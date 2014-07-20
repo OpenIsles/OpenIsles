@@ -5,7 +5,7 @@ BUILD_DIRECTORY = build
 
 CC = /usr/bin/g++
 CFLAGS = -std=c++11 -Wall -Werror -pedantic -g -O0 $(SDL_CFLAGS)
-LDFLAGS = $(SDL_LDFLAGS) -lSDL2_image
+LDFLAGS = $(SDL_LDFLAGS) -lSDL2_image -lSDL2_ttf
 
 
 .PHONY: all clean
