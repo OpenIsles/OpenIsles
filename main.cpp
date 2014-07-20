@@ -94,8 +94,6 @@ int main(int argc, char** argv) {
 	}
 	atexit(IMG_Quit);
 
-
-
 	if (TTF_Init() != 0) {
 		std::cerr << "Could not init SDL-TTF: " << TTF_GetError() << std::endl;
 		return EXIT_FAILURE;

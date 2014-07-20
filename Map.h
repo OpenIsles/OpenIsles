@@ -34,21 +34,8 @@ private:
 	int screenOffsetY;
 
 public:
-	Map(unsigned int width, unsigned int height) :
-			width(width), height(height) {
-
-		tiles = new unsigned char[width * height];
-
-		// TODO Karte laden statt einfach nur leerzunullen
-		memset(tiles, 0, width * height * sizeof(unsigned char));
-
-		screenOffsetX = 0;
-		screenOffsetY = 0;
-	}
-
-	~Map() {
-		delete tiles;
-	}
+	Map(unsigned int width, unsigned int height);
+	~Map();
 
 	unsigned int getHeight() const {
 		return height;

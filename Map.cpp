@@ -26,6 +26,29 @@
 // Aus main.cpp importiert
 extern GraphicsMgr* graphicsMgr;
 
+Map::Map(unsigned int width, unsigned int height) :
+		width(width), height(height) {
+
+	tiles = new unsigned char[width * height];
+
+	// TODO Karte laden statt einfach nur statisch eine Insel erzeugen
+	for (unsigned int y = 0, i = 0; y < height; y++) {
+		for (unsigned int x = 0; x < width; x++, i++) {
+			if (x < 3 || y < 3 || x >= width - 3 || y >= height - 3) {
+				tiles[i] = 0;
+			} else {
+				tiles[i] = ((x + y) % 2 == 0) ? 1 : 2;
+			}
+		}
+	}
+
+	screenOffsetX = 0;
+	screenOffsetY = 0;
+}
+
+Map::~Map() {
+	delete tiles;
+}
 
 void Map::renderMap(SDL_Renderer* renderer) {
 	// TODO muss sich die Anwendung irgendwie merken vbzw. aus dem Fenster holen (SDL_GetWindowSize(SDL_Window*,...))
@@ -56,13 +79,12 @@ void Map::renderMap(SDL_Renderer* renderer) {
 
 			rectDestination.x = screenX;
 			rectDestination.y = screenY;
-			SDL_RenderCopy(renderer, graphicsMgr->getTileTexture(0), NULL, &rectDestination);
+			SDL_RenderCopy(renderer, graphicsMgr->getTileTexture(getTileAt(mapX, mapY)), NULL, &rectDestination);
 		}
 	}
 
 	// Bildfläche anzeigen
 	SDL_RenderPresent(renderer);
-
 }
 
 void Map::scroll(int screenOffsetX, int screenOffsetY) {
