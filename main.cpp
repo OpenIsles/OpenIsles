@@ -4,6 +4,7 @@
 #include <iostream>
 #include <cstdlib>
 #include <string>
+#include "GraphicsMgr.h"
 #include "Map.h"
 
 /*********************************************************************************************************************
@@ -11,24 +12,14 @@
  *********************************************************************************************************************/
 
 /**
+ * @brief Grafik-Manager
+ */
+GraphicsMgr* graphicsMgr;
+
+/**
  * @brief TTF-Schriftart zum Render der FPS
  */
 TTF_Font* ttfFont;
-
-/**
- * @brief Breite einer Kachel
- */
-int tileImgWidth;
-
-/**
- * @brief Höhe einer Kachel
- */
-int tileImgHeight;
-
-/**
- * @brief SDL-Texture des Test-Tiles
- */
-SDL_Texture* textureTestTile;
 
 /**
  * @brief aktuelle FPS des letzten Frames
@@ -103,23 +94,7 @@ int main(int argc, char** argv) {
 	}
 	atexit(IMG_Quit);
 
-	SDL_Surface* surfaceTestTile = IMG_Load("data/img/tiles/water.png");
-	if (surfaceTestTile == nullptr) {
-		std::cerr << "Could not load test tile: " << IMG_GetError() << std::endl;
-		SDL_DestroyWindow(window);
-		return EXIT_FAILURE;
-	}
 
-	tileImgWidth = surfaceTestTile->w;
-	tileImgHeight = surfaceTestTile->h;
-
-	textureTestTile = SDL_CreateTextureFromSurface(renderer, surfaceTestTile);
-	if (textureTestTile == nullptr) {
-		std::cerr << "Could not create texture for test tile: " << SDL_GetError() << std::endl;
-		SDL_DestroyWindow(window);
-		return EXIT_FAILURE;
-	}
-	SDL_FreeSurface(surfaceTestTile);
 
 	if (TTF_Init() != 0) {
 		std::cerr << "Could not init SDL-TTF: " << TTF_GetError() << std::endl;
@@ -131,6 +106,7 @@ int main(int argc, char** argv) {
 
 	// Game-Initialisierung //////////////////////////////////////////////////////////////////////////////////////////
 
+	graphicsMgr = new GraphicsMgr(renderer);
 	map = new Map(40, 40);
 
 	// Mainloop //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -170,12 +146,12 @@ int main(int argc, char** argv) {
 	// Game-Deinitialisierung ////////////////////////////////////////////////////////////////////////////////////////
 
 	delete map;
+	delete graphicsMgr;
 
 	// Library-Deinitialisierung /////////////////////////////////////////////////////////////////////////////////////
 
 	TTF_CloseFont(ttfFont);
 
-	SDL_DestroyTexture(textureTestTile);
 	SDL_DestroyRenderer(renderer);
 	SDL_DestroyWindow(window);
 	SDL_Quit();

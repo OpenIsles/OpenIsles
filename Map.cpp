@@ -1,3 +1,4 @@
+#include "GraphicsMgr.h"
 #include "Map.h"
 
 /**
@@ -23,10 +24,8 @@
  */
 
 // Aus main.cpp importiert
-// TODO später in einen Graphics-Manager stecken
-extern int tileImgWidth;
-extern int tileImgHeight;
-extern SDL_Texture* textureTestTile;
+extern GraphicsMgr* graphicsMgr;
+
 
 void Map::renderMap(SDL_Renderer* renderer) {
 	// TODO muss sich die Anwendung irgendwie merken vbzw. aus dem Fenster holen (SDL_GetWindowSize(SDL_Window*,...))
@@ -34,18 +33,18 @@ void Map::renderMap(SDL_Renderer* renderer) {
 	const int windowHeight = 768;
 
 	// Kacheln rendern
-	SDL_Rect rectDestination = { 0, 0, tileImgWidth, tileImgHeight };
+	SDL_Rect rectDestination = { 0, 0, GraphicsMgr::TILE_WIDTH, GraphicsMgr::TILE_HEIGHT };
 	for (unsigned int mapY = 0; mapY < height; mapY++) {
 		for (unsigned int mapX = 0; mapX < width; mapX++) {
 			int screenX, screenY;
 
 			// Koordinatensystem wechseln
-			screenX = mapX * (tileImgWidth / 2) - mapY * (tileImgWidth / 2);
-			screenY = mapX * (tileImgHeight / 2) + mapY * (tileImgHeight / 2);
+			screenX = mapX * (GraphicsMgr::TILE_WIDTH / 2) - mapY * (GraphicsMgr::TILE_WIDTH / 2);
+			screenY = mapX * (GraphicsMgr::TILE_HEIGHT / 2) + mapY * (GraphicsMgr::TILE_HEIGHT / 2);
 
 			// Kachelmittelpunkt als Referenzpunkt nehmen
-			screenX -= (tileImgWidth / 2);
-			screenY -= (tileImgHeight / 2);
+			screenX -= (GraphicsMgr::TILE_WIDTH / 2);
+			screenY -= (GraphicsMgr::TILE_HEIGHT / 2);
 
 			// Im Fenster zentrieren
 			screenX += (windowWidth / 2);
@@ -57,7 +56,7 @@ void Map::renderMap(SDL_Renderer* renderer) {
 
 			rectDestination.x = screenX;
 			rectDestination.y = screenY;
-			SDL_RenderCopy(renderer, textureTestTile, NULL, &rectDestination);
+			SDL_RenderCopy(renderer, graphicsMgr->getTileTexture(0), NULL, &rectDestination);
 		}
 	}
 
