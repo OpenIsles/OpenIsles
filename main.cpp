@@ -4,8 +4,77 @@
 #include <iostream>
 #include <cstdlib>
 #include <string>
+#include "Map.h"
+
+/*********************************************************************************************************************
+ * globale Variablen                                                                                                 *
+ *********************************************************************************************************************/
+
+/**
+ * @brief TTF-Schriftart zum Render der FPS
+ */
+TTF_Font* ttfFont;
+
+/**
+ * @brief Breite einer Kachel
+ */
+int tileImgWidth;
+
+/**
+ * @brief Höhe einer Kachel
+ */
+int tileImgHeight;
+
+/**
+ * @brief SDL-Texture des Test-Tiles
+ */
+SDL_Texture* textureTestTile;
+
+/**
+ * @brief aktuelle FPS des letzten Frames
+ */
+double fps = 0.0;
+
+/**
+ * @brief die Karte
+ */
+Map* map;
+
+/*********************************************************************************************************************
+ * Prototypen                                                                                                        *
+ *********************************************************************************************************************/
+
+int main(int argc, char** argv);
+void drawFrame(SDL_Renderer* renderer);
+
+/*********************************************************************************************************************
+ * Implementierung                                                                                                   *
+ *********************************************************************************************************************/
+
+void drawFrame(SDL_Renderer* renderer) {
+	// Bildfläche leermachen
+	SDL_RenderClear(renderer);
+
+	// Karte rendern
+	map->renderMap(renderer);
+
+	// FPS rendern
+	std::string fpsString = "FPS = " + std::to_string(fps);
+	SDL_Color fpsColor = { 255, 255, 255, 0 };
+	SDL_Surface* surfaceFpsText = TTF_RenderText_Solid(ttfFont, fpsString.data(), fpsColor);
+	SDL_Rect rectDestination = { 10, 10, surfaceFpsText->w, surfaceFpsText->h };
+	SDL_Texture* textureFpsText = SDL_CreateTextureFromSurface(renderer, surfaceFpsText);
+	SDL_FreeSurface(surfaceFpsText);
+	SDL_RenderCopy(renderer, textureFpsText, NULL, &rectDestination);
+	SDL_DestroyTexture(textureFpsText);
+
+	// Bildfläche anzeigen
+	SDL_RenderPresent(renderer);
+}
 
 int main(int argc, char** argv) {
+	// Library-Initialisierung ///////////////////////////////////////////////////////////////////////////////////////
+
 	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS) != 0) {
 		std::cerr << "SDL could not be initialized: " << SDL_GetError() << std::endl;
 		return EXIT_FAILURE;
@@ -41,10 +110,10 @@ int main(int argc, char** argv) {
 		return EXIT_FAILURE;
 	}
 
-	int tileImgWidth = surfaceTestTile->w;
-	int tileImgHeight = surfaceTestTile->h;
+	tileImgWidth = surfaceTestTile->w;
+	tileImgHeight = surfaceTestTile->h;
 
-	SDL_Texture* textureTestTile = SDL_CreateTextureFromSurface(renderer, surfaceTestTile);
+	textureTestTile = SDL_CreateTextureFromSurface(renderer, surfaceTestTile);
 	if (textureTestTile == nullptr) {
 		std::cerr << "Could not create texture for test tile: " << SDL_GetError() << std::endl;
 		SDL_DestroyWindow(window);
@@ -58,10 +127,14 @@ int main(int argc, char** argv) {
 	}
 	atexit(TTF_Quit);
 
-	TTF_Font* ttfFont = TTF_OpenFont("data/font/DroidSans-Bold.ttf", 14);
+	ttfFont = TTF_OpenFont("data/font/DroidSans-Bold.ttf", 14);
 
-	// Mainloop
-	double fps = 0.0;
+	// Game-Initialisierung //////////////////////////////////////////////////////////////////////////////////////////
+
+	map = new Map(40, 40);
+
+	// Mainloop //////////////////////////////////////////////////////////////////////////////////////////////////////
+
 	bool quitGame = false;
 	while (!quitGame) {
 		Uint32 ticksAtLoopStart = SDL_GetTicks();
@@ -80,36 +153,19 @@ int main(int argc, char** argv) {
 			}
 		}
 
-		// Bildfläche leermachen
-		SDL_RenderClear(renderer);
-
-		// Kacheln rendern
-		SDL_Rect rectDestination = { 0, 0, tileImgWidth, tileImgHeight };
-		for (int y = 0; y < 768; y += tileImgHeight) {
-			for (int x = 0; x < 1024; x += tileImgWidth) {
-				rectDestination.x = x;
-				rectDestination.y = y;
-				SDL_RenderCopy(renderer, textureTestTile, NULL, &rectDestination);
-			}
-		}
-
-		// FPS rendern
-		std::string fpsString = "FPS = " + std::to_string(fps);
-		SDL_Color fpsColor = { 255, 255, 255, 0 };
-		SDL_Surface* surfaceFpsText = TTF_RenderText_Solid(ttfFont, fpsString.data(), fpsColor);
-		rectDestination = { 10, 10, surfaceFpsText->w, surfaceFpsText->h };
-		SDL_Texture* textureFpsText = SDL_CreateTextureFromSurface(renderer, surfaceFpsText);
-		SDL_FreeSurface(surfaceFpsText);
-		SDL_RenderCopy(renderer, textureFpsText, NULL, &rectDestination);
-		SDL_DestroyTexture(textureFpsText);
-
-		// Bildfläche anzeigen
-		SDL_RenderPresent(renderer);
+		// Frame zeichnen
+		drawFrame(renderer);
 
 		// FPS berechnen
 		Uint32 ticksAtLoopEnd = SDL_GetTicks();
 		fps = 1000.0 / (ticksAtLoopEnd - ticksAtLoopStart);
 	}
+
+	// Game-Deinitialisierung ////////////////////////////////////////////////////////////////////////////////////////
+
+	delete map;
+
+	// Library-Deinitialisierung /////////////////////////////////////////////////////////////////////////////////////
 
 	TTF_CloseFont(ttfFont);
 
