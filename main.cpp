@@ -144,11 +144,17 @@ int main(int argc, char** argv) {
 		if (SDL_PollEvent(&event)) {
 			if (event.type == SDL_QUIT) {
 				quitGame = true;
-				break;
 			} else if (event.type == SDL_KEYDOWN) {
-				if (event.key.keysym.sym == SDLK_ESCAPE) {
+				if (event.key.keysym.scancode == SDL_SCANCODE_ESCAPE) {
 					quitGame = true;
-					break;
+				} else if (event.key.keysym.scancode == SDL_SCANCODE_UP) {
+					map->scroll(0, -16);
+				} else if (event.key.keysym.scancode == SDL_SCANCODE_DOWN) {
+					map->scroll(0, 16);
+				} else if (event.key.keysym.scancode == SDL_SCANCODE_LEFT) {
+					map->scroll(-16, 0);
+				} else if (event.key.keysym.scancode == SDL_SCANCODE_RIGHT) {
+					map->scroll(16, 0);
 				}
 			}
 		}

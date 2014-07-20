@@ -5,7 +5,6 @@
 #include <iostream>
 #include <string.h>
 
-
 class Map {
 
 private:
@@ -24,12 +23,27 @@ private:
 	 */
 	unsigned char* tiles;
 
+	/**
+	 * @brief X-Offset in Screen-Koordinaten, um Scrolling zu ermöglichen
+	 */
+	int screenOffsetX;
+
+	/**
+	 * @brief Y-Offset in Screen-Koordinaten, um Scrolling zu ermöglichen
+	 */
+	int screenOffsetY;
+
 public:
-	Map(unsigned int width, unsigned int height) : width(width), height(height) {
+	Map(unsigned int width, unsigned int height) :
+			width(width), height(height) {
+
 		tiles = new unsigned char[width * height];
 
 		// TODO Karte laden statt einfach nur leerzunullen
 		memset(tiles, 0, width * height * sizeof(unsigned char));
+
+		screenOffsetX = 0;
+		screenOffsetY = 0;
 	}
 
 	~Map() {
@@ -58,6 +72,15 @@ public:
 	 */
 	// TODO durch Graphics- oder Render-Manager abstrahieren, damit die Karte nicht die Grafiken kennen muss
 	void renderMap(SDL_Renderer* renderer);
+
+	/**
+	 * @brief Scrollt die Karte
+	 * @param screenOffsetX X-Offset in Screen-Koordinaten, in die gescrollt werden soll.
+	 *                      Positive Werte scrollen nach rechts, negative nach links
+	 * @param screenOffsetY Y-Offset in Screen-Koordinaten, in die gescrollt werden soll.
+	 *                      Positive Werte scrollen nach unten, negative nach oben
+	 */
+	void scroll(int screenOffsetX, int screenOffsetY);
 
 };
 

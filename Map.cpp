@@ -29,10 +29,6 @@ extern int tileImgHeight;
 extern SDL_Texture* textureTestTile;
 
 void Map::renderMap(SDL_Renderer* renderer) {
-	// TODO kommt später an die Klasse, damit man scrollen kann
-	const int screenOffsetX = 0;
-	const int screenOffsetY = 0;
-
 	// TODO muss sich die Anwendung irgendwie merken vbzw. aus dem Fenster holen (SDL_GetWindowSize(SDL_Window*,...))
 	const int windowWidth = 1024;
 	const int windowHeight = 768;
@@ -68,4 +64,9 @@ void Map::renderMap(SDL_Renderer* renderer) {
 	// Bildfläche anzeigen
 	SDL_RenderPresent(renderer);
 
+}
+
+void Map::scroll(int screenOffsetX, int screenOffsetY) {
+	this->screenOffsetX += screenOffsetX;
+	this->screenOffsetY += screenOffsetY;
 }
