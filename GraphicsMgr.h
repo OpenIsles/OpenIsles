@@ -32,6 +32,11 @@ private:
 	 */
 	SDL_Texture** tileTextures;
 
+	/**
+	 * @brief Array von SDL-Texture-Zeigern auf die Objekt-Grafiken
+	 */
+	SDL_Texture** objectTextures;
+
 public:
 	GraphicsMgr(SDL_Renderer* renderer);
 	~GraphicsMgr();
@@ -44,6 +49,14 @@ public:
 		return tileTextures[index];
 	}
 
+	/**
+	 * @brief Liefert eine Object-Grafik
+	 * @param index Index ins Array #objectTextures dessen Eintrag zurückgeliefert werden soll
+	 */
+	SDL_Texture* const getObjectTexture(int index) const {
+		return objectTextures[index];
+	}
+
 private:
 	/**
 	 * @brief Initialisiert eine Tile-Grafik
@@ -51,6 +64,13 @@ private:
 	 * @param filename Dateiname (ohne Pfad) der Tile-Grafik
 	 */
 	void initTileTexture(int index, const char* filename);
+
+	/**
+	 * @brief Initialisiert eine Object-Grafik
+	 * @param index Index ins Array #objectTextures unter dessen Eintrag die Grafik geladen werden soll
+	 * @param filename Dateiname (ohne Pfad) der Object-Grafik
+	 */
+	void initObjectTexture(int index, const char* filename);
 
 };
 

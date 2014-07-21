@@ -42,45 +42,72 @@ Map::Map(unsigned int width, unsigned int height) :
 		}
 	}
 
+	MapObject* dummyMapObject = new MapObject { 3, 4, 0 };
+	mapObjects.push_front(dummyMapObject);
+
+	dummyMapObject = new MapObject { 6, 9, 0 };
+	mapObjects.push_front(dummyMapObject);
+
+	dummyMapObject = new MapObject { 11, 10, 1 };
+	mapObjects.push_front(dummyMapObject);
+
 	screenOffsetX = 0;
 	screenOffsetY = 0;
 }
 
 Map::~Map() {
-	delete tiles;
+	for (auto iter = mapObjects.cbegin(); iter != mapObjects.cend(); iter++) {
+		MapObject* mapObject = *iter;
+		delete mapObject;
+	}
+	mapObjects.clear();
+
+	delete[] tiles;
 }
 
-void Map::renderMap(SDL_Renderer* renderer) {
+void Map::mapToScreenCoords(unsigned int mapX, unsigned int mapY, int& screenX, int& screenY) {
 	// TODO muss sich die Anwendung irgendwie merken vbzw. aus dem Fenster holen (SDL_GetWindowSize(SDL_Window*,...))
 	const int windowWidth = 1024;
 	const int windowHeight = 768;
 
+	// Koordinatensystem wechseln
+	screenX = mapX * (GraphicsMgr::TILE_WIDTH / 2) - mapY * (GraphicsMgr::TILE_WIDTH / 2);
+	screenY = mapX * (GraphicsMgr::TILE_HEIGHT / 2) + mapY * (GraphicsMgr::TILE_HEIGHT / 2);
+
+	// Kachelmittelpunkt als Referenzpunkt nehmen
+	screenX -= (GraphicsMgr::TILE_WIDTH / 2);
+	screenY -= (GraphicsMgr::TILE_HEIGHT / 2);
+
+	// Im Fenster zentrieren
+	screenX += (windowWidth / 2);
+	screenY += (windowHeight / 2);
+
+	// Scrolling-Offset anwenden
+	screenX -= screenOffsetX;
+	screenY -= screenOffsetY;
+}
+
+void Map::renderMap(SDL_Renderer* renderer) {
 	// Kacheln rendern
 	SDL_Rect rectDestination = { 0, 0, GraphicsMgr::TILE_WIDTH, GraphicsMgr::TILE_HEIGHT };
 	for (unsigned int mapY = 0; mapY < height; mapY++) {
 		for (unsigned int mapX = 0; mapX < width; mapX++) {
-			int screenX, screenY;
-
-			// Koordinatensystem wechseln
-			screenX = mapX * (GraphicsMgr::TILE_WIDTH / 2) - mapY * (GraphicsMgr::TILE_WIDTH / 2);
-			screenY = mapX * (GraphicsMgr::TILE_HEIGHT / 2) + mapY * (GraphicsMgr::TILE_HEIGHT / 2);
-
-			// Kachelmittelpunkt als Referenzpunkt nehmen
-			screenX -= (GraphicsMgr::TILE_WIDTH / 2);
-			screenY -= (GraphicsMgr::TILE_HEIGHT / 2);
-
-			// Im Fenster zentrieren
-			screenX += (windowWidth / 2);
-			screenY += (windowHeight / 2);
-
-			// Scrolling-Offset anwenden
-			screenX -= screenOffsetX;
-			screenY -= screenOffsetY;
-
-			rectDestination.x = screenX;
-			rectDestination.y = screenY;
+			mapToScreenCoords(mapX, mapY, rectDestination.x, rectDestination.y);
 			SDL_RenderCopy(renderer, graphicsMgr->getTileTexture(getTileAt(mapX, mapY)), NULL, &rectDestination);
 		}
+	}
+
+	// Objekte rendern
+	// TODO Reihenfolge muss entsprechend von hinten nach vorne passieren und nicht wild durcheinander
+	for (auto iter = mapObjects.cbegin(); iter != mapObjects.cend(); iter++) {
+		MapObject* mapObject = *iter;
+
+		// TODO Objekte haben unterschiedliche Größen. Das müssen wir auch handeln.
+		// Aktuell einfach mal fix für die beiden Grafiken.
+		SDL_Rect rect = { 0, 0, 128, 128 };
+		mapToScreenCoords(mapObject->mapX, mapObject->mapY, rect.x, rect.y);
+
+		SDL_RenderCopy(renderer, graphicsMgr->getObjectTexture(mapObject->object), NULL, &rect);
 	}
 
 	// Bildfläche anzeigen

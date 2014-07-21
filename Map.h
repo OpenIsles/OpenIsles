@@ -3,7 +3,14 @@
 
 #include <SDL.h>
 #include <iostream>
+#include <list>
 #include <string.h>
+
+typedef struct {
+	unsigned int mapX;
+	unsigned int mapY;
+	unsigned char object;
+} MapObject;
 
 class Map {
 
@@ -22,6 +29,11 @@ private:
 	 * @brief Array (height x width) mit den Kacheln
 	 */
 	unsigned char* tiles;
+
+	/**
+	 * @brief Liste von Objekten (z.B. Häusern) auf der Karte
+	 */
+	std::list<MapObject*> mapObjects;
 
 	/**
 	 * @brief X-Offset in Screen-Koordinaten, um Scrolling zu ermöglichen
@@ -68,6 +80,16 @@ public:
 	 *                      Positive Werte scrollen nach unten, negative nach oben
 	 */
 	void scroll(int screenOffsetX, int screenOffsetY);
+
+private:
+	/**
+	 * @brief Rechnet Map- in Screen-Koordinaten um
+	 * @param mapX Map-X-Koordinate (Eingabe)
+	 * @param mapY Map-Y-Koordinate (Eingabe)
+	 * @param screenX Screen-X-Koordinate (Ausgabe)
+	 * @param screenY Screen-Y-Koordinate (Ausgabe)
+	 */
+	void mapToScreenCoords(unsigned int mapX, unsigned int mapY, int& screenX, int& screenY);
 
 };
 
