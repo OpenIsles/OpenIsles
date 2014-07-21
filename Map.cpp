@@ -107,7 +107,10 @@ void Map::renderMap(SDL_Renderer* renderer) {
 		SDL_Rect rect = { 0, 0, 128, 128 };
 		mapToScreenCoords(mapObject->mapX, mapObject->mapY, rect.x, rect.y);
 
-		SDL_RenderCopy(renderer, graphicsMgr->getObjectTexture(mapObject->object), NULL, &rect);
+		SDL_Texture* objectTexture = graphicsMgr->getObjectTexture(mapObject->object);
+		SDL_SetTextureAlphaMod(objectTexture, 192);
+		SDL_SetTextureColorMod(objectTexture, 255, 64, 64);
+		SDL_RenderCopy(renderer, objectTexture, NULL, &rect);
 	}
 
 	// Bildfläche anzeigen

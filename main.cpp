@@ -27,6 +27,16 @@ TTF_Font* ttfFont;
 double fps = 0.0;
 
 /**
+ * @brief aktuelle Position des Mauszeigers (X-Koordinate)
+ */
+int mouseX = -1;
+
+/**
+ * @brief aktuelle Position des Mauszeigers (Y-Koordinate)
+ */
+int mouseY = -1;
+
+/**
  * @brief die Karte
  */
 Map* map;
@@ -36,11 +46,22 @@ Map* map;
  *********************************************************************************************************************/
 
 int main(int argc, char** argv);
+void renderText(SDL_Renderer* renderer, std::string string, int x, int y);
 void drawFrame(SDL_Renderer* renderer);
 
 /*********************************************************************************************************************
  * Implementierung                                                                                                   *
  *********************************************************************************************************************/
+
+void renderText(SDL_Renderer* renderer, std::string string, int x, int y) {
+	SDL_Color fpsColor = { 255, 255, 255, 0 };
+	SDL_Surface* surfaceText = TTF_RenderText_Solid(ttfFont, string.data(), fpsColor);
+	SDL_Rect rectDestination = { x, y, surfaceText->w, surfaceText->h };
+	SDL_Texture* textureText = SDL_CreateTextureFromSurface(renderer, surfaceText);
+	SDL_FreeSurface(surfaceText);
+	SDL_RenderCopy(renderer, textureText, NULL, &rectDestination);
+	SDL_DestroyTexture(textureText);
+}
 
 void drawFrame(SDL_Renderer* renderer) {
 	// Bildfläche leermachen
@@ -51,13 +72,11 @@ void drawFrame(SDL_Renderer* renderer) {
 
 	// FPS rendern
 	std::string fpsString = "FPS = " + std::to_string(fps);
-	SDL_Color fpsColor = { 255, 255, 255, 0 };
-	SDL_Surface* surfaceFpsText = TTF_RenderText_Solid(ttfFont, fpsString.data(), fpsColor);
-	SDL_Rect rectDestination = { 10, 10, surfaceFpsText->w, surfaceFpsText->h };
-	SDL_Texture* textureFpsText = SDL_CreateTextureFromSurface(renderer, surfaceFpsText);
-	SDL_FreeSurface(surfaceFpsText);
-	SDL_RenderCopy(renderer, textureFpsText, NULL, &rectDestination);
-	SDL_DestroyTexture(textureFpsText);
+	renderText(renderer, fpsString, 10, 10);
+
+	// Debugging-Infos rendern
+	std::string debugInfosString = "MousePos = (" + std::to_string(mouseX) + ", " + std::to_string(mouseY) + ")";
+	renderText(renderer, debugInfosString, 10, 25);
 
 	// Bildfläche anzeigen
 	SDL_RenderPresent(renderer);
@@ -132,6 +151,9 @@ int main(int argc, char** argv) {
 				}
 			}
 		}
+
+		// Mausposition auslesen
+		SDL_GetMouseState(&mouseX, &mouseY);
 
 		// Frame zeichnen
 		drawFrame(renderer);
