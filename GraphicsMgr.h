@@ -4,6 +4,7 @@
 #include <SDL.h>
 #include <SDL_image.h>
 #include <iostream>
+#include "Graphic.h"
 
 /**
  * @brief Manager, der alle Grafiken verwaltet
@@ -23,55 +24,34 @@ public:
 
 private:
 	/**
-	 * @brief Referenz auf den SDL-Renderer
+	 * @brief Array von Zeigern auf die Tile-Grafiken
 	 */
-	SDL_Renderer* renderer;
+	Graphic** tiles;
 
 	/**
-	 * @brief Array von SDL-Texture-Zeigern auf die Tile-Grafiken
+	 * @brief Array von Zeigern auf die Objekt-Grafiken
 	 */
-	SDL_Texture** tileTextures;
-
-	/**
-	 * @brief Array von SDL-Texture-Zeigern auf die Objekt-Grafiken
-	 */
-	SDL_Texture** objectTextures;
+	Graphic** objects;
 
 public:
-	GraphicsMgr(SDL_Renderer* renderer);
+	GraphicsMgr();
 	~GraphicsMgr();
 
 	/**
 	 * @brief Liefert eine Tile-Grafik
-	 * @param index Index ins Array #tileTextures dessen Eintrag zurückgeliefert werden soll
+	 * @param index Index ins Array #tiles dessen Eintrag zurückgeliefert werden soll
 	 */
-	SDL_Texture* const getTileTexture(int index) const {
-		return tileTextures[index];
+	Graphic* const getTile(int index) const {
+		return tiles[index];
 	}
 
 	/**
 	 * @brief Liefert eine Object-Grafik
-	 * @param index Index ins Array #objectTextures dessen Eintrag zurückgeliefert werden soll
+	 * @param index Index ins Array #objects dessen Eintrag zurückgeliefert werden soll
 	 */
-	SDL_Texture* const getObjectTexture(int index) const {
-		return objectTextures[index];
+	Graphic* const getObject(int index) const {
+		return objects[index];
 	}
-
-private:
-	/**
-	 * @brief Initialisiert eine Tile-Grafik
-	 * @param index Index ins Array #tileTextures unter dessen Eintrag die Grafik geladen werden soll
-	 * @param filename Dateiname (ohne Pfad) der Tile-Grafik
-	 */
-	void initTileTexture(int index, const char* filename);
-
-	/**
-	 * @brief Initialisiert eine Object-Grafik
-	 * @param index Index ins Array #objectTextures unter dessen Eintrag die Grafik geladen werden soll
-	 * @param filename Dateiname (ohne Pfad) der Object-Grafik
-	 */
-	void initObjectTexture(int index, const char* filename);
-
 };
 
 #endif

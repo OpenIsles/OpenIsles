@@ -12,6 +12,11 @@
  *********************************************************************************************************************/
 
 /**
+ * @brief SDL-Renderer
+ */
+SDL_Renderer* renderer;
+
+/**
  * @brief Grafik-Manager
  */
 GraphicsMgr* graphicsMgr;
@@ -100,7 +105,7 @@ int main(int argc, char** argv) {
 		return EXIT_FAILURE;
 	}
 
-	SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
 	if (renderer == nullptr) {
 		std::cerr << "SDL could not create renderer: " << SDL_GetError() << std::endl;
 		SDL_DestroyWindow(window);
@@ -123,7 +128,7 @@ int main(int argc, char** argv) {
 
 	// Game-Initialisierung //////////////////////////////////////////////////////////////////////////////////////////
 
-	graphicsMgr = new GraphicsMgr(renderer);
+	graphicsMgr = new GraphicsMgr();
 	map = new Map(40, 40);
 
 	// Mainloop //////////////////////////////////////////////////////////////////////////////////////////////////////

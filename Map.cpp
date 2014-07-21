@@ -93,7 +93,7 @@ void Map::renderMap(SDL_Renderer* renderer) {
 	for (unsigned int mapY = 0; mapY < height; mapY++) {
 		for (unsigned int mapX = 0; mapX < width; mapX++) {
 			mapToScreenCoords(mapX, mapY, rectDestination.x, rectDestination.y);
-			SDL_RenderCopy(renderer, graphicsMgr->getTileTexture(getTileAt(mapX, mapY)), NULL, &rectDestination);
+			SDL_RenderCopy(renderer, graphicsMgr->getTile(getTileAt(mapX, mapY))->getTexture(), NULL, &rectDestination);
 		}
 	}
 
@@ -107,7 +107,7 @@ void Map::renderMap(SDL_Renderer* renderer) {
 		SDL_Rect rect = { 0, 0, 128, 128 };
 		mapToScreenCoords(mapObject->mapX, mapObject->mapY, rect.x, rect.y);
 
-		SDL_Texture* objectTexture = graphicsMgr->getObjectTexture(mapObject->object);
+		SDL_Texture* objectTexture = graphicsMgr->getObject(mapObject->object)->getTexture();
 		SDL_SetTextureAlphaMod(objectTexture, 192);
 		SDL_SetTextureColorMod(objectTexture, 255, 64, 64);
 		SDL_RenderCopy(renderer, objectTexture, NULL, &rect);
