@@ -94,8 +94,20 @@ void Map::renderMap(SDL_Renderer* renderer) {
 		}
 	}
 
+	// Reihenfolge der Objekte so stellen, dass von hinten nach vorne gerendert wird
+	// TODO ggf. Algorithmus verbessern, dass wirklich nach Y-Screen-Koordinaten sortiert wird. Mit den paar Grafiken
+	// hab ich keinen Fall bauen können, der n Unterschied macht.
+	mapObjects.sort([] (MapObject* mo1, MapObject* mo2) {
+		if (mo1->mapY < mo2->mapY) {
+			return true;
+		} else if (mo1->mapY > mo2->mapY) {
+			return false;
+		} else {
+			return (mo1->mapX <= mo2->mapX);
+		}
+	});
+
 	// Objekte rendern
-	// TODO Reihenfolge muss entsprechend von hinten nach vorne passieren und nicht wild durcheinander
 	for (auto iter = mapObjects.cbegin(); iter != mapObjects.cend(); iter++) {
 		MapObject* mapObject = *iter;
 		Graphic* graphic = graphicsMgr->getObject(mapObject->object);
@@ -109,11 +121,9 @@ void Map::renderMap(SDL_Renderer* renderer) {
 				- (graphic->getMapWidth() + graphic->getMapHeight()) * (GraphicsMgr::TILE_HEIGHT / 2);
 
 		SDL_Texture* objectTexture = graphic->getTexture();
-		SDL_SetTextureAlphaMod(objectTexture, 192);
-		SDL_SetTextureColorMod(objectTexture, 255, 64, 64);
+		SDL_SetTextureAlphaMod(objectTexture, 255);
+		SDL_SetTextureColorMod(objectTexture, 255, 255, 255);
 		SDL_RenderCopy(renderer, objectTexture, NULL, &rect);
-
-		SDL_RenderDrawRect(renderer, &rect);
 	}
 
 	// Bildfläche anzeigen
