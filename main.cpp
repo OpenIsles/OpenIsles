@@ -32,6 +32,11 @@ TTF_Font* ttfFont;
 double fps = 0.0;
 
 /**
+ * @brief Zeichenketten-Puffer für 5 Zeilen Debug-Ausgabe
+ */
+std::string debugOutput[5];
+
+/**
  * @brief aktuelle Position des Mauszeigers (X-Koordinate)
  */
 int mouseX = -1;
@@ -69,26 +74,20 @@ void renderText(SDL_Renderer* renderer, std::string string, int x, int y) {
 }
 
 void drawFrame(SDL_Renderer* renderer) {
-	// Bildfläche leermachen
-	SDL_RenderClear(renderer);
-
 	// Karte rendern
 	map->renderMap(renderer);
 
-	// FPS rendern
-	std::string fpsString = "FPS = " + std::to_string(fps);
-	renderText(renderer, fpsString, 10, 10);
-
 	// Debugging-Infos rendern
-	std::string debugInfosString = "MousePos = (" + std::to_string(mouseX) + ", " + std::to_string(mouseY) + ")";
-	renderText(renderer, debugInfosString, 10, 25);
-
-	// Bildfläche anzeigen
-	SDL_RenderPresent(renderer);
+	for (int i = 0; i < 5; i++) {
+		renderText(renderer, debugOutput[i], 10, 10 + 15 * i);
+	}
 }
 
 int main(int argc, char** argv) {
 	// Library-Initialisierung ///////////////////////////////////////////////////////////////////////////////////////
+
+	const int windowWidth = 1024;
+	const int windowHeight = 768;
 
 	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS) != 0) {
 		std::cerr << "SDL could not be initialized: " << SDL_GetError() << std::endl;
@@ -98,19 +97,22 @@ int main(int argc, char** argv) {
 	atexit(SDL_Quit);
 	std::cout << "SDL initialisert" << std::endl;
 
-	SDL_Window* window = SDL_CreateWindow("OpenIsles", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1024, 768,
-			SDL_WINDOW_SHOWN);
+	SDL_Window* window = SDL_CreateWindow("OpenIsles", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, windowWidth,
+			windowHeight, SDL_WINDOW_SHOWN);
 	if (window == nullptr) {
 		std::cerr << "SDL could not create window: " << SDL_GetError() << std::endl;
 		return EXIT_FAILURE;
 	}
 
-	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_TARGETTEXTURE);
 	if (renderer == nullptr) {
 		std::cerr << "SDL could not create renderer: " << SDL_GetError() << std::endl;
 		SDL_DestroyWindow(window);
 		return EXIT_FAILURE;
 	}
+
+	SDL_Texture* offscreenTexture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET,
+			windowWidth, windowHeight);
 
 	if ((IMG_Init(IMG_INIT_PNG) & IMG_INIT_PNG) != IMG_INIT_PNG) {
 		std::cerr << "Could not init SDL-image: " << IMG_GetError() << std::endl;
@@ -160,8 +162,26 @@ int main(int argc, char** argv) {
 		// Mausposition auslesen
 		SDL_GetMouseState(&mouseX, &mouseY);
 
-		// Frame zeichnen
+		// Debug-Infos vorbereiten, damit wir sie später einfach nur ausgeben können
+		std::string fpsString = "FPS = " + std::to_string(fps);
+		debugOutput[0] = fpsString;
+
+		std::string mousePosString = "MousePos = (" + std::to_string(mouseX) + ", " + std::to_string(mouseY) + ")";
+		debugOutput[1] = mousePosString;
+
+		debugOutput[2] = " ";
+		debugOutput[3] = " ";
+		debugOutput[4] = " ";
+
+		// Frame auf Offscreen-Texture zeichnen
+		SDL_SetRenderTarget(renderer, offscreenTexture);
+		SDL_RenderClear(renderer);
 		drawFrame(renderer);
+
+		// Frame fertig. Erst jetzt komplett in Fenster übertragen, um Flackern zu unterbinden
+		SDL_SetRenderTarget(renderer, nullptr);
+		SDL_RenderCopy(renderer, offscreenTexture, nullptr, nullptr);
+		SDL_RenderPresent(renderer);
 
 		// FPS berechnen
 		Uint32 ticksAtLoopEnd = SDL_GetTicks();
@@ -177,6 +197,7 @@ int main(int argc, char** argv) {
 
 	TTF_CloseFont(ttfFont);
 
+	SDL_DestroyTexture(offscreenTexture);
 	SDL_DestroyRenderer(renderer);
 	SDL_DestroyWindow(window);
 	SDL_Quit();
