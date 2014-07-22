@@ -13,14 +13,24 @@ private:
 	const char* filename;
 
 	/**
+	 * @brief Breite (X-Richtung) der Grafik in Tile-Koordinaten
+	 */
+	unsigned char mapWidth;
+
+	/**
+	 * @brief Höhe (Y-Richtung) der Grafik in Tile-Koordinaten
+	 */
+	unsigned char mapHeight;
+
+	/**
 	 * @brief Breite der Grafik
 	 */
-	unsigned int width;
+	int width;
 
 	/**
 	 * @brief Höhe der Grafik
 	 */
-	unsigned int height;
+	int height;
 
 	/**
 	 * @brief SDL-Texture der geladenen Grafik
@@ -28,8 +38,40 @@ private:
 	SDL_Texture* texture;
 
 public:
-	Graphic(const char* filename);
+	Graphic(const char* filename, unsigned char mapWidth, unsigned char mapHeight);
 	~Graphic();
+
+	/**
+	 * @brief Liefert die Breite der Grafik in Map-Koordinaten zurück
+	 * @return Breite der Grafik in Map-Koordinaten
+	 */
+	unsigned char getMapWidth() const {
+		return mapWidth;
+	}
+
+	/**
+	 * @brief Liefert die Höhe der Grafik in Map-Koordinaten zurück
+	 * @return Breite der Höhe in Map-Koordinaten
+	 */
+	unsigned char getMapHeight() const {
+		return mapHeight;
+	}
+
+	/**
+	 * @brief Liefert die Breite der Grafik zurück
+	 * @return Breite der Grafik
+	 */
+	int getWidth() const {
+		return width;
+	}
+
+	/**
+	 * @brief Liefert die Höhe der Grafik zurück
+	 * @return Höhe der Grafik
+	 */
+	int getHeight() const {
+		return height;
+	}
 
 	/**
 	 * @brief Liefert die SDL-Texture zurück

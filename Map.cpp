@@ -9,7 +9,7 @@
  *       y <--/      ---        \--
  *                --/   \--        \--> x
  *             --/         \--
- *          --/       x       \--(w-1,0)
+ *          --/               \--(w-1,0)
  *    (0,h-1)  --\         /--
  *                --\   /--
  *                   ---
@@ -19,8 +19,8 @@
  * Koordinatensysteme:
  *   Obenstehend sind die Kachel- oder Map-Koordinaten (mapCoords) dargestellt.
  *   Bildschirm-Koordinaten (screenCoords) sind durch ein Pixel-Koordinatensystem definiert. Hierbei wird die
- *   gesamte Karte um die Bildschirm-Koordinaten (0, 0) zentriert. Im Bild oben durch den Punkt x dargestellt.
- *   Die Bildschirm-Koordinate einer Kachel bestimmt die Position des Pixels in der Mitte der Kachel.
+ *   Kachel mit mapCoords (0, 0) auf screenCoords (0, 0) gelegt.
+ *   Die Bildschirm-Koordinate einer Kachel bestimmt die Position des Pixels links-oben an der Kachel.
  */
 
 // Aus main.cpp importiert
@@ -42,13 +42,22 @@ Map::Map(unsigned int width, unsigned int height) :
 		}
 	}
 
-	MapObject* dummyMapObject = new MapObject { 3, 4, 0 };
+	MapObject* dummyMapObject = new MapObject { 3, 3, 0 };
 	mapObjects.push_front(dummyMapObject);
 
-	dummyMapObject = new MapObject { 6, 9, 0 };
+	dummyMapObject = new MapObject { 6, 3, 1 };
 	mapObjects.push_front(dummyMapObject);
 
-	dummyMapObject = new MapObject { 11, 10, 1 };
+	dummyMapObject = new MapObject { 9, 3, 2 };
+	mapObjects.push_front(dummyMapObject);
+
+	dummyMapObject = new MapObject { 12, 3, 3 };
+	mapObjects.push_front(dummyMapObject);
+
+	dummyMapObject = new MapObject { 15, 3, 4 };
+	mapObjects.push_front(dummyMapObject);
+
+	dummyMapObject = new MapObject { 18, 3, 5 };
 	mapObjects.push_front(dummyMapObject);
 
 	screenOffsetX = 0;
@@ -66,21 +75,9 @@ Map::~Map() {
 }
 
 void Map::mapToScreenCoords(unsigned int mapX, unsigned int mapY, int& screenX, int& screenY) {
-	// TODO muss sich die Anwendung irgendwie merken vbzw. aus dem Fenster holen (SDL_GetWindowSize(SDL_Window*,...))
-	const int windowWidth = 1024;
-	const int windowHeight = 768;
-
 	// Koordinatensystem wechseln
-	screenX = mapX * (GraphicsMgr::TILE_WIDTH / 2) - mapY * (GraphicsMgr::TILE_WIDTH / 2);
-	screenY = mapX * (GraphicsMgr::TILE_HEIGHT / 2) + mapY * (GraphicsMgr::TILE_HEIGHT / 2);
-
-	// Kachelmittelpunkt als Referenzpunkt nehmen
-	screenX -= (GraphicsMgr::TILE_WIDTH / 2);
-	screenY -= (GraphicsMgr::TILE_HEIGHT / 2);
-
-	// Im Fenster zentrieren
-	screenX += (windowWidth / 2);
-	screenY += (windowHeight / 2);
+	screenX = (mapX - mapY) * (GraphicsMgr::TILE_WIDTH / 2);
+	screenY = (mapX + mapY) * (GraphicsMgr::TILE_HEIGHT / 2);
 
 	// Scrolling-Offset anwenden
 	screenX -= screenOffsetX;
@@ -101,16 +98,22 @@ void Map::renderMap(SDL_Renderer* renderer) {
 	// TODO Reihenfolge muss entsprechend von hinten nach vorne passieren und nicht wild durcheinander
 	for (auto iter = mapObjects.cbegin(); iter != mapObjects.cend(); iter++) {
 		MapObject* mapObject = *iter;
+		Graphic* graphic = graphicsMgr->getObject(mapObject->object);
 
-		// TODO Objekte haben unterschiedliche Größen. Das müssen wir auch handeln.
-		// Aktuell einfach mal fix für die beiden Grafiken.
-		SDL_Rect rect = { 0, 0, 128, 128 };
+		SDL_Rect rect = { 0, 0, graphic->getWidth(), graphic->getHeight() };
 		mapToScreenCoords(mapObject->mapX, mapObject->mapY, rect.x, rect.y);
 
-		SDL_Texture* objectTexture = graphicsMgr->getObject(mapObject->object)->getTexture();
+		// Grafik an die richtige Stelle schieben. Das muss ausgehend von der zu belegenden Tile-Fläche berechnet werden.
+		rect.x -= graphic->getWidth() - (graphic->getMapWidth() + 1) * (GraphicsMgr::TILE_WIDTH / 2);
+		rect.y -= graphic->getHeight()
+				- (graphic->getMapWidth() + graphic->getMapHeight()) * (GraphicsMgr::TILE_HEIGHT / 2);
+
+		SDL_Texture* objectTexture = graphic->getTexture();
 		SDL_SetTextureAlphaMod(objectTexture, 192);
 		SDL_SetTextureColorMod(objectTexture, 255, 64, 64);
 		SDL_RenderCopy(renderer, objectTexture, NULL, &rect);
+
+		SDL_RenderDrawRect(renderer, &rect);
 	}
 
 	// Bildfläche anzeigen

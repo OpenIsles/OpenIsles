@@ -3,8 +3,10 @@
 
 extern SDL_Renderer* renderer;
 
-Graphic::Graphic(const char* filename) {
+Graphic::Graphic(const char* filename, unsigned char mapWidth, unsigned char mapHeight) {
 	this->filename = filename;
+	this->mapWidth = mapWidth;
+	this->mapHeight = mapHeight;
 
 	SDL_Surface* surface = IMG_Load(filename);
 	if (surface == nullptr) {
@@ -34,7 +36,8 @@ Graphic::~Graphic() {
 	SDL_DestroyTexture(texture);
 
 	filename = nullptr;
-	width = height = 0;
+	width = height = -1;
+	mapWidth = mapHeight = 0;
 	texture = nullptr;
 }
 
