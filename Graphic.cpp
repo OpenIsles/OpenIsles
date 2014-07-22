@@ -21,11 +21,8 @@ Graphic::Graphic(const char* filename, unsigned char mapWidth, unsigned char map
 		std::cerr << "Could not create texture for graphic '" << filename << "': " << SDL_GetError() << std::endl;
 		// TODO Programm abbrechen
 	}
-	SDL_FreeSurface(surface);
 
-	// TODO Surface dazu benutzen, eine Alphamasking anzufertigen, damit wir später gucken können, ob eine Grafik
-	// angeklickt wurde oder ins Transparente geklickt wurde
-
+	this->surface = surface;
 	this->texture = texture;
 
 	std::cout << "Loaded graphic '" << filename << "': size = (" << std::to_string(width) << ", "
@@ -33,11 +30,13 @@ Graphic::Graphic(const char* filename, unsigned char mapWidth, unsigned char map
 }
 
 Graphic::~Graphic() {
+	SDL_FreeSurface(surface);
 	SDL_DestroyTexture(texture);
 
 	filename = nullptr;
 	width = height = -1;
 	mapWidth = mapHeight = 0;
+	surface = nullptr;
 	texture = nullptr;
 }
 

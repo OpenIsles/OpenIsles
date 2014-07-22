@@ -7,9 +7,31 @@
 #include <string.h>
 
 typedef struct {
+	/**
+	 * @brief X-Map-Koordinate des Objekts
+	 */
 	unsigned int mapX;
+
+	/**
+	 * @brief Y-Map-Koordinate des Objekts
+	 */
 	unsigned int mapY;
+
+	/**
+	 * @brief Objekt-Typ, d.h. Index in GraphicsMgr#objects
+	 */
 	unsigned char object;
+
+	/**
+	 * @brief berechnete X-Screen-Koordinate, an dem die Grafik gezeichnet werden muss
+	 */
+	int screenX;
+
+	/**
+	 * @brief berechnete X-Screen-Koordinate, an dem die Grafik gezeichnet werden muss
+	 */
+	int screenY;
+
 } MapObject;
 
 class Map {
@@ -65,6 +87,18 @@ public:
 		return tiles[y * width + x];
 	}
 
+	const std::list<MapObject*>& getMapObjects() const {
+		return mapObjects;
+	}
+
+	int getScreenOffsetX() const {
+		return screenOffsetX;
+	}
+
+	int getScreenOffsetY() const {
+		return screenOffsetY;
+	}
+
 	/**
 	 * @brief Rendert die Karte.
 	 * @param renderer SDL-Renderer, auf den gezeichnet wird
@@ -80,6 +114,15 @@ public:
 	 *                      Positive Werte scrollen nach unten, negative nach oben
 	 */
 	void scroll(int screenOffsetX, int screenOffsetY);
+
+	/**
+	 * @brief Fügt ein neues Objekt der Karte hinzu.
+	 * @param mapX X-Map-Koordinate des Objekts
+	 * @param mapY Y-Map-Koordinate des Objekts
+	 * @param object Objekt-Typ, d.h. Index in GraphicsMgr#objects
+	 * @return readonly-Zeiger auf das neu angelegte MapObject
+	 */
+	const MapObject* addMapObject(unsigned int mapX, unsigned int mapY, unsigned char object);
 
 private:
 	/**

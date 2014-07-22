@@ -37,6 +37,11 @@ private:
 	 */
 	SDL_Texture* texture;
 
+	/**
+	 * @brief SDL-Surface
+	 */
+	SDL_Surface* surface;
+
 public:
 	Graphic(const char* filename, unsigned char mapWidth, unsigned char mapHeight);
 	~Graphic();
@@ -79,6 +84,14 @@ public:
 	 */
 	SDL_Texture* getTexture() const {
 		return texture;
+	}
+
+	/**
+	 * @brief Liefert das SDL-Surface zurück
+	 * @return SDL-Surface
+	 */
+	SDL_Surface* getSurface() const {
+		return surface;
 	}
 
 };

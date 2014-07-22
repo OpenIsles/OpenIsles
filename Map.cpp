@@ -42,23 +42,12 @@ Map::Map(unsigned int width, unsigned int height) :
 		}
 	}
 
-	MapObject* dummyMapObject = new MapObject { 3, 3, 0 };
-	mapObjects.push_front(dummyMapObject);
-
-	dummyMapObject = new MapObject { 6, 3, 1 };
-	mapObjects.push_front(dummyMapObject);
-
-	dummyMapObject = new MapObject { 9, 3, 2 };
-	mapObjects.push_front(dummyMapObject);
-
-	dummyMapObject = new MapObject { 12, 3, 3 };
-	mapObjects.push_front(dummyMapObject);
-
-	dummyMapObject = new MapObject { 15, 3, 4 };
-	mapObjects.push_front(dummyMapObject);
-
-	dummyMapObject = new MapObject { 18, 3, 5 };
-	mapObjects.push_front(dummyMapObject);
+	addMapObject(3, 3, 0);
+	addMapObject(6, 3, 1);
+	addMapObject(9, 3, 2);
+	addMapObject(12, 3, 3);
+	addMapObject(15, 3, 4);
+	addMapObject(18, 3, 5);
 
 	screenOffsetX = 0;
 	screenOffsetY = 0;
@@ -78,10 +67,6 @@ void Map::mapToScreenCoords(unsigned int mapX, unsigned int mapY, int& screenX, 
 	// Koordinatensystem wechseln
 	screenX = (mapX - mapY) * (GraphicsMgr::TILE_WIDTH / 2);
 	screenY = (mapX + mapY) * (GraphicsMgr::TILE_HEIGHT / 2);
-
-	// Scrolling-Offset anwenden
-	screenX -= screenOffsetX;
-	screenY -= screenOffsetY;
 }
 
 void Map::renderMap(SDL_Renderer* renderer) {
@@ -90,6 +75,11 @@ void Map::renderMap(SDL_Renderer* renderer) {
 	for (unsigned int mapY = 0; mapY < height; mapY++) {
 		for (unsigned int mapX = 0; mapX < width; mapX++) {
 			mapToScreenCoords(mapX, mapY, rectDestination.x, rectDestination.y);
+
+			// Scrolling-Offset anwenden
+			rectDestination.x -= screenOffsetX;
+			rectDestination.y -= screenOffsetY;
+
 			SDL_RenderCopy(renderer, graphicsMgr->getTile(getTileAt(mapX, mapY))->getTexture(), NULL, &rectDestination);
 		}
 	}
@@ -111,14 +101,11 @@ void Map::renderMap(SDL_Renderer* renderer) {
 	for (auto iter = mapObjects.cbegin(); iter != mapObjects.cend(); iter++) {
 		MapObject* mapObject = *iter;
 		Graphic* graphic = graphicsMgr->getObject(mapObject->object);
-
-		SDL_Rect rect = { 0, 0, graphic->getWidth(), graphic->getHeight() };
-		mapToScreenCoords(mapObject->mapX, mapObject->mapY, rect.x, rect.y);
-
-		// Grafik an die richtige Stelle schieben. Das muss ausgehend von der zu belegenden Tile-Fläche berechnet werden.
-		rect.x -= graphic->getWidth() - (graphic->getMapWidth() + 1) * (GraphicsMgr::TILE_WIDTH / 2);
-		rect.y -= graphic->getHeight()
-				- (graphic->getMapWidth() + graphic->getMapHeight()) * (GraphicsMgr::TILE_HEIGHT / 2);
+		SDL_Rect rect = SDL_Rect();
+		rect.x = mapObject->screenX - screenOffsetX;
+		rect.y = mapObject->screenY - screenOffsetY;
+		rect.w = graphic->getWidth();
+		rect.h = graphic->getHeight();
 
 		SDL_Texture* objectTexture = graphic->getTexture();
 		SDL_SetTextureAlphaMod(objectTexture, 255);
@@ -133,4 +120,27 @@ void Map::renderMap(SDL_Renderer* renderer) {
 void Map::scroll(int screenOffsetX, int screenOffsetY) {
 	this->screenOffsetX += screenOffsetX;
 	this->screenOffsetY += screenOffsetY;
+}
+
+const MapObject* Map::addMapObject(unsigned int mapX, unsigned int mapY, unsigned char object) {
+	// Position berechnen in Screen-Koordinaten berechnen, an dem sich die Grafik befinden muss.
+	Graphic* graphic = graphicsMgr->getObject(object);
+	SDL_Rect rect = { 0, 0, graphic->getWidth(), graphic->getHeight() };
+	mapToScreenCoords(mapX, mapY, rect.x, rect.y);
+
+	// Grafik an die richtige Stelle schieben. Das muss ausgehend von der zu belegenden Tile-Fläche berechnet werden.
+	rect.x -= graphic->getWidth() - (graphic->getMapWidth() + 1) * (GraphicsMgr::TILE_WIDTH / 2);
+	rect.y -= graphic->getHeight()
+			- (graphic->getMapWidth() + graphic->getMapHeight()) * (GraphicsMgr::TILE_HEIGHT / 2);
+
+	// Objekt anlegen und in die Liste aufnehmen
+	MapObject* newMapObject = new MapObject();
+	newMapObject->mapX = mapX;
+	newMapObject->mapY = mapY;
+	newMapObject->object = object;
+	newMapObject->screenX = rect.x;
+	newMapObject->screenY = rect.y;
+
+	mapObjects.push_front(newMapObject);
+	return newMapObject;
 }
