@@ -145,6 +145,22 @@ public:
 	 */
 	void screenToMapCoords(int screenX, int screenY, int& mapX, int& mapY);
 
+	/**
+	 * @brief Callback, der sich um einen Mausklick auf die Karte kümmert
+	 * @param mouseX X-Koordinate im Fenster, die geklickt wurde
+	 * @param mouseY Y-Koordinate im Fenster, die geklickt wurde
+	 */
+	void onClick(int mouseX, int mouseY);
+
+private:
+	/**
+	 * @brief Callback, der sich um einen Mausklick auf ein Objekt kümmert
+	 * @param mapObject angeklicktes Objekt
+	 * @param mouseXInObject X-Koordinate innerhalb des Objekts, wo geklickt wurde
+	 * @param mouseYInObject Y-oordinate innerhalb des Objekts, wo geklickt wurde
+	 */
+	void onObjectClick(MapObject* mapObject, int mouseXInObject, int mouseYInObject);
+
 };
 
 #endif

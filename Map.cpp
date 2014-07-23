@@ -233,3 +233,47 @@ const MapObject* Map::addMapObject(int mapX, int mapY, unsigned char object) {
 
 	return newMapObject;
 }
+
+void Map::onClick(int mouseX, int mouseY) {
+	int mouseAtScreenX = mouseX + getScreenOffsetX();
+	int mouseAtScreenY = mouseY + getScreenOffsetY();
+
+	// Gucken, ob ein Objekt geklickt wurde.
+	// Objekte dabei rückwärts iterieren. Somit kommen "oben liegende" Objekte zuerst dran.
+	for (auto iter = mapObjects.crbegin(); iter != mapObjects.crend(); iter++) {
+		MapObject* mapObject = *iter;
+
+		// Außerhalb der Boundary-Box des Objekt geklickt?
+		if (mouseAtScreenX < mapObject->screenX) {
+			continue;
+		}
+		if (mouseAtScreenX >= mapObject->screenX + mapObject->screenWidth) {
+			continue;
+		}
+		if (mouseAtScreenY < mapObject->screenY) {
+			continue;
+		}
+		if (mouseAtScreenY >= mapObject->screenY + mapObject->screenHeight) {
+			continue;
+		}
+
+		// Pixelfarbwert holen
+		Uint8 r, g, b, a;
+		int x = mouseAtScreenX - mapObject->screenX;
+		int y = mouseAtScreenY - mapObject->screenY;
+		graphicsMgr->getObject(mapObject->object)->getPixel(x, y, &r, &g, &b, &a);
+
+		// Checken, ob Pixel un-transparent genug ist, um es als Treffer zu nehmen
+		if (a > 127) {
+			onObjectClick(mapObject, x, y);
+			return;
+		}
+	}
+}
+
+void Map::onObjectClick(MapObject* mapObject, int mouseXInObject, int mouseYInObject) {
+	std::cout << "Klick auf " << std::to_string(mapObject->object) << "@(" << std::to_string(mouseXInObject) << ", "
+			<< std::to_string(mouseYInObject) << ")" << std::endl;
+
+	// TODO Klick handeln
+}
