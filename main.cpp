@@ -32,9 +32,9 @@ TTF_Font* ttfFont;
 double fps = 0.0;
 
 /**
- * @brief Zeichenketten-Puffer für 5 Zeilen Debug-Ausgabe
+ * @brief Zeichenketten-Puffer für 6 Zeilen Debug-Ausgabe
  */
-std::string debugOutput[5];
+std::string debugOutput[6];
 
 /**
  * @brief aktuelle Position des Mauszeigers (X-Koordinate)
@@ -78,7 +78,7 @@ void drawFrame(SDL_Renderer* renderer) {
 	map->renderMap(renderer);
 
 	// Debugging-Infos rendern
-	for (int i = 0; i < 5; i++) {
+	for (int i = 0; i < 6; i++) {
 		renderText(renderer, debugOutput[i], 10, 10 + 15 * i);
 	}
 }
@@ -169,9 +169,40 @@ int main(int argc, char** argv) {
 		std::string mousePosString = "MousePos = (" + std::to_string(mouseX) + ", " + std::to_string(mouseY) + ")";
 		debugOutput[1] = mousePosString;
 
-		debugOutput[2] = " ";
-		debugOutput[3] = " ";
-		debugOutput[4] = " ";
+		int mouseAtScreenX = mouseX + map->getScreenOffsetX();
+		int mouseAtScreenY = mouseY + map->getScreenOffsetY();
+		std::string mouseAtScreenString = "MouseScreenPos = (" + std::to_string(mouseAtScreenX) + ", "
+				+ std::to_string(mouseAtScreenY) + ")";
+		debugOutput[2] = mouseAtScreenString;
+
+		int mouseMapX, mouseMapY;
+		map->screenToMapCoords(mouseAtScreenX, mouseAtScreenY, mouseMapX, mouseMapY);
+		std::string mouseMapString = "MouseMapPos = (" + std::to_string(mouseMapX) + ", " + std::to_string(mouseMapY)
+				+ ")";
+		debugOutput[3] = mouseMapString;
+
+		std::list<MapObject*> mapObjects = map->getMapObjects();
+		std::string boundingBoxObjectsMapString = "objectsMap = (";
+		std::string boundingBoxObjectsScreenString = "objectsScreen = (";
+		for (auto iter = mapObjects.cbegin(); iter != mapObjects.cend(); iter++) {
+			MapObject* mapObject = *iter;
+
+			if ((mouseMapX >= mapObject->mapX) && (mouseMapX < mapObject->mapX + mapObject->mapWidth)
+					&& (mouseMapY >= mapObject->mapY) && (mouseMapY < mapObject->mapY + mapObject->mapHeight)) {
+
+				boundingBoxObjectsMapString.append("object " + std::to_string(mapObject->object) + ", ");
+			}
+
+			if ((mouseAtScreenX >= mapObject->screenX) && (mouseAtScreenX < mapObject->screenX + mapObject->screenWidth)
+						&& (mouseAtScreenY >= mapObject->screenY) && (mouseAtScreenY < mapObject->screenY + mapObject->screenHeight)) {
+
+					boundingBoxObjectsScreenString.append("object " + std::to_string(mapObject->object) + ", ");
+				}
+		}
+		boundingBoxObjectsMapString.append(")");
+		boundingBoxObjectsScreenString.append(")");
+		debugOutput[4] = boundingBoxObjectsMapString;
+		debugOutput[5] = boundingBoxObjectsScreenString;
 
 		// Frame auf Offscreen-Texture zeichnen
 		SDL_SetRenderTarget(renderer, offscreenTexture);

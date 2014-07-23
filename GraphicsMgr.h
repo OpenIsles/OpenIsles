@@ -13,14 +13,12 @@ class GraphicsMgr {
 
 public:
 	/**
-	 * @brief Breite einer Kachel
+	 * @brief Größe einer Kachel
 	 */
 	static const int TILE_WIDTH = 64;
-
-	/**
-	 * @brief Breite einer Kachel
-	 */
 	static const int TILE_HEIGHT = 32;
+	static const int TILE_WIDTH_HALF = TILE_WIDTH / 2;
+	static const int TILE_HEIGHT_HALF = TILE_HEIGHT / 2;
 
 private:
 	/**

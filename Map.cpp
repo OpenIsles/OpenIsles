@@ -42,23 +42,12 @@ Map::Map(unsigned int width, unsigned int height) :
 		}
 	}
 
-	MapObject* dummyMapObject = new MapObject { 3, 3, 0 };
-	mapObjects.push_front(dummyMapObject);
-
-	dummyMapObject = new MapObject { 6, 3, 1 };
-	mapObjects.push_front(dummyMapObject);
-
-	dummyMapObject = new MapObject { 9, 3, 2 };
-	mapObjects.push_front(dummyMapObject);
-
-	dummyMapObject = new MapObject { 12, 3, 3 };
-	mapObjects.push_front(dummyMapObject);
-
-	dummyMapObject = new MapObject { 15, 3, 4 };
-	mapObjects.push_front(dummyMapObject);
-
-	dummyMapObject = new MapObject { 18, 3, 5 };
-	mapObjects.push_front(dummyMapObject);
+	addMapObject(3, 3, 0);
+	addMapObject(6, 3, 1);
+	addMapObject(9, 3, 2);
+	addMapObject(12, 3, 3);
+	addMapObject(15, 3, 4);
+	addMapObject(18, 3, 5);
 
 	screenOffsetX = 0;
 	screenOffsetY = 0;
@@ -74,22 +63,108 @@ Map::~Map() {
 	delete[] tiles;
 }
 
-void Map::mapToScreenCoords(unsigned int mapX, unsigned int mapY, int& screenX, int& screenY) {
-	// Koordinatensystem wechseln
-	screenX = (mapX - mapY) * (GraphicsMgr::TILE_WIDTH / 2);
-	screenY = (mapX + mapY) * (GraphicsMgr::TILE_HEIGHT / 2);
+void Map::mapToScreenCoords(int mapX, int mapY, int& screenX, int& screenY) {
+	screenX = (mapX - mapY) * GraphicsMgr::TILE_WIDTH_HALF;
+	screenY = (mapX + mapY) * GraphicsMgr::TILE_HEIGHT_HALF;
+}
 
-	// Scrolling-Offset anwenden
-	screenX -= screenOffsetX;
-	screenY -= screenOffsetY;
+void Map::screenToMapCoords(int screenX, int screenY, int& mapX, int& mapY) {
+	/*
+	 * Screen-Koordinaten erst in ein (TILE_WIDTH x TILE_HEIGHT)-Koordinatensystem runterrechnen
+	 * Dann gibts 8 Fälle und wir haben es. Ohne unperformante Matrizen und Projektionen :-)
+	 *
+	 * |          TILE_WIDTH           |
+	 * |   xDiff<0.5       xDiff>0.5   |
+	 * O-------------------------------O-------------
+	 * | x-1          /|\          y-1 |
+	 * |   [1]   /---- | ----\   [6]   | yDiff<0.5
+	 * |    /----  [2] | [5]  ----\    |
+	 * |---------------+---------------|  TILE_HEIGHT
+	 * |    \----  [4] | [7]  ----/    |
+	 * |   [3]   \---- | ----/   [8]   | yDiff>0.5
+	 * | y+1          \|/          x+1 |
+	 * O-------------------------------O-------------
+	 *
+	 * O = obere linke Ecke der Kacheln = Punkt, der mit mapToScreenCoords() berechnet wird.
+	 *     Entspricht genau den (TILE_WIDTH x TILE_HEIGHT)-Koordinatensystem-Punkten
+	 * [x] = 8 Fälle, siehe if-Block unten
+	 *
+	 * x/yDouble = exakte Koordinate im (TILE_WIDTH x TILE_HEIGHT)-Koordinatensystem.
+	 * x/yInt = abgerundete Koordinate im (TILE_WIDTH x TILE_HEIGHT)-Koordinatensystem, entspricht den O-Punkten im Bild
+	 * x/yDiff = Wert zwischen 0.0 und 1.0, siehe Grafik oben, mit dem die 8 Fälle identifiziert werden
+	 *
+	 */
+
+	double xDouble = (double) screenX / (double) GraphicsMgr::TILE_WIDTH;
+	double yDouble = (double) screenY / (double) GraphicsMgr::TILE_HEIGHT;
+	int xInt = (int) floor(xDouble);
+	int yInt = (int) floor(yDouble);
+	double xDiff = xDouble - (double) xInt;
+	double yDiff = yDouble - (double) yInt;
+
+	// preliminaryMap-Koordinate = Map-Koordinate der Kachel, die ggf. noch in 4 von 8 Fällen angepasst werden muss
+	int preliminaryMapX = xInt + yInt;
+	int preliminaryMapY = yInt - xInt;
+
+	// Jetzt die 8 Fälle durchgehen und ggf. noch plus-minus 1 auf x oder y
+	if (xDiff < 0.5) {
+		if (yDiff < 0.5) {
+			if (xDiff < 0.5 - yDiff) {
+				// Fall 1
+				mapX = preliminaryMapX - 1;
+				mapY = preliminaryMapY;
+			} else {
+				// Fall 2
+				mapX = preliminaryMapX;
+				mapY = preliminaryMapY;
+			}
+		} else {
+			if (xDiff < yDiff - 0.5) {
+				// Fall 3
+				mapX = preliminaryMapX;
+				mapY = preliminaryMapY + 1;
+			} else {
+				// Fall 4
+				mapX = preliminaryMapX;
+				mapY = preliminaryMapY;
+			}
+		}
+	} else {
+		if (yDiff < 0.5) {
+			if (xDiff - 0.5 < yDiff) {
+				// Fall 5
+				mapX = preliminaryMapX;
+				mapY = preliminaryMapY;
+			} else {
+				// Fall 6
+				mapX = preliminaryMapX;
+				mapY = preliminaryMapY - 1;
+			}
+		} else {
+			if (xDiff - 0.5 < 1 - yDiff) {
+				// Fall 7
+				mapX = preliminaryMapX;
+				mapY = preliminaryMapY;
+			} else {
+				// Fall 8
+				mapX = preliminaryMapX + 1;
+				mapY = preliminaryMapY;
+			}
+		}
+	}
 }
 
 void Map::renderMap(SDL_Renderer* renderer) {
 	// Kacheln rendern
 	SDL_Rect rectDestination = { 0, 0, GraphicsMgr::TILE_WIDTH, GraphicsMgr::TILE_HEIGHT };
-	for (unsigned int mapY = 0; mapY < height; mapY++) {
-		for (unsigned int mapX = 0; mapX < width; mapX++) {
+	for (int mapY = 0; mapY < (int) height; mapY++) {
+		for (int mapX = 0; mapX < (int) width; mapX++) {
 			mapToScreenCoords(mapX, mapY, rectDestination.x, rectDestination.y);
+
+			// Scrolling-Offset anwenden
+			rectDestination.x -= screenOffsetX;
+			rectDestination.y -= screenOffsetY;
+
 			SDL_RenderCopy(renderer, graphicsMgr->getTile(getTileAt(mapX, mapY))->getTexture(), NULL, &rectDestination);
 		}
 	}
@@ -111,14 +186,11 @@ void Map::renderMap(SDL_Renderer* renderer) {
 	for (auto iter = mapObjects.cbegin(); iter != mapObjects.cend(); iter++) {
 		MapObject* mapObject = *iter;
 		Graphic* graphic = graphicsMgr->getObject(mapObject->object);
-
-		SDL_Rect rect = { 0, 0, graphic->getWidth(), graphic->getHeight() };
-		mapToScreenCoords(mapObject->mapX, mapObject->mapY, rect.x, rect.y);
-
-		// Grafik an die richtige Stelle schieben. Das muss ausgehend von der zu belegenden Tile-Fläche berechnet werden.
-		rect.x -= graphic->getWidth() - (graphic->getMapWidth() + 1) * (GraphicsMgr::TILE_WIDTH / 2);
-		rect.y -= graphic->getHeight()
-				- (graphic->getMapWidth() + graphic->getMapHeight()) * (GraphicsMgr::TILE_HEIGHT / 2);
+		SDL_Rect rect = SDL_Rect();
+		rect.x = mapObject->screenX - screenOffsetX;
+		rect.y = mapObject->screenY - screenOffsetY;
+		rect.w = mapObject->screenWidth;
+		rect.h = mapObject->screenHeight;
 
 		SDL_Texture* objectTexture = graphic->getTexture();
 		SDL_SetTextureAlphaMod(objectTexture, 255);
@@ -133,4 +205,30 @@ void Map::renderMap(SDL_Renderer* renderer) {
 void Map::scroll(int screenOffsetX, int screenOffsetY) {
 	this->screenOffsetX += screenOffsetX;
 	this->screenOffsetY += screenOffsetY;
+}
+
+const MapObject* Map::addMapObject(int mapX, int mapY, unsigned char object) {
+	// Position berechnen in Screen-Koordinaten berechnen, an dem sich die Grafik befinden muss.
+	Graphic* graphic = graphicsMgr->getObject(object);
+	SDL_Rect rect = { 0, 0, graphic->getWidth(), graphic->getHeight() };
+	mapToScreenCoords(mapX, mapY, rect.x, rect.y);
+
+	// Grafik an die richtige Stelle schieben. Das muss ausgehend von der zu belegenden Tile-Fläche berechnet werden.
+	rect.x -= graphic->getWidth() - (graphic->getMapWidth() + 1) * GraphicsMgr::TILE_WIDTH_HALF;
+	rect.y -= graphic->getHeight() - (graphic->getMapWidth() + graphic->getMapHeight()) * GraphicsMgr::TILE_HEIGHT_HALF;
+
+	// Objekt anlegen und in die Liste aufnehmen
+	MapObject* newMapObject = new MapObject();
+	newMapObject->mapX = mapX;
+	newMapObject->mapY = mapY;
+	newMapObject->mapWidth = graphic->getMapWidth();
+	newMapObject->mapHeight = graphic->getMapHeight();
+	newMapObject->object = object;
+	newMapObject->screenX = rect.x;
+	newMapObject->screenY = rect.y;
+	newMapObject->screenWidth = graphic->getWidth();
+	newMapObject->screenHeight = graphic->getHeight();
+
+	mapObjects.push_front(newMapObject);
+	return newMapObject;
 }

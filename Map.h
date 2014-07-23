@@ -7,9 +7,31 @@
 #include <string.h>
 
 typedef struct {
-	unsigned int mapX;
-	unsigned int mapY;
+	/**
+	 * @brief Map-Koordinaten des Objekts
+	 */
+	int mapX, mapY;
+
+	/**
+	 * @brief Größe der des Objekts in Map-Koordinaten
+	 */
+	int mapWidth, mapHeight;
+
+	/**
+	 * @brief Objekt-Typ, d.h. Index in GraphicsMgr#objects
+	 */
 	unsigned char object;
+
+	/**
+	 * @brief berechnete X-Screen-Koordinaten, an dem die Grafik gezeichnet werden muss
+	 */
+	int screenX, screenY;
+
+	/**
+	 * @brief Größe der Grafik
+	 */
+	int screenWidth, screenHeight;
+
 } MapObject;
 
 class Map {
@@ -21,7 +43,7 @@ private:
 	unsigned int width;
 
 	/**
-	 * @brief Breite der Karte in Kacheln
+	 * @brief Höhe der Karte in Kacheln
 	 */
 	unsigned int height;
 
@@ -65,6 +87,18 @@ public:
 		return tiles[y * width + x];
 	}
 
+	const std::list<MapObject*>& getMapObjects() const {
+		return mapObjects;
+	}
+
+	int getScreenOffsetX() const {
+		return screenOffsetX;
+	}
+
+	int getScreenOffsetY() const {
+		return screenOffsetY;
+	}
+
 	/**
 	 * @brief Rendert die Karte.
 	 * @param renderer SDL-Renderer, auf den gezeichnet wird
@@ -81,15 +115,32 @@ public:
 	 */
 	void scroll(int screenOffsetX, int screenOffsetY);
 
-private:
 	/**
-	 * @brief Rechnet Map- in Screen-Koordinaten um
+	 * @brief Fügt ein neues Objekt der Karte hinzu.
+	 * @param mapX X-Map-Koordinate des Objekts
+	 * @param mapY Y-Map-Koordinate des Objekts
+	 * @param object Objekt-Typ, d.h. Index in GraphicsMgr#objects
+	 * @return readonly-Zeiger auf das neu angelegte MapObject
+	 */
+	const MapObject* addMapObject(int mapX, int mapY, unsigned char object);
+
+    /**
+	 * @brief Rechnet Map- in Screen-Koordinaten um. Die Screen-Koordinaten sind die der oberen linken Ecke der Kachel.
 	 * @param mapX Map-X-Koordinate (Eingabe)
 	 * @param mapY Map-Y-Koordinate (Eingabe)
 	 * @param screenX Screen-X-Koordinate (Ausgabe)
 	 * @param screenY Screen-Y-Koordinate (Ausgabe)
 	 */
-	void mapToScreenCoords(unsigned int mapX, unsigned int mapY, int& screenX, int& screenY);
+	void mapToScreenCoords(int mapX, int mapY, int& screenX, int& screenY);
+
+	/**
+	 * @brief Rechnet Screen- in Map-Koordinaten um.
+	 * @param screenX Screen-X-Koordinate (Eingabe)
+	 * @param screenY Screen-Y-Koordinate (Eingabe)
+	 * @param mapX Map-X-Koordinate (Ausgabe)
+	 * @param mapY Map-Y-Koordinate (Ausgabe)
+	 */
+	void screenToMapCoords(int screenX, int screenY, int& mapX, int& mapY);
 
 };
 
