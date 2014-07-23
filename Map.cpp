@@ -42,6 +42,8 @@ Map::Map(unsigned int width, unsigned int height) :
 		}
 	}
 
+	selectedMapObject = nullptr;
+
 	addMapObject(3, 3, 0);
 	addMapObject(6, 3, 1);
 	addMapObject(9, 3, 2);
@@ -54,6 +56,8 @@ Map::Map(unsigned int width, unsigned int height) :
 }
 
 Map::~Map() {
+	selectedMapObject = nullptr;
+
 	for (auto iter = mapObjects.cbegin(); iter != mapObjects.cend(); iter++) {
 		MapObject* mapObject = *iter;
 		delete mapObject;
@@ -165,7 +169,14 @@ void Map::renderMap(SDL_Renderer* renderer) {
 			rectDestination.x -= screenOffsetX;
 			rectDestination.y -= screenOffsetY;
 
-			SDL_RenderCopy(renderer, graphicsMgr->getTile(getTileAt(mapX, mapY))->getTexture(), NULL, &rectDestination);
+			SDL_Texture* tileTexture = graphicsMgr->getTile(getTileAt(mapX, mapY))->getTexture();
+
+			if (selectedMapObject != nullptr) {
+				SDL_SetTextureColorMod(tileTexture, 160, 160, 160);
+			} else {
+				SDL_SetTextureColorMod(tileTexture, 255, 255, 255);
+			}
+			SDL_RenderCopy(renderer, tileTexture, NULL, &rectDestination);
 		}
 	}
 
@@ -180,8 +191,12 @@ void Map::renderMap(SDL_Renderer* renderer) {
 		rect.h = mapObject->screenHeight;
 
 		SDL_Texture* objectTexture = graphic->getTexture();
-		SDL_SetTextureAlphaMod(objectTexture, 255);
-		SDL_SetTextureColorMod(objectTexture, 255, 255, 255);
+
+		if (selectedMapObject == nullptr || selectedMapObject == mapObject) {
+			SDL_SetTextureColorMod(objectTexture, 255, 255, 255);
+		} else {
+			SDL_SetTextureColorMod(objectTexture, 160, 160, 160);
+		}
 		SDL_RenderCopy(renderer, objectTexture, NULL, &rect);
 	}
 
@@ -269,11 +284,14 @@ void Map::onClick(int mouseX, int mouseY) {
 			return;
 		}
 	}
+
+	// TODO später ggf. weitere Events
+	selectedMapObject = nullptr;
 }
 
 void Map::onObjectClick(MapObject* mapObject, int mouseXInObject, int mouseYInObject) {
 	std::cout << "Klick auf " << std::to_string(mapObject->object) << "@(" << std::to_string(mouseXInObject) << ", "
 			<< std::to_string(mouseYInObject) << ")" << std::endl;
 
-	// TODO Klick handeln
+	selectedMapObject = mapObject;
 }

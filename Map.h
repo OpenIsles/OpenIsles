@@ -61,6 +61,11 @@ private:
 	std::list<MapObject*> mapObjects;
 
 	/**
+	 * @brief ausgewähltes Objekt oder @c nullptr, wenn nichts ausgewählt ist
+	 */
+	MapObject* selectedMapObject;
+
+	/**
 	 * @brief X-Offset in Screen-Koordinaten, um Scrolling zu ermöglichen
 	 */
 	int screenOffsetX;
