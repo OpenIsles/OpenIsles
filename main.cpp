@@ -32,9 +32,9 @@ TTF_Font* ttfFont;
 double fps = 0.0;
 
 /**
- * @brief Zeichenketten-Puffer für 6 Zeilen Debug-Ausgabe
+ * @brief Zeichenketten-Puffer für 7 Zeilen Debug-Ausgabe
  */
-std::string debugOutput[6];
+std::string debugOutput[7];
 
 /**
  * @brief aktuelle Position des Mauszeigers (X-Koordinate)
@@ -78,7 +78,7 @@ void drawFrame(SDL_Renderer* renderer) {
 	map->renderMap(renderer);
 
 	// Debugging-Infos rendern
-	for (int i = 0; i < 6; i++) {
+	for (int i = 0; i < 7; i++) {
 		renderText(renderer, debugOutput[i], 10, 10 + 15 * i);
 	}
 }
@@ -184,7 +184,10 @@ int main(int argc, char** argv) {
 		std::list<MapObject*> mapObjects = map->getMapObjects();
 		std::string boundingBoxObjectsMapString = "objectsMap = (";
 		std::string boundingBoxObjectsScreenString = "objectsScreen = (";
-		for (auto iter = mapObjects.cbegin(); iter != mapObjects.cend(); iter++) {
+		std::string realCollisionString = "realCollision = (";
+
+		// Objekte rückwärts iterieren. Somit kommen "oben liegende" Objekte zuerst dran
+		for (auto iter = mapObjects.crbegin(); iter != mapObjects.crend(); iter++) {
 			MapObject* mapObject = *iter;
 
 			if ((mouseMapX >= mapObject->mapX) && (mouseMapX < mapObject->mapX + mapObject->mapWidth)
@@ -194,15 +197,25 @@ int main(int argc, char** argv) {
 			}
 
 			if ((mouseAtScreenX >= mapObject->screenX) && (mouseAtScreenX < mapObject->screenX + mapObject->screenWidth)
-						&& (mouseAtScreenY >= mapObject->screenY) && (mouseAtScreenY < mapObject->screenY + mapObject->screenHeight)) {
+					&& (mouseAtScreenY >= mapObject->screenY)
+					&& (mouseAtScreenY < mapObject->screenY + mapObject->screenHeight)) {
 
-					boundingBoxObjectsScreenString.append("object " + std::to_string(mapObject->object) + ", ");
-				}
+				boundingBoxObjectsScreenString.append("object " + std::to_string(mapObject->object) + ", ");
+
+				Uint8 r, g, b, a;
+				int x = mouseAtScreenX - mapObject->screenX;
+				int y = mouseAtScreenY - mapObject->screenY;
+				graphicsMgr->getObject(mapObject->object)->getPixel(x, y, &r, &g, &b, &a);
+
+				realCollisionString.append("a = " + std::to_string(a) + ", ");
+			}
 		}
 		boundingBoxObjectsMapString.append(")");
 		boundingBoxObjectsScreenString.append(")");
+		realCollisionString.append(")");
 		debugOutput[4] = boundingBoxObjectsMapString;
 		debugOutput[5] = boundingBoxObjectsScreenString;
+		debugOutput[6] = realCollisionString;
 
 		// Frame auf Offscreen-Texture zeichnen
 		SDL_SetRenderTarget(renderer, offscreenTexture);

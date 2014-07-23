@@ -53,7 +53,10 @@ private:
 	unsigned char* tiles;
 
 	/**
-	 * @brief Liste von Objekten (z.B. Häusern) auf der Karte
+	 * @brief Liste von Objekten (z.B. Häusern) auf der Karte.
+	 *
+	 * Die Objekte sind in dieser Liste immer so geordnet, dass sie in Rendering-Reihenfolge liegen:
+	 * "hinten im Bild" liegende Objekte kommen in der Liste zuerst.
 	 */
 	std::list<MapObject*> mapObjects;
 

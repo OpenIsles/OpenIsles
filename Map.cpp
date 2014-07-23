@@ -169,19 +169,6 @@ void Map::renderMap(SDL_Renderer* renderer) {
 		}
 	}
 
-	// Reihenfolge der Objekte so stellen, dass von hinten nach vorne gerendert wird
-	// TODO ggf. Algorithmus verbessern, dass wirklich nach Y-Screen-Koordinaten sortiert wird. Mit den paar Grafiken
-	// hab ich keinen Fall bauen können, der n Unterschied macht.
-	mapObjects.sort([] (MapObject* mo1, MapObject* mo2) {
-		if (mo1->mapY < mo2->mapY) {
-			return true;
-		} else if (mo1->mapY > mo2->mapY) {
-			return false;
-		} else {
-			return (mo1->mapX <= mo2->mapX);
-		}
-	});
-
 	// Objekte rendern
 	for (auto iter = mapObjects.cbegin(); iter != mapObjects.cend(); iter++) {
 		MapObject* mapObject = *iter;
@@ -230,5 +217,19 @@ const MapObject* Map::addMapObject(int mapX, int mapY, unsigned char object) {
 	newMapObject->screenHeight = graphic->getHeight();
 
 	mapObjects.push_front(newMapObject);
+
+	// Reihenfolge der Objekte so stellen, dass von hinten nach vorne gerendert wird
+	// TODO ggf. Algorithmus verbessern, dass wirklich nach Y-Screen-Koordinaten sortiert wird. Mit den paar Grafiken
+	// hab ich keinen Fall bauen können, der n Unterschied macht.
+	mapObjects.sort([] (MapObject* mo1, MapObject* mo2) {
+		if (mo1->mapY < mo2->mapY) {
+			return true;
+		} else if (mo1->mapY > mo2->mapY) {
+			return false;
+		} else {
+			return (mo1->mapX <= mo2->mapX);
+		}
+	});
+
 	return newMapObject;
 }

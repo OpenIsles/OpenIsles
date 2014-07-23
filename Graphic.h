@@ -37,6 +37,11 @@ private:
 	 */
 	SDL_Texture* texture;
 
+	/**
+	 * @brief SDL-Surface
+	 */
+	SDL_Surface* surface;
+
 public:
 	Graphic(const char* filename, unsigned char mapWidth, unsigned char mapHeight);
 	~Graphic();
@@ -80,6 +85,25 @@ public:
 	SDL_Texture* getTexture() const {
 		return texture;
 	}
+
+	/**
+	 * @brief Liefert das SDL-Surface zurück
+	 * @return SDL-Surface
+	 */
+	SDL_Surface* getSurface() const {
+		return surface;
+	}
+
+	/**
+	 * @brief Liest die Farbwerte eines bestimmten Pixels aus und setzt sie in die r-, g-, b- und a-Parameter.
+	 * @param x x-Koordinate (IN)
+	 * @param y y-Koordinate (IN)
+	 * @param r wird auf den Rot-Wert des Pixels gesetzt (OUT)
+	 * @param g wird auf den Grün-Wert des Pixels gesetzt (OUT)
+	 * @param b wird auf den Blau-Wert des Pixels gesetzt (OUT)
+	 * @param a wird auf den Alpha-Wert des Pixels gesetzt (OUT) 0 = voll transparent, 255 = absolut undurchsichtig
+	 */
+	void getPixel(int x, int y, Uint8* r, Uint8* g, Uint8* b, Uint8* a);
 
 };
 
