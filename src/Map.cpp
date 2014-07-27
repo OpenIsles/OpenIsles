@@ -61,6 +61,8 @@ void Map::initNewMap(unsigned int width, unsigned int height) {
 		delete[] tiles;
 	}
 	tiles = new unsigned char[width * height];
+	this->width = width;
+	this->height = height;
 
 	// Sonstiges Zeugs auf Anfangswerte stellen
 	selectedMapObject = nullptr;
