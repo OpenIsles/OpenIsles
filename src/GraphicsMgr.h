@@ -3,7 +3,6 @@
 
 #include <SDL.h>
 #include <SDL_image.h>
-#include <iostream>
 #include "Graphic.h"
 
 /**
@@ -50,6 +49,13 @@ public:
 	Graphic* const getObject(int index) const {
 		return objects[index];
 	}
+
+private:
+	/**
+	 * @brief Lädt die Tile-Grafiken
+	 */
+	void loadTiles();
+
 };
 
 #endif

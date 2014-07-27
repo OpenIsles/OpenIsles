@@ -205,7 +205,7 @@ void Map::loadMapFromTMX(const char* filename) {
 
 		// Tile zuweisen
 		currentValue[currentValueSize] = '\0';
-		char tile = atoi(currentValue) - 1; // TODO ggf. tileset.firstgid aus der TMX benutzen
+		char tile = atoi(currentValue);
 		tiles[i] = tile;
 	}
 

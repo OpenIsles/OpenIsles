@@ -1,11 +1,10 @@
+#include <fstream>
+#include <sstream>
+#include <stdexcept>
 #include "GraphicsMgr.h"
 
 GraphicsMgr::GraphicsMgr() {
-	tiles = new Graphic*[3];
-    // TODO Datei mit Zuordnung der Tile-Indexes, damit sie nicht nur von der Dateinamen-Sortierung abhängig sind
-	tiles[0] = new Graphic("data/img/tiles/grass2.png", 1, 1);
-	tiles[1] = new Graphic("data/img/tiles/grass.png", 1, 1);
-	tiles[2] = new Graphic("data/img/tiles/water.png", 1, 1);
+	loadTiles();
 
 	objects = new Graphic*[6];
 	objects[0] = new Graphic("data/img/objects/chapel.png", 2, 2);
@@ -17,8 +16,10 @@ GraphicsMgr::GraphicsMgr() {
 }
 
 GraphicsMgr::~GraphicsMgr() {
-	for (int i = 0; i < 3; i++) {
-		delete tiles[i];
+	for (int i = 0; i < 128; i++) {
+		if (tiles[i] != nullptr) {
+			delete tiles[i];
+		}
 	}
 	delete[] tiles;
 
@@ -26,4 +27,29 @@ GraphicsMgr::~GraphicsMgr() {
 		delete objects[i];
 	}
 	delete[] objects;
+}
+
+void GraphicsMgr::loadTiles() {
+	tiles = new Graphic*[128];
+
+	std::ifstream inputFileStreamTilesTxt("data/img/tiles/tiles.txt");
+	std::string line;
+	int lineNr = 0;
+	while (std::getline(inputFileStreamTilesTxt, line)) {
+		lineNr++;
+
+		// Leerzeilen und Kommentarzeilen überspringen
+		if (line.empty() || line.data()[0] == '#')
+			continue;
+
+		std::istringstream inputStringStream(line);
+		int tileIndex, xOffset, yOffset;
+		std::string tileFilename;
+		if (!(inputStringStream >> tileIndex >> xOffset >> yOffset >> tileFilename)) {
+			throw new std::runtime_error("Error in tiles.txt line " + lineNr);
+		}
+
+		std::string tileFilepath("data/img/tiles/" + tileFilename);
+		tiles[tileIndex] = new Graphic(tileFilepath.data(), 1, 1);
+	}
 }
