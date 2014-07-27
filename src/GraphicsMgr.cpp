@@ -2,9 +2,10 @@
 
 GraphicsMgr::GraphicsMgr() {
 	tiles = new Graphic*[3];
-	tiles[0] = new Graphic("data/img/tiles/water.png", 1, 1);
+    // TODO Datei mit Zuordnung der Tile-Indexes, damit sie nicht nur von der Dateinamen-Sortierung abhängig sind
+	tiles[0] = new Graphic("data/img/tiles/grass2.png", 1, 1);
 	tiles[1] = new Graphic("data/img/tiles/grass.png", 1, 1);
-	tiles[2] = new Graphic("data/img/tiles/grass2.png", 1, 1);
+	tiles[2] = new Graphic("data/img/tiles/water.png", 1, 1);
 
 	objects = new Graphic*[6];
 	objects[0] = new Graphic("data/img/objects/chapel.png", 2, 2);

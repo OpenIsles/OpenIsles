@@ -50,7 +50,7 @@ private:
 	/**
 	 * @brief Array (height x width) mit den Kacheln
 	 */
-	unsigned char* tiles;
+	unsigned char* tiles = nullptr;
 
 	/**
 	 * @brief Liste von Objekten (z.B. Häusern) auf der Karte.
@@ -63,7 +63,7 @@ private:
 	/**
 	 * @brief ausgewähltes Objekt oder @c nullptr, wenn nichts ausgewählt ist
 	 */
-	MapObject* selectedMapObject;
+	MapObject* selectedMapObject = nullptr;
 
 	/**
 	 * @brief X-Offset in Screen-Koordinaten, um Scrolling zu ermöglichen
@@ -108,6 +108,12 @@ public:
 	}
 
 	/**
+	 * @brief Lädt eine Karte von einer tiled-TMX-Datei
+	 * @param filename Dateiname der zu ladenden Karte
+	 */
+	void loadMapFromTMX(const char* filename);
+
+	/**
 	 * @brief Rendert die Karte.
 	 * @param renderer SDL-Renderer, auf den gezeichnet wird
 	 */
@@ -131,6 +137,11 @@ public:
 	 * @return readonly-Zeiger auf das neu angelegte MapObject
 	 */
 	const MapObject* addMapObject(int mapX, int mapY, unsigned char object);
+
+	/**
+	 * @brief Entfernt alle Objekte auf der Karte.
+	 */
+	void clearMapObjects();
 
     /**
 	 * @brief Rechnet Map- in Screen-Koordinaten um. Die Screen-Koordinaten sind die der oberen linken Ecke der Kachel.
@@ -165,6 +176,14 @@ private:
 	 * @param mouseYInObject Y-oordinate innerhalb des Objekts, wo geklickt wurde
 	 */
 	void onObjectClick(MapObject* mapObject, int mouseXInObject, int mouseYInObject);
+
+	/**
+	 * @brief Initialisiert das tiles-Array neu, wenn die Karte sich ändert.
+	 * Es werden alle Objekte von der Karte geräumt, der Speicher (neu) initialisiert, sowie sonstige Zustände resettet.
+	 * @param width neue Breite der Karte
+	 * @param height neue Höhe der Karte
+	 */
+	void initNewMap(unsigned int width, unsigned int height);
 
 };
 

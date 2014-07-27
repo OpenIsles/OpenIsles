@@ -1,5 +1,7 @@
 #include "GraphicsMgr.h"
 #include "Map.h"
+#include "rapidxml/rapidxml.hpp"
+#include "rapidxml/rapidxml_utils.hpp"
 
 /**
  * Die Karte stellt sich wiefolgt dar:
@@ -29,20 +31,9 @@ extern GraphicsMgr* graphicsMgr;
 Map::Map(unsigned int width, unsigned int height) :
 		width(width), height(height) {
 
-	tiles = new unsigned char[width * height];
+	initNewMap(width, height);
 
-	// TODO Karte laden statt einfach nur statisch eine Insel erzeugen
-	for (unsigned int y = 0, i = 0; y < height; y++) {
-		for (unsigned int x = 0; x < width; x++, i++) {
-			if (x < 3 || y < 3 || x >= width - 3 || y >= height - 3) {
-				tiles[i] = 0;
-			} else {
-				tiles[i] = ((x + y) % 2 == 0) ? 1 : 2;
-			}
-		}
-	}
-
-	selectedMapObject = nullptr;
+	loadMapFromTMX("data/map/map.tmx");
 
 	addMapObject(3, 3, 0);
 	addMapObject(6, 3, 1);
@@ -50,21 +41,32 @@ Map::Map(unsigned int width, unsigned int height) :
 	addMapObject(12, 3, 3);
 	addMapObject(15, 3, 4);
 	addMapObject(18, 3, 5);
-
-	screenOffsetX = 0;
-	screenOffsetY = 0;
 }
 
 Map::~Map() {
 	selectedMapObject = nullptr;
 
-	for (auto iter = mapObjects.cbegin(); iter != mapObjects.cend(); iter++) {
-		MapObject* mapObject = *iter;
-		delete mapObject;
-	}
-	mapObjects.clear();
+	clearMapObjects();
 
 	delete[] tiles;
+	tiles = nullptr;
+}
+
+void Map::initNewMap(unsigned int width, unsigned int height) {
+	// Karte erst leerräumen
+	clearMapObjects();
+
+	// Neue Karte anlegen
+	if (tiles != nullptr) {
+		delete[] tiles;
+	}
+	tiles = new unsigned char[width * height];
+
+	// Sonstiges Zeugs auf Anfangswerte stellen
+	selectedMapObject = nullptr;
+
+	screenOffsetX = 0;
+	screenOffsetY = 0;
 }
 
 void Map::mapToScreenCoords(int mapX, int mapY, int& screenX, int& screenY) {
@@ -158,6 +160,57 @@ void Map::screenToMapCoords(int screenX, int screenY, int& mapX, int& mapY) {
 	}
 }
 
+// TODO Fehlermanagement, wenn die Datei mal nicht so hübsch aussieht, dass alle Tags da sind
+void Map::loadMapFromTMX(const char* filename) {
+	// Datei öffnen
+	rapidxml::file<> tmxFile(filename);
+
+	rapidxml::xml_document<>* xmlDocument = new rapidxml::xml_document<>();
+	xmlDocument->parse<0>(tmxFile.data());
+
+	rapidxml::xml_node<>* mapNode = xmlDocument->first_node("map");
+	int newMapWidth = atoi(mapNode->first_attribute("width", 5, true)->value());
+	int newMapHeight = atoi(mapNode->first_attribute("height", 6, true)->value());
+
+	rapidxml::xml_node<>* layerNode = mapNode->first_node("layer");
+	rapidxml::xml_node<>* dataNode = layerNode->first_node("data");
+
+	const char* dataEncoding = dataNode->first_attribute("encoding", 8, true)->value();
+	if (strcmp(dataEncoding, "csv") != 0)
+		throw new std::runtime_error("Map is not csv encoded");
+
+	char* csvMapData = dataNode->value();
+	char* csvMapDataPtr = csvMapData;
+
+	// CSV-Daten parsen und Map laden
+	char currentValue[6];
+	int currentValueSize = 0;
+
+	initNewMap(newMapWidth, newMapHeight);
+
+	for (int i = 0; i < newMapWidth * newMapHeight; i++) {
+		// ein CSV-Feld lesen, d.h. bis zum nächsten Komma oder Stringende
+		currentValueSize = 0;
+		while (*csvMapDataPtr != ',' && *csvMapDataPtr != '\0') {
+			// Nicht-Ziffern überspringen (das sind z.B. die Newlines am Zeilenende)
+			if (*csvMapDataPtr >= '0' && *csvMapDataPtr <= '9') {
+				currentValue[currentValueSize++] = *csvMapDataPtr;
+			}
+
+			csvMapDataPtr++;
+		}
+		csvMapDataPtr++; // Trennzeichen skippen
+
+		// Tile zuweisen
+		currentValue[currentValueSize] = '\0';
+		char tile = atoi(currentValue) - 1; // TODO ggf. tileset.firstgid aus der TMX benutzen
+		tiles[i] = tile;
+	}
+
+	// XML-Document wegräumen
+	delete xmlDocument;
+}
+
 void Map::renderMap(SDL_Renderer* renderer) {
 	// Kacheln rendern
 	SDL_Rect rectDestination = { 0, 0, GraphicsMgr::TILE_WIDTH, GraphicsMgr::TILE_HEIGHT };
@@ -247,6 +300,15 @@ const MapObject* Map::addMapObject(int mapX, int mapY, unsigned char object) {
 	});
 
 	return newMapObject;
+}
+
+void Map::clearMapObjects() {
+	// TODO sollte wohl synchronisiert werden
+	for (auto iter = mapObjects.cbegin(); iter != mapObjects.cend(); iter++) {
+		MapObject* mapObject = *iter;
+		delete mapObject;
+	}
+	mapObjects.clear();
 }
 
 void Map::onClick(int mouseX, int mouseY) {
