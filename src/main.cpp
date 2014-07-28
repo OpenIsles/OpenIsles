@@ -65,7 +65,10 @@ void renderText(SDL_Renderer* renderer, std::string string, int x, int y) {
 	SDL_Rect rectDestination = { x, y, surfaceText->w, surfaceText->h };
 	SDL_Texture* textureText = SDL_CreateTextureFromSurface(renderer, surfaceText);
 	SDL_FreeSurface(surfaceText);
+
+	SDL_RenderSetClipRect(renderer, nullptr);
 	SDL_RenderCopy(renderer, textureText, NULL, &rectDestination);
+
 	SDL_DestroyTexture(textureText);
 }
 

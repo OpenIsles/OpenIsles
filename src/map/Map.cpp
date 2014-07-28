@@ -31,6 +31,11 @@ extern GraphicsMgr* graphicsMgr;
 extern const int windowWidth;
 extern const int windowHeight;
 
+/**
+ * @brief Rechteck, indem die Karte dargestellt wird
+ */
+const SDL_Rect mapClipRect = { 0, 0, 768, 734 };
+
 Map::Map(unsigned int width, unsigned int height) :
 		width(width), height(height) {
 
@@ -244,22 +249,29 @@ void Map::loadMapFromTMX(const char* filename) {
 void Map::renderMap(SDL_Renderer* renderer) {
 	/*
 	 * Optimierung: Das Loop über ALLE Kacheln ist teuer, weil wir jedes Mal die screenCoords ermitteln müssen,
-	 * bevor das Clipping greifen kann. Wir ermitteln die mapCoords in den Bildschirmecken, um Start- und End-
-	 * Map-Koordinaten zu ermitteln. Damit gehen wir zwar immer noch über mehr Kacheln, als auf dem Bildschirm sind,
-	 * aber besser als nix :-)
+	 * bevor das Clipping greifen kann. Wir ermitteln die mapCoords in den Ecken der Karten-Zeichenfläche, um Start-
+	 * und End-Map-Koordinaten zu ermitteln. Damit gehen wir zwar immer noch über mehr Kacheln, als auf dem Bildschirm
+	 * sind, aber besser als nix :-)
 	 */
 	int mapXTopLeft, mapYTopLeft, mapXTopRight, mapYTopRight;
 	int mapXBottomLeft, mapYBottomLeft, mapXBottomRight, mapYBottomRight;
 
-	screenToMapCoords(0 + screenOffsetX, 0 + screenOffsetY, mapXTopLeft, mapYTopLeft);
-	screenToMapCoords(windowWidth + screenOffsetX, 0 + screenOffsetY, mapXTopRight, mapYTopRight);
-	screenToMapCoords(0 + screenOffsetX, windowHeight + screenOffsetY, mapXBottomLeft, mapYBottomLeft);
-	screenToMapCoords(windowWidth + screenOffsetX, windowHeight + screenOffsetY, mapXBottomRight, mapYBottomRight);
+	screenToMapCoords(mapClipRect.x + screenOffsetX, mapClipRect.y + screenOffsetY, mapXTopLeft, mapYTopLeft);
+	screenToMapCoords(mapClipRect.x + mapClipRect.w + screenOffsetX, 0 + screenOffsetY, mapXTopRight, mapYTopRight);
+	screenToMapCoords(mapClipRect.x + screenOffsetX, mapClipRect.y + mapClipRect.h + screenOffsetY, mapXBottomLeft,
+			mapYBottomLeft);
+	screenToMapCoords(mapClipRect.x + mapClipRect.w + screenOffsetX, mapClipRect.y + mapClipRect.h + screenOffsetY,
+			mapXBottomRight, mapYBottomRight);
 
 	int mapXStart = std::max(mapXTopLeft, 0);
 	int mapYStart = std::max(mapYTopRight, 0);
 	int mapXEnd = std::min(mapXBottomRight, (int) (width - 1));
 	int mapYEnd = std::min(mapYBottomLeft, (int) (height - 1));
+
+	// Nur die Kartenfläche vollmalen
+	SDL_Rect sdlMapClipRect(mapClipRect);
+	sdlMapClipRect.y = windowHeight - (sdlMapClipRect.y + sdlMapClipRect.h); // SDL misst das Rechteck von UNTEN, kp, warum und ob das ein Bug is
+	SDL_RenderSetClipRect(renderer, &sdlMapClipRect);
 
 	// Kacheln rendern
 	SDL_Rect rectDestination = { 0, 0, GraphicsMgr::TILE_WIDTH, GraphicsMgr::TILE_HEIGHT };
@@ -272,9 +284,9 @@ void Map::renderMap(SDL_Renderer* renderer) {
 			rectDestination.y -= screenOffsetY;
 
 			// Clipping
-			if (rectDestination.x > windowWidth || rectDestination.y > windowHeight
-					|| rectDestination.x + GraphicsMgr::TILE_WIDTH < 0
-					|| rectDestination.y + GraphicsMgr::TILE_HEIGHT < 0) {
+			if (rectDestination.x >= mapClipRect.x + mapClipRect.w || rectDestination.y >= mapClipRect.y + mapClipRect.h
+					|| rectDestination.x + GraphicsMgr::TILE_WIDTH < mapClipRect.x
+					|| rectDestination.y + GraphicsMgr::TILE_HEIGHT < mapClipRect.y) {
 				continue;
 			}
 
@@ -305,7 +317,8 @@ void Map::renderMap(SDL_Renderer* renderer) {
 		rect.y -= screenOffsetY;
 
 		// Clipping
-		if (rect.x > windowWidth || rect.y > windowHeight || rect.x + rect.w < 0 || rect.y + rect.h < 0) {
+		if (rect.x >= mapClipRect.x + mapClipRect.w || rect.y >= mapClipRect.y + mapClipRect.h
+				|| rect.x + rect.w < mapClipRect.x || rect.y + rect.h < mapClipRect.y) {
 			continue;
 		}
 
@@ -402,6 +415,12 @@ void Map::clearMapObjects() {
 }
 
 void Map::onClick(int mouseX, int mouseY) {
+	// Clipping in der Kartenfläche
+	if (mouseX >= mapClipRect.x + mapClipRect.w || mouseY >= mapClipRect.y + mapClipRect.h || mouseX < mapClipRect.x
+			|| mouseY < mapClipRect.y) {
+		return;
+	}
+
 	int mouseAtScreenX = mouseX + getScreenOffsetX();
 	int mouseAtScreenY = mouseY + getScreenOffsetY();
 
