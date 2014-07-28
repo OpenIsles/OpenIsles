@@ -233,8 +233,8 @@ void Map::renderMap(SDL_Renderer* renderer) {
 
 	int mapXStart = std::max(mapXTopLeft, 0);
 	int mapYStart = std::max(mapYTopRight, 0);
-	int mapXEnd = std::min(mapXBottomRight, (int) width);
-	int mapYEnd = std::min(mapYBottomLeft, (int) height);
+	int mapXEnd = std::min(mapXBottomRight, (int) (width - 1));
+	int mapYEnd = std::min(mapYBottomLeft, (int) (height - 1));
 
 	// Kacheln rendern
 	SDL_Rect rectDestination = { 0, 0, GraphicsMgr::TILE_WIDTH, GraphicsMgr::TILE_HEIGHT };
