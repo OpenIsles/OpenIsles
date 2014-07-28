@@ -31,6 +31,9 @@ GraphicsMgr::~GraphicsMgr() {
 
 void GraphicsMgr::loadTiles() {
 	tiles = new Graphic*[128];
+	for (int i = 0; i < 128; i++) {
+		tiles[i] = nullptr;
+	}
 
 	std::ifstream inputFileStreamTilesTxt("data/img/tiles/tiles.txt");
 	std::string line;
