@@ -5,34 +5,8 @@
 #include <iostream>
 #include <list>
 #include <string.h>
-
-typedef struct {
-	/**
-	 * @brief Map-Koordinaten des Objekts
-	 */
-	int mapX, mapY;
-
-	/**
-	 * @brief Größe der des Objekts in Map-Koordinaten
-	 */
-	int mapWidth, mapHeight;
-
-	/**
-	 * @brief Objekt-Typ, d.h. Index in GraphicsMgr#objects
-	 */
-	unsigned char object;
-
-	/**
-	 * @brief berechnete X-Screen-Koordinaten, an dem die Grafik gezeichnet werden muss
-	 */
-	int screenX, screenY;
-
-	/**
-	 * @brief Größe der Grafik
-	 */
-	int screenWidth, screenHeight;
-
-} MapObject;
+#include "MapObject.h"
+#include "Building.h"
 
 class Map {
 
@@ -107,6 +81,14 @@ public:
 		return screenOffsetY;
 	}
 
+	const MapObject* getSelectedMapObject() const {
+		return selectedMapObject;
+	}
+
+	void setSelectedMapObject(MapObject* selectedMapObject) {
+		this->selectedMapObject = selectedMapObject;
+	}
+
 	/**
 	 * @brief Lädt eine Karte von einer tiled-TMX-Datei
 	 * @param filename Dateiname der zu ladenden Karte
@@ -130,20 +112,20 @@ public:
 	void scroll(int screenOffsetX, int screenOffsetY);
 
 	/**
-	 * @brief Fügt ein neues Objekt der Karte hinzu.
+	 * @brief Fügt ein neues Gebäude der Karte hinzu.
 	 * @param mapX X-Map-Koordinate des Objekts
 	 * @param mapY Y-Map-Koordinate des Objekts
 	 * @param object Objekt-Typ, d.h. Index in GraphicsMgr#objects
-	 * @return readonly-Zeiger auf das neu angelegte MapObject
+	 * @return readonly-Zeiger auf das neu angelegte Building
 	 */
-	const MapObject* addMapObject(int mapX, int mapY, unsigned char object);
+	const Building* addBuilding(int mapX, int mapY, unsigned char object);
 
 	/**
 	 * @brief Entfernt alle Objekte auf der Karte.
 	 */
 	void clearMapObjects();
 
-    /**
+	/**
 	 * @brief Rechnet Map- in Screen-Koordinaten um. Die Screen-Koordinaten sind die der oberen linken Ecke der Kachel.
 	 * @param mapX Map-X-Koordinate (Eingabe)
 	 * @param mapY Map-Y-Koordinate (Eingabe)
@@ -169,14 +151,6 @@ public:
 	void onClick(int mouseX, int mouseY);
 
 private:
-	/**
-	 * @brief Callback, der sich um einen Mausklick auf ein Objekt kümmert
-	 * @param mapObject angeklicktes Objekt
-	 * @param mouseXInObject X-Koordinate innerhalb des Objekts, wo geklickt wurde
-	 * @param mouseYInObject Y-oordinate innerhalb des Objekts, wo geklickt wurde
-	 */
-	void onObjectClick(MapObject* mapObject, int mouseXInObject, int mouseYInObject);
-
 	/**
 	 * @brief Initialisiert das tiles-Array neu, wenn die Karte sich ändert.
 	 * Es werden alle Objekte von der Karte geräumt, der Speicher (neu) initialisiert, sowie sonstige Zustände resettet.

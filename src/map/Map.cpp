@@ -37,12 +37,12 @@ Map::Map(unsigned int width, unsigned int height) :
 
 	loadMapFromTMX("data/map/map.tmx");
 
-	addMapObject(3, 3, 0);
-	addMapObject(6, 3, 1);
-	addMapObject(9, 3, 2);
-	addMapObject(12, 3, 3);
-	addMapObject(15, 3, 4);
-	addMapObject(18, 3, 5);
+	addBuilding(3, 3, 0);
+	addBuilding(6, 3, 1);
+	addBuilding(9, 3, 2);
+	addBuilding(12, 3, 3);
+	addBuilding(15, 3, 4);
+	addBuilding(18, 3, 5);
 }
 
 Map::~Map() {
@@ -248,18 +248,23 @@ void Map::renderMap(SDL_Renderer* renderer) {
 	for (auto iter = mapObjects.cbegin(); iter != mapObjects.cend(); iter++) {
 		MapObject* mapObject = *iter;
 
+		// TODO hier später weitere Typen handeln oder cleverer in Objekt-Methoden arbeiten
+		Building* building = dynamic_cast<Building*>(mapObject);
+		if (building == nullptr) {
+			continue;
+		}
+
 		SDL_Rect rect = SDL_Rect();
-		rect.x = mapObject->screenX - screenOffsetX;
-		rect.y = mapObject->screenY - screenOffsetY;
-		rect.w = mapObject->screenWidth;
-		rect.h = mapObject->screenHeight;
+		building->getScreenCoords(rect.x, rect.y, rect.w, rect.h);
+		rect.x -= screenOffsetX;
+		rect.y -= screenOffsetY;
 
 		// Clipping
 		if (rect.x > windowWidth || rect.y > windowHeight || rect.x + rect.w < 0 || rect.y + rect.h < 0) {
 			continue;
 		}
 
-		Graphic* graphic = graphicsMgr->getObject(mapObject->object);
+		Graphic* graphic = graphicsMgr->getObject(building->getObject());
 		SDL_Texture* objectTexture = graphic->getTexture();
 
 		if (selectedMapObject == nullptr || selectedMapObject == mapObject) {
@@ -279,7 +284,7 @@ void Map::scroll(int screenOffsetX, int screenOffsetY) {
 	this->screenOffsetY += screenOffsetY;
 }
 
-const MapObject* Map::addMapObject(int mapX, int mapY, unsigned char object) {
+const Building* Map::addBuilding(int mapX, int mapY, unsigned char object) {
 	// Position berechnen in Screen-Koordinaten berechnen, an dem sich die Grafik befinden muss.
 	Graphic* graphic = graphicsMgr->getObject(object);
 	SDL_Rect rect = { 0, 0, graphic->getWidth(), graphic->getHeight() };
@@ -290,33 +295,31 @@ const MapObject* Map::addMapObject(int mapX, int mapY, unsigned char object) {
 	rect.y -= graphic->getHeight() - (graphic->getMapWidth() + graphic->getMapHeight()) * GraphicsMgr::TILE_HEIGHT_HALF;
 
 	// Objekt anlegen und in die Liste aufnehmen
-	MapObject* newMapObject = new MapObject();
-	newMapObject->mapX = mapX;
-	newMapObject->mapY = mapY;
-	newMapObject->mapWidth = graphic->getMapWidth();
-	newMapObject->mapHeight = graphic->getMapHeight();
-	newMapObject->object = object;
-	newMapObject->screenX = rect.x;
-	newMapObject->screenY = rect.y;
-	newMapObject->screenWidth = graphic->getWidth();
-	newMapObject->screenHeight = graphic->getHeight();
+	Building* building = new Building();
+	building->setMapCoords(mapX, mapY, graphic->getMapWidth(), graphic->getMapHeight());
+	building->setScreenCoords(rect.x, rect.y, graphic->getWidth(), graphic->getHeight());
+	building->setObject(object);
 
-	mapObjects.push_front(newMapObject);
+	mapObjects.push_front(building);
 
 	// Reihenfolge der Objekte so stellen, dass von hinten nach vorne gerendert wird
 	// TODO ggf. Algorithmus verbessern, dass wirklich nach Y-Screen-Koordinaten sortiert wird. Mit den paar Grafiken
 	// hab ich keinen Fall bauen können, der n Unterschied macht.
 	mapObjects.sort([] (MapObject* mo1, MapObject* mo2) {
-		if (mo1->mapY < mo2->mapY) {
+		int mo1x, mo1y, mo2x, mo2y;
+		mo1->getMapCoords(mo1x, mo1y);
+		mo2->getMapCoords(mo2x, mo2y);
+
+		if (mo1y < mo2y) {
 			return true;
-		} else if (mo1->mapY > mo2->mapY) {
+		} else if (mo1y > mo2y) {
 			return false;
 		} else {
-			return (mo1->mapX <= mo2->mapX);
+			return (mo1x <= mo2x);
 		}
 	});
 
-	return newMapObject;
+	return building;
 }
 
 void Map::clearMapObjects() {
@@ -337,40 +340,42 @@ void Map::onClick(int mouseX, int mouseY) {
 	for (auto iter = mapObjects.crbegin(); iter != mapObjects.crend(); iter++) {
 		MapObject* mapObject = *iter;
 
+		// TODO hier später weitere Typen handeln oder cleverer in Objekt-Methoden arbeiten
+		Building* building = dynamic_cast<Building*>(mapObject);
+		if (building == nullptr) {
+			continue;
+		}
+
+		int screenX, screenY, screenWidth, screenHeight;
+		building->getScreenCoords(screenX, screenY, screenWidth, screenHeight);
+
 		// Außerhalb der Boundary-Box des Objekt geklickt?
-		if (mouseAtScreenX < mapObject->screenX) {
+		if (mouseAtScreenX < screenX) {
 			continue;
 		}
-		if (mouseAtScreenX >= mapObject->screenX + mapObject->screenWidth) {
+		if (mouseAtScreenX >= screenX + screenWidth) {
 			continue;
 		}
-		if (mouseAtScreenY < mapObject->screenY) {
+		if (mouseAtScreenY < screenY) {
 			continue;
 		}
-		if (mouseAtScreenY >= mapObject->screenY + mapObject->screenHeight) {
+		if (mouseAtScreenY >= screenY + screenHeight) {
 			continue;
 		}
 
 		// Pixelfarbwert holen
 		Uint8 r, g, b, a;
-		int x = mouseAtScreenX - mapObject->screenX;
-		int y = mouseAtScreenY - mapObject->screenY;
-		graphicsMgr->getObject(mapObject->object)->getPixel(x, y, &r, &g, &b, &a);
+		int x = mouseAtScreenX - screenX;
+		int y = mouseAtScreenY - screenY;
+		graphicsMgr->getObject(building->getObject())->getPixel(x, y, &r, &g, &b, &a);
 
 		// Checken, ob Pixel un-transparent genug ist, um es als Treffer zu nehmen
 		if (a > 127) {
-			onObjectClick(mapObject, x, y);
+			building->onClick(x, y);
 			return;
 		}
 	}
 
 	// TODO später ggf. weitere Events
 	selectedMapObject = nullptr;
-}
-
-void Map::onObjectClick(MapObject* mapObject, int mouseXInObject, int mouseYInObject) {
-	std::cout << "Klick auf " << std::to_string(mapObject->object) << "@(" << std::to_string(mouseXInObject) << ", "
-			<< std::to_string(mouseYInObject) << ")" << std::endl;
-
-	selectedMapObject = mapObject;
 }

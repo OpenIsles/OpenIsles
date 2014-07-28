@@ -5,7 +5,7 @@
 #include <cstdlib>
 #include <string>
 #include "GraphicsMgr.h"
-#include "Map.h"
+#include "map/Map.h"
 
 /*********************************************************************************************************************
  * globale Variablen                                                                                                 *
