@@ -41,6 +41,12 @@ std::string debugOutput[7];
  */
 Map* map;
 
+/**
+ * @brief Größe des Fensters
+ */
+extern const int windowWidth = 1024;
+extern const int windowHeight = 768;
+
 /*********************************************************************************************************************
  * Prototypen                                                                                                        *
  *********************************************************************************************************************/
@@ -79,9 +85,6 @@ void drawFrame(SDL_Renderer* renderer) {
 
 int main(int argc, char** argv) {
 	// Library-Initialisierung ///////////////////////////////////////////////////////////////////////////////////////
-
-	const int windowWidth = 1024;
-	const int windowHeight = 768;
 
 	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS) != 0) {
 		std::cerr << "SDL could not be initialized: " << SDL_GetError() << std::endl;

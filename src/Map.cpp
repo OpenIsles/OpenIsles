@@ -27,6 +27,8 @@
 
 // Aus main.cpp importiert
 extern GraphicsMgr* graphicsMgr;
+extern const int windowWidth;
+extern const int windowHeight;
 
 Map::Map(unsigned int width, unsigned int height) :
 		width(width), height(height) {
@@ -224,6 +226,13 @@ void Map::renderMap(SDL_Renderer* renderer) {
 			rectDestination.x -= screenOffsetX;
 			rectDestination.y -= screenOffsetY;
 
+			// Clipping
+			if (rectDestination.x > windowWidth || rectDestination.y > windowHeight
+					|| rectDestination.x + GraphicsMgr::TILE_WIDTH < 0
+					|| rectDestination.y + GraphicsMgr::TILE_HEIGHT < 0) {
+				continue;
+			}
+
 			SDL_Texture* tileTexture = graphicsMgr->getTile(getTileAt(mapX, mapY))->getTexture();
 
 			if (selectedMapObject != nullptr) {
@@ -238,13 +247,19 @@ void Map::renderMap(SDL_Renderer* renderer) {
 	// Objekte rendern
 	for (auto iter = mapObjects.cbegin(); iter != mapObjects.cend(); iter++) {
 		MapObject* mapObject = *iter;
-		Graphic* graphic = graphicsMgr->getObject(mapObject->object);
+
 		SDL_Rect rect = SDL_Rect();
 		rect.x = mapObject->screenX - screenOffsetX;
 		rect.y = mapObject->screenY - screenOffsetY;
 		rect.w = mapObject->screenWidth;
 		rect.h = mapObject->screenHeight;
 
+		// Clipping
+		if (rect.x > windowWidth || rect.y > windowHeight || rect.x + rect.w < 0 || rect.y + rect.h < 0) {
+			continue;
+		}
+
+		Graphic* graphic = graphicsMgr->getObject(mapObject->object);
 		SDL_Texture* objectTexture = graphic->getTexture();
 
 		if (selectedMapObject == nullptr || selectedMapObject == mapObject) {
