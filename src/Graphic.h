@@ -43,7 +43,20 @@ private:
 	SDL_Surface* surface;
 
 public:
+	/**
+	 * @brief Konstruktor für kartenspezifische Grafiken, die eine Größe in Kacheln haben
+	 * @param filename Dateiname der zu ladenden Grafik
+	 * @param mapWidth Breite in mapCoords
+	 * @param mapHeight Höhe in mapCoords
+	 */
 	Graphic(const char* filename, unsigned char mapWidth, unsigned char mapHeight);
+
+	/**
+	 * @brief Konstruktor für allgemeine Grafiken
+	 * @param filename Dateiname der zu ladenden Grafik
+	 */
+	Graphic(const char* filename);
+
 	~Graphic();
 
 	/**

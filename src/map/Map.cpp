@@ -333,8 +333,8 @@ void Map::renderMap(SDL_Renderer* renderer) {
 		SDL_RenderCopy(renderer, objectTexture, NULL, &rect);
 	}
 
-	// Bildfläche anzeigen
-	SDL_RenderPresent(renderer);
+	// Clipping wieder zurücksetzen, bevor der nächste mit Malen drankommt
+	SDL_RenderSetClipRect(renderer, nullptr);
 }
 
 void Map::scroll(int screenOffsetX, int screenOffsetY) {

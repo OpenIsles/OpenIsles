@@ -3,6 +3,9 @@
 
 extern SDL_Renderer* renderer;
 
+Graphic::Graphic(const char* filename) : Graphic(filename, 0, 0) {
+}
+
 Graphic::Graphic(const char* filename, unsigned char mapWidth, unsigned char mapHeight) {
 	this->filename = filename;
 	this->mapWidth = mapWidth;

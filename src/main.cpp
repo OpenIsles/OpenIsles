@@ -4,8 +4,10 @@
 #include <iostream>
 #include <cstdlib>
 #include <string>
-#include "GraphicsMgr.h"
+#include "gui/Gui.h"
 #include "map/Map.h"
+#include "GraphicsMgr.h"
+
 
 /*********************************************************************************************************************
  * globale Variablen                                                                                                 *
@@ -42,6 +44,11 @@ std::string debugOutput[7];
 Map* map;
 
 /**
+ * @brief die Benutzeroberfläche
+ */
+Gui* gui;
+
+/**
  * @brief Größe des Fensters
  */
 extern const int windowWidth = 1024;
@@ -65,16 +72,16 @@ void renderText(SDL_Renderer* renderer, std::string string, int x, int y) {
 	SDL_Rect rectDestination = { x, y, surfaceText->w, surfaceText->h };
 	SDL_Texture* textureText = SDL_CreateTextureFromSurface(renderer, surfaceText);
 	SDL_FreeSurface(surfaceText);
-
-	SDL_RenderSetClipRect(renderer, nullptr);
 	SDL_RenderCopy(renderer, textureText, NULL, &rectDestination);
-
 	SDL_DestroyTexture(textureText);
 }
 
 void drawFrame(SDL_Renderer* renderer) {
 	// Karte rendern
 	map->renderMap(renderer);
+
+	// UI rendern
+	gui->renderGui(renderer);
 
 	// Debugging-Infos rendern
 	for (int i = 0; i < 7; i++) {
@@ -132,6 +139,7 @@ int main(int argc, char** argv) {
 
 	graphicsMgr = new GraphicsMgr();
 	map = new Map(40, 40);
+	gui = new Gui();
 
 	// Mainloop //////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -182,6 +190,7 @@ int main(int argc, char** argv) {
 
 	// Game-Deinitialisierung ////////////////////////////////////////////////////////////////////////////////////////
 
+	delete gui;
 	delete map;
 	delete graphicsMgr;
 
