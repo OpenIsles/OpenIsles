@@ -1,3 +1,4 @@
+#include <algorithm>
 #include "GraphicsMgr.h"
 #include "Map.h"
 #include "rapidxml/rapidxml.hpp"
@@ -216,10 +217,29 @@ void Map::loadMapFromTMX(const char* filename) {
 }
 
 void Map::renderMap(SDL_Renderer* renderer) {
+	/*
+	 * Optimierung: Das Loop über ALLE Kacheln ist teuer, weil wir jedes Mal die screenCoords ermitteln müssen,
+	 * bevor das Clipping greifen kann. Wir ermitteln die mapCoords in den Bildschirmecken, um Start- und End-
+	 * Map-Koordinaten zu ermitteln. Damit gehen wir zwar immer noch über mehr Kacheln, als auf dem Bildschirm sind,
+	 * aber besser als nix :-)
+	 */
+	int mapXTopLeft, mapYTopLeft, mapXTopRight, mapYTopRight;
+	int mapXBottomLeft, mapYBottomLeft, mapXBottomRight, mapYBottomRight;
+
+	screenToMapCoords(0 + screenOffsetX, 0 + screenOffsetY, mapXTopLeft, mapYTopLeft);
+	screenToMapCoords(windowWidth + screenOffsetX, 0 + screenOffsetY, mapXTopRight, mapYTopRight);
+	screenToMapCoords(0 + screenOffsetX, windowHeight + screenOffsetY, mapXBottomLeft, mapYBottomLeft);
+	screenToMapCoords(windowWidth + screenOffsetX, windowHeight + screenOffsetY, mapXBottomRight, mapYBottomRight);
+
+	int mapXStart = std::max(mapXTopLeft, 0);
+	int mapYStart = std::max(mapYTopRight, 0);
+	int mapXEnd = std::min(mapXBottomRight, (int) width);
+	int mapYEnd = std::min(mapYBottomLeft, (int) height);
+
 	// Kacheln rendern
 	SDL_Rect rectDestination = { 0, 0, GraphicsMgr::TILE_WIDTH, GraphicsMgr::TILE_HEIGHT };
-	for (int mapY = 0; mapY < (int) height; mapY++) {
-		for (int mapX = 0; mapX < (int) width; mapX++) {
+	for (int mapY = mapYStart; mapY <= mapYEnd; mapY++) {
+		for (int mapX = mapXStart; mapX <= mapXEnd; mapX++) {
 			mapToScreenCoords(mapX, mapY, rectDestination.x, rectDestination.y);
 
 			// Scrolling-Offset anwenden
