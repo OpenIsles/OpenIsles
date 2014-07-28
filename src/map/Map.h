@@ -5,7 +5,6 @@
 #include <iostream>
 #include <list>
 #include <string.h>
-#include "MapObject.h"
 #include "Building.h"
 
 class Map {
@@ -112,6 +111,15 @@ public:
 	void scroll(int screenOffsetX, int screenOffsetY);
 
 	/**
+	 * @brief Fügt eine neue Struktur der Karte hinzu.
+	 * @param mapX X-Map-Koordinate des Objekts
+	 * @param mapY Y-Map-Koordinate des Objekts
+	 * @param object Objekt-Typ, d.h. Index in GraphicsMgr#objects
+	 * @return readonly-Zeiger auf das neu angelegte Building
+	 */
+	const Structure* addStructure(int mapX, int mapY, unsigned char object);
+
+	/**
 	 * @brief Fügt ein neues Gebäude der Karte hinzu.
 	 * @param mapX X-Map-Koordinate des Objekts
 	 * @param mapY Y-Map-Koordinate des Objekts
@@ -151,6 +159,12 @@ public:
 	void onClick(int mouseX, int mouseY);
 
 private:
+	/**
+	 * @brief Fügt ein neues Map-Objekt der Karte hinzu
+	 * @param mapObject Map-Objekt
+	 */
+	void addMapObject(MapObject* mapObject);
+
 	/**
 	 * @brief Initialisiert das tiles-Array neu, wenn die Karte sich ändert.
 	 * Es werden alle Objekte von der Karte geräumt, der Speicher (neu) initialisiert, sowie sonstige Zustände resettet.

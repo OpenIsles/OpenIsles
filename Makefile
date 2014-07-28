@@ -7,6 +7,8 @@ OBJ_FILES := \
 	$(BUILD_DIRECTORY)/Graphic.o \
 	$(BUILD_DIRECTORY)/GraphicsMgr.o \
 	$(BUILD_DIRECTORY)/main.o
+	
+MAP_HEADER_FILES := $(addprefix $(SRC_DIRECTORY)/map/,Building.h Map.h MapObject.h Structure.h)
 
 # Für das fertige Tileset für Tiled: Anzahl Kacheln pro Zeile
 TILESET_WIDTH := 4
@@ -33,10 +35,10 @@ $(BUILD_DIRECTORY):
 $(BUILD_DIRECTORY)/map: | $(BUILD_DIRECTORY)
 	mkdir $@
 	
-$(BUILD_DIRECTORY)/map/Building.o: $(SRC_DIRECTORY)/map/Building.cpp $(SRC_DIRECTORY)/map/Building.h | $(BUILD_DIRECTORY)/map
+$(BUILD_DIRECTORY)/map/Building.o: $(SRC_DIRECTORY)/map/Building.cpp $(MAP_HEADER_FILES) | $(BUILD_DIRECTORY)/map
 	$(CC) $(CFLAGS) -o $@ -c $<
 	
-$(BUILD_DIRECTORY)/map/Map.o: $(SRC_DIRECTORY)/map/Map.cpp $(SRC_DIRECTORY)/map/Map.h $(SRC_DIRECTORY)/GraphicsMgr.h | $(BUILD_DIRECTORY)/map
+$(BUILD_DIRECTORY)/map/Map.o: $(SRC_DIRECTORY)/map/Map.cpp $(MAP_HEADER_FILES) $(SRC_DIRECTORY)/GraphicsMgr.h | $(BUILD_DIRECTORY)/map
 	$(CC) $(CFLAGS) -o $@ -c $<
 	
 	

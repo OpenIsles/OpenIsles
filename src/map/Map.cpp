@@ -38,12 +38,37 @@ Map::Map(unsigned int width, unsigned int height) :
 
 	loadMapFromTMX("data/map/map.tmx");
 
-	addBuilding(3, 3, 0);
-	addBuilding(6, 3, 1);
-	addBuilding(9, 3, 2);
-	addBuilding(12, 3, 3);
-	addBuilding(15, 3, 4);
-	addBuilding(18, 3, 5);
+	addBuilding(15, 8, 1);
+
+	addStructure(13, 5, 11);
+	addStructure(14, 5, 11);
+	addStructure(15, 5, 11);
+	addStructure(16, 5, 11);
+	addStructure(17, 5, 11);
+	addStructure(18, 5, 11);
+	addStructure(19, 5, 6);
+	addStructure(19, 6, 10);
+	addStructure(19, 7, 10);
+	addStructure(19, 8, 10);
+	addStructure(19, 9, 10);
+	addStructure(19, 10, 10);
+	addStructure(19, 11, 10);
+	addStructure(19, 12, 8);
+	addStructure(18, 12, 11);
+	addStructure(17, 12, 11);
+	addStructure(16, 12, 11);
+	addStructure(15, 12, 11);
+	addStructure(14, 12, 11);
+	addStructure(13, 12, 11);
+	addStructure(12, 12, 9);
+	addStructure(12, 11, 10);
+	addStructure(12, 11, 10);
+	addStructure(12, 10, 10);
+	addStructure(12, 9, 10);
+	addStructure(12, 8, 10);
+	addStructure(12, 7, 10);
+	addStructure(12, 6, 10);
+	addStructure(12, 5, 7);
 }
 
 Map::~Map() {
@@ -269,13 +294,13 @@ void Map::renderMap(SDL_Renderer* renderer) {
 		MapObject* mapObject = *iter;
 
 		// TODO hier später weitere Typen handeln oder cleverer in Objekt-Methoden arbeiten
-		Building* building = dynamic_cast<Building*>(mapObject);
-		if (building == nullptr) {
+		Structure* structure = dynamic_cast<Structure*>(mapObject);
+		if (structure == nullptr) {
 			continue;
 		}
 
 		SDL_Rect rect = SDL_Rect();
-		building->getScreenCoords(rect.x, rect.y, rect.w, rect.h);
+		structure->getScreenCoords(rect.x, rect.y, rect.w, rect.h);
 		rect.x -= screenOffsetX;
 		rect.y -= screenOffsetY;
 
@@ -284,7 +309,7 @@ void Map::renderMap(SDL_Renderer* renderer) {
 			continue;
 		}
 
-		Graphic* graphic = graphicsMgr->getObject(building->getObject());
+		Graphic* graphic = graphicsMgr->getObject(structure->getObject());
 		SDL_Texture* objectTexture = graphic->getTexture();
 
 		if (selectedMapObject == nullptr || selectedMapObject == mapObject) {
@@ -304,23 +329,8 @@ void Map::scroll(int screenOffsetX, int screenOffsetY) {
 	this->screenOffsetY += screenOffsetY;
 }
 
-const Building* Map::addBuilding(int mapX, int mapY, unsigned char object) {
-	// Position berechnen in Screen-Koordinaten berechnen, an dem sich die Grafik befinden muss.
-	Graphic* graphic = graphicsMgr->getObject(object);
-	SDL_Rect rect = { 0, 0, graphic->getWidth(), graphic->getHeight() };
-	mapToScreenCoords(mapX, mapY, rect.x, rect.y);
-
-	// Grafik an die richtige Stelle schieben. Das muss ausgehend von der zu belegenden Tile-Fläche berechnet werden.
-	rect.x -= graphic->getWidth() - (graphic->getMapWidth() + 1) * GraphicsMgr::TILE_WIDTH_HALF;
-	rect.y -= graphic->getHeight() - (graphic->getMapWidth() + graphic->getMapHeight()) * GraphicsMgr::TILE_HEIGHT_HALF;
-
-	// Objekt anlegen und in die Liste aufnehmen
-	Building* building = new Building();
-	building->setMapCoords(mapX, mapY, graphic->getMapWidth(), graphic->getMapHeight());
-	building->setScreenCoords(rect.x, rect.y, graphic->getWidth(), graphic->getHeight());
-	building->setObject(object);
-
-	mapObjects.push_front(building);
+void Map::addMapObject(MapObject* mapObject) {
+	mapObjects.push_front(mapObject);
 
 	// Reihenfolge der Objekte so stellen, dass von hinten nach vorne gerendert wird
 	// TODO ggf. Algorithmus verbessern, dass wirklich nach Y-Screen-Koordinaten sortiert wird. Mit den paar Grafiken
@@ -338,6 +348,46 @@ const Building* Map::addBuilding(int mapX, int mapY, unsigned char object) {
 			return (mo1x <= mo2x);
 		}
 	});
+}
+
+const Structure* Map::addStructure(int mapX, int mapY, unsigned char object) {
+	// Position berechnen in Screen-Koordinaten berechnen, an dem sich die Grafik befinden muss.
+	Graphic* graphic = graphicsMgr->getObject(object);
+	SDL_Rect rect = { 0, 0, graphic->getWidth(), graphic->getHeight() };
+	mapToScreenCoords(mapX, mapY, rect.x, rect.y);
+
+	// Grafik an die richtige Stelle schieben. Das muss ausgehend von der zu belegenden Tile-Fläche berechnet werden.
+	rect.x -= graphic->getWidth() - (graphic->getMapWidth() + 1) * GraphicsMgr::TILE_WIDTH_HALF;
+	rect.y -= graphic->getHeight() - (graphic->getMapWidth() + graphic->getMapHeight()) * GraphicsMgr::TILE_HEIGHT_HALF;
+
+	// Objekt anlegen und in die Liste aufnehmen
+	Structure* structure = new Structure();
+	structure->setMapCoords(mapX, mapY, graphic->getMapWidth(), graphic->getMapHeight());
+	structure->setScreenCoords(rect.x, rect.y, graphic->getWidth(), graphic->getHeight());
+	structure->setObject(object);
+
+	addMapObject(structure);
+
+	return structure;
+}
+
+const Building* Map::addBuilding(int mapX, int mapY, unsigned char object) {
+	// Position berechnen in Screen-Koordinaten berechnen, an dem sich die Grafik befinden muss.
+	Graphic* graphic = graphicsMgr->getObject(object);
+	SDL_Rect rect = { 0, 0, graphic->getWidth(), graphic->getHeight() };
+	mapToScreenCoords(mapX, mapY, rect.x, rect.y);
+
+	// Grafik an die richtige Stelle schieben. Das muss ausgehend von der zu belegenden Tile-Fläche berechnet werden.
+	rect.x -= graphic->getWidth() - (graphic->getMapWidth() + 1) * GraphicsMgr::TILE_WIDTH_HALF;
+	rect.y -= graphic->getHeight() - (graphic->getMapWidth() + graphic->getMapHeight()) * GraphicsMgr::TILE_HEIGHT_HALF;
+
+	// Objekt anlegen und in die Liste aufnehmen
+	Building* building = new Building();
+	building->setMapCoords(mapX, mapY, graphic->getMapWidth(), graphic->getMapHeight());
+	building->setScreenCoords(rect.x, rect.y, graphic->getWidth(), graphic->getHeight());
+	building->setObject(object);
+
+	addMapObject(building);
 
 	return building;
 }
@@ -355,7 +405,7 @@ void Map::onClick(int mouseX, int mouseY) {
 	int mouseAtScreenX = mouseX + getScreenOffsetX();
 	int mouseAtScreenY = mouseY + getScreenOffsetY();
 
-	// Gucken, ob ein Objekt geklickt wurde.
+	// Gucken, ob ein Gebäude geklickt wurde.
 	// Objekte dabei rückwärts iterieren. Somit kommen "oben liegende" Objekte zuerst dran.
 	for (auto iter = mapObjects.crbegin(); iter != mapObjects.crend(); iter++) {
 		MapObject* mapObject = *iter;
@@ -363,6 +413,8 @@ void Map::onClick(int mouseX, int mouseY) {
 		// TODO hier später weitere Typen handeln oder cleverer in Objekt-Methoden arbeiten
 		Building* building = dynamic_cast<Building*>(mapObject);
 		if (building == nullptr) {
+			// Da wir nur die Buildings durchgehen und nicht alle Structures, haben wir den positiven Nebeneffekt,
+			// dass wir z.B. durch eine Mauer durchklicken und ein verstecktes Gebäude dahinter anklicken können.
 			continue;
 		}
 

@@ -6,13 +6,20 @@
 GraphicsMgr::GraphicsMgr() {
 	loadTiles();
 
-	objects = new Graphic*[6];
+	objects = new Graphic*[12];
 	objects[0] = new Graphic("data/img/objects/chapel.png", 2, 2);
 	objects[1] = new Graphic("data/img/objects/weaponsmith.png", 2, 2);
 	objects[2] = new Graphic("data/img/objects/signalfire.png", 1, 1);
 	objects[3] = new Graphic("data/img/objects/herbary.png", 3, 3);
 	objects[4] = new Graphic("data/img/objects/brickyard.png", 4, 2);
 	objects[5] = new Graphic("data/img/objects/brickyard2.png", 2, 4);
+
+	objects[6] = new Graphic("data/img/objects/way/way-e.png", 1, 1);
+	objects[7] = new Graphic("data/img/objects/way/way-n.png", 1, 1);
+	objects[8] = new Graphic("data/img/objects/way/way-s.png", 1, 1);
+	objects[9] = new Graphic("data/img/objects/way/way-w.png", 1, 1);
+	objects[10] = new Graphic("data/img/objects/way/way-sw-ne.png", 1, 1);
+	objects[11] = new Graphic("data/img/objects/way/way-nw-se.png", 1, 1);
 }
 
 GraphicsMgr::~GraphicsMgr() {
@@ -23,7 +30,7 @@ GraphicsMgr::~GraphicsMgr() {
 	}
 	delete[] tiles;
 
-	for (int i = 0; i < 6; i++) {
+	for (int i = 0; i < 12; i++) {
 		delete objects[i];
 	}
 	delete[] objects;
