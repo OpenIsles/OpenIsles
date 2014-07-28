@@ -138,7 +138,7 @@ int main(int argc, char** argv) {
 
 		// Events handeln
 		SDL_Event event;
-		if (SDL_PollEvent(&event)) {
+		while (SDL_PollEvent(&event)) {
 			if (event.type == SDL_QUIT) {
 				quitGame = true;
 			} else if (event.type == SDL_KEYDOWN) {
