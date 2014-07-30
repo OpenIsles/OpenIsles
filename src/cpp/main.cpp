@@ -110,12 +110,21 @@ int main(int argc, char** argv) {
 	atexit(SDL_Quit);
 	std::cout << "SDL initialisert" << std::endl;
 
+	SDL_Surface* surfaceAppIcon = IMG_Load("data/img/appicon.png");
+	if (surfaceAppIcon == nullptr) {
+		std::cerr << "Could not load graphic 'data/img/appicon.png': " << IMG_GetError() << std::endl;
+		return EXIT_FAILURE;
+	}
+
 	SDL_Window* window = SDL_CreateWindow("OpenIsles", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, windowWidth,
 			windowHeight, SDL_WINDOW_SHOWN);
 	if (window == nullptr) {
 		std::cerr << "SDL could not create window: " << SDL_GetError() << std::endl;
 		return EXIT_FAILURE;
 	}
+
+	SDL_SetWindowIcon(window, surfaceAppIcon);
+	SDL_FreeSurface(surfaceAppIcon);
 
 	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_TARGETTEXTURE);
 	if (renderer == nullptr) {
