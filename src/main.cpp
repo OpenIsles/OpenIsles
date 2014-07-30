@@ -6,6 +6,7 @@
 #include <string>
 #include "gui/Gui.h"
 #include "map/Map.h"
+#include "sound/SoundMgr.h"
 #include "GraphicsMgr.h"
 
 
@@ -47,6 +48,11 @@ Map* map;
  * @brief die Benutzeroberfläche
  */
 Gui* gui;
+
+/**
+ * @brief der Sound-Manager
+ */
+SoundMgr* soundMgr;
 
 /**
  * @brief Größe des Fensters
@@ -96,7 +102,7 @@ void drawFrame(SDL_Renderer* renderer) {
 int main(int argc, char** argv) {
 	// Library-Initialisierung ///////////////////////////////////////////////////////////////////////////////////////
 
-	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS) != 0) {
+	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_EVENTS) != 0) {
 		std::cerr << "SDL could not be initialized: " << SDL_GetError() << std::endl;
 		return EXIT_FAILURE;
 	}
@@ -137,6 +143,7 @@ int main(int argc, char** argv) {
 
 	// Game-Initialisierung //////////////////////////////////////////////////////////////////////////////////////////
 
+	soundMgr = new SoundMgr();
 	graphicsMgr = new GraphicsMgr();
 	map = new Map(40, 40);
 	gui = new Gui();
@@ -163,6 +170,8 @@ int main(int argc, char** argv) {
 					map->scroll(-16, 0);
 				} else if (event.key.keysym.scancode == SDL_SCANCODE_RIGHT) {
 					map->scroll(16, 0);
+				} else if (event.key.keysym.scancode == SDL_SCANCODE_M) {
+					soundMgr->toggleMusic();
 				}
 			} else if (event.type == SDL_MOUSEBUTTONUP) {
 				map->onClick(event.button.x, event.button.y);
@@ -193,6 +202,7 @@ int main(int argc, char** argv) {
 	delete gui;
 	delete map;
 	delete graphicsMgr;
+	delete soundMgr;
 
 	// Library-Deinitialisierung /////////////////////////////////////////////////////////////////////////////////////
 
