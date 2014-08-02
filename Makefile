@@ -3,7 +3,9 @@ SRC_CPP_DIRECTORY := $(SRC_DIRECTORY)/cpp
 DATA_DIRECTORY := data
 BUILD_DIRECTORY := build
 OBJ_FILES := \
-	$(BUILD_DIRECTORY)/gui/Gui.o \
+	$(BUILD_DIRECTORY)/gui/GuiButton.o \
+	$(BUILD_DIRECTORY)/gui/GuiMgr.o \
+	$(BUILD_DIRECTORY)/gui/GuiStaticElement.o \
 	$(BUILD_DIRECTORY)/map/Building.o \
 	$(BUILD_DIRECTORY)/map/Map.o \
 	$(BUILD_DIRECTORY)/sound/SoundMgr.o \
@@ -34,7 +36,15 @@ clean: clean-tiles clean-gui
 	rm -rf $(BUILD_DIRECTORY)
 	
 
-$(BUILD_DIRECTORY)/gui/Gui.o: $(SRC_CPP_DIRECTORY)/gui/Gui.cpp $(SRC_CPP_DIRECTORY)/gui/Gui.h $(SRC_CPP_DIRECTORY)/Graphic.h
+$(BUILD_DIRECTORY)/gui/GuiButton.o: $(SRC_CPP_DIRECTORY)/gui/GuiButton.cpp $(SRC_CPP_DIRECTORY)/gui/GuiButton.h
+	$(CREATE_TARGET_DIRECTORY)
+	$(CC) $(CFLAGS) -o $@ -c $<
+	
+$(BUILD_DIRECTORY)/gui/GuiMgr.o: $(SRC_CPP_DIRECTORY)/gui/GuiMgr.cpp $(SRC_CPP_DIRECTORY)/gui/GuiMgr.h
+	$(CREATE_TARGET_DIRECTORY)
+	$(CC) $(CFLAGS) -o $@ -c $<
+	
+$(BUILD_DIRECTORY)/gui/GuiStaticElement.o: $(SRC_CPP_DIRECTORY)/gui/GuiStaticElement.cpp $(SRC_CPP_DIRECTORY)/gui/GuiStaticElement.h
 	$(CREATE_TARGET_DIRECTORY)
 	$(CC) $(CFLAGS) -o $@ -c $<
 
@@ -61,7 +71,7 @@ $(BUILD_DIRECTORY)/GraphicsMgr.o: $(SRC_CPP_DIRECTORY)/GraphicsMgr.cpp $(SRC_CPP
 	$(CREATE_TARGET_DIRECTORY)
 	$(CC) $(CFLAGS) -o $@ -c $<
 	
-$(BUILD_DIRECTORY)/main.o: $(SRC_CPP_DIRECTORY)/main.cpp $(SRC_CPP_DIRECTORY)/gui/Gui.h $(SRC_CPP_DIRECTORY)/map/Map.h $(SRC_CPP_DIRECTORY)/sound/SoundMgr.h $(SRC_CPP_DIRECTORY)/GraphicsMgr.h
+$(BUILD_DIRECTORY)/main.o: $(SRC_CPP_DIRECTORY)/main.cpp $(SRC_CPP_DIRECTORY)/gui/GuiMgr.h $(SRC_CPP_DIRECTORY)/map/Map.h $(SRC_CPP_DIRECTORY)/sound/SoundMgr.h $(SRC_CPP_DIRECTORY)/GraphicsMgr.h
 	$(CREATE_TARGET_DIRECTORY)
 	$(CC) $(CFLAGS) -o $@ -c $<
 	

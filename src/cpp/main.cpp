@@ -4,7 +4,7 @@
 #include <iostream>
 #include <cstdlib>
 #include <string>
-#include "gui/Gui.h"
+#include "gui/GuiMgr.h"
 #include "map/Map.h"
 #include "sound/SoundMgr.h"
 #include "GraphicsMgr.h"
@@ -47,7 +47,7 @@ Map* map;
 /**
  * @brief die Benutzeroberfläche
  */
-Gui* gui;
+GuiMgr* guiMgr;
 
 /**
  * @brief der Sound-Manager
@@ -87,7 +87,7 @@ void drawFrame(SDL_Renderer* renderer) {
 	map->renderMap(renderer);
 
 	// UI rendern
-	gui->renderGui(renderer);
+	guiMgr->render(renderer);
 
 	// Debugging-Infos rendern
 	for (int i = 0; i < 7; i++) {
@@ -155,7 +155,7 @@ int main(int argc, char** argv) {
 	soundMgr = new SoundMgr();
 	graphicsMgr = new GraphicsMgr();
 	map = new Map(40, 40);
-	gui = new Gui();
+	guiMgr = new GuiMgr();
 
 	// Mainloop //////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -166,6 +166,8 @@ int main(int argc, char** argv) {
 		// Events handeln
 		SDL_Event event;
 		while (SDL_PollEvent(&event)) {
+            guiMgr->onEvent(event);
+            
 			if (event.type == SDL_QUIT) {
 				quitGame = true;
 			} else if (event.type == SDL_KEYDOWN) {
@@ -208,7 +210,7 @@ int main(int argc, char** argv) {
 
 	// Game-Deinitialisierung ////////////////////////////////////////////////////////////////////////////////////////
 
-	delete gui;
+	delete guiMgr;
 	delete map;
 	delete graphicsMgr;
 	delete soundMgr;
