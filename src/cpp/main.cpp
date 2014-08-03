@@ -93,6 +93,9 @@ void drawFrame(SDL_Renderer* renderer) {
 
 	// UI rendern
 	guiMgr->render(renderer);
+    
+    // Minimap auf die GUI rendern
+	map->renderMinimap(renderer);
 
 	// Debugging-Infos rendern
 	for (int i = 0; i < 7; i++) {
@@ -179,6 +182,7 @@ int main(int argc, char** argv) {
 
 		// Frame auf Offscreen-Texture zeichnen
 		SDL_SetRenderTarget(renderer, offscreenTexture);
+        SDL_SetRenderDrawColor(renderer, 0, 0, 128, 255);
 		SDL_RenderClear(renderer);
 		drawFrame(renderer);
 

@@ -39,7 +39,7 @@ GuiMgr::GuiMgr() {
     // Testzeugs
     graphic = new Graphic("data/img/gui/testbutton.png");
     testButton = new GuiButton();
-    testButton->setWindowCoords(795, 25, graphic->getWidth(), graphic->getHeight());
+    testButton->setWindowCoords(795, 235, graphic->getWidth(), graphic->getHeight());
     testButton->setGraphic(graphic);
     testButton->setGraphicPressed(new Graphic("data/img/gui/testbutton-pressed.png"));
     testButton->setOnClickFunction([]() {
@@ -48,7 +48,7 @@ GuiMgr::GuiMgr() {
     
     graphic = new Graphic("data/img/gui/testbutton.png");
     testPushButton = new GuiPushButton();
-    testPushButton->setWindowCoords(875, 25, graphic->getWidth(), graphic->getHeight());
+    testPushButton->setWindowCoords(875, 235, graphic->getWidth(), graphic->getHeight());
     testPushButton->setGraphic(graphic);
     testPushButton->setGraphicPressed(new Graphic("data/img/gui/testbutton-pressed.png"));
     testPushButton->setOnClickFunction([this]() {

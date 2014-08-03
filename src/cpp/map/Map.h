@@ -100,6 +100,12 @@ public:
 	 */
 	// TODO durch Graphics- oder Render-Manager abstrahieren, damit die Karte nicht die Grafiken kennen muss
 	void renderMap(SDL_Renderer* renderer);
+    
+    /**
+	 * @brief Rendert die Minimap
+	 * @param renderer SDL-Renderer, auf den gezeichnet wird
+	 */
+    void renderMinimap(SDL_Renderer* renderer);
 
 	/**
 	 * @brief Scrollt die Karte

@@ -36,6 +36,12 @@ extern const int windowHeight;
  */
 const SDL_Rect mapClipRect = { 0, 0, 768, 734 };
 
+/**
+ * @brief Rechteck, indem die Minimap dargestellt wird
+ */
+const SDL_Rect minimapClipRect = { 796, 28, 200, 200 };
+
+
 Map::Map(unsigned int width, unsigned int height) :
 		width(width), height(height) {
 
@@ -86,6 +92,12 @@ Map::~Map() {
 }
 
 void Map::initNewMap(unsigned int width, unsigned int height) {
+    // TODO Wir gehen erstmal davon aus, dass die Karten immer quadratisch sind.
+    // Damit spar ich mir erstmal Hirnschmalz mit der Minimap und anderem Zeug, was noch kommen wird.
+    if (width != height) {
+        throw new std::runtime_error("Map has to be quadratically for now ;-p");
+    }
+    
 	// Karte erst leerräumen
 	clearMapObjects();
 
@@ -246,6 +258,63 @@ void Map::loadMapFromTMX(const char* filename) {
 	delete xmlDocument;
 }
 
+void Map::renderMinimap(SDL_Renderer* renderer) {
+    // Nur die Kartenfläche vollmalen
+	SDL_Rect sdlMinimapClipRect(minimapClipRect);
+	sdlMinimapClipRect.y = windowHeight - (sdlMinimapClipRect.y + sdlMinimapClipRect.h); // SDL misst das Rechteck von UNTEN, kp, warum und ob das ein Bug is
+	SDL_RenderSetClipRect(renderer, &sdlMinimapClipRect);
+    
+    float scaleFactor = (float) width / (float) minimapClipRect.w;
+    
+    // Karte zeichnen
+    // TODO Das kostet Zeit. Wir können die Minimap direkt nach dem Laden einer Karte EINmalig erstellen :-)
+    for (int y = 0, screenY = minimapClipRect.y; y < minimapClipRect.h; y++, screenY++) {
+        for (int x = 0, screenX = minimapClipRect.x; x < minimapClipRect.w; x++, screenX++) {
+            int mapX = (int) ((float) x * scaleFactor);
+            int mapY = (int) ((float) y * scaleFactor);
+            
+            unsigned char tile = tiles[mapY * width + mapX];
+            if (tile == 1) {
+                SDL_SetRenderDrawColor(renderer, 0, 0, 192, 255);
+            } else {
+                SDL_SetRenderDrawColor(renderer, 0, 128, 0, 255);
+            }
+            
+            SDL_RenderDrawPoint(renderer, screenX, screenY);
+        }
+    }
+    
+    // Aktuellen Ausschnitt bestimmen
+    // TODO Duplicate-Code refactorn, (x/y)-Tuple für MapCoords einführen, Rect (top, left, right, bottom) von Punkten einführen
+    int mapXTopLeft, mapYTopLeft, mapXTopRight, mapYTopRight;
+	int mapXBottomLeft, mapYBottomLeft, mapXBottomRight, mapYBottomRight;
+
+	screenToMapCoords(mapClipRect.x + screenOffsetX, mapClipRect.y + screenOffsetY, mapXTopLeft, mapYTopLeft);
+	screenToMapCoords(mapClipRect.x + mapClipRect.w + screenOffsetX, 0 + screenOffsetY, mapXTopRight, mapYTopRight);
+	screenToMapCoords(mapClipRect.x + screenOffsetX, mapClipRect.y + mapClipRect.h + screenOffsetY, mapXBottomLeft,
+			mapYBottomLeft);
+	screenToMapCoords(mapClipRect.x + mapClipRect.w + screenOffsetX, mapClipRect.y + mapClipRect.h + screenOffsetY,
+			mapXBottomRight, mapYBottomRight);
+    
+    SDL_Point points[5] = {
+        { minimapClipRect.x + (int) ((float) mapXTopLeft / scaleFactor),
+          minimapClipRect.y + (int) ((float) mapYTopLeft / scaleFactor) },
+        { minimapClipRect.x + (int) ((float) mapXTopRight / scaleFactor),
+          minimapClipRect.y + (int) ((float) mapYTopRight / scaleFactor) },
+        { minimapClipRect.x + (int) ((float) mapXBottomRight / scaleFactor),
+          minimapClipRect.y + (int) ((float) mapYBottomRight / scaleFactor) },
+        { minimapClipRect.x + (int) ((float) mapXBottomLeft / scaleFactor),
+          minimapClipRect.y + (int) ((float) mapYBottomLeft / scaleFactor) }
+    };
+    points[4] = points[0];
+    SDL_SetRenderDrawColor(renderer, 255, 0, 0, 192);
+    SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
+    SDL_RenderDrawLines(renderer, points, 5);
+    
+    SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_NONE);
+    SDL_RenderSetClipRect(renderer, nullptr);
+}
+
 void Map::renderMap(SDL_Renderer* renderer) {
 	/*
 	 * Optimierung: Das Loop über ALLE Kacheln ist teuer, weil wir jedes Mal die screenCoords ermitteln müssen,
@@ -253,6 +322,7 @@ void Map::renderMap(SDL_Renderer* renderer) {
 	 * und End-Map-Koordinaten zu ermitteln. Damit gehen wir zwar immer noch über mehr Kacheln, als auf dem Bildschirm
 	 * sind, aber besser als nix :-)
 	 */
+    // TODO Duplicate-Code refactorn, (x/y)-Tuple für MapCoords einführen, Rect (top, left, right, bottom) von Punkten einführen
 	int mapXTopLeft, mapYTopLeft, mapXTopRight, mapYTopRight;
 	int mapXBottomLeft, mapYBottomLeft, mapXBottomRight, mapYBottomRight;
 
