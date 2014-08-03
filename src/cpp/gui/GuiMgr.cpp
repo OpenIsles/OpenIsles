@@ -36,10 +36,54 @@ GuiMgr::GuiMgr() {
         }
     });
     
+    panelSwitchPushButtonBuild = new GuiPushButton();
+    panelSwitchPushButtonBuild->setGraphic(new Graphic("data/img/gui/button-build.png"));
+    panelSwitchPushButtonBuild->setGraphicPressed(new Graphic("data/img/gui/button-build-pressed.png"));
+    panelSwitchPushButtonBuild->setWindowCoords(790, 235, 48, 64);
+    panelSwitchPushButtonBuild->setOnClickFunction([this]() {
+        this->panelSwitchPushButton2->setActive(false);
+        this->panelSwitchPushButton3->setActive(false);
+        this->panelSwitchPushButton4->setActive(false);
+        std::cout << "panel: build" << std::endl;
+    });
+    
+    panelSwitchPushButton2 = new GuiPushButton();
+    panelSwitchPushButton2->setGraphic(new Graphic("data/img/gui/button-dummy.png"));
+    panelSwitchPushButton2->setGraphicPressed(new Graphic("data/img/gui/button-dummy-pressed.png"));
+    panelSwitchPushButton2->setWindowCoords(845, 235, 48, 64);
+    panelSwitchPushButton2->setOnClickFunction([this]() {
+        this->panelSwitchPushButtonBuild->setActive(false);
+        this->panelSwitchPushButton3->setActive(false);
+        this->panelSwitchPushButton4->setActive(false);
+        std::cout << "panel: dummy2" << std::endl;
+    });
+    
+    panelSwitchPushButton3 = new GuiPushButton();
+    panelSwitchPushButton3->setGraphic(new Graphic("data/img/gui/button-dummy.png"));
+    panelSwitchPushButton3->setGraphicPressed(new Graphic("data/img/gui/button-dummy-pressed.png"));
+    panelSwitchPushButton3->setWindowCoords(900, 235, 48, 64);
+    panelSwitchPushButton3->setOnClickFunction([this]() {
+        this->panelSwitchPushButtonBuild->setActive(false);
+        this->panelSwitchPushButton2->setActive(false);
+        this->panelSwitchPushButton4->setActive(false);
+        std::cout << "panel: dummy3" << std::endl;
+    });
+    
+    panelSwitchPushButton4 = new GuiPushButton();
+    panelSwitchPushButton4->setGraphic(new Graphic("data/img/gui/button-dummy.png"));
+    panelSwitchPushButton4->setGraphicPressed(new Graphic("data/img/gui/button-dummy-pressed.png"));
+    panelSwitchPushButton4->setWindowCoords(955, 235, 48, 64);
+    panelSwitchPushButton4->setOnClickFunction([this]() {
+        this->panelSwitchPushButtonBuild->setActive(false);
+        this->panelSwitchPushButton2->setActive(false);
+        this->panelSwitchPushButton3->setActive(false);
+        std::cout << "panel: dummy4" << std::endl;
+    });
+    
     // Testzeugs
     graphic = new Graphic("data/img/gui/testbutton.png");
     testButton = new GuiButton();
-    testButton->setWindowCoords(795, 235, graphic->getWidth(), graphic->getHeight());
+    testButton->setWindowCoords(795, 390, graphic->getWidth(), graphic->getHeight());
     testButton->setGraphic(graphic);
     testButton->setGraphicPressed(new Graphic("data/img/gui/testbutton-pressed.png"));
     testButton->setOnClickFunction([]() {
@@ -48,7 +92,7 @@ GuiMgr::GuiMgr() {
     
     graphic = new Graphic("data/img/gui/testbutton.png");
     testPushButton = new GuiPushButton();
-    testPushButton->setWindowCoords(875, 235, graphic->getWidth(), graphic->getHeight());
+    testPushButton->setWindowCoords(875, 390, graphic->getWidth(), graphic->getHeight());
     testPushButton->setGraphic(graphic);
     testPushButton->setGraphicPressed(new Graphic("data/img/gui/testbutton-pressed.png"));
     testPushButton->setOnClickFunction([this]() {
@@ -72,6 +116,26 @@ GuiMgr::~GuiMgr() {
 	delete musicPushButton;
     musicPushButton = nullptr;
     
+    delete panelSwitchPushButtonBuild->getGraphic();
+    delete panelSwitchPushButtonBuild->getGraphicPressed();
+	delete panelSwitchPushButtonBuild;
+    panelSwitchPushButtonBuild = nullptr;
+    
+    delete panelSwitchPushButton2->getGraphic();
+    delete panelSwitchPushButton2->getGraphicPressed();
+	delete panelSwitchPushButton2;
+    panelSwitchPushButton2 = nullptr;
+    
+    delete panelSwitchPushButton3->getGraphic();
+    delete panelSwitchPushButton3->getGraphicPressed();
+	delete panelSwitchPushButton3;
+    panelSwitchPushButton3 = nullptr;
+    
+    delete panelSwitchPushButton4->getGraphic();
+    delete panelSwitchPushButton4->getGraphicPressed();
+	delete panelSwitchPushButton4;
+    panelSwitchPushButton4 = nullptr;
+    
     // Testzeugs
     delete testButton->getGraphic();
     delete testButton->getGraphicPressed();
@@ -90,6 +154,11 @@ void GuiMgr::render(SDL_Renderer* renderer) {
 	panel->render(renderer);
     statusBar->render(renderer);
     musicPushButton->render(renderer);
+    
+    panelSwitchPushButtonBuild->render(renderer);
+    panelSwitchPushButton2->render(renderer);
+    panelSwitchPushButton3->render(renderer);
+    panelSwitchPushButton4->render(renderer);
     
     // Testzeugs
     testButton->render(renderer);
@@ -152,6 +221,11 @@ void GuiMgr::onEvent(SDL_Event& event) {
     panel->onEvent(event);
     statusBar->onEvent(event);
     musicPushButton->onEvent(event);
+    
+    panelSwitchPushButtonBuild->onEvent(event);
+    panelSwitchPushButton2->onEvent(event);
+    panelSwitchPushButton3->onEvent(event);
+    panelSwitchPushButton4->onEvent(event);
     
     // Testzeugs
     testButton->onEvent(event);

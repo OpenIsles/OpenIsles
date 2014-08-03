@@ -19,6 +19,11 @@ private:
 	GuiStaticElement* statusBar;
     GuiPushButton* musicPushButton;
     
+    GuiPushButton* panelSwitchPushButtonBuild;
+    GuiPushButton* panelSwitchPushButton2; // noch ohne Funktion als Dummy
+    GuiPushButton* panelSwitchPushButton3; // noch ohne Funktion als Dummy
+    GuiPushButton* panelSwitchPushButton4; // noch ohne Funktion als Dummy
+    
     GuiButton* testButton;
     GuiPushButton* testPushButton;
     

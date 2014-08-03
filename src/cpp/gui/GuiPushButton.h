@@ -30,6 +30,14 @@ public:
     }
     
     /**
+     * @brief Setzt den Zustand des Buttons
+     * @param active true, um den Button anzuschalten, false, um ihn auszuschalten
+     */
+    void setActive(bool active) {
+        this->active = active;
+    }
+    
+    /**
 	 * @brief Zeichnet das Element
 	 */
 	virtual void render(SDL_Renderer* renderer);
