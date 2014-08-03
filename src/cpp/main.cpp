@@ -60,6 +60,11 @@ SoundMgr* soundMgr;
 extern const int windowWidth = 1024;
 extern const int windowHeight = 768;
 
+/**
+ * @brief Bool-Flag, um die Mainloop zu breaken und das Spiel zu beenden
+ */
+bool quitGame = false;
+
 /*********************************************************************************************************************
  * Prototypen                                                                                                        *
  *********************************************************************************************************************/
@@ -159,7 +164,6 @@ int main(int argc, char** argv) {
 
 	// Mainloop //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	bool quitGame = false;
 	while (!quitGame) {
 		Uint32 ticksAtLoopStart = SDL_GetTicks();
 
@@ -167,26 +171,6 @@ int main(int argc, char** argv) {
 		SDL_Event event;
 		while (SDL_PollEvent(&event)) {
             guiMgr->onEvent(event);
-            
-			if (event.type == SDL_QUIT) {
-				quitGame = true;
-			} else if (event.type == SDL_KEYDOWN) {
-				if (event.key.keysym.scancode == SDL_SCANCODE_ESCAPE) {
-					quitGame = true;
-				} else if (event.key.keysym.scancode == SDL_SCANCODE_UP) {
-					map->scroll(0, -16);
-				} else if (event.key.keysym.scancode == SDL_SCANCODE_DOWN) {
-					map->scroll(0, 16);
-				} else if (event.key.keysym.scancode == SDL_SCANCODE_LEFT) {
-					map->scroll(-16, 0);
-				} else if (event.key.keysym.scancode == SDL_SCANCODE_RIGHT) {
-					map->scroll(16, 0);
-				} else if (event.key.keysym.scancode == SDL_SCANCODE_M) {
-					soundMgr->toggleMusic();
-				}
-			} else if (event.type == SDL_MOUSEBUTTONUP) {
-				map->onClick(event.button.x, event.button.y);
-			}
 		}
 
 		// Debug-Infos vorbereiten, damit wir sie später einfach nur ausgeben können

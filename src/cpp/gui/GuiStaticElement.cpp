@@ -10,6 +10,6 @@ GuiStaticElement::~GuiStaticElement() {
 }
 
 void GuiStaticElement::render(SDL_Renderer* renderer) {
-    SDL_Rect rectDestination = { windowX, windowY, graphic->getWidth(), graphic->getHeight() };
+    SDL_Rect rectDestination = { windowX, windowY, width, height };
 	SDL_RenderCopy(renderer, graphic->getTexture(), nullptr, &rectDestination);
 }

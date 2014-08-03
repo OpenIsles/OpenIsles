@@ -8,24 +8,24 @@ class SDL_Renderer;
 
 
 /**
- * Grafischer Button
+ * Grafischer Button, den man einfach nur drücken kann
  */
 class GuiButton : public GuiStaticElement {
 
-private:
+protected:
     /**
-     * @brief Grafik, wenn der Button gedrückt ist
+     * @brief Grafik, wenn der Button grade runtergedrückt ist
      */
 	Graphic* graphicPressed;
     
     /**
-     * @brief gibt an, ob der Button im Zustand "gedrückt" steht
+     * @brief gibt an, ob der Button grade im Zustand "runtergedrückt" steht
      */
     bool pressed = false;
 
 public:
 	GuiButton();
-	~GuiButton();
+	virtual ~GuiButton();
     
     Graphic* getGraphicPressed() const {
         return graphicPressed;
@@ -38,13 +38,13 @@ public:
     /**
 	 * @brief Zeichnet das Element
 	 */
-	void render(SDL_Renderer* renderer);
+	virtual void render(SDL_Renderer* renderer);
     
     /**
      * Callback, der ein Event handelt
      * @param event SDL-Event
      */
-    void onEvent(SDL_Event& event);
+    virtual void onEvent(SDL_Event& event);
 
 };
 

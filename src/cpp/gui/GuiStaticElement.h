@@ -1,6 +1,7 @@
 #ifndef _GUI_STATIC_ELEMENT_H
 #define _GUI_STATIC_ELEMENT_H
 
+union SDL_Event;
 class Graphic;
 class SDL_Renderer;
 
@@ -10,11 +11,16 @@ class SDL_Renderer;
  */
 class GuiStaticElement {
 
-protected:
+protected: 
     /**
      * @brief Position des Element in Fensterkoordinaten
      */
     int windowX, windowY;
+    
+    /**
+     * @brief Größe des Elements. Die Grafiken müssen dieselbe Größe haben!
+     */
+    int width, height;
     
     /**
      * @brief Grafik, der für das Element gerendert wird
@@ -23,7 +29,7 @@ protected:
 
 public:
 	GuiStaticElement();
-	~GuiStaticElement();
+	virtual ~GuiStaticElement();
     
     Graphic* getGraphic() const {
         return graphic;
@@ -33,26 +39,42 @@ public:
         this->graphic = graphic;
     }
 
-    void getWindowCoords(int& windowX, int& windowY) {
+    void getWindowCoords(int& windowX, int& windowY, int& width, int& height) {
         windowX = this->windowX;
         windowY = this->windowY;
+        width = this->width;
+        height = this->height;
     }
 
-    void setWindowCoords(int windowX, int windowY) {
+    void setWindowCoords(int windowX, int windowY, int width, int height) {
         this->windowX = windowX;
         this->windowY = windowY;
+        this->width = width;
+        this->height = height;
+    }
+    
+    /**
+     * Prüft, ob die angegebenen Fenster-Koordinaten innerhlab des Elements liegen.
+     * @param x X-Fenster-Koordinate
+     * @param y Y-Fenster-Koordinate
+     * @return true, wenn innerhalb des Elements; sonst false
+     */
+    bool hitTest(int x, int y) {
+        return (x >= windowX && y >= windowY && x < windowX + width && y < windowY + height);
     }
     
 	/**
 	 * @brief Zeichnet das Element
 	 */
-	void render(SDL_Renderer* renderer);
+	virtual void render(SDL_Renderer* renderer);
     
     /**
      * Callback, der ein Event handelt
      * @param event SDL-Event
      */
-    void onEvent(SDL_Event& event) {}
+    virtual void onEvent(SDL_Event& event) {
+        // nix tun
+    }
 
 };
 

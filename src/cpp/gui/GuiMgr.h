@@ -3,9 +3,10 @@
 
 #include "SDL.h"
 
-class SDL_Renderer;
 class GuiButton;
 class GuiStaticElement;
+class GuiPushButton;
+class SDL_Renderer;
 
 
 /**
@@ -17,10 +18,22 @@ private:
 	GuiStaticElement* panel;
 	GuiStaticElement* statusBar;
     GuiButton* testButton;
+    GuiPushButton* testPushButton;
+    
+    /**
+     * @brief Fenster-Koordinaten, an dem der letzte Click gestartet wurde.
+     * Gültig, bis die Maustaste losgelassen wurde.
+     */
+    int startClickX, startClickY;
 
 public:
 	GuiMgr();
 	~GuiMgr();
+    
+    void getStartClickCoords(int& startClickX, int& startClickY) {
+        startClickX = this->startClickX;
+        startClickY = this->startClickY;
+    }
 
 	/**
 	 * @brief Zeichnet die Benutzeroberfläche

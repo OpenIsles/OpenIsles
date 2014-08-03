@@ -5,6 +5,7 @@ BUILD_DIRECTORY := build
 OBJ_FILES := \
 	$(BUILD_DIRECTORY)/gui/GuiButton.o \
 	$(BUILD_DIRECTORY)/gui/GuiMgr.o \
+	$(BUILD_DIRECTORY)/gui/GuiPushButton.o \
 	$(BUILD_DIRECTORY)/gui/GuiStaticElement.o \
 	$(BUILD_DIRECTORY)/map/Building.o \
 	$(BUILD_DIRECTORY)/map/Map.o \
@@ -41,6 +42,10 @@ $(BUILD_DIRECTORY)/gui/GuiButton.o: $(SRC_CPP_DIRECTORY)/gui/GuiButton.cpp $(SRC
 	$(CC) $(CFLAGS) -o $@ -c $<
 	
 $(BUILD_DIRECTORY)/gui/GuiMgr.o: $(SRC_CPP_DIRECTORY)/gui/GuiMgr.cpp $(SRC_CPP_DIRECTORY)/gui/GuiMgr.h
+	$(CREATE_TARGET_DIRECTORY)
+	$(CC) $(CFLAGS) -o $@ -c $<
+	
+$(BUILD_DIRECTORY)/gui/GuiPushButton.o: $(SRC_CPP_DIRECTORY)/gui/GuiPushButton.cpp $(SRC_CPP_DIRECTORY)/gui/GuiPushButton.h
 	$(CREATE_TARGET_DIRECTORY)
 	$(CC) $(CFLAGS) -o $@ -c $<
 	
