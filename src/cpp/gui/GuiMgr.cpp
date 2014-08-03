@@ -27,12 +27,18 @@ GuiMgr::GuiMgr() {
     testButton->setWindowCoords(795, 25, graphic->getWidth(), graphic->getHeight());
     testButton->setGraphic(graphic);
     testButton->setGraphicPressed(new Graphic("data/img/gui/testbutton-pressed.png"));
+    testButton->setOnClickFunction([]() {
+        std::cout << "Click" << std::endl;
+    });
     
     graphic = new Graphic("data/img/gui/testbutton.png");
     testPushButton = new GuiPushButton();
     testPushButton->setWindowCoords(875, 25, graphic->getWidth(), graphic->getHeight());
     testPushButton->setGraphic(graphic);
     testPushButton->setGraphicPressed(new Graphic("data/img/gui/testbutton-pressed.png"));
+    testPushButton->setOnClickFunction([this]() {
+        std::cout << "Click im PushButton: " << (this->testPushButton->isActive() ? "active" : "inactive") << std::endl;
+    });
 }
 
 GuiMgr::~GuiMgr() {

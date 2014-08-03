@@ -1,6 +1,7 @@
 #ifndef _GUI_BUTTON_H
 #define _GUI_BUTTON_H
 
+#include <functional>
 #include "GuiStaticElement.h"
 
 class Graphic;
@@ -22,6 +23,11 @@ protected:
      * @brief gibt an, ob der Button grade im Zustand "runtergedrückt" steht
      */
     bool pressed = false;
+    
+    /**
+     * @brief Funktion, die aufgerufen wird, wenn der Button gedrückt wird
+     */
+    std::function<void()> onClickFunction = []{};
 
 public:
 	GuiButton();
@@ -33,6 +39,10 @@ public:
 
     void setGraphicPressed(Graphic* graphicPressed) {
         this->graphicPressed = graphicPressed;
+    }
+    
+    void setOnClickFunction(std::function<void()> onClickFunction) {
+        this->onClickFunction = onClickFunction;
     }
     
     /**

@@ -1,4 +1,3 @@
-#include <iostream>
 #include "SDL.h"
 #include "gui/GuiButton.h"
 #include "gui/GuiMgr.h"
@@ -26,8 +25,6 @@ void GuiButton::onEvent(SDL_Event& event) {
     
     if (event.type == SDL_MOUSEBUTTONUP && pressed) {
         pressed = false;
-        
-        // TODO was tun
-        std::cout << "Button wurde gedrückt." << std::endl;
+        onClickFunction();
     }
 }

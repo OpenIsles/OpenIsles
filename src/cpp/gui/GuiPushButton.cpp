@@ -27,6 +27,7 @@ void GuiPushButton::onEvent(SDL_Event& event) {
         pressed = false;
         if (hitTest(event.button.x, event.button.y)) {
             active = !active;
+            onClickFunction();
         }
     }
 }
