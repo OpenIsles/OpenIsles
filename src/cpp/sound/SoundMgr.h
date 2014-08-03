@@ -16,9 +16,14 @@ public:
 	~SoundMgr();
 
 	/**
-	 * @brief aktiviert/deaktiviert die Hintergrundmusik
+	 * @brief aktiviert die Hintergrundmusik
 	 */
-	void toggleMusic();
+	void enableMusic();
+    
+    /**
+	 * @brief deaktiviert die Hintergrundmusik
+	 */
+	void disableMusic();
 
 private:
 	/**

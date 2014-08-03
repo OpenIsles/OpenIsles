@@ -44,10 +44,14 @@ Mix_Music* SoundMgr::loadMusic(const char* file) {
 	return mixMusic;
 }
 
-void SoundMgr::toggleMusic() {
+void SoundMgr::enableMusic() {
 	if (Mix_PlayingMusic() == 0) {
 		Mix_PlayMusic(backgroundMusic, -1);
-	} else {
+	}
+}
+
+void SoundMgr::disableMusic() {
+	if (Mix_PlayingMusic() != 0) {
 		Mix_HaltMusic();
 	}
 }

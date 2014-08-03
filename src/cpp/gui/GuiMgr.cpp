@@ -22,6 +22,21 @@ GuiMgr::GuiMgr() {
     statusBar->setWindowCoords(0, 734, graphic->getWidth(), graphic->getHeight());
     statusBar->setGraphic(graphic);
     
+    musicPushButton = new GuiPushButton();
+    musicPushButton->setGraphic(new Graphic("data/img/gui/button-music.png"));
+    musicPushButton->setGraphicPressed(new Graphic("data/img/gui/button-music-pressed.png"));
+    musicPushButton->setWindowCoords(785, 690, 64, 64);
+    musicPushButton->setOnClickFunction([this]() {
+        bool musicEnabled = this->musicPushButton->isActive();
+        
+        if (musicEnabled) {
+            soundMgr->enableMusic();
+        } else  {
+            soundMgr->disableMusic();
+        }
+    });
+    
+    // Testzeugs
     graphic = new Graphic("data/img/gui/testbutton.png");
     testButton = new GuiButton();
     testButton->setWindowCoords(795, 25, graphic->getWidth(), graphic->getHeight());
@@ -42,6 +57,8 @@ GuiMgr::GuiMgr() {
 }
 
 GuiMgr::~GuiMgr() {
+    // TODO alle GUI-Element durchiterieren
+    
     delete panel->getGraphic();
 	delete panel;
 	panel = nullptr;
@@ -50,6 +67,12 @@ GuiMgr::~GuiMgr() {
 	delete statusBar;
 	statusBar = nullptr;
     
+    delete musicPushButton->getGraphic();
+    delete musicPushButton->getGraphicPressed();
+	delete musicPushButton;
+    musicPushButton = nullptr;
+    
+    // Testzeugs
     delete testButton->getGraphic();
     delete testButton->getGraphicPressed();
 	delete testButton;
@@ -62,8 +85,13 @@ GuiMgr::~GuiMgr() {
 }
 
 void GuiMgr::render(SDL_Renderer* renderer) {
+    // TODO alle GUI-Element durchiterieren
+    
 	panel->render(renderer);
     statusBar->render(renderer);
+    musicPushButton->render(renderer);
+    
+    // Testzeugs
     testButton->render(renderer);
     testPushButton->render(renderer);
 }
@@ -102,8 +130,6 @@ void GuiMgr::onEvent(SDL_Event& event) {
             map->scroll(-16, 0);
         } else if (event.key.keysym.scancode == SDL_SCANCODE_RIGHT) {
             map->scroll(16, 0);
-        } else if (event.key.keysym.scancode == SDL_SCANCODE_M) {
-            soundMgr->toggleMusic();
         }
     }
     
@@ -125,6 +151,9 @@ void GuiMgr::onEvent(SDL_Event& event) {
     // TODO alle GUI-Element durchiterieren
     panel->onEvent(event);
     statusBar->onEvent(event);
+    musicPushButton->onEvent(event);
+    
+    // Testzeugs
     testButton->onEvent(event);
     testPushButton->onEvent(event);
 }

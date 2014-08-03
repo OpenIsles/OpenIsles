@@ -17,6 +17,8 @@ class GuiMgr {
 private:
 	GuiStaticElement* panel;
 	GuiStaticElement* statusBar;
+    GuiPushButton* musicPushButton;
+    
     GuiButton* testButton;
     GuiPushButton* testPushButton;
     
