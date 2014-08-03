@@ -28,6 +28,7 @@
 
 // Aus main.cpp importiert
 extern GraphicsMgr* graphicsMgr;
+extern SDL_Renderer* renderer;
 extern const int windowWidth;
 extern const int windowHeight;
 
@@ -86,6 +87,10 @@ Map::~Map() {
 	selectedMapObject = nullptr;
 
 	clearMapObjects();
+    
+    if (minimapTexture != nullptr) {
+        SDL_DestroyTexture(minimapTexture);
+    }
 
 	delete[] tiles;
 	tiles = nullptr;
@@ -100,6 +105,10 @@ void Map::initNewMap(unsigned int width, unsigned int height) {
     
 	// Karte erst leerräumen
 	clearMapObjects();
+    
+    if (minimapTexture != nullptr) {
+        SDL_DestroyTexture(minimapTexture);
+    }
 
 	// Neue Karte anlegen
 	if (tiles != nullptr) {
@@ -256,6 +265,9 @@ void Map::loadMapFromTMX(const char* filename) {
 
 	// XML-Document wegräumen
 	delete xmlDocument;
+    
+    // Minimap erstellen
+    updateMinimapTexture();
 }
 
 void Map::renderMinimap(SDL_Renderer* renderer) {
@@ -267,22 +279,7 @@ void Map::renderMinimap(SDL_Renderer* renderer) {
     float scaleFactor = (float) width / (float) minimapClipRect.w;
     
     // Karte zeichnen
-    // TODO Das kostet Zeit. Wir können die Minimap direkt nach dem Laden einer Karte EINmalig erstellen :-)
-    for (int y = 0, screenY = minimapClipRect.y; y < minimapClipRect.h; y++, screenY++) {
-        for (int x = 0, screenX = minimapClipRect.x; x < minimapClipRect.w; x++, screenX++) {
-            int mapX = (int) ((float) x * scaleFactor);
-            int mapY = (int) ((float) y * scaleFactor);
-            
-            unsigned char tile = tiles[mapY * width + mapX];
-            if (tile == 1) {
-                SDL_SetRenderDrawColor(renderer, 0, 0, 192, 255);
-            } else {
-                SDL_SetRenderDrawColor(renderer, 0, 128, 0, 255);
-            }
-            
-            SDL_RenderDrawPoint(renderer, screenX, screenY);
-        }
-    }
+    SDL_RenderCopy(renderer, minimapTexture, nullptr, &minimapClipRect);
     
     // Aktuellen Ausschnitt bestimmen
     // TODO Duplicate-Code refactorn, (x/y)-Tuple für MapCoords einführen, Rect (top, left, right, bottom) von Punkten einführen
@@ -313,6 +310,34 @@ void Map::renderMinimap(SDL_Renderer* renderer) {
     
     SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_NONE);
     SDL_RenderSetClipRect(renderer, nullptr);
+}
+
+void Map::updateMinimapTexture() {
+    if (minimapTexture != nullptr) {
+        SDL_DestroyTexture(minimapTexture);
+    }
+    
+    float scaleFactor = (float) width / (float) minimapClipRect.w;
+    
+    // Karte zeichnen
+    Uint32* pixelData = new Uint32[minimapClipRect.w * minimapClipRect.h];
+    Uint32* pixelPtr = pixelData;
+    for (int y = 0, screenY = minimapClipRect.y; y < minimapClipRect.h; y++, screenY++) {
+        for (int x = 0, screenX = minimapClipRect.x; x < minimapClipRect.w; x++, screenX++) {
+            int mapX = (int) ((float) x * scaleFactor);
+            int mapY = (int) ((float) y * scaleFactor);
+            
+            unsigned char tile = tiles[mapY * width + mapX];
+            *(pixelPtr++) = (tile == 1) ? 0x0000c0 : 0x008000;
+        }
+    }
+    
+    // Daten zur Texture umwandeln
+    SDL_Surface* surface = SDL_CreateRGBSurfaceFrom(
+            pixelData, minimapClipRect.w, minimapClipRect.h, 32, minimapClipRect.w * 4, 0, 0, 0, 0);
+    minimapTexture = SDL_CreateTextureFromSurface(renderer, surface);
+    SDL_FreeSurface(surface);
+    delete[] pixelData;
 }
 
 void Map::renderMap(SDL_Renderer* renderer) {

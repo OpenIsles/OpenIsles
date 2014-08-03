@@ -47,6 +47,12 @@ private:
 	 * @brief Y-Offset in Screen-Koordinaten, um Scrolling zu ermöglichen
 	 */
 	int screenOffsetY;
+    
+    /**
+     * @brief SDL-Texture mit der Minimap. Diese wird vorberechnet und hier gespeichert, sodass sie nur gezeichnet
+     * werden muss und keine Berechnungszeit anfällt.
+     */
+    SDL_Texture* minimapTexture = nullptr;
 
 public:
 	Map(unsigned int width, unsigned int height);
@@ -178,6 +184,11 @@ private:
 	 * @param height neue Höhe der Karte
 	 */
 	void initNewMap(unsigned int width, unsigned int height);
+    
+    /**
+     * @brief Aktualisiert die SDL-Texture für die Minimap
+     */
+    void updateMinimapTexture();
 
 };
 
