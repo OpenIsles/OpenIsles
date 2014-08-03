@@ -189,6 +189,22 @@ private:
      * @brief Aktualisiert die SDL-Texture für die Minimap
      */
     void updateMinimapTexture();
+    
+    /**
+	 * @brief interner Klickhandler, wenn in die Karte geklickt wurde. Diese Methode wird garantiert nur aufgerufen,
+     * wenn die Koordinaten in der Karte liegen.
+	 * @param mouseX X-Fenster-Koordinate, die geklickt wurde
+	 * @param mouseY Y-Fenster-Koordinate, die geklickt wurde
+	 */
+	void onClickInMap(int mouseX, int mouseY);
+    
+    /**
+	 * @brief interner Klickhandler, wenn in die Minimap geklickt wurde. Diese Methode wird garantiert nur aufgerufen,
+     * wenn die Koordinaten in der Minimap liegen.
+	 * @param mouseX X-Fenster-Koordinate, die geklickt wurde
+	 * @param mouseY Y-Fenster-Koordinate, die geklickt wurde
+	 */
+	void onClickInMinimap(int mouseX, int mouseY);
 
 };
 

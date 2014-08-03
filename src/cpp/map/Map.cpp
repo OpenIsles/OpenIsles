@@ -510,12 +510,22 @@ void Map::clearMapObjects() {
 }
 
 void Map::onClick(int mouseX, int mouseY) {
-	// Clipping in der Kartenfläche
-	if (mouseX >= mapClipRect.x + mapClipRect.w || mouseY >= mapClipRect.y + mapClipRect.h || mouseX < mapClipRect.x
-			|| mouseY < mapClipRect.y) {
-		return;
-	}
+    // Karte
+	if (mouseX >= mapClipRect.x && mouseY >= mapClipRect.y &&
+            mouseX < mapClipRect.x + mapClipRect.w && mouseY < mapClipRect.y + mapClipRect.h) {
+        onClickInMap(mouseX, mouseY);
+        return;
+    }
+    
+    // Minimap
+    if(mouseX >= minimapClipRect.x && mouseY >= minimapClipRect.y &&
+            mouseX < minimapClipRect.x + minimapClipRect.w && mouseY < minimapClipRect.y + minimapClipRect.h) {
+        onClickInMinimap(mouseX, mouseY);
+        return;
+    }
+}
 
+void Map::onClickInMap(int mouseX, int mouseY) {
 	int mouseAtScreenX = mouseX + getScreenOffsetX();
 	int mouseAtScreenY = mouseY + getScreenOffsetY();
 
@@ -564,4 +574,24 @@ void Map::onClick(int mouseX, int mouseY) {
 
 	// TODO später ggf. weitere Events
 	selectedMapObject = nullptr;
+}
+
+void Map::onClickInMinimap(int mouseX, int mouseY) {
+    int xInMinimap = mouseX - minimapClipRect.x;
+    int yInMinimap = mouseY - minimapClipRect.y;
+    
+    float scaleFactor = (float) width / (float) minimapClipRect.w;
+    
+    int mapX = (int) ((float) xInMinimap  * scaleFactor);
+    int mapY = (int) ((float) yInMinimap  * scaleFactor);
+    
+    int screenX, screenY;
+    mapToScreenCoords(mapX, mapY, screenX, screenY);
+    
+    // zentrieren
+    screenX -= mapClipRect.w / 2;
+    screenY -= mapClipRect.h / 2;
+    
+    this->screenOffsetX = screenX;
+    this->screenOffsetY = screenY;
 }
