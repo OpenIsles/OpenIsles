@@ -37,6 +37,10 @@ public:
         return graphicPressed;
     }
 
+    /**
+     * Setzt die Grafik für das Element, wenn der Button gedrückt ist. Der Destruktur räumt die Grafik am Ende weg.
+     * @param graphic frisch geladene Grafik, die verwendet werden soll
+     */
     void setGraphicPressed(Graphic* graphicPressed) {
         this->graphicPressed = graphicPressed;
     }

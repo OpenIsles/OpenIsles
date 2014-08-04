@@ -1,0 +1,22 @@
+/**
+ * In dieser Datei sind alle guiIdentifiers gelistet
+ */
+#ifndef _GUI_IDENTIFIERS_H
+#define _GUI_IDENTIFIERS_H
+
+
+#define GUI_ID_PANEL 1
+#define GUI_ID_STATUS_BAR 2
+
+#define GUI_ID_MUSIC_PUSH_BUTTON 101
+
+#define GUI_ID_PANEL_SWITCH_PUSH_BUTTON_BUILD 201
+#define GUI_ID_PANEL_SWITCH_PUSH_BUTTON_2 202
+#define GUI_ID_PANEL_SWITCH_PUSH_BUTTON_3 203
+#define GUI_ID_PANEL_SWITCH_PUSH_BUTTON_4 204
+
+#define GUI_ID_TEST_BUTTON 301
+#define GUI_ID_TEST_PUSH_BUTTON 302
+
+
+#endif

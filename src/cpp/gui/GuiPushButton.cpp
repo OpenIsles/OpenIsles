@@ -9,6 +9,7 @@ GuiPushButton::GuiPushButton() {
 }
 
 GuiPushButton::~GuiPushButton() {
+    delete graphicPressed;
 }
 
 void GuiPushButton::render(SDL_Renderer* renderer) {

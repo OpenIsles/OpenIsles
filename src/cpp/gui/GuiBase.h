@@ -2,7 +2,6 @@
 #define _GUI_BASE_H
 
 union SDL_Event;
-class Graphic;
 class SDL_Renderer;
 
 

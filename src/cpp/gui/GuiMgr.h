@@ -1,8 +1,10 @@
 #ifndef _GUI_MGR_H
 #define _GUI_MGR_H
 
+#include <map>
 #include "SDL.h"
 
+class GuiBase;
 class GuiButton;
 class GuiStaticElement;
 class GuiPushButton;
@@ -15,23 +17,16 @@ class SDL_Renderer;
 class GuiMgr {
 
 private:
-	GuiStaticElement* panel;
-	GuiStaticElement* statusBar;
-    GuiPushButton* musicPushButton;
-    
-    GuiPushButton* panelSwitchPushButtonBuild;
-    GuiPushButton* panelSwitchPushButton2; // noch ohne Funktion als Dummy
-    GuiPushButton* panelSwitchPushButton3; // noch ohne Funktion als Dummy
-    GuiPushButton* panelSwitchPushButton4; // noch ohne Funktion als Dummy
-    
-    GuiButton* testButton;
-    GuiPushButton* testPushButton;
-    
-    /**
+	/**
      * @brief Fenster-Koordinaten, an dem der letzte Click gestartet wurde.
      * Gültig, bis die Maustaste losgelassen wurde.
      */
     int startClickX, startClickY;
+    
+    /**
+     * @brief Map, die alle registrierten Gui-Elemente enthält und durch ihre Identifier referenziert.
+     */
+    std::map<int, GuiBase*> identifierMap;
 
 public:
 	GuiMgr();
@@ -52,6 +47,21 @@ public:
      * @param event SDL-Event
      */
     void onEvent(SDL_Event& event);
+    
+private:
+    /**
+     * @brief Registriert ein neues GUI-Element
+     * @param identifier eindeutiger Identifier, um das Element mit diesem anzusprechen
+     * @param guiElement Referenz zum GUI-Element
+     */
+    void registerElement(int identifier, GuiBase* guiElement);
+    
+    /**
+     * @brief Liefert ein bestimmtes GUI-Element zurück.
+     * @param identifier Identifier des Elements
+     * @return Referenz zum GUI-Element
+     */
+    GuiBase* findElement(int identifier);
 
 };
 

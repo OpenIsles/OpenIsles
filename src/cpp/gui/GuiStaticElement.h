@@ -27,6 +27,10 @@ public:
         return graphic;
     }
 
+    /**
+     * Setzt die Grafik für das Element. Der Destruktur räumt die Grafik am Ende weg.
+     * @param graphic frisch geladene Grafik, die verwendet werden soll
+     */
     void setGraphic(Graphic* graphic) {
         this->graphic = graphic;
     }
