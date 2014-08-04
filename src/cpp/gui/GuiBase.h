@@ -20,9 +20,16 @@ protected:
      * @brief Größe des Elements. Die Grafiken müssen dieselbe Größe haben!
      */
     int width, height;
+    
+    /**
+     * @brief gibt an, ob das Element sichtbar ist, d.h. gerendert wird und Events empfangen kann.
+     */
+    bool visible;
 
 public:
-	GuiBase() {}
+	GuiBase() {
+        visible = true;
+    }
 	virtual ~GuiBase() {}
 
     void getWindowCoords(int& windowX, int& windowY, int& width, int& height) {
@@ -47,6 +54,14 @@ public:
      */
     bool hitTest(int x, int y) {
         return (x >= windowX && y >= windowY && x < windowX + width && y < windowY + height);
+    }
+    
+    bool isVisible() const {
+        return visible;
+    }
+
+    void setVisible(bool visible) {
+        this->visible = visible;
     }
     
 	/**

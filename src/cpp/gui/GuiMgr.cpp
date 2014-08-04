@@ -97,6 +97,7 @@ GuiMgr::GuiMgr() {
     testButton->setOnClickFunction([]() {
         std::cout << "Click" << std::endl;
     });
+    testButton->setVisible(false);
     registerElement(GUI_ID_TEST_BUTTON, testButton);
     
     graphic = new Graphic("data/img/gui/testbutton.png");
@@ -106,6 +107,7 @@ GuiMgr::GuiMgr() {
     testPushButton->setGraphicPressed(new Graphic("data/img/gui/testbutton-pressed.png"));
     testPushButton->setOnClickFunction([this]() {
         GuiPushButton* testPushButton = (GuiPushButton*) findElement(GUI_ID_TEST_PUSH_BUTTON);
+        ((GuiPushButton*) findElement(GUI_ID_TEST_BUTTON))->setVisible(testPushButton->isActive());
         std::cout << "Click im PushButton: " << (testPushButton->isActive() ? "active" : "inactive") << std::endl;
     });
     registerElement(GUI_ID_TEST_PUSH_BUTTON, testPushButton);
@@ -140,6 +142,11 @@ GuiBase* GuiMgr::findElement(int identifier) {
 void GuiMgr::render(SDL_Renderer* renderer) {
     for (auto iter = identifierMap.cbegin(); iter != identifierMap.cend(); iter++) {
 		GuiBase* guiElement = iter->second;
+        
+        if (!guiElement->isVisible()) {
+            continue;
+        }
+        
         guiElement->render(renderer);
     }
 }
@@ -198,6 +205,11 @@ void GuiMgr::onEvent(SDL_Event& event) {
     
     for (auto iter = identifierMap.cbegin(); iter != identifierMap.cend(); iter++) {
 		GuiBase* guiElement = iter->second;
+        
+        if (!guiElement->isVisible()) {
+            continue;
+        }
+        
         guiElement->onEvent(event);
     }
 }
