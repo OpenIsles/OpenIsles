@@ -4,6 +4,7 @@
 #include <iostream>
 #include <cstdlib>
 #include <string>
+#include "config/BuildingConfigMgr.h"
 #include "gui/GuiMgr.h"
 #include "map/Map.h"
 #include "sound/SoundMgr.h"
@@ -55,6 +56,11 @@ GuiMgr* guiMgr;
 SoundMgr* soundMgr;
 
 /**
+ * @brief Die Konfiguration der Gebäude
+ */
+BuildingConfigMgr* buildingConfigMgr;
+
+/**
  * @brief Größe des Fensters
  */
 extern const int windowWidth = 1024;
@@ -70,17 +76,17 @@ bool quitGame = false;
  *********************************************************************************************************************/
 
 int main(int argc, char** argv);
-void renderText(SDL_Renderer* renderer, std::string string, int x, int y);
+void renderText(SDL_Renderer* renderer, std::string string, int x, int y, bool rightAlign);
 void drawFrame(SDL_Renderer* renderer);
 
 /*********************************************************************************************************************
  * Implementierung                                                                                                   *
  *********************************************************************************************************************/
 
-void renderText(SDL_Renderer* renderer, std::string string, int x, int y) {
+void renderText(SDL_Renderer* renderer, std::string string, int x, int y, bool rightAlign) {
 	SDL_Color fpsColor = { 255, 255, 255, 0 };
-	SDL_Surface* surfaceText = TTF_RenderText_Solid(ttfFont, string.data(), fpsColor);
-	SDL_Rect rectDestination = { x, y, surfaceText->w, surfaceText->h };
+	SDL_Surface* surfaceText = TTF_RenderUTF8_Solid(ttfFont, string.data(), fpsColor);
+	SDL_Rect rectDestination = { (rightAlign) ? (x - surfaceText->w) : x, y, surfaceText->w, surfaceText->h };
 	SDL_Texture* textureText = SDL_CreateTextureFromSurface(renderer, surfaceText);
 	SDL_FreeSurface(surfaceText);
 	SDL_RenderCopy(renderer, textureText, NULL, &rectDestination);
@@ -94,6 +100,16 @@ void drawFrame(SDL_Renderer* renderer) {
 	// UI rendern
 	guiMgr->render(renderer);
     
+    // Statuszeile
+    const MapObject* selectedMapObject = map->getSelectedMapObject();
+    if (selectedMapObject != nullptr) {
+        const Building* selectedBuilding = reinterpret_cast<const Building*>(selectedMapObject);
+        if (selectedBuilding != nullptr) {
+            const BuildingConfig* buildingConfig = buildingConfigMgr->getConfig(selectedBuilding->getObject());
+            renderText(renderer, buildingConfig->name, 753, 744, true);
+        }
+    }
+    
     // Minimap auf die GUI rendern
 	map->renderMinimap(renderer);
 
@@ -103,7 +119,7 @@ void drawFrame(SDL_Renderer* renderer) {
 			continue;
 		}
 
-		renderText(renderer, debugOutput[i], 10, 10 + 15 * i);
+		renderText(renderer, debugOutput[i], 10, 10 + 15 * i, false);
 	}
 }
 
@@ -161,6 +177,7 @@ int main(int argc, char** argv) {
 	// Game-Initialisierung //////////////////////////////////////////////////////////////////////////////////////////
 
 	soundMgr = new SoundMgr();
+    buildingConfigMgr = new BuildingConfigMgr();
 	graphicsMgr = new GraphicsMgr();
 	map = new Map(40, 40);
 	guiMgr = new GuiMgr();
@@ -201,6 +218,7 @@ int main(int argc, char** argv) {
 	delete guiMgr;
 	delete map;
 	delete graphicsMgr;
+    delete buildingConfigMgr;
 	delete soundMgr;
 
 	// Library-Deinitialisierung /////////////////////////////////////////////////////////////////////////////////////

@@ -7,8 +7,42 @@
  * @brief Structure, die ein Gebäude darstellt.
  */
 class Building : public Structure {
+    
+private:
+    /**
+     * Radius des Einzugsgebiets
+     */
+    int catchmentAreaRadius;
+        
 
 public:
+    Building() {}
+    virtual ~Building() {}
+    
+    int getCatchmentAreaRadius() const {
+        return catchmentAreaRadius;
+    }
+
+    void setCatchmentAreaRadius(int catchmentAreaRadius) {
+        this->catchmentAreaRadius = catchmentAreaRadius;
+    }
+    
+    /**
+     * @brief Testet, ob eine bestimmte Kachel innerhalb des Einzugsgebiets des Gebäudes liegt
+     * @param mapX X-Map-Koordinate, die getestet wird
+     * @param mapY Y-Map-Koordinate, die getestet wird
+     * @return true, wenn die Kachel innerhalb des Einzugsgebiets liegt; sonst false
+     */
+    bool isInsideCatchmentArea(int mapX, int mapY);
+    
+    /**
+     * @brief Testet, ob ein bestimmtes Map-Objekt innerhalb des Einzugsgebiets des Gebäudes liegt. Dies ist immer dann
+     * der Fall, wenn mindestens eine Kachel des Mapobjekts im Einzuggebiet liegt.
+     * @param mapObject Map-Objekt, was getestet wird
+     * @return true, wenn das Map-Objekt innerhalb des Einzugsgebiets liegt; sonst false
+     */
+    bool isInsideCatchmentArea(MapObject* mapObject);
+    
 	/**
 	 * @brief Callback, der sich um einen Mausklick auf das Gebäude kümmert
 	 * @param mouseXInBuilding X-Koordinate innerhalb des Gebäude, wo geklickt wurde

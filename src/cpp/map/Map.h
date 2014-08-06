@@ -136,32 +136,15 @@ public:
 	 * @param mapX X-Map-Koordinate des Objekts
 	 * @param mapY Y-Map-Koordinate des Objekts
 	 * @param object Objekt-Typ, d.h. Index in GraphicsMgr#objects
+     * @param catchmentAreaRadius Radius des Einzugsgebiets
 	 * @return readonly-Zeiger auf das neu angelegte Building
 	 */
-	const Building* addBuilding(int mapX, int mapY, unsigned char object);
+	const Building* addBuilding(int mapX, int mapY, unsigned char object, int catchmentAreaRadius);
 
 	/**
 	 * @brief Entfernt alle Objekte auf der Karte.
 	 */
 	void clearMapObjects();
-
-	/**
-	 * @brief Rechnet Map- in Screen-Koordinaten um. Die Screen-Koordinaten sind die der oberen linken Ecke der Kachel.
-	 * @param mapX Map-X-Koordinate (Eingabe)
-	 * @param mapY Map-Y-Koordinate (Eingabe)
-	 * @param screenX Screen-X-Koordinate (Ausgabe)
-	 * @param screenY Screen-Y-Koordinate (Ausgabe)
-	 */
-	void mapToScreenCoords(int mapX, int mapY, int& screenX, int& screenY);
-
-	/**
-	 * @brief Rechnet Screen- in Map-Koordinaten um.
-	 * @param screenX Screen-X-Koordinate (Eingabe)
-	 * @param screenY Screen-Y-Koordinate (Eingabe)
-	 * @param mapX Map-X-Koordinate (Ausgabe)
-	 * @param mapY Map-Y-Koordinate (Ausgabe)
-	 */
-	void screenToMapCoords(int screenX, int screenY, int& mapX, int& mapY);
 
 	/**
 	 * @brief Callback, der sich um einen Mausklick auf die Karte kümmert

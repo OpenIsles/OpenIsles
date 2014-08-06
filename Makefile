@@ -3,18 +3,20 @@ SRC_CPP_DIRECTORY := $(SRC_DIRECTORY)/cpp
 DATA_DIRECTORY := data
 BUILD_DIRECTORY := build
 OBJ_FILES := \
+	$(BUILD_DIRECTORY)/config/BuildingConfigMgr.o \
 	$(BUILD_DIRECTORY)/gui/GuiButton.o \
 	$(BUILD_DIRECTORY)/gui/GuiMgr.o \
 	$(BUILD_DIRECTORY)/gui/GuiPushButton.o \
 	$(BUILD_DIRECTORY)/gui/GuiStaticElement.o \
 	$(BUILD_DIRECTORY)/map/Building.o \
 	$(BUILD_DIRECTORY)/map/Map.o \
+	$(BUILD_DIRECTORY)/map/MapUtils.o \
 	$(BUILD_DIRECTORY)/sound/SoundMgr.o \
 	$(BUILD_DIRECTORY)/Graphic.o \
 	$(BUILD_DIRECTORY)/GraphicsMgr.o \
 	$(BUILD_DIRECTORY)/main.o
 	
-MAP_HEADER_FILES := $(addprefix $(SRC_CPP_DIRECTORY)/map/,Building.h Map.h MapObject.h Structure.h)
+MAP_HEADER_FILES := $(addprefix $(SRC_CPP_DIRECTORY)/map/,Building.h Map.h MapObject.h MapUtils.h Structure.h)
 
 # Für das fertige Tileset für Tiled: Anzahl Kacheln pro Zeile
 TILESET_WIDTH := 4
@@ -36,6 +38,11 @@ all: build-tiles build-gui $(BUILD_DIRECTORY)/OpenIsles
 clean: clean-tiles clean-gui
 	rm -rf $(BUILD_DIRECTORY)
 	
+
+$(BUILD_DIRECTORY)/config/BuildingConfigMgr.o: $(SRC_CPP_DIRECTORY)/config/BuildingConfigMgr.cpp $(SRC_CPP_DIRECTORY)/config/BuildingConfigMgr.h
+	$(CREATE_TARGET_DIRECTORY)
+	$(CC) $(CFLAGS) -o $@ -c $<
+
 
 $(BUILD_DIRECTORY)/gui/GuiButton.o: $(SRC_CPP_DIRECTORY)/gui/GuiButton.cpp $(SRC_CPP_DIRECTORY)/gui/GuiButton.h
 	$(CREATE_TARGET_DIRECTORY)
@@ -62,6 +69,10 @@ $(BUILD_DIRECTORY)/map/Map.o: $(SRC_CPP_DIRECTORY)/map/Map.cpp $(MAP_HEADER_FILE
 	$(CREATE_TARGET_DIRECTORY)
 	$(CC) $(CFLAGS) -o $@ -c $<
 	
+$(BUILD_DIRECTORY)/map/MapUtils.o: $(SRC_CPP_DIRECTORY)/map/MapUtils.cpp $(MAP_HEADER_FILES)
+	$(CREATE_TARGET_DIRECTORY)
+	$(CC) $(CFLAGS) -o $@ -c $<
+
 	
 $(BUILD_DIRECTORY)/sound/SoundMgr.o: $(SRC_CPP_DIRECTORY)/sound/SoundMgr.cpp $(SRC_CPP_DIRECTORY)/sound/SoundMgr.h
 	$(CREATE_TARGET_DIRECTORY)

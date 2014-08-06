@@ -95,19 +95,35 @@ GuiMgr::GuiMgr() {
     testButton->setGraphic(graphic);
     testButton->setGraphicPressed(new Graphic("data/img/gui/testbutton-pressed.png"));
     testButton->setOnClickFunction([]() {
-        std::cout << "Click" << std::endl;
+        Building* building = (Building*) map->getSelectedMapObject();
+        building->setCatchmentAreaRadius(building->getCatchmentAreaRadius() - 1);
+        std::cout << "Click1" << std::endl;
     });
     testButton->setVisible(false);
-    registerElement(GUI_ID_TEST_BUTTON, testButton);
+    registerElement(GUI_ID_TEST_BUTTON1, testButton);
+    
+    graphic = new Graphic("data/img/gui/testbutton.png");
+    GuiButton* testButton2 = new GuiButton();
+    testButton2->setWindowCoords(875, 390, graphic->getWidth(), graphic->getHeight());
+    testButton2->setGraphic(graphic);
+    testButton2->setGraphicPressed(new Graphic("data/img/gui/testbutton-pressed.png"));
+    testButton2->setOnClickFunction([]() {
+        Building* building = (Building*) map->getSelectedMapObject();
+        building->setCatchmentAreaRadius(building->getCatchmentAreaRadius() + 1);
+        std::cout << "Click2" << std::endl;
+    });
+    testButton2->setVisible(false);
+    registerElement(GUI_ID_TEST_BUTTON2, testButton2);
     
     graphic = new Graphic("data/img/gui/testbutton.png");
     GuiPushButton* testPushButton = new GuiPushButton();
-    testPushButton->setWindowCoords(875, 390, graphic->getWidth(), graphic->getHeight());
+    testPushButton->setWindowCoords(955, 390, graphic->getWidth(), graphic->getHeight());
     testPushButton->setGraphic(graphic);
     testPushButton->setGraphicPressed(new Graphic("data/img/gui/testbutton-pressed.png"));
     testPushButton->setOnClickFunction([this]() {
         GuiPushButton* testPushButton = (GuiPushButton*) findElement(GUI_ID_TEST_PUSH_BUTTON);
-        ((GuiPushButton*) findElement(GUI_ID_TEST_BUTTON))->setVisible(testPushButton->isActive());
+        ((GuiPushButton*) findElement(GUI_ID_TEST_BUTTON1))->setVisible(testPushButton->isActive());
+        ((GuiPushButton*) findElement(GUI_ID_TEST_BUTTON2))->setVisible(testPushButton->isActive());
         std::cout << "Click im PushButton: " << (testPushButton->isActive() ? "active" : "inactive") << std::endl;
     });
     registerElement(GUI_ID_TEST_PUSH_BUTTON, testPushButton);
