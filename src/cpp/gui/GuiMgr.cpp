@@ -95,8 +95,6 @@ GuiMgr::GuiMgr() {
     testButton->setGraphic(graphic);
     testButton->setGraphicPressed(new Graphic("data/img/gui/testbutton-pressed.png"));
     testButton->setOnClickFunction([]() {
-        Building* building = (Building*) map->getSelectedMapObject();
-        building->setCatchmentAreaRadius(building->getCatchmentAreaRadius() - 1);
         std::cout << "Click1" << std::endl;
     });
     testButton->setVisible(false);
@@ -108,8 +106,6 @@ GuiMgr::GuiMgr() {
     testButton2->setGraphic(graphic);
     testButton2->setGraphicPressed(new Graphic("data/img/gui/testbutton-pressed.png"));
     testButton2->setOnClickFunction([]() {
-        Building* building = (Building*) map->getSelectedMapObject();
-        building->setCatchmentAreaRadius(building->getCatchmentAreaRadius() + 1);
         std::cout << "Click2" << std::endl;
     });
     testButton2->setVisible(false);

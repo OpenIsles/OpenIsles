@@ -1,10 +1,10 @@
+#include "config/BuildingConfigMgr.h"
 #include "map/Building.h"
 #include "map/Map.h"
 #include "map/MapUtils.h"
 
-/**
- * @brief die Karte
- */
+// Aus main.cpp importiert
+extern BuildingConfigMgr* buildingConfigMgr;
 extern Map* map;
 
 
@@ -16,26 +16,25 @@ void Building::onClick(int mouseXInBuilding, int mouseYInBuilding) {
 }
 
 bool Building::isInsideCatchmentArea(int mapX, int mapY) {
-    // Wir müssen in Screen-Koordinaten rechnen. Der Einzugsbereich ist eine 2:1-Ellipse um den Gebäude-Mittelpunkt.
-    int screenX, screenY, thisScreenCenterX, thisScreenCenterY;
+    const BuildingConfig* buildingConfig = buildingConfigMgr->getConfig(object);
+    const RectangleData<char>* catchmentAreaData = buildingConfig->GetCatchmentArea(); 
     
-    MapUtils::mapToScreenCoordsCenter(mapX, mapY, screenX, screenY);
-    getScreenCoordsCenter(thisScreenCenterX, thisScreenCenterY);
+    // Gebäude hat keinen Einzugsbereich?
+    if (catchmentAreaData == nullptr) {
+        return false;
+    }
     
-    /* Ellipsengleichung:
-     *   (x - x0)²   (y - y0)²
-     *   --------- + --------- = 1
-     *       a²          b² 
-     */
-
-    float radiusA = ((float)catchmentAreaRadius + 0.25) * GraphicsMgr::TILE_WIDTH_HALF;
-    float radiusB = ((float)catchmentAreaRadius + 0.25) * GraphicsMgr::TILE_HEIGHT_HALF;
+    // Koordinaten innerhalb von buildingConfig.catchmentArea.data ermitteln
+    int x = (mapX - this->mapX) + ((catchmentAreaData->width - this->mapWidth) / 2);
+    int y = (mapY - this->mapY) + ((catchmentAreaData->height - this->mapHeight) / 2);
     
-    return ( ((float)(screenX - thisScreenCenterX) * (screenX - thisScreenCenterX) /
-              (radiusA * radiusA)) +
-             ((float)(screenY - thisScreenCenterY) * (screenY - thisScreenCenterY) /
-              (radiusB * radiusB))
-            <= 1);
+    // Außerhalb des definierten Rechtsecks? Sicher außerhalb Einzugsbereich
+    if (x < 0 || y < 0 || x >= catchmentAreaData->width || y >= catchmentAreaData->height) {
+        return false;
+    }
+    
+    // TODO String-'1' durch echte 1 ersetzen, wenn wir das über die Config einlesen
+    return (catchmentAreaData->data[y * catchmentAreaData->width + x] == '1'); 
 }
 
 bool Building::isInsideCatchmentArea(MapObject* mapObject) {

@@ -136,10 +136,9 @@ public:
 	 * @param mapX X-Map-Koordinate des Objekts
 	 * @param mapY Y-Map-Koordinate des Objekts
 	 * @param object Objekt-Typ, d.h. Index in GraphicsMgr#objects
-     * @param catchmentAreaRadius Radius des Einzugsgebiets
 	 * @return readonly-Zeiger auf das neu angelegte Building
 	 */
-	const Building* addBuilding(int mapX, int mapY, unsigned char object, int catchmentAreaRadius);
+	const Building* addBuilding(int mapX, int mapY, unsigned char object);
 
 	/**
 	 * @brief Entfernt alle Objekte auf der Karte.

@@ -54,12 +54,12 @@ Map::Map(unsigned int width, unsigned int height) :
 
 	loadMapFromTMX("data/map/map.tmx");
 
-	addBuilding(17, 14, 0, 3);
-    addBuilding(16, 10, 1, 4);
-    addBuilding(24, 15, 2, 5);
-    addBuilding(20, 10, 3, 6);
-    addBuilding(16, 7, 4, 8);
-    addBuilding(16, 2, 5, 10);
+	addBuilding(17, 14, 0);
+    addBuilding(16, 10, 1);
+    addBuilding(24, 15, 2);
+    addBuilding(20, 10, 3);
+    addBuilding(16, 7, 4);
+    addBuilding(16, 2, 5);
 
 	addStructure(13, 5, 11);
 	addStructure(14, 5, 11);
@@ -419,7 +419,7 @@ const Structure* Map::addStructure(int mapX, int mapY, unsigned char object) {
 	return structure;
 }
 
-const Building* Map::addBuilding(int mapX, int mapY, unsigned char object, int catchmentAreaRadius) {
+const Building* Map::addBuilding(int mapX, int mapY, unsigned char object) {
 	// Position berechnen in Screen-Koordinaten berechnen, an dem sich die Grafik befinden muss.
 	Graphic* graphic = graphicsMgr->getObject(object);
 	SDL_Rect rect = { 0, 0, graphic->getWidth(), graphic->getHeight() };
@@ -434,7 +434,6 @@ const Building* Map::addBuilding(int mapX, int mapY, unsigned char object, int c
 	building->setMapCoords(mapX, mapY, graphic->getMapWidth(), graphic->getMapHeight());
 	building->setScreenCoords(rect.x, rect.y, graphic->getWidth(), graphic->getHeight());
 	building->setObject(object);
-    building->setCatchmentAreaRadius(catchmentAreaRadius);
 
 	addMapObject(building);
 

@@ -6,26 +6,11 @@
 /**
  * @brief Structure, die ein Gebäude darstellt.
  */
-class Building : public Structure {
-    
-private:
-    /**
-     * Radius des Einzugsgebiets
-     */
-    int catchmentAreaRadius;
-        
+class Building : public Structure {     
 
 public:
     Building() {}
     virtual ~Building() {}
-    
-    int getCatchmentAreaRadius() const {
-        return catchmentAreaRadius;
-    }
-
-    void setCatchmentAreaRadius(int catchmentAreaRadius) {
-        this->catchmentAreaRadius = catchmentAreaRadius;
-    }
     
     /**
      * @brief Testet, ob eine bestimmte Kachel innerhalb des Einzugsgebiets des Gebäudes liegt
