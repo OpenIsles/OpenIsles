@@ -105,7 +105,7 @@ void drawFrame(SDL_Renderer* renderer) {
     if (selectedMapObject != nullptr) {
         const Building* selectedBuilding = reinterpret_cast<const Building*>(selectedMapObject);
         if (selectedBuilding != nullptr) {
-            const BuildingConfig* buildingConfig = buildingConfigMgr->getConfig(selectedBuilding->getObject());
+            const BuildingConfig* buildingConfig = buildingConfigMgr->getConfig(selectedBuilding->getStructureType());
             renderText(renderer, buildingConfig->name, 753, 744, true);
         }
     }

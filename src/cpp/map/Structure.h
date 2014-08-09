@@ -4,25 +4,47 @@
 #include "MapObject.h"
 
 /**
+ * Enum zur Unterscheidung der verschiedenen Strukturen
+ */
+typedef
+enum StructureType : unsigned char {
+    // Strukturen
+    WAY_E = 1,
+    WAY_N = 2,
+    WAY_S = 3,
+    WAY_W = 4,
+    WAY_SW_NE = 5,
+    WAY_NW_SE = 6,
+    
+    // Gebäude
+    CHAPEL = 101,
+    WEAPONSMITH = 102,
+    SIGNALFIRE = 103,
+    HERBARY = 104,
+    BRICKYARD = 105,
+    BRICKYARD2 = 106,  
+} StructureType;
+
+
+/**
  * @brief MapObject, das eine Struktur darstellt. Strukturen sind Wege und Felder, also Sachen nicht klickbar sind.
  */
 class Structure : public MapObject {
 
 protected:
 	/**
-	 * @brief Objekt-Typ, d.h. Index in GraphicsMgr#objects
-	 * TODO kann man sicher noch besser benennen. Vielleicht Referenz auf die Grafik?
+	 * @brief Objekt-Typ
 	 */
-	unsigned char object;
+	StructureType structureType;
 
 public:
-	unsigned char getObject() const {
-		return object;
-	}
+    StructureType getStructureType() const {
+        return structureType;
+    }
 
-	void setObject(unsigned char object) {
-		this->object = object;
-	}
+    void setStructureType(StructureType structureType) {
+        this->structureType = structureType;
+    }
 
 };
 

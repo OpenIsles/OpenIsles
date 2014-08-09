@@ -1,6 +1,9 @@
 #ifndef _BUILDING_CONFIG_MGR_H
 #define _BUILDING_CONFIG_MGR_H
 
+
+enum StructureType : unsigned char;
+
 /**
  * @brief Hilfsklasse, die Daten innerhalb eines Rechtecks mit definierter Breite und Höhe hält.
  */
@@ -33,11 +36,6 @@ struct RectangleData {
 
 typedef
 struct BuildingConfig {
-    /**
-     * @brief Index des Gebäudes. Aktuell werden alle Gebäude per Zahl angesprochen.
-     */
-    int buildingIndex;
-    
     /**
      * @brief Name des Gebäudes
      */
@@ -107,10 +105,10 @@ public:
     
     /**
      * @brief Liefert die Konfiguration eines Gebäudes zurück
-     * @param buildingIndex Index des Gebäudes
+     * @param structureType Typ des Gebäudes
      */
-    const BuildingConfig* const getConfig(int buildingIndex) {
-        return configs[buildingIndex];
+    const BuildingConfig* const getConfig(StructureType structureType) {
+        return configs[structureType];
     }
 };
 

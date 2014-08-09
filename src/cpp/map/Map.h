@@ -126,19 +126,19 @@ public:
 	 * @brief Fügt eine neue Struktur der Karte hinzu.
 	 * @param mapX X-Map-Koordinate des Objekts
 	 * @param mapY Y-Map-Koordinate des Objekts
-	 * @param object Objekt-Typ, d.h. Index in GraphicsMgr#objects
+	 * @param structureType Typ der Struktur
 	 * @return readonly-Zeiger auf das neu angelegte Building
 	 */
-	const Structure* addStructure(int mapX, int mapY, unsigned char object);
+	const Structure* addStructure(int mapX, int mapY, StructureType structureType);
 
 	/**
 	 * @brief Fügt ein neues Gebäude der Karte hinzu.
 	 * @param mapX X-Map-Koordinate des Objekts
 	 * @param mapY Y-Map-Koordinate des Objekts
-	 * @param object Objekt-Typ, d.h. Index in GraphicsMgr#objects
+	 * @param structureType Typ des Gebäudes
 	 * @return readonly-Zeiger auf das neu angelegte Building
 	 */
-	const Building* addBuilding(int mapX, int mapY, unsigned char object);
+	const Building* addBuilding(int mapX, int mapY, StructureType structureType);
 
 	/**
 	 * @brief Entfernt alle Objekte auf der Karte.

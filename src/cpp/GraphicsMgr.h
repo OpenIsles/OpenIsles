@@ -5,6 +5,8 @@
 #include <SDL_image.h>
 #include "Graphic.h"
 
+enum StructureType : unsigned char;
+
 /**
  * @brief Manager, der alle Grafiken verwaltet
  */
@@ -26,9 +28,9 @@ private:
 	Graphic** tiles;
 
 	/**
-	 * @brief Array von Zeigern auf die Objekt-Grafiken
+	 * @brief Array von Zeigern auf die Struktur-Grafiken
 	 */
-	Graphic** objects;
+	Graphic** structures;
 
 public:
 	GraphicsMgr();
@@ -38,7 +40,7 @@ public:
 	 * @brief Liefert eine Tile-Grafik
 	 * @param index Index ins Array #tiles dessen Eintrag zurückgeliefert werden soll
 	 */
-	Graphic* const getTile(int index) const {
+	Graphic* const getGraphicForTile(int index) const {
 		return tiles[index];
 	}
 
@@ -46,8 +48,8 @@ public:
 	 * @brief Liefert eine Object-Grafik
 	 * @param index Index ins Array #objects dessen Eintrag zurückgeliefert werden soll
 	 */
-	Graphic* const getObject(int index) const {
-		return objects[index];
+	Graphic* const getGraphicForStructure(StructureType structureType) const {
+		return structures[structureType];
 	}
 
 private:

@@ -54,42 +54,42 @@ Map::Map(unsigned int width, unsigned int height) :
 
 	loadMapFromTMX("data/map/map.tmx");
 
-	addBuilding(17, 14, 0);
-    addBuilding(16, 10, 1);
-    addBuilding(24, 15, 2);
-    addBuilding(20, 10, 3);
-    addBuilding(16, 7, 4);
-    addBuilding(16, 2, 5);
-
-	addStructure(13, 5, 11);
-	addStructure(14, 5, 11);
-	addStructure(15, 5, 11);
-	addStructure(16, 5, 11);
-	addStructure(17, 5, 11);
-	addStructure(18, 5, 11);
-	addStructure(19, 5, 6);
-	addStructure(19, 6, 10);
-	addStructure(19, 7, 10);
-	addStructure(19, 8, 10);
-	addStructure(19, 9, 10);
-	addStructure(19, 10, 10);
-	addStructure(19, 11, 10);
-	addStructure(19, 12, 8);
-	addStructure(18, 12, 11);
-	addStructure(17, 12, 11);
-	addStructure(16, 12, 11);
-	addStructure(15, 12, 11);
-	addStructure(14, 12, 11);
-	addStructure(13, 12, 11);
-	addStructure(12, 12, 9);
-	addStructure(12, 11, 10);
-	addStructure(12, 11, 10);
-	addStructure(12, 10, 10);
-	addStructure(12, 9, 10);
-	addStructure(12, 8, 10);
-	addStructure(12, 7, 10);
-	addStructure(12, 6, 10);
-	addStructure(12, 5, 7);
+	addBuilding(17, 14, CHAPEL);
+    addBuilding(16, 10, WEAPONSMITH);
+    addBuilding(24, 15, SIGNALFIRE);
+    addBuilding(20, 10, HERBARY);
+    addBuilding(16, 7, BRICKYARD);
+    addBuilding(16, 2, BRICKYARD2);
+    
+	addStructure(13, 5, WAY_NW_SE);
+	addStructure(14, 5, WAY_NW_SE);
+	addStructure(15, 5, WAY_NW_SE);
+	addStructure(16, 5, WAY_NW_SE);
+	addStructure(17, 5, WAY_NW_SE);
+	addStructure(18, 5, WAY_NW_SE);
+	addStructure(19, 5, WAY_E);
+	addStructure(19, 6, WAY_SW_NE);
+	addStructure(19, 7, WAY_SW_NE);
+	addStructure(19, 8, WAY_SW_NE);
+	addStructure(19, 9, WAY_SW_NE);
+	addStructure(19, 10, WAY_SW_NE);
+	addStructure(19, 11, WAY_SW_NE);
+	addStructure(19, 12, WAY_S);
+	addStructure(18, 12, WAY_NW_SE);
+	addStructure(17, 12, WAY_NW_SE);
+	addStructure(16, 12, WAY_NW_SE);
+	addStructure(15, 12, WAY_NW_SE);
+	addStructure(14, 12, WAY_NW_SE);
+	addStructure(13, 12, WAY_NW_SE);
+	addStructure(12, 12, WAY_W);
+	addStructure(12, 11, WAY_SW_NE);
+	addStructure(12, 11, WAY_SW_NE);
+	addStructure(12, 10, WAY_SW_NE);
+	addStructure(12, 9, WAY_SW_NE);
+	addStructure(12, 8, WAY_SW_NE);
+	addStructure(12, 7, WAY_SW_NE);
+	addStructure(12, 6, WAY_SW_NE);
+	addStructure(12, 5, WAY_N);
 }
 
 Map::~Map() {
@@ -309,7 +309,7 @@ void Map::renderMap(SDL_Renderer* renderer) {
 				continue;
 			}
 
-			SDL_Texture* tileTexture = graphicsMgr->getTile(getTileAt(mapX, mapY))->getTexture();
+			SDL_Texture* tileTexture = graphicsMgr->getGraphicForTile(getTileAt(mapX, mapY))->getTexture();
 
 			if (selectedMapObject != nullptr) {
                 Building* selectedBuilding = dynamic_cast<Building*>(selectedMapObject);
@@ -349,7 +349,7 @@ void Map::renderMap(SDL_Renderer* renderer) {
 			continue;
 		}
 
-		Graphic* graphic = graphicsMgr->getObject(structure->getObject());
+		Graphic* graphic = graphicsMgr->getGraphicForStructure(structure->getStructureType());
 		SDL_Texture* objectTexture = graphic->getTexture();
 
 		if (selectedMapObject != nullptr) {
@@ -398,9 +398,9 @@ void Map::addMapObject(MapObject* mapObject) {
 	});
 }
 
-const Structure* Map::addStructure(int mapX, int mapY, unsigned char object) {
+const Structure* Map::addStructure(int mapX, int mapY, StructureType structureType) {
 	// Position berechnen in Screen-Koordinaten berechnen, an dem sich die Grafik befinden muss.
-	Graphic* graphic = graphicsMgr->getObject(object);
+	Graphic* graphic = graphicsMgr->getGraphicForStructure(structureType);
 	SDL_Rect rect = { 0, 0, graphic->getWidth(), graphic->getHeight() };
 	MapUtils::mapToScreenCoords(mapX, mapY, rect.x, rect.y);
 
@@ -412,16 +412,16 @@ const Structure* Map::addStructure(int mapX, int mapY, unsigned char object) {
 	Structure* structure = new Structure();
 	structure->setMapCoords(mapX, mapY, graphic->getMapWidth(), graphic->getMapHeight());
 	structure->setScreenCoords(rect.x, rect.y, graphic->getWidth(), graphic->getHeight());
-	structure->setObject(object);
+	structure->setStructureType(structureType);
 
 	addMapObject(structure);
 
 	return structure;
 }
 
-const Building* Map::addBuilding(int mapX, int mapY, unsigned char object) {
+const Building* Map::addBuilding(int mapX, int mapY, StructureType structureType) {
 	// Position berechnen in Screen-Koordinaten berechnen, an dem sich die Grafik befinden muss.
-	Graphic* graphic = graphicsMgr->getObject(object);
+	Graphic* graphic = graphicsMgr->getGraphicForStructure(structureType);
 	SDL_Rect rect = { 0, 0, graphic->getWidth(), graphic->getHeight() };
 	MapUtils::mapToScreenCoords(mapX, mapY, rect.x, rect.y);
 
@@ -433,7 +433,7 @@ const Building* Map::addBuilding(int mapX, int mapY, unsigned char object) {
 	Building* building = new Building();
 	building->setMapCoords(mapX, mapY, graphic->getMapWidth(), graphic->getMapHeight());
 	building->setScreenCoords(rect.x, rect.y, graphic->getWidth(), graphic->getHeight());
-	building->setObject(object);
+	building->setStructureType(structureType);
 
 	addMapObject(building);
 
@@ -503,7 +503,7 @@ void Map::onClickInMap(int mouseX, int mouseY) {
 		Uint8 r, g, b, a;
 		int x = mouseAtScreenX - screenX;
 		int y = mouseAtScreenY - screenY;
-		graphicsMgr->getObject(building->getObject())->getPixel(x, y, &r, &g, &b, &a);
+		graphicsMgr->getGraphicForStructure(building->getStructureType())->getPixel(x, y, &r, &g, &b, &a);
 
 		// Checken, ob Pixel un-transparent genug ist, um es als Treffer zu nehmen
 		if (a > 127) {

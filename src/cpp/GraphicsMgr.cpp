@@ -1,25 +1,28 @@
 #include <fstream>
 #include <sstream>
 #include <stdexcept>
+#include "map/Structure.h"
 #include "GraphicsMgr.h"
 
 GraphicsMgr::GraphicsMgr() {
 	loadTiles();
 
-	objects = new Graphic*[12];
-	objects[0] = new Graphic("data/img/objects/chapel.png", 2, 2);
-	objects[1] = new Graphic("data/img/objects/weaponsmith.png", 2, 2);
-	objects[2] = new Graphic("data/img/objects/signalfire.png", 1, 1);
-	objects[3] = new Graphic("data/img/objects/herbary.png", 3, 3);
-	objects[4] = new Graphic("data/img/objects/brickyard.png", 4, 2);
-	objects[5] = new Graphic("data/img/objects/brickyard2.png", 2, 4);
+	structures = new Graphic*[256];
+    memset(structures, 0, 256 * sizeof(Graphic*));
+    
+	structures[CHAPEL] = new Graphic("data/img/objects/chapel.png", 2, 2);
+	structures[WEAPONSMITH] = new Graphic("data/img/objects/weaponsmith.png", 2, 2);
+	structures[SIGNALFIRE] = new Graphic("data/img/objects/signalfire.png", 1, 1);
+	structures[HERBARY] = new Graphic("data/img/objects/herbary.png", 3, 3);
+	structures[BRICKYARD] = new Graphic("data/img/objects/brickyard.png", 4, 2);
+	structures[BRICKYARD2] = new Graphic("data/img/objects/brickyard2.png", 2, 4);
 
-	objects[6] = new Graphic("data/img/objects/way/way-e.png", 1, 1);
-	objects[7] = new Graphic("data/img/objects/way/way-n.png", 1, 1);
-	objects[8] = new Graphic("data/img/objects/way/way-s.png", 1, 1);
-	objects[9] = new Graphic("data/img/objects/way/way-w.png", 1, 1);
-	objects[10] = new Graphic("data/img/objects/way/way-sw-ne.png", 1, 1);
-	objects[11] = new Graphic("data/img/objects/way/way-nw-se.png", 1, 1);
+	structures[WAY_E] = new Graphic("data/img/objects/way/way-e.png", 1, 1);
+	structures[WAY_N] = new Graphic("data/img/objects/way/way-n.png", 1, 1);
+	structures[WAY_S] = new Graphic("data/img/objects/way/way-s.png", 1, 1);
+	structures[WAY_W] = new Graphic("data/img/objects/way/way-w.png", 1, 1);
+	structures[WAY_SW_NE] = new Graphic("data/img/objects/way/way-sw-ne.png", 1, 1);
+	structures[WAY_NW_SE] = new Graphic("data/img/objects/way/way-nw-se.png", 1, 1);
 }
 
 GraphicsMgr::~GraphicsMgr() {
@@ -30,17 +33,17 @@ GraphicsMgr::~GraphicsMgr() {
 	}
 	delete[] tiles;
 
-	for (int i = 0; i < 12; i++) {
-		delete objects[i];
+	for (int i = 0; i < 256; i++) {
+        if (structures[i] != nullptr) {
+			delete structures[i];
+		}
 	}
-	delete[] objects;
+	delete[] structures;
 }
 
 void GraphicsMgr::loadTiles() {
 	tiles = new Graphic*[128];
-	for (int i = 0; i < 128; i++) {
-		tiles[i] = nullptr;
-	}
+    memset(tiles, 0, 128 * sizeof(Graphic*));
 
 	std::ifstream inputFileStreamTilesTxt("data/img/tiles/tiles.txt");
 	std::string line;

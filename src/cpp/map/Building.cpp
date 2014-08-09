@@ -9,14 +9,14 @@ extern Map* map;
 
 
 void Building::onClick(int mouseXInBuilding, int mouseYInBuilding) {
-	std::cout << "Klick auf Building " << std::to_string(this->object) << "@(" << std::to_string(mouseXInBuilding)
+	std::cout << "Klick auf Building " << std::to_string(structureType) << "@(" << std::to_string(mouseXInBuilding)
 			<< ", " << std::to_string(mouseYInBuilding) << ")" << std::endl;
-
+    
 	map->setSelectedMapObject(this);
 }
 
 bool Building::isInsideCatchmentArea(int mapX, int mapY) {
-    const BuildingConfig* buildingConfig = buildingConfigMgr->getConfig(object);
+    const BuildingConfig* buildingConfig = buildingConfigMgr->getConfig(structureType);
     const RectangleData<char>* catchmentAreaData = buildingConfig->GetCatchmentArea(); 
     
     // Gebäude hat keinen Einzugsbereich?
