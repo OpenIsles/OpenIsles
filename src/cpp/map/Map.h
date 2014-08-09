@@ -173,6 +173,15 @@ private:
     void updateMinimapTexture();
     
     /**
+     * Render eine Struktur. Hilfsmethode von renderMap().
+     * 
+     * @param structure Struktur
+     * @param rect Rechteck mit Screen-Koordinaten, wo die Grafik gesetzt werden soll
+     * @param masked true, um die Grafik maskiert (für Gebäudeplatzierung) zu zeichnen
+     */
+    void renderStructure(Structure* structure, SDL_Rect* rect, bool masked);
+    
+    /**
 	 * @brief interner Klickhandler, wenn in die Karte geklickt wurde. Diese Methode wird garantiert nur aufgerufen,
      * wenn die Koordinaten in der Karte liegen.
 	 * @param mouseX X-Fenster-Koordinate, die geklickt wurde

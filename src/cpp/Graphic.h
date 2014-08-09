@@ -98,6 +98,13 @@ public:
 	SDL_Texture* getTexture() const {
 		return texture;
 	}
+    
+    /**
+	 * @brief Liefert die SDL-Texture für die maskierte Grafik zurück. Diese wird verwendet, wenn ein neues Gebäude
+     * positioniert wird.
+	 * @return SDL-Texture
+	 */
+	SDL_Texture* getTextureMasked() const;
 
 	/**
 	 * @brief Liefert das SDL-Surface zurück
@@ -117,6 +124,18 @@ public:
 	 * @param a wird auf den Alpha-Wert des Pixels gesetzt (OUT) 0 = voll transparent, 255 = absolut undurchsichtig
 	 */
 	void getPixel(int x, int y, Uint8* r, Uint8* g, Uint8* b, Uint8* a);
+    
+    // TODO nur vorübergehend hier. Grafiken manipulieren sollte eigentlich keiner von außen können!
+    /**
+	 * @brief Setzt die Farbwerte eines bestimmten Pixels.
+	 * @param x x-Koordinate
+	 * @param y y-Koordinate
+	 * @param r Rot-Wert des Pixels
+	 * @param g Grün-Wert des Pixels
+	 * @param b Blau-Wert des Pixels
+	 * @param a Alpha-Wert des Pixels. 0 = voll transparent, 255 = absolut undurchsichtig
+	 */
+	void setPixel(int x, int y, Uint8 r, Uint8 g, Uint8 b, Uint8 a);
 
 };
 

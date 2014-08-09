@@ -12,6 +12,7 @@ OBJ_FILES := \
 	$(BUILD_DIRECTORY)/map/Map.o \
 	$(BUILD_DIRECTORY)/map/MapUtils.o \
 	$(BUILD_DIRECTORY)/sound/SoundMgr.o \
+	$(BUILD_DIRECTORY)/Game.o \
 	$(BUILD_DIRECTORY)/Graphic.o \
 	$(BUILD_DIRECTORY)/GraphicsMgr.o \
 	$(BUILD_DIRECTORY)/main.o
@@ -78,6 +79,10 @@ $(BUILD_DIRECTORY)/sound/SoundMgr.o: $(SRC_CPP_DIRECTORY)/sound/SoundMgr.cpp $(S
 	$(CREATE_TARGET_DIRECTORY)
 	$(CC) $(CFLAGS) -o $@ -c $<
 	
+	
+$(BUILD_DIRECTORY)/Game.o: $(SRC_CPP_DIRECTORY)/Game.cpp $(SRC_CPP_DIRECTORY)/Game.h
+	$(CREATE_TARGET_DIRECTORY)
+	$(CC) $(CFLAGS) -o $@ -c $<
 	
 $(BUILD_DIRECTORY)/Graphic.o: $(SRC_CPP_DIRECTORY)/Graphic.cpp $(SRC_CPP_DIRECTORY)/Graphic.h
 	$(CREATE_TARGET_DIRECTORY)

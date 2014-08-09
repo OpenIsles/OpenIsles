@@ -4,10 +4,13 @@
 #include "gui/GuiStaticElement.h"
 #include "map/Map.h"
 #include "sound/SoundMgr.h"
+#include "Game.h"
 #include "Graphic.h"
 #include "GuiPushButton.h"
 
+// Aus main.cpp importiert
 extern bool quitGame;
+extern Game* game;
 extern Map* map;
 extern SoundMgr* soundMgr;
 
@@ -34,11 +37,26 @@ GuiMgr::GuiMgr() {
         
         if (musicEnabled) {
             soundMgr->enableMusic();
-        } else  {
+        } else {
             soundMgr->disableMusic();
         }
     });
     registerElement(GUI_ID_MUSIC_PUSH_BUTTON, musicPushButton);
+    
+    GuiPushButton* addBuildingPushButton = new GuiPushButton();
+    addBuildingPushButton->setGraphic(new Graphic("data/img/gui/button-add-building.png"));
+    addBuildingPushButton->setGraphicPressed(new Graphic("data/img/gui/button-add-building-pressed.png"));
+    addBuildingPushButton->setWindowCoords(790, 320, 52, 64);
+    addBuildingPushButton->setOnClickFunction([this]() {
+        bool buttonActive = ((GuiPushButton*) findElement(GUI_ID_ADD_BUILDING_PUSH_BUTTON))->isActive();
+        
+        if (buttonActive) {
+            game->setAddingStructure(CHAPEL);
+        } else {
+            game->setAddingStructure(NO_STRUCTURE);
+        }
+    });
+    registerElement(GUI_ID_ADD_BUILDING_PUSH_BUTTON, addBuildingPushButton);
     
     GuiPushButton* panelSwitchPushButtonBuild = new GuiPushButton();
     panelSwitchPushButtonBuild->setGraphic(new Graphic("data/img/gui/button-build.png"));

@@ -98,3 +98,14 @@ void MapUtils::screenToMapCoords(int screenX, int screenY, int& mapX, int& mapY)
 		}
 	}
 }
+
+void MapUtils::mapToDrawScreenCoords(int mapX, int mapY, Graphic* graphic, SDL_Rect* rect) {
+    // Größe ist gleich der Grafikgröße
+    rect->w = graphic->getWidth();
+    rect->h = graphic->getHeight();
+    
+	// Grafik an die richtige Stelle schieben. Das muss ausgehend von der zu belegenden Tile-Fläche berechnet werden.
+    mapToScreenCoords(mapX, mapY, rect->x, rect->y);
+	rect->x -= graphic->getWidth() - (graphic->getMapWidth() + 1) * GraphicsMgr::TILE_WIDTH_HALF;
+	rect->y -= graphic->getHeight() - (graphic->getMapWidth() + graphic->getMapHeight()) * GraphicsMgr::TILE_HEIGHT_HALF;
+}

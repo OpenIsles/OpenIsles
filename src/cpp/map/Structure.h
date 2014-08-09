@@ -8,6 +8,9 @@
  */
 typedef
 enum StructureType : unsigned char {
+    // keine Struktur
+    NO_STRUCTURE = 0,
+    
     // Strukturen
     WAY_E = 1,
     WAY_N = 2,

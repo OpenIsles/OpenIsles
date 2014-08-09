@@ -8,6 +8,7 @@
 #include "gui/GuiMgr.h"
 #include "map/Map.h"
 #include "sound/SoundMgr.h"
+#include "Game.h"
 #include "GraphicsMgr.h"
 
 
@@ -29,6 +30,11 @@ GraphicsMgr* graphicsMgr;
  * @brief TTF-Schriftart zum Render der FPS
  */
 TTF_Font* ttfFont;
+
+/**
+ * @brief aktuelle Position des Mauszeigers
+ */
+int mouseCurrentX, mouseCurrentY;
 
 /**
  * @brief aktuelle FPS des letzten Frames
@@ -59,6 +65,11 @@ SoundMgr* soundMgr;
  * @brief Die Konfiguration der Gebäude
  */
 BuildingConfigMgr* buildingConfigMgr;
+
+/**
+ * @brief Zustand des Spiels
+ */
+Game* game;
 
 /**
  * @brief Größe des Fensters
@@ -181,6 +192,7 @@ int main(int argc, char** argv) {
 	graphicsMgr = new GraphicsMgr();
 	map = new Map(40, 40);
 	guiMgr = new GuiMgr();
+    game = new Game();
 
 	// Mainloop //////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -192,6 +204,9 @@ int main(int argc, char** argv) {
 		while (SDL_PollEvent(&event)) {
             guiMgr->onEvent(event);
 		}
+        
+        // Position des Mauszeigers holen
+        SDL_GetMouseState(&mouseCurrentX, &mouseCurrentY);
 
 		// Debug-Infos vorbereiten, damit wir sie später einfach nur ausgeben können
 		std::string fpsString = "FPS = " + std::to_string(fps);
@@ -215,6 +230,7 @@ int main(int argc, char** argv) {
 
 	// Game-Deinitialisierung ////////////////////////////////////////////////////////////////////////////////////////
 
+    delete game;
 	delete guiMgr;
 	delete map;
 	delete graphicsMgr;

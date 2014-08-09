@@ -1,6 +1,9 @@
 #ifndef _MAP_UTILS_H
 #define _MAP_UTILS_H
 
+struct SDL_Rect;
+class Graphic;
+
 /**
  * Klasse mit statischen Helperklassen
  */
@@ -33,6 +36,17 @@ public:
 	 * @param mapY Map-Y-Koordinate (Ausgabe)
 	 */
 	static void screenToMapCoords(int screenX, int screenY, int& mapX, int& mapY);
+    
+    /**
+     * @brief Berechnet ausgehend von Map-Koordinaten und einer Grafik das SDL-Rechteck, an welche Stelle
+     * die Grafik gesetzt werden muss.
+     * 
+     * @param mapX Map-X-Koordinate (Eingabe)
+	 * @param mapY Map-Y-Koordinate (Eingabe)
+     * @param graphic zu zeichnende Grafik (Eingabe)
+     * @param rect SDL-Rechteck mit der Screen-Koordinaten, wo die Grafik hingezeichnet werden muss (Ausgabe)
+     */
+    static void mapToDrawScreenCoords(int mapX, int mapY, Graphic* graphic, SDL_Rect* rect);
     
 };
 

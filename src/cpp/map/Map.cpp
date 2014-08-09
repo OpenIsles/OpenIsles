@@ -2,6 +2,7 @@
 #include "map/MapUtils.h"
 #include "rapidxml/rapidxml.hpp"
 #include "rapidxml/rapidxml_utils.hpp"
+#include "Game.h"
 #include "GraphicsMgr.h"
 
 #define SDL_SetTextureDarkened(texture) (SDL_SetTextureColorMod((texture), 160, 160, 160))
@@ -31,8 +32,10 @@
  */
 
 // Aus main.cpp importiert
+extern Game* game;
 extern GraphicsMgr* graphicsMgr;
 extern SDL_Renderer* renderer;
+extern int mouseCurrentX, mouseCurrentY;
 extern const int windowWidth;
 extern const int windowHeight;
 
@@ -332,44 +335,67 @@ void Map::renderMap(SDL_Renderer* renderer) {
 	for (auto iter = mapObjects.cbegin(); iter != mapObjects.cend(); iter++) {
 		MapObject* mapObject = *iter;
 
-		// TODO hier später weitere Typen handeln oder cleverer in Objekt-Methoden arbeiten
+//		 TODO hier später weitere Typen handeln oder cleverer in Objekt-Methoden arbeiten
 		Structure* structure = dynamic_cast<Structure*>(mapObject);
 		if (structure == nullptr) {
 			continue;
 		}
+        
+        SDL_Rect rect = SDL_Rect();
+        structure->getScreenCoords(rect.x, rect.y, rect.w, rect.h);
 
-		SDL_Rect rect = SDL_Rect();
-		structure->getScreenCoords(rect.x, rect.y, rect.w, rect.h);
-		rect.x -= screenOffsetX;
-		rect.y -= screenOffsetY;
-
-		// Clipping
-		if (rect.x >= mapClipRect.x + mapClipRect.w || rect.y >= mapClipRect.y + mapClipRect.h
-				|| rect.x + rect.w < mapClipRect.x || rect.y + rect.h < mapClipRect.y) {
-			continue;
-		}
-
-		Graphic* graphic = graphicsMgr->getGraphicForStructure(structure->getStructureType());
-		SDL_Texture* objectTexture = graphic->getTexture();
-
-		if (selectedMapObject != nullptr) {
-            Building* selectedBuilding = dynamic_cast<Building*>(selectedMapObject);
-            bool insideCatchmentArea = 
-                (selectedBuilding != nullptr && selectedBuilding->isInsideCatchmentArea(structure));
-
-            if (insideCatchmentArea) {
-                SDL_SetTextureNormal(objectTexture);
-            } else {
-                SDL_SetTextureDarkened(objectTexture);
-            }
-        } else {
-            SDL_SetTextureNormal(objectTexture);
-        }
-		SDL_RenderCopy(renderer, objectTexture, NULL, &rect);
+        renderStructure(structure, &rect, false);
 	}
+    
+    // Postionieren wir grade ein neues Gebäude?
+    if (game->getAddingStructure() != NO_STRUCTURE) {
+        int mouseScreenX = mouseCurrentX + screenOffsetX;
+        int mouseScreenY = mouseCurrentY + screenOffsetY;
+        int mapX, mapY;
+        MapUtils::screenToMapCoords(mouseScreenX, mouseScreenY, mapX, mapY);
+        
+        // Zu zeichnendes Gebäude erstellen
+        Structure structure;
+        structure.setStructureType(game->getAddingStructure());
+        
+        Graphic* graphic = graphicsMgr->getGraphicForStructure(structure.getStructureType());
+        SDL_Rect rect;
+        MapUtils::mapToDrawScreenCoords(mapX, mapY, graphic, &rect);
+        
+        renderStructure(&structure, &rect, true);
+    }
 
 	// Clipping wieder zurücksetzen, bevor der nächste mit Malen drankommt
 	SDL_RenderSetClipRect(renderer, nullptr);
+}
+
+void Map::renderStructure(Structure* structure, SDL_Rect* rect, bool masked) {
+    rect->x -= screenOffsetX;
+    rect->y -= screenOffsetY;
+        
+    // Clipping
+    if (rect->x >= mapClipRect.x + mapClipRect.w || rect->y >= mapClipRect.y + mapClipRect.h ||
+            rect->x + rect->w < mapClipRect.x || rect->y + rect->h < mapClipRect.y) {
+        return;
+    }
+
+    Graphic* graphic = graphicsMgr->getGraphicForStructure(structure->getStructureType());
+    SDL_Texture* objectTexture = masked ? graphic->getTextureMasked() : graphic->getTexture();
+
+    if (selectedMapObject != nullptr) {
+        Building* selectedBuilding = dynamic_cast<Building*>(selectedMapObject);
+        bool insideCatchmentArea = 
+            (selectedBuilding != nullptr && selectedBuilding->isInsideCatchmentArea(structure));
+
+        if (insideCatchmentArea) {
+            SDL_SetTextureNormal(objectTexture);
+        } else {
+            SDL_SetTextureDarkened(objectTexture);
+        }
+    } else {
+        SDL_SetTextureNormal(objectTexture);
+    }
+    SDL_RenderCopy(renderer, objectTexture, NULL, rect);
 }
 
 void Map::scroll(int screenOffsetX, int screenOffsetY) {
@@ -420,14 +446,11 @@ const Structure* Map::addStructure(int mapX, int mapY, StructureType structureTy
 }
 
 const Building* Map::addBuilding(int mapX, int mapY, StructureType structureType) {
-	// Position berechnen in Screen-Koordinaten berechnen, an dem sich die Grafik befinden muss.
-	Graphic* graphic = graphicsMgr->getGraphicForStructure(structureType);
-	SDL_Rect rect = { 0, 0, graphic->getWidth(), graphic->getHeight() };
-	MapUtils::mapToScreenCoords(mapX, mapY, rect.x, rect.y);
-
-	// Grafik an die richtige Stelle schieben. Das muss ausgehend von der zu belegenden Tile-Fläche berechnet werden.
-	rect.x -= graphic->getWidth() - (graphic->getMapWidth() + 1) * GraphicsMgr::TILE_WIDTH_HALF;
-	rect.y -= graphic->getHeight() - (graphic->getMapWidth() + graphic->getMapHeight()) * GraphicsMgr::TILE_HEIGHT_HALF;
+    Graphic* graphic = graphicsMgr->getGraphicForStructure(structureType);
+    
+	// Position in Screen-Koordinaten berechnen, an dem sich die Grafik befinden muss.
+    SDL_Rect rect;
+    MapUtils::mapToDrawScreenCoords(mapX, mapY, graphic, &rect);
 
 	// Objekt anlegen und in die Liste aufnehmen
 	Building* building = new Building();
