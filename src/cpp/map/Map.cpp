@@ -335,7 +335,7 @@ void Map::renderMap(SDL_Renderer* renderer) {
 	for (auto iter = mapObjects.cbegin(); iter != mapObjects.cend(); iter++) {
 		MapObject* mapObject = *iter;
 
-//		 TODO hier später weitere Typen handeln oder cleverer in Objekt-Methoden arbeiten
+		// TODO hier später weitere Typen handeln oder cleverer in Objekt-Methoden arbeiten
 		Structure* structure = dynamic_cast<Structure*>(mapObject);
 		if (structure == nullptr) {
 			continue;
