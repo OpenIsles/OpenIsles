@@ -17,7 +17,7 @@ void Building::onClick(int mouseXInBuilding, int mouseYInBuilding) {
 
 bool Building::isInsideCatchmentArea(int mapX, int mapY) {
     const BuildingConfig* buildingConfig = buildingConfigMgr->getConfig(structureType);
-    const RectangleData<char>* catchmentAreaData = buildingConfig->GetCatchmentArea(); 
+    const RectangleData<char>* catchmentAreaData = buildingConfig->getCatchmentArea(); 
     
     // Gebäude hat keinen Einzugsbereich?
     if (catchmentAreaData == nullptr) {

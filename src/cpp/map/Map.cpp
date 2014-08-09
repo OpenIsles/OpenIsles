@@ -1,3 +1,4 @@
+#include "config/BuildingConfigMgr.h"
 #include "map/Map.h"
 #include "map/MapUtils.h"
 #include "rapidxml/rapidxml.hpp"
@@ -32,6 +33,7 @@
  */
 
 // Aus main.cpp importiert
+extern BuildingConfigMgr* buildingConfigMgr;
 extern Game* game;
 extern GraphicsMgr* graphicsMgr;
 extern SDL_Renderer* renderer;
@@ -355,10 +357,13 @@ void Map::renderMap(SDL_Renderer* renderer) {
         MapUtils::screenToMapCoords(mouseScreenX, mouseScreenY, mapX, mapY);
         
         // Zu zeichnendes Gebäude erstellen
-        Structure structure;
-        structure.setStructureType(game->getAddingStructure());
+        StructureType structureType = game->getAddingStructure();
+        Graphic* graphic = graphicsMgr->getGraphicForStructure(structureType);
         
-        Graphic* graphic = graphicsMgr->getGraphicForStructure(structure.getStructureType());
+        Structure structure;
+        structure.setStructureType(structureType);
+        structure.setMapCoords(mapX, mapY, graphic->getMapWidth(), graphic->getMapHeight());
+        
         SDL_Rect rect;
         MapUtils::mapToDrawScreenCoords(mapX, mapY, graphic, &rect);
         
@@ -396,6 +401,61 @@ void Map::renderStructure(Structure* structure, SDL_Rect* rect, bool masked) {
         SDL_SetTextureNormal(objectTexture);
     }
     SDL_RenderCopy(renderer, objectTexture, NULL, rect);
+    
+    if (!masked) {
+        return;  
+    }
+    
+    // masked gesetzt? Dann malen wir noch den Einzugsbereich-Rahmen rum
+    SDL_SetRenderDrawColor(renderer, 0xc8, 0xaf, 0x37, 255);
+    
+    const BuildingConfig* buildingConfig = buildingConfigMgr->getConfig(structure->getStructureType());
+    const RectangleData<char>* catchmentAreaData = buildingConfig->getCatchmentArea(); 
+    for (int y = 0; y < catchmentAreaData->height; y++) {
+        for (int x = 0; x < catchmentAreaData->width; x++) {
+            int mapX, mapY, mapWidth, mapHeight;
+            structure->getMapCoords(mapX, mapY, mapWidth, mapHeight);
+            
+            mapX += x - (catchmentAreaData->width - mapWidth) / 2;
+            mapY += y - (catchmentAreaData->height - mapHeight) / 2;
+            
+            int screenX, screenY;
+            MapUtils::mapToScreenCoords(mapX, mapY, screenX, screenY);
+            screenX -= screenOffsetX;
+            screenY -= screenOffsetY;
+            
+            // An der Kachel jede der 4 Seiten untersuchen, ob wir eine Linie malen müssen.
+            // TODO die String-'1'er ersetzen durch echte 1en.
+            
+            // Oben rechts
+            if (catchmentAreaData->getData(x, y - 1, '0') == '0' && catchmentAreaData->getData(x, y, '0') == '1') {
+                SDL_RenderDrawLine(renderer,
+                        screenX + GraphicsMgr::TILE_WIDTH_HALF, screenY, 
+                        screenX + GraphicsMgr::TILE_WIDTH, screenY + GraphicsMgr::TILE_HEIGHT_HALF); 
+            }
+            
+            // Oben links
+            if (catchmentAreaData->getData(x - 1, y, '0') == '0' && catchmentAreaData->getData(x, y, '0') == '1') {
+                SDL_RenderDrawLine(renderer,
+                        screenX, screenY + GraphicsMgr::TILE_HEIGHT_HALF,
+                        screenX + GraphicsMgr::TILE_WIDTH_HALF, screenY);
+            }
+            
+            // Unten rechts
+            if (catchmentAreaData->getData(x, y, '0') == '1' && catchmentAreaData->getData(x + 1, y, '0') == '0') {
+                SDL_RenderDrawLine(renderer, 
+                        screenX + GraphicsMgr::TILE_WIDTH_HALF, screenY + GraphicsMgr::TILE_HEIGHT, 
+                        screenX + GraphicsMgr::TILE_WIDTH, screenY + GraphicsMgr::TILE_HEIGHT_HALF);
+            }
+            
+            // Unten links
+            if (catchmentAreaData->getData(x, y, '0') == '1' && catchmentAreaData->getData(x, y + 1, '0') == '0') {
+                SDL_RenderDrawLine(renderer,
+                        screenX, screenY + GraphicsMgr::TILE_HEIGHT_HALF,
+                        screenX + GraphicsMgr::TILE_WIDTH_HALF, screenY + GraphicsMgr::TILE_HEIGHT);
+            }
+        }
+    }
 }
 
 void Map::scroll(int screenOffsetX, int screenOffsetY) {

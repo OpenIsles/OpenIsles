@@ -30,7 +30,25 @@ struct RectangleData {
     
     ~RectangleData() {
         delete[] data;
-    }  
+    }
+    
+    /**
+     * Helper-Methode, um einen bestimmten Eintrag aus dem Array zu lesen.
+     * Diese Methode kann sicher benutzt werden, um mit beliebigen Koordinaten zuzugreifen. Befinden sich die
+     * Koordinaten außerhalb des Rechtecks, wird ein bestimmter Wert zurückgeliefert.
+     * 
+     * @param x X-Koordinate im Array
+     * @param y Y-Koordinate im Array
+     * @param outOfArrayValue Wert, der zurückgegeben wird, wenn die Koordinate außerhalb des Rechtecks liegt.
+     * @return Wert
+     */
+    T getData(int x, int y, T outOfArrayValue) const {
+        if (x < 0 || y < 0 || x >= width || y >= height) {
+            return outOfArrayValue;
+        }
+        
+        return data[y * width + x];
+    }
     
 };
 
@@ -61,6 +79,10 @@ struct BuildingConfig {
      * ------=================--------     --------I---------------I------
      * | | | | | | | | | | | | | | | |     | | | | I | | | | | | | I | | |
      * -------------------------------     --------=================------   
+     * 
+     * Der Einzugsbereich muss desweiteren folgende Bedingungen erfüllen, damit die Anwendung korrekt funktioniert:
+     * - Es darf keine Leerzeile/-spalte geben. Das Rechteck muss so klein wie möglich gewählt sein.
+     * - Der Einzugsbereich darf nicht nach innen gewölbt sein. Nur runde oder rechteckige Formen sind erlaubt.
      */
     RectangleData<char>* catchmentArea = nullptr;   
     
@@ -80,7 +102,7 @@ struct BuildingConfig {
     /**
      * @return Einzugsbereich
      */
-    RectangleData<char>* GetCatchmentArea() const {
+    RectangleData<char>* getCatchmentArea() const {
         return catchmentArea;
     }
     
