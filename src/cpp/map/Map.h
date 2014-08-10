@@ -66,13 +66,7 @@ public:
 		return width;
 	}
 
-	unsigned char getTileAt(unsigned int x, unsigned int y) const {
-		if (x >= width || y >= height) {
-			std::cerr << "mapCoords (" << std::to_string(x) << ", " + std::to_string(y) << ") out of bounds";
-		}
-
-		return tiles[y * width + x];
-	}
+	unsigned char getTileAt(unsigned int x, unsigned int y) const;
 
 	const std::list<MapObject*>& getMapObjects() const {
 		return mapObjects;

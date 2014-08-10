@@ -139,6 +139,14 @@ void Map::initNewMap(unsigned int width, unsigned int height) {
 	screenOffsetY = 0;
 }
 
+unsigned char Map::getTileAt(unsigned int x, unsigned int y) const {
+    if (x >= width || y >= height) {
+        std::cerr << "mapCoords (" << std::to_string(x) << ", " + std::to_string(y) << ") out of bounds";
+    }
+
+    return tiles[y * width + x];
+}
+
 // TODO Fehlermanagement, wenn die Datei mal nicht so hübsch aussieht, dass alle Tags da sind
 void Map::loadMapFromTMX(const char* filename) {
 	// Datei öffnen
@@ -253,7 +261,7 @@ void Map::updateMinimapTexture() {
             int mapX = (int) ((float) x * scaleFactor);
             int mapY = (int) ((float) y * scaleFactor);
             
-            unsigned char tile = tiles[mapY * width + mapX];
+            unsigned char tile = getTileAt(mapX, mapY);
             *(pixelPtr++) = (tile == 1) ? 0x0000c0 : 0x008000;
         }
     }
