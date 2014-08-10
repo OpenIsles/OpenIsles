@@ -60,10 +60,11 @@ Map::Map(int width, int height) : width(width), height(height) {
 
 	addBuilding(52, 39, CHAPEL);
     addBuilding(51, 35, WEAPONSMITH);
-    addBuilding(59, 40, SIGNALFIRE);
+    addBuilding(58, 39, SIGNALFIRE);
     addBuilding(55, 35, HERBARY);
     addBuilding(50, 32, BRICKYARD);
     addBuilding(51, 26, BRICKYARD2);
+    addBuilding(43, 24, OFFICE);
     
 	addStructure(48, 30, WAY_NW_SE);
 	addStructure(49, 30, WAY_NW_SE);
