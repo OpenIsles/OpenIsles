@@ -52,8 +52,7 @@ const SDL_Rect mapClipRect = { 0, 0, 768, 734 };
 const SDL_Rect minimapClipRect = { 796, 28, 200, 200 };
 
 
-Map::Map(unsigned int width, unsigned int height) :
-		width(width), height(height) {
+Map::Map(int width, int height) : width(width), height(height) {
 
 	initNewMap(width, height);
 
@@ -105,12 +104,9 @@ Map::~Map() {
     if (minimapTexture != nullptr) {
         SDL_DestroyTexture(minimapTexture);
     }
-
-	delete[] tiles;
-	tiles = nullptr;
 }
 
-void Map::initNewMap(unsigned int width, unsigned int height) {
+void Map::initNewMap(int width, int height) {
     // TODO Wir gehen erstmal davon aus, dass die Karten immer quadratisch sind.
     // Damit spar ich mir erstmal Hirnschmalz mit der Minimap und anderem Zeug, was noch kommen wird.
     if (width != height) {
@@ -119,18 +115,11 @@ void Map::initNewMap(unsigned int width, unsigned int height) {
     
 	// Karte erst leerräumen
 	clearMapObjects();
+    isles.clear();
     
     if (minimapTexture != nullptr) {
         SDL_DestroyTexture(minimapTexture);
     }
-
-	// Neue Karte anlegen
-	if (tiles != nullptr) {
-		delete[] tiles;
-	}
-	tiles = new unsigned char[width * height];
-	this->width = width;
-	this->height = height;
 
 	// Sonstiges Zeugs auf Anfangswerte stellen
 	selectedMapObject = nullptr;
@@ -139,12 +128,31 @@ void Map::initNewMap(unsigned int width, unsigned int height) {
 	screenOffsetY = 0;
 }
 
-unsigned char Map::getTileAt(unsigned int x, unsigned int y) const {
-    if (x >= width || y >= height) {
+unsigned char Map::getTileAt(int x, int y) const {
+    if (x < 0 || y < 0 || x >= width || y >= height) {
         std::cerr << "mapCoords (" << std::to_string(x) << ", " + std::to_string(y) << ") out of bounds";
+        throw new std::runtime_error("mapCoords out of bounds");
     }
-
-    return tiles[y * width + x];
+    
+    // Insel suchen, die sich auf diesen Map-Koordinaten befindet
+    for (auto iter = isles.cbegin(); iter != isles.cend(); iter++) {
+		Isle* isle = *iter;
+        
+        int isleMapX, isleMapY, isleMapWidth, isleMapHeight;
+        isle->getMapCoords(isleMapX, isleMapY, isleMapWidth, isleMapHeight);
+        
+        // Koordinaten sind nicht auf der Insel
+        if (x < isleMapX || y < isleMapY || x >= isleMapX + isleMapWidth || y >= isleMapY + isleMapHeight) {
+            continue;
+        }
+        
+        // Koordinaten sind auf der Insel
+        return isle->getTileAt(x - isleMapX, y - isleMapY);
+    }
+    
+    // Keine Insel? Dann Wasser.
+    // TODO sollte Konstanten geben für die Tiles
+    return 1;
 }
 
 // TODO Fehlermanagement, wenn die Datei mal nicht so hübsch aussieht, dass alle Tags da sind
@@ -155,44 +163,51 @@ void Map::loadMapFromTMX(const char* filename) {
 	rapidxml::xml_document<>* xmlDocument = new rapidxml::xml_document<>();
 	xmlDocument->parse<0>(tmxFile.data());
 
-	rapidxml::xml_node<>* mapNode = xmlDocument->first_node("map");
+	rapidxml::xml_node<>* mapNode = xmlDocument->first_node("map", 3, true);
 	int newMapWidth = atoi(mapNode->first_attribute("width", 5, true)->value());
 	int newMapHeight = atoi(mapNode->first_attribute("height", 6, true)->value());
+    
+    this->width = newMapWidth;
+    this->height = newMapHeight;
 
-	rapidxml::xml_node<>* layerNode = mapNode->first_node("layer");
-	rapidxml::xml_node<>* dataNode = layerNode->first_node("data");
-
-	const char* dataEncoding = dataNode->first_attribute("encoding", 8, true)->value();
-	if (strcmp(dataEncoding, "csv") != 0)
-		throw new std::runtime_error("Map is not csv encoded");
-
-	char* csvMapData = dataNode->value();
-	char* csvMapDataPtr = csvMapData;
-
-	// CSV-Daten parsen und Map laden
-	char currentValue[6];
-	int currentValueSize = 0;
-
-	initNewMap(newMapWidth, newMapHeight);
-
-	for (int i = 0; i < newMapWidth * newMapHeight; i++) {
-		// ein CSV-Feld lesen, d.h. bis zum nächsten Komma oder Stringende
-		currentValueSize = 0;
-		while (*csvMapDataPtr != ',' && *csvMapDataPtr != '\0') {
-			// Nicht-Ziffern überspringen (das sind z.B. die Newlines am Zeilenende)
-			if (*csvMapDataPtr >= '0' && *csvMapDataPtr <= '9') {
-				currentValue[currentValueSize++] = *csvMapDataPtr;
-			}
-
-			csvMapDataPtr++;
-		}
-		csvMapDataPtr++; // Trennzeichen skippen
-
-		// Tile zuweisen
-		currentValue[currentValueSize] = '\0';
-		char tile = atoi(currentValue);
-		tiles[i] = tile;
-	}
+	rapidxml::xml_node<>* objectgroupNode = mapNode->first_node("objectgroup", 11, true);
+    for (rapidxml::xml_node<>* objectNode = objectgroupNode->first_node("object", 6, true); objectNode != nullptr; 
+            objectNode = objectNode->next_sibling("object", 6, true)) {
+        
+        // Objekt aus der Tiled-Datei lesen
+        char* isleName = objectNode->first_attribute("name", 4, true)->value();
+        int isleX = atoi(objectNode->first_attribute("x", 1, true)->value());
+        int isleY = atoi(objectNode->first_attribute("y", 1, true)->value());
+        int isleWidth = atoi(objectNode->first_attribute("width", 5, true)->value());
+        int isleHeight = atoi(objectNode->first_attribute("height", 6, true)->value());
+        
+        int isleMapX = isleX / GraphicsMgr::TILE_HEIGHT; // tiled rechnet merkwürdigerweise auch für X in KachelHÖHE
+        int isleMapY = isleY / GraphicsMgr::TILE_HEIGHT; 
+        int isleMapWidth = isleWidth / GraphicsMgr::TILE_HEIGHT; // tiled rechnet merkwürdigerweise auch für X in KachelHÖHE
+        int isleMapHeight = isleHeight / GraphicsMgr::TILE_HEIGHT;
+        
+        // Dateiname der Insel zusammenbauen
+        std::string filename = "data/map/isles/";
+        filename.append(isleName);
+        filename.append(".tmx");
+        
+        // Insel laden
+        Isle* isle = new Isle(filename.data());
+        
+        // Prüfen, ob die Insel wirklich die Größe hat, wie die Karte sie haben will.
+        if (isle->getWidth() != isleMapWidth || isle->getHeight() != isleMapHeight) {
+            std::cerr << "Isle '" << isleName << "' ('" << 
+                    std::to_string(isle->getWidth()) << "x" << std::to_string(isle->getHeight()) <<
+                    ") does not match size on map (" <<
+                    std::to_string(isleMapWidth) << "x" << std::to_string(isleMapHeight) << ")";
+            
+            throw new std::runtime_error("Isle does not match size on map");
+        }
+        
+        isle->setMapCoords(isleMapX, isleMapY, isleMapWidth, isleMapHeight);
+        
+        isles.push_back(isle);
+    }
 
 	// XML-Document wegräumen
 	delete xmlDocument;

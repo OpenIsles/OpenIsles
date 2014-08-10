@@ -9,6 +9,7 @@ OBJ_FILES := \
 	$(BUILD_DIRECTORY)/gui/GuiPushButton.o \
 	$(BUILD_DIRECTORY)/gui/GuiStaticElement.o \
 	$(BUILD_DIRECTORY)/map/Building.o \
+	$(BUILD_DIRECTORY)/map/Isle.o \
 	$(BUILD_DIRECTORY)/map/Map.o \
 	$(BUILD_DIRECTORY)/map/MapUtils.o \
 	$(BUILD_DIRECTORY)/sound/SoundMgr.o \
@@ -63,6 +64,10 @@ $(BUILD_DIRECTORY)/gui/GuiStaticElement.o: $(SRC_CPP_DIRECTORY)/gui/GuiStaticEle
 
 	
 $(BUILD_DIRECTORY)/map/Building.o: $(SRC_CPP_DIRECTORY)/map/Building.cpp $(MAP_HEADER_FILES)
+	$(CREATE_TARGET_DIRECTORY)
+	$(CC) $(CFLAGS) -o $@ -c $<
+	
+$(BUILD_DIRECTORY)/map/Isle.o: $(SRC_CPP_DIRECTORY)/map/Isle.cpp $(SRC_CPP_DIRECTORY)/map/Isle.h
 	$(CREATE_TARGET_DIRECTORY)
 	$(CC) $(CFLAGS) -o $@ -c $<
 	

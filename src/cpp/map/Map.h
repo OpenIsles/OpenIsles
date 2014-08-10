@@ -5,7 +5,8 @@
 #include <iostream>
 #include <list>
 #include <string.h>
-#include "Building.h"
+#include "map/Building.h"
+#include "map/Isle.h"
 
 class Map {
 
@@ -13,17 +14,17 @@ private:
 	/**
 	 * @brief Breite der Karte in Kacheln
 	 */
-	unsigned int width;
+	int width;
 
 	/**
 	 * @brief Höhe der Karte in Kacheln
 	 */
-	unsigned int height;
+	int height;
 
 	/**
-	 * @brief Array (height x width) mit den Kacheln
+	 * @brief Liste der Inseln auf der Karte
 	 */
-	unsigned char* tiles = nullptr;
+	std::list<Isle*> isles;
 
 	/**
 	 * @brief Liste von Objekten (z.B. Häusern) auf der Karte.
@@ -55,18 +56,18 @@ private:
     SDL_Texture* minimapTexture = nullptr;
 
 public:
-	Map(unsigned int width, unsigned int height);
+	Map(int width, int height);
 	~Map();
 
-	unsigned int getHeight() const {
+	int getHeight() const {
 		return height;
 	}
 
-	unsigned int getWidth() const {
+	int getWidth() const {
 		return width;
 	}
 
-	unsigned char getTileAt(unsigned int x, unsigned int y) const;
+	unsigned char getTileAt(int x, int y) const;
 
 	const std::list<MapObject*>& getMapObjects() const {
 		return mapObjects;
@@ -159,7 +160,7 @@ private:
 	 * @param width neue Breite der Karte
 	 * @param height neue Höhe der Karte
 	 */
-	void initNewMap(unsigned int width, unsigned int height);
+	void initNewMap(int width, int height);
     
     /**
      * @brief Aktualisiert die SDL-Texture für die Minimap
