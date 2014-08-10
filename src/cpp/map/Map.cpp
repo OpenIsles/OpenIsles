@@ -58,42 +58,41 @@ Map::Map(int width, int height) : width(width), height(height) {
 
 	loadMapFromTMX("data/map/map.tmx");
 
-	addBuilding(17, 14, CHAPEL);
-    addBuilding(16, 10, WEAPONSMITH);
-    addBuilding(24, 15, SIGNALFIRE);
-    addBuilding(20, 10, HERBARY);
-    addBuilding(16, 7, BRICKYARD);
-    addBuilding(16, 2, BRICKYARD2);
+	addBuilding(52, 39, CHAPEL);
+    addBuilding(51, 35, WEAPONSMITH);
+    addBuilding(59, 40, SIGNALFIRE);
+    addBuilding(55, 35, HERBARY);
+    addBuilding(50, 32, BRICKYARD);
+    addBuilding(51, 26, BRICKYARD2);
     
-	addStructure(13, 5, WAY_NW_SE);
-	addStructure(14, 5, WAY_NW_SE);
-	addStructure(15, 5, WAY_NW_SE);
-	addStructure(16, 5, WAY_NW_SE);
-	addStructure(17, 5, WAY_NW_SE);
-	addStructure(18, 5, WAY_NW_SE);
-	addStructure(19, 5, WAY_E);
-	addStructure(19, 6, WAY_SW_NE);
-	addStructure(19, 7, WAY_SW_NE);
-	addStructure(19, 8, WAY_SW_NE);
-	addStructure(19, 9, WAY_SW_NE);
-	addStructure(19, 10, WAY_SW_NE);
-	addStructure(19, 11, WAY_SW_NE);
-	addStructure(19, 12, WAY_S);
-	addStructure(18, 12, WAY_NW_SE);
-	addStructure(17, 12, WAY_NW_SE);
-	addStructure(16, 12, WAY_NW_SE);
-	addStructure(15, 12, WAY_NW_SE);
-	addStructure(14, 12, WAY_NW_SE);
-	addStructure(13, 12, WAY_NW_SE);
-	addStructure(12, 12, WAY_W);
-	addStructure(12, 11, WAY_SW_NE);
-	addStructure(12, 11, WAY_SW_NE);
-	addStructure(12, 10, WAY_SW_NE);
-	addStructure(12, 9, WAY_SW_NE);
-	addStructure(12, 8, WAY_SW_NE);
-	addStructure(12, 7, WAY_SW_NE);
-	addStructure(12, 6, WAY_SW_NE);
-	addStructure(12, 5, WAY_N);
+	addStructure(48, 30, WAY_NW_SE);
+	addStructure(49, 30, WAY_NW_SE);
+	addStructure(50, 30, WAY_NW_SE);
+	addStructure(51, 30, WAY_NW_SE);
+	addStructure(52, 30, WAY_NW_SE);
+	addStructure(53, 30, WAY_NW_SE);
+	addStructure(54, 30, WAY_E);
+	addStructure(54, 31, WAY_SW_NE);
+	addStructure(54, 32, WAY_SW_NE);
+	addStructure(54, 33, WAY_SW_NE);
+	addStructure(54, 34, WAY_SW_NE);
+	addStructure(54, 35, WAY_SW_NE);
+	addStructure(54, 36, WAY_SW_NE);
+	addStructure(54, 37, WAY_S);
+	addStructure(53, 37, WAY_NW_SE);
+	addStructure(52, 37, WAY_NW_SE);
+	addStructure(51, 37, WAY_NW_SE);
+	addStructure(50, 37, WAY_NW_SE);
+	addStructure(49, 37, WAY_NW_SE);
+	addStructure(48, 37, WAY_NW_SE);
+	addStructure(47, 37, WAY_W);
+	addStructure(47, 36, WAY_SW_NE);
+	addStructure(47, 35, WAY_SW_NE);
+	addStructure(47, 34, WAY_SW_NE);
+	addStructure(47, 33, WAY_SW_NE);
+	addStructure(47, 32, WAY_SW_NE);
+	addStructure(47, 31, WAY_SW_NE);
+	addStructure(47, 30, WAY_N);
 }
 
 Map::~Map() {
@@ -174,39 +173,55 @@ void Map::loadMapFromTMX(const char* filename) {
     for (rapidxml::xml_node<>* objectNode = objectgroupNode->first_node("object", 6, true); objectNode != nullptr; 
             objectNode = objectNode->next_sibling("object", 6, true)) {
         
-        // Objekt aus der Tiled-Datei lesen
-        char* isleName = objectNode->first_attribute("name", 4, true)->value();
-        int isleX = atoi(objectNode->first_attribute("x", 1, true)->value());
-        int isleY = atoi(objectNode->first_attribute("y", 1, true)->value());
-        int isleWidth = atoi(objectNode->first_attribute("width", 5, true)->value());
-        int isleHeight = atoi(objectNode->first_attribute("height", 6, true)->value());
+        const char* nodeType = objectNode->first_attribute("type", 4, true)->value();
         
-        int isleMapX = isleX / GraphicsMgr::TILE_HEIGHT; // tiled rechnet merkwürdigerweise auch für X in KachelHÖHE
-        int isleMapY = isleY / GraphicsMgr::TILE_HEIGHT; 
-        int isleMapWidth = isleWidth / GraphicsMgr::TILE_HEIGHT; // tiled rechnet merkwürdigerweise auch für X in KachelHÖHE
-        int isleMapHeight = isleHeight / GraphicsMgr::TILE_HEIGHT;
+        int x = atoi(objectNode->first_attribute("x", 1, true)->value());
+        int y = atoi(objectNode->first_attribute("y", 1, true)->value());
         
-        // Dateiname der Insel zusammenbauen
-        std::string filename = "data/map/isles/";
-        filename.append(isleName);
-        filename.append(".tmx");
+        int mapX = x / GraphicsMgr::TILE_HEIGHT; // tiled rechnet merkwürdigerweise auch für X in KachelHÖHE
+        int mapY = y / GraphicsMgr::TILE_HEIGHT; 
         
-        // Insel laden
-        Isle* isle = new Isle(filename.data());
-        
-        // Prüfen, ob die Insel wirklich die Größe hat, wie die Karte sie haben will.
-        if (isle->getWidth() != isleMapWidth || isle->getHeight() != isleMapHeight) {
-            std::cerr << "Isle '" << isleName << "' ('" << 
-                    std::to_string(isle->getWidth()) << "x" << std::to_string(isle->getHeight()) <<
-                    ") does not match size on map (" <<
-                    std::to_string(isleMapWidth) << "x" << std::to_string(isleMapHeight) << ")";
+        // Insel
+        if (strcmp(nodeType, "isle") == 0) {
+            // Objekt aus der Tiled-Datei lesen
+            const char* isleName = objectNode->first_attribute("name", 4, true)->value();
             
-            throw new std::runtime_error("Isle does not match size on map");
+            int isleWidth = atoi(objectNode->first_attribute("width", 5, true)->value());
+            int isleHeight = atoi(objectNode->first_attribute("height", 6, true)->value());
+
+            int isleMapWidth = isleWidth / GraphicsMgr::TILE_HEIGHT; // tiled rechnet merkwürdigerweise auch für X in KachelHÖHE
+            int isleMapHeight = isleHeight / GraphicsMgr::TILE_HEIGHT;
+
+            // Dateiname der Insel zusammenbauen
+            std::string filename = "data/map/isles/";
+            filename.append(isleName);
+            filename.append(".tmx");
+
+            // Insel laden
+            Isle* isle = new Isle(filename.data());
+
+            // Prüfen, ob die Insel wirklich die Größe hat, wie die Karte sie haben will.
+            if (isle->getWidth() != isleMapWidth || isle->getHeight() != isleMapHeight) {
+                std::cerr << "Isle '" << isleName << "' ('" << 
+                        std::to_string(isle->getWidth()) << "x" << std::to_string(isle->getHeight()) <<
+                        ") does not match size on map (" <<
+                        std::to_string(isleMapWidth) << "x" << std::to_string(isleMapHeight) << ")";
+
+                throw new std::runtime_error("Isle does not match size on map");
+            }
+
+            isle->setMapCoords(mapX, mapY, isleMapWidth, isleMapHeight);
+
+            isles.push_back(isle);
         }
-        
-        isle->setMapCoords(isleMapX, isleMapY, isleMapWidth, isleMapHeight);
-        
-        isles.push_back(isle);
+        // Startpunkt: Diesen Punkt wollen wir auf den Bildschirm zentrieren
+        else if (strcmp(nodeType, "startpoint") == 0) {
+            int screenCenterX, screenCenterY;
+            MapUtils::mapToScreenCoordsCenter(mapX, mapY, screenCenterX, screenCenterY);
+            
+            screenOffsetX = screenCenterX - (mapClipRect.w / 2);
+            screenOffsetY = screenCenterY - (mapClipRect.h / 2);
+        }
     }
 
 	// XML-Document wegräumen

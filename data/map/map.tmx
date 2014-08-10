@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" orientation="isometric" width="300" height="300" tilewidth="64" tileheight="32">
  <objectgroup name="Objektebene 1" width="300" height="300">
-  <object name="small1" x="4064" y="4800" width="960" height="960"/>
-  <object name="medium1" x="3840" y="6848" width="1600" height="1600"/>
-  <object name="large1" x="6496" y="6528" width="2560" height="2560"/>
-  <object name="large1" x="576" y="416" width="2560" height="2560"/>
-  <object name="medium1" x="7296" y="4224" width="1600" height="1600"/>
-  <object name="large1" x="640" y="6528" width="2560" height="2560"/>
-  <object name="medium1" x="1760" y="3712" width="1600" height="1600"/>
-  <object name="medium1" x="4096" y="2368" width="1600" height="1600"/>
-  <object name="small1" x="3936" y="640" width="960" height="960"/>
-  <object name="small1" x="8096" y="544" width="960" height="960"/>
-  <object name="medium1" x="6304" y="1824" width="1600" height="1600"/>
+  <object name="small1" type="isle" x="4064" y="4800" width="960" height="960"/>
+  <object name="medium1" type="isle" x="3840" y="6848" width="1600" height="1600"/>
+  <object name="large1" type="isle" x="6496" y="6528" width="2560" height="2560"/>
+  <object name="large1" type="isle" x="576" y="416" width="2560" height="2560"/>
+  <object name="medium1" type="isle" x="7296" y="4224" width="1600" height="1600"/>
+  <object name="large1" type="isle" x="640" y="6528" width="2560" height="2560"/>
+  <object name="medium1" type="isle" x="1760" y="3712" width="1600" height="1600"/>
+  <object name="medium1" type="isle" x="4096" y="2368" width="1600" height="1600"/>
+  <object name="small1" type="isle" x="3936" y="640" width="960" height="960"/>
+  <object name="small1" type="isle" x="8096" y="544" width="960" height="960"/>
+  <object name="medium1" type="isle" x="6304" y="1824" width="1600" height="1600"/>
+  <object type="startpoint" x="1600" y="1024" width="32" height="32"/>
  </objectgroup>
 </map>
