@@ -127,15 +127,14 @@ void Map::initNewMap(int width, int height) {
 	screenOffsetY = 0;
 }
 
-void Map::checkMapCoords(int mapX, int mapY) const {
-    if (mapX < 0 || mapY < 0 || mapX >= width || mapY >= height) {
-        std::cerr << "mapCoords (" << std::to_string(mapX) << ", " + std::to_string(mapY) << ") out of bounds";
-        throw new std::runtime_error("mapCoords out of bounds");
-    }
+bool Map::checkMapCoords(int mapX, int mapY) const {
+    return (!(mapX < 0 || mapY < 0 || mapX >= width || mapY >= height));
 }
 
 Isle* Map::getIsleAt(int mapX, int mapY) const {
-    checkMapCoords(mapX, mapY);
+    if (!checkMapCoords(mapX, mapY)) {
+        return nullptr;
+    }
     
     // Insel suchen, die sich auf diesen Map-Koordinaten befindet
     for (auto iter = isles.cbegin(); iter != isles.cend(); iter++) {
@@ -157,8 +156,37 @@ Isle* Map::getIsleAt(int mapX, int mapY) const {
     return nullptr;
 }
 
+MapObject* Map::getMapObjectAt(int mapX, int mapY) const {
+    if (!checkMapCoords(mapX, mapY)) {
+        return nullptr;
+    }
+    
+    // Insel suchen, die sich auf diesen Map-Koordinaten befindet
+    for (auto iter = mapObjects.cbegin(); iter != mapObjects.cend(); iter++) {
+		MapObject* mapObject = *iter;
+        
+        int mapObjectMapX, mapObjectMapY, mapObjectMapWidth, mapObjectMapHeight;
+        mapObject->getMapCoords(mapObjectMapX, mapObjectMapY, mapObjectMapWidth, mapObjectMapHeight);
+        
+        // Koordinaten sind nicht im Bereich dieses Map-Objekts
+        if (mapX < mapObjectMapX || mapY < mapObjectMapY || mapX >= mapObjectMapX + mapObjectMapWidth ||
+                mapY >= mapObjectMapY + mapObjectMapHeight) {
+            continue;
+        }
+        
+        // Koordinaten sind im Bereich dieses Map-Objekts
+        return mapObject;
+    }
+    
+    // Keine Insel da
+    return nullptr;
+}
+
 unsigned char Map::getTileAt(int mapX, int mapY) const {
-    checkMapCoords(mapX, mapY);
+    if (!checkMapCoords(mapX, mapY)) {
+        std::cerr << "mapCoords (" << std::to_string(mapX) << ", " + std::to_string(mapY) << ") out of bounds";
+        throw new std::runtime_error("mapCoords out of bounds");
+    }
     
     // Insel suchen, die sich auf diesen Map-Koordinaten befindet
     Isle* isle = getIsleAt(mapX, mapY);
@@ -407,7 +435,7 @@ void Map::renderMap(SDL_Renderer* renderer) {
         SDL_Rect rect = SDL_Rect();
         structure->getScreenCoords(rect.x, rect.y, rect.w, rect.h);
 
-        renderStructure(structure, &rect, false);
+        renderStructure(structure, &rect, false, false, false);
 	}
     
     // Postionieren wir grade ein neues Gebäude?
@@ -417,25 +445,56 @@ void Map::renderMap(SDL_Renderer* renderer) {
         int mapX, mapY;
         MapUtils::screenToMapCoords(mouseScreenX, mouseScreenY, mapX, mapY);
         
-        // Zu zeichnendes Gebäude erstellen
         StructureType structureType = game->getAddingStructure();
         Graphic* graphic = graphicsMgr->getGraphicForStructure(structureType);
+        unsigned char allowedToPlaceStructure = isAllowedToPlaceStructure(mapX, mapY, structureType, graphic);
         
-        Structure structure;
-        structure.setStructureType(structureType);
-        structure.setMapCoords(mapX, mapY, graphic->getMapWidth(), graphic->getMapHeight());
-        
-        SDL_Rect rect;
-        MapUtils::mapToDrawScreenCoords(mapX, mapY, graphic, &rect);
-        
-        renderStructure(&structure, &rect, true);
+        // Auf dem Ozean malen wir gar nix
+        if (!(allowedToPlaceStructure & PLACING_STRUCTURE_OUTSIDE_OF_ISLE)) {
+            // Zu zeichnendes Gebäude erstellen
+            Structure structure;
+            structure.setStructureType(structureType);
+            structure.setMapCoords(mapX, mapY, graphic->getMapWidth(), graphic->getMapHeight());
+
+            SDL_Rect rect;
+            MapUtils::mapToDrawScreenCoords(mapX, mapY, graphic, &rect);
+
+            bool redAndSemiTransparent = (allowedToPlaceStructure & PLACING_STRUCTURE_NO_ROOM);
+            bool blink = (allowedToPlaceStructure & PLACING_STRUCTURE_NO_RESOURCES);
+            renderStructure(&structure, &rect, true, redAndSemiTransparent, blink);
+        }
     }
 
 	// Clipping wieder zurücksetzen, bevor der nächste mit Malen drankommt
 	SDL_RenderSetClipRect(renderer, nullptr);
 }
 
-void Map::renderStructure(Structure* structure, SDL_Rect* rect, bool masked) {
+unsigned char Map::isAllowedToPlaceStructure(int mapX, int mapY, StructureType structureType, Graphic* graphic) {
+    Isle* isle = getIsleAt(mapX, mapY);
+    
+    if (isle == nullptr) {
+        return PLACING_STRUCTURE_OUTSIDE_OF_ISLE;
+    }
+    
+    unsigned char result = PLACING_STRUCTURE_ALLOWED;
+    
+    // TODO Resourcen checken und ggf. PLACING_STRUCTURE_NO_RESOURCES setzen
+    // if(!enoughResources) { result |= PLACING_STRUCTURE_NO_RESOURCES; }
+    
+    // Checken, ob alles frei is, um das Gebäude zu setzen
+    for (int y = mapY; y < mapY + graphic->getMapHeight(); y++) {
+        for (int x = mapX; x < mapX + graphic->getMapWidth(); x++) {
+            if (getMapObjectAt(x, y) != nullptr) {
+                result |= PLACING_STRUCTURE_NO_ROOM;
+                return result;
+            }
+        }
+    }
+    
+    return result;
+}
+
+void Map::renderStructure(Structure* structure, SDL_Rect* rect, bool masked, bool redAndSemiTransparent, bool blink) {
     rect->x -= screenOffsetX;
     rect->y -= screenOffsetY;
         
@@ -447,27 +506,40 @@ void Map::renderStructure(Structure* structure, SDL_Rect* rect, bool masked) {
 
     Graphic* graphic = graphicsMgr->getGraphicForStructure(structure->getStructureType());
     SDL_Texture* objectTexture = masked ? graphic->getTextureMasked() : graphic->getTexture();
-
-    if (selectedMapObject != nullptr) {
-        Building* selectedBuilding = dynamic_cast<Building*>(selectedMapObject);
-        bool insideCatchmentArea = 
-            (selectedBuilding != nullptr && selectedBuilding->isInsideCatchmentArea(structure));
-
-        if (insideCatchmentArea) {
-            SDL_SetTextureNormal(objectTexture);
-        } else {
-            SDL_SetTextureDarkened(objectTexture);
-        }
-    } else {
-        SDL_SetTextureNormal(objectTexture);
-    }
-    SDL_RenderCopy(renderer, objectTexture, NULL, rect);
     
+    // Gebäude nicht zeichnen, wenn wir im Blinkmodus sind. Dann nur in der ersten Hälfte einer Sekunde zeichnen
+    if (!blink || (SDL_GetTicks() % 1000 < 500)) {
+        if (selectedMapObject != nullptr) {
+            Building* selectedBuilding = dynamic_cast<Building*>(selectedMapObject);
+            bool insideCatchmentArea = 
+                (selectedBuilding != nullptr && selectedBuilding->isInsideCatchmentArea(structure));
+
+            if (insideCatchmentArea) {
+                SDL_SetTextureNormal(objectTexture);
+            } else {
+                SDL_SetTextureDarkened(objectTexture);
+            }
+        } else {
+            SDL_SetTextureNormal(objectTexture);
+        }
+
+        if (redAndSemiTransparent) {
+            SDL_SetTextureColorMod(objectTexture, 255, 0, 0);
+            SDL_SetTextureAlphaMod(objectTexture, 128);
+        } else {
+            SDL_SetTextureColorMod(objectTexture, 255, 255, 255);
+            SDL_SetTextureAlphaMod(objectTexture, 255);
+        }
+
+        SDL_RenderCopy(renderer, objectTexture, NULL, rect);
+    }
+    
+    // masked nicht gesetzt? Dann sind wir fertig. 
     if (!masked) {
         return;  
     }
     
-    // masked gesetzt? Dann malen wir noch den Einzugsbereich-Rahmen rum
+    // Einzugsbereich-Rahmen malen
     SDL_SetRenderDrawColor(renderer, 0xc8, 0xaf, 0x37, 255);
     
     const BuildingConfig* buildingConfig = buildingConfigMgr->getConfig(structure->getStructureType());

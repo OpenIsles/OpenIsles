@@ -8,6 +8,33 @@
 #include "map/Building.h"
 #include "map/Isle.h"
 
+// Konstanten für isAllowedToPlaceStructure()
+
+/**
+ * @brief Setzen der Struktur ist erlaubt
+ */
+#define PLACING_STRUCTURE_ALLOWED         0
+
+/**
+ * @brief Setzen der Struktur ist nicht erlaubt wegen Resourcen-Mangel.
+ * Grafisch wird dies dargestellt, indem das Gebäude blickt.
+ */
+#define PLACING_STRUCTURE_NO_RESOURCES    (1 << 0)
+
+/**
+ * @brief Setzen der Struktur ist hier nicht erlaubt. Das kann sein, weil was im Weg ist
+ * oder das Gebiet nicht erschlossen ist. Grafisch wird dies dargestellt, indem die Struktur rot gezeichnet wird
+ */
+#define PLACING_STRUCTURE_NO_ROOM         (1 << 1)
+
+/**
+ * @brief Setzen der Struktur ist nicht erlaubt, da wir mitten auf dem Ozean außerhalb einer Insel sind.
+ * Grafisch wird dies dargestellt, indem gar nix gezeichnet wird.
+ */
+#define PLACING_STRUCTURE_OUTSIDE_OF_ISLE (1 << 2)
+
+
+
 class Map {
 
 private:
@@ -155,12 +182,12 @@ public:
 
 private:
     /**
-     * @brief Prüft die Map-Koordinaten auf ihre Gültigkeit und wirft eine Exception,
-     * wenn sie außerhalb der Karte liegen.
+     * @brief Prüft die Map-Koordinaten auf ihre Gültigkeit, ob sie außerhalb der Karte liegen.
      * @param mapX Map-X-Koordiante
      * @param mapY Map-Y-Koordiante
+     * @return true, wenn die Koordinaten gültig sind; false, wenn sie außerhalb der Karte liegen.
      */
-    void checkMapCoords(int mapX, int mapY) const;
+    bool checkMapCoords(int mapX, int mapY) const;
     
     /**
      * @brief Liefert die Insel zurück, die sich an den angegebenen Koordinaten befindet.
@@ -169,6 +196,14 @@ private:
      * @return Zeiger auf die Insel oder nullptr, wenn dort keine Insel ist
      */
     Isle* getIsleAt(int mapX, int mapY) const;
+    
+    /**
+     * @brief Liefert das Map-Objekt zurück, die sich an den angegebenen Koordinaten befindet.
+     * @param mapX Map-X-Koordiante
+     * @param mapY Map-Y-Koordiante
+     * @return Zeiger auf das Map-Objekt oder nullptr, wenn dort kein Map-Objekt ist
+     */
+    MapObject* getMapObjectAt(int mapX, int mapY) const;
     
 	/**
 	 * @brief Fügt ein neues Map-Objekt der Karte hinzu
@@ -190,13 +225,27 @@ private:
     void updateMinimapTexture();
     
     /**
+     * Prüft, ob eine bestimmte Struktur an eine bestimmte Position gesetzt werden darf.
+     * 
+     * @param mapX Map-X-Koordinate, wo die Struktur gesetzt werden soll
+     * @param mapY Map-Y-Koordinate, wo die Struktur gesetzt werden soll
+     * @param structureType Typ der zu setzenden Struktur
+     * @param graphic Grafik der zu setzenden Struktur. Notwendig, damit wir wissen, wie viel Platz die Struktur braucht
+     * @sa PLACING_STRUCTURE-Konstanten
+     * @return Bitmaske, die angibt, ob das Gebäude gesetzt werden darf.
+     */
+    unsigned char isAllowedToPlaceStructure(int mapX, int mapY, StructureType structureType, Graphic* graphic);
+    
+    /**
      * Render eine Struktur. Hilfsmethode von renderMap().
      * 
      * @param structure Struktur
      * @param rect Rechteck mit Screen-Koordinaten, wo die Grafik gesetzt werden soll
      * @param masked true, um die Grafik maskiert (für Gebäudeplatzierung) zu zeichnen
+     * @param redAndSemiTransparent true, um die Grafik rot einzufärben und halb-durchsichtig zu machen
+     * @param blink true, um die Grafik blinken zu lassen, d.h. entweder wird die Grafik gezeichnet oder nicht
      */
-    void renderStructure(Structure* structure, SDL_Rect* rect, bool masked);
+    void renderStructure(Structure* structure, SDL_Rect* rect, bool masked, bool redAndSemiTransparent, bool blink);
     
     /**
 	 * @brief interner Klickhandler, wenn in die Karte geklickt wurde. Diese Methode wird garantiert nur aufgerufen,
