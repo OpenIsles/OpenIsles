@@ -67,7 +67,13 @@ public:
 		return width;
 	}
 
-	unsigned char getTileAt(int x, int y) const;
+    /**
+     * @brief Liefert die Kachel an einer bestimmten Stelle zurück
+     * @param mapX Map-X-Koordiante
+     * @param mapY Map-Y-Koordiante
+     * @return Kachel-Index
+     */
+	unsigned char getTileAt(int mapX, int mapY) const;
 
 	const std::list<MapObject*>& getMapObjects() const {
 		return mapObjects;
@@ -148,6 +154,22 @@ public:
 	void onClick(int mouseX, int mouseY);
 
 private:
+    /**
+     * @brief Prüft die Map-Koordinaten auf ihre Gültigkeit und wirft eine Exception,
+     * wenn sie außerhalb der Karte liegen.
+     * @param mapX Map-X-Koordiante
+     * @param mapY Map-Y-Koordiante
+     */
+    void checkMapCoords(int mapX, int mapY) const;
+    
+    /**
+     * @brief Liefert die Insel zurück, die sich an den angegebenen Koordinaten befindet.
+     * @param mapX Map-X-Koordiante
+     * @param mapY Map-Y-Koordiante
+     * @return Zeiger auf die Insel oder nullptr, wenn dort keine Insel ist
+     */
+    Isle* getIsleAt(int mapX, int mapY) const;
+    
 	/**
 	 * @brief Fügt ein neues Map-Objekt der Karte hinzu
 	 * @param mapObject Map-Objekt

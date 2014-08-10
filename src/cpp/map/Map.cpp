@@ -127,11 +127,15 @@ void Map::initNewMap(int width, int height) {
 	screenOffsetY = 0;
 }
 
-unsigned char Map::getTileAt(int x, int y) const {
-    if (x < 0 || y < 0 || x >= width || y >= height) {
-        std::cerr << "mapCoords (" << std::to_string(x) << ", " + std::to_string(y) << ") out of bounds";
+void Map::checkMapCoords(int mapX, int mapY) const {
+    if (mapX < 0 || mapY < 0 || mapX >= width || mapY >= height) {
+        std::cerr << "mapCoords (" << std::to_string(mapX) << ", " + std::to_string(mapY) << ") out of bounds";
         throw new std::runtime_error("mapCoords out of bounds");
     }
+}
+
+Isle* Map::getIsleAt(int mapX, int mapY) const {
+    checkMapCoords(mapX, mapY);
     
     // Insel suchen, die sich auf diesen Map-Koordinaten befindet
     for (auto iter = isles.cbegin(); iter != isles.cend(); iter++) {
@@ -141,12 +145,31 @@ unsigned char Map::getTileAt(int x, int y) const {
         isle->getMapCoords(isleMapX, isleMapY, isleMapWidth, isleMapHeight);
         
         // Koordinaten sind nicht auf der Insel
-        if (x < isleMapX || y < isleMapY || x >= isleMapX + isleMapWidth || y >= isleMapY + isleMapHeight) {
+        if (mapX < isleMapX || mapY < isleMapY || mapX >= isleMapX + isleMapWidth || mapY >= isleMapY + isleMapHeight) {
             continue;
         }
         
         // Koordinaten sind auf der Insel
-        return isle->getTileAt(x - isleMapX, y - isleMapY);
+        return isle;
+    }
+    
+    // Keine Insel da
+    return nullptr;
+}
+
+unsigned char Map::getTileAt(int mapX, int mapY) const {
+    checkMapCoords(mapX, mapY);
+    
+    // Insel suchen, die sich auf diesen Map-Koordinaten befindet
+    Isle* isle = getIsleAt(mapX, mapY);
+    
+    if (isle != nullptr) {
+        // Koordinaten sind auf der Insel
+        
+        int isleMapX, isleMapY;
+        isle->getMapCoords(isleMapX, isleMapY);
+        
+        return isle->getTileAt(mapX - isleMapX, mapY - isleMapY);
     }
     
     // Keine Insel? Dann Wasser.
