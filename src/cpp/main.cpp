@@ -5,10 +5,11 @@
 #include <cstdlib>
 #include <string>
 #include "config/BuildingConfigMgr.h"
+#include "game/Game.h"
+#include "game/Player.h"
 #include "gui/GuiMgr.h"
 #include "map/Map.h"
 #include "sound/SoundMgr.h"
-#include "Game.h"
 #include "GraphicsMgr.h"
 
 
@@ -190,9 +191,13 @@ int main(int argc, char** argv) {
 	soundMgr = new SoundMgr();
     buildingConfigMgr = new BuildingConfigMgr();
 	graphicsMgr = new GraphicsMgr();
-	map = new Map(40, 40);
-	guiMgr = new GuiMgr();
+    guiMgr = new GuiMgr();
+    
     game = new Game();
+    game->addPlayer(new Player(PlayerColor::RED, "Spieler 1"));
+    game->addPlayer(new Player(PlayerColor::YELLOW, "Spieler 2"));
+    
+	map = new Map(40, 40);
 
 	// Mainloop //////////////////////////////////////////////////////////////////////////////////////////////////////
 

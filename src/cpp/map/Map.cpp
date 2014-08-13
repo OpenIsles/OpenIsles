@@ -1,9 +1,9 @@
 #include "config/BuildingConfigMgr.h"
+#include "game/Game.h"
 #include "map/Map.h"
 #include "map/MapUtils.h"
 #include "rapidxml/rapidxml.hpp"
 #include "rapidxml/rapidxml_utils.hpp"
-#include "Game.h"
 #include "GraphicsMgr.h"
 
 #define SDL_SetTextureDarkened(texture) (SDL_SetTextureColorMod((texture), 160, 160, 160))
@@ -57,43 +57,48 @@ Map::Map(int width, int height) : width(width), height(height) {
 	initNewMap(width, height);
 
 	loadMapFromTMX("data/map/map.tmx");
-
-	addBuilding(52, 39, CHAPEL);
-    addBuilding(51, 35, WEAPONSMITH);
-    addBuilding(58, 39, SIGNALFIRE);
-    addBuilding(55, 35, HERBARY);
-    addBuilding(50, 32, BRICKYARD);
-    addBuilding(51, 26, BRICKYARD2);
-    addBuilding(43, 24, OFFICE);
     
-	addStructure(48, 30, WAY_NW_SE);
-	addStructure(49, 30, WAY_NW_SE);
-	addStructure(50, 30, WAY_NW_SE);
-	addStructure(51, 30, WAY_NW_SE);
-	addStructure(52, 30, WAY_NW_SE);
-	addStructure(53, 30, WAY_NW_SE);
-	addStructure(54, 30, WAY_E);
-	addStructure(54, 31, WAY_SW_NE);
-	addStructure(54, 32, WAY_SW_NE);
-	addStructure(54, 33, WAY_SW_NE);
-	addStructure(54, 34, WAY_SW_NE);
-	addStructure(54, 35, WAY_SW_NE);
-	addStructure(54, 36, WAY_SW_NE);
-	addStructure(54, 37, WAY_S);
-	addStructure(53, 37, WAY_NW_SE);
-	addStructure(52, 37, WAY_NW_SE);
-	addStructure(51, 37, WAY_NW_SE);
-	addStructure(50, 37, WAY_NW_SE);
-	addStructure(49, 37, WAY_NW_SE);
-	addStructure(48, 37, WAY_NW_SE);
-	addStructure(47, 37, WAY_W);
-	addStructure(47, 36, WAY_SW_NE);
-	addStructure(47, 35, WAY_SW_NE);
-	addStructure(47, 34, WAY_SW_NE);
-	addStructure(47, 33, WAY_SW_NE);
-	addStructure(47, 32, WAY_SW_NE);
-	addStructure(47, 31, WAY_SW_NE);
-	addStructure(47, 30, WAY_N);
+    Player* player1 = game->getPlayer(0);
+    Player* player2 = game->getPlayer(1);
+
+	addBuilding(52, 39, CHAPEL, player1);
+    addBuilding(51, 35, WEAPONSMITH, player1);
+    addBuilding(58, 39, SIGNALFIRE, player1);
+    addBuilding(55, 35, HERBARY, player1);
+    addBuilding(50, 32, BRICKYARD, player1);
+    addBuilding(51, 26, BRICKYARD2, player1);
+    addBuilding(43, 24, OFFICE, player1);
+    
+    addBuilding(228, 214, OFFICE, player2);
+    
+	addStructure(48, 30, WAY_NW_SE, player1);
+	addStructure(49, 30, WAY_NW_SE, player1);
+	addStructure(50, 30, WAY_NW_SE, player1);
+	addStructure(51, 30, WAY_NW_SE, player1);
+	addStructure(52, 30, WAY_NW_SE, player1);
+	addStructure(53, 30, WAY_NW_SE, player1);
+	addStructure(54, 30, WAY_E, player1);
+	addStructure(54, 31, WAY_SW_NE, player1);
+	addStructure(54, 32, WAY_SW_NE, player1);
+	addStructure(54, 33, WAY_SW_NE, player1);
+	addStructure(54, 34, WAY_SW_NE, player1);
+	addStructure(54, 35, WAY_SW_NE, player1);
+	addStructure(54, 36, WAY_SW_NE, player1);
+	addStructure(54, 37, WAY_S, player1);
+	addStructure(53, 37, WAY_NW_SE, player1);
+	addStructure(52, 37, WAY_NW_SE, player1);
+	addStructure(51, 37, WAY_NW_SE, player1);
+	addStructure(50, 37, WAY_NW_SE, player1);
+	addStructure(49, 37, WAY_NW_SE, player1);
+	addStructure(48, 37, WAY_NW_SE, player1);
+	addStructure(47, 37, WAY_W, player1);
+	addStructure(47, 36, WAY_SW_NE, player1);
+	addStructure(47, 35, WAY_SW_NE, player1);
+	addStructure(47, 34, WAY_SW_NE, player1);
+	addStructure(47, 33, WAY_SW_NE, player1);
+	addStructure(47, 32, WAY_SW_NE, player1);
+	addStructure(47, 31, WAY_SW_NE, player1);
+	addStructure(47, 30, WAY_N, player1);
 }
 
 Map::~Map() {
@@ -618,7 +623,7 @@ void Map::addMapObject(MapObject* mapObject) {
 	});
 }
 
-const Structure* Map::addStructure(int mapX, int mapY, StructureType structureType) {
+const Structure* Map::addStructure(int mapX, int mapY, StructureType structureType, Player* player) {
 	// Position berechnen in Screen-Koordinaten berechnen, an dem sich die Grafik befinden muss.
 	Graphic* graphic = graphicsMgr->getGraphicForStructure(structureType);
 	SDL_Rect rect = { 0, 0, graphic->getWidth(), graphic->getHeight() };
@@ -633,13 +638,14 @@ const Structure* Map::addStructure(int mapX, int mapY, StructureType structureTy
 	structure->setMapCoords(mapX, mapY, graphic->getMapWidth(), graphic->getMapHeight());
 	structure->setScreenCoords(rect.x, rect.y, graphic->getWidth(), graphic->getHeight());
 	structure->setStructureType(structureType);
+    structure->setPlayer(player);
 
 	addMapObject(structure);
 
 	return structure;
 }
 
-const Building* Map::addBuilding(int mapX, int mapY, StructureType structureType) {
+const Building* Map::addBuilding(int mapX, int mapY, StructureType structureType, Player* player) {
     Graphic* graphic = graphicsMgr->getGraphicForStructure(structureType);
     
 	// Position in Screen-Koordinaten berechnen, an dem sich die Grafik befinden muss.
@@ -651,6 +657,7 @@ const Building* Map::addBuilding(int mapX, int mapY, StructureType structureType
 	building->setMapCoords(mapX, mapY, graphic->getMapWidth(), graphic->getMapHeight());
 	building->setScreenCoords(rect.x, rect.y, graphic->getWidth(), graphic->getHeight());
 	building->setStructureType(structureType);
+    building->setPlayer(player);
 
 	addMapObject(building);
 

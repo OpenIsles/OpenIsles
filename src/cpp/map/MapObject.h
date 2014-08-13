@@ -1,6 +1,7 @@
 #ifndef _MAP_OBJECT_H
 #define _MAP_OBJECT_H
 
+#include "game/Player.h"
 #include "map/MapUtils.h"
 #include "GraphicsMgr.h"
 
@@ -29,6 +30,11 @@ protected:
 	 * @brief Größe der Grafik
 	 */
 	int screenWidth, screenHeight;
+    
+    /**
+     * @brief Spieler, dem das Objekt gehört, oder nullptr für spielerlose Objekte
+     */
+    Player* player = nullptr;
 
 public:
 	virtual ~MapObject() {
@@ -87,6 +93,14 @@ public:
         // Wir wollen die Mitte der Kachel, also noch ne halbe Kacheln draufaddieren.
         screenCenterX += GraphicsMgr::TILE_WIDTH_HALF;
         screenCenterY += GraphicsMgr::TILE_HEIGHT_HALF;
+    }
+    
+    Player* getPlayer() const {
+        return player;
+    }
+
+    void setPlayer(Player* player) {
+        this->player = player;
     }
 
 };

@@ -4,6 +4,8 @@ DATA_DIRECTORY := data
 BUILD_DIRECTORY := build
 OBJ_FILES := \
 	$(BUILD_DIRECTORY)/config/BuildingConfigMgr.o \
+	$(BUILD_DIRECTORY)/game/Game.o \
+	$(BUILD_DIRECTORY)/game/Player.o \
 	$(BUILD_DIRECTORY)/gui/GuiButton.o \
 	$(BUILD_DIRECTORY)/gui/GuiMgr.o \
 	$(BUILD_DIRECTORY)/gui/GuiPushButton.o \
@@ -13,7 +15,6 @@ OBJ_FILES := \
 	$(BUILD_DIRECTORY)/map/Map.o \
 	$(BUILD_DIRECTORY)/map/MapUtils.o \
 	$(BUILD_DIRECTORY)/sound/SoundMgr.o \
-	$(BUILD_DIRECTORY)/Game.o \
 	$(BUILD_DIRECTORY)/Graphic.o \
 	$(BUILD_DIRECTORY)/GraphicsMgr.o \
 	$(BUILD_DIRECTORY)/main.o
@@ -42,6 +43,15 @@ clean: clean-tiles clean-gui
 	
 
 $(BUILD_DIRECTORY)/config/BuildingConfigMgr.o: $(SRC_CPP_DIRECTORY)/config/BuildingConfigMgr.cpp $(SRC_CPP_DIRECTORY)/config/BuildingConfigMgr.h
+	$(CREATE_TARGET_DIRECTORY)
+	$(CC) $(CFLAGS) -o $@ -c $<
+	
+	
+$(BUILD_DIRECTORY)/game/Game.o: $(SRC_CPP_DIRECTORY)/game/Game.cpp $(SRC_CPP_DIRECTORY)/game/Game.h
+	$(CREATE_TARGET_DIRECTORY)
+	$(CC) $(CFLAGS) -o $@ -c $<
+	
+$(BUILD_DIRECTORY)/game/Player.o: $(SRC_CPP_DIRECTORY)/game/Player.cpp $(SRC_CPP_DIRECTORY)/game/Player.h
 	$(CREATE_TARGET_DIRECTORY)
 	$(CC) $(CFLAGS) -o $@ -c $<
 
@@ -84,10 +94,6 @@ $(BUILD_DIRECTORY)/sound/SoundMgr.o: $(SRC_CPP_DIRECTORY)/sound/SoundMgr.cpp $(S
 	$(CREATE_TARGET_DIRECTORY)
 	$(CC) $(CFLAGS) -o $@ -c $<
 	
-	
-$(BUILD_DIRECTORY)/Game.o: $(SRC_CPP_DIRECTORY)/Game.cpp $(SRC_CPP_DIRECTORY)/Game.h
-	$(CREATE_TARGET_DIRECTORY)
-	$(CC) $(CFLAGS) -o $@ -c $<
 	
 $(BUILD_DIRECTORY)/Graphic.o: $(SRC_CPP_DIRECTORY)/Graphic.cpp $(SRC_CPP_DIRECTORY)/Graphic.h
 	$(CREATE_TARGET_DIRECTORY)

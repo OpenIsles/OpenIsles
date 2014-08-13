@@ -155,18 +155,20 @@ public:
 	 * @param mapX X-Map-Koordinate des Objekts
 	 * @param mapY Y-Map-Koordinate des Objekts
 	 * @param structureType Typ der Struktur
+     * @param player Spieler, dem die Struktur gehören soll
 	 * @return readonly-Zeiger auf das neu angelegte Building
 	 */
-	const Structure* addStructure(int mapX, int mapY, StructureType structureType);
+	const Structure* addStructure(int mapX, int mapY, StructureType structureType, Player* player);
 
 	/**
 	 * @brief Fügt ein neues Gebäude der Karte hinzu.
 	 * @param mapX X-Map-Koordinate des Objekts
 	 * @param mapY Y-Map-Koordinate des Objekts
 	 * @param structureType Typ des Gebäudes
+     * @param player Spieler, dem das Gebäude gehören soll
 	 * @return readonly-Zeiger auf das neu angelegte Building
 	 */
-	const Building* addBuilding(int mapX, int mapY, StructureType structureType);
+	const Building* addBuilding(int mapX, int mapY, StructureType structureType, Player* player);
 
 	/**
 	 * @brief Entfernt alle Objekte auf der Karte.

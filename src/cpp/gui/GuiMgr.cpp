@@ -1,10 +1,10 @@
+#include "game/Game.h"
 #include "gui/GuiButton.h"
 #include "gui/Identifiers.h"
 #include "gui/GuiMgr.h"
 #include "gui/GuiStaticElement.h"
 #include "map/Map.h"
 #include "sound/SoundMgr.h"
-#include "Game.h"
 #include "Graphic.h"
 #include "GuiPushButton.h"
 
