@@ -7,6 +7,7 @@
 #include <string.h>
 #include "map/Building.h"
 #include "map/Isle.h"
+#include "utils/RectangleData.h"
 
 // Konstanten für isAllowedToPlaceStructure()
 
@@ -35,6 +36,44 @@
 
 
 
+/**
+ * @brief Stellt eine Kachel auf der Karte dar. Wir müssen uns mehrere Informationen hierzu merken.
+ * Diese Klasse fasst alles zusammen, was wir zu einer Map-Koordinate wissen müssen.
+ */
+struct MapTile {
+    
+    /**
+     * @brief Index in Graphics.tiles, welche Grafik die Kachel hat
+     */
+    unsigned char tileGraphicIndex;
+    
+    /**
+     * @brief Zeiger auf die Insel (durch Map.isles verwaltet), die sich an dieser Stelle befindet
+     * oder nullptr, wenn dort Ozean ist.
+     */
+    Isle* isle;
+    
+    /**
+     * @brief Zeiger auf den Spieler (durch Game.players verwaltet), dem die Kachel Land gehört
+     * oder nullptr, wenns keinem gehört
+     */
+    Player* player;
+    
+    
+    MapTile() {
+        // TODO Konstante/Enum
+        tileGraphicIndex = 1; // Ozean
+        isle = nullptr;
+        player = nullptr;
+    }
+
+};
+
+
+
+/**
+ * @brief Stellt die Karte dar
+ */
 class Map {
 
 private:
@@ -47,6 +86,11 @@ private:
 	 * @brief Höhe der Karte in Kacheln
 	 */
 	int height;
+    
+    /**
+     * @brief Daten aller Kacheln auf der Karte
+     */
+    RectangleData<MapTile*>* mapTiles = nullptr;
 
 	/**
 	 * @brief Liste der Inseln auf der Karte
@@ -83,7 +127,7 @@ private:
     SDL_Texture* minimapTexture = nullptr;
 
 public:
-	Map(int width, int height);
+	Map();
 	~Map();
 
 	int getHeight() const {
@@ -169,11 +213,17 @@ public:
 	 * @return readonly-Zeiger auf das neu angelegte Building
 	 */
 	const Building* addBuilding(int mapX, int mapY, StructureType structureType, Player* player);
+    
+    /**
+     * @brief Aktualisiert die internen Strukturen der Karte (mapTiles und Minimap) beim Neuerrichten eines Kontors
+     * @param building Kontor-Gebäude
+     */
+    void addOfficeCatchmentAreaToMap(const Building& building);
 
 	/**
-	 * @brief Entfernt alle Objekte auf der Karte.
+	 * @brief Räumt alles weg und gibt Speicher wieder frei
 	 */
-	void clearMapObjects();
+	void clearMap();
 
 	/**
 	 * @brief Callback, der sich um einen Mausklick auf die Karte kümmert
@@ -214,12 +264,13 @@ private:
 	void addMapObject(MapObject* mapObject);
 
 	/**
-	 * @brief Initialisiert das tiles-Array neu, wenn die Karte sich ändert.
-	 * Es werden alle Objekte von der Karte geräumt, der Speicher (neu) initialisiert, sowie sonstige Zustände resettet.
-	 * @param width neue Breite der Karte
+	 * @brief Initialisiert alles, wenn die Karte sich ändert.
+	 * Es werden alle Objekte von der Karte geräumt, der Speicher und die Map-Breite/Höhe (neu) initialisiert, 
+     * sowie sonstige Zustände resettet.
+	 * @param newWidth neue Breite der Karte
 	 * @param height neue Höhe der Karte
 	 */
-	void initNewMap(int width, int height);
+	void initNewMap(int newWidth, int newHeight);
     
     /**
      * @brief Aktualisiert die SDL-Texture für die Minimap

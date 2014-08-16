@@ -15,7 +15,7 @@ void Building::onClick(int mouseXInBuilding, int mouseYInBuilding) {
 	map->setSelectedMapObject(this);
 }
 
-bool Building::isInsideCatchmentArea(int mapX, int mapY) {
+bool Building::isInsideCatchmentArea(int mapX, int mapY) const {
     const BuildingConfig* buildingConfig = buildingConfigMgr->getConfig(structureType);
     const RectangleData<char>* catchmentAreaData = buildingConfig->getCatchmentArea(); 
     
@@ -37,7 +37,7 @@ bool Building::isInsideCatchmentArea(int mapX, int mapY) {
     return (catchmentAreaData->data[y * catchmentAreaData->width + x] == '1'); 
 }
 
-bool Building::isInsideCatchmentArea(MapObject* mapObject) {
+bool Building::isInsideCatchmentArea(MapObject* mapObject) const {
     int testX, testY, testWidth, testHeight;
     mapObject->getMapCoords(testX, testY, testWidth, testHeight);
 

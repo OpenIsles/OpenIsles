@@ -30,10 +30,9 @@ struct RectangleData {
     }
     
     /**
-     * Helper-Methode, um einen bestimmten Eintrag aus dem Array zu lesen.
+     * @brief Helper-Methode, um einen bestimmten Eintrag aus dem Array zu lesen.
      * Diese Methode kann sicher benutzt werden, um mit beliebigen Koordinaten zuzugreifen. Befinden sich die
      * Koordinaten außerhalb des Rechtecks, wird ein bestimmter Wert zurückgeliefert.
-     * 
      * @param x X-Koordinate im Array
      * @param y Y-Koordinate im Array
      * @param outOfArrayValue Wert, der zurückgegeben wird, wenn die Koordinate außerhalb des Rechtecks liegt.

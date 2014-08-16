@@ -47,12 +47,12 @@ public:
 		this->mapHeight = mapHeight;
 	}
 
-	void getMapCoords(int& mapX, int& mapY) {
+	void getMapCoords(int& mapX, int& mapY) const {
 		mapX = this->mapX;
 		mapY = this->mapY;
 	}
 
-	void getMapCoords(int& mapX, int& mapY, int& mapWidth, int& mapHeight) {
+	void getMapCoords(int& mapX, int& mapY, int& mapWidth, int& mapHeight) const {
 		mapX = this->mapX;
 		mapY = this->mapY;
 		mapWidth = this->mapWidth;
@@ -66,7 +66,7 @@ public:
 		this->screenHeight = screenHeight;
 	}
 
-	void getScreenCoords(int& screenX, int& screenY, int& screenWidth, int& screenHeight) {
+	void getScreenCoords(int& screenX, int& screenY, int& screenWidth, int& screenHeight) const {
 		screenX = this->screenX;
 		screenY = this->screenY;
 		screenWidth = this->screenWidth;
@@ -78,7 +78,7 @@ public:
      * @param screenCenterX Referenz, die die X-Screen-Koordinate des Mittelpunkts empfängt
      * @param screenCenterY Referenz, die die Y-Screen-Koordinate des Mittelpunkts empfängt
      */
-    void getScreenCoordsCenter(int& screenCenterX, int& screenCenterY) {
+    void getScreenCoordsCenter(int& screenCenterX, int& screenCenterY) const {
         // Mittelpunkt aus den beiden Screen-Koordinaten an den beiden Ecken des Objekts bestimmen
         int screenXUpperLeft, screenYUpperLeft;
         int screenXLowerRight, screenYLowerRight;

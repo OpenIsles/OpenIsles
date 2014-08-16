@@ -18,7 +18,7 @@ public:
      * @param mapY Y-Map-Koordinate, die getestet wird
      * @return true, wenn die Kachel innerhalb des Einzugsgebiets liegt; sonst false
      */
-    bool isInsideCatchmentArea(int mapX, int mapY);
+    bool isInsideCatchmentArea(int mapX, int mapY) const;
     
     /**
      * @brief Testet, ob ein bestimmtes Map-Objekt innerhalb des Einzugsgebiets des Gebäudes liegt. Dies ist immer dann
@@ -26,7 +26,7 @@ public:
      * @param mapObject Map-Objekt, was getestet wird
      * @return true, wenn das Map-Objekt innerhalb des Einzugsgebiets liegt; sonst false
      */
-    bool isInsideCatchmentArea(MapObject* mapObject);
+    bool isInsideCatchmentArea(MapObject* mapObject) const;
     
 	/**
 	 * @brief Callback, der sich um einen Mausklick auf das Gebäude kümmert

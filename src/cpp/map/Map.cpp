@@ -52,14 +52,13 @@ const SDL_Rect mapClipRect = { 0, 0, 768, 734 };
 const SDL_Rect minimapClipRect = { 796, 28, 200, 200 };
 
 
-Map::Map(int width, int height) : width(width), height(height) {
-
-	initNewMap(width, height);
-
+Map::Map() {
 	loadMapFromTMX("data/map/map.tmx");
     
     Player* player1 = game->getPlayer(0);
     Player* player2 = game->getPlayer(1);
+    Player* player3 = game->getPlayer(2);
+    Player* player4 = game->getPlayer(3);
 
 	addBuilding(52, 39, CHAPEL, player1);
     addBuilding(51, 35, WEAPONSMITH, player1);
@@ -70,6 +69,8 @@ Map::Map(int width, int height) : width(width), height(height) {
     addBuilding(43, 24, OFFICE, player1);
     
     addBuilding(228, 214, OFFICE, player2);
+    addBuilding(28, 226, OFFICE, player3);
+    addBuilding(130, 94, OFFICE, player4);
     
 	addStructure(48, 30, WAY_NW_SE, player1);
 	addStructure(49, 30, WAY_NW_SE, player1);
@@ -99,31 +100,32 @@ Map::Map(int width, int height) : width(width), height(height) {
 	addStructure(47, 32, WAY_SW_NE, player1);
 	addStructure(47, 31, WAY_SW_NE, player1);
 	addStructure(47, 30, WAY_N, player1);
+    
+    updateMinimapTexture();
 }
 
 Map::~Map() {
-	selectedMapObject = nullptr;
-
-	clearMapObjects();
-    
-    if (minimapTexture != nullptr) {
-        SDL_DestroyTexture(minimapTexture);
-    }
+	clearMap();
 }
 
-void Map::initNewMap(int width, int height) {
+void Map::initNewMap(int newWidth, int newHeight) {
     // TODO Wir gehen erstmal davon aus, dass die Karten immer quadratisch sind.
     // Damit spar ich mir erstmal Hirnschmalz mit der Minimap und anderem Zeug, was noch kommen wird.
-    if (width != height) {
+    if (newWidth != newHeight) {
         throw new std::runtime_error("Map has to be quadratically for now ;-p");
     }
     
 	// Karte erst leerräumen
-	clearMapObjects();
-    isles.clear();
+	clearMap();
     
-    if (minimapTexture != nullptr) {
-        SDL_DestroyTexture(minimapTexture);
+    // Neue Größe setzen
+    width = newWidth;
+    height = newHeight;
+    
+    // mapTiles neu anlegen und mit Ozean initialisieren
+    mapTiles = new RectangleData<MapTile*>(newWidth, newHeight);
+    for(int i = 0; i < mapTiles->width * mapTiles->height; i++) {
+        mapTiles->data[i] = new MapTile();
     }
 
 	// Sonstiges Zeugs auf Anfangswerte stellen
@@ -142,24 +144,7 @@ Isle* Map::getIsleAt(int mapX, int mapY) const {
         return nullptr;
     }
     
-    // Insel suchen, die sich auf diesen Map-Koordinaten befindet
-    for (auto iter = isles.cbegin(); iter != isles.cend(); iter++) {
-		Isle* isle = *iter;
-        
-        int isleMapX, isleMapY, isleMapWidth, isleMapHeight;
-        isle->getMapCoords(isleMapX, isleMapY, isleMapWidth, isleMapHeight);
-        
-        // Koordinaten sind nicht auf der Insel
-        if (mapX < isleMapX || mapY < isleMapY || mapX >= isleMapX + isleMapWidth || mapY >= isleMapY + isleMapHeight) {
-            continue;
-        }
-        
-        // Koordinaten sind auf der Insel
-        return isle;
-    }
-    
-    // Keine Insel da
-    return nullptr;
+    return mapTiles->getData(mapX, mapY, nullptr)->isle;
 }
 
 MapObject* Map::getMapObjectAt(int mapX, int mapY) const {
@@ -167,7 +152,8 @@ MapObject* Map::getMapObjectAt(int mapX, int mapY) const {
         return nullptr;
     }
     
-    // Insel suchen, die sich auf diesen Map-Koordinaten befindet
+    // TODO sollte man analog den Inseln für Direktzugriff speichern
+    // Objekt suchen, die sich auf diesen Map-Koordinaten befindet
     for (auto iter = mapObjects.cbegin(); iter != mapObjects.cend(); iter++) {
 		MapObject* mapObject = *iter;
         
@@ -194,21 +180,7 @@ unsigned char Map::getTileAt(int mapX, int mapY) const {
         throw new std::runtime_error("mapCoords out of bounds");
     }
     
-    // Insel suchen, die sich auf diesen Map-Koordinaten befindet
-    Isle* isle = getIsleAt(mapX, mapY);
-    
-    if (isle != nullptr) {
-        // Koordinaten sind auf der Insel
-        
-        int isleMapX, isleMapY;
-        isle->getMapCoords(isleMapX, isleMapY);
-        
-        return isle->getTileAt(mapX - isleMapX, mapY - isleMapY);
-    }
-    
-    // Keine Insel? Dann Wasser.
-    // TODO sollte Konstanten geben für die Tiles
-    return 1;
+    return mapTiles->getData(mapX, mapY, nullptr)->tileGraphicIndex;
 }
 
 // TODO Fehlermanagement, wenn die Datei mal nicht so hübsch aussieht, dass alle Tags da sind
@@ -223,8 +195,7 @@ void Map::loadMapFromTMX(const char* filename) {
 	int newMapWidth = atoi(mapNode->first_attribute("width", 5, true)->value());
 	int newMapHeight = atoi(mapNode->first_attribute("height", 6, true)->value());
     
-    this->width = newMapWidth;
-    this->height = newMapHeight;
+    initNewMap(newMapWidth, newMapHeight);
 
 	rapidxml::xml_node<>* objectgroupNode = mapNode->first_node("objectgroup", 11, true);
     for (rapidxml::xml_node<>* objectNode = objectgroupNode->first_node("object", 6, true); objectNode != nullptr; 
@@ -267,9 +238,17 @@ void Map::loadMapFromTMX(const char* filename) {
                 throw new std::runtime_error("Isle does not match size on map");
             }
 
+            // Insel zur Karte hinzufügen
             isle->setMapCoords(mapX, mapY, isleMapWidth, isleMapHeight);
-
             isles.push_back(isle);
+            
+            for (int my = mapY, isleY = 0; my < mapY + isleMapHeight; my++, isleY++) {
+                for (int mx = mapX, isleX = 0; mx < mapX + isleMapWidth; mx++, isleX++) {
+                    MapTile* mapTile = mapTiles->getData(mx, my, nullptr);
+                    mapTile->tileGraphicIndex = isle->getTileAt(isleX, isleY);
+                    mapTile->isle = isle;
+                }
+            }
         }
         // Startpunkt: Diesen Punkt wollen wir auf den Bildschirm zentrieren
         else if (strcmp(nodeType, "startpoint") == 0) {
@@ -325,7 +304,7 @@ void Map::renderMinimap(SDL_Renderer* renderer) {
           minimapClipRect.y + (int) ((float) mapYBottomLeft / scaleFactor) }
     };
     points[4] = points[0];
-    SDL_SetRenderDrawColor(renderer, 255, 0, 0, 192);
+    SDL_SetRenderDrawColor(renderer, 192, 128, 0, 255);
     SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
     SDL_RenderDrawLines(renderer, points, 5);
     
@@ -348,8 +327,12 @@ void Map::updateMinimapTexture() {
             int mapX = (int) ((float) x * scaleFactor);
             int mapY = (int) ((float) y * scaleFactor);
             
-            unsigned char tile = getTileAt(mapX, mapY);
-            *(pixelPtr++) = (tile == 1) ? 0x0000c0 : 0x008000;
+            MapTile* mapTile = mapTiles->getData(mapX, mapY, nullptr);
+            
+            unsigned char tile = mapTile->tileGraphicIndex;
+            Player* player = mapTile->player;
+            
+            *(pixelPtr++) = (tile == 1) ? 0x000090 : (player != nullptr ? ((Uint32) player->GetColor()) : 0x008000);
         }
     }
     
@@ -660,17 +643,73 @@ const Building* Map::addBuilding(int mapX, int mapY, StructureType structureType
     building->setPlayer(player);
 
 	addMapObject(building);
+    
+    // Kontor? Einzugbereich in mapTiles aktualisieren
+    if (structureType == OFFICE) {
+        addOfficeCatchmentAreaToMap(*building);
+    }
 
 	return building;
 }
 
-void Map::clearMapObjects() {
+void Map::addOfficeCatchmentAreaToMap(const Building& building) {
+    int buildingMapX, buildingMapY;
+    building.getMapCoords(buildingMapX, buildingMapY);
+    
+    const BuildingConfig* buildingConfig = buildingConfigMgr->getConfig(building.getStructureType());
+    RectangleData<char>* catchmentArea = buildingConfig->getCatchmentArea();
+    
+    // TODO Sehr hässlich, aber tuts erstmal sicher, ohne Gefahr.
+    for (int mapY = buildingMapY - catchmentArea->height/2 - 1;
+             mapY <= buildingMapY + catchmentArea->height/2 + 1; mapY++) {
+        
+        for (int mapX = buildingMapX - catchmentArea->width/2 - 1;
+                 mapX <= buildingMapX + catchmentArea->width/2 + 1; mapX++) {
+            
+            if (!building.isInsideCatchmentArea(mapX, mapY)) {
+                continue;
+            }
+            
+            MapTile* mapTile = mapTiles->getData(mapX, mapY, nullptr);
+            if (mapTile == nullptr) {
+                continue;
+            }
+            
+            mapTile->player = building.getPlayer();
+        }
+    }
+    
+    updateMinimapTexture();
+}
+
+void Map::clearMap() {
+    selectedMapObject = nullptr;
+    
+    // Map-Objekte wegräumen
 	// TODO sollte wohl synchronisiert werden
 	for (auto iter = mapObjects.cbegin(); iter != mapObjects.cend(); iter++) {
 		MapObject* mapObject = *iter;
 		delete mapObject;
 	}
 	mapObjects.clear();
+    
+    // mapTiles wegräumen
+    if (mapTiles != nullptr) {
+        for(int i = 0; i < mapTiles->width * mapTiles->height; i++) {
+            delete mapTiles->data[i];
+        }
+        delete mapTiles;
+        mapTiles = nullptr;
+    }
+    
+    // Inseln wegräumen
+    isles.clear();
+    
+    // Minimap-Texture wegräumen
+    if (minimapTexture != nullptr) {
+        SDL_DestroyTexture(minimapTexture);
+        minimapTexture = nullptr;
+    }
 }
 
 void Map::onClick(int mouseX, int mouseY) {

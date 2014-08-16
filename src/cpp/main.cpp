@@ -196,8 +196,10 @@ int main(int argc, char** argv) {
     game = new Game();
     game->addPlayer(new Player(PlayerColor::RED, "Spieler 1"));
     game->addPlayer(new Player(PlayerColor::YELLOW, "Spieler 2"));
+    game->addPlayer(new Player(PlayerColor::GREEN, "Spieler 3"));
+    game->addPlayer(new Player(PlayerColor::BLUE, "Spieler 4"));
     
-	map = new Map(40, 40);
+	map = new Map();
 
 	// Mainloop //////////////////////////////////////////////////////////////////////////////////////////////////////
 
