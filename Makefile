@@ -103,7 +103,7 @@ $(BUILD_DIRECTORY)/GraphicsMgr.o: $(SRC_CPP_DIRECTORY)/GraphicsMgr.cpp $(SRC_CPP
 	$(CREATE_TARGET_DIRECTORY)
 	$(CC) $(CFLAGS) -o $@ -c $<
 	
-$(BUILD_DIRECTORY)/main.o: $(SRC_CPP_DIRECTORY)/main.cpp $(SRC_CPP_DIRECTORY)/gui/GuiMgr.h $(SRC_CPP_DIRECTORY)/map/Map.h $(SRC_CPP_DIRECTORY)/sound/SoundMgr.h $(SRC_CPP_DIRECTORY)/GraphicsMgr.h
+$(BUILD_DIRECTORY)/main.o: $(SRC_CPP_DIRECTORY)/main.cpp $(SRC_CPP_DIRECTORY)/gui/GuiMgr.h $(SRC_CPP_DIRECTORY)/map/Map.h $(SRC_CPP_DIRECTORY)/sound/SoundMgr.h $(SRC_CPP_DIRECTORY)/GraphicsMgr.h $(SRC_CPP_DIRECTORY)/utils/FpsCounter.h
 	$(CREATE_TARGET_DIRECTORY)
 	$(CC) $(CFLAGS) -o $@ -c $<
 	

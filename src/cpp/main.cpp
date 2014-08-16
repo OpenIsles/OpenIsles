@@ -10,6 +10,7 @@
 #include "gui/GuiMgr.h"
 #include "map/Map.h"
 #include "sound/SoundMgr.h"
+#include "utils/FpsCounter.h"
 #include "GraphicsMgr.h"
 
 
@@ -38,9 +39,9 @@ TTF_Font* ttfFont;
 int mouseCurrentX, mouseCurrentY;
 
 /**
- * @brief aktuelle FPS des letzten Frames
+ * @brief FPS-Counter
  */
-double fps = 0.0;
+FpsCounter* fpsCounter;
 
 /**
  * @brief Zeichenketten-Puffer für 7 Zeilen Debug-Ausgabe
@@ -192,6 +193,7 @@ int main(int argc, char** argv) {
     buildingConfigMgr = new BuildingConfigMgr();
 	graphicsMgr = new GraphicsMgr();
     guiMgr = new GuiMgr();
+    fpsCounter = new FpsCounter(500);
     
     game = new Game();
     game->addPlayer(new Player(PlayerColor::RED, "Spieler 1"));
@@ -204,7 +206,7 @@ int main(int argc, char** argv) {
 	// Mainloop //////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	while (!quitGame) {
-		Uint32 ticksAtLoopStart = SDL_GetTicks();
+		fpsCounter->startFrame();
 
 		// Events handeln
 		SDL_Event event;
@@ -216,7 +218,8 @@ int main(int argc, char** argv) {
         SDL_GetMouseState(&mouseCurrentX, &mouseCurrentY);
 
 		// Debug-Infos vorbereiten, damit wir sie später einfach nur ausgeben können
-		std::string fpsString = "FPS = " + std::to_string(fps);
+		std::string fpsString = "FPS: average = " + std::to_string(fpsCounter->getFpsAvg()) +
+                ", current = " + std::to_string(fpsCounter->getFpsCurrent());
 		debugOutput[0] = fpsString;
 
 		// Frame auf Offscreen-Texture zeichnen
@@ -230,16 +233,16 @@ int main(int argc, char** argv) {
 		SDL_RenderCopy(renderer, offscreenTexture, nullptr, nullptr);
 		SDL_RenderPresent(renderer);
 
-		// FPS berechnen
-		Uint32 ticksAtLoopEnd = SDL_GetTicks();
-		fps = 1000.0 / (ticksAtLoopEnd - ticksAtLoopStart);
+		fpsCounter->endFrame();
 	}
 
 	// Game-Deinitialisierung ////////////////////////////////////////////////////////////////////////////////////////
-
+    
+    delete map;
     delete game;
+    
+    delete fpsCounter;
 	delete guiMgr;
-	delete map;
 	delete graphicsMgr;
     delete buildingConfigMgr;
 	delete soundMgr;
