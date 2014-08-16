@@ -195,11 +195,13 @@ int main(int argc, char** argv) {
     guiMgr = new GuiMgr();
     fpsCounter = new FpsCounter(500);
     
+    Player* myPlayer = new Player(PlayerColor::RED, "Spieler 1");
     game = new Game();
-    game->addPlayer(new Player(PlayerColor::RED, "Spieler 1"));
+    game->addPlayer(myPlayer);
     game->addPlayer(new Player(PlayerColor::YELLOW, "Spieler 2"));
     game->addPlayer(new Player(PlayerColor::GREEN, "Spieler 3"));
     game->addPlayer(new Player(PlayerColor::BLUE, "Spieler 4"));
+    game->setCurrentPlayer(myPlayer);
     
 	map = new Map();
 

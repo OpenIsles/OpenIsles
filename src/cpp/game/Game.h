@@ -20,6 +20,11 @@ private:
      * @brief Vektor von Spielern
      */
     std::vector<Player*> players;
+    
+    /**
+     * @brief Zeiger auf den Spieler, den dieser Client kontrolliert
+     */
+    Player* currentPlayer = nullptr;
 
 public:
 	Game();
@@ -49,6 +54,22 @@ public:
      */
     Player* getPlayer(int playerIndex) const {
         return players.at(playerIndex);
+    }
+
+    /**
+     * @brief Setzt den aktuellen Spieler. Das muss man wohl nur ein einziges Mal machen.
+     * @param currentPlayer Spieler, der als aktueller Spieler gesetzt werden soll.
+     */
+    void setCurrentPlayer(Player* currentPlayer) {
+        this->currentPlayer = currentPlayer;
+    }
+    
+    /**
+     * @brief Liefert den aktueller Spieler zurück
+     * @return aktueller Spieler
+     */
+    Player* getCurrentPlayer() const {
+        return currentPlayer;
     }
 
 };

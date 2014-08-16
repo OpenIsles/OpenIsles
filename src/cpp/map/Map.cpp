@@ -473,7 +473,18 @@ unsigned char Map::isAllowedToPlaceStructure(int mapX, int mapY, StructureType s
     // Checken, ob alles frei is, um das Gebäude zu setzen
     for (int y = mapY; y < mapY + graphic->getMapHeight(); y++) {
         for (int x = mapX; x < mapX + graphic->getMapWidth(); x++) {
-            if (getMapObjectAt(x, y) != nullptr) {
+            MapTile* mapTile = mapTiles->getData(x, y, nullptr);
+            if (
+                    // Gebiet nicht erschlossen oder nicht unseres
+                    mapTile->player == nullptr || mapTile->player != game->getCurrentPlayer() ||
+
+                    // Da steht was im Weg
+                    getMapObjectAt(x, y) != nullptr ||
+                    
+                    // Gelände passt nicht
+                    // TODO aktuell darf nur auf Grass und Grass2 gebaut werden. Später muss das das Gebäude wissen, wo.
+                    (mapTile->tileGraphicIndex != 2 && mapTile->tileGraphicIndex != 7)
+            ) {
                 result |= PLACING_STRUCTURE_NO_ROOM;
                 return result;
             }
