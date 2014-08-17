@@ -17,6 +17,7 @@ GraphicsMgr::GraphicsMgr() {
 	structures[BRICKYARD] = new Graphic("data/img/objects/brickyard.png", 4, 2);
 	structures[BRICKYARD2] = new Graphic("data/img/objects/brickyard2.png", 2, 4);
     structures[OFFICE] = new Graphic("data/img/objects/office.png", 3, 3);
+    structures[MARKETPLACE] = new Graphic("data/img/objects/marketplace.png", 4, 3);
 
 	structures[WAY_E] = new Graphic("data/img/objects/way/way-e.png", 1, 1);
 	structures[WAY_N] = new Graphic("data/img/objects/way/way-n.png", 1, 1);

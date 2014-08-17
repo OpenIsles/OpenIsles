@@ -67,6 +67,7 @@ Map::Map() {
     addBuilding(50, 32, BRICKYARD, player1);
     addBuilding(51, 26, BRICKYARD2, player1);
     addBuilding(43, 24, OFFICE, player1);
+    addBuilding(49, 41, MARKETPLACE, player1);
     
     addBuilding(228, 214, OFFICE, player2);
     addBuilding(28, 226, OFFICE, player3);
@@ -656,7 +657,7 @@ const Building* Map::addBuilding(int mapX, int mapY, StructureType structureType
 	addMapObject(building);
     
     // Kontor? Einzugbereich in mapTiles aktualisieren
-    if (structureType == OFFICE) {
+    if (structureType == OFFICE || structureType == MARKETPLACE) {
         addOfficeCatchmentAreaToMap(*building);
     }
 

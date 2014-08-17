@@ -25,8 +25,9 @@ enum StructureType : unsigned char {
     SIGNALFIRE = 103,
     HERBARY = 104,
     BRICKYARD = 105,
-    BRICKYARD2 = 106,  
-    OFFICE = 107,  
+    BRICKYARD2 = 106,
+    OFFICE = 107,
+    MARKETPLACE = 108,
 } StructureType;
 
 
