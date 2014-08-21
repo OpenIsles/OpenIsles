@@ -34,7 +34,7 @@ LDFLAGS := $(SDL_LDFLAGS) -lSDL2_image -lSDL2_mixer -lSDL2_ttf
 CREATE_TARGET_DIRECTORY = mkdir -p $(@D)
 
 
-.PHONY: all clean build-tiles clean-tiles build-gui clean-gui
+.PHONY: all clean build-tiles clean-tiles build-gui clean-gui render-blender
 
 all: build-tiles build-gui $(BUILD_DIRECTORY)/OpenIsles
 
@@ -137,3 +137,10 @@ $(DATA_DIRECTORY)/img/gui/panel.png:
 $(DATA_DIRECTORY)/img/gui/statusbar.png:
 	$(CREATE_TARGET_DIRECTORY)
 	convert -size 758x24 canvas:"#907f67" -mattecolor "#6f5038" -frame 5x5+2+2 $@
+
+
+render-blender: $(DATA_DIRECTORY)/img/objects/marketplace.png
+
+$(DATA_DIRECTORY)/img/objects/marketplace.png: $(SRC_DIRECTORY)/blender/marketplace/marketplace.blend
+	cd $(SRC_DIRECTORY)/blender/marketplace; blender -b $(notdir $<) -P render.py
+	cp $(SRC_DIRECTORY)/blender/marketplace/render/angle0.png $@
