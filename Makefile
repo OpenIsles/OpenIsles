@@ -139,8 +139,37 @@ $(DATA_DIRECTORY)/img/gui/statusbar.png:
 	convert -size 758x24 canvas:"#907f67" -mattecolor "#6f5038" -frame 5x5+2+2 $@
 
 
-render-blender: $(DATA_DIRECTORY)/img/objects/marketplace.png
+render-blender: \
+	$(DATA_DIRECTORY)/img/objects/marketplace.png \
+	$(DATA_DIRECTORY)/img/goods/marketplace-icon/tools.png \
+	$(DATA_DIRECTORY)/img/goods/icon/tools.png \
+	$(DATA_DIRECTORY)/img/goods/marketplace-icon/wood.png \
+	$(DATA_DIRECTORY)/img/goods/icon/wood.png \
+	$(DATA_DIRECTORY)/img/goods/marketplace-icon/bricks.png \
+	$(DATA_DIRECTORY)/img/goods/icon/bricks.png
 
 $(DATA_DIRECTORY)/img/objects/marketplace.png: $(SRC_DIRECTORY)/blender/marketplace/marketplace.blend
+	$(CREATE_TARGET_DIRECTORY)
 	cd $(SRC_DIRECTORY)/blender/marketplace; blender -b $(notdir $<) -P render.py
 	cp $(SRC_DIRECTORY)/blender/marketplace/render/angle0.png $@
+
+$(DATA_DIRECTORY)/img/goods/marketplace-icon/tools.png $(DATA_DIRECTORY)/img/goods/icon/tools.png: $(SRC_DIRECTORY)/blender/goods/tools/tools.blend
+	mkdir -p $(DATA_DIRECTORY)/img/goods/marketplace-icon
+	mkdir -p $(DATA_DIRECTORY)/img/goods/icon
+	cd $(SRC_DIRECTORY)/blender/goods/tools; blender -b $(notdir $<) -P ../render.py
+	cp $(SRC_DIRECTORY)/blender/goods/tools/marketplace-icon.png $(DATA_DIRECTORY)/img/goods/marketplace-icon/tools.png
+	cp $(SRC_DIRECTORY)/blender/goods/tools/icon.png $(DATA_DIRECTORY)/img/goods/icon/tools.png
+
+$(DATA_DIRECTORY)/img/goods/marketplace-icon/wood.png $(DATA_DIRECTORY)/img/goods/icon/wood.png: $(SRC_DIRECTORY)/blender/goods/wood/wood.blend
+	mkdir -p $(DATA_DIRECTORY)/img/goods/marketplace-icon
+	mkdir -p $(DATA_DIRECTORY)/img/goods/icon
+	cd $(SRC_DIRECTORY)/blender/goods/wood; blender -b $(notdir $<) -P ../render.py
+	cp $(SRC_DIRECTORY)/blender/goods/wood/marketplace-icon.png $(DATA_DIRECTORY)/img/goods/marketplace-icon/wood.png
+	cp $(SRC_DIRECTORY)/blender/goods/wood/icon.png $(DATA_DIRECTORY)/img/goods/icon/wood.png
+
+$(DATA_DIRECTORY)/img/goods/marketplace-icon/bricks.png $(DATA_DIRECTORY)/img/goods/icon/bricks.png: $(SRC_DIRECTORY)/blender/goods/bricks/bricks.blend
+	mkdir -p $(DATA_DIRECTORY)/img/goods/marketplace-icon
+	mkdir -p $(DATA_DIRECTORY)/img/goods/icon
+	cd $(SRC_DIRECTORY)/blender/goods/bricks; blender -b $(notdir $<) -P ../render.py
+	cp $(SRC_DIRECTORY)/blender/goods/bricks/marketplace-icon.png $(DATA_DIRECTORY)/img/goods/marketplace-icon/bricks.png
+	cp $(SRC_DIRECTORY)/blender/goods/bricks/icon.png $(DATA_DIRECTORY)/img/goods/icon/bricks.png
