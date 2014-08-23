@@ -7,6 +7,30 @@ BuildingConfigMgr::BuildingConfigMgr() {
     configs = new BuildingConfig*[256];
     memset(configs, 0, 256 * sizeof(BuildingConfig*));
     
+    configs[WAY_E] = new BuildingConfig();
+    configs[WAY_E]->name = "Weg";
+    configs[WAY_E]->catchmentArea = nullptr;
+    
+    configs[WAY_N] = new BuildingConfig();
+    configs[WAY_N]->name = "Weg";
+    configs[WAY_N]->catchmentArea = nullptr;
+    
+    configs[WAY_S] = new BuildingConfig();
+    configs[WAY_S]->name = "Weg";
+    configs[WAY_S]->catchmentArea = nullptr;
+    
+    configs[WAY_W] = new BuildingConfig();
+    configs[WAY_W]->name = "Weg";
+    configs[WAY_W]->catchmentArea = nullptr;
+    
+    configs[WAY_SW_NE] = new BuildingConfig();
+    configs[WAY_SW_NE]->name = "Weg";
+    configs[WAY_SW_NE]->catchmentArea = nullptr;
+    
+    configs[WAY_NW_SE] = new BuildingConfig();
+    configs[WAY_NW_SE]->name = "Weg";
+    configs[WAY_NW_SE]->catchmentArea = nullptr;
+    
     configs[CHAPEL] = new BuildingConfig();
     configs[CHAPEL]->name = "Kapelle";
     configs[CHAPEL]->catchmentArea = new RectangleData<char>(6, 6);

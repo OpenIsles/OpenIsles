@@ -436,11 +436,12 @@ void Map::renderMap(SDL_Renderer* renderer) {
         MapUtils::screenToMapCoords(mouseScreenX, mouseScreenY, mapX, mapY);
         
         StructureType structureType = game->getAddingStructure();
-        Graphic* graphic = graphicsMgr->getGraphicForStructure(structureType);
-        unsigned char allowedToPlaceStructure = isAllowedToPlaceStructure(mapX, mapY, structureType, graphic);
+        unsigned char allowedToPlaceStructure = isAllowedToPlaceStructure(mapX, mapY, structureType);
         
         // Auf dem Ozean malen wir gar nix
         if (!(allowedToPlaceStructure & PLACING_STRUCTURE_OUTSIDE_OF_ISLE)) {
+            Graphic* graphic = graphicsMgr->getGraphicForStructure(structureType);
+            
             // Zu zeichnendes Gebäude erstellen
             Structure structure;
             structure.setStructureType(structureType);
@@ -459,7 +460,7 @@ void Map::renderMap(SDL_Renderer* renderer) {
 	SDL_RenderSetClipRect(renderer, nullptr);
 }
 
-unsigned char Map::isAllowedToPlaceStructure(int mapX, int mapY, StructureType structureType, Graphic* graphic) {
+unsigned char Map::isAllowedToPlaceStructure(int mapX, int mapY, StructureType structureType) {
     Isle* isle = getIsleAt(mapX, mapY);
     
     if (isle == nullptr) {
@@ -472,6 +473,7 @@ unsigned char Map::isAllowedToPlaceStructure(int mapX, int mapY, StructureType s
     // if(!enoughResources) { result |= PLACING_STRUCTURE_NO_RESOURCES; }
     
     // Checken, ob alles frei is, um das Gebäude zu setzen
+    Graphic* graphic = graphicsMgr->getGraphicForStructure(structureType);
     for (int y = mapY; y < mapY + graphic->getMapHeight(); y++) {
         for (int x = mapX; x < mapX + graphic->getMapWidth(); x++) {
             MapTile* mapTile = mapTiles->getData(x, y, nullptr);
@@ -545,48 +547,50 @@ void Map::renderStructure(Structure* structure, SDL_Rect* rect, bool masked, boo
     
     const BuildingConfig* buildingConfig = buildingConfigMgr->getConfig(structure->getStructureType());
     const RectangleData<char>* catchmentAreaData = buildingConfig->getCatchmentArea(); 
-    for (int y = 0; y < catchmentAreaData->height; y++) {
-        for (int x = 0; x < catchmentAreaData->width; x++) {
-            int mapX, mapY, mapWidth, mapHeight;
-            structure->getMapCoords(mapX, mapY, mapWidth, mapHeight);
-            
-            mapX += x - (catchmentAreaData->width - mapWidth) / 2;
-            mapY += y - (catchmentAreaData->height - mapHeight) / 2;
-            
-            int screenX, screenY;
-            MapUtils::mapToScreenCoords(mapX, mapY, screenX, screenY);
-            screenX -= screenOffsetX;
-            screenY -= screenOffsetY;
-            
-            // An der Kachel jede der 4 Seiten untersuchen, ob wir eine Linie malen müssen.
-            // TODO die String-'1'er ersetzen durch echte 1en.
-            
-            // Oben rechts
-            if (catchmentAreaData->getData(x, y - 1, '0') == '0' && catchmentAreaData->getData(x, y, '0') == '1') {
-                SDL_RenderDrawLine(renderer,
-                        screenX + GraphicsMgr::TILE_WIDTH_HALF, screenY, 
-                        screenX + GraphicsMgr::TILE_WIDTH, screenY + GraphicsMgr::TILE_HEIGHT_HALF); 
-            }
-            
-            // Oben links
-            if (catchmentAreaData->getData(x - 1, y, '0') == '0' && catchmentAreaData->getData(x, y, '0') == '1') {
-                SDL_RenderDrawLine(renderer,
-                        screenX, screenY + GraphicsMgr::TILE_HEIGHT_HALF,
-                        screenX + GraphicsMgr::TILE_WIDTH_HALF, screenY);
-            }
-            
-            // Unten rechts
-            if (catchmentAreaData->getData(x, y, '0') == '1' && catchmentAreaData->getData(x + 1, y, '0') == '0') {
-                SDL_RenderDrawLine(renderer, 
-                        screenX + GraphicsMgr::TILE_WIDTH_HALF, screenY + GraphicsMgr::TILE_HEIGHT, 
-                        screenX + GraphicsMgr::TILE_WIDTH, screenY + GraphicsMgr::TILE_HEIGHT_HALF);
-            }
-            
-            // Unten links
-            if (catchmentAreaData->getData(x, y, '0') == '1' && catchmentAreaData->getData(x, y + 1, '0') == '0') {
-                SDL_RenderDrawLine(renderer,
-                        screenX, screenY + GraphicsMgr::TILE_HEIGHT_HALF,
-                        screenX + GraphicsMgr::TILE_WIDTH_HALF, screenY + GraphicsMgr::TILE_HEIGHT);
+    if (catchmentAreaData != nullptr) {
+        for (int y = 0; y < catchmentAreaData->height; y++) {
+            for (int x = 0; x < catchmentAreaData->width; x++) {
+                int mapX, mapY, mapWidth, mapHeight;
+                structure->getMapCoords(mapX, mapY, mapWidth, mapHeight);
+
+                mapX += x - (catchmentAreaData->width - mapWidth) / 2;
+                mapY += y - (catchmentAreaData->height - mapHeight) / 2;
+
+                int screenX, screenY;
+                MapUtils::mapToScreenCoords(mapX, mapY, screenX, screenY);
+                screenX -= screenOffsetX;
+                screenY -= screenOffsetY;
+
+                // An der Kachel jede der 4 Seiten untersuchen, ob wir eine Linie malen müssen.
+                // TODO die String-'1'er ersetzen durch echte 1en.
+
+                // Oben rechts
+                if (catchmentAreaData->getData(x, y - 1, '0') == '0' && catchmentAreaData->getData(x, y, '0') == '1') {
+                    SDL_RenderDrawLine(renderer,
+                            screenX + GraphicsMgr::TILE_WIDTH_HALF, screenY, 
+                            screenX + GraphicsMgr::TILE_WIDTH, screenY + GraphicsMgr::TILE_HEIGHT_HALF); 
+                }
+
+                // Oben links
+                if (catchmentAreaData->getData(x - 1, y, '0') == '0' && catchmentAreaData->getData(x, y, '0') == '1') {
+                    SDL_RenderDrawLine(renderer,
+                            screenX, screenY + GraphicsMgr::TILE_HEIGHT_HALF,
+                            screenX + GraphicsMgr::TILE_WIDTH_HALF, screenY);
+                }
+
+                // Unten rechts
+                if (catchmentAreaData->getData(x, y, '0') == '1' && catchmentAreaData->getData(x + 1, y, '0') == '0') {
+                    SDL_RenderDrawLine(renderer, 
+                            screenX + GraphicsMgr::TILE_WIDTH_HALF, screenY + GraphicsMgr::TILE_HEIGHT, 
+                            screenX + GraphicsMgr::TILE_WIDTH, screenY + GraphicsMgr::TILE_HEIGHT_HALF);
+                }
+
+                // Unten links
+                if (catchmentAreaData->getData(x, y, '0') == '1' && catchmentAreaData->getData(x, y + 1, '0') == '0') {
+                    SDL_RenderDrawLine(renderer,
+                            screenX, screenY + GraphicsMgr::TILE_HEIGHT_HALF,
+                            screenX + GraphicsMgr::TILE_WIDTH_HALF, screenY + GraphicsMgr::TILE_HEIGHT);
+                }
             }
         }
     }
@@ -619,14 +623,11 @@ void Map::addMapObject(MapObject* mapObject) {
 }
 
 const Structure* Map::addStructure(int mapX, int mapY, StructureType structureType, Player* player) {
-	// Position berechnen in Screen-Koordinaten berechnen, an dem sich die Grafik befinden muss.
 	Graphic* graphic = graphicsMgr->getGraphicForStructure(structureType);
-	SDL_Rect rect = { 0, 0, graphic->getWidth(), graphic->getHeight() };
-	MapUtils::mapToScreenCoords(mapX, mapY, rect.x, rect.y);
-
-	// Grafik an die richtige Stelle schieben. Das muss ausgehend von der zu belegenden Tile-Fläche berechnet werden.
-	rect.x -= graphic->getWidth() - (graphic->getMapWidth() + 1) * GraphicsMgr::TILE_WIDTH_HALF;
-	rect.y -= graphic->getHeight() - (graphic->getMapWidth() + graphic->getMapHeight()) * GraphicsMgr::TILE_HEIGHT_HALF;
+    
+	// Position in Screen-Koordinaten berechnen, an dem sich die Grafik befinden muss.
+    SDL_Rect rect;
+    MapUtils::mapToDrawScreenCoords(mapX, mapY, graphic, &rect);
 
 	// Objekt anlegen und in die Liste aufnehmen
 	Structure* structure = new Structure();
@@ -743,6 +744,15 @@ void Map::onClick(int mouseX, int mouseY) {
 void Map::onClickInMap(int mouseX, int mouseY) {
 	int mouseAtScreenX = mouseX + getScreenOffsetX();
 	int mouseAtScreenY = mouseY + getScreenOffsetY();
+    
+    // Grade beim Platzieren eines neuen Gebäudes?
+    if (game->isAddingStructure()) {
+        int mapX, mapY;
+        MapUtils::screenToMapCoords(mouseAtScreenX, mouseAtScreenY, mapX, mapY);
+        
+        onClickInMapWhileAddingStructure(mapX, mapY);
+        return;
+    }
 
 	// Gucken, ob ein Gebäude geklickt wurde.
 	// Objekte dabei rückwärts iterieren. Somit kommen "oben liegende" Objekte zuerst dran.
@@ -789,6 +799,25 @@ void Map::onClickInMap(int mouseX, int mouseY) {
 
 	// TODO später ggf. weitere Events
 	selectedMapObject = nullptr;
+}
+
+void Map::onClickInMapWhileAddingStructure(int mapX, int mapY) {
+    StructureType structureType = game->getAddingStructure();
+    if (isAllowedToPlaceStructure(mapX, mapY, structureType) != PLACING_STRUCTURE_ALLOWED) {
+        // Dürfen wir hier/jetzt nicht setzen, ignorieren wir den Klick
+        return;
+    }
+    
+    // Gebäude platzieren und Modus verlassen
+    if (structureType >= START_BUILDINGS) {
+        addBuilding(mapX, mapY, structureType, game->getCurrentPlayer());
+    } else {
+        addStructure(mapX, mapY, structureType, game->getCurrentPlayer());
+    }
+    
+    // TODO Status der Shift-Taste aus dem Event bis hierhin durchschleußen.
+    // Wenn gedrückt, "Gebäude platzieren"-Modus nicht verlassen, damit wir mehrere Gebäude auf einmal setzen können.
+    game->endAddingStructure();
 }
 
 void Map::onClickInMinimap(int mouseX, int mouseY) {

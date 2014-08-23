@@ -283,11 +283,10 @@ private:
      * @param mapX Map-X-Koordinate, wo die Struktur gesetzt werden soll
      * @param mapY Map-Y-Koordinate, wo die Struktur gesetzt werden soll
      * @param structureType Typ der zu setzenden Struktur
-     * @param graphic Grafik der zu setzenden Struktur. Notwendig, damit wir wissen, wie viel Platz die Struktur braucht
      * @sa PLACING_STRUCTURE-Konstanten
      * @return Bitmaske, die angibt, ob das Gebäude gesetzt werden darf.
      */
-    unsigned char isAllowedToPlaceStructure(int mapX, int mapY, StructureType structureType, Graphic* graphic);
+    unsigned char isAllowedToPlaceStructure(int mapX, int mapY, StructureType structureType);
     
     /**
      * Render eine Struktur. Hilfsmethode von renderMap().
@@ -307,6 +306,14 @@ private:
 	 * @param mouseY Y-Fenster-Koordinate, die geklickt wurde
 	 */
 	void onClickInMap(int mouseX, int mouseY);
+    
+    /**
+	 * @brief interner Klickhandler, wenn in die Karte geklickt wurde, während wir im "Gebäude positionieren"-Modus
+     * sind.
+	 * @param mapX X-Map-Koordinate, wo geklickt wurde
+	 * @param mapY Y-Map-Koordinate, wo geklickt wurde
+	 */
+    void onClickInMapWhileAddingStructure(int mapX, int mapY);
     
     /**
 	 * @brief interner Klickhandler, wenn in die Minimap geklickt wurde. Diese Methode wird garantiert nur aufgerufen,

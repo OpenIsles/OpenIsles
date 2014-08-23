@@ -51,9 +51,9 @@ GuiMgr::GuiMgr() {
         bool buttonActive = ((GuiPushButton*) findElement(GUI_ID_ADD_BUILDING_PUSH_BUTTON))->isActive();
         
         if (buttonActive) {
-            game->setAddingStructure(CHAPEL);
+            game->startAddingStructure(StructureType::MARKETPLACE);
         } else {
-            game->setAddingStructure(NO_STRUCTURE);
+            game->endAddingStructure();
         }
     });
     registerElement(GUI_ID_ADD_BUILDING_PUSH_BUTTON, addBuildingPushButton);
@@ -196,9 +196,17 @@ void GuiMgr::onEvent(SDL_Event& event) {
             startClickX = event.button.x; 
             startClickY = event.button.y;
         }
-        // Rechtsklick deselektiert auf der Karte
+        // Rechtsklick...
         else if (event.button.button == SDL_BUTTON_RIGHT) {
-            map->setSelectedMapObject(nullptr);
+            // Platzieren wir ein Gebäude -> abbrechen
+            if (game->isAddingStructure()) {
+                game->endAddingStructure();
+            }
+            // Ist ein Gebäude auf der Karte markieren -> deselektieren
+            else if(map->getSelectedMapObject() != nullptr) {
+                map->setSelectedMapObject(nullptr);
+            }
+            
             return;
         }
     }

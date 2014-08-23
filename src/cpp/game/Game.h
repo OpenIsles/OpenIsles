@@ -33,9 +33,28 @@ public:
     StructureType getAddingStructure() const {
         return addingStructure;
     }
+    
+    /**
+     * @return true, wenn wir grade ein Gebäude positionieren, sonst false
+     */
+    bool isAddingStructure() const {
+        return (addingStructure != StructureType::NO_STRUCTURE);
+    }
 
-    void setAddingStructure(StructureType addingStructure) {
+    /**
+     * @brief Wechselt in den "Gebäude platzieren"-Modus, bzw. wenn wir schon drin waren, wechselt das zu platzierende
+     * Gebäude
+     * @param addingStructure
+     */
+    void startAddingStructure(StructureType addingStructure) {
         this->addingStructure = addingStructure;
+    }
+    
+    /**
+     * @brief Beendet den "Gebäude platzieren"-Modus
+     */
+    void endAddingStructure() {
+        this->addingStructure = StructureType::NO_STRUCTURE;
     }
     
     /**
