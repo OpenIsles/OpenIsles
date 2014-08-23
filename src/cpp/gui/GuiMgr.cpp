@@ -224,6 +224,27 @@ void GuiMgr::onEvent(SDL_Event& event) {
         } else if (event.key.keysym.scancode == SDL_SCANCODE_RIGHT) {
             map->scroll(16, 0);
         }
+        
+        // Debug-Zwecke
+        if (event.key.keysym.scancode == SDL_SCANCODE_1) {
+            game->startAddingStructure(StructureType::CHAPEL);
+        } else if (event.key.keysym.scancode == SDL_SCANCODE_2) {
+            game->startAddingStructure(StructureType::WEAPONSMITH);
+        } else if (event.key.keysym.scancode == SDL_SCANCODE_3) {
+            game->startAddingStructure(StructureType::SIGNALFIRE);
+        } else if (event.key.keysym.scancode == SDL_SCANCODE_4) {
+            game->startAddingStructure(StructureType::HERBARY);
+        } else if (event.key.keysym.scancode == SDL_SCANCODE_5) {
+            game->startAddingStructure(StructureType::BRICKYARD);
+        } else if (event.key.keysym.scancode == SDL_SCANCODE_6) {
+            game->startAddingStructure(StructureType::BRICKYARD2);
+        } else if (event.key.keysym.scancode == SDL_SCANCODE_7) {
+            game->startAddingStructure(StructureType::OFFICE);
+        } else if (event.key.keysym.scancode == SDL_SCANCODE_8) {
+            game->startAddingStructure(StructureType::WAY_E);
+        } else if (event.key.keysym.scancode == SDL_SCANCODE_9) {
+            game->startAddingStructure(StructureType::WAY_SW_NE);
+        }
     }
     
     // Maustaste in der Karte geklickt
