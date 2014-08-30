@@ -357,7 +357,7 @@ void Map::updateMinimapTexture() {
             unsigned char tile = mapTile->tileGraphicIndex;
             Player* player = mapTile->player;
             
-            *(pixelPtr++) = (tile == 1) ? 0x000090 : (player != nullptr ? ((Uint32) player->GetColor()) : 0x008000);
+            *(pixelPtr++) = (tile == 1) ? 0x000090 : (player != nullptr ? ((Uint32) player->getColor()) : 0x008000);
         }
     }
     

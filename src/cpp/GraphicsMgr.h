@@ -8,6 +8,14 @@
 enum GoodsType : unsigned char;
 enum StructureType : unsigned char;
 
+typedef
+enum OtherGraphic {
+    // Münzensymbol
+    COINS = 1,
+            
+    MAX_GRAPHIC // Marker, wie viele Grafiken es gibt
+} OtherGraphic;
+
 /**
  * @brief Manager, der alle Grafiken verwaltet
  */
@@ -37,6 +45,11 @@ private:
 	 * @brief Array von Zeigern auf die Gütergrafiken (Symbole)
 	 */
 	Graphic** goodsIcons;
+    
+    /**
+     * @brief Array von Zeigern auf andere Grafiken
+     */
+    Graphic** otherGraphics;
 
 public:
 	GraphicsMgr();
@@ -61,10 +74,19 @@ public:
     /**
      * @brief Liefert die Grafik für ein Güter-Symbol zurück
      * @param goodsType Güter-Typ
-     * @return Graph
+     * @return Graphic
      */
     Graphic* const getGraphicForGoodsIcon(GoodsType goodsType) const {
         return goodsIcons[goodsType];
+    }
+    
+    /**
+     * @brief Liefert eine sonstige Grafik zurück
+     * @param otherGraphic welche Grafik
+     * @return Graphic
+     */
+    Graphic* const getOtherGraphic(OtherGraphic otherGraphic) const {
+        return otherGraphics[otherGraphic];
     }
 
 private:

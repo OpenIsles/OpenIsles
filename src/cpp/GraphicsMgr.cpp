@@ -35,6 +35,12 @@ GraphicsMgr::GraphicsMgr() {
     goodsIcons[GoodsType::TOOLS] = new Graphic("data/img/goods/icon/tools.png");
     goodsIcons[GoodsType::WOOD] = new Graphic("data/img/goods/icon/wood.png");
     goodsIcons[GoodsType::BRICKS] = new Graphic("data/img/goods/icon/bricks.png");
+    
+    
+    otherGraphics = new Graphic*[OtherGraphic::MAX_GRAPHIC];
+    memset(otherGraphics, 0, OtherGraphic::MAX_GRAPHIC * sizeof(Graphic*));
+    
+    otherGraphics[OtherGraphic::COINS] = new Graphic("data/img/coin.png");
 }
 
 GraphicsMgr::~GraphicsMgr() {
@@ -58,6 +64,13 @@ GraphicsMgr::~GraphicsMgr() {
 		}
 	}
 	delete[] goodsIcons;
+    
+    for (int i = 0; i < OtherGraphic::COINS; i++) {
+        if (otherGraphics[i] != nullptr) {
+			delete otherGraphics[i];
+		}
+	}
+	delete[] otherGraphics;
 }
 
 void GraphicsMgr::loadTiles() {

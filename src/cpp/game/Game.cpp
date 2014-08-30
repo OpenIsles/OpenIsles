@@ -44,8 +44,17 @@ Colony* Game::foundNewColony(Player* player, Isle* isle) {
 }
 
 void Game::renderResourcesBar() {
+    // Münzenguthaben
+    Player* currentPlayer = game->getCurrentPlayer();
+    
+    graphicsMgr->getOtherGraphic(OtherGraphic::COINS)->drawAt(15, 8);
+    fontMgr->renderText(renderer, std::to_string(currentPlayer->getCoins()), 42, 10,
+                        &colorWhite, &colorBlack, "DroidSans-Bold.ttf", 18, RENDERTEXT_HALIGN_LEFT);
+        
+    
+    // Kolonie, wo der Cursor grade is
     MapTile* mapTileAtCursor = map->getMapTileAt(mouseCurrentMapX, mouseCurrentMapY);
-    if (mapTileAtCursor == nullptr || mapTileAtCursor->player != game->getCurrentPlayer()) {
+    if (mapTileAtCursor == nullptr || mapTileAtCursor->player != currentPlayer) {
         return;
     }
     
@@ -61,7 +70,6 @@ void Game::renderResourcesBar() {
         GoodsType goodsType = goodsToDraw[i];
         
         int goodsInventory = colony->getGoodsInventory(goodsType);
-        goodsInventory = goodsInventory;
         graphicsMgr->getGraphicForGoodsIcon(goodsType)->drawAt(x, 5);
         fontMgr->renderText(renderer, std::to_string(goodsInventory), x + 35, 10,
                             &colorWhite, &colorBlack, "DroidSans-Bold.ttf", 18, RENDERTEXT_HALIGN_LEFT);

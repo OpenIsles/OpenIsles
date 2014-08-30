@@ -31,6 +31,11 @@ private:
      * @brief Name des Spielers
      */
     const char* name;
+    
+    /**
+     * @brief Guthaben an Münzen
+     */
+    unsigned long coins;
 
 public:
     
@@ -42,12 +47,16 @@ public:
     Player(PlayerColor color, const char* name);
     ~Player();
     
-    PlayerColor GetColor() const {
+    PlayerColor getColor() const {
         return color;
     }
 
-    const char* GetName() const {
+    const char* getName() const {
         return name;
+    }
+    
+    unsigned long getCoins() const {
+        return coins;
     }
 
 };
