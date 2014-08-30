@@ -89,17 +89,55 @@ bool quitGame = false;
  *********************************************************************************************************************/
 
 int main(int argc, char** argv);
-void renderText(SDL_Renderer* renderer, std::string string, int x, int y, bool rightAlign);
+void renderText(SDL_Renderer* renderer, std::string string, int x, int y, int align);
 void drawFrame(SDL_Renderer* renderer);
 
 /*********************************************************************************************************************
  * Implementierung                                                                                                   *
  *********************************************************************************************************************/
 
-void renderText(SDL_Renderer* renderer, std::string string, int x, int y, bool rightAlign) {
+#define RENDERTEXT_HALIGN_LEFT 0x00
+#define RENDERTEXT_HALIGN_RIGHT 0x01
+#define RENDERTEXT_HALIGN_CENTER 0x02
+#define RENDERTEXT_HALIGN_MASK 0x03
+#define RENDERTEXT_VALIGN_TOP 0x00
+#define RENDERTEXT_VALIGN_BOTTOM 0x10
+#define RENDERTEXT_VALIGN_MIDDLE 0x20
+#define RENDERTEXT_VALIGN_MASK 0x30
+void renderText(SDL_Renderer* renderer, std::string string, int x, int y, int align) {
 	SDL_Color fpsColor = { 255, 255, 255, 0 };
 	SDL_Surface* surfaceText = TTF_RenderUTF8_Solid(ttfFont, string.data(), fpsColor);
-	SDL_Rect rectDestination = { (rightAlign) ? (x - surfaceText->w) : x, y, surfaceText->w, surfaceText->h };
+    
+	SDL_Rect rectDestination;
+    rectDestination.w = surfaceText->w;
+    rectDestination.h = surfaceText->h;
+    
+    switch (align & RENDERTEXT_HALIGN_MASK) {
+        default: // fall-through
+        case RENDERTEXT_HALIGN_LEFT:
+            rectDestination.x = x;
+            break;
+        case RENDERTEXT_HALIGN_RIGHT:
+            rectDestination.x = x - surfaceText->w;
+            break;
+        case RENDERTEXT_HALIGN_CENTER:
+            rectDestination.x = x - surfaceText->w / 2;
+            break;
+    }
+    
+    switch (align & RENDERTEXT_VALIGN_MASK) {
+        default: // fall-through
+        case RENDERTEXT_VALIGN_TOP:
+            rectDestination.y = y;
+            break;
+        case RENDERTEXT_VALIGN_BOTTOM:
+            rectDestination.y = y - surfaceText->h;
+            break;
+        case RENDERTEXT_VALIGN_MIDDLE:
+            rectDestination.y = y - surfaceText->h / 2;
+            break;
+    }
+    
 	SDL_Texture* textureText = SDL_CreateTextureFromSurface(renderer, surfaceText);
 	SDL_FreeSurface(surfaceText);
 	SDL_RenderCopy(renderer, textureText, NULL, &rectDestination);
@@ -119,7 +157,7 @@ void drawFrame(SDL_Renderer* renderer) {
         const Building* selectedBuilding = reinterpret_cast<const Building*>(selectedMapObject);
         if (selectedBuilding != nullptr) {
             const BuildingConfig* buildingConfig = buildingConfigMgr->getConfig(selectedBuilding->getStructureType());
-            renderText(renderer, buildingConfig->name, 753, 744, true);
+            renderText(renderer, buildingConfig->name, 753, 744, RENDERTEXT_HALIGN_RIGHT);
         }
     }
     
@@ -132,7 +170,7 @@ void drawFrame(SDL_Renderer* renderer) {
 			continue;
 		}
 
-		renderText(renderer, debugOutput[i], 10, 10 + 15 * i, false);
+		renderText(renderer, debugOutput[i], 10, 10 + 15 * i, RENDERTEXT_HALIGN_LEFT);
 	}
 }
 
@@ -220,9 +258,37 @@ int main(int argc, char** argv) {
         SDL_GetMouseState(&mouseCurrentX, &mouseCurrentY);
 
 		// Debug-Infos vorbereiten, damit wir sie später einfach nur ausgeben können
-		std::string fpsString = "FPS: average = " + std::to_string(fpsCounter->getFpsAvg()) +
+		debugOutput[0] = "FPS: average = " + std::to_string(fpsCounter->getFpsAvg()) + 
                 ", current = " + std::to_string(fpsCounter->getFpsCurrent());
-		debugOutput[0] = fpsString;
+        
+        int mapX, mapY, screenX, screenY;
+        screenX = mouseCurrentX + map->getScreenOffsetX();
+        screenY = mouseCurrentY + map->getScreenOffsetY();
+        MapUtils::screenToMapCoords(screenX, screenY, mapX, mapY);
+        
+        debugOutput[1] = "mouse = (" + 
+                std::to_string(mouseCurrentX) + ", " + std::to_string(mouseCurrentY) + "), map = (" +
+                std::to_string(mapX) + ", " + std::to_string(mapY) + "), screen = (" +
+                std::to_string(screenX) + ", " + std::to_string(screenY) + ")";
+    
+        if (map->getSelectedMapObject() != nullptr) {
+            int mapX, mapY, mapWidth, mapHeight;
+            int screenX, screenY, screenWidth, screenHeight;
+            
+            map->getSelectedMapObject()->getMapCoords(mapX, mapY, mapWidth, mapHeight);
+            map->getSelectedMapObject()->getScreenCoords(screenX, screenY, screenWidth, screenHeight);
+            
+            debugOutput[2] = "selectedMapObject on mapCoords (" + 
+                    std::to_string(mapX) + ", " + std::to_string(mapY) + "), size = (" +
+                    std::to_string(mapWidth) + ", " + std::to_string(mapHeight) + ")";
+            
+            debugOutput[3] = "selectedMapObject on screenCoords (" + 
+                    std::to_string(screenX) + ", " + std::to_string(screenY) + "), size = (" + 
+                    std::to_string(screenWidth) + ", " + std::to_string(screenHeight) + ")";
+        } else {
+            debugOutput[2] = "";
+            debugOutput[3] = "";
+        }
 
 		// Frame auf Offscreen-Texture zeichnen
 		SDL_SetRenderTarget(renderer, offscreenTexture);

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="isometric" width="40" height="40" tilewidth="64" tileheight="32">
+ <objectgroup name="Objektebene 1" width="40" height="40">
+  <object name="small1" type="isle" x="128" y="128" width="960" height="960"/>
+  <object type="startpoint" x="512" y="512"/>
+ </objectgroup>
+</map>

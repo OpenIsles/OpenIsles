@@ -2,6 +2,7 @@
 #define _MAP_H
 
 #include <SDL.h>
+#include <algorithm>
 #include <iostream>
 #include <list>
 #include <string.h>
@@ -231,6 +232,11 @@ public:
 	 * @param mouseY Y-Koordinate im Fenster, die geklickt wurde
 	 */
 	void onClick(int mouseX, int mouseY);
+    
+    /**
+     * @brief DEBUG - Löscht das aktuell ausgewählte Objekt, falls eins ausgewählt is
+     */
+    void deleteSelectedObject();
 
 private:
     /**
@@ -262,7 +268,12 @@ private:
 	 * @param mapObject Map-Objekt
 	 */
 	void addMapObject(MapObject* mapObject);
-
+    
+    /**
+     * @brief Sortiert die Liste mapObjects für das Rendering neu.
+     */
+    void resortMapObjects();
+ 
 	/**
 	 * @brief Initialisiert alles, wenn die Karte sich ändert.
 	 * Es werden alle Objekte von der Karte geräumt, der Speicher und die Map-Breite/Höhe (neu) initialisiert, 

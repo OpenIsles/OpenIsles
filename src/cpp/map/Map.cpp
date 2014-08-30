@@ -1,5 +1,6 @@
 #include "config/BuildingConfigMgr.h"
 #include "game/Game.h"
+#include "map/DrawingOrderer.h"
 #include "map/Map.h"
 #include "map/MapUtils.h"
 #include "rapidxml/rapidxml.hpp"
@@ -603,23 +604,16 @@ void Map::scroll(int screenOffsetX, int screenOffsetY) {
 
 void Map::addMapObject(MapObject* mapObject) {
 	mapObjects.push_front(mapObject);
+    
+    resortMapObjects();
+}
 
-	// Reihenfolge der Objekte so stellen, dass von hinten nach vorne gerendert wird
-	// TODO ggf. Algorithmus verbessern, dass wirklich nach Y-Screen-Koordinaten sortiert wird. Mit den paar Grafiken
-	// hab ich keinen Fall bauen können, der n Unterschied macht.
-	mapObjects.sort([] (MapObject* mo1, MapObject* mo2) {
-		int mo1x, mo1y, mo2x, mo2y;
-		mo1->getMapCoords(mo1x, mo1y);
-		mo2->getMapCoords(mo2x, mo2y);
-
-		if (mo1y < mo2y) {
-			return true;
-		} else if (mo1y > mo2y) {
-			return false;
-		} else {
-			return (mo1x <= mo2x);
-		}
-	});
+void Map::resortMapObjects() {
+    // Reihenfolge der Objekte so stellen, dass von hinten nach vorne gerendert wird.
+    // Siehe doc/rendering-order.xcf für exakte Erklärung.
+    
+    DrawingOrderer drawingOrderer(&mapObjects);
+    drawingOrderer.reorder();
 }
 
 const Structure* Map::addStructure(int mapX, int mapY, StructureType structureType, Player* player) {
@@ -838,4 +832,17 @@ void Map::onClickInMinimap(int mouseX, int mouseY) {
     
     this->screenOffsetX = screenX;
     this->screenOffsetY = screenY;
+}
+
+void Map::deleteSelectedObject() {
+    if (selectedMapObject == nullptr) {
+        return;
+    }
+    
+    mapObjects.remove(selectedMapObject);
+    delete selectedMapObject;
+    
+    selectedMapObject = nullptr;
+    
+    resortMapObjects();
 }

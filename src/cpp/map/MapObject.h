@@ -65,6 +65,11 @@ public:
 		this->screenWidth = screenWidth;
 		this->screenHeight = screenHeight;
 	}
+    
+    void getScreenCoords(int& screenX, int& screenY) const {
+		screenX = this->screenX;
+		screenY = this->screenY;
+	}
 
 	void getScreenCoords(int& screenX, int& screenY, int& screenWidth, int& screenHeight) const {
 		screenX = this->screenX;
