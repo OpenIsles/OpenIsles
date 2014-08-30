@@ -133,6 +133,13 @@ public:
 	 */
 	void getPixel(int x, int y, Uint8* r, Uint8* g, Uint8* b, Uint8* a);
     
+    /**
+     * @brief Zeichnet die Grafik
+     * @param x x-Koordinate, wo hingezeichnet werden soll
+     * @param y y-Koordinate, wo hingezeichnet werden soll
+     */
+    void drawAt(int x, int y);
+    
 private:
     /**
      * @brief Erzeugt `textureMasked`. Erwartet, dass `surface` bereits mit der Grafik befüllt ist.

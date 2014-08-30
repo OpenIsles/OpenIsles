@@ -4,8 +4,10 @@ DATA_DIRECTORY := data
 BUILD_DIRECTORY := build
 OBJ_FILES := \
 	$(BUILD_DIRECTORY)/config/BuildingConfigMgr.o \
+	$(BUILD_DIRECTORY)/game/Colony.o \
 	$(BUILD_DIRECTORY)/game/Game.o \
 	$(BUILD_DIRECTORY)/game/Player.o \
+	$(BUILD_DIRECTORY)/gui/FontMgr.o \
 	$(BUILD_DIRECTORY)/gui/GuiButton.o \
 	$(BUILD_DIRECTORY)/gui/GuiMgr.o \
 	$(BUILD_DIRECTORY)/gui/GuiPushButton.o \
@@ -48,6 +50,10 @@ $(BUILD_DIRECTORY)/config/BuildingConfigMgr.o: $(SRC_CPP_DIRECTORY)/config/Build
 	$(CC) $(CFLAGS) -o $@ -c $<
 	
 	
+$(BUILD_DIRECTORY)/game/Colony.o: $(SRC_CPP_DIRECTORY)/game/Colony.cpp $(SRC_CPP_DIRECTORY)/game/Colony.h
+	$(CREATE_TARGET_DIRECTORY)
+	$(CC) $(CFLAGS) -o $@ -c $<
+	
 $(BUILD_DIRECTORY)/game/Game.o: $(SRC_CPP_DIRECTORY)/game/Game.cpp $(SRC_CPP_DIRECTORY)/game/Game.h
 	$(CREATE_TARGET_DIRECTORY)
 	$(CC) $(CFLAGS) -o $@ -c $<
@@ -57,6 +63,10 @@ $(BUILD_DIRECTORY)/game/Player.o: $(SRC_CPP_DIRECTORY)/game/Player.cpp $(SRC_CPP
 	$(CC) $(CFLAGS) -o $@ -c $<
 
 
+$(BUILD_DIRECTORY)/gui/FontMgr.o: $(SRC_CPP_DIRECTORY)/gui/FontMgr.cpp $(SRC_CPP_DIRECTORY)/gui/FontMgr.h
+	$(CREATE_TARGET_DIRECTORY)
+	$(CC) $(CFLAGS) -o $@ -c $<
+	
 $(BUILD_DIRECTORY)/gui/GuiButton.o: $(SRC_CPP_DIRECTORY)/gui/GuiButton.cpp $(SRC_CPP_DIRECTORY)/gui/GuiButton.h
 	$(CREATE_TARGET_DIRECTORY)
 	$(CC) $(CFLAGS) -o $@ -c $<

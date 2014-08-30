@@ -1,9 +1,13 @@
 #ifndef _GAME_H
 #define _GAME_H
 
+#include <map>
 #include <vector>
-#include "game/Player.h"
 #include "map/Structure.h"
+
+class Colony;
+class Isle;
+class Player;
 
 /**
  * @brief Klasse, die den Zustand des Spiels beinhaltet
@@ -25,6 +29,11 @@ private:
      * @brief Zeiger auf den Spieler, den dieser Client kontrolliert
      */
     Player* currentPlayer = nullptr;
+    
+    /**
+     * @brief Siedlungen im Spiel. Jeder Spieler kann auf jeder Insel nur maximal eine Siedlung haben.
+     */
+    std::map<std::pair<Player*, Isle*>, Colony*> colonies;
 
 public:
 	Game();
@@ -90,7 +99,21 @@ public:
     Player* getCurrentPlayer() const {
         return currentPlayer;
     }
-
+    
+    /**
+     * Gründet eine neue Siedlung
+     * 
+     * @param player Spieler, der die Siedlung gründet
+     * @param isle Insel, auf der die Siedlung gegründet wird
+     * @return Zeiger auf die neu angelegte Siedlung
+     */
+    Colony* foundNewColony(Player* player, Isle* isle);
+    
+    /**
+     * @brief rendert die Leiste mit den Resourcen, wenn notwendig
+     */
+    void renderResourcesBar();
+    
 };
 
 #endif

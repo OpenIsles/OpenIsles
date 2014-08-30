@@ -1,4 +1,5 @@
 #include "config/BuildingConfigMgr.h"
+#include "game/Colony.h"
 #include "game/Game.h"
 #include "map/DrawingOrderer.h"
 #include "map/Map.h"
@@ -70,6 +71,7 @@ Map::Map() {
     addBuilding(43, 24, OFFICE, player1);
     addBuilding(49, 41, MARKETPLACE, player1);
     
+    addBuilding(199, 77, OFFICE, player1);
     addBuilding(228, 214, OFFICE, player2);
     addBuilding(28, 226, OFFICE, player3);
     addBuilding(130, 94, OFFICE, player4);
@@ -104,6 +106,36 @@ Map::Map() {
 	addStructure(47, 30, WAY_N, player1);
     
     updateMinimapTexture();
+    
+    MapTile* mapTile = mapTiles->getData(43, 24, nullptr);
+    Colony* colony = game->foundNewColony(mapTile->player, mapTile->isle);
+    colony->setGoodsInventory(GoodsType::TOOLS, 15);
+    colony->setGoodsInventory(GoodsType::WOOD, 30);
+    colony->setGoodsInventory(GoodsType::BRICKS, 2);
+    
+    mapTile = mapTiles->getData(199, 77, nullptr);
+    colony = game->foundNewColony(mapTile->player, mapTile->isle);
+    colony->setGoodsInventory(GoodsType::TOOLS, 5);
+    colony->setGoodsInventory(GoodsType::WOOD, 15);
+    colony->setGoodsInventory(GoodsType::BRICKS, 7);
+    
+    mapTile = mapTiles->getData(228, 214, nullptr);
+    colony = game->foundNewColony(mapTile->player, mapTile->isle);
+    colony->setGoodsInventory(GoodsType::TOOLS, 20);
+    colony->setGoodsInventory(GoodsType::WOOD, 30);
+    colony->setGoodsInventory(GoodsType::BRICKS, 10);
+    
+    mapTile = mapTiles->getData(28, 226, nullptr);
+    colony = game->foundNewColony(mapTile->player, mapTile->isle);
+    colony->setGoodsInventory(GoodsType::TOOLS, 20);
+    colony->setGoodsInventory(GoodsType::WOOD, 30);
+    colony->setGoodsInventory(GoodsType::BRICKS, 10);
+    
+    mapTile = mapTiles->getData(130, 94, nullptr);
+    colony = game->foundNewColony(mapTile->player, mapTile->isle);
+    colony->setGoodsInventory(GoodsType::TOOLS, 20);
+    colony->setGoodsInventory(GoodsType::WOOD, 30);
+    colony->setGoodsInventory(GoodsType::BRICKS, 10);
 }
 
 Map::~Map() {
@@ -141,12 +173,12 @@ bool Map::checkMapCoords(int mapX, int mapY) const {
     return (!(mapX < 0 || mapY < 0 || mapX >= width || mapY >= height));
 }
 
-Isle* Map::getIsleAt(int mapX, int mapY) const {
+MapTile* Map::getMapTileAt(int mapX, int mapY) const {
     if (!checkMapCoords(mapX, mapY)) {
         return nullptr;
     }
     
-    return mapTiles->getData(mapX, mapY, nullptr)->isle;
+    return mapTiles->getData(mapX, mapY, nullptr);
 }
 
 MapObject* Map::getMapObjectAt(int mapX, int mapY) const {
@@ -174,15 +206,6 @@ MapObject* Map::getMapObjectAt(int mapX, int mapY) const {
     
     // Keine Insel da
     return nullptr;
-}
-
-unsigned char Map::getTileAt(int mapX, int mapY) const {
-    if (!checkMapCoords(mapX, mapY)) {
-        std::cerr << "mapCoords (" << std::to_string(mapX) << ", " + std::to_string(mapY) << ") out of bounds";
-        throw new std::runtime_error("mapCoords out of bounds");
-    }
-    
-    return mapTiles->getData(mapX, mapY, nullptr)->tileGraphicIndex;
 }
 
 // TODO Fehlermanagement, wenn die Datei mal nicht so hübsch aussieht, dass alle Tags da sind
@@ -394,7 +417,8 @@ void Map::renderMap(SDL_Renderer* renderer) {
 				continue;
 			}
 
-			SDL_Texture* tileTexture = graphicsMgr->getGraphicForTile(getTileAt(mapX, mapY))->getTexture();
+			SDL_Texture* tileTexture =
+                    graphicsMgr->getGraphicForTile(getMapTileAt(mapX, mapY)->tileGraphicIndex)->getTexture();
 
 			if (selectedMapObject != nullptr) {
                 Building* selectedBuilding = dynamic_cast<Building*>(selectedMapObject);
@@ -462,8 +486,12 @@ void Map::renderMap(SDL_Renderer* renderer) {
 }
 
 unsigned char Map::isAllowedToPlaceStructure(int mapX, int mapY, StructureType structureType) {
-    Isle* isle = getIsleAt(mapX, mapY);
+    MapTile* mapTile = getMapTileAt(mapX, mapY);
+    if (mapTile == nullptr) {
+        return PLACING_STRUCTURE_OUTSIDE_OF_ISLE;
+    }
     
+    Isle* isle = mapTile->isle;
     if (isle == nullptr) {
         return PLACING_STRUCTURE_OUTSIDE_OF_ISLE;
     }

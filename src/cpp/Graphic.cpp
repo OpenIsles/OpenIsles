@@ -121,3 +121,8 @@ void Graphic::getPixel(int x, int y, Uint8* r, Uint8* g, Uint8* b, Uint8* a) {
 	// Farbwerte ermitteln
 	SDL_GetRGBA(pixelValue, pixelFormat, r, g, b, a);
 }
+
+void Graphic::drawAt(int x, int y) {
+    SDL_Rect rectDestination = { x, y, width, height };
+    SDL_RenderCopy(renderer, texture, nullptr, &rectDestination);
+}

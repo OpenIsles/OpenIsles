@@ -1,11 +1,13 @@
 #include <fstream>
 #include <sstream>
 #include <stdexcept>
+#include "game/Colony.h"
 #include "map/Structure.h"
 #include "GraphicsMgr.h"
 
 GraphicsMgr::GraphicsMgr() {
 	loadTiles();
+    
 
 	structures = new Graphic*[256];
     memset(structures, 0, 256 * sizeof(Graphic*));
@@ -25,6 +27,14 @@ GraphicsMgr::GraphicsMgr() {
 	structures[WAY_W] = new Graphic("data/img/objects/way/way-w.png", 1, 1);
 	structures[WAY_SW_NE] = new Graphic("data/img/objects/way/way-sw-ne.png", 1, 1);
 	structures[WAY_NW_SE] = new Graphic("data/img/objects/way/way-nw-se.png", 1, 1);
+    
+    
+    goodsIcons = new Graphic*[GoodsType::MAX_GOOD];
+    memset(goodsIcons, 0, GoodsType::MAX_GOOD * sizeof(Graphic*));
+    
+    goodsIcons[GoodsType::TOOLS] = new Graphic("data/img/goods/icon/tools.png");
+    goodsIcons[GoodsType::WOOD] = new Graphic("data/img/goods/icon/wood.png");
+    goodsIcons[GoodsType::BRICKS] = new Graphic("data/img/goods/icon/bricks.png");
 }
 
 GraphicsMgr::~GraphicsMgr() {
@@ -41,6 +51,13 @@ GraphicsMgr::~GraphicsMgr() {
 		}
 	}
 	delete[] structures;
+    
+    for (int i = 0; i < GoodsType::MAX_GOOD; i++) {
+        if (goodsIcons[i] != nullptr) {
+			delete goodsIcons[i];
+		}
+	}
+	delete[] goodsIcons;
 }
 
 void GraphicsMgr::loadTiles() {

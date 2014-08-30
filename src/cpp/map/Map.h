@@ -140,12 +140,12 @@ public:
 	}
 
     /**
-     * @brief Liefert die Kachel an einer bestimmten Stelle zurück
+     * @brief Liefert das MapTile (Infos zu einer Kachel) an einer bestimmten Stelle zurück
      * @param mapX Map-X-Koordiante
      * @param mapY Map-Y-Koordiante
-     * @return Kachel-Index
+     * @return Zeiger auf MapTile
      */
-	unsigned char getTileAt(int mapX, int mapY) const;
+	MapTile* getMapTileAt(int mapX, int mapY) const;
 
 	const std::list<MapObject*>& getMapObjects() const {
 		return mapObjects;
@@ -246,14 +246,6 @@ private:
      * @return true, wenn die Koordinaten gültig sind; false, wenn sie außerhalb der Karte liegen.
      */
     bool checkMapCoords(int mapX, int mapY) const;
-    
-    /**
-     * @brief Liefert die Insel zurück, die sich an den angegebenen Koordinaten befindet.
-     * @param mapX Map-X-Koordiante
-     * @param mapY Map-Y-Koordiante
-     * @return Zeiger auf die Insel oder nullptr, wenn dort keine Insel ist
-     */
-    Isle* getIsleAt(int mapX, int mapY) const;
     
     /**
      * @brief Liefert das Map-Objekt zurück, die sich an den angegebenen Koordinaten befindet.

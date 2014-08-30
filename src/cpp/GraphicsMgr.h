@@ -5,6 +5,7 @@
 #include <SDL_image.h>
 #include "Graphic.h"
 
+enum GoodsType : unsigned char;
 enum StructureType : unsigned char;
 
 /**
@@ -31,6 +32,11 @@ private:
 	 * @brief Array von Zeigern auf die Struktur-Grafiken
 	 */
 	Graphic** structures;
+    
+    /**
+	 * @brief Array von Zeigern auf die Gütergrafiken (Symbole)
+	 */
+	Graphic** goodsIcons;
 
 public:
 	GraphicsMgr();
@@ -51,6 +57,15 @@ public:
 	Graphic* const getGraphicForStructure(StructureType structureType) const {
 		return structures[structureType];
 	}
+    
+    /**
+     * @brief Liefert die Grafik für ein Güter-Symbol zurück
+     * @param goodsType Güter-Typ
+     * @return Graph
+     */
+    Graphic* const getGraphicForGoodsIcon(GoodsType goodsType) const {
+        return goodsIcons[goodsType];
+    }
 
 private:
 	/**

@@ -7,11 +7,14 @@
 #include "config/BuildingConfigMgr.h"
 #include "game/Game.h"
 #include "game/Player.h"
+#include "gui/FontMgr.h"
 #include "gui/GuiMgr.h"
 #include "map/Map.h"
 #include "sound/SoundMgr.h"
 #include "utils/FpsCounter.h"
 #include "GraphicsMgr.h"
+
+static SDL_Color colorWhite = {255, 255, 255, 255};
 
 
 /*********************************************************************************************************************
@@ -29,14 +32,14 @@ SDL_Renderer* renderer;
 GraphicsMgr* graphicsMgr;
 
 /**
- * @brief TTF-Schriftart zum Render der FPS
- */
-TTF_Font* ttfFont;
-
-/**
  * @brief aktuelle Position des Mauszeigers
  */
 int mouseCurrentX, mouseCurrentY;
+
+/**
+ * @brief aktuelle Map-Koordinaten unter dem Mauszeiger
+ */
+int mouseCurrentMapX, mouseCurrentMapY;
 
 /**
  * @brief FPS-Counter
@@ -52,6 +55,11 @@ std::string debugOutput[7];
  * @brief die Karte
  */
 Map* map;
+
+/**
+ * @brief Verwaltung der Schriftarten
+ */
+FontMgr* fontMgr;
 
 /**
  * @brief die Benutzeroberfläche
@@ -89,64 +97,18 @@ bool quitGame = false;
  *********************************************************************************************************************/
 
 int main(int argc, char** argv);
-void renderText(SDL_Renderer* renderer, std::string string, int x, int y, int align);
 void drawFrame(SDL_Renderer* renderer);
 
 /*********************************************************************************************************************
  * Implementierung                                                                                                   *
  *********************************************************************************************************************/
 
-#define RENDERTEXT_HALIGN_LEFT 0x00
-#define RENDERTEXT_HALIGN_RIGHT 0x01
-#define RENDERTEXT_HALIGN_CENTER 0x02
-#define RENDERTEXT_HALIGN_MASK 0x03
-#define RENDERTEXT_VALIGN_TOP 0x00
-#define RENDERTEXT_VALIGN_BOTTOM 0x10
-#define RENDERTEXT_VALIGN_MIDDLE 0x20
-#define RENDERTEXT_VALIGN_MASK 0x30
-void renderText(SDL_Renderer* renderer, std::string string, int x, int y, int align) {
-	SDL_Color fpsColor = { 255, 255, 255, 0 };
-	SDL_Surface* surfaceText = TTF_RenderUTF8_Solid(ttfFont, string.data(), fpsColor);
-    
-	SDL_Rect rectDestination;
-    rectDestination.w = surfaceText->w;
-    rectDestination.h = surfaceText->h;
-    
-    switch (align & RENDERTEXT_HALIGN_MASK) {
-        default: // fall-through
-        case RENDERTEXT_HALIGN_LEFT:
-            rectDestination.x = x;
-            break;
-        case RENDERTEXT_HALIGN_RIGHT:
-            rectDestination.x = x - surfaceText->w;
-            break;
-        case RENDERTEXT_HALIGN_CENTER:
-            rectDestination.x = x - surfaceText->w / 2;
-            break;
-    }
-    
-    switch (align & RENDERTEXT_VALIGN_MASK) {
-        default: // fall-through
-        case RENDERTEXT_VALIGN_TOP:
-            rectDestination.y = y;
-            break;
-        case RENDERTEXT_VALIGN_BOTTOM:
-            rectDestination.y = y - surfaceText->h;
-            break;
-        case RENDERTEXT_VALIGN_MIDDLE:
-            rectDestination.y = y - surfaceText->h / 2;
-            break;
-    }
-    
-	SDL_Texture* textureText = SDL_CreateTextureFromSurface(renderer, surfaceText);
-	SDL_FreeSurface(surfaceText);
-	SDL_RenderCopy(renderer, textureText, NULL, &rectDestination);
-	SDL_DestroyTexture(textureText);
-}
-
 void drawFrame(SDL_Renderer* renderer) {
 	// Karte rendern
 	map->renderMap(renderer);
+    
+    // Resourcen oben an die Karte ran
+    game->renderResourcesBar();
 
 	// UI rendern
 	guiMgr->render(renderer);
@@ -157,7 +119,7 @@ void drawFrame(SDL_Renderer* renderer) {
         const Building* selectedBuilding = reinterpret_cast<const Building*>(selectedMapObject);
         if (selectedBuilding != nullptr) {
             const BuildingConfig* buildingConfig = buildingConfigMgr->getConfig(selectedBuilding->getStructureType());
-            renderText(renderer, buildingConfig->name, 753, 744, RENDERTEXT_HALIGN_RIGHT);
+            fontMgr->renderText(renderer, buildingConfig->name, 753, 744, &colorWhite, nullptr, "DroidSans-Bold.ttf", 14, RENDERTEXT_HALIGN_RIGHT);
         }
     }
     
@@ -170,7 +132,7 @@ void drawFrame(SDL_Renderer* renderer) {
 			continue;
 		}
 
-		renderText(renderer, debugOutput[i], 10, 10 + 15 * i, RENDERTEXT_HALIGN_LEFT);
+		fontMgr->renderText(renderer, debugOutput[i], 10, 40 + 15 * i, &colorWhite, nullptr, "DroidSans-Bold.ttf", 14, RENDERTEXT_HALIGN_LEFT);
 	}
 }
 
@@ -223,13 +185,12 @@ int main(int argc, char** argv) {
 	}
 	atexit(TTF_Quit);
 
-	ttfFont = TTF_OpenFont("data/font/DroidSans-Bold.ttf", 14);
-
 	// Game-Initialisierung //////////////////////////////////////////////////////////////////////////////////////////
 
 	soundMgr = new SoundMgr();
     buildingConfigMgr = new BuildingConfigMgr();
 	graphicsMgr = new GraphicsMgr();
+    fontMgr = new FontMgr();
     guiMgr = new GuiMgr();
     fpsCounter = new FpsCounter(500);
     
@@ -261,14 +222,14 @@ int main(int argc, char** argv) {
 		debugOutput[0] = "FPS: average = " + std::to_string(fpsCounter->getFpsAvg()) + 
                 ", current = " + std::to_string(fpsCounter->getFpsCurrent());
         
-        int mapX, mapY, screenX, screenY;
+        int screenX, screenY;
         screenX = mouseCurrentX + map->getScreenOffsetX();
         screenY = mouseCurrentY + map->getScreenOffsetY();
-        MapUtils::screenToMapCoords(screenX, screenY, mapX, mapY);
+        MapUtils::screenToMapCoords(screenX, screenY, mouseCurrentMapX, mouseCurrentMapY);
         
         debugOutput[1] = "mouse = (" + 
                 std::to_string(mouseCurrentX) + ", " + std::to_string(mouseCurrentY) + "), map = (" +
-                std::to_string(mapX) + ", " + std::to_string(mapY) + "), screen = (" +
+                std::to_string(mouseCurrentMapX) + ", " + std::to_string(mouseCurrentMapY) + "), screen = (" +
                 std::to_string(screenX) + ", " + std::to_string(screenY) + ")";
     
         if (map->getSelectedMapObject() != nullptr) {
@@ -311,13 +272,12 @@ int main(int argc, char** argv) {
     
     delete fpsCounter;
 	delete guiMgr;
+    delete fontMgr;
 	delete graphicsMgr;
     delete buildingConfigMgr;
 	delete soundMgr;
 
 	// Library-Deinitialisierung /////////////////////////////////////////////////////////////////////////////////////
-
-	TTF_CloseFont(ttfFont);
 
 	SDL_DestroyTexture(offscreenTexture);
 	SDL_DestroyRenderer(renderer);
