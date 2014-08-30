@@ -35,7 +35,7 @@ LDFLAGS := $(SDL_LDFLAGS) -lSDL2_image -lSDL2_mixer -lSDL2_ttf
 CREATE_TARGET_DIRECTORY = mkdir -p $(@D)
 
 
-.PHONY: all clean build-tiles clean-tiles build-gui clean-gui render-blender
+.PHONY: all clean build-tiles clean-tiles build-gui clean-gui render-blender clean-blender
 
 all: build-tiles build-gui $(BUILD_DIRECTORY)/OpenIsles
 
@@ -144,37 +144,46 @@ $(DATA_DIRECTORY)/img/gui/statusbar.png:
 	convert -size 758x24 canvas:"#907f67" -mattecolor "#6f5038" -frame 5x5+2+2 $@
 
 
+GOODS := tools wood bricks
+
 render-blender: \
 	$(DATA_DIRECTORY)/img/objects/marketplace.png \
-	$(DATA_DIRECTORY)/img/goods/marketplace-icon/tools.png \
-	$(DATA_DIRECTORY)/img/goods/icon/tools.png \
-	$(DATA_DIRECTORY)/img/goods/marketplace-icon/wood.png \
-	$(DATA_DIRECTORY)/img/goods/icon/wood.png \
-	$(DATA_DIRECTORY)/img/goods/marketplace-icon/bricks.png \
-	$(DATA_DIRECTORY)/img/goods/icon/bricks.png
+	$(foreach GOOD,$(GOODS), \
+	    $(DATA_DIRECTORY)/img/goods/marketplace-icon/$(GOOD).png \
+	    $(DATA_DIRECTORY)/img/goods/icon/$(GOOD).png \
+	)
+	
+clean-blender:
+	rm -f $(DATA_DIRECTORY)/img/objects/marketplace.png
+	rm -rf $(DATA_DIRECTORY)/img/goods
+	
+########################################################################################################################
+# Gebäude                                                                                                              #
+########################################################################################################################
 
 $(DATA_DIRECTORY)/img/objects/marketplace.png: $(SRC_DIRECTORY)/blender/marketplace/marketplace.blend
 	$(CREATE_TARGET_DIRECTORY)
 	cd $(SRC_DIRECTORY)/blender/marketplace; blender -b $(notdir $<) -P render.py
 	cp $(SRC_DIRECTORY)/blender/marketplace/render/angle0.png $@
+	
+########################################################################################################################
+# Gütersymbole                                                                                                         #
+########################################################################################################################
 
-$(DATA_DIRECTORY)/img/goods/marketplace-icon/tools.png $(DATA_DIRECTORY)/img/goods/icon/tools.png: $(SRC_DIRECTORY)/blender/goods/tools/tools.blend
+define RENDER_GOODS_ICONS
+$(DATA_DIRECTORY)/img/goods/marketplace-icon/$(1).png $(DATA_DIRECTORY)/img/goods/icon/$(1).png: \
+	$(SRC_DIRECTORY)/blender/goods/$(1)/$(1).blend \
+	$(SRC_DIRECTORY)/blender/goods/render.py \
+	$(SRC_DIRECTORY)/xcf/goods/marketplace-icon-background.xcf
+	
 	mkdir -p $(DATA_DIRECTORY)/img/goods/marketplace-icon
 	mkdir -p $(DATA_DIRECTORY)/img/goods/icon
-	cd $(SRC_DIRECTORY)/blender/goods/tools; blender -b $(notdir $<) -P ../render.py
-	cp $(SRC_DIRECTORY)/blender/goods/tools/marketplace-icon.png $(DATA_DIRECTORY)/img/goods/marketplace-icon/tools.png
-	cp $(SRC_DIRECTORY)/blender/goods/tools/icon.png $(DATA_DIRECTORY)/img/goods/icon/tools.png
+	
+	cd $$(dir $$<); blender -b $$(notdir $$<) -P ../render.py
+	
+	mv -f $$(dir $$<)icon.png $(DATA_DIRECTORY)/img/goods/icon/$(1).png
+	convert $(SRC_DIRECTORY)/xcf/goods/marketplace-icon-background.xcf -resize 42x42 -flatten $$(dir $$<)marketplace-icon.png -gravity center -composite $(DATA_DIRECTORY)/img/goods/marketplace-icon/$(1).png
+	rm -f $$(dir $$<)marketplace-icon.png
+endef
 
-$(DATA_DIRECTORY)/img/goods/marketplace-icon/wood.png $(DATA_DIRECTORY)/img/goods/icon/wood.png: $(SRC_DIRECTORY)/blender/goods/wood/wood.blend
-	mkdir -p $(DATA_DIRECTORY)/img/goods/marketplace-icon
-	mkdir -p $(DATA_DIRECTORY)/img/goods/icon
-	cd $(SRC_DIRECTORY)/blender/goods/wood; blender -b $(notdir $<) -P ../render.py
-	cp $(SRC_DIRECTORY)/blender/goods/wood/marketplace-icon.png $(DATA_DIRECTORY)/img/goods/marketplace-icon/wood.png
-	cp $(SRC_DIRECTORY)/blender/goods/wood/icon.png $(DATA_DIRECTORY)/img/goods/icon/wood.png
-
-$(DATA_DIRECTORY)/img/goods/marketplace-icon/bricks.png $(DATA_DIRECTORY)/img/goods/icon/bricks.png: $(SRC_DIRECTORY)/blender/goods/bricks/bricks.blend
-	mkdir -p $(DATA_DIRECTORY)/img/goods/marketplace-icon
-	mkdir -p $(DATA_DIRECTORY)/img/goods/icon
-	cd $(SRC_DIRECTORY)/blender/goods/bricks; blender -b $(notdir $<) -P ../render.py
-	cp $(SRC_DIRECTORY)/blender/goods/bricks/marketplace-icon.png $(DATA_DIRECTORY)/img/goods/marketplace-icon/bricks.png
-	cp $(SRC_DIRECTORY)/blender/goods/bricks/icon.png $(DATA_DIRECTORY)/img/goods/icon/bricks.png
+$(foreach GOOD,$(GOODS),$(eval $(call RENDER_GOODS_ICONS,$(GOOD))))
