@@ -21,6 +21,12 @@ enum class PlayerColor : Uint32 {
  */
 class Player {
     
+public:
+    /**
+     * @brief Guthaben an Münzen
+     */
+    unsigned long coins;
+    
 private:
     /**
      * @brief Spielerfarbe
@@ -31,11 +37,6 @@ private:
      * @brief Name des Spielers
      */
     const char* name;
-    
-    /**
-     * @brief Guthaben an Münzen
-     */
-    unsigned long coins;
 
 public:
     
@@ -53,10 +54,6 @@ public:
 
     const char* getName() const {
         return name;
-    }
-    
-    unsigned long getCoins() const {
-        return coins;
     }
 
 };

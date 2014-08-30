@@ -6,6 +6,36 @@
 
 enum StructureType : unsigned char;
 
+
+/**
+ * @brief Baukosten eines Gebäudes
+ */
+typedef
+struct BuildingCosts {
+    
+    /**
+     * @brief Münzen
+     */
+    unsigned int coins;
+    
+    /**
+     * @brief Werkzeuge
+     */
+    unsigned int tools;
+    
+    /**
+     * @brief Holz
+     */
+    unsigned int wood;
+    
+    /**
+     * @brief Ziegel
+     */
+    unsigned int bricks;
+    
+} BuildingCosts;
+
+
 typedef
 struct BuildingConfig {
     /**
@@ -38,7 +68,13 @@ struct BuildingConfig {
      * - Es darf keine Leerzeile/-spalte geben. Das Rechteck muss so klein wie möglich gewählt sein.
      * - Der Einzugsbereich darf nicht nach innen gewölbt sein. Nur runde oder rechteckige Formen sind erlaubt.
      */
-    RectangleData<char>* catchmentArea = nullptr;   
+    RectangleData<char>* catchmentArea = nullptr;
+    
+    /**
+     * @brief Baukosten
+     */
+    BuildingCosts buildingCosts;
+    
     
     ~BuildingConfig() {
         if (catchmentArea != nullptr) {
@@ -58,6 +94,13 @@ struct BuildingConfig {
      */
     RectangleData<char>* getCatchmentArea() const {
         return catchmentArea;
+    }
+    
+    /**
+     * @return Baukosten
+     */
+    const BuildingCosts* getBuildingCosts() const {
+        return &buildingCosts;
     }
     
 } BuildingConfig;

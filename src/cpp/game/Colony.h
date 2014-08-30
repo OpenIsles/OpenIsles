@@ -2,6 +2,7 @@
 #define _COLONY_H
 
 #include <vector>
+#include "config/BuildingConfigMgr.h"
 
 
 /**
@@ -28,12 +29,12 @@ private:
     /**
      * Lagerbestand pro Gütertyp. Vektor-Indexes siehe GoodsType.
      */
-    std::vector<int> goodsInventory;
+    std::vector<unsigned int> goodsInventory;
     
     /**
      * Lagerkapazität pro Gütertyp. Vektor-Indexes siehe GoodsType.
      */
-    std::vector<int> goodsCapacity;
+    std::vector<unsigned int> goodsCapacity;
     
 public:
 	Colony();
@@ -45,7 +46,7 @@ public:
      * @param goodsType Gütertyp
      * @param inventory neuer Lagerbestand
      */
-    void setGoodsInventory(GoodsType goodsType, int inventory) {
+    void setGoodsInventory(GoodsType goodsType, unsigned int inventory) {
         goodsInventory[goodsType] = inventory;
     }
     
@@ -55,7 +56,7 @@ public:
      * @param goodsType Gütertyp
      * @return Lagerbestand
      */
-    int getGoodsInventory(GoodsType goodsType) const {
+    unsigned int getGoodsInventory(GoodsType goodsType) const {
         return goodsInventory[goodsType];
     }
     
@@ -65,7 +66,7 @@ public:
      * @param goodsType Gütertyp
      * @param capacity neue Lagerkapazität
      */
-    void setGoodsCapacity(GoodsType goodsType, int capacity) {
+    void setGoodsCapacity(GoodsType goodsType, unsigned int capacity) {
         goodsCapacity[goodsType] = capacity;
     }
     
@@ -75,8 +76,18 @@ public:
      * @param goodsType Gütertyp
      * @return Lagerkapazität
      */
-    int getGoodsCapacity(GoodsType goodsType) const {
+    unsigned int getGoodsCapacity(GoodsType goodsType) const {
         return goodsInventory[goodsType];
+    }
+    
+    /**
+     * @brief Erniedrigt die Lagerbestände der Güter der Kolonie für den Bau eines Gebäudes
+     * @param buildingCosts Gebäudekosten, wo denen die Güterkosten dekrementiert werden.
+     */
+    void subtractBuildingCosts(const BuildingCosts* buildingCosts) {
+        goodsInventory[GoodsType::TOOLS] -= buildingCosts->tools;
+        goodsInventory[GoodsType::WOOD] -= buildingCosts->wood;
+        goodsInventory[GoodsType::BRICKS] -= buildingCosts->bricks; 
     }
     
 };

@@ -498,8 +498,19 @@ unsigned char Map::isAllowedToPlaceStructure(int mapX, int mapY, StructureType s
     
     unsigned char result = PLACING_STRUCTURE_ALLOWED;
     
-    // TODO Resourcen checken und ggf. PLACING_STRUCTURE_NO_RESOURCES setzen
-    // if(!enoughResources) { result |= PLACING_STRUCTURE_NO_RESOURCES; }
+    // Resourcen checken
+    Player* currentPlayer = game->getCurrentPlayer();
+    Colony* colony = game->getColony(currentPlayer, isle);
+    
+    if (colony != nullptr) {
+        const BuildingCosts* buildingCosts = buildingConfigMgr->getConfig(structureType)->getBuildingCosts();
+        if ((buildingCosts->coins > currentPlayer->coins) ||
+            (buildingCosts->tools > colony->getGoodsInventory(GoodsType::TOOLS)) ||
+            (buildingCosts->wood > colony->getGoodsInventory(GoodsType::WOOD)) ||
+            (buildingCosts->bricks > colony->getGoodsInventory(GoodsType::BRICKS))) {
+                result |= PLACING_STRUCTURE_NO_RESOURCES;
+        }
+    }
     
     // Checken, ob alles frei is, um das Gebäude zu setzen
     Graphic* graphic = graphicsMgr->getGraphicForStructure(structureType);
@@ -539,8 +550,8 @@ void Map::renderStructure(Structure* structure, SDL_Rect* rect, bool masked, boo
     Graphic* graphic = graphicsMgr->getGraphicForStructure(structure->getStructureType());
     SDL_Texture* objectTexture = masked ? graphic->getTextureMasked() : graphic->getTexture();
     
-    // Gebäude nicht zeichnen, wenn wir im Blinkmodus sind. Dann nur in der ersten Hälfte einer Sekunde zeichnen
-    if (!blink || (SDL_GetTicks() % 1000 < 500)) {
+    // Gebäude nicht zeichnen, wenn wir im Blinkmodus sind. Dann nur in der ersten Hälfte eines Intervalls zeichnen
+    if (!blink || (SDL_GetTicks() % 800 < 400)) {
         if (selectedMapObject != nullptr) {
             Building* selectedBuilding = dynamic_cast<Building*>(selectedMapObject);
             bool insideCatchmentArea = 
@@ -831,11 +842,18 @@ void Map::onClickInMapWhileAddingStructure(int mapX, int mapY) {
     }
     
     // Gebäude platzieren und Modus verlassen
+    Player* currentPlayer = game->getCurrentPlayer();
     if (structureType >= START_BUILDINGS) {
-        addBuilding(mapX, mapY, structureType, game->getCurrentPlayer());
+        addBuilding(mapX, mapY, structureType, currentPlayer);
     } else {
-        addStructure(mapX, mapY, structureType, game->getCurrentPlayer());
+        addStructure(mapX, mapY, structureType, currentPlayer);
     }
+    
+    // Resourcen bezahlen
+    Colony* colony = game->getColony(currentPlayer, getMapTileAt(mapX, mapY)->isle);
+    const BuildingCosts* buildingCosts = buildingConfigMgr->getConfig(structureType)->getBuildingCosts();
+    currentPlayer->coins -= buildingCosts->coins;
+    colony->subtractBuildingCosts(buildingCosts);
     
     // TODO Status der Shift-Taste aus dem Event bis hierhin durchschleußen.
     // Wenn gedrückt, "Gebäude platzieren"-Modus nicht verlassen, damit wir mehrere Gebäude auf einmal setzen können.

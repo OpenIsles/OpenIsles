@@ -1,3 +1,4 @@
+#include "config/BuildingConfigMgr.h"
 #include "map/Building.h"
 #include "map/Map.h"
 #include "game/Colony.h"
@@ -9,6 +10,7 @@ static SDL_Color colorWhite = {255, 255, 255, 255};
 static SDL_Color colorBlack = {0, 0, 0, 255};
 
 // Aus main.cpp importiert
+extern BuildingConfigMgr* buildingConfigMgr;
 extern FontMgr* fontMgr;
 extern Game* game;
 extern GraphicsMgr* graphicsMgr;
@@ -43,14 +45,32 @@ Colony* Game::foundNewColony(Player* player, Isle* isle) {
     return colony;
 }
 
-void Game::renderResourcesBar() {
-    // Münzenguthaben
-    Player* currentPlayer = game->getCurrentPlayer();
+Colony* Game::getColony(Player* player, Isle* isle) {
+    auto iter = colonies.find(std::pair<Player*, Isle*>(player, isle));
+    if (iter == colonies.end()) {
+        return nullptr;
+    }
     
+    return iter->second;
+}
+
+void Game::renderResourcesBar() {
+    Player* currentPlayer = game->getCurrentPlayer();
+    StructureType addingStructure = game->getAddingStructure();
+    const BuildingCosts* buildingCosts = (addingStructure != StructureType::NO_STRUCTURE) ? 
+        buildingConfigMgr->getConfig(addingStructure)->getBuildingCosts() : nullptr;
+    
+    // Münzenguthaben
     graphicsMgr->getOtherGraphic(OtherGraphic::COINS)->drawAt(15, 8);
-    fontMgr->renderText(renderer, std::to_string(currentPlayer->getCoins()), 42, 10,
+    
+    std::string outputString = std::to_string(currentPlayer->coins);
+    if (buildingCosts != nullptr) {
+        outputString += " ("; 
+        outputString += std::to_string(buildingCosts->coins);
+        outputString += ")";
+    }
+    fontMgr->renderText(renderer, outputString, 42, 10,
                         &colorWhite, &colorBlack, "DroidSans-Bold.ttf", 18, RENDERTEXT_HALIGN_LEFT);
-        
     
     // Kolonie, wo der Cursor grade is
     MapTile* mapTileAtCursor = map->getMapTileAt(mouseCurrentMapX, mouseCurrentMapY);
@@ -69,9 +89,21 @@ void Game::renderResourcesBar() {
     for (unsigned int i = 0; i < sizeof(goodsToDraw); i++, x += 110) {
         GoodsType goodsType = goodsToDraw[i];
         
-        int goodsInventory = colony->getGoodsInventory(goodsType);
+        
         graphicsMgr->getGraphicForGoodsIcon(goodsType)->drawAt(x, 5);
-        fontMgr->renderText(renderer, std::to_string(goodsInventory), x + 35, 10,
+        
+        int goodsInventory = colony->getGoodsInventory(goodsType);
+        std::string outputString = std::to_string(goodsInventory);
+        if (buildingCosts != nullptr) {
+            outputString += " ("; 
+            outputString += std::to_string(
+                (goodsType == GoodsType::TOOLS) ? buildingCosts->tools :
+                (goodsType == GoodsType::WOOD) ? buildingCosts->wood :
+                (goodsType == GoodsType::BRICKS) ? buildingCosts->bricks : 0);
+            outputString += ")";
+        }
+        
+        fontMgr->renderText(renderer, outputString, x + 35, 10,
                             &colorWhite, &colorBlack, "DroidSans-Bold.ttf", 18, RENDERTEXT_HALIGN_LEFT);
     }
 }

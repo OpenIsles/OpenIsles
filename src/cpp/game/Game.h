@@ -110,6 +110,15 @@ public:
     Colony* foundNewColony(Player* player, Isle* isle);
     
     /**
+     * Liefert die Siedlung eines Spielers auf einer Insel zurück
+     * 
+     * @param player Spieler
+     * @param isle Insel
+     * @return Colony oder nullptr, wenn keine Siedlung da ist
+     */
+    Colony* getColony(Player* player, Isle* isle);
+    
+    /**
      * @brief rendert die Leiste mit den Resourcen, wenn notwendig
      */
     void renderResourcesBar();
