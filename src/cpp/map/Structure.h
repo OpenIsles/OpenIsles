@@ -30,6 +30,7 @@ enum StructureType : unsigned char {
     BRICKYARD2 = 106,
     OFFICE = 107,
     MARKETPLACE = 108,
+    FORESTERS = 109,
             
     MAX_STRUCTURE, // Marker, wie viel Platz wir im Array brauchen
 } StructureType;

@@ -152,33 +152,27 @@ $(DATA_DIRECTORY)/img/gui/panel.png:
 $(DATA_DIRECTORY)/img/gui/statusbar.png:
 	$(CREATE_TARGET_DIRECTORY)
 	convert -size 758x24 canvas:"#907f67" -mattecolor "#6f5038" -frame 5x5+2+2 $@
-
-
-GOODS := tools wood bricks
-
-render-blender: \
-	$(DATA_DIRECTORY)/img/objects/marketplace.png \
-	$(foreach GOOD,$(GOODS), \
-	    $(DATA_DIRECTORY)/img/goods/marketplace-icon/$(GOOD).png \
-	    $(DATA_DIRECTORY)/img/goods/icon/$(GOOD).png \
-	)
-	
-clean-blender:
-	rm -f $(DATA_DIRECTORY)/img/objects/marketplace.png
-	rm -rf $(DATA_DIRECTORY)/img/goods
 	
 ########################################################################################################################
 # Gebäude                                                                                                              #
 ########################################################################################################################
 
-$(DATA_DIRECTORY)/img/objects/marketplace.png: $(SRC_DIRECTORY)/blender/marketplace/marketplace.blend
-	$(CREATE_TARGET_DIRECTORY)
-	cd $(SRC_DIRECTORY)/blender/marketplace; blender -b $(notdir $<) -P render.py
-	cp $(SRC_DIRECTORY)/blender/marketplace/render/angle0.png $@
-	
+BUILDINGS := marketplace foresters
+
+define RENDER_BUILDING
+$(DATA_DIRECTORY)/img/objects/$(1).png: $(SRC_DIRECTORY)/blender/$(1)/$(1).blend
+	$$(CREATE_TARGET_DIRECTORY)
+	cd $(SRC_DIRECTORY)/blender/$(1); blender -b $$(notdir $$<) -P ../render-building.py
+	cp $(SRC_DIRECTORY)/blender/$(1)/render/angle0.png $$@
+endef
+
+$(foreach BUILDING,$(BUILDINGS),$(eval $(call RENDER_BUILDING,$(BUILDING))))
+
 ########################################################################################################################
 # Gütersymbole                                                                                                         #
 ########################################################################################################################
+
+GOODS := tools wood bricks
 
 define RENDER_GOODS_ICONS
 $(DATA_DIRECTORY)/img/goods/marketplace-icon/$(1).png $(DATA_DIRECTORY)/img/goods/icon/$(1).png: \
@@ -197,3 +191,21 @@ $(DATA_DIRECTORY)/img/goods/marketplace-icon/$(1).png $(DATA_DIRECTORY)/img/good
 endef
 
 $(foreach GOOD,$(GOODS),$(eval $(call RENDER_GOODS_ICONS,$(GOOD))))
+
+########################################################################################################################
+# PHONYs um alle Blender-Sachen zu rendern und zu cleanen                                                              #
+########################################################################################################################
+
+render-blender: \
+	$(foreach BUILDING,$(BUILDINGS), \
+	    $(DATA_DIRECTORY)/img/objects/$(BUILDING).png \
+	) \
+	$(foreach GOOD,$(GOODS), \
+	    $(DATA_DIRECTORY)/img/goods/marketplace-icon/$(GOOD).png \
+	    $(DATA_DIRECTORY)/img/goods/icon/$(GOOD).png \
+	)
+	
+clean-blender:
+	rm -f $(foreach BUILDING,$(BUILDINGS), $(DATA_DIRECTORY)/img/objects/$(BUILDING).png)
+	rm -rf $(foreach BUILDING,$(BUILDINGS), $(SRC_DIRECTORY)/blender/$(BUILDING)/render)
+	rm -rf $(DATA_DIRECTORY)/img/goods

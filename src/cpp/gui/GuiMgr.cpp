@@ -244,6 +244,8 @@ void GuiMgr::onEvent(SDL_Event& event) {
             game->startAddingStructure(StructureType::WAY_E);
         } else if (event.key.keysym.scancode == SDL_SCANCODE_9) {
             game->startAddingStructure(StructureType::WAY_SW_NE);
+        } else if (event.key.keysym.scancode == SDL_SCANCODE_0) {
+            game->startAddingStructure(StructureType::FORESTERS);
         } else if (event.key.keysym.scancode == SDL_SCANCODE_DELETE) {
             map->deleteSelectedObject();
         }
