@@ -223,6 +223,12 @@ void GuiMgr::onEvent(SDL_Event& event) {
             map->scroll(-16, 0);
         } else if (event.key.keysym.scancode == SDL_SCANCODE_RIGHT) {
             map->scroll(16, 0);
+        } else if (event.key.keysym.scancode == SDL_SCANCODE_F2) {
+            map->setScreenZoom(4);
+        } else if (event.key.keysym.scancode == SDL_SCANCODE_F3) {
+            map->setScreenZoom(2);
+        } else if (event.key.keysym.scancode == SDL_SCANCODE_F4) {
+            map->setScreenZoom(1);
         }
         
         // Debug-Zwecke

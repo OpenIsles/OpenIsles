@@ -30,8 +30,11 @@
  * Koordinatensysteme:
  *   Obenstehend sind die Kachel- oder Map-Koordinaten (mapCoords) dargestellt.
  *   Bildschirm-Koordinaten (screenCoords) sind durch ein Pixel-Koordinatensystem definiert. Hierbei wird die
- *   Kachel mit mapCoords (0, 0) auf screenCoords (0, 0) gelegt.
- *   Die Bildschirm-Koordinate einer Kachel bestimmt die Position des Pixels links-oben an der Kachel.
+ *   Kachel mit mapCoords (0, 0) auf screenCoords (0, 0) gelegt. 
+ *   Die Bildschirm-Koordinate einer Kachel bestimmt die Position des Pixels links-oben am Kachelrechteck.
+ *   Beim Zoomen ändert sich nicht die Zuordnung von map- zu screenCoords. Beim Zeichnen wird verkleinert, d.h.
+ *   mehr Inhalt dargestellt. Auf Zoomstufe Verkleinerung 4x z.B. liegt neben dem Pixel das screenCoords (0, 0)
+ *   darstellt, die screenCoords (4, 0).
  */
 
 // Aus main.cpp importiert
@@ -42,17 +45,6 @@ extern SDL_Renderer* renderer;
 extern int mouseCurrentX, mouseCurrentY;
 extern const int windowWidth;
 extern const int windowHeight;
-
-/**
- * @brief Rechteck, indem die Karte dargestellt wird
- */
-const SDL_Rect mapClipRect = { 0, 0, 768, 734 };
-
-/**
- * @brief Rechteck, indem die Minimap dargestellt wird
- */
-const SDL_Rect minimapClipRect = { 796, 28, 200, 200 };
-
 
 Map::Map() {
 	loadMapFromTMX("data/map/map.tmx");
@@ -284,6 +276,7 @@ void Map::loadMapFromTMX(const char* filename) {
             screenOffsetY = screenCenterY - (mapClipRect.h / 2);
         }
     }
+    screenZoom = 2;
 
 	// XML-Document wegräumen
 	delete xmlDocument;
@@ -309,13 +302,16 @@ void Map::renderMinimap(SDL_Renderer* renderer) {
 	int mapXBottomLeft, mapYBottomLeft, mapXBottomRight, mapYBottomRight;
 
 	MapUtils::screenToMapCoords(
-        mapClipRect.x + screenOffsetX, mapClipRect.y + screenOffsetY, mapXTopLeft, mapYTopLeft);
+        screenOffsetX, screenOffsetY,
+        mapXTopLeft, mapYTopLeft);
 	MapUtils::screenToMapCoords(
-        mapClipRect.x + mapClipRect.w + screenOffsetX, 0 + screenOffsetY, mapXTopRight, mapYTopRight);
+        (mapClipRect.w * screenZoom) + screenOffsetX, screenOffsetY,
+        mapXTopRight, mapYTopRight);
 	MapUtils::screenToMapCoords(
-        mapClipRect.x + screenOffsetX, mapClipRect.y + mapClipRect.h + screenOffsetY, mapXBottomLeft, mapYBottomLeft);
+        screenOffsetX, (mapClipRect.h * screenZoom) + screenOffsetY,
+        mapXBottomLeft, mapYBottomLeft);
 	MapUtils::screenToMapCoords(
-        mapClipRect.x + mapClipRect.w + screenOffsetX, mapClipRect.y + mapClipRect.h + screenOffsetY, 
+        (mapClipRect.w * screenZoom) + screenOffsetX, (mapClipRect.h * screenZoom) + screenOffsetY,
         mapXBottomRight, mapYBottomRight);
     
     SDL_Point points[5] = {
@@ -381,13 +377,16 @@ void Map::renderMap(SDL_Renderer* renderer) {
 	int mapXBottomLeft, mapYBottomLeft, mapXBottomRight, mapYBottomRight;
 
 	MapUtils::screenToMapCoords(
-        mapClipRect.x + screenOffsetX, mapClipRect.y + screenOffsetY, mapXTopLeft, mapYTopLeft);
+        screenOffsetX, screenOffsetY,
+        mapXTopLeft, mapYTopLeft);
 	MapUtils::screenToMapCoords(
-        mapClipRect.x + mapClipRect.w + screenOffsetX, 0 + screenOffsetY, mapXTopRight, mapYTopRight);
+        (mapClipRect.w * screenZoom) + screenOffsetX, screenOffsetY,
+        mapXTopRight, mapYTopRight);
 	MapUtils::screenToMapCoords(
-        mapClipRect.x + screenOffsetX, mapClipRect.y + mapClipRect.h + screenOffsetY, mapXBottomLeft, mapYBottomLeft);
+        screenOffsetX, (mapClipRect.h * screenZoom) + screenOffsetY,
+        mapXBottomLeft, mapYBottomLeft);
 	MapUtils::screenToMapCoords(
-        mapClipRect.x + mapClipRect.w + screenOffsetX, mapClipRect.y + mapClipRect.h + screenOffsetY,
+        (mapClipRect.w * screenZoom) + screenOffsetX, (mapClipRect.h * screenZoom) + screenOffsetY,
         mapXBottomRight, mapYBottomRight);
 
 	int mapXStart = std::max(mapXTopLeft, 0);
@@ -401,7 +400,7 @@ void Map::renderMap(SDL_Renderer* renderer) {
 	SDL_RenderSetClipRect(renderer, &sdlMapClipRect);
 
 	// Kacheln rendern
-	SDL_Rect rectDestination = { 0, 0, GraphicsMgr::TILE_WIDTH, GraphicsMgr::TILE_HEIGHT };
+	SDL_Rect rectDestination = { 0, 0, GraphicsMgr::TILE_WIDTH / screenZoom, GraphicsMgr::TILE_HEIGHT / screenZoom };
 	for (int mapY = mapYStart; mapY <= mapYEnd; mapY++) {
 		for (int mapX = mapXStart; mapX <= mapXEnd; mapX++) {
 			MapUtils::mapToScreenCoords(mapX, mapY, rectDestination.x, rectDestination.y);
@@ -409,6 +408,9 @@ void Map::renderMap(SDL_Renderer* renderer) {
 			// Scrolling-Offset anwenden
 			rectDestination.x -= screenOffsetX;
 			rectDestination.y -= screenOffsetY;
+            
+            rectDestination.x /= screenZoom;
+            rectDestination.y /= screenZoom;
 
 			// Clipping
 			if (rectDestination.x >= mapClipRect.x + mapClipRect.w || rectDestination.y >= mapClipRect.y + mapClipRect.h
@@ -449,14 +451,18 @@ void Map::renderMap(SDL_Renderer* renderer) {
         
         SDL_Rect rect = SDL_Rect();
         structure->getScreenCoords(rect.x, rect.y, rect.w, rect.h);
+        rect.x /= screenZoom;
+        rect.y /= screenZoom;
+        rect.w /= screenZoom;
+        rect.h /= screenZoom;
 
         renderStructure(structure, &rect, false, false, false);
 	}
     
     // Postionieren wir grade ein neues Gebäude?
     if (game->getAddingStructure() != NO_STRUCTURE) {
-        int mouseScreenX = mouseCurrentX + screenOffsetX;
-        int mouseScreenY = mouseCurrentY + screenOffsetY;
+        int mouseScreenX = (mouseCurrentX * screenZoom) + screenOffsetX;
+        int mouseScreenY = (mouseCurrentY * screenZoom) + screenOffsetY;
         int mapX, mapY;
         MapUtils::screenToMapCoords(mouseScreenX, mouseScreenY, mapX, mapY);
         
@@ -474,6 +480,10 @@ void Map::renderMap(SDL_Renderer* renderer) {
 
             SDL_Rect rect;
             MapUtils::mapToDrawScreenCoords(mapX, mapY, graphic, &rect);
+            rect.x /= screenZoom;
+            rect.y /= screenZoom;
+            rect.w /= screenZoom;
+            rect.h /= screenZoom;
 
             bool redAndSemiTransparent = (allowedToPlaceStructure & PLACING_STRUCTURE_NO_ROOM);
             bool blink = (allowedToPlaceStructure & PLACING_STRUCTURE_NO_RESOURCES);
@@ -538,8 +548,8 @@ unsigned char Map::isAllowedToPlaceStructure(int mapX, int mapY, StructureType s
 }
 
 void Map::renderStructure(Structure* structure, SDL_Rect* rect, bool masked, bool redAndSemiTransparent, bool blink) {
-    rect->x -= screenOffsetX;
-    rect->y -= screenOffsetY;
+    rect->x -= screenOffsetX / screenZoom;
+    rect->y -= screenOffsetY / screenZoom;
         
     // Clipping
     if (rect->x >= mapClipRect.x + mapClipRect.w || rect->y >= mapClipRect.y + mapClipRect.h ||
@@ -607,29 +617,33 @@ void Map::renderStructure(Structure* structure, SDL_Rect* rect, bool masked, boo
                 // Oben rechts
                 if (catchmentAreaData->getData(x, y - 1, '0') == '0' && catchmentAreaData->getData(x, y, '0') == '1') {
                     SDL_RenderDrawLine(renderer,
-                            screenX + GraphicsMgr::TILE_WIDTH_HALF, screenY, 
-                            screenX + GraphicsMgr::TILE_WIDTH, screenY + GraphicsMgr::TILE_HEIGHT_HALF); 
+                            (screenX + GraphicsMgr::TILE_WIDTH_HALF) / screenZoom, screenY / screenZoom, 
+                            (screenX + GraphicsMgr::TILE_WIDTH) / screenZoom,
+                            (screenY + GraphicsMgr::TILE_HEIGHT_HALF) / screenZoom); 
                 }
 
                 // Oben links
                 if (catchmentAreaData->getData(x - 1, y, '0') == '0' && catchmentAreaData->getData(x, y, '0') == '1') {
                     SDL_RenderDrawLine(renderer,
-                            screenX, screenY + GraphicsMgr::TILE_HEIGHT_HALF,
-                            screenX + GraphicsMgr::TILE_WIDTH_HALF, screenY);
+                            screenX / screenZoom, (screenY + GraphicsMgr::TILE_HEIGHT_HALF) / screenZoom,
+                            (screenX + GraphicsMgr::TILE_WIDTH_HALF) / screenZoom, screenY / screenZoom);
                 }
 
                 // Unten rechts
                 if (catchmentAreaData->getData(x, y, '0') == '1' && catchmentAreaData->getData(x + 1, y, '0') == '0') {
                     SDL_RenderDrawLine(renderer, 
-                            screenX + GraphicsMgr::TILE_WIDTH_HALF, screenY + GraphicsMgr::TILE_HEIGHT, 
-                            screenX + GraphicsMgr::TILE_WIDTH, screenY + GraphicsMgr::TILE_HEIGHT_HALF);
+                            (screenX + GraphicsMgr::TILE_WIDTH_HALF) / screenZoom,
+                            (screenY + GraphicsMgr::TILE_HEIGHT) / screenZoom, 
+                            (screenX + GraphicsMgr::TILE_WIDTH) / screenZoom,
+                            (screenY + GraphicsMgr::TILE_HEIGHT_HALF) / screenZoom);
                 }
 
                 // Unten links
                 if (catchmentAreaData->getData(x, y, '0') == '1' && catchmentAreaData->getData(x, y + 1, '0') == '0') {
                     SDL_RenderDrawLine(renderer,
-                            screenX, screenY + GraphicsMgr::TILE_HEIGHT_HALF,
-                            screenX + GraphicsMgr::TILE_WIDTH_HALF, screenY + GraphicsMgr::TILE_HEIGHT);
+                            screenX / screenZoom, (screenY + GraphicsMgr::TILE_HEIGHT_HALF) / screenZoom,
+                            (screenX + GraphicsMgr::TILE_WIDTH_HALF) / screenZoom,
+                            (screenY + GraphicsMgr::TILE_HEIGHT) / screenZoom);
                 }
             }
         }
@@ -775,8 +789,8 @@ void Map::onClick(int mouseX, int mouseY) {
 }
 
 void Map::onClickInMap(int mouseX, int mouseY) {
-	int mouseAtScreenX = mouseX + getScreenOffsetX();
-	int mouseAtScreenY = mouseY + getScreenOffsetY();
+	int mouseAtScreenX = (mouseX * screenZoom) + screenOffsetX;
+	int mouseAtScreenY = (mouseY * screenZoom) + screenOffsetY;
     
     // Grade beim Platzieren eines neuen Gebäudes?
     if (game->isAddingStructure()) {
@@ -873,8 +887,8 @@ void Map::onClickInMinimap(int mouseX, int mouseY) {
     MapUtils::mapToScreenCoords(mapX, mapY, screenX, screenY);
     
     // zentrieren
-    screenX -= mapClipRect.w / 2;
-    screenY -= mapClipRect.h / 2;
+    screenX -= (mapClipRect.w * screenZoom) / 2;
+    screenY -= (mapClipRect.h * screenZoom) / 2;
     
     this->screenOffsetX = screenX;
     this->screenOffsetY = screenY;

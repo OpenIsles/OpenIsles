@@ -222,12 +222,19 @@ int main(int argc, char** argv) {
 		debugOutput[0] = "FPS: average = " + std::to_string(fpsCounter->getFpsAvg()) + 
                 ", current = " + std::to_string(fpsCounter->getFpsCurrent());
         
+        int screenOffsetX = map->getScreenOffsetX();
+        int screenOffsetY = map->getScreenOffsetY();
+        int screenZoom = map->getScreenZoom();
+        debugOutput[1] = "Screen: offset = (" + 
+                std::to_string(screenOffsetX) + ", " + std::to_string(screenOffsetY) + "), zoom = " +
+                std::to_string(screenZoom);
+        
         int screenX, screenY;
-        screenX = mouseCurrentX + map->getScreenOffsetX();
-        screenY = mouseCurrentY + map->getScreenOffsetY();
+        screenX = (mouseCurrentX * screenZoom) + screenOffsetX;
+        screenY = (mouseCurrentY * screenZoom) + screenOffsetY;
         MapUtils::screenToMapCoords(screenX, screenY, mouseCurrentMapX, mouseCurrentMapY);
         
-        debugOutput[1] = "mouse = (" + 
+        debugOutput[2] = "mouse = (" + 
                 std::to_string(mouseCurrentX) + ", " + std::to_string(mouseCurrentY) + "), map = (" +
                 std::to_string(mouseCurrentMapX) + ", " + std::to_string(mouseCurrentMapY) + "), screen = (" +
                 std::to_string(screenX) + ", " + std::to_string(screenY) + ")";
@@ -239,16 +246,16 @@ int main(int argc, char** argv) {
             map->getSelectedMapObject()->getMapCoords(mapX, mapY, mapWidth, mapHeight);
             map->getSelectedMapObject()->getScreenCoords(screenX, screenY, screenWidth, screenHeight);
             
-            debugOutput[2] = "selectedMapObject on mapCoords (" + 
+            debugOutput[3] = "selectedMapObject on mapCoords (" + 
                     std::to_string(mapX) + ", " + std::to_string(mapY) + "), size = (" +
                     std::to_string(mapWidth) + ", " + std::to_string(mapHeight) + ")";
             
-            debugOutput[3] = "selectedMapObject on screenCoords (" + 
+            debugOutput[4] = "selectedMapObject on screenCoords (" + 
                     std::to_string(screenX) + ", " + std::to_string(screenY) + "), size = (" + 
                     std::to_string(screenWidth) + ", " + std::to_string(screenHeight) + ")";
         } else {
-            debugOutput[2] = "";
             debugOutput[3] = "";
+            debugOutput[4] = "";
         }
 
 		// Frame auf Offscreen-Texture zeichnen

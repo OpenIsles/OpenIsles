@@ -122,10 +122,26 @@ private:
 	int screenOffsetY;
     
     /**
+     * @brief Zoom-Level (1, 2, 4), entspricht Verkleinerungsfaktor
+     */
+    int screenZoom;
+    
+    /**
      * @brief SDL-Texture mit der Minimap. Diese wird vorberechnet und hier gespeichert, sodass sie nur gezeichnet
      * werden muss und keine Berechnungszeit anfällt.
      */
     SDL_Texture* minimapTexture = nullptr;
+    
+    
+   /**
+    * @brief Rechteck, indem die Karte dargestellt wird
+    */
+   const SDL_Rect mapClipRect = { 0, 0, 768, 734 };
+
+   /**
+    * @brief Rechteck, indem die Minimap dargestellt wird
+    */
+   const SDL_Rect minimapClipRect = { 796, 28, 200, 200 };
 
 public:
 	Map();
@@ -158,6 +174,19 @@ public:
 	int getScreenOffsetY() const {
 		return screenOffsetY;
 	}
+    
+    int getScreenZoom() const {
+        return screenZoom;
+    }
+
+    void setScreenZoom(int screenZoom) {
+        // screenOffset anpassen, damit um die Bildschirmmitte gezoomt wird
+        int zoomFactor = this->screenZoom - screenZoom;
+        screenOffsetX += (mapClipRect.w / 2) * zoomFactor;
+        screenOffsetY += (mapClipRect.h / 2) * zoomFactor;
+        
+        this->screenZoom = screenZoom;
+    }
 
 	const MapObject* getSelectedMapObject() const {
 		return selectedMapObject;
@@ -295,7 +324,7 @@ private:
      * Render eine Struktur. Hilfsmethode von renderMap().
      * 
      * @param structure Struktur
-     * @param rect Rechteck mit Screen-Koordinaten, wo die Grafik gesetzt werden soll
+     * @param rect Rechteck mit Pixel-Koordinaten, wo die Grafik gesetzt werden soll
      * @param masked true, um die Grafik maskiert (für Gebäudeplatzierung) zu zeichnen
      * @param redAndSemiTransparent true, um die Grafik rot einzufärben und halb-durchsichtig zu machen
      * @param blink true, um die Grafik blinken zu lassen, d.h. entweder wird die Grafik gezeichnet oder nicht
