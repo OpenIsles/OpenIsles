@@ -60,13 +60,13 @@ Map::Map() {
     addBuilding(55, 35, HERBARY, player1);
     addBuilding(50, 32, BRICKYARD, player1);
     addBuilding(51, 26, BRICKYARD2, player1);
-    addBuilding(43, 24, OFFICE, player1);
+    addBuilding(45, 24, OFFICE1, player1);
     addBuilding(49, 41, MARKETPLACE, player1);
     
-    addBuilding(199, 77, OFFICE, player1);
-    addBuilding(228, 214, OFFICE, player2);
-    addBuilding(28, 226, OFFICE, player3);
-    addBuilding(130, 94, OFFICE, player4);
+    addBuilding(201, 77, OFFICE1, player1);
+    addBuilding(230, 214, OFFICE1, player2);
+    addBuilding(30, 226, OFFICE1, player3);
+    addBuilding(132, 94, OFFICE1, player4);
     
 	addStructure(48, 30, WAY_NW_SE, player1);
 	addStructure(49, 30, WAY_NW_SE, player1);
@@ -705,7 +705,7 @@ const Building* Map::addBuilding(int mapX, int mapY, StructureType structureType
 	addMapObject(building);
     
     // Kontor? Einzugbereich in mapTiles aktualisieren
-    if (structureType == OFFICE || structureType == MARKETPLACE) {
+    if (structureType == OFFICE1 || structureType == MARKETPLACE) {
         addOfficeCatchmentAreaToMap(*building);
     }
 

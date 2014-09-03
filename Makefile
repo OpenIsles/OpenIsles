@@ -157,7 +157,7 @@ $(DATA_DIRECTORY)/img/gui/statusbar.png:
 # Gebäude                                                                                                              #
 ########################################################################################################################
 
-BUILDINGS := marketplace foresters
+BUILDINGS := marketplace foresters office1
 
 define RENDER_BUILDING
 $(DATA_DIRECTORY)/img/objects/$(1).png: $(SRC_DIRECTORY)/blender/$(1)/$(1).blend
