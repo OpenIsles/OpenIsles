@@ -235,7 +235,7 @@ void GuiMgr::onEvent(SDL_Event& event) {
         if (event.key.keysym.scancode == SDL_SCANCODE_1) {
             game->startAddingStructure(StructureType::CHAPEL);
         } else if (event.key.keysym.scancode == SDL_SCANCODE_2) {
-            game->startAddingStructure(StructureType::WEAPONSMITH);
+            game->startAddingStructure(StructureType::PIONEERS_HOUSE1);
         } else if (event.key.keysym.scancode == SDL_SCANCODE_3) {
             game->startAddingStructure(StructureType::SIGNALFIRE);
         } else if (event.key.keysym.scancode == SDL_SCANCODE_4) {

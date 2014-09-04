@@ -55,7 +55,7 @@ Map::Map() {
     Player* player4 = game->getPlayer(3);
 
 	addBuilding(52, 39, CHAPEL, player1);
-    addBuilding(51, 35, WEAPONSMITH, player1);
+    addBuilding(51, 35, PIONEERS_HOUSE1, player1);
     addBuilding(58, 39, SIGNALFIRE, player1);
     addBuilding(55, 35, HERBARY, player1);
     addBuilding(50, 32, BRICKYARD, player1);

@@ -23,7 +23,7 @@ enum StructureType : unsigned char {
     START_BUILDINGS = 101, // Marker, um zu unterscheiden, ob Structure oder Building angelegt werden
             
     CHAPEL = 101,
-    WEAPONSMITH = 102,
+    PIONEERS_HOUSE1 = 102,
     SIGNALFIRE = 103,
     HERBARY = 104,
     BRICKYARD = 105,

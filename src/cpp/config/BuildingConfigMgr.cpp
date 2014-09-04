@@ -43,11 +43,11 @@ BuildingConfigMgr::BuildingConfigMgr() {
     memcpy(configs[StructureType::CHAPEL]->catchmentArea->data, "011110111111111111111111111111011110", 36);
     configs[StructureType::CHAPEL]->buildingCosts = { 100, 2, 5, 0 };
     
-    configs[StructureType::WEAPONSMITH] = new BuildingConfig();
-    configs[StructureType::WEAPONSMITH]->name = "Schmied";
-    configs[StructureType::WEAPONSMITH]->catchmentArea = new RectangleData<char>(4, 4);
-    memcpy(configs[StructureType::WEAPONSMITH]->catchmentArea->data, "1111111111111111", 16);
-    configs[StructureType::WEAPONSMITH]->buildingCosts = { 150, 3, 2, 5 };
+    configs[StructureType::PIONEERS_HOUSE1] = new BuildingConfig();
+    configs[StructureType::PIONEERS_HOUSE1]->name = "Haus (Pioniere)";
+    configs[StructureType::PIONEERS_HOUSE1]->catchmentArea = new RectangleData<char>(14, 14);
+    memcpy(configs[StructureType::PIONEERS_HOUSE1]->catchmentArea->data, "0000111111000000011111111000001111111111000111111111111011111111111111111111111111111111111111111111111111111111111111111111111111111111111101111111111110001111111111000001111111100000001111110000", 196);
+    configs[StructureType::PIONEERS_HOUSE1]->buildingCosts = { 0, 0, 3, 0 };
     
     configs[StructureType::SIGNALFIRE] = new BuildingConfig();
     configs[StructureType::SIGNALFIRE]->name = "Signalturm";
