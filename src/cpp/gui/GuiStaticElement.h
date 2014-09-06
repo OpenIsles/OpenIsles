@@ -15,9 +15,9 @@ class GuiStaticElement : public GuiBase {
 
 protected: 
     /**
-     * @brief Grafik, der für das Element gerendert wird
+     * @brief Grafik, der für das Element gerendert wird. Kann nullptr sein, wenn keine Grafik gezeichnet werden soll.
      */
-	Graphic* graphic;
+	Graphic* graphic = nullptr;
 
 public:
 	GuiStaticElement();
@@ -36,15 +36,15 @@ public:
     }
     
 	/**
-	 * @brief Zeichnet das Element
+	 * @brief Zeichnet das Element (ohne Kinder)
 	 */
-	virtual void render(SDL_Renderer* renderer);
+	virtual void renderElement(SDL_Renderer* renderer);
     
     /**
-     * Callback, der ein Event handelt
+     * @brief Callback, der ein Event handelt
      * @param event SDL-Event
      */
-    virtual void onEvent(SDL_Event& event) {
+    virtual void onEventElement(SDL_Event& event) {
         // nix tun
     }
 

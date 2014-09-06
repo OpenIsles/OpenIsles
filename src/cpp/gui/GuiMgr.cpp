@@ -1,8 +1,8 @@
 #include "game/Game.h"
 #include "gui/GuiButton.h"
-#include "gui/Identifiers.h"
 #include "gui/GuiMgr.h"
 #include "gui/GuiStaticElement.h"
+#include "gui/Identifiers.h"
 #include "map/Map.h"
 #include "sound/SoundMgr.h"
 #include "Graphic.h"
@@ -16,37 +16,68 @@ extern SoundMgr* soundMgr;
 
 
 GuiMgr::GuiMgr() {
+    // Panel
     Graphic* graphic = new Graphic("data/img/gui/panel.png");
 	GuiStaticElement* panel = new GuiStaticElement();
-    panel->setWindowCoords(768, 0, graphic->getWidth(), graphic->getHeight());
+    panel->setCoords(768, 0, graphic->getWidth(), graphic->getHeight());
     panel->setGraphic(graphic);
     registerElement(GUI_ID_PANEL, panel);
     
+    // Statusleiste
     graphic = new Graphic("data/img/gui/statusbar.png");
 	GuiStaticElement* statusBar = new GuiStaticElement();
-    statusBar->setWindowCoords(0, 734, graphic->getWidth(), graphic->getHeight());
+    statusBar->setCoords(0, 734, graphic->getWidth(), graphic->getHeight());
     statusBar->setGraphic(graphic);
     registerElement(GUI_ID_STATUS_BAR, statusBar);
     
-    GuiPushButton* musicPushButton = new GuiPushButton();
-    musicPushButton->setGraphic(new Graphic("data/img/gui/button-music.png"));
-    musicPushButton->setGraphicPressed(new Graphic("data/img/gui/button-music-pressed.png"));
-    musicPushButton->setWindowCoords(785, 690, 64, 64);
-    musicPushButton->setOnClickFunction([this]() {
-        bool musicEnabled = ((GuiPushButton*) findElement(GUI_ID_MUSIC_PUSH_BUTTON))->isActive();
-        
-        if (musicEnabled) {
-            soundMgr->enableMusic();
-        } else {
-            soundMgr->disableMusic();
+    // Buttons zum Umschalten der Tabs und zugehörige UI-Gruppen
+    const char* tabGraphics[4][2] = {
+        {
+            "data/img/gui/button-build.png",
+            "data/img/gui/button-build-pressed.png"
+        }, {
+            "data/img/gui/button-dummy.png",
+            "data/img/gui/button-dummy-pressed.png"
+        }, {
+            "data/img/gui/button-dummy.png",
+            "data/img/gui/button-dummy-pressed.png"
+        }, {
+            "data/img/gui/button-dummy.png",
+            "data/img/gui/button-dummy-pressed.png"
         }
-    });
-    registerElement(GUI_ID_MUSIC_PUSH_BUTTON, musicPushButton);
+    };
     
+    for (int i = 0; i < 4; i++) {
+        // Button
+        GuiPushButton* panelSwitchPushButton = new GuiPushButton();
+        panelSwitchPushButton->setGraphic(new Graphic(tabGraphics[i][0]));
+        panelSwitchPushButton->setGraphicPressed(new Graphic(tabGraphics[i][1]));
+        panelSwitchPushButton->setCoords(22 + i*55, 235, 48, 64);
+        panelSwitchPushButton->setOnClickFunction([this, i]() {
+            for (int j = 0; j < 4; j++) {
+                bool active = (j == i);
+                
+                ((GuiPushButton*) findElement(GUI_ID_PANEL_SWITCH_PUSH_BUTTON_BASE + j))->setActive(active);
+                findElement(GUI_ID_PANEL_SWITCH_BASE + j)->setVisible(active);
+            }
+        });
+        registerElement(GUI_ID_PANEL_SWITCH_PUSH_BUTTON_BASE + i, panelSwitchPushButton);
+        panel->addChildElement(panelSwitchPushButton);
+        
+        // Container
+        GuiStaticElement* panelSwitch = new GuiStaticElement();
+        panelSwitch->setCoords(15, 320, 226, 448);
+        
+        registerElement(GUI_ID_PANEL_SWITCH_BASE + i, panelSwitch);
+        panel->addChildElement(panelSwitch);
+    }
+    ((GuiPushButton*) findElement(GUI_ID_PANEL_SWITCH_PUSH_BUTTON_BUILD))->triggerOnClick();
+    
+    // Buttons auf dem 1. Tab
     GuiPushButton* addBuildingPushButton = new GuiPushButton();
     addBuildingPushButton->setGraphic(new Graphic("data/img/gui/button-add-building.png"));
     addBuildingPushButton->setGraphicPressed(new Graphic("data/img/gui/button-add-building-pressed.png"));
-    addBuildingPushButton->setWindowCoords(790, 320, 52, 64);
+    addBuildingPushButton->setCoords(7, 0, 52, 64);
     addBuildingPushButton->setOnClickFunction([this]() {
         bool buttonActive = ((GuiPushButton*) findElement(GUI_ID_ADD_BUILDING_PUSH_BUTTON))->isActive();
         
@@ -57,59 +88,29 @@ GuiMgr::GuiMgr() {
         }
     });
     registerElement(GUI_ID_ADD_BUILDING_PUSH_BUTTON, addBuildingPushButton);
+    findElement(GUI_ID_PANEL_SWITCH_BUILD)->addChildElement(addBuildingPushButton);
     
-    GuiPushButton* panelSwitchPushButtonBuild = new GuiPushButton();
-    panelSwitchPushButtonBuild->setGraphic(new Graphic("data/img/gui/button-build.png"));
-    panelSwitchPushButtonBuild->setGraphicPressed(new Graphic("data/img/gui/button-build-pressed.png"));
-    panelSwitchPushButtonBuild->setWindowCoords(790, 235, 48, 64);
-    panelSwitchPushButtonBuild->setOnClickFunction([this]() {
-        ((GuiPushButton*) findElement(GUI_ID_PANEL_SWITCH_PUSH_BUTTON_2))->setActive(false);
-        ((GuiPushButton*) findElement(GUI_ID_PANEL_SWITCH_PUSH_BUTTON_3))->setActive(false);
-        ((GuiPushButton*) findElement(GUI_ID_PANEL_SWITCH_PUSH_BUTTON_4))->setActive(false);
-        std::cout << "panel: build" << std::endl;
+    // Buttons auf dem 4. Tab
+    GuiPushButton* musicPushButton = new GuiPushButton();
+    musicPushButton->setGraphic(new Graphic("data/img/gui/button-music.png"));
+    musicPushButton->setGraphicPressed(new Graphic("data/img/gui/button-music-pressed.png"));
+    musicPushButton->setCoords(2, 370, 64, 64);
+    musicPushButton->setOnClickFunction([this]() {
+        bool musicEnabled = ((GuiPushButton*) findElement(GUI_ID_MUSIC_PUSH_BUTTON))->isActive();
+        
+        if (musicEnabled) {
+            soundMgr->enableMusic();
+        } else {
+            soundMgr->disableMusic();
+        }
     });
-    registerElement(GUI_ID_PANEL_SWITCH_PUSH_BUTTON_BUILD, panelSwitchPushButtonBuild);
-    
-    GuiPushButton* panelSwitchPushButton2 = new GuiPushButton();
-    panelSwitchPushButton2->setGraphic(new Graphic("data/img/gui/button-dummy.png"));
-    panelSwitchPushButton2->setGraphicPressed(new Graphic("data/img/gui/button-dummy-pressed.png"));
-    panelSwitchPushButton2->setWindowCoords(845, 235, 48, 64);
-    panelSwitchPushButton2->setOnClickFunction([this]() {
-        ((GuiPushButton*) findElement(GUI_ID_PANEL_SWITCH_PUSH_BUTTON_BUILD))->setActive(false);
-        ((GuiPushButton*) findElement(GUI_ID_PANEL_SWITCH_PUSH_BUTTON_3))->setActive(false);
-        ((GuiPushButton*) findElement(GUI_ID_PANEL_SWITCH_PUSH_BUTTON_4))->setActive(false);
-        std::cout << "panel: dummy2" << std::endl;
-    });
-    registerElement(GUI_ID_PANEL_SWITCH_PUSH_BUTTON_2, panelSwitchPushButton2);
-    
-    GuiPushButton* panelSwitchPushButton3 = new GuiPushButton();
-    panelSwitchPushButton3->setGraphic(new Graphic("data/img/gui/button-dummy.png"));
-    panelSwitchPushButton3->setGraphicPressed(new Graphic("data/img/gui/button-dummy-pressed.png"));
-    panelSwitchPushButton3->setWindowCoords(900, 235, 48, 64);
-    panelSwitchPushButton3->setOnClickFunction([this]() {
-        ((GuiPushButton*) findElement(GUI_ID_PANEL_SWITCH_PUSH_BUTTON_BUILD))->setActive(false);
-        ((GuiPushButton*) findElement(GUI_ID_PANEL_SWITCH_PUSH_BUTTON_2))->setActive(false);
-        ((GuiPushButton*) findElement(GUI_ID_PANEL_SWITCH_PUSH_BUTTON_4))->setActive(false);
-        std::cout << "panel: dummy3" << std::endl;
-    });
-    registerElement(GUI_ID_PANEL_SWITCH_PUSH_BUTTON_3, panelSwitchPushButton3);
-    
-    GuiPushButton* panelSwitchPushButton4 = new GuiPushButton();
-    panelSwitchPushButton4->setGraphic(new Graphic("data/img/gui/button-dummy.png"));
-    panelSwitchPushButton4->setGraphicPressed(new Graphic("data/img/gui/button-dummy-pressed.png"));
-    panelSwitchPushButton4->setWindowCoords(955, 235, 48, 64);
-    panelSwitchPushButton4->setOnClickFunction([this]() {
-        ((GuiPushButton*) findElement(GUI_ID_PANEL_SWITCH_PUSH_BUTTON_BUILD))->setActive(false);
-        ((GuiPushButton*) findElement(GUI_ID_PANEL_SWITCH_PUSH_BUTTON_2))->setActive(false);
-        ((GuiPushButton*) findElement(GUI_ID_PANEL_SWITCH_PUSH_BUTTON_3))->setActive(false);
-        std::cout << "panel: dummy4" << std::endl;
-    });
-    registerElement(GUI_ID_PANEL_SWITCH_PUSH_BUTTON_4, panelSwitchPushButton4);
+    registerElement(GUI_ID_MUSIC_PUSH_BUTTON, musicPushButton);
+    findElement(GUI_ID_PANEL_SWITCH_4)->addChildElement(musicPushButton);
     
     // Testzeugs
     graphic = new Graphic("data/img/gui/testbutton.png");
     GuiButton* testButton = new GuiButton();
-    testButton->setWindowCoords(795, 390, graphic->getWidth(), graphic->getHeight());
+    testButton->setCoords(12, 70, graphic->getWidth(), graphic->getHeight());
     testButton->setGraphic(graphic);
     testButton->setGraphicPressed(new Graphic("data/img/gui/testbutton-pressed.png"));
     testButton->setOnClickFunction([]() {
@@ -117,10 +118,11 @@ GuiMgr::GuiMgr() {
     });
     testButton->setVisible(false);
     registerElement(GUI_ID_TEST_BUTTON1, testButton);
+    findElement(GUI_ID_PANEL_SWITCH_3)->addChildElement(testButton);
     
     graphic = new Graphic("data/img/gui/testbutton.png");
     GuiButton* testButton2 = new GuiButton();
-    testButton2->setWindowCoords(875, 390, graphic->getWidth(), graphic->getHeight());
+    testButton2->setCoords(92, 70, graphic->getWidth(), graphic->getHeight());
     testButton2->setGraphic(graphic);
     testButton2->setGraphicPressed(new Graphic("data/img/gui/testbutton-pressed.png"));
     testButton2->setOnClickFunction([]() {
@@ -128,10 +130,11 @@ GuiMgr::GuiMgr() {
     });
     testButton2->setVisible(false);
     registerElement(GUI_ID_TEST_BUTTON2, testButton2);
+    findElement(GUI_ID_PANEL_SWITCH_3)->addChildElement(testButton2);
     
     graphic = new Graphic("data/img/gui/testbutton.png");
     GuiPushButton* testPushButton = new GuiPushButton();
-    testPushButton->setWindowCoords(955, 390, graphic->getWidth(), graphic->getHeight());
+    testPushButton->setCoords(172, 70, graphic->getWidth(), graphic->getHeight());
     testPushButton->setGraphic(graphic);
     testPushButton->setGraphicPressed(new Graphic("data/img/gui/testbutton-pressed.png"));
     testPushButton->setOnClickFunction([this]() {
@@ -141,6 +144,7 @@ GuiMgr::GuiMgr() {
         std::cout << "Click im PushButton: " << (testPushButton->isActive() ? "active" : "inactive") << std::endl;
     });
     registerElement(GUI_ID_TEST_PUSH_BUTTON, testPushButton);
+    findElement(GUI_ID_PANEL_SWITCH_3)->addChildElement(testPushButton);
 }
 
 GuiMgr::~GuiMgr() {
@@ -173,7 +177,8 @@ void GuiMgr::render(SDL_Renderer* renderer) {
     for (auto iter = identifierMap.cbegin(); iter != identifierMap.cend(); iter++) {
 		GuiBase* guiElement = iter->second;
         
-        if (!guiElement->isVisible()) {
+        // nur Toplevel-Element zeichnen
+        if (guiElement->getParentElement() != nullptr) {
             continue;
         }
         
@@ -275,7 +280,8 @@ void GuiMgr::onEvent(SDL_Event& event) {
     for (auto iter = identifierMap.cbegin(); iter != identifierMap.cend(); iter++) {
 		GuiBase* guiElement = iter->second;
         
-        if (!guiElement->isVisible()) {
+        // nur an Toplevel-Elemente schicken
+        if (guiElement->getParentElement() != nullptr) {
             continue;
         }
         

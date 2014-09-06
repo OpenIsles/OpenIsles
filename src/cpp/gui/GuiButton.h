@@ -50,15 +50,22 @@ public:
     }
     
     /**
-	 * @brief Zeichnet das Element
-	 */
-	virtual void render(SDL_Renderer* renderer);
+     * @brief Ruft die onClick-Funktion auf
+     */
+    void triggerOnClick() {
+        this->onClickFunction();
+    }
     
     /**
-     * Callback, der ein Event handelt
+	 * @brief Zeichnet das Element (ohne Kinder)
+	 */
+	virtual void renderElement(SDL_Renderer* renderer);
+    
+    /**
+     * @brief Callback, der ein Event handelt
      * @param event SDL-Event
      */
-    virtual void onEvent(SDL_Event& event);
+    virtual void onEventElement(SDL_Event& event);
 
 };
 

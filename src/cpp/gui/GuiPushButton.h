@@ -38,15 +38,15 @@ public:
     }
     
     /**
-	 * @brief Zeichnet das Element
+	 * @brief Zeichnet das Element (ohne Kinder)
 	 */
-	virtual void render(SDL_Renderer* renderer);
+	virtual void renderElement(SDL_Renderer* renderer);
     
     /**
-     * Callback, der ein Event handelt
+     * @brief Callback, der ein Event handelt
      * @param event SDL-Event
      */
-    virtual void onEvent(SDL_Event& event);
+    virtual void onEventElement(SDL_Event& event);
 
 };
 
