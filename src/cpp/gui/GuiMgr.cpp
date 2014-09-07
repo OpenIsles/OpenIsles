@@ -74,21 +74,47 @@ GuiMgr::GuiMgr() {
     ((GuiPushButton*) findElement(GUI_ID_PANEL_SWITCH_PUSH_BUTTON_BUILD))->triggerOnClick();
     
     // Buttons auf dem 1. Tab
-    GuiPushButton* addBuildingPushButton = new GuiPushButton();
-    addBuildingPushButton->setGraphic(new Graphic("data/img/gui/button-add-building.png"));
-    addBuildingPushButton->setGraphicPressed(new Graphic("data/img/gui/button-add-building-pressed.png"));
-    addBuildingPushButton->setCoords(7, 0, 52, 64);
-    addBuildingPushButton->setOnClickFunction([this]() {
-        bool buttonActive = ((GuiPushButton*) findElement(GUI_ID_ADD_BUILDING_PUSH_BUTTON))->isActive();
-        
-        if (buttonActive) {
-            game->startAddingStructure(StructureType::MARKETPLACE);
-        } else {
-            game->endAddingStructure();
+    static struct {
+        const char* graphicFilename;
+        const char* graphicPressedFilename;
+        StructureType structureType;
+    } buttonAddBuildingGraphics[4] = {
+        {
+            "data/img/gui/button-add-building-craftsman.png",
+            "data/img/gui/button-add-building-craftsman-pressed.png",
+            StructureType::HERBARY
+        }, {
+            "data/img/gui/button-add-building-farm.png",
+            "data/img/gui/button-add-building-farm-pressed.png",
+            StructureType::FORESTERS
+        }, {
+            "data/img/gui/button-add-building-port.png",
+            "data/img/gui/button-add-building-port-pressed.png",
+            StructureType::OFFICE1
+        }, {
+            "data/img/gui/button-add-building-public.png",
+            "data/img/gui/button-add-building-public-pressed.png",
+            StructureType::MARKETPLACE        
         }
-    });
-    registerElement(GUI_ID_ADD_BUILDING_PUSH_BUTTON, addBuildingPushButton);
-    findElement(GUI_ID_PANEL_SWITCH_BUILD)->addChildElement(addBuildingPushButton);
+    };
+    
+    for (int i = 0; i < 4; i++) {
+        GuiPushButton* addBuildingPushButton = new GuiPushButton();
+        addBuildingPushButton->setGraphic(new Graphic(buttonAddBuildingGraphics[i].graphicFilename));
+        addBuildingPushButton->setGraphicPressed(new Graphic(buttonAddBuildingGraphics[i].graphicPressedFilename));
+        addBuildingPushButton->setCoords(7 + i*55, 370, 52, 64);
+        addBuildingPushButton->setOnClickFunction([this, i]() {
+            bool buttonActive = ((GuiPushButton*) findElement(GUI_ID_ADD_BUILDING_PUSH_BUTTON_BASE + i))->isActive();
+
+            if (buttonActive) {
+                game->startAddingStructure(buttonAddBuildingGraphics[i].structureType);
+            } else {
+                game->endAddingStructure();
+            }
+        });
+        registerElement(GUI_ID_ADD_BUILDING_PUSH_BUTTON_BASE + i, addBuildingPushButton);
+        findElement(GUI_ID_PANEL_SWITCH_BUILD)->addChildElement(addBuildingPushButton);
+    }
     
     // Buttons auf dem 4. Tab
     GuiPushButton* musicPushButton = new GuiPushButton();
