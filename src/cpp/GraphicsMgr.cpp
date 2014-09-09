@@ -12,7 +12,7 @@ GraphicsMgr::GraphicsMgr() {
 	structures = new Graphic*[256];
     memset(structures, 0, 256 * sizeof(Graphic*));
     
-	structures[CHAPEL] = new Graphic("data/img/objects/chapel.png", 2, 2);
+	structures[CHAPEL] = new Graphic("data/img/objects/chapel.png", 2, 1);
 	structures[PIONEERS_HOUSE1] = new Graphic("data/img/objects/pioneers-house1.png", 2, 2);
 	structures[SIGNALFIRE] = new Graphic("data/img/objects/signalfire.png", 1, 1);
 	structures[HERBARY] = new Graphic("data/img/objects/herbary.png", 3, 3);
