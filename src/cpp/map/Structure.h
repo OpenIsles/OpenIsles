@@ -32,8 +32,28 @@ enum StructureType : unsigned char {
     MARKETPLACE = 108,
     FORESTERS = 109,
             
-    MAX_STRUCTURE, // Marker, wie viel Platz wir im Array brauchen
+    MAX_STRUCTURE // Marker, wie viel Platz wir im Array brauchen
 } StructureType;
+
+/**
+ * Enum für die Gebäude-Gruppen, d.h. wie sie im Baumenü angeordnet werden
+ */
+typedef
+enum BuildingGroup : unsigned char {
+
+    // Handwerksbetriebe
+    CRAFTSMAN,
+
+    // Farmen & Plantagen
+    FARM,
+
+    // Hafenanlagen
+    PORT,
+
+    // Öffentliche Gebäude
+    PUBLIC
+
+} BuildingGroup;
 
 
 /**

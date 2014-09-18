@@ -15,7 +15,7 @@ class GuiStaticElement : public GuiBase {
 
 protected: 
     /**
-     * @brief Grafik, der für das Element gerendert wird. Kann nullptr sein, wenn keine Grafik gezeichnet werden soll.
+     * @brief Grafik, die für das Element gerendert wird. Kann nullptr sein, wenn keine Grafik gezeichnet werden soll.
      */
 	Graphic* graphic = nullptr;
 
@@ -28,8 +28,8 @@ public:
     }
 
     /**
-     * Setzt die Grafik für das Element. Der Destruktur räumt die Grafik am Ende weg.
-     * @param graphic frisch geladene Grafik, die verwendet werden soll
+     * Setzt die Grafik für das Element.
+     * @param graphic Grafik, die verwendet werden soll
      */
     void setGraphic(Graphic* graphic) {
         this->graphic = graphic;

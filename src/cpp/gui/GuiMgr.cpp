@@ -11,6 +11,7 @@
 // Aus main.cpp importiert
 extern bool quitGame;
 extern Game* game;
+extern GraphicsMgr* graphicsMgr;
 extern Map* map;
 extern SoundMgr* soundMgr;
 
@@ -74,48 +75,8 @@ GuiMgr::GuiMgr() {
     ((GuiPushButton*) findElement(GUI_ID_PANEL_SWITCH_PUSH_BUTTON_BUILD))->triggerOnClick();
     
     // Buttons auf dem 1. Tab
-    static struct {
-        const char* graphicFilename;
-        const char* graphicPressedFilename;
-        StructureType structureType;
-    } buttonAddBuildingGraphics[4] = {
-        {
-            "data/img/gui/button-add-building-craftsman.png",
-            "data/img/gui/button-add-building-craftsman-pressed.png",
-            StructureType::HERBARY
-        }, {
-            "data/img/gui/button-add-building-farm.png",
-            "data/img/gui/button-add-building-farm-pressed.png",
-            StructureType::FORESTERS
-        }, {
-            "data/img/gui/button-add-building-port.png",
-            "data/img/gui/button-add-building-port-pressed.png",
-            StructureType::OFFICE1
-        }, {
-            "data/img/gui/button-add-building-public.png",
-            "data/img/gui/button-add-building-public-pressed.png",
-            StructureType::MARKETPLACE        
-        }
-    };
-    
-    for (int i = 0; i < 4; i++) {
-        GuiPushButton* addBuildingPushButton = new GuiPushButton();
-        addBuildingPushButton->setGraphic(new Graphic(buttonAddBuildingGraphics[i].graphicFilename));
-        addBuildingPushButton->setGraphicPressed(new Graphic(buttonAddBuildingGraphics[i].graphicPressedFilename));
-        addBuildingPushButton->setCoords(7 + i*55, 370, 52, 64);
-        addBuildingPushButton->setOnClickFunction([this, i]() {
-            bool buttonActive = ((GuiPushButton*) findElement(GUI_ID_ADD_BUILDING_PUSH_BUTTON_BASE + i))->isActive();
+    initBuildGui();
 
-            if (buttonActive) {
-                game->startAddingStructure(buttonAddBuildingGraphics[i].structureType);
-            } else {
-                game->endAddingStructure();
-            }
-        });
-        registerElement(GUI_ID_ADD_BUILDING_PUSH_BUTTON_BASE + i, addBuildingPushButton);
-        findElement(GUI_ID_PANEL_SWITCH_BUILD)->addChildElement(addBuildingPushButton);
-    }
-    
     // Buttons auf dem 4. Tab
     GuiPushButton* musicPushButton = new GuiPushButton();
     musicPushButton->setGraphic(new Graphic("data/img/gui/button-music.png"));
@@ -179,6 +140,193 @@ GuiMgr::~GuiMgr() {
         delete guiElement;
     }
     identifierMap.clear();
+}
+
+void GuiMgr::initBuildGui() {
+    // TODO in Config auslagern
+    static struct {
+        BuildingGroup buildingGroup;
+        const char* name;
+        const char* graphicFilename;
+        const char* graphicPressedFilename;
+
+        struct {
+            StructureType structureType;
+            const char* name;
+            OtherGraphic graphic;
+        } buildings[16];
+
+    } buildingGroups[4] = {
+        {
+            BuildingGroup::CRAFTSMAN,
+            "Handwerksbetriebe",
+            "data/img/gui/button-add-building-craftsman.png",
+            "data/img/gui/button-add-building-craftsman-pressed.png", {
+                { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
+                { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
+                { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
+                { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
+                { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
+                { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
+                { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
+                { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
+                { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
+                { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
+                { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
+                { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
+                { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
+                { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
+                {
+                    StructureType::BRICKYARD,
+                    "Steinmetz",
+                    OtherGraphic::ADD_BUILDING_DUMMY
+                }, {
+                    StructureType::BRICKYARD2,
+                    "Steinmetz (gedreht)",
+                    OtherGraphic::ADD_BUILDING_DUMMY
+                }
+            }
+        }, {
+            BuildingGroup::FARM,
+            "Farmen & Plantagen",
+            "data/img/gui/button-add-building-farm.png",
+            "data/img/gui/button-add-building-farm-pressed.png", {
+                { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
+                { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
+                { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
+                { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
+                { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
+                { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
+                { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
+                { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
+                { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
+                { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
+                { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
+                { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
+                {
+                    StructureType::HERBARY,
+                    "Kräuterfeld",
+                    OtherGraphic::ADD_BUILDING_DUMMY
+                }, {
+                    StructureType::FORESTERS,
+                    "Förster",
+                    OtherGraphic::ADD_BUILDING_DUMMY
+                },
+                { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
+                { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY }
+            }
+        }, {
+            BuildingGroup::PORT,
+            "Hafenanlagen",
+            "data/img/gui/button-add-building-port.png",
+            "data/img/gui/button-add-building-port-pressed.png", {
+                { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
+                { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
+                { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
+                { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
+                { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
+                { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
+                { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
+                { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
+                { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
+                { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
+                { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
+                { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
+                { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
+                { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
+                { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
+                {
+                    StructureType::OFFICE1,
+                    "Kontor I",
+                    OtherGraphic::ADD_BUILDING_OFFICE1
+                }
+            }
+        }, {
+            BuildingGroup::PUBLIC,
+            "Öffentliche Gebäude",
+            "data/img/gui/button-add-building-public.png",
+            "data/img/gui/button-add-building-public-pressed.png", {
+                { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
+                { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
+                { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
+                { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
+                { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
+                { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
+                { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
+                { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
+                { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
+                { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
+                { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
+                { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
+                {
+                    StructureType::SIGNALFIRE,
+                    "Signalfeuer",
+                    OtherGraphic::ADD_BUILDING_DUMMY
+                }, {
+                    StructureType::PIONEERS_HOUSE1,
+                    "Pionier-Haus",
+                    OtherGraphic::ADD_BUILDING_DUMMY
+                }, {
+                    StructureType::MARKETPLACE,
+                    "Marktplatz",
+                    OtherGraphic::ADD_BUILDING_MARKETPLACE
+                }, {
+                    StructureType::CHAPEL,
+                    "Kapelle",
+                    OtherGraphic::ADD_BUILDING_CHAPEL
+                }
+            }
+        }
+    };
+
+    for (int groupIndex = 0; groupIndex < 4; groupIndex++) {
+        // Grid
+        GuiStaticElement* addBuildingGrid = new GuiStaticElement();
+        Graphic* graphicAddBuildingGrid = graphicsMgr->getOtherGraphic(OtherGraphic::ADD_BUILDING_GRID);
+        addBuildingGrid->setCoords(775, 450, graphicAddBuildingGrid->getWidth(), graphicAddBuildingGrid->getHeight());
+        addBuildingGrid->setGraphic(graphicAddBuildingGrid);
+        addBuildingGrid->setVisible(false);
+        registerElement(GUI_ID_ADD_BUILDING_GRID_BASE + groupIndex, addBuildingGrid);
+
+        // Buttons im Grid
+        for (int gridY = 0; gridY < 4; gridY++) {
+            for (int gridX = 0; gridX < 4; gridX++) {
+                int buildingIndex = gridY * 4 + gridX;
+                StructureType structureType = buildingGroups[groupIndex].buildings[buildingIndex].structureType;
+
+                if (structureType == NO_STRUCTURE) {
+                    continue;
+                }
+
+                GuiButton* addBuildingButton = new GuiButton();
+                Graphic* graphicAddBuildingButton =
+                    graphicsMgr->getOtherGraphic(buildingGroups[groupIndex].buildings[buildingIndex].graphic);
+                addBuildingButton->setCoords(
+                    12 + 58*gridX, 13 + 58*gridY, graphicAddBuildingButton->getWidth(), graphicAddBuildingButton->getHeight());
+                addBuildingButton->setGraphic(graphicAddBuildingButton);
+                addBuildingButton->setGraphicPressed(graphicAddBuildingButton);
+                addBuildingButton->setOnClickFunction([structureType, buildingIndex, groupIndex]() {
+                    game->startAddingStructure(structureType);
+                });
+                registerElement(GUI_ID_ADD_BUILDING_GRID_BUTTON_BASE + groupIndex * 16 + buildingIndex, addBuildingButton);
+                addBuildingGrid->addChildElement(addBuildingButton);
+            }
+        }
+
+        // Button für die Gruppe
+        GuiPushButton* addBuildingPushButton = new GuiPushButton();
+        addBuildingPushButton->setGraphic(new Graphic(buildingGroups[groupIndex].graphicFilename)); // TODO über GraphicsMgr abwickeln, aktuell Memory-Leak
+        addBuildingPushButton->setGraphicPressed(new Graphic(buildingGroups[groupIndex].graphicPressedFilename)); // TODO über GraphicsMgr abwickeln, aktuell Memory-Leak
+        addBuildingPushButton->setCoords(7 + groupIndex*55, 370, 52, 64);
+        addBuildingPushButton->setOnClickFunction([this, groupIndex ]() {
+            bool buttonActive = ((GuiPushButton*) findElement(GUI_ID_ADD_BUILDING_PUSH_BUTTON_BASE + groupIndex))->isActive();
+
+            findElement(GUI_ID_ADD_BUILDING_GRID_BASE + groupIndex)->setVisible(buttonActive);
+        });
+        registerElement(GUI_ID_ADD_BUILDING_PUSH_BUTTON_BASE + groupIndex, addBuildingPushButton);
+        findElement(GUI_ID_PANEL_SWITCH_BUILD)->addChildElement(addBuildingPushButton);
+    }
+
 }
 
 void GuiMgr::registerElement(int identifier, GuiBase* guiElement) {

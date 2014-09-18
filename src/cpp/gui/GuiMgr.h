@@ -50,6 +50,11 @@ public:
     
 private:
     /**
+     * @brief Initialisiert die GUI für "Gebäude bauen". Wird vom Konstruktor aufgerufen.
+     */
+    void initBuildGui();
+
+    /**
      * @brief Registriert ein neues GUI-Element
      * @param identifier eindeutiger Identifier, um das Element mit diesem anzusprechen
      * @param guiElement Referenz zum GUI-Element

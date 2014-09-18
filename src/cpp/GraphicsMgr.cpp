@@ -42,6 +42,13 @@ GraphicsMgr::GraphicsMgr() {
     memset(otherGraphics, 0, OtherGraphic::MAX_GRAPHIC * sizeof(Graphic*));
     
     otherGraphics[OtherGraphic::COINS] = new Graphic("data/img/coin.png");
+    otherGraphics[OtherGraphic::PANEL] = new Graphic("data/img/gui/panel.png");
+    otherGraphics[OtherGraphic::STATUSBAR] = new Graphic("data/img/gui/statusbar.png");
+    otherGraphics[OtherGraphic::ADD_BUILDING_GRID] = new Graphic("data/img/gui/add-building/add-building-grid.png");
+    otherGraphics[OtherGraphic::ADD_BUILDING_CHAPEL] = new Graphic("data/img/gui/add-building/chapel.png");
+    otherGraphics[OtherGraphic::ADD_BUILDING_MARKETPLACE] = new Graphic("data/img/gui/add-building/marketplace.png");
+    otherGraphics[OtherGraphic::ADD_BUILDING_OFFICE1] = new Graphic("data/img/gui/add-building/office1.png");
+    otherGraphics[OtherGraphic::ADD_BUILDING_DUMMY] = new Graphic("data/img/gui/add-building/dummy.png");
 }
 
 GraphicsMgr::~GraphicsMgr() {
@@ -66,7 +73,7 @@ GraphicsMgr::~GraphicsMgr() {
 	}
 	delete[] goodsIcons;
     
-    for (int i = 0; i < OtherGraphic::COINS; i++) {
+    for (int i = 0; i < OtherGraphic::MAX_GRAPHIC; i++) {
         if (otherGraphics[i] != nullptr) {
 			delete otherGraphics[i];
 		}

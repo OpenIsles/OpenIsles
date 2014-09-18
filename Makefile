@@ -144,9 +144,9 @@ clean-tiles:
 clean-gui:
 	rm -f $(DATA_DIRECTORY)/img/gui/panel.png
 	rm -f $(DATA_DIRECTORY)/img/gui/statusbar.png
-	rm -f $(DATA_DIRECTORY)/img/gui/add-building-grid.png
+	rm -f $(DATA_DIRECTORY)/img/gui/add-building/add-building-grid.png
 	
-build-gui: $(DATA_DIRECTORY)/img/gui/panel.png $(DATA_DIRECTORY)/img/gui/statusbar.png $(DATA_DIRECTORY)/img/gui/add-building-grid.png
+build-gui: $(DATA_DIRECTORY)/img/gui/panel.png $(DATA_DIRECTORY)/img/gui/statusbar.png $(DATA_DIRECTORY)/img/gui/add-building/add-building-grid.png
 
 
 $(DATA_DIRECTORY)/img/gui/panel.png:
@@ -157,7 +157,7 @@ $(DATA_DIRECTORY)/img/gui/statusbar.png:
 	$(CREATE_TARGET_DIRECTORY)
 	convert -size 758x24 canvas:"#907f67" -mattecolor "#6f5038" -frame 5x5+2+2 $@
 
-$(DATA_DIRECTORY)/img/gui/add-building-grid.png: $(SRC_DIRECTORY)/blender/ui/add-building-grid/add-building-grid.blend
+$(DATA_DIRECTORY)/img/gui/add-building/add-building-grid.png: $(SRC_DIRECTORY)/blender/ui/add-building-grid/add-building-grid.blend
 	$(CREATE_TARGET_DIRECTORY)
 	cd $(SRC_DIRECTORY)/blender/ui/add-building-grid; blender -b $(notdir $<) -P render.py
 	mv $(SRC_DIRECTORY)/blender/ui/add-building-grid/add-building-grid.png $@

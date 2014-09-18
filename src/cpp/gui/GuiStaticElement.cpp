@@ -7,7 +7,6 @@ GuiStaticElement::GuiStaticElement() {
 }
 
 GuiStaticElement::~GuiStaticElement() {
-    delete graphic;
 }
 
 void GuiStaticElement::renderElement(SDL_Renderer* renderer) {

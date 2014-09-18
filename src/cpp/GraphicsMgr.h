@@ -11,7 +11,22 @@ enum StructureType : unsigned char;
 typedef
 enum OtherGraphic {
     // Münzensymbol
-    COINS = 1,
+    COINS,
+
+    // Hintergrund des Panels
+    PANEL,
+
+    // Hintergrund der Statusbar
+    STATUSBAR,
+
+    // Gebäude bauen - Grid mit den Symbolen
+    ADD_BUILDING_GRID,
+
+    // Grafiken fürs "Gebäude bauen"-Menü
+    ADD_BUILDING_CHAPEL,
+    ADD_BUILDING_MARKETPLACE,
+    ADD_BUILDING_OFFICE1,
+    ADD_BUILDING_DUMMY,
             
     MAX_GRAPHIC // Marker, wie viele Grafiken es gibt
 } OtherGraphic;
