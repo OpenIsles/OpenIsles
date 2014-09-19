@@ -5,7 +5,7 @@
 #include <SDL_image.h>
 #include "Graphic.h"
 
-enum GoodsType : unsigned char;
+enum GoodsType : char;
 enum StructureType : unsigned char;
 
 typedef
@@ -27,6 +27,10 @@ enum OtherGraphic {
     ADD_BUILDING_MARKETPLACE,
     ADD_BUILDING_OFFICE1,
     ADD_BUILDING_DUMMY,
+
+    // Plus-Zeichen und Pfeil für Produktion eines Gebäudes
+    PRODUCTION_ARROW,
+    PRODUCTION_PLUS,
             
     MAX_GRAPHIC // Marker, wie viele Grafiken es gibt
 } OtherGraphic;
@@ -60,6 +64,11 @@ private:
 	 * @brief Array von Zeigern auf die Gütergrafiken (Symbole)
 	 */
 	Graphic** goodsIcons;
+
+    /**
+     * @brief Array von Zeigern auf die Gütergrafiken (Marketplatz-Symbole)
+     */
+    Graphic** goodsMarketplaceIcons;
     
     /**
      * @brief Array von Zeigern auf andere Grafiken
@@ -93,6 +102,15 @@ public:
      */
     Graphic* const getGraphicForGoodsIcon(GoodsType goodsType) const {
         return goodsIcons[goodsType];
+    }
+
+    /**
+     * @brief Liefert die Grafik für ein Güter-Symbol (Marktplatz-Symbol) zurück
+     * @param goodsType Güter-Typ
+     * @return Graphic
+     */
+    Graphic* const getGraphicForGoodsMarketplaceIcon(GoodsType goodsType) const {
+        return goodsMarketplaceIcons[goodsType];
     }
     
     /**

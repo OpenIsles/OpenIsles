@@ -1,4 +1,5 @@
 #include "game/Game.h"
+#include "gui/GuiAddBuildingWidget.h"
 #include "gui/GuiButton.h"
 #include "gui/GuiMgr.h"
 #include "gui/GuiStaticElement.h"
@@ -59,7 +60,7 @@ GuiMgr::GuiMgr() {
                 bool active = (j == i);
                 
                 ((GuiPushButton*) findElement(GUI_ID_PANEL_SWITCH_PUSH_BUTTON_BASE + j))->setActive(active);
-                findElement(GUI_ID_PANEL_SWITCH_BASE + j)->setVisible(active);
+                findElement(GUI_ID_PANEL_BASE + j)->setVisible(active);
             }
         });
         registerElement(GUI_ID_PANEL_SWITCH_PUSH_BUTTON_BASE + i, panelSwitchPushButton);
@@ -69,7 +70,7 @@ GuiMgr::GuiMgr() {
         GuiStaticElement* panelSwitch = new GuiStaticElement();
         panelSwitch->setCoords(15, 320, 226, 448);
         
-        registerElement(GUI_ID_PANEL_SWITCH_BASE + i, panelSwitch);
+        registerElement(GUI_ID_PANEL_BASE + i, panelSwitch);
         panel->addChildElement(panelSwitch);
     }
     ((GuiPushButton*) findElement(GUI_ID_PANEL_SWITCH_PUSH_BUTTON_BUILD))->triggerOnClick();
@@ -92,7 +93,7 @@ GuiMgr::GuiMgr() {
         }
     });
     registerElement(GUI_ID_MUSIC_PUSH_BUTTON, musicPushButton);
-    findElement(GUI_ID_PANEL_SWITCH_4)->addChildElement(musicPushButton);
+    findElement(GUI_ID_PANEL_4)->addChildElement(musicPushButton);
     
     // Testzeugs
     graphic = new Graphic("data/img/gui/testbutton.png");
@@ -105,7 +106,7 @@ GuiMgr::GuiMgr() {
     });
     testButton->setVisible(false);
     registerElement(GUI_ID_TEST_BUTTON1, testButton);
-    findElement(GUI_ID_PANEL_SWITCH_3)->addChildElement(testButton);
+    findElement(GUI_ID_PANEL_3)->addChildElement(testButton);
     
     graphic = new Graphic("data/img/gui/testbutton.png");
     GuiButton* testButton2 = new GuiButton();
@@ -117,7 +118,7 @@ GuiMgr::GuiMgr() {
     });
     testButton2->setVisible(false);
     registerElement(GUI_ID_TEST_BUTTON2, testButton2);
-    findElement(GUI_ID_PANEL_SWITCH_3)->addChildElement(testButton2);
+    findElement(GUI_ID_PANEL_3)->addChildElement(testButton2);
     
     graphic = new Graphic("data/img/gui/testbutton.png");
     GuiPushButton* testPushButton = new GuiPushButton();
@@ -131,7 +132,7 @@ GuiMgr::GuiMgr() {
         std::cout << "Click im PushButton: " << (testPushButton->isActive() ? "active" : "inactive") << std::endl;
     });
     registerElement(GUI_ID_TEST_PUSH_BUTTON, testPushButton);
-    findElement(GUI_ID_PANEL_SWITCH_3)->addChildElement(testPushButton);
+    findElement(GUI_ID_PANEL_3)->addChildElement(testPushButton);
 }
 
 GuiMgr::~GuiMgr() {
@@ -305,8 +306,9 @@ void GuiMgr::initBuildGui() {
                     12 + 58*gridX, 13 + 58*gridY, graphicAddBuildingButton->getWidth(), graphicAddBuildingButton->getHeight());
                 addBuildingButton->setGraphic(graphicAddBuildingButton);
                 addBuildingButton->setGraphicPressed(graphicAddBuildingButton);
-                addBuildingButton->setOnClickFunction([structureType, buildingIndex, groupIndex]() {
+                addBuildingButton->setOnClickFunction([this, structureType, buildingIndex, groupIndex]() {
                     game->startAddingStructure(structureType);
+                    findElement(GUI_ID_ADD_BUILDING_GRID_BASE + groupIndex)->setVisible(false);
                 });
                 registerElement(GUI_ID_ADD_BUILDING_GRID_BUTTON_BASE + groupIndex * 16 + buildingIndex, addBuildingButton);
                 addBuildingGrid->addChildElement(addBuildingButton);
@@ -324,9 +326,13 @@ void GuiMgr::initBuildGui() {
             findElement(GUI_ID_ADD_BUILDING_GRID_BASE + groupIndex)->setVisible(buttonActive);
         });
         registerElement(GUI_ID_ADD_BUILDING_PUSH_BUTTON_BASE + groupIndex, addBuildingPushButton);
-        findElement(GUI_ID_PANEL_SWITCH_BUILD)->addChildElement(addBuildingPushButton);
+        findElement(GUI_ID_PANEL_BUILD)->addChildElement(addBuildingPushButton);
     }
 
+    // Aktuell gewähltes Gebäude: Grafik, was es tut und die Kosten
+    GuiAddBuildingWidget* addBuildingWidget = new GuiAddBuildingWidget();
+    registerElement(GUI_ID_ADD_BUILDING_WIDGET, addBuildingWidget);
+    findElement(GUI_ID_PANEL_BUILD)->addChildElement(addBuildingWidget);
 }
 
 void GuiMgr::registerElement(int identifier, GuiBase* guiElement) {

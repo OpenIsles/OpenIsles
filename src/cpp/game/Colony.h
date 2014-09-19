@@ -9,7 +9,11 @@
  * Enum für die verschiedenen Gütertypen
  */
 typedef
-enum GoodsType : unsigned char {
+enum GoodsType : char {
+    // Spezialwert, der dem null-Wert entspricht
+    NO_GOODS = -1,
+
+    // Güter
     TOOLS = 0,
     WOOD = 1,
     BRICKS = 2,

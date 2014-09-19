@@ -4,6 +4,7 @@
 #include "utils/RectangleData.h"
 
 
+enum GoodsType : char;
 enum StructureType : unsigned char;
 
 
@@ -34,6 +35,30 @@ struct BuildingCosts {
     unsigned int bricks;
     
 } BuildingCosts;
+
+/**
+* @brief Produktions eines Gebäudes
+*/
+typedef
+struct BuildingProduction {
+
+    /**
+     * @brief produzierte Güter
+     */
+    GoodsType output;
+
+    /**
+     * @brief verbrauchte Güter (NO_GOODS, wenn das Gebäude aus dem Nichts herstellt)
+     */
+    GoodsType input;
+
+    /**
+     * @brief weitere verbrauchte Güter, wenn das Gebäude aus zwei verschiedenen Gütern was herstellt
+     * (NO_GOODS, wenn das Gebäude keine zwei verschiedenen Güter braucht)
+     */
+    GoodsType input2;
+
+} BuildingProduction;
 
 
 typedef
@@ -74,6 +99,11 @@ struct BuildingConfig {
      * @brief Baukosten
      */
     BuildingCosts buildingCosts;
+
+    /**
+     * @brief Güter, die verbraucht und hergestellt werden.
+     */
+    BuildingProduction buildingProduction;
     
     
     ~BuildingConfig() {
@@ -85,7 +115,7 @@ struct BuildingConfig {
     /**
      * @return Gebäudenamen
      */
-    const char* GetName() const {
+    const char* getName() const {
         return name;
     }
     
@@ -102,7 +132,14 @@ struct BuildingConfig {
     const BuildingCosts* getBuildingCosts() const {
         return &buildingCosts;
     }
-    
+
+    /**
+     * @return produzierte und verbrauchte Güter
+     */
+    const BuildingProduction* getBuildingProduction() const {
+        return &buildingProduction;
+    }
+
 } BuildingConfig;
 
 
@@ -125,6 +162,7 @@ public:
     /**
      * @brief Liefert die Konfiguration eines Gebäudes zurück
      * @param structureType Typ des Gebäudes
+     * @return Konfiguration
      */
     const BuildingConfig* const getConfig(StructureType structureType) {
         return configs[structureType];

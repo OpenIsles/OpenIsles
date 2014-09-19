@@ -36,8 +36,15 @@ GraphicsMgr::GraphicsMgr() {
     goodsIcons[GoodsType::TOOLS] = new Graphic("data/img/goods/icon/tools.png");
     goodsIcons[GoodsType::WOOD] = new Graphic("data/img/goods/icon/wood.png");
     goodsIcons[GoodsType::BRICKS] = new Graphic("data/img/goods/icon/bricks.png");
-    
-    
+
+    goodsMarketplaceIcons = new Graphic*[GoodsType::MAX_GOOD];
+    memset(goodsMarketplaceIcons, 0, GoodsType::MAX_GOOD * sizeof(Graphic*));
+
+    goodsMarketplaceIcons[GoodsType::TOOLS] = new Graphic("data/img/goods/marketplace-icon/tools.png");
+    goodsMarketplaceIcons[GoodsType::WOOD] = new Graphic("data/img/goods/marketplace-icon/wood.png");
+    goodsMarketplaceIcons[GoodsType::BRICKS] = new Graphic("data/img/goods/marketplace-icon/bricks.png");
+
+
     otherGraphics = new Graphic*[OtherGraphic::MAX_GRAPHIC];
     memset(otherGraphics, 0, OtherGraphic::MAX_GRAPHIC * sizeof(Graphic*));
     
@@ -49,6 +56,8 @@ GraphicsMgr::GraphicsMgr() {
     otherGraphics[OtherGraphic::ADD_BUILDING_MARKETPLACE] = new Graphic("data/img/gui/add-building/marketplace.png");
     otherGraphics[OtherGraphic::ADD_BUILDING_OFFICE1] = new Graphic("data/img/gui/add-building/office1.png");
     otherGraphics[OtherGraphic::ADD_BUILDING_DUMMY] = new Graphic("data/img/gui/add-building/dummy.png");
+    otherGraphics[OtherGraphic::PRODUCTION_ARROW] = new Graphic("data/img/gui/production-arrow.png");
+    otherGraphics[OtherGraphic::PRODUCTION_PLUS] = new Graphic("data/img/gui/production-plus.png");
 }
 
 GraphicsMgr::~GraphicsMgr() {
@@ -70,6 +79,9 @@ GraphicsMgr::~GraphicsMgr() {
         if (goodsIcons[i] != nullptr) {
 			delete goodsIcons[i];
 		}
+        if (goodsMarketplaceIcons[i] != nullptr) {
+            delete goodsMarketplaceIcons[i];
+        }
 	}
 	delete[] goodsIcons;
     

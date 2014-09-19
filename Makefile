@@ -8,6 +8,7 @@ OBJ_FILES := \
 	$(BUILD_DIRECTORY)/game/Game.o \
 	$(BUILD_DIRECTORY)/game/Player.o \
 	$(BUILD_DIRECTORY)/gui/FontMgr.o \
+	$(BUILD_DIRECTORY)/gui/GuiAddBuildingWidget.o \
 	$(BUILD_DIRECTORY)/gui/GuiButton.o \
 	$(BUILD_DIRECTORY)/gui/GuiMgr.o \
 	$(BUILD_DIRECTORY)/gui/GuiPushButton.o \
