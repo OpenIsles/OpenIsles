@@ -183,6 +183,15 @@ endef
 $(foreach BUILDING,$(BUILDINGS),$(eval $(call RENDER_BUILDING,$(BUILDING))))
 
 ########################################################################################################################
+# Straßen                                                                                                              #
+########################################################################################################################
+
+render-streets: $(SRC_DIRECTORY)/blender/streets/streets.blend
+	mkdir -p $(DATA_DIRECTORY)/img/objects
+	cd $(SRC_DIRECTORY)/blender/streets; blender -b $(notdir $<) -P render-streets.py
+	cp $(SRC_DIRECTORY)/blender/streets/render/* $(DATA_DIRECTORY)/img/objects
+
+########################################################################################################################
 # Gütersymbole                                                                                                         #
 ########################################################################################################################
 
@@ -217,9 +226,12 @@ render-blender: \
 	$(foreach GOOD,$(GOODS), \
 	    $(DATA_DIRECTORY)/img/goods/marketplace-icon/$(GOOD).png \
 	    $(DATA_DIRECTORY)/img/goods/icon/$(GOOD).png \
-	)
+	) \
+	render-streets
 	
 clean-blender:
 	rm -f $(foreach BUILDING,$(BUILDINGS), $(DATA_DIRECTORY)/img/objects/$(BUILDING).png)
 	rm -rf $(foreach BUILDING,$(BUILDINGS), $(SRC_DIRECTORY)/blender/$(BUILDING)/render)
 	rm -rf $(DATA_DIRECTORY)/img/goods
+	rm -rf $(SRC_DIRECTORY)/blender/streets/render
+	rm -rf $(DATA_DIRECTORY)/img/objects/street*.png

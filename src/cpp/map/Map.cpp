@@ -68,34 +68,49 @@ Map::Map() {
     addBuilding(30, 226, OFFICE1, player3);
     addBuilding(132, 94, OFFICE1, player4);
     
-	addStructure(48, 30, WAY_NW_SE, player1);
-	addStructure(49, 30, WAY_NW_SE, player1);
-	addStructure(50, 30, WAY_NW_SE, player1);
-	addStructure(51, 30, WAY_NW_SE, player1);
-	addStructure(52, 30, WAY_NW_SE, player1);
-	addStructure(53, 30, WAY_NW_SE, player1);
-	addStructure(54, 30, WAY_E, player1);
-	addStructure(54, 31, WAY_SW_NE, player1);
-	addStructure(54, 32, WAY_SW_NE, player1);
-	addStructure(54, 33, WAY_SW_NE, player1);
-	addStructure(54, 34, WAY_SW_NE, player1);
-	addStructure(54, 35, WAY_SW_NE, player1);
-	addStructure(54, 36, WAY_SW_NE, player1);
-	addStructure(54, 37, WAY_S, player1);
-	addStructure(53, 37, WAY_NW_SE, player1);
-	addStructure(52, 37, WAY_NW_SE, player1);
-	addStructure(51, 37, WAY_NW_SE, player1);
-	addStructure(50, 37, WAY_NW_SE, player1);
-	addStructure(49, 37, WAY_NW_SE, player1);
-	addStructure(48, 37, WAY_NW_SE, player1);
-	addStructure(47, 37, WAY_W, player1);
-	addStructure(47, 36, WAY_SW_NE, player1);
-	addStructure(47, 35, WAY_SW_NE, player1);
-	addStructure(47, 34, WAY_SW_NE, player1);
-	addStructure(47, 33, WAY_SW_NE, player1);
-	addStructure(47, 32, WAY_SW_NE, player1);
-	addStructure(47, 31, WAY_SW_NE, player1);
-	addStructure(47, 30, WAY_N, player1);
+	addStructure(48, 30, STREET_STRAIGHT_0, player1);
+	addStructure(49, 30, STREET_STRAIGHT_0, player1);
+	addStructure(50, 30, STREET_STRAIGHT_0, player1);
+	addStructure(51, 30, STREET_STRAIGHT_0, player1);
+	addStructure(52, 30, STREET_STRAIGHT_0, player1);
+	addStructure(53, 30, STREET_STRAIGHT_0, player1);
+	addStructure(54, 30, STREET_CURVE_180, player1);
+	addStructure(54, 31, STREET_STRAIGHT_90, player1);
+	addStructure(54, 32, STREET_STRAIGHT_90, player1);
+	addStructure(54, 33, STREET_STRAIGHT_90, player1);
+	addStructure(54, 34, STREET_TEE_180, player1);
+	addStructure(54, 35, STREET_STRAIGHT_90, player1);
+	addStructure(54, 36, STREET_STRAIGHT_90, player1);
+	addStructure(54, 37, STREET_CURVE_270, player1);
+	addStructure(53, 37, STREET_STRAIGHT_0, player1);
+	addStructure(52, 37, STREET_STRAIGHT_0, player1);
+	addStructure(51, 37, STREET_STRAIGHT_0, player1);
+	addStructure(50, 37, STREET_TEE_90, player1);
+	addStructure(49, 37, STREET_TEE_270, player1);
+	addStructure(48, 37, STREET_STRAIGHT_0, player1);
+	addStructure(47, 37, STREET_CURVE_0, player1);
+	addStructure(47, 36, STREET_STRAIGHT_90, player1);
+	addStructure(47, 35, STREET_STRAIGHT_90, player1);
+	addStructure(47, 34, STREET_TEE_0, player1);
+	addStructure(47, 33, STREET_STRAIGHT_90, player1);
+	addStructure(47, 32, STREET_TEE_0, player1);
+	addStructure(47, 31, STREET_STRAIGHT_90, player1);
+	addStructure(47, 30, STREET_CURVE_90, player1);
+
+    addStructure(46, 32, STREET_STRAIGHT_0, player1);
+    addStructure(46, 34, STREET_STRAIGHT_0, player1);
+    addStructure(45, 32, STREET_TEE_180, player1);
+    addStructure(45, 31, STREET_STRAIGHT_90, player1);
+    addStructure(45, 33, STREET_STRAIGHT_90, player1);
+    addStructure(45, 34, STREET_CROSS, player1);
+    addStructure(45, 35, STREET_STRAIGHT_90, player1);
+    addStructure(44, 34, STREET_STRAIGHT_0, player1);
+
+    addStructure(49, 38, STREET_STRAIGHT_90, player1);
+    addStructure(50, 36, STREET_STRAIGHT_90, player1);
+
+    addStructure(55, 34, STREET_STRAIGHT_0, player1);
+    addStructure(56, 34, STREET_STRAIGHT_0, player1);
     
     updateMinimapTexture();
     

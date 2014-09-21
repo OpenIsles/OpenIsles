@@ -432,9 +432,9 @@ void GuiMgr::onEvent(SDL_Event& event) {
         } else if (event.key.keysym.scancode == SDL_SCANCODE_7) {
             game->startAddingStructure(StructureType::OFFICE1);
         } else if (event.key.keysym.scancode == SDL_SCANCODE_8) {
-            game->startAddingStructure(StructureType::WAY_E);
+            game->startAddingStructure(StructureType::STREET_STRAIGHT_0);
         } else if (event.key.keysym.scancode == SDL_SCANCODE_9) {
-            game->startAddingStructure(StructureType::WAY_SW_NE);
+            game->startAddingStructure(StructureType::STREET_CURVE_180);
         } else if (event.key.keysym.scancode == SDL_SCANCODE_0) {
             game->startAddingStructure(StructureType::FORESTERS);
         } else if (event.key.keysym.scancode == SDL_SCANCODE_DELETE) {

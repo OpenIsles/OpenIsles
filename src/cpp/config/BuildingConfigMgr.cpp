@@ -8,41 +8,71 @@ BuildingConfigMgr::BuildingConfigMgr() {
     configs = new BuildingConfig*[StructureType::MAX_STRUCTURE];
     memset(configs, 0, StructureType::MAX_STRUCTURE * sizeof(BuildingConfig*));
     
-    configs[StructureType::WAY_E] = new BuildingConfig();
-    configs[StructureType::WAY_E]->name = "Weg";
-    configs[StructureType::WAY_E]->catchmentArea = nullptr;
-    configs[StructureType::WAY_E]->buildingCosts = { 5, 0, 0, 0 };
-    configs[StructureType::WAY_E]->buildingProduction = { GoodsType::NO_GOODS, GoodsType::NO_GOODS, GoodsType::NO_GOODS };
+    configs[StructureType::STREET_STRAIGHT_0] = new BuildingConfig();
+    configs[StructureType::STREET_STRAIGHT_0]->name = "Pflasterstraße";
+    configs[StructureType::STREET_STRAIGHT_0]->catchmentArea = nullptr;
+    configs[StructureType::STREET_STRAIGHT_0]->buildingCosts = { 5, 0, 0, 0 };
+    configs[StructureType::STREET_STRAIGHT_0]->buildingProduction = { GoodsType::NO_GOODS, GoodsType::NO_GOODS, GoodsType::NO_GOODS };
     
-    configs[StructureType::WAY_N] = new BuildingConfig();
-    configs[StructureType::WAY_N]->name = "Weg";
-    configs[StructureType::WAY_N]->catchmentArea = nullptr;
-    configs[StructureType::WAY_N]->buildingCosts = { 5, 0, 0, 0 };
-    configs[StructureType::WAY_N]->buildingProduction = { GoodsType::NO_GOODS, GoodsType::NO_GOODS, GoodsType::NO_GOODS };
+    configs[StructureType::STREET_STRAIGHT_90] = new BuildingConfig();
+    configs[StructureType::STREET_STRAIGHT_90]->name = "Pflasterstraße";
+    configs[StructureType::STREET_STRAIGHT_90]->catchmentArea = nullptr;
+    configs[StructureType::STREET_STRAIGHT_90]->buildingCosts = { 5, 0, 0, 0 };
+    configs[StructureType::STREET_STRAIGHT_90]->buildingProduction = { GoodsType::NO_GOODS, GoodsType::NO_GOODS, GoodsType::NO_GOODS };
     
-    configs[StructureType::WAY_S] = new BuildingConfig();
-    configs[StructureType::WAY_S]->name = "Weg";
-    configs[StructureType::WAY_S]->catchmentArea = nullptr;
-    configs[StructureType::WAY_S]->buildingCosts = { 5, 0, 0, 0 };
-    configs[StructureType::WAY_S]->buildingProduction = { GoodsType::NO_GOODS, GoodsType::NO_GOODS, GoodsType::NO_GOODS };
+    configs[StructureType::STREET_CURVE_0] = new BuildingConfig();
+    configs[StructureType::STREET_CURVE_0]->name = "Pflasterstraße";
+    configs[StructureType::STREET_CURVE_0]->catchmentArea = nullptr;
+    configs[StructureType::STREET_CURVE_0]->buildingCosts = { 5, 0, 0, 0 };
+    configs[StructureType::STREET_CURVE_0]->buildingProduction = { GoodsType::NO_GOODS, GoodsType::NO_GOODS, GoodsType::NO_GOODS };
     
-    configs[StructureType::WAY_W] = new BuildingConfig();
-    configs[StructureType::WAY_W]->name = "Weg";
-    configs[StructureType::WAY_W]->catchmentArea = nullptr;
-    configs[StructureType::WAY_W]->buildingCosts = { 5, 0, 0, 0 };
-    configs[StructureType::WAY_W]->buildingProduction = { GoodsType::NO_GOODS, GoodsType::NO_GOODS, GoodsType::NO_GOODS };
+    configs[StructureType::STREET_CURVE_90] = new BuildingConfig();
+    configs[StructureType::STREET_CURVE_90]->name = "Pflasterstraße";
+    configs[StructureType::STREET_CURVE_90]->catchmentArea = nullptr;
+    configs[StructureType::STREET_CURVE_90]->buildingCosts = { 5, 0, 0, 0 };
+    configs[StructureType::STREET_CURVE_90]->buildingProduction = { GoodsType::NO_GOODS, GoodsType::NO_GOODS, GoodsType::NO_GOODS };
     
-    configs[StructureType::WAY_SW_NE] = new BuildingConfig();
-    configs[StructureType::WAY_SW_NE]->name = "Weg";
-    configs[StructureType::WAY_SW_NE]->catchmentArea = nullptr;
-    configs[StructureType::WAY_SW_NE]->buildingCosts = { 5, 0, 0, 0 };
-    configs[StructureType::WAY_SW_NE]->buildingProduction = { GoodsType::NO_GOODS, GoodsType::NO_GOODS, GoodsType::NO_GOODS };
+    configs[StructureType::STREET_CURVE_180] = new BuildingConfig();
+    configs[StructureType::STREET_CURVE_180]->name = "Pflasterstraße";
+    configs[StructureType::STREET_CURVE_180]->catchmentArea = nullptr;
+    configs[StructureType::STREET_CURVE_180]->buildingCosts = { 5, 0, 0, 0 };
+    configs[StructureType::STREET_CURVE_180]->buildingProduction = { GoodsType::NO_GOODS, GoodsType::NO_GOODS, GoodsType::NO_GOODS };
     
-    configs[StructureType::WAY_NW_SE] = new BuildingConfig();
-    configs[StructureType::WAY_NW_SE]->name = "Weg";
-    configs[StructureType::WAY_NW_SE]->catchmentArea = nullptr;
-    configs[StructureType::WAY_NW_SE]->buildingCosts = { 5, 0, 0, 0 };
-    configs[StructureType::WAY_NW_SE]->buildingProduction = { GoodsType::NO_GOODS, GoodsType::NO_GOODS, GoodsType::NO_GOODS };
+    configs[StructureType::STREET_CURVE_270] = new BuildingConfig();
+    configs[StructureType::STREET_CURVE_270]->name = "Pflasterstraße";
+    configs[StructureType::STREET_CURVE_270]->catchmentArea = nullptr;
+    configs[StructureType::STREET_CURVE_270]->buildingCosts = { 5, 0, 0, 0 };
+    configs[StructureType::STREET_CURVE_270]->buildingProduction = { GoodsType::NO_GOODS, GoodsType::NO_GOODS, GoodsType::NO_GOODS };
+
+    configs[StructureType::STREET_TEE_0] = new BuildingConfig();
+    configs[StructureType::STREET_TEE_0]->name = "Pflasterstraße";
+    configs[StructureType::STREET_TEE_0]->catchmentArea = nullptr;
+    configs[StructureType::STREET_TEE_0]->buildingCosts = { 5, 0, 0, 0 };
+    configs[StructureType::STREET_TEE_0]->buildingProduction = { GoodsType::NO_GOODS, GoodsType::NO_GOODS, GoodsType::NO_GOODS };
+
+    configs[StructureType::STREET_TEE_90] = new BuildingConfig();
+    configs[StructureType::STREET_TEE_90]->name = "Pflasterstraße";
+    configs[StructureType::STREET_TEE_90]->catchmentArea = nullptr;
+    configs[StructureType::STREET_TEE_90]->buildingCosts = { 5, 0, 0, 0 };
+    configs[StructureType::STREET_TEE_90]->buildingProduction = { GoodsType::NO_GOODS, GoodsType::NO_GOODS, GoodsType::NO_GOODS };
+
+    configs[StructureType::STREET_TEE_180] = new BuildingConfig();
+    configs[StructureType::STREET_TEE_180]->name = "Pflasterstraße";
+    configs[StructureType::STREET_TEE_180]->catchmentArea = nullptr;
+    configs[StructureType::STREET_TEE_180]->buildingCosts = { 5, 0, 0, 0 };
+    configs[StructureType::STREET_TEE_180]->buildingProduction = { GoodsType::NO_GOODS, GoodsType::NO_GOODS, GoodsType::NO_GOODS };
+
+    configs[StructureType::STREET_TEE_270] = new BuildingConfig();
+    configs[StructureType::STREET_TEE_270]->name = "Pflasterstraße";
+    configs[StructureType::STREET_TEE_270]->catchmentArea = nullptr;
+    configs[StructureType::STREET_TEE_270]->buildingCosts = { 5, 0, 0, 0 };
+    configs[StructureType::STREET_TEE_270]->buildingProduction = { GoodsType::NO_GOODS, GoodsType::NO_GOODS, GoodsType::NO_GOODS };
+
+    configs[StructureType::STREET_CROSS] = new BuildingConfig();
+    configs[StructureType::STREET_CROSS]->name = "Pflasterstraße";
+    configs[StructureType::STREET_CROSS]->catchmentArea = nullptr;
+    configs[StructureType::STREET_CROSS]->buildingCosts = { 5, 0, 0, 0 };
+    configs[StructureType::STREET_CROSS]->buildingProduction = { GoodsType::NO_GOODS, GoodsType::NO_GOODS, GoodsType::NO_GOODS };
     
     configs[StructureType::CHAPEL] = new BuildingConfig();
     configs[StructureType::CHAPEL]->name = "Kapelle";

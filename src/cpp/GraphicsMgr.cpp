@@ -12,22 +12,27 @@ GraphicsMgr::GraphicsMgr() {
 	structures = new Graphic*[256];
     memset(structures, 0, 256 * sizeof(Graphic*));
     
-	structures[CHAPEL] = new Graphic("data/img/objects/chapel.png", 2, 1);
-	structures[PIONEERS_HOUSE1] = new Graphic("data/img/objects/pioneers-house1.png", 2, 2);
-	structures[SIGNALFIRE] = new Graphic("data/img/objects/signalfire.png", 1, 1);
-	structures[HERBARY] = new Graphic("data/img/objects/herbary.png", 3, 3);
-	structures[BRICKYARD] = new Graphic("data/img/objects/brickyard.png", 4, 2);
-	structures[BRICKYARD2] = new Graphic("data/img/objects/brickyard2.png", 2, 4);
-    structures[OFFICE1] = new Graphic("data/img/objects/office1.png", 3, 2);
-    structures[MARKETPLACE] = new Graphic("data/img/objects/marketplace.png", 4, 3);
-    structures[FORESTERS] = new Graphic("data/img/objects/foresters.png", 2, 2);
+	structures[StructureType::CHAPEL] = new Graphic("data/img/objects/chapel.png", 2, 1);
+	structures[StructureType::PIONEERS_HOUSE1] = new Graphic("data/img/objects/pioneers-house1.png", 2, 2);
+	structures[StructureType::SIGNALFIRE] = new Graphic("data/img/objects/signalfire.png", 1, 1);
+	structures[StructureType::HERBARY] = new Graphic("data/img/objects/herbary.png", 3, 3);
+	structures[StructureType::BRICKYARD] = new Graphic("data/img/objects/brickyard.png", 4, 2);
+	structures[StructureType::BRICKYARD2] = new Graphic("data/img/objects/brickyard2.png", 2, 4);
+    structures[StructureType::OFFICE1] = new Graphic("data/img/objects/office1.png", 3, 2);
+    structures[StructureType::MARKETPLACE] = new Graphic("data/img/objects/marketplace.png", 4, 3);
+    structures[StructureType::FORESTERS] = new Graphic("data/img/objects/foresters.png", 2, 2);
 
-	structures[WAY_E] = new Graphic("data/img/objects/way/way-e.png", 1, 1);
-	structures[WAY_N] = new Graphic("data/img/objects/way/way-n.png", 1, 1);
-	structures[WAY_S] = new Graphic("data/img/objects/way/way-s.png", 1, 1);
-	structures[WAY_W] = new Graphic("data/img/objects/way/way-w.png", 1, 1);
-	structures[WAY_SW_NE] = new Graphic("data/img/objects/way/way-sw-ne.png", 1, 1);
-	structures[WAY_NW_SE] = new Graphic("data/img/objects/way/way-nw-se.png", 1, 1);
+	structures[StructureType::STREET_STRAIGHT_0] = new Graphic("data/img/objects/street-straight0.png", 1, 1);
+	structures[StructureType::STREET_STRAIGHT_90] = new Graphic("data/img/objects/street-straight90.png", 1, 1);
+	structures[StructureType::STREET_CURVE_0] = new Graphic("data/img/objects/street-curve0.png", 1, 1);
+	structures[StructureType::STREET_CURVE_90] = new Graphic("data/img/objects/street-curve90.png", 1, 1);
+	structures[StructureType::STREET_CURVE_180] = new Graphic("data/img/objects/street-curve180.png", 1, 1);
+	structures[StructureType::STREET_CURVE_270] = new Graphic("data/img/objects/street-curve270.png", 1, 1);
+    structures[StructureType::STREET_TEE_0] = new Graphic("data/img/objects/street-tee0.png", 1, 1);
+    structures[StructureType::STREET_TEE_90] = new Graphic("data/img/objects/street-tee90.png", 1, 1);
+    structures[StructureType::STREET_TEE_180] = new Graphic("data/img/objects/street-tee180.png", 1, 1);
+    structures[StructureType::STREET_TEE_270] = new Graphic("data/img/objects/street-tee270.png", 1, 1);
+    structures[StructureType::STREET_CROSS] = new Graphic("data/img/objects/street-cross.png", 1, 1);
     
     
     goodsIcons = new Graphic*[GoodsType::MAX_GOOD];

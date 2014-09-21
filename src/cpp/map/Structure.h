@@ -12,12 +12,17 @@ enum StructureType : unsigned char {
     NO_STRUCTURE = 0,
     
     // Strukturen
-    WAY_E = 1,
-    WAY_N = 2,
-    WAY_S = 3,
-    WAY_W = 4,
-    WAY_SW_NE = 5,
-    WAY_NW_SE = 6,
+    STREET_STRAIGHT_0 = 1,
+    STREET_STRAIGHT_90 = 2,
+    STREET_CURVE_0 = 3,
+    STREET_CURVE_90 = 4,
+    STREET_CURVE_180 = 5,
+    STREET_CURVE_270 = 6,
+    STREET_TEE_0 = 7,
+    STREET_TEE_90 = 8,
+    STREET_TEE_180 = 9,
+    STREET_TEE_270 = 10,
+    STREET_CROSS = 11,
     
     // Gebäude
     START_BUILDINGS = 101, // Marker, um zu unterscheiden, ob Structure oder Building angelegt werden
