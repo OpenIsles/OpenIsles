@@ -40,9 +40,9 @@ CREATE_TARGET_DIRECTORY = mkdir -p $(@D)
 
 .PHONY: all clean build-tiles clean-tiles build-gui clean-gui render-blender clean-blender
 
-all: build-tiles build-gui $(BUILD_DIRECTORY)/OpenIsles
+all: build-tiles build-gui render-blender $(BUILD_DIRECTORY)/OpenIsles
 
-clean: clean-tiles clean-gui
+clean: clean-tiles clean-gui clean-blender
 	rm -rf $(BUILD_DIRECTORY)
 	
 
@@ -65,6 +65,10 @@ $(BUILD_DIRECTORY)/game/Player.o: $(SRC_CPP_DIRECTORY)/game/Player.cpp $(SRC_CPP
 
 
 $(BUILD_DIRECTORY)/gui/FontMgr.o: $(SRC_CPP_DIRECTORY)/gui/FontMgr.cpp $(SRC_CPP_DIRECTORY)/gui/FontMgr.h
+	$(CREATE_TARGET_DIRECTORY)
+	$(CC) $(CFLAGS) -o $@ -c $<
+
+$(BUILD_DIRECTORY)/gui/GuiAddBuildingWidget.o: $(SRC_CPP_DIRECTORY)/gui/GuiAddBuildingWidget.cpp $(SRC_CPP_DIRECTORY)/gui/GuiAddBuildingWidget.h
 	$(CREATE_TARGET_DIRECTORY)
 	$(CC) $(CFLAGS) -o $@ -c $<
 	
