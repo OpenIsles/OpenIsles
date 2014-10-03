@@ -7,7 +7,9 @@
 
 GraphicsMgr::GraphicsMgr() {
 	loadTiles();
-    
+
+    // anisotropic filtering für die Gebäude aktivieren, damit beim Skalieren das Mask-Overlay ordentlich is
+    SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "2");
 
 	structures = new Graphic*[256];
     memset(structures, 0, 256 * sizeof(Graphic*));
@@ -33,7 +35,7 @@ GraphicsMgr::GraphicsMgr() {
     structures[StructureType::STREET_TEE_180] = new Graphic("data/img/objects/street-tee180.png", 1, 1);
     structures[StructureType::STREET_TEE_270] = new Graphic("data/img/objects/street-tee270.png", 1, 1);
     structures[StructureType::STREET_CROSS] = new Graphic("data/img/objects/street-cross.png", 1, 1);
-    
+
     
     goodsIcons = new Graphic*[GoodsType::MAX_GOOD];
     memset(goodsIcons, 0, GoodsType::MAX_GOOD * sizeof(Graphic*));
@@ -99,6 +101,9 @@ GraphicsMgr::~GraphicsMgr() {
 }
 
 void GraphicsMgr::loadTiles() {
+    // nearest pixel sampling für die Kacheln, damit die fließend ineinander übergehen
+    SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "0");
+
 	tiles = new Graphic*[128];
     memset(tiles, 0, 128 * sizeof(Graphic*));
 
