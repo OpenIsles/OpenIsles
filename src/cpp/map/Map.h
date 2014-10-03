@@ -327,12 +327,19 @@ private:
     unsigned char isAllowedToPlaceStructure(int mapX, int mapY, StructureType structureType);
     
     /**
-     * Render eine Struktur. Hilfsmethode von renderMap().
+     * Rendert eine Struktur. Hilfsmethode von renderMap().
      * 
      * @param structure Struktur
      * @param rect Rechteck mit Pixel-Koordinaten, wo die Grafik gesetzt werden soll
      */
     void renderStructure(Structure* structure, SDL_Rect* rect);
+
+    /**
+     * Zeichnet den Einzugsbereich eines Gebäudes. Hilfsmethode von renderMap().
+     *
+     * @param structure Struktur
+     */
+    void drawCatchmentArea(Structure* structure);
     
     /**
 	 * @brief interner Klickhandler, wenn in die Karte geklickt wurde. Diese Methode wird garantiert nur aufgerufen,

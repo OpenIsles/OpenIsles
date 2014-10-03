@@ -515,8 +515,12 @@ void Map::renderMap(SDL_Renderer* renderer) {
         renderStructure(structure, &rect);
 	}
 
-    // mapObjectBeingAdded gesetzt? Schnell wieder aus der Liste nehmen
+    // mapObjectBeingAdded gesetzt?
     if (structureBeingAdded != nullptr) {
+        // Einzugsbereich jetzt malen, damit er oben drauf is...
+        drawCatchmentArea(structureBeingAdded);
+
+        // ... und MapObject schnell wieder aus der Liste nehmen.
         mapObjects.remove(structureBeingAdded);
         drawingOrderGraph.removeNode(structureBeingAdded);
         delete structureBeingAdded;
@@ -635,17 +639,13 @@ void Map::renderStructure(Structure* structure, SDL_Rect* rect) {
         rect->x + (rect->w / 2), rect->y + (rect->h / 2),
         &colorYellow, &colorRed, "DroidSans-Bold.ttf", 12, RENDERTEXT_HALIGN_CENTER | RENDERTEXT_VALIGN_MIDDLE);
 #endif
-    
-    // masked nicht gesetzt? Dann sind wir fertig. 
-    if (!(drawingFlags & MapObject::DRAWING_FLAG_MASKED)) {
-        return;  
-    }
-    
-    // Einzugsbereich-Rahmen malen
+}
+
+void Map::drawCatchmentArea(Structure* structure) {
     SDL_SetRenderDrawColor(renderer, 0xc8, 0xaf, 0x37, 255);
-    
+
     const BuildingConfig* buildingConfig = buildingConfigMgr->getConfig(structure->getStructureType());
-    const RectangleData<char>* catchmentAreaData = buildingConfig->getCatchmentArea(); 
+    const RectangleData<char>* catchmentAreaData = buildingConfig->getCatchmentArea();
     if (catchmentAreaData != nullptr) {
         for (int y = 0; y < catchmentAreaData->height; y++) {
             for (int x = 0; x < catchmentAreaData->width; x++) {
@@ -666,9 +666,9 @@ void Map::renderStructure(Structure* structure, SDL_Rect* rect) {
                 // Oben rechts
                 if (catchmentAreaData->getData(x, y - 1, '0') == '0' && catchmentAreaData->getData(x, y, '0') == '1') {
                     SDL_RenderDrawLine(renderer,
-                            (screenX + GraphicsMgr::TILE_WIDTH_HALF) / screenZoom, screenY / screenZoom, 
+                            (screenX + GraphicsMgr::TILE_WIDTH_HALF) / screenZoom, screenY / screenZoom,
                             (screenX + GraphicsMgr::TILE_WIDTH) / screenZoom,
-                            (screenY + GraphicsMgr::TILE_HEIGHT_HALF) / screenZoom); 
+                            (screenY + GraphicsMgr::TILE_HEIGHT_HALF) / screenZoom);
                 }
 
                 // Oben links
@@ -680,9 +680,9 @@ void Map::renderStructure(Structure* structure, SDL_Rect* rect) {
 
                 // Unten rechts
                 if (catchmentAreaData->getData(x, y, '0') == '1' && catchmentAreaData->getData(x + 1, y, '0') == '0') {
-                    SDL_RenderDrawLine(renderer, 
+                    SDL_RenderDrawLine(renderer,
                             (screenX + GraphicsMgr::TILE_WIDTH_HALF) / screenZoom,
-                            (screenY + GraphicsMgr::TILE_HEIGHT) / screenZoom, 
+                            (screenY + GraphicsMgr::TILE_HEIGHT) / screenZoom,
                             (screenX + GraphicsMgr::TILE_WIDTH) / screenZoom,
                             (screenY + GraphicsMgr::TILE_HEIGHT_HALF) / screenZoom);
                 }
