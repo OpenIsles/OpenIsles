@@ -6,6 +6,7 @@
 #include <iostream>
 #include <list>
 #include <string.h>
+#include "map/DrawingOrderGraph.h"
 #include "map/Building.h"
 #include "map/Isle.h"
 #include "utils/RectangleData.h"
@@ -18,22 +19,27 @@
 #define PLACING_STRUCTURE_ALLOWED         0
 
 /**
- * @brief Setzen der Struktur ist nicht erlaubt wegen Resourcen-Mangel.
- * Grafisch wird dies dargestellt, indem das Gebäude blickt.
- */
-#define PLACING_STRUCTURE_NO_RESOURCES    (1 << 0)
+* @brief Setzen der Struktur ist nicht erlaubt wegen Resourcen-Mangel.
+* Grafisch wird dies dargestellt, indem das Gebäude blickt.
+*/
+#define PLACING_STRUCTURE_NO_RESOURCES           (1 << 0)
 
 /**
- * @brief Setzen der Struktur ist hier nicht erlaubt. Das kann sein, weil was im Weg ist
- * oder das Gebiet nicht erschlossen ist. Grafisch wird dies dargestellt, indem die Struktur rot gezeichnet wird
- */
-#define PLACING_STRUCTURE_NO_ROOM         (1 << 1)
+* @brief Setzen der Struktur ist hier nicht erlaubt, weil was im Weg ist.
+*/
+#define PLACING_STRUCTURE_SOMETHING_IN_THE_WAY   (1 << 1)
 
 /**
- * @brief Setzen der Struktur ist nicht erlaubt, da wir mitten auf dem Ozean außerhalb einer Insel sind.
- * Grafisch wird dies dargestellt, indem gar nix gezeichnet wird.
- */
-#define PLACING_STRUCTURE_OUTSIDE_OF_ISLE (1 << 2)
+* @brief Setzen der Struktur ist hier nicht erlaubt, weil das Gebiet nicht erschlossen ist.
+* Grafisch wird dies dargestellt, indem die Struktur rot gezeichnet wird
+*/
+#define PLACING_STRUCTURE_ROOM_NOT_UNLOCK        (1 << 2)
+
+/**
+* @brief Setzen der Struktur ist nicht erlaubt, da wir mitten auf dem Ozean außerhalb einer Insel sind.
+* Grafisch wird dies dargestellt, indem gar nix gezeichnet wird.
+*/
+#define PLACING_STRUCTURE_OUTSIDE_OF_ISLE        (1 << 3)
 
 
 
@@ -105,6 +111,11 @@ private:
 	 * "hinten im Bild" liegende Objekte kommen in der Liste zuerst.
 	 */
 	std::list<MapObject*> mapObjects;
+
+    /**
+     * @brief Graph der Map-Objekte für die Reihenfolge beim Zeichnen.
+     */
+    DrawingOrderGraph drawingOrderGraph;
 
 	/**
 	 * @brief ausgewähltes Objekt oder @c nullptr, wenn nichts ausgewählt ist
@@ -289,11 +300,6 @@ private:
 	 * @param mapObject Map-Objekt
 	 */
 	void addMapObject(MapObject* mapObject);
-    
-    /**
-     * @brief Sortiert die Liste mapObjects für das Rendering neu.
-     */
-    void resortMapObjects();
  
 	/**
 	 * @brief Initialisiert alles, wenn die Karte sich ändert.
@@ -325,11 +331,8 @@ private:
      * 
      * @param structure Struktur
      * @param rect Rechteck mit Pixel-Koordinaten, wo die Grafik gesetzt werden soll
-     * @param masked true, um die Grafik maskiert (für Gebäudeplatzierung) zu zeichnen
-     * @param redAndSemiTransparent true, um die Grafik rot einzufärben und halb-durchsichtig zu machen
-     * @param blink true, um die Grafik blinken zu lassen, d.h. entweder wird die Grafik gezeichnet oder nicht
      */
-    void renderStructure(Structure* structure, SDL_Rect* rect, bool masked, bool redAndSemiTransparent, bool blink);
+    void renderStructure(Structure* structure, SDL_Rect* rect);
     
     /**
 	 * @brief interner Klickhandler, wenn in die Karte geklickt wurde. Diese Methode wird garantiert nur aufgerufen,

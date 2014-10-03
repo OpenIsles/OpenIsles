@@ -10,6 +10,25 @@
  */
 class MapObject {
 
+public:
+    /**
+     * @brief zeichnet das Objekt maskiert, d.h. gelbem Overlay für Gebäudeplatzierung
+     * @sa #drawingFlags
+     */
+    static const int DRAWING_FLAG_MASKED                   = (1 << 0);
+
+    /**
+     * @brief zeichnet das Objekt rot eingefärbt und halb-durchsichtig
+     * @sa #drawingFlags
+     */
+    static const int DRAWING_FLAG_RED_AND_SEMI_TRANSPARENT = (1 << 1);
+
+    /**
+     * @brief zeichnet das Objekt blinkend, d.h. entweder wird die Grafik gezeichnet oder nicht
+     * @sa #drawingFlags
+     */
+    static const int DRAWING_FLAG_BLINK                    = (1 << 2);
+
 protected:
 	/**
 	 * @brief Map-Koordinaten des Objekts
@@ -35,6 +54,17 @@ protected:
      * @brief Spieler, dem das Objekt gehört, oder nullptr für spielerlose Objekte
      */
     Player* player = nullptr;
+
+    /**
+     * @brief Wird zum Sortieren der Objekte in Zeichenreihenfolge verwendet. DrawingOrderGraph setzt diesen Wert.
+     */
+    int drawingOrderIndex = -1;
+
+    /**
+     * @brief Flags, die angeben, wie das Objekt gezeichnet wird.
+     * Eine Kombination aus DRAWING_FLAG_-Konstanten wird erwartet.
+     */
+    int drawingFlags = 0;
 
 public:
 	virtual ~MapObject() {
@@ -108,6 +138,21 @@ public:
         this->player = player;
     }
 
+    int getDrawingOrderIndex() const {
+        return drawingOrderIndex;
+    }
+
+    void setDrawingOrderIndex(int drawingOrderIndex) {
+        this->drawingOrderIndex = drawingOrderIndex;
+    }
+
+    int getDrawingFlags() const {
+        return drawingFlags;
+    }
+
+    void setDrawingFlags(int drawingFlags) {
+        this->drawingFlags = drawingFlags;
+    }
 };
 
 #endif

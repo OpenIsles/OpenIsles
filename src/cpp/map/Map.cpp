@@ -1,12 +1,11 @@
+#include <gui/FontMgr.h>
 #include "config/BuildingConfigMgr.h"
 #include "game/Colony.h"
 #include "game/Game.h"
-#include "map/DrawingOrderer.h"
+#include "map/DrawingOrderGraph.h"
 #include "map/Map.h"
-#include "map/MapUtils.h"
 #include "rapidxml/rapidxml.hpp"
 #include "rapidxml/rapidxml_utils.hpp"
-#include "GraphicsMgr.h"
 
 #define SDL_SetTextureDarkened(texture) (SDL_SetTextureColorMod((texture), 160, 160, 160))
 #define SDL_SetTextureNormal(texture) (SDL_SetTextureColorMod((texture), 255, 255, 255))
@@ -39,6 +38,9 @@
 
 // Aus main.cpp importiert
 extern BuildingConfigMgr* buildingConfigMgr;
+#ifdef DEBUG_DRAWING_ORDER
+extern FontMgr* fontMgr;
+#endif
 extern Game* game;
 extern GraphicsMgr* graphicsMgr;
 extern SDL_Renderer* renderer;
@@ -46,7 +48,7 @@ extern int mouseCurrentX, mouseCurrentY;
 extern const int windowWidth;
 extern const int windowHeight;
 
-Map::Map() {
+Map::Map() : drawingOrderGraph(&mapObjects) {
 	loadMapFromTMX("data/map/map.tmx");
     
     Player* player1 = game->getPlayer(0);
@@ -62,12 +64,12 @@ Map::Map() {
     addBuilding(51, 26, BRICKYARD2, player1);
     addBuilding(45, 24, OFFICE1, player1);
     addBuilding(49, 41, MARKETPLACE, player1);
-    
+
     addBuilding(201, 77, OFFICE1, player1);
     addBuilding(230, 214, OFFICE1, player2);
     addBuilding(30, 226, OFFICE1, player3);
     addBuilding(132, 94, OFFICE1, player4);
-    
+
 	addStructure(48, 30, STREET_STRAIGHT_0, player1);
 	addStructure(49, 30, STREET_STRAIGHT_0, player1);
 	addStructure(50, 30, STREET_STRAIGHT_0, player1);
@@ -454,6 +456,45 @@ void Map::renderMap(SDL_Renderer* renderer) {
 		}
 	}
 
+    // Postionieren wir grade ein neues Gebäude? Dann kurzfristig in die mapObjects-Liste nehmen, damits gerendert wird
+    Structure* structureBeingAdded = nullptr;
+    if (game->getAddingStructure() != NO_STRUCTURE) {
+        int mouseScreenX = (mouseCurrentX * screenZoom) + screenOffsetX;
+        int mouseScreenY = (mouseCurrentY * screenZoom) + screenOffsetY;
+        int mapX, mapY;
+        MapUtils::screenToMapCoords(mouseScreenX, mouseScreenY, mapX, mapY);
+
+        StructureType structureType = game->getAddingStructure();
+        unsigned char allowedToPlaceStructure = isAllowedToPlaceStructure(mapX, mapY, structureType);
+
+        // Auf dem Ozean malen wir gar nix.
+        // Is was im Weg, malen wir auch nicht, weil sonst der DrawingOrder-Algorithmus in eine Endlosschleife läuft // TODO wir müssen eine flache Kachel malen, sonst sieht man ja gar nix
+        if (!(allowedToPlaceStructure & (PLACING_STRUCTURE_OUTSIDE_OF_ISLE | PLACING_STRUCTURE_SOMETHING_IN_THE_WAY))) {
+            Graphic* graphic = graphicsMgr->getGraphicForStructure(structureType);
+
+            SDL_Rect rect;
+            MapUtils::mapToDrawScreenCoords(mapX, mapY, graphic, &rect);
+
+            int drawingFlags = MapObject::DRAWING_FLAG_MASKED;
+            if (allowedToPlaceStructure & PLACING_STRUCTURE_ROOM_NOT_UNLOCK) {
+                drawingFlags |= MapObject::DRAWING_FLAG_RED_AND_SEMI_TRANSPARENT;
+            }
+            if (allowedToPlaceStructure & PLACING_STRUCTURE_NO_RESOURCES) {
+                drawingFlags |= MapObject::DRAWING_FLAG_BLINK;
+            }
+
+            // Zu zeichnendes Gebäude erstellen
+            structureBeingAdded = new Structure();
+            structureBeingAdded->setStructureType(structureType);
+            structureBeingAdded->setMapCoords(mapX, mapY, graphic->getMapWidth(), graphic->getMapHeight());
+            structureBeingAdded->setScreenCoords(rect.x, rect.y, rect.w, rect.h);
+            structureBeingAdded->setDrawingFlags(drawingFlags);
+
+            mapObjects.push_front(structureBeingAdded);
+            drawingOrderGraph.addNode(structureBeingAdded);
+        }
+    }
+
 	// Objekte rendern
 	for (auto iter = mapObjects.cbegin(); iter != mapObjects.cend(); iter++) {
 		MapObject* mapObject = *iter;
@@ -471,39 +512,14 @@ void Map::renderMap(SDL_Renderer* renderer) {
         rect.w /= screenZoom;
         rect.h /= screenZoom;
 
-        renderStructure(structure, &rect, false, false, false);
+        renderStructure(structure, &rect);
 	}
-    
-    // Postionieren wir grade ein neues Gebäude?
-    if (game->getAddingStructure() != NO_STRUCTURE) {
-        int mouseScreenX = (mouseCurrentX * screenZoom) + screenOffsetX;
-        int mouseScreenY = (mouseCurrentY * screenZoom) + screenOffsetY;
-        int mapX, mapY;
-        MapUtils::screenToMapCoords(mouseScreenX, mouseScreenY, mapX, mapY);
-        
-        StructureType structureType = game->getAddingStructure();
-        unsigned char allowedToPlaceStructure = isAllowedToPlaceStructure(mapX, mapY, structureType);
-        
-        // Auf dem Ozean malen wir gar nix
-        if (!(allowedToPlaceStructure & PLACING_STRUCTURE_OUTSIDE_OF_ISLE)) {
-            Graphic* graphic = graphicsMgr->getGraphicForStructure(structureType);
-            
-            // Zu zeichnendes Gebäude erstellen
-            Structure structure;
-            structure.setStructureType(structureType);
-            structure.setMapCoords(mapX, mapY, graphic->getMapWidth(), graphic->getMapHeight());
 
-            SDL_Rect rect;
-            MapUtils::mapToDrawScreenCoords(mapX, mapY, graphic, &rect);
-            rect.x /= screenZoom;
-            rect.y /= screenZoom;
-            rect.w /= screenZoom;
-            rect.h /= screenZoom;
-
-            bool redAndSemiTransparent = (allowedToPlaceStructure & PLACING_STRUCTURE_NO_ROOM);
-            bool blink = (allowedToPlaceStructure & PLACING_STRUCTURE_NO_RESOURCES);
-            renderStructure(&structure, &rect, true, redAndSemiTransparent, blink);
-        }
+    // mapObjectBeingAdded gesetzt? Schnell wieder aus der Liste nehmen
+    if (structureBeingAdded != nullptr) {
+        mapObjects.remove(structureBeingAdded);
+        drawingOrderGraph.removeNode(structureBeingAdded);
+        delete structureBeingAdded;
     }
 
 	// Clipping wieder zurücksetzen, bevor der nächste mit Malen drankommt
@@ -543,17 +559,22 @@ unsigned char Map::isAllowedToPlaceStructure(int mapX, int mapY, StructureType s
         for (int x = mapX; x < mapX + graphic->getMapWidth(); x++) {
             MapTile* mapTile = mapTiles->getData(x, y, nullptr);
             if (
-                    // Gebiet nicht erschlossen oder nicht unseres
-                    mapTile->player == nullptr || mapTile->player != game->getCurrentPlayer() ||
+                // Da steht was im Weg
+                getMapObjectAt(x, y) != nullptr
+                ) {
+                result |= PLACING_STRUCTURE_SOMETHING_IN_THE_WAY;
+                return result;
+            }
 
-                    // Da steht was im Weg
-                    getMapObjectAt(x, y) != nullptr ||
-                    
+            if (
+                // Gebiet nicht erschlossen oder nicht unseres
+                mapTile->player == nullptr || mapTile->player != game->getCurrentPlayer() ||
+
                     // Gelände passt nicht
-                    // TODO aktuell darf nur auf Grass und Grass2 gebaut werden. Später muss das das Gebäude wissen, wo.
-                    (mapTile->tileGraphicIndex != 2 && mapTile->tileGraphicIndex != 7)
-            ) {
-                result |= PLACING_STRUCTURE_NO_ROOM;
+                        // TODO aktuell darf nur auf Grass und Grass2 gebaut werden. Später muss das das Gebäude wissen, wo.
+                        (mapTile->tileGraphicIndex != 2 && mapTile->tileGraphicIndex != 7)
+                ) {
+                result |= PLACING_STRUCTURE_ROOM_NOT_UNLOCK;
                 return result;
             }
         }
@@ -562,7 +583,7 @@ unsigned char Map::isAllowedToPlaceStructure(int mapX, int mapY, StructureType s
     return result;
 }
 
-void Map::renderStructure(Structure* structure, SDL_Rect* rect, bool masked, bool redAndSemiTransparent, bool blink) {
+void Map::renderStructure(Structure* structure, SDL_Rect* rect) {
     rect->x -= screenOffsetX / screenZoom;
     rect->y -= screenOffsetY / screenZoom;
         
@@ -572,11 +593,14 @@ void Map::renderStructure(Structure* structure, SDL_Rect* rect, bool masked, boo
         return;
     }
 
+    int drawingFlags = structure->getDrawingFlags();
+
     Graphic* graphic = graphicsMgr->getGraphicForStructure(structure->getStructureType());
-    SDL_Texture* objectTexture = masked ? graphic->getTextureMasked() : graphic->getTexture();
+    SDL_Texture* objectTexture =
+        (drawingFlags & MapObject::DRAWING_FLAG_MASKED) ? graphic->getTextureMasked() : graphic->getTexture();
     
     // Gebäude nicht zeichnen, wenn wir im Blinkmodus sind. Dann nur in der ersten Hälfte eines Intervalls zeichnen
-    if (!blink || (SDL_GetTicks() % 800 < 400)) {
+    if (!(drawingFlags & MapObject::DRAWING_FLAG_BLINK) || (SDL_GetTicks() % 800 < 400)) {
         if (selectedMapObject != nullptr) {
             Building* selectedBuilding = dynamic_cast<Building*>(selectedMapObject);
             bool insideCatchmentArea = 
@@ -591,7 +615,7 @@ void Map::renderStructure(Structure* structure, SDL_Rect* rect, bool masked, boo
             SDL_SetTextureNormal(objectTexture);
         }
 
-        if (redAndSemiTransparent) {
+        if (drawingFlags & MapObject::DRAWING_FLAG_RED_AND_SEMI_TRANSPARENT) {
             SDL_SetTextureColorMod(objectTexture, 255, 0, 0);
             SDL_SetTextureAlphaMod(objectTexture, 128);
         } else {
@@ -601,9 +625,19 @@ void Map::renderStructure(Structure* structure, SDL_Rect* rect, bool masked, boo
 
         SDL_RenderCopy(renderer, objectTexture, NULL, rect);
     }
+
+#ifdef DEBUG_DRAWING_ORDER
+    // Anzeige des drawingOrderIndex
+    static SDL_Color colorYellow = {255, 255, 0, 255};
+    static SDL_Color colorRed = {255, 0, 0, 255};
+
+    fontMgr->renderText(renderer, std::to_string(structure->getDrawingOrderIndex()),
+        rect->x + (rect->w / 2), rect->y + (rect->h / 2),
+        &colorYellow, &colorRed, "DroidSans-Bold.ttf", 12, RENDERTEXT_HALIGN_CENTER | RENDERTEXT_VALIGN_MIDDLE);
+#endif
     
     // masked nicht gesetzt? Dann sind wir fertig. 
-    if (!masked) {
+    if (!(drawingFlags & MapObject::DRAWING_FLAG_MASKED)) {
         return;  
     }
     
@@ -671,17 +705,9 @@ void Map::scroll(int screenOffsetX, int screenOffsetY) {
 }
 
 void Map::addMapObject(MapObject* mapObject) {
-	mapObjects.push_front(mapObject);
+    mapObjects.push_front(mapObject);
     
-    resortMapObjects();
-}
-
-void Map::resortMapObjects() {
-    // Reihenfolge der Objekte so stellen, dass von hinten nach vorne gerendert wird.
-    // Siehe doc/rendering-order.xcf für exakte Erklärung.
-    
-    DrawingOrderer drawingOrderer(&mapObjects);
-    drawingOrderer.reorder();
+    drawingOrderGraph.addNode(mapObject);
 }
 
 const Structure* Map::addStructure(int mapX, int mapY, StructureType structureType, Player* player) {
@@ -767,6 +793,7 @@ void Map::clearMap() {
 		delete mapObject;
 	}
 	mapObjects.clear();
+    drawingOrderGraph.clear();
     
     // mapTiles wegräumen
     if (mapTiles != nullptr) {
@@ -915,9 +942,8 @@ void Map::deleteSelectedObject() {
     }
     
     mapObjects.remove(selectedMapObject);
+    drawingOrderGraph.removeNode(selectedMapObject);
     delete selectedMapObject;
     
     selectedMapObject = nullptr;
-    
-    resortMapObjects();
 }
