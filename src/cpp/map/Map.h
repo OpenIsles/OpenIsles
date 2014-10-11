@@ -105,6 +105,13 @@ private:
      */
     RectangleData<MapTile*>* mapTiles = nullptr;
 
+    /**
+     * @brief Hilfsstruktur, die zum Zeichnen der Map-Objekte benötigt wird. Wir wollen sie nicht jedes Frame neu
+     * anlegen, weil sie immer so groß wie die Karte ist.
+     * @sa renderMap()
+     */
+    RectangleData<char>* mapObjectAlreadyDrawnThere = nullptr;
+
 	/**
 	 * @brief Liste der Inseln auf der Karte
 	 */
@@ -327,13 +334,13 @@ private:
      */
     unsigned char isAllowedToPlaceStructure(int mapX, int mapY, StructureType structureType);
     
-    /**
-     * Rendert eine Struktur. Hilfsmethode von renderMap().
-     * 
-     * @param structure Struktur
-     * @param rect Rechteck mit Pixel-Koordinaten, wo die Grafik gesetzt werden soll
-     */
-    void renderStructure(Structure* structure, SDL_Rect* rect);
+//    /**
+//     * Rendert eine Struktur. Hilfsmethode von renderMap().
+//     *
+//     * @param structure Struktur
+//     * @param rect Rechteck mit Pixel-Koordinaten, wo die Grafik gesetzt werden soll
+//     */
+//    void renderStructure(Structure* structure, SDL_Rect* rect);
 
     /**
      * Zeichnet den Einzugsbereich eines Gebäudes. Hilfsmethode von renderMap().

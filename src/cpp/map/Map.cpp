@@ -61,14 +61,13 @@ Map::Map() {
 //    Player* player3 = game->getPlayer(2);
 //    Player* player4 = game->getPlayer(3);
 
-//    addBuilding(52, 39, CHAPEL, player1);
-//    addBuilding(51, 35, PIONEERS_HOUSE1, player1);
-//    addBuilding(58, 39, SIGNALFIRE, player1);
-//    addBuilding(55, 35, HERBARY, player1);
-//    addBuilding(50, 32, BRICKYARD, player1);
-//    addBuilding(51, 26, BRICKYARD2, player1);
-//    addBuilding(45, 24, OFFICE1, player1);
-//    addBuilding(49, 41, MARKETPLACE, player1);
+    addBuilding(52, 39, CHAPEL, player1);
+    addBuilding(51, 35, PIONEERS_HOUSE1, player1);
+    addBuilding(58, 39, SIGNALFIRE, player1);
+    addBuilding(55, 35, HERBARY, player1);
+    addBuilding(50, 32, BRICKYARD, player1);
+    addBuilding(51, 26, BRICKYARD2, player1);
+    addBuilding(45, 24, OFFICE1, player1);
 //
 //    addBuilding(201, 77, OFFICE1, player1);
 //    addBuilding(230, 214, OFFICE1, player2);
@@ -119,26 +118,26 @@ Map::Map() {
 //    addStructure(55, 34, STREET_STRAIGHT_0, player1);
 //    addStructure(56, 34, STREET_STRAIGHT_0, player1);
 //
-//    // Map zufällig mit Gebäuden vollmachen
-//    for (int mapY = 5; mapY < 295; mapY += 30) {
-//        for (int mapX = 5; mapX < 295; mapX += 30) {
-//            addBuilding(mapX, mapY, MARKETPLACE, player1);
-//        }
-//    }
-//    for (int i = 0; i < 150; i++) {
-//        int mapX = 40 + (rand() % 35);
-//        int mapY = 40 + (rand() % 35);
-//        StructureType structureType = (StructureType) (101 + (rand() % 8));
-//
-//        // Gucken, ob frei is
-//        if (isAllowedToPlaceStructure(mapX, mapY, structureType) & PLACING_STRUCTURE_SOMETHING_IN_THE_WAY) {
-//            i--;
-//            continue;
-//        }
-//
-//        addBuilding(mapX, mapY, structureType, player1);
-//        std::cout << i << std::endl;
-//    }
+    // Map zufällig mit Gebäuden vollmachen
+    for (int mapY = 5; mapY < 295; mapY += 30) {
+        for (int mapX = 5; mapX < 295; mapX += 30) {
+            addBuilding(mapX, mapY, MARKETPLACE, player1);
+        }
+    }
+    for (int i = 0; i < 1500; i++) {
+        int mapX = 40 + (rand() % 85);
+        int mapY = 40 + (rand() % 55);
+        StructureType structureType = (StructureType) (101 + (rand() % 8));
+
+        // Gucken, ob frei is
+        if (isAllowedToPlaceStructure(mapX, mapY, structureType) & PLACING_STRUCTURE_SOMETHING_IN_THE_WAY) {
+            i--;
+            continue;
+        }
+
+        addBuilding(mapX, mapY, structureType, player1);
+        std::cout << i << std::endl;
+    }
     
     updateMinimapTexture();
     
@@ -196,6 +195,9 @@ void Map::initNewMap(int newWidth, int newHeight) {
     for(int i = 0; i < mapTiles->width * mapTiles->height; i++) {
         mapTiles->data[i] = new MapTile();
     }
+
+    // mapObjectAlreadyDrawnThere neu anlegen, brauchen wir fürs Zeichnen
+    mapObjectAlreadyDrawnThere = new RectangleData<char>(newWidth, newHeight);
 
 	// Sonstiges Zeugs auf Anfangswerte stellen
 	selectedMapObject = nullptr;
@@ -503,24 +505,59 @@ void Map::renderMap(SDL_Renderer* renderer) {
     }
 
 	// Objekte rendern
-	for (auto iter = mapObjects.cbegin(); iter != mapObjects.cend(); iter++) {
-		MapObject* mapObject = *iter;
+    memset(mapObjectAlreadyDrawnThere->data, 0, width * height * sizeof(char));
 
-		// TODO hier später weitere Typen handeln oder cleverer in Objekt-Methoden arbeiten
-		Structure* structure = dynamic_cast<Structure*>(mapObject);
-		if (structure == nullptr) {
-			continue;
-		}
-        
-        SDL_Rect rect = SDL_Rect();
-        structure->getScreenCoords(rect.x, rect.y, rect.w, rect.h);
-        rect.x /= screenZoom;
-        rect.y /= screenZoom;
-        rect.w /= screenZoom;
-        rect.h /= screenZoom;
+    // TODO Start und End noch ein wenig weiter ausweiten?
+    for (int mapY = mapYStart; mapY <= mapYEnd; mapY++) {
+        for (int mapX = mapXStart; mapX <= mapXEnd; mapX++) {
+            MapObject* mapObject = getMapObjectAt(mapX, mapY);
+            if (mapObject == nullptr) {
+                continue; // nix zum Zeichen an dieser Stelle
+            }
 
-        renderStructure(structure, &rect);
-	}
+            if (mapObjectAlreadyDrawnThere->getData(mapX, mapY, 1) == 1) {
+                continue; // hier is schon bemalt, nix zu tun
+            }
+
+            // @see docs/drawing-order-x-tiles.xcf für Variablen
+
+            // Ausrechnen, welchen Schnibbel der Grafik wir anzeigen müssen
+            int moMapX, moMapY, moMapWidth, moMapHeight;
+            mapObject->getMapCoords(moMapX, moMapY, moMapWidth, moMapHeight);
+
+            Structure* structure = dynamic_cast<Structure*>(mapObject); // TODO nullptr sollte nicht passieren; später checken, wenn wir Bäume und sowas haben
+            Graphic* graphic = graphicsMgr->getGraphicForStructure(structure->getStructureType());
+
+            int tileOffsetXInMapObject = mapX - moMapX; // (0 ... moMapWidth-1)
+            int tileOffsetYInMapObject = mapY - moMapY; // (0 ... moMapHeight-1)
+            int xInMapObject =
+                ((moMapHeight - 1) - tileOffsetYInMapObject + tileOffsetXInMapObject) * GraphicsMgr::TILE_WIDTH_HALF;
+            int yInMapObject = graphic->getHeight() -
+                ((moMapHeight - 1) - tileOffsetYInMapObject + (moMapWidth - 1) - tileOffsetXInMapObject + 2) *
+                    GraphicsMgr::TILE_HEIGHT_HALF;
+
+            SDL_Rect rectSource = { xInMapObject, 0, GraphicsMgr::TILE_WIDTH, graphic->getHeight() };
+            SDL_Rect rectDestination = { 0, 0, rectSource.w, rectSource.h };
+            MapUtils::mapToScreenCoords(mapX, mapY, rectDestination.x, rectDestination.y);
+            rectDestination.y -= yInMapObject;
+
+            rectDestination.x -= screenOffsetX / screenZoom;
+            rectDestination.y -= screenOffsetY / screenZoom;
+
+            // TODO drawingFlags
+            SDL_Texture* objectTexture = graphic->getTexture();
+            SDL_SetTextureNormal(objectTexture);
+            SDL_RenderCopy(renderer, objectTexture, &rectSource, &rectDestination);
+
+            // In mapObjectAlreadyDrawnThere die Kacheln-Spalte als erledigt markieren
+            do {
+                mapObjectAlreadyDrawnThere->setData(moMapX + tileOffsetXInMapObject, moMapY + tileOffsetYInMapObject, 1);
+
+                tileOffsetXInMapObject++;
+                tileOffsetYInMapObject++;
+            } while(tileOffsetXInMapObject < moMapWidth && tileOffsetYInMapObject < moMapHeight);
+        }
+    }
 
     // mapObjectBeingAdded gesetzt?
     if (structureBeingAdded != nullptr) {
@@ -593,49 +630,50 @@ unsigned char Map::isAllowedToPlaceStructure(int mapX, int mapY, StructureType s
     return result;
 }
 
-void Map::renderStructure(Structure* structure, SDL_Rect* rect) {
-    rect->x -= screenOffsetX / screenZoom;
-    rect->y -= screenOffsetY / screenZoom;
-        
-    // Clipping
-    if (rect->x >= mapClipRect.x + mapClipRect.w || rect->y >= mapClipRect.y + mapClipRect.h ||
-            rect->x + rect->w < mapClipRect.x || rect->y + rect->h < mapClipRect.y) {
-        return;
-    }
-
-    int drawingFlags = structure->getDrawingFlags();
-
-    Graphic* graphic = graphicsMgr->getGraphicForStructure(structure->getStructureType());
-    SDL_Texture* objectTexture =
-        (drawingFlags & MapObject::DRAWING_FLAG_MASKED) ? graphic->getTextureMasked() : graphic->getTexture();
-    
-    // Gebäude nicht zeichnen, wenn wir im Blinkmodus sind. Dann nur in der ersten Hälfte eines Intervalls zeichnen
-    if (!(drawingFlags & MapObject::DRAWING_FLAG_BLINK) || (SDL_GetTicks() % 800 < 400)) {
-        if (selectedMapObject != nullptr) {
-            Building* selectedBuilding = dynamic_cast<Building*>(selectedMapObject);
-            bool insideCatchmentArea = 
-                (selectedBuilding != nullptr && selectedBuilding->isInsideCatchmentArea(structure));
-
-            if (insideCatchmentArea) {
-                SDL_SetTextureNormal(objectTexture);
-            } else {
-                SDL_SetTextureDarkened(objectTexture);
-            }
-        } else {
-            SDL_SetTextureNormal(objectTexture);
-        }
-
-        if (drawingFlags & MapObject::DRAWING_FLAG_RED_AND_SEMI_TRANSPARENT) {
-            SDL_SetTextureColorMod(objectTexture, 255, 0, 0);
-            SDL_SetTextureAlphaMod(objectTexture, 128);
-        } else {
-            SDL_SetTextureColorMod(objectTexture, 255, 255, 255);
-            SDL_SetTextureAlphaMod(objectTexture, 255);
-        }
-
-        SDL_RenderCopy(renderer, objectTexture, NULL, rect);
-    }
-}
+//void Map::renderStructure(Structure* structure, SDL_Rect* rect) {
+//    rect->x -= screenOffsetX / screenZoom;
+//    rect->y -= screenOffsetY / screenZoom;
+//
+//    // Clipping
+//    if (rect->x >= mapClipRect.x + mapClipRect.w || rect->y >= mapClipRect.y + mapClipRect.h ||
+//            rect->x + rect->w < mapClipRect.x || rect->y + rect->h < mapClipRect.y) {
+//        return;
+//    }
+//
+//    int drawingFlags = structure->getDrawingFlags();
+//
+//    Graphic* graphic = graphicsMgr->getGraphicForStructure(structure->getStructureType());
+//    SDL_Texture* objectTexture =
+//        (drawingFlags & MapObject::DRAWING_FLAG_MASKED) ? graphic->getTextureMasked() : graphic->getTexture();
+//
+//    // Gebäude nicht zeichnen, wenn wir im Blinkmodus sind. Dann nur in der ersten Hälfte eines Intervalls zeichnen
+//    if (!(drawingFlags & MapObject::DRAWING_FLAG_BLINK) || (SDL_GetTicks() % 800 < 400)) {
+//        if (selectedMapObject != nullptr) {
+//            Building* selectedBuilding = dynamic_cast<Building*>(selectedMapObject);
+//            bool insideCatchmentArea =
+//                (selectedBuilding != nullptr && selectedBuilding->isInsideCatchmentArea(structure));
+//
+//            if (insideCatchmentArea) {
+//                SDL_SetTextureNormal(objectTexture);
+//            } else {
+//                SDL_SetTextureDarkened(objectTexture);
+//            }
+//        } else {
+//            SDL_SetTextureNormal(objectTexture);
+//        }
+//
+//        if (drawingFlags & MapObject::DRAWING_FLAG_RED_AND_SEMI_TRANSPARENT) {
+//            SDL_SetTextureColorMod(objectTexture, 255, 0, 0);
+//            SDL_SetTextureAlphaMod(objectTexture, 128);
+//        } else {
+//            SDL_SetTextureColorMod(objectTexture, 255, 255, 255);
+//            SDL_SetTextureAlphaMod(objectTexture, 255);
+//        }
+//
+//        SDL_RenderCopy(renderer, objectTexture, NULL, rect);
+//        SDL_RenderPresent(renderer);
+//    }
+//}
 
 void Map::drawCatchmentArea(Structure* structure) {
     SDL_SetRenderDrawColor(renderer, 0xc8, 0xaf, 0x37, 255);
@@ -807,7 +845,13 @@ void Map::clearMap() {
         delete mapTiles;
         mapTiles = nullptr;
     }
-    
+
+    // mapObjectAlreadyDrawnThere wegräumen
+    if (mapObjectAlreadyDrawnThere != nullptr) {
+        delete mapObjectAlreadyDrawnThere;
+        mapObjectAlreadyDrawnThere = nullptr;
+    }
+
     // Inseln wegräumen
     isles.clear();
     
