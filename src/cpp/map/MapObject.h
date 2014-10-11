@@ -56,11 +56,6 @@ protected:
     Player* player = nullptr;
 
     /**
-     * @brief Wird zum Sortieren der Objekte in Zeichenreihenfolge verwendet. DrawingOrderGraph setzt diesen Wert.
-     */
-    int drawingOrderIndex = -1;
-
-    /**
      * @brief Flags, die angeben, wie das Objekt gezeichnet wird.
      * Eine Kombination aus DRAWING_FLAG_-Konstanten wird erwartet.
      */
@@ -136,14 +131,6 @@ public:
 
     void setPlayer(Player* player) {
         this->player = player;
-    }
-
-    int getDrawingOrderIndex() const {
-        return drawingOrderIndex;
-    }
-
-    void setDrawingOrderIndex(int drawingOrderIndex) {
-        this->drawingOrderIndex = drawingOrderIndex;
     }
 
     int getDrawingFlags() const {

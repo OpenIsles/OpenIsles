@@ -6,7 +6,6 @@
 #include <iostream>
 #include <list>
 #include <string.h>
-#include "map/DrawingOrderGraph.h"
 #include "map/Building.h"
 #include "map/Isle.h"
 #include "utils/RectangleData.h"
@@ -111,11 +110,6 @@ private:
 	 * "hinten im Bild" liegende Objekte kommen in der Liste zuerst.
 	 */
 	std::list<MapObject*> mapObjects;
-
-    /**
-     * @brief Graph der Map-Objekte für die Reihenfolge beim Zeichnen.
-     */
-    DrawingOrderGraph drawingOrderGraph;
 
 	/**
 	 * @brief ausgewähltes Objekt oder @c nullptr, wenn nichts ausgewählt ist

@@ -2,7 +2,6 @@
 #include "config/BuildingConfigMgr.h"
 #include "game/Colony.h"
 #include "game/Game.h"
-#include "map/DrawingOrderGraph.h"
 #include "map/Map.h"
 #include "rapidxml/rapidxml.hpp"
 #include "rapidxml/rapidxml_utils.hpp"
@@ -48,71 +47,98 @@ extern int mouseCurrentX, mouseCurrentY;
 extern const int windowWidth;
 extern const int windowHeight;
 
-Map::Map() : drawingOrderGraph(&mapObjects) {
+Map::Map() {
 	loadMapFromTMX("data/map/map.tmx");
     
     Player* player1 = game->getPlayer(0);
-    Player* player2 = game->getPlayer(1);
-    Player* player3 = game->getPlayer(2);
-    Player* player4 = game->getPlayer(3);
 
-	addBuilding(52, 39, CHAPEL, player1);
-    addBuilding(51, 35, PIONEERS_HOUSE1, player1);
-    addBuilding(58, 39, SIGNALFIRE, player1);
-    addBuilding(55, 35, HERBARY, player1);
-    addBuilding(50, 32, BRICKYARD, player1);
-    addBuilding(51, 26, BRICKYARD2, player1);
-    addBuilding(45, 24, OFFICE1, player1);
     addBuilding(49, 41, MARKETPLACE, player1);
+    screenZoom = 1;
+    screenOffsetX = -80;
+    screenOffsetY = 1073;
 
-    addBuilding(201, 77, OFFICE1, player1);
-    addBuilding(230, 214, OFFICE1, player2);
-    addBuilding(30, 226, OFFICE1, player3);
-    addBuilding(132, 94, OFFICE1, player4);
+//    Player* player2 = game->getPlayer(1);
+//    Player* player3 = game->getPlayer(2);
+//    Player* player4 = game->getPlayer(3);
 
-	addStructure(48, 30, STREET_STRAIGHT_0, player1);
-	addStructure(49, 30, STREET_STRAIGHT_0, player1);
-	addStructure(50, 30, STREET_STRAIGHT_0, player1);
-	addStructure(51, 30, STREET_STRAIGHT_0, player1);
-	addStructure(52, 30, STREET_STRAIGHT_0, player1);
-	addStructure(53, 30, STREET_STRAIGHT_0, player1);
-	addStructure(54, 30, STREET_CURVE_180, player1);
-	addStructure(54, 31, STREET_STRAIGHT_90, player1);
-	addStructure(54, 32, STREET_STRAIGHT_90, player1);
-	addStructure(54, 33, STREET_STRAIGHT_90, player1);
-	addStructure(54, 34, STREET_TEE_180, player1);
-	addStructure(54, 35, STREET_STRAIGHT_90, player1);
-	addStructure(54, 36, STREET_STRAIGHT_90, player1);
-	addStructure(54, 37, STREET_CURVE_270, player1);
-	addStructure(53, 37, STREET_STRAIGHT_0, player1);
-	addStructure(52, 37, STREET_STRAIGHT_0, player1);
-	addStructure(51, 37, STREET_STRAIGHT_0, player1);
-	addStructure(50, 37, STREET_TEE_90, player1);
-	addStructure(49, 37, STREET_TEE_270, player1);
-	addStructure(48, 37, STREET_STRAIGHT_0, player1);
-	addStructure(47, 37, STREET_CURVE_0, player1);
-	addStructure(47, 36, STREET_STRAIGHT_90, player1);
-	addStructure(47, 35, STREET_STRAIGHT_90, player1);
-	addStructure(47, 34, STREET_TEE_0, player1);
-	addStructure(47, 33, STREET_STRAIGHT_90, player1);
-	addStructure(47, 32, STREET_TEE_0, player1);
-	addStructure(47, 31, STREET_STRAIGHT_90, player1);
-	addStructure(47, 30, STREET_CURVE_90, player1);
-
-    addStructure(46, 32, STREET_STRAIGHT_0, player1);
-    addStructure(46, 34, STREET_STRAIGHT_0, player1);
-    addStructure(45, 32, STREET_TEE_180, player1);
-    addStructure(45, 31, STREET_STRAIGHT_90, player1);
-    addStructure(45, 33, STREET_STRAIGHT_90, player1);
-    addStructure(45, 34, STREET_CROSS, player1);
-    addStructure(45, 35, STREET_STRAIGHT_90, player1);
-    addStructure(44, 34, STREET_STRAIGHT_0, player1);
-
-    addStructure(49, 38, STREET_STRAIGHT_90, player1);
-    addStructure(50, 36, STREET_STRAIGHT_90, player1);
-
-    addStructure(55, 34, STREET_STRAIGHT_0, player1);
-    addStructure(56, 34, STREET_STRAIGHT_0, player1);
+//    addBuilding(52, 39, CHAPEL, player1);
+//    addBuilding(51, 35, PIONEERS_HOUSE1, player1);
+//    addBuilding(58, 39, SIGNALFIRE, player1);
+//    addBuilding(55, 35, HERBARY, player1);
+//    addBuilding(50, 32, BRICKYARD, player1);
+//    addBuilding(51, 26, BRICKYARD2, player1);
+//    addBuilding(45, 24, OFFICE1, player1);
+//    addBuilding(49, 41, MARKETPLACE, player1);
+//
+//    addBuilding(201, 77, OFFICE1, player1);
+//    addBuilding(230, 214, OFFICE1, player2);
+//    addBuilding(30, 226, OFFICE1, player3);
+//    addBuilding(132, 94, OFFICE1, player4);
+//
+//	addStructure(48, 30, STREET_STRAIGHT_0, player1);
+//	addStructure(49, 30, STREET_STRAIGHT_0, player1);
+//	addStructure(50, 30, STREET_STRAIGHT_0, player1);
+//	addStructure(51, 30, STREET_STRAIGHT_0, player1);
+//	addStructure(52, 30, STREET_STRAIGHT_0, player1);
+//	addStructure(53, 30, STREET_STRAIGHT_0, player1);
+//	addStructure(54, 30, STREET_CURVE_180, player1);
+//	addStructure(54, 31, STREET_STRAIGHT_90, player1);
+//	addStructure(54, 32, STREET_STRAIGHT_90, player1);
+//	addStructure(54, 33, STREET_STRAIGHT_90, player1);
+//	addStructure(54, 34, STREET_TEE_180, player1);
+//	addStructure(54, 35, STREET_STRAIGHT_90, player1);
+//	addStructure(54, 36, STREET_STRAIGHT_90, player1);
+//	addStructure(54, 37, STREET_CURVE_270, player1);
+//	addStructure(53, 37, STREET_STRAIGHT_0, player1);
+//	addStructure(52, 37, STREET_STRAIGHT_0, player1);
+//	addStructure(51, 37, STREET_STRAIGHT_0, player1);
+//	addStructure(50, 37, STREET_TEE_90, player1);
+//	addStructure(49, 37, STREET_TEE_270, player1);
+//	addStructure(48, 37, STREET_STRAIGHT_0, player1);
+//	addStructure(47, 37, STREET_CURVE_0, player1);
+//	addStructure(47, 36, STREET_STRAIGHT_90, player1);
+//	addStructure(47, 35, STREET_STRAIGHT_90, player1);
+//	addStructure(47, 34, STREET_TEE_0, player1);
+//	addStructure(47, 33, STREET_STRAIGHT_90, player1);
+//	addStructure(47, 32, STREET_TEE_0, player1);
+//	addStructure(47, 31, STREET_STRAIGHT_90, player1);
+//	addStructure(47, 30, STREET_CURVE_90, player1);
+//
+//    addStructure(46, 32, STREET_STRAIGHT_0, player1);
+//    addStructure(46, 34, STREET_STRAIGHT_0, player1);
+//    addStructure(45, 32, STREET_TEE_180, player1);
+//    addStructure(45, 31, STREET_STRAIGHT_90, player1);
+//    addStructure(45, 33, STREET_STRAIGHT_90, player1);
+//    addStructure(45, 34, STREET_CROSS, player1);
+//    addStructure(45, 35, STREET_STRAIGHT_90, player1);
+//    addStructure(44, 34, STREET_STRAIGHT_0, player1);
+//
+//    addStructure(49, 38, STREET_STRAIGHT_90, player1);
+//    addStructure(50, 36, STREET_STRAIGHT_90, player1);
+//
+//    addStructure(55, 34, STREET_STRAIGHT_0, player1);
+//    addStructure(56, 34, STREET_STRAIGHT_0, player1);
+//
+//    // Map zufällig mit Gebäuden vollmachen
+//    for (int mapY = 5; mapY < 295; mapY += 30) {
+//        for (int mapX = 5; mapX < 295; mapX += 30) {
+//            addBuilding(mapX, mapY, MARKETPLACE, player1);
+//        }
+//    }
+//    for (int i = 0; i < 150; i++) {
+//        int mapX = 40 + (rand() % 35);
+//        int mapY = 40 + (rand() % 35);
+//        StructureType structureType = (StructureType) (101 + (rand() % 8));
+//
+//        // Gucken, ob frei is
+//        if (isAllowedToPlaceStructure(mapX, mapY, structureType) & PLACING_STRUCTURE_SOMETHING_IN_THE_WAY) {
+//            i--;
+//            continue;
+//        }
+//
+//        addBuilding(mapX, mapY, structureType, player1);
+//        std::cout << i << std::endl;
+//    }
     
     updateMinimapTexture();
     
@@ -491,7 +517,6 @@ void Map::renderMap(SDL_Renderer* renderer) {
             structureBeingAdded->setDrawingFlags(drawingFlags);
 
             mapObjects.push_front(structureBeingAdded);
-            drawingOrderGraph.addNode(structureBeingAdded);
         }
     }
 
@@ -522,7 +547,6 @@ void Map::renderMap(SDL_Renderer* renderer) {
 
         // ... und MapObject schnell wieder aus der Liste nehmen.
         mapObjects.remove(structureBeingAdded);
-        drawingOrderGraph.removeNode(structureBeingAdded);
         delete structureBeingAdded;
     }
 
@@ -629,16 +653,6 @@ void Map::renderStructure(Structure* structure, SDL_Rect* rect) {
 
         SDL_RenderCopy(renderer, objectTexture, NULL, rect);
     }
-
-#ifdef DEBUG_DRAWING_ORDER
-    // Anzeige des drawingOrderIndex
-    static SDL_Color colorYellow = {255, 255, 0, 255};
-    static SDL_Color colorRed = {255, 0, 0, 255};
-
-    fontMgr->renderText(renderer, std::to_string(structure->getDrawingOrderIndex()),
-        rect->x + (rect->w / 2), rect->y + (rect->h / 2),
-        &colorYellow, &colorRed, "DroidSans-Bold.ttf", 12, RENDERTEXT_HALIGN_CENTER | RENDERTEXT_VALIGN_MIDDLE);
-#endif
 }
 
 void Map::drawCatchmentArea(Structure* structure) {
@@ -706,8 +720,6 @@ void Map::scroll(int screenOffsetX, int screenOffsetY) {
 
 void Map::addMapObject(MapObject* mapObject) {
     mapObjects.push_front(mapObject);
-    
-    drawingOrderGraph.addNode(mapObject);
 }
 
 const Structure* Map::addStructure(int mapX, int mapY, StructureType structureType, Player* player) {
@@ -793,7 +805,6 @@ void Map::clearMap() {
 		delete mapObject;
 	}
 	mapObjects.clear();
-    drawingOrderGraph.clear();
     
     // mapTiles wegräumen
     if (mapTiles != nullptr) {
@@ -942,7 +953,6 @@ void Map::deleteSelectedObject() {
     }
     
     mapObjects.remove(selectedMapObject);
-    drawingOrderGraph.removeNode(selectedMapObject);
     delete selectedMapObject;
     
     selectedMapObject = nullptr;

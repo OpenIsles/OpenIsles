@@ -5,7 +5,7 @@ cmake_minimum_required(VERSION 2.8)
 add_definitions("-std=c++11 -Wall -Werror -pedantic")
 
 # Bei Bedarf einkommentieren: Aktiviert Debugausgabe des DrawingOrder-Graphen und Rendering des drawingOrderIndex
-# add_definitions("-DDEBUG_DRAWING_ORDER")
+add_definitions("-DDEBUG_DRAWING_ORDER")
 
 # TODO pkg-config funktioniert unter Windows nicht
 include(FindPkgConfig)
@@ -26,7 +26,6 @@ set(SOURCE_FILES
 	src/cpp/gui/GuiPushButton.cpp
 	src/cpp/gui/GuiStaticElement.cpp
 	src/cpp/map/Building.cpp
-	src/cpp/map/DrawingOrderGraph.cpp
 	src/cpp/map/Isle.cpp
 	src/cpp/map/Map.cpp
 	src/cpp/map/MapUtils.cpp
