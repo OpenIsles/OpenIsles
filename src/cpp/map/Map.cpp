@@ -142,35 +142,35 @@ Map::Map() {
     
     updateMinimapTexture();
     
-    MapTile* mapTile = mapTiles->getData(43, 24, nullptr);
+    MapTile* mapTile = mapTiles->getData(50, 42, nullptr);
     Colony* colony = game->foundNewColony(mapTile->player, mapTile->isle);
     colony->setGoodsInventory(GoodsType::TOOLS, 15);
     colony->setGoodsInventory(GoodsType::WOOD, 30);
     colony->setGoodsInventory(GoodsType::BRICKS, 2);
     
-    mapTile = mapTiles->getData(199, 77, nullptr);
-    colony = game->foundNewColony(mapTile->player, mapTile->isle);
-    colony->setGoodsInventory(GoodsType::TOOLS, 5);
-    colony->setGoodsInventory(GoodsType::WOOD, 15);
-    colony->setGoodsInventory(GoodsType::BRICKS, 7);
-    
-    mapTile = mapTiles->getData(228, 214, nullptr);
-    colony = game->foundNewColony(mapTile->player, mapTile->isle);
-    colony->setGoodsInventory(GoodsType::TOOLS, 20);
-    colony->setGoodsInventory(GoodsType::WOOD, 30);
-    colony->setGoodsInventory(GoodsType::BRICKS, 10);
-    
-    mapTile = mapTiles->getData(28, 226, nullptr);
-    colony = game->foundNewColony(mapTile->player, mapTile->isle);
-    colony->setGoodsInventory(GoodsType::TOOLS, 20);
-    colony->setGoodsInventory(GoodsType::WOOD, 30);
-    colony->setGoodsInventory(GoodsType::BRICKS, 10);
-    
-    mapTile = mapTiles->getData(130, 94, nullptr);
-    colony = game->foundNewColony(mapTile->player, mapTile->isle);
-    colony->setGoodsInventory(GoodsType::TOOLS, 20);
-    colony->setGoodsInventory(GoodsType::WOOD, 30);
-    colony->setGoodsInventory(GoodsType::BRICKS, 10);
+//    mapTile = mapTiles->getData(199, 77, nullptr);
+//    colony = game->foundNewColony(mapTile->player, mapTile->isle);
+//    colony->setGoodsInventory(GoodsType::TOOLS, 5);
+//    colony->setGoodsInventory(GoodsType::WOOD, 15);
+//    colony->setGoodsInventory(GoodsType::BRICKS, 7);
+//
+//    mapTile = mapTiles->getData(228, 214, nullptr);
+//    colony = game->foundNewColony(mapTile->player, mapTile->isle);
+//    colony->setGoodsInventory(GoodsType::TOOLS, 20);
+//    colony->setGoodsInventory(GoodsType::WOOD, 30);
+//    colony->setGoodsInventory(GoodsType::BRICKS, 10);
+//
+//    mapTile = mapTiles->getData(28, 226, nullptr);
+//    colony = game->foundNewColony(mapTile->player, mapTile->isle);
+//    colony->setGoodsInventory(GoodsType::TOOLS, 20);
+//    colony->setGoodsInventory(GoodsType::WOOD, 30);
+//    colony->setGoodsInventory(GoodsType::BRICKS, 10);
+//
+//    mapTile = mapTiles->getData(130, 94, nullptr);
+//    colony = game->foundNewColony(mapTile->player, mapTile->isle);
+//    colony->setGoodsInventory(GoodsType::TOOLS, 20);
+//    colony->setGoodsInventory(GoodsType::WOOD, 30);
+//    colony->setGoodsInventory(GoodsType::BRICKS, 10);
 }
 
 Map::~Map() {
@@ -217,30 +217,12 @@ MapTile* Map::getMapTileAt(int mapX, int mapY) const {
 }
 
 MapObject* Map::getMapObjectAt(int mapX, int mapY) const {
-    if (!checkMapCoords(mapX, mapY)) {
+    MapTile* mapTile = getMapTileAt(mapX, mapY);
+    if (mapTile == nullptr) {
         return nullptr;
     }
-    
-    // TODO sollte man analog den Inseln für Direktzugriff speichern
-    // Objekt suchen, die sich auf diesen Map-Koordinaten befindet
-    for (auto iter = mapObjects.cbegin(); iter != mapObjects.cend(); iter++) {
-		MapObject* mapObject = *iter;
-        
-        int mapObjectMapX, mapObjectMapY, mapObjectMapWidth, mapObjectMapHeight;
-        mapObject->getMapCoords(mapObjectMapX, mapObjectMapY, mapObjectMapWidth, mapObjectMapHeight);
-        
-        // Koordinaten sind nicht im Bereich dieses Map-Objekts
-        if (mapX < mapObjectMapX || mapY < mapObjectMapY || mapX >= mapObjectMapX + mapObjectMapWidth ||
-                mapY >= mapObjectMapY + mapObjectMapHeight) {
-            continue;
-        }
-        
-        // Koordinaten sind im Bereich dieses Map-Objekts
-        return mapObject;
-    }
-    
-    // Keine Insel da
-    return nullptr;
+
+    return mapTile->mapObject;
 }
 
 // TODO Fehlermanagement, wenn die Datei mal nicht so hübsch aussieht, dass alle Tags da sind
@@ -588,7 +570,7 @@ unsigned char Map::isAllowedToPlaceStructure(int mapX, int mapY, StructureType s
             MapTile* mapTile = mapTiles->getData(x, y, nullptr);
             if (
                 // Da steht was im Weg
-                getMapObjectAt(x, y) != nullptr
+                mapTile->mapObject != nullptr
                 ) {
                 result |= PLACING_STRUCTURE_SOMETHING_IN_THE_WAY;
                 return result;
@@ -719,7 +701,18 @@ void Map::scroll(int screenOffsetX, int screenOffsetY) {
 }
 
 void Map::addMapObject(MapObject* mapObject) {
+    // Objekt in die Liste einreihen
     mapObjects.push_front(mapObject);
+
+    int mapX, mapY, mapWidth, mapHeight;
+    mapObject->getMapCoords(mapX, mapY, mapWidth, mapHeight);
+
+    // Fläche auf den MapTiles als belegt markieren
+    for (int my = mapY; my < mapY + mapHeight; my++) {
+        for (int mx = mapX; mx < mapX + mapWidth; mx++) {
+            getMapTileAt(mx, my)->mapObject = mapObject;
+        }
+    }
 }
 
 const Structure* Map::addStructure(int mapX, int mapY, StructureType structureType, Player* player) {
@@ -951,8 +944,21 @@ void Map::deleteSelectedObject() {
     if (selectedMapObject == nullptr) {
         return;
     }
-    
+
+    // Objekt aus der Liste entfernen
     mapObjects.remove(selectedMapObject);
+
+    // Fläche auf den MapTiles freigeben
+    int mapX, mapY, mapWidth, mapHeight;
+    selectedMapObject->getMapCoords(mapX, mapY, mapWidth, mapHeight);
+
+    for (int my = mapY; my < mapY + mapHeight; my++) {
+        for (int mx = mapX; mx < mapX + mapWidth; mx++) {
+            getMapTileAt(mx, my)->mapObject = nullptr;
+        }
+    }
+
+
     delete selectedMapObject;
     
     selectedMapObject = nullptr;

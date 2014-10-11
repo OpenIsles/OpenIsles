@@ -64,13 +64,20 @@ struct MapTile {
      * oder nullptr, wenns keinem gehört
      */
     Player* player;
-    
+
+    /**
+     * @brief Zeiger auf ein MapObject (durch Map.mapObjects verwaltet), das sich auf dieser Kachel befindet
+     * oder nullptr, wenns nix da is
+     */
+    MapObject* mapObject;
+
     
     MapTile() {
         // TODO Konstante/Enum
         tileGraphicIndex = 1; // Ozean
         isle = nullptr;
         player = nullptr;
+        mapObject = nullptr;
     }
 
 };
