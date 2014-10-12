@@ -138,7 +138,7 @@ Map::Map() {
         addBuilding(mapX, mapY, structureType, player1);
         std::cout << i << std::endl;
     }
-    
+
     updateMinimapTexture();
     
     MapTile* mapTile = mapTiles->getData(50, 42, nullptr);
@@ -499,8 +499,6 @@ void Map::renderMap(SDL_Renderer* renderer) {
             structureBeingAdded->setMapCoords(mapX, mapY, graphic->getMapWidth(), graphic->getMapHeight());
             structureBeingAdded->setScreenCoords(rect.x, rect.y, rect.w, rect.h);
             structureBeingAdded->setDrawingFlags(drawingFlags);
-
-            mapObjects.push_front(structureBeingAdded);
         }
     }
 
@@ -512,7 +510,18 @@ void Map::renderMap(SDL_Renderer* renderer) {
         for (int mapX = mapXStart; mapX <= mapXEnd; mapX++) {
             MapObject* mapObject = getMapObjectAt(mapX, mapY);
             if (mapObject == nullptr) {
-                continue; // nix zum Zeichen an dieser Stelle
+                // Positionieren wir hier ein neues Gebäude?
+                if (structureBeingAdded != nullptr) {
+                    int mx, my, mw, mh;
+                    structureBeingAdded->getMapCoords(mx, my, mw, mh);
+                    if (mapX >= mx && mapY >= my && mapX < mx + mw && mapY < my + mh) {
+                        mapObject = structureBeingAdded;
+                    }
+                }
+
+                if (mapObject == nullptr) {
+                    continue; // nix zum Zeichen an dieser Stelle
+                }
             }
 
             if (mapObjectAlreadyDrawnThere->getData(mapX, mapY, 1) == 1) {
@@ -561,11 +570,8 @@ void Map::renderMap(SDL_Renderer* renderer) {
 
     // mapObjectBeingAdded gesetzt?
     if (structureBeingAdded != nullptr) {
-        // Einzugsbereich jetzt malen, damit er oben drauf is...
+        // Einzugsbereich jetzt malen, damit er oben drauf is
         drawCatchmentArea(structureBeingAdded);
-
-        // ... und MapObject schnell wieder aus der Liste nehmen.
-        mapObjects.remove(structureBeingAdded);
         delete structureBeingAdded;
     }
 
