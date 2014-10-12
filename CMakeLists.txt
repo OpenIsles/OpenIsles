@@ -4,9 +4,6 @@ cmake_minimum_required(VERSION 2.8)
 
 add_definitions("-std=c++11 -Wall -Werror -pedantic")
 
-# Bei Bedarf einkommentieren: Aktiviert Debugausgabe des DrawingOrder-Graphen und Rendering des drawingOrderIndex
-add_definitions("-DDEBUG_DRAWING_ORDER")
-
 # TODO pkg-config funktioniert unter Windows nicht
 include(FindPkgConfig)
 pkg_search_module(SDL2 REQUIRED sdl2)

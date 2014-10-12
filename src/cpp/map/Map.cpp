@@ -1,4 +1,3 @@
-#include <gui/FontMgr.h>
 #include "config/BuildingConfigMgr.h"
 #include "game/Colony.h"
 #include "game/Game.h"
@@ -37,9 +36,6 @@
 
 // Aus main.cpp importiert
 extern BuildingConfigMgr* buildingConfigMgr;
-#ifdef DEBUG_DRAWING_ORDER
-extern FontMgr* fontMgr;
-#endif
 extern Game* game;
 extern GraphicsMgr* graphicsMgr;
 extern SDL_Renderer* renderer;
@@ -51,15 +47,9 @@ Map::Map() {
 	loadMapFromTMX("data/map/map.tmx");
     
     Player* player1 = game->getPlayer(0);
-
-    addBuilding(49, 41, MARKETPLACE, player1);
-    screenZoom = 1;
-    screenOffsetX = -80;
-    screenOffsetY = 1073;
-
-//    Player* player2 = game->getPlayer(1);
-//    Player* player3 = game->getPlayer(2);
-//    Player* player4 = game->getPlayer(3);
+    Player* player2 = game->getPlayer(1);
+    Player* player3 = game->getPlayer(2);
+    Player* player4 = game->getPlayer(3);
 
     addBuilding(52, 39, CHAPEL, player1);
     addBuilding(51, 35, PIONEERS_HOUSE1, player1);
@@ -68,76 +58,55 @@ Map::Map() {
     addBuilding(50, 32, BRICKYARD, player1);
     addBuilding(51, 26, BRICKYARD2, player1);
     addBuilding(45, 24, OFFICE1, player1);
-//
-//    addBuilding(201, 77, OFFICE1, player1);
-//    addBuilding(230, 214, OFFICE1, player2);
-//    addBuilding(30, 226, OFFICE1, player3);
-//    addBuilding(132, 94, OFFICE1, player4);
-//
-//	addStructure(48, 30, STREET_STRAIGHT_0, player1);
-//	addStructure(49, 30, STREET_STRAIGHT_0, player1);
-//	addStructure(50, 30, STREET_STRAIGHT_0, player1);
-//	addStructure(51, 30, STREET_STRAIGHT_0, player1);
-//	addStructure(52, 30, STREET_STRAIGHT_0, player1);
-//	addStructure(53, 30, STREET_STRAIGHT_0, player1);
-//	addStructure(54, 30, STREET_CURVE_180, player1);
-//	addStructure(54, 31, STREET_STRAIGHT_90, player1);
-//	addStructure(54, 32, STREET_STRAIGHT_90, player1);
-//	addStructure(54, 33, STREET_STRAIGHT_90, player1);
-//	addStructure(54, 34, STREET_TEE_180, player1);
-//	addStructure(54, 35, STREET_STRAIGHT_90, player1);
-//	addStructure(54, 36, STREET_STRAIGHT_90, player1);
-//	addStructure(54, 37, STREET_CURVE_270, player1);
-//	addStructure(53, 37, STREET_STRAIGHT_0, player1);
-//	addStructure(52, 37, STREET_STRAIGHT_0, player1);
-//	addStructure(51, 37, STREET_STRAIGHT_0, player1);
-//	addStructure(50, 37, STREET_TEE_90, player1);
-//	addStructure(49, 37, STREET_TEE_270, player1);
-//	addStructure(48, 37, STREET_STRAIGHT_0, player1);
-//	addStructure(47, 37, STREET_CURVE_0, player1);
-//	addStructure(47, 36, STREET_STRAIGHT_90, player1);
-//	addStructure(47, 35, STREET_STRAIGHT_90, player1);
-//	addStructure(47, 34, STREET_TEE_0, player1);
-//	addStructure(47, 33, STREET_STRAIGHT_90, player1);
-//	addStructure(47, 32, STREET_TEE_0, player1);
-//	addStructure(47, 31, STREET_STRAIGHT_90, player1);
-//	addStructure(47, 30, STREET_CURVE_90, player1);
-//
-//    addStructure(46, 32, STREET_STRAIGHT_0, player1);
-//    addStructure(46, 34, STREET_STRAIGHT_0, player1);
-//    addStructure(45, 32, STREET_TEE_180, player1);
-//    addStructure(45, 31, STREET_STRAIGHT_90, player1);
-//    addStructure(45, 33, STREET_STRAIGHT_90, player1);
-//    addStructure(45, 34, STREET_CROSS, player1);
-//    addStructure(45, 35, STREET_STRAIGHT_90, player1);
-//    addStructure(44, 34, STREET_STRAIGHT_0, player1);
-//
-//    addStructure(49, 38, STREET_STRAIGHT_90, player1);
-//    addStructure(50, 36, STREET_STRAIGHT_90, player1);
-//
-//    addStructure(55, 34, STREET_STRAIGHT_0, player1);
-//    addStructure(56, 34, STREET_STRAIGHT_0, player1);
-//
-    // Map zufällig mit Gebäuden vollmachen
-    for (int mapY = 5; mapY < 295; mapY += 30) {
-        for (int mapX = 5; mapX < 295; mapX += 30) {
-            addBuilding(mapX, mapY, MARKETPLACE, player1);
-        }
-    }
-    for (int i = 0; i < 1500; i++) {
-        int mapX = 40 + (rand() % 85);
-        int mapY = 40 + (rand() % 55);
-        StructureType structureType = (StructureType) (101 + (rand() % 8));
 
-        // Gucken, ob frei is
-        if (isAllowedToPlaceStructure(mapX, mapY, structureType) & PLACING_STRUCTURE_SOMETHING_IN_THE_WAY) {
-            i--;
-            continue;
-        }
+    addBuilding(201, 77, OFFICE1, player1);
+    addBuilding(230, 214, OFFICE1, player2);
+    addBuilding(30, 226, OFFICE1, player3);
+    addBuilding(132, 94, OFFICE1, player4);
 
-        addBuilding(mapX, mapY, structureType, player1);
-        std::cout << i << std::endl;
-    }
+	addStructure(48, 30, STREET_STRAIGHT_0, player1);
+	addStructure(49, 30, STREET_STRAIGHT_0, player1);
+	addStructure(50, 30, STREET_STRAIGHT_0, player1);
+	addStructure(51, 30, STREET_STRAIGHT_0, player1);
+	addStructure(52, 30, STREET_STRAIGHT_0, player1);
+	addStructure(53, 30, STREET_STRAIGHT_0, player1);
+	addStructure(54, 30, STREET_CURVE_180, player1);
+	addStructure(54, 31, STREET_STRAIGHT_90, player1);
+	addStructure(54, 32, STREET_STRAIGHT_90, player1);
+	addStructure(54, 33, STREET_STRAIGHT_90, player1);
+	addStructure(54, 34, STREET_TEE_180, player1);
+	addStructure(54, 35, STREET_STRAIGHT_90, player1);
+	addStructure(54, 36, STREET_STRAIGHT_90, player1);
+	addStructure(54, 37, STREET_CURVE_270, player1);
+	addStructure(53, 37, STREET_STRAIGHT_0, player1);
+	addStructure(52, 37, STREET_STRAIGHT_0, player1);
+	addStructure(51, 37, STREET_STRAIGHT_0, player1);
+	addStructure(50, 37, STREET_TEE_90, player1);
+	addStructure(49, 37, STREET_TEE_270, player1);
+	addStructure(48, 37, STREET_STRAIGHT_0, player1);
+	addStructure(47, 37, STREET_CURVE_0, player1);
+	addStructure(47, 36, STREET_STRAIGHT_90, player1);
+	addStructure(47, 35, STREET_STRAIGHT_90, player1);
+	addStructure(47, 34, STREET_TEE_0, player1);
+	addStructure(47, 33, STREET_STRAIGHT_90, player1);
+	addStructure(47, 32, STREET_TEE_0, player1);
+	addStructure(47, 31, STREET_STRAIGHT_90, player1);
+	addStructure(47, 30, STREET_CURVE_90, player1);
+
+    addStructure(46, 32, STREET_STRAIGHT_0, player1);
+    addStructure(46, 34, STREET_STRAIGHT_0, player1);
+    addStructure(45, 32, STREET_TEE_180, player1);
+    addStructure(45, 31, STREET_STRAIGHT_90, player1);
+    addStructure(45, 33, STREET_STRAIGHT_90, player1);
+    addStructure(45, 34, STREET_CROSS, player1);
+    addStructure(45, 35, STREET_STRAIGHT_90, player1);
+    addStructure(44, 34, STREET_STRAIGHT_0, player1);
+
+    addStructure(49, 38, STREET_STRAIGHT_90, player1);
+    addStructure(50, 36, STREET_STRAIGHT_90, player1);
+
+    addStructure(55, 34, STREET_STRAIGHT_0, player1);
+    addStructure(56, 34, STREET_STRAIGHT_0, player1);
 
     updateMinimapTexture();
     
@@ -147,29 +116,29 @@ Map::Map() {
     colony->setGoodsInventory(GoodsType::WOOD, 30);
     colony->setGoodsInventory(GoodsType::BRICKS, 2);
     
-//    mapTile = mapTiles->getData(199, 77, nullptr);
-//    colony = game->foundNewColony(mapTile->player, mapTile->isle);
-//    colony->setGoodsInventory(GoodsType::TOOLS, 5);
-//    colony->setGoodsInventory(GoodsType::WOOD, 15);
-//    colony->setGoodsInventory(GoodsType::BRICKS, 7);
-//
-//    mapTile = mapTiles->getData(228, 214, nullptr);
-//    colony = game->foundNewColony(mapTile->player, mapTile->isle);
-//    colony->setGoodsInventory(GoodsType::TOOLS, 20);
-//    colony->setGoodsInventory(GoodsType::WOOD, 30);
-//    colony->setGoodsInventory(GoodsType::BRICKS, 10);
-//
-//    mapTile = mapTiles->getData(28, 226, nullptr);
-//    colony = game->foundNewColony(mapTile->player, mapTile->isle);
-//    colony->setGoodsInventory(GoodsType::TOOLS, 20);
-//    colony->setGoodsInventory(GoodsType::WOOD, 30);
-//    colony->setGoodsInventory(GoodsType::BRICKS, 10);
-//
-//    mapTile = mapTiles->getData(130, 94, nullptr);
-//    colony = game->foundNewColony(mapTile->player, mapTile->isle);
-//    colony->setGoodsInventory(GoodsType::TOOLS, 20);
-//    colony->setGoodsInventory(GoodsType::WOOD, 30);
-//    colony->setGoodsInventory(GoodsType::BRICKS, 10);
+    mapTile = mapTiles->getData(199, 77, nullptr);
+    colony = game->foundNewColony(mapTile->player, mapTile->isle);
+    colony->setGoodsInventory(GoodsType::TOOLS, 5);
+    colony->setGoodsInventory(GoodsType::WOOD, 15);
+    colony->setGoodsInventory(GoodsType::BRICKS, 7);
+
+    mapTile = mapTiles->getData(228, 214, nullptr);
+    colony = game->foundNewColony(mapTile->player, mapTile->isle);
+    colony->setGoodsInventory(GoodsType::TOOLS, 20);
+    colony->setGoodsInventory(GoodsType::WOOD, 30);
+    colony->setGoodsInventory(GoodsType::BRICKS, 10);
+
+    mapTile = mapTiles->getData(28, 226, nullptr);
+    colony = game->foundNewColony(mapTile->player, mapTile->isle);
+    colony->setGoodsInventory(GoodsType::TOOLS, 20);
+    colony->setGoodsInventory(GoodsType::WOOD, 30);
+    colony->setGoodsInventory(GoodsType::BRICKS, 10);
+
+    mapTile = mapTiles->getData(130, 94, nullptr);
+    colony = game->foundNewColony(mapTile->player, mapTile->isle);
+    colony->setGoodsInventory(GoodsType::TOOLS, 20);
+    colony->setGoodsInventory(GoodsType::WOOD, 30);
+    colony->setGoodsInventory(GoodsType::BRICKS, 10);
 }
 
 Map::~Map() {
@@ -668,51 +637,6 @@ unsigned char Map::isAllowedToPlaceStructure(int mapX, int mapY, StructureType s
     
     return result;
 }
-
-//void Map::renderStructure(Structure* structure, SDL_Rect* rect) {
-//    rect->x -= screenOffsetX / screenZoom;
-//    rect->y -= screenOffsetY / screenZoom;
-//
-//    // Clipping
-//    if (rect->x >= mapClipRect.x + mapClipRect.w || rect->y >= mapClipRect.y + mapClipRect.h ||
-//            rect->x + rect->w < mapClipRect.x || rect->y + rect->h < mapClipRect.y) {
-//        return;
-//    }
-//
-//    int drawingFlags = structure->getDrawingFlags();
-//
-//    Graphic* graphic = graphicsMgr->getGraphicForStructure(structure->getStructureType());
-//    SDL_Texture* objectTexture =
-//        (drawingFlags & MapObject::DRAWING_FLAG_MASKED) ? graphic->getTextureMasked() : graphic->getTexture();
-//
-//    // Gebäude nicht zeichnen, wenn wir im Blinkmodus sind. Dann nur in der ersten Hälfte eines Intervalls zeichnen
-//    if (!(drawingFlags & MapObject::DRAWING_FLAG_BLINK) || (SDL_GetTicks() % 800 < 400)) {
-//        if (selectedMapObject != nullptr) {
-//            Building* selectedBuilding = dynamic_cast<Building*>(selectedMapObject);
-//            bool insideCatchmentArea =
-//                (selectedBuilding != nullptr && selectedBuilding->isInsideCatchmentArea(structure));
-//
-//            if (insideCatchmentArea) {
-//                SDL_SetTextureNormal(objectTexture);
-//            } else {
-//                SDL_SetTextureDarkened(objectTexture);
-//            }
-//        } else {
-//            SDL_SetTextureNormal(objectTexture);
-//        }
-//
-//        if (drawingFlags & MapObject::DRAWING_FLAG_RED) {
-//            SDL_SetTextureColorMod(objectTexture, 255, 0, 0);
-//            SDL_SetTextureAlphaMod(objectTexture, 128);
-//        } else {
-//            SDL_SetTextureColorMod(objectTexture, 255, 255, 255);
-//            SDL_SetTextureAlphaMod(objectTexture, 255);
-//        }
-//
-//        SDL_RenderCopy(renderer, objectTexture, NULL, rect);
-//        SDL_RenderPresent(renderer);
-//    }
-//}
 
 void Map::drawCatchmentArea(Structure* structure) {
     SDL_SetRenderDrawColor(renderer, 0xc8, 0xaf, 0x37, 255);
