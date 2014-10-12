@@ -45,6 +45,22 @@ struct RectangleData {
         
         return data[y * width + x];
     }
+
+    /**
+    * @brief Helper-Methode, um einen bestimmten Eintrag im Array zu setzen.
+    * Diese Methode kann sicher benutzt werden, um mit beliebigen Koordinaten zuzugreifen. Befinden sich die
+    * Koordinaten außerhalb des Rechtecks, ist dies eine No-Op.
+    * @param x X-Koordinate im Array
+    * @param y Y-Koordinate im Array
+    * @param value Wert, der gesetzt werden soll
+    */
+    void setData(int x, int y, T value) {
+        if (x < 0 || y < 0 || x >= width || y >= height) {
+            return;
+        }
+
+        data[y * width + x] = value;
+    }
     
 };
 

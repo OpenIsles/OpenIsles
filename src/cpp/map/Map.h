@@ -6,7 +6,6 @@
 #include <iostream>
 #include <list>
 #include <string.h>
-#include "map/DrawingOrderGraph.h"
 #include "map/Building.h"
 #include "map/Isle.h"
 #include "utils/RectangleData.h"
@@ -65,13 +64,20 @@ struct MapTile {
      * oder nullptr, wenns keinem gehört
      */
     Player* player;
-    
+
+    /**
+     * @brief Zeiger auf ein MapObject (durch Map.mapObjects verwaltet), das sich auf dieser Kachel befindet
+     * oder nullptr, wenns nix da is
+     */
+    MapObject* mapObject;
+
     
     MapTile() {
         // TODO Konstante/Enum
         tileGraphicIndex = 1; // Ozean
         isle = nullptr;
         player = nullptr;
+        mapObject = nullptr;
     }
 
 };
@@ -99,6 +105,13 @@ private:
      */
     RectangleData<MapTile*>* mapTiles = nullptr;
 
+    /**
+     * @brief Hilfsstruktur, die zum Zeichnen der Map-Objekte benötigt wird. Wir wollen sie nicht jedes Frame neu
+     * anlegen, weil sie immer so groß wie die Karte ist.
+     * @sa renderMap()
+     */
+    RectangleData<char>* mapObjectAlreadyDrawnThere = nullptr;
+
 	/**
 	 * @brief Liste der Inseln auf der Karte
 	 */
@@ -111,11 +124,6 @@ private:
 	 * "hinten im Bild" liegende Objekte kommen in der Liste zuerst.
 	 */
 	std::list<MapObject*> mapObjects;
-
-    /**
-     * @brief Graph der Map-Objekte für die Reihenfolge beim Zeichnen.
-     */
-    DrawingOrderGraph drawingOrderGraph;
 
 	/**
 	 * @brief ausgewähltes Objekt oder @c nullptr, wenn nichts ausgewählt ist
@@ -326,14 +334,6 @@ private:
      */
     unsigned char isAllowedToPlaceStructure(int mapX, int mapY, StructureType structureType);
     
-    /**
-     * Rendert eine Struktur. Hilfsmethode von renderMap().
-     * 
-     * @param structure Struktur
-     * @param rect Rechteck mit Pixel-Koordinaten, wo die Grafik gesetzt werden soll
-     */
-    void renderStructure(Structure* structure, SDL_Rect* rect);
-
     /**
      * Zeichnet den Einzugsbereich eines Gebäudes. Hilfsmethode von renderMap().
      *
