@@ -557,12 +557,16 @@ void Map::renderMap(SDL_Renderer* renderer) {
                         GraphicsMgr::TILE_HEIGHT_HALF;
 
                 SDL_Rect rectSource = { xInMapObject, 0, GraphicsMgr::TILE_WIDTH, graphic->getHeight() };
-                SDL_Rect rectDestination = { 0, 0, rectSource.w, rectSource.h };
+                SDL_Rect rectDestination = { 0, 0, rectSource.w / screenZoom, rectSource.h / screenZoom };
                 MapUtils::mapToScreenCoords(mapX, mapY, rectDestination.x, rectDestination.y);
+
+                rectDestination.x -= screenOffsetX;
+                rectDestination.y -= screenOffsetY;
+
                 rectDestination.y -= yInMapObject;
 
-                rectDestination.x -= screenOffsetX / screenZoom;
-                rectDestination.y -= screenOffsetY / screenZoom;
+                rectDestination.x /= screenZoom;
+                rectDestination.y /= screenZoom;
 
                 if (selectedMapObject != nullptr) {
                     Building* selectedBuilding = dynamic_cast<Building*>(selectedMapObject);
