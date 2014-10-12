@@ -258,11 +258,14 @@ void GuiMgr::initBuildGui() {
                 { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
                 { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
                 { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
-                { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
                 {
                     StructureType::SIGNALFIRE,
                     "Signalfeuer",
                     OtherGraphic::ADD_BUILDING_DUMMY
+                }, {
+                    StructureType::STREET,
+                    "Plasterstraße",
+                    OtherGraphic::ADD_BUILDING_STREET
                 }, {
                     StructureType::PIONEERS_HOUSE1,
                     "Pionier-Haus",
@@ -432,9 +435,9 @@ void GuiMgr::onEvent(SDL_Event& event) {
         } else if (event.key.keysym.scancode == SDL_SCANCODE_7) {
             game->startAddingStructure(StructureType::OFFICE1);
         } else if (event.key.keysym.scancode == SDL_SCANCODE_8) {
-            game->startAddingStructure(StructureType::STREET_STRAIGHT_0);
+            game->startAddingStructure(StructureType::STREET);
         } else if (event.key.keysym.scancode == SDL_SCANCODE_9) {
-            game->startAddingStructure(StructureType::STREET_CURVE_180);
+            game->startAddingStructure(StructureType::MARKETPLACE);
         } else if (event.key.keysym.scancode == SDL_SCANCODE_0) {
             game->startAddingStructure(StructureType::FORESTERS);
         } else if (event.key.keysym.scancode == SDL_SCANCODE_DELETE) {

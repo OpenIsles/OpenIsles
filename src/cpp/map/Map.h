@@ -365,6 +365,26 @@ private:
 	 */
 	void onClickInMinimap(int mouseX, int mouseY);
 
+    /**
+     * @brief Berechnet welcher konkrete StructureType für eine Straßenkachel verwendet werden muss. Als Eingabeparameter
+     * abstractStreetStructureType wird festgelegt, ob Pflasterstraße oder Feldweg und an welchen Map-Koordinaten die
+     * Grafik gesetzt werden soll. Diese Methode bestimmt ausgehend von umliegenden Wegen, ob Gerade, Kurve, T-Stück
+     * oder Kreuzung verwendet werden muss und gibt diesen StructureType zurück.
+     * @param mapX Map-X-Koordinate, für die berechnet werden soll
+     * @param mapY Map-Y-Koordinate, für die berechnet werden soll
+     * @param abstractStreetStructureType spezifiziert, welcher Typ von Weg gewünscht wird
+     * @return konkreter StructureType, der an dieser Stelle verwendet werden muss
+     * TODO Feldweg
+     */
+    StructureType getConcreteStreetStructureType(int mapX, int mapY, StructureType abstractStreetStructureType);
+
+    /**
+     * @brief Ermittelt, ob an einer bestimmten Stelle ein Weg liegt.
+     * @param mapX Map-X-Koordinate
+     * @param mapY Map-Y-Koordinate
+     * @return true, wenn ein Weg (Feldweg oder Pflasterstraße) da ist; sonst false.
+     */
+    bool isStreetAt(int mapX, int mapY);
 };
 
 #endif

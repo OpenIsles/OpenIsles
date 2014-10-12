@@ -24,6 +24,7 @@ GraphicsMgr::GraphicsMgr() {
     structures[StructureType::MARKETPLACE] = new Graphic("data/img/objects/marketplace.png", 4, 3);
     structures[StructureType::FORESTERS] = new Graphic("data/img/objects/foresters.png", 2, 2);
 
+    structures[StructureType::STREET] = new Graphic("data/img/objects/street-straight90.png", 1, 1); // damit was drinsteht. Fürs Malen werden die nachfolgenden Grafiken verwendet
 	structures[StructureType::STREET_STRAIGHT_0] = new Graphic("data/img/objects/street-straight0.png", 1, 1);
 	structures[StructureType::STREET_STRAIGHT_90] = new Graphic("data/img/objects/street-straight90.png", 1, 1);
 	structures[StructureType::STREET_CURVE_0] = new Graphic("data/img/objects/street-curve0.png", 1, 1);
@@ -62,6 +63,7 @@ GraphicsMgr::GraphicsMgr() {
     otherGraphics[OtherGraphic::ADD_BUILDING_CHAPEL] = new Graphic("data/img/gui/add-building/chapel.png");
     otherGraphics[OtherGraphic::ADD_BUILDING_MARKETPLACE] = new Graphic("data/img/gui/add-building/marketplace.png");
     otherGraphics[OtherGraphic::ADD_BUILDING_OFFICE1] = new Graphic("data/img/gui/add-building/office1.png");
+    otherGraphics[OtherGraphic::ADD_BUILDING_STREET] = new Graphic("data/img/gui/add-building/street.png");
     otherGraphics[OtherGraphic::ADD_BUILDING_DUMMY] = new Graphic("data/img/gui/add-building/dummy.png");
     otherGraphics[OtherGraphic::PRODUCTION_ARROW] = new Graphic("data/img/gui/production-arrow.png");
     otherGraphics[OtherGraphic::PRODUCTION_PLUS] = new Graphic("data/img/gui/production-plus.png");

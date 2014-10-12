@@ -64,49 +64,49 @@ Map::Map() {
     addBuilding(30, 226, OFFICE1, player3);
     addBuilding(132, 94, OFFICE1, player4);
 
-	addStructure(48, 30, STREET_STRAIGHT_0, player1);
-	addStructure(49, 30, STREET_STRAIGHT_0, player1);
-	addStructure(50, 30, STREET_STRAIGHT_0, player1);
-	addStructure(51, 30, STREET_STRAIGHT_0, player1);
-	addStructure(52, 30, STREET_STRAIGHT_0, player1);
-	addStructure(53, 30, STREET_STRAIGHT_0, player1);
-	addStructure(54, 30, STREET_CURVE_180, player1);
-	addStructure(54, 31, STREET_STRAIGHT_90, player1);
-	addStructure(54, 32, STREET_STRAIGHT_90, player1);
-	addStructure(54, 33, STREET_STRAIGHT_90, player1);
-	addStructure(54, 34, STREET_TEE_180, player1);
-	addStructure(54, 35, STREET_STRAIGHT_90, player1);
-	addStructure(54, 36, STREET_STRAIGHT_90, player1);
-	addStructure(54, 37, STREET_CURVE_270, player1);
-	addStructure(53, 37, STREET_STRAIGHT_0, player1);
-	addStructure(52, 37, STREET_STRAIGHT_0, player1);
-	addStructure(51, 37, STREET_STRAIGHT_0, player1);
-	addStructure(50, 37, STREET_TEE_90, player1);
-	addStructure(49, 37, STREET_TEE_270, player1);
-	addStructure(48, 37, STREET_STRAIGHT_0, player1);
-	addStructure(47, 37, STREET_CURVE_0, player1);
-	addStructure(47, 36, STREET_STRAIGHT_90, player1);
-	addStructure(47, 35, STREET_STRAIGHT_90, player1);
-	addStructure(47, 34, STREET_TEE_0, player1);
-	addStructure(47, 33, STREET_STRAIGHT_90, player1);
-	addStructure(47, 32, STREET_TEE_0, player1);
-	addStructure(47, 31, STREET_STRAIGHT_90, player1);
-	addStructure(47, 30, STREET_CURVE_90, player1);
+	addStructure(48, 30, STREET, player1);
+	addStructure(49, 30, STREET, player1);
+	addStructure(50, 30, STREET, player1);
+	addStructure(51, 30, STREET, player1);
+	addStructure(52, 30, STREET, player1);
+	addStructure(53, 30, STREET, player1);
+	addStructure(54, 30, STREET, player1);
+	addStructure(54, 31, STREET, player1);
+	addStructure(54, 32, STREET, player1);
+	addStructure(54, 33, STREET, player1);
+	addStructure(54, 34, STREET, player1);
+	addStructure(54, 35, STREET, player1);
+	addStructure(54, 36, STREET, player1);
+	addStructure(54, 37, STREET, player1);
+	addStructure(53, 37, STREET, player1);
+	addStructure(52, 37, STREET, player1);
+	addStructure(51, 37, STREET, player1);
+	addStructure(50, 37, STREET, player1);
+	addStructure(49, 37, STREET, player1);
+	addStructure(48, 37, STREET, player1);
+	addStructure(47, 37, STREET, player1);
+	addStructure(47, 36, STREET, player1);
+	addStructure(47, 35, STREET, player1);
+	addStructure(47, 34, STREET, player1);
+	addStructure(47, 33, STREET, player1);
+	addStructure(47, 32, STREET, player1);
+	addStructure(47, 31, STREET, player1);
+	addStructure(47, 30, STREET, player1);
 
-    addStructure(46, 32, STREET_STRAIGHT_0, player1);
-    addStructure(46, 34, STREET_STRAIGHT_0, player1);
-    addStructure(45, 32, STREET_TEE_180, player1);
-    addStructure(45, 31, STREET_STRAIGHT_90, player1);
-    addStructure(45, 33, STREET_STRAIGHT_90, player1);
-    addStructure(45, 34, STREET_CROSS, player1);
-    addStructure(45, 35, STREET_STRAIGHT_90, player1);
-    addStructure(44, 34, STREET_STRAIGHT_0, player1);
+    addStructure(46, 32, STREET, player1);
+    addStructure(46, 34, STREET, player1);
+    addStructure(45, 32, STREET, player1);
+    addStructure(45, 31, STREET, player1);
+    addStructure(45, 33, STREET, player1);
+    addStructure(45, 34, STREET, player1);
+    addStructure(45, 35, STREET, player1);
+    addStructure(44, 34, STREET, player1);
 
-    addStructure(49, 38, STREET_STRAIGHT_90, player1);
-    addStructure(50, 36, STREET_STRAIGHT_90, player1);
+    addStructure(49, 38, STREET, player1);
+    addStructure(50, 36, STREET, player1);
 
-    addStructure(55, 34, STREET_STRAIGHT_0, player1);
-    addStructure(56, 34, STREET_STRAIGHT_0, player1);
+    addStructure(55, 34, STREET, player1);
+    addStructure(56, 34, STREET, player1);
 
     updateMinimapTexture();
     
@@ -515,7 +515,14 @@ void Map::renderMap(SDL_Renderer* renderer) {
 
             // Gebäude nicht zeichnen, wenn wir im Blinkmodus sind. Dann nur in der ersten Hälfte eines Intervalls zeichnen
             if (!(drawingFlags & MapObject::DRAWING_FLAG_BLINK) || (sdlTicks % 800 < 400)) {
-                Graphic* graphic = graphicsMgr->getGraphicForStructure(structure->getStructureType());
+                StructureType structureType = structure->getStructureType();;
+
+                // Sonderfall: Straße
+                if (structureType == StructureType::STREET) {
+                    structureType = getConcreteStreetStructureType(mapX, mapY, structureType);
+                }
+
+                Graphic* graphic = graphicsMgr->getGraphicForStructure(structureType);
                 SDL_Texture* objectTexture =
                     (drawingFlags & MapObject::DRAWING_FLAG_MASKED) ? graphic->getTextureMasked() : graphic->getTexture();
 
@@ -969,4 +976,51 @@ void Map::deleteSelectedObject() {
     delete selectedMapObject;
     
     selectedMapObject = nullptr;
+}
+
+StructureType Map::getConcreteStreetStructureType(int mapX, int mapY, StructureType abstractStreetStructureType) {
+    if (abstractStreetStructureType == StructureType::STREET) {
+        static const StructureType structureTypeMap[16] = {
+            STREET_STRAIGHT_90, // oder STREET_STRAIGHT_0, is in diesem Fall egal. TODO Sollte später mit der Drehfunktion genauer untersucht werden
+            STREET_STRAIGHT_90,
+            STREET_STRAIGHT_0,
+            STREET_CURVE_0,
+            STREET_STRAIGHT_0,
+            STREET_CURVE_270,
+            STREET_STRAIGHT_0,
+            STREET_TEE_90,
+            STREET_STRAIGHT_90,
+            STREET_STRAIGHT_90,
+            STREET_CURVE_90,
+            STREET_TEE_180,
+            STREET_CURVE_180,
+            STREET_TEE_0,
+            STREET_TEE_270,
+            STREET_CROSS
+        };
+
+        char isStreetAbove = isStreetAt(mapX, mapY - 1) ? 1 : 0; // Bit 0
+        char isStreetRight = isStreetAt(mapX + 1, mapY) ? 1 : 0; // Bit 1
+        char isStreetLeft = isStreetAt(mapX -1, mapY) ? 1 : 0;   // Bit 2
+        char isStreetBelow = isStreetAt(mapX, mapY + 1) ? 1 : 0; // Bit 3
+
+        int index = (isStreetBelow << 3) | (isStreetLeft << 2) | (isStreetRight << 1) | isStreetAbove;
+
+        return structureTypeMap[index];
+    }
+
+    // TODO Feldweg
+    throw new std::runtime_error("Illegal abstractStreetStructureType " + std::to_string(abstractStreetStructureType));
+}
+
+bool Map::isStreetAt(int mapX, int mapY) {
+    MapObject* mapObject = getMapObjectAt(mapX, mapY);
+    if (mapObject == nullptr) {
+        return false;
+    }
+
+    Structure* structure = dynamic_cast<Structure*>(mapObject);
+
+    // TODO Feldweg
+    return (structure->getStructureType() == StructureType::STREET);
 }

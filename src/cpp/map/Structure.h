@@ -12,17 +12,18 @@ enum StructureType : unsigned char {
     NO_STRUCTURE = 0,
     
     // Strukturen
-    STREET_STRAIGHT_0 = 1,
-    STREET_STRAIGHT_90 = 2,
-    STREET_CURVE_0 = 3,
-    STREET_CURVE_90 = 4,
-    STREET_CURVE_180 = 5,
-    STREET_CURVE_270 = 6,
-    STREET_TEE_0 = 7,
-    STREET_TEE_90 = 8,
-    STREET_TEE_180 = 9,
-    STREET_TEE_270 = 10,
-    STREET_CROSS = 11,
+    STREET = 1,               // wird als MapObject verwendet
+    STREET_STRAIGHT_0 = 2,    // werden nur zum Zeichnen verwendet und können nicht direkt platziert werden
+    STREET_STRAIGHT_90 = 3,   //  "
+    STREET_CURVE_0 = 4,       //  "
+    STREET_CURVE_90 = 5,      //  "
+    STREET_CURVE_180 = 6,     //  "
+    STREET_CURVE_270 = 7,     //  "
+    STREET_TEE_0 = 8,         //  "
+    STREET_TEE_90 = 9,        //  "
+    STREET_TEE_180 = 10,      //  "
+    STREET_TEE_270 = 11,      //  "
+    STREET_CROSS = 12,        //  "
     
     // Gebäude
     START_BUILDINGS = 101, // Marker, um zu unterscheiden, ob Structure oder Building angelegt werden
