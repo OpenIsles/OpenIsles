@@ -15,19 +15,19 @@ public:
      * @brief zeichnet das Objekt maskiert, d.h. gelbem Overlay für Gebäudeplatzierung
      * @sa #drawingFlags
      */
-    static const int DRAWING_FLAG_MASKED                   = (1 << 0);
+    static const int DRAWING_FLAG_MASKED = (1 << 0);
 
     /**
-     * @brief zeichnet das Objekt rot eingefärbt und halb-durchsichtig
+     * @brief zeichnet das Objekt rot eingefärbt
      * @sa #drawingFlags
      */
-    static const int DRAWING_FLAG_RED_AND_SEMI_TRANSPARENT = (1 << 1);
+    static const int DRAWING_FLAG_RED    = (1 << 1);
 
     /**
      * @brief zeichnet das Objekt blinkend, d.h. entweder wird die Grafik gezeichnet oder nicht
      * @sa #drawingFlags
      */
-    static const int DRAWING_FLAG_BLINK                    = (1 << 2);
+    static const int DRAWING_FLAG_BLINK  = (1 << 2);
 
 protected:
 	/**

@@ -487,7 +487,7 @@ void Map::renderMap(SDL_Renderer* renderer) {
 
             int drawingFlags = MapObject::DRAWING_FLAG_MASKED;
             if (allowedToPlaceStructure & PLACING_STRUCTURE_ROOM_NOT_UNLOCK) {
-                drawingFlags |= MapObject::DRAWING_FLAG_RED_AND_SEMI_TRANSPARENT;
+                drawingFlags |= MapObject::DRAWING_FLAG_RED;
             }
             if (allowedToPlaceStructure & PLACING_STRUCTURE_NO_RESOURCES) {
                 drawingFlags |= MapObject::DRAWING_FLAG_BLINK;
@@ -501,6 +501,10 @@ void Map::renderMap(SDL_Renderer* renderer) {
             structureBeingAdded->setDrawingFlags(drawingFlags);
         }
     }
+
+    // während des Zeichnens nur einmal auf die Uhr gucken, damit beim Blinkend-Zeichnen nicht ein Schnibbel eines
+    // Gebäude gezeichnet und ein anderer ne Millisekunde später nicht mehr
+    int sdlTicks = SDL_GetTicks();
 
 	// Objekte rendern
     memset(mapObjectAlreadyDrawnThere->data, 0, width * height * sizeof(char));
@@ -534,29 +538,54 @@ void Map::renderMap(SDL_Renderer* renderer) {
             int moMapX, moMapY, moMapWidth, moMapHeight;
             mapObject->getMapCoords(moMapX, moMapY, moMapWidth, moMapHeight);
 
-            Structure* structure = dynamic_cast<Structure*>(mapObject); // TODO nullptr sollte nicht passieren; später checken, wenn wir Bäume und sowas haben
-            Graphic* graphic = graphicsMgr->getGraphicForStructure(structure->getStructureType());
-
             int tileOffsetXInMapObject = mapX - moMapX; // (0 ... moMapWidth-1)
             int tileOffsetYInMapObject = mapY - moMapY; // (0 ... moMapHeight-1)
-            int xInMapObject =
-                ((moMapHeight - 1) - tileOffsetYInMapObject + tileOffsetXInMapObject) * GraphicsMgr::TILE_WIDTH_HALF;
-            int yInMapObject = graphic->getHeight() -
-                ((moMapHeight - 1) - tileOffsetYInMapObject + (moMapWidth - 1) - tileOffsetXInMapObject + 2) *
-                    GraphicsMgr::TILE_HEIGHT_HALF;
 
-            SDL_Rect rectSource = { xInMapObject, 0, GraphicsMgr::TILE_WIDTH, graphic->getHeight() };
-            SDL_Rect rectDestination = { 0, 0, rectSource.w, rectSource.h };
-            MapUtils::mapToScreenCoords(mapX, mapY, rectDestination.x, rectDestination.y);
-            rectDestination.y -= yInMapObject;
+            Structure* structure = dynamic_cast<Structure*>(mapObject); // TODO nullptr sollte nicht passieren; später checken, wenn wir Bäume und sowas haben
+            int drawingFlags = structure->getDrawingFlags();
 
-            rectDestination.x -= screenOffsetX / screenZoom;
-            rectDestination.y -= screenOffsetY / screenZoom;
+            // Gebäude nicht zeichnen, wenn wir im Blinkmodus sind. Dann nur in der ersten Hälfte eines Intervalls zeichnen
+            if (!(drawingFlags & MapObject::DRAWING_FLAG_BLINK) || (sdlTicks % 800 < 400)) {
+                Graphic* graphic = graphicsMgr->getGraphicForStructure(structure->getStructureType());
+                SDL_Texture* objectTexture =
+                    (drawingFlags & MapObject::DRAWING_FLAG_MASKED) ? graphic->getTextureMasked() : graphic->getTexture();
 
-            // TODO drawingFlags
-            SDL_Texture* objectTexture = graphic->getTexture();
-            SDL_SetTextureNormal(objectTexture);
-            SDL_RenderCopy(renderer, objectTexture, &rectSource, &rectDestination);
+                int xInMapObject =
+                    ((moMapHeight - 1) - tileOffsetYInMapObject + tileOffsetXInMapObject) * GraphicsMgr::TILE_WIDTH_HALF;
+                int yInMapObject = graphic->getHeight() -
+                    ((moMapHeight - 1) - tileOffsetYInMapObject + (moMapWidth - 1) - tileOffsetXInMapObject + 2) *
+                        GraphicsMgr::TILE_HEIGHT_HALF;
+
+                SDL_Rect rectSource = { xInMapObject, 0, GraphicsMgr::TILE_WIDTH, graphic->getHeight() };
+                SDL_Rect rectDestination = { 0, 0, rectSource.w, rectSource.h };
+                MapUtils::mapToScreenCoords(mapX, mapY, rectDestination.x, rectDestination.y);
+                rectDestination.y -= yInMapObject;
+
+                rectDestination.x -= screenOffsetX / screenZoom;
+                rectDestination.y -= screenOffsetY / screenZoom;
+
+                if (selectedMapObject != nullptr) {
+                    Building* selectedBuilding = dynamic_cast<Building*>(selectedMapObject);
+                    bool insideCatchmentArea =
+                        (selectedBuilding != nullptr && selectedBuilding->isInsideCatchmentArea(structure));
+
+                    if (insideCatchmentArea) {
+                        SDL_SetTextureNormal(objectTexture);
+                    } else {
+                        SDL_SetTextureDarkened(objectTexture);
+                    }
+                } else {
+                    SDL_SetTextureNormal(objectTexture);
+                }
+
+                if (drawingFlags & MapObject::DRAWING_FLAG_RED) {
+                    SDL_SetTextureColorMod(objectTexture, 255, 0, 0);
+                } else {
+                    SDL_SetTextureColorMod(objectTexture, 255, 255, 255);
+                }
+
+                SDL_RenderCopy(renderer, objectTexture, &rectSource, &rectDestination);
+            }
 
             // In mapObjectAlreadyDrawnThere die Kacheln-Spalte als erledigt markieren
             do {
@@ -668,7 +697,7 @@ unsigned char Map::isAllowedToPlaceStructure(int mapX, int mapY, StructureType s
 //            SDL_SetTextureNormal(objectTexture);
 //        }
 //
-//        if (drawingFlags & MapObject::DRAWING_FLAG_RED_AND_SEMI_TRANSPARENT) {
+//        if (drawingFlags & MapObject::DRAWING_FLAG_RED) {
 //            SDL_SetTextureColorMod(objectTexture, 255, 0, 0);
 //            SDL_SetTextureAlphaMod(objectTexture, 128);
 //        } else {
