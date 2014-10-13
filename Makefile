@@ -97,6 +97,23 @@ endef
 $(foreach GOOD,$(GOODS),$(eval $(call RENDER_GOODS_ICONS,$(GOOD))))
 
 ########################################################################################################################
+# Animationen                                                                                                         #
+########################################################################################################################
+
+ANIMATIONS := carrier
+
+define RENDER_ANIMATION
+$(DATA_DIRECTORY)/img/objects/$(1).png: $(SRC_DIRECTORY)/blender/$(1)/$(1).blend
+	$$(CREATE_TARGET_DIRECTORY)
+	cd $(SRC_DIRECTORY)/blender/$(1); blender -b $$(notdir $$<) -P ../render-animation.py
+
+	# geometry muss angegeben werden, sonst greift der Default von 120x120
+	montage $(SRC_DIRECTORY)/blender/$(1)/render/angle0/* -geometry +0+0 -tile x1 $$@
+endef
+
+$(foreach ANIMATION,$(ANIMATIONS),$(eval $(call RENDER_ANIMATION,$(ANIMATION))))
+
+########################################################################################################################
 # PHONYs um alle Blender-Sachen zu rendern und zu cleanen                                                              #
 ########################################################################################################################
 
@@ -108,11 +125,16 @@ render-blender: \
 	    $(DATA_DIRECTORY)/img/goods/marketplace-icon/$(GOOD).png \
 	    $(DATA_DIRECTORY)/img/goods/icon/$(GOOD).png \
 	) \
+	$(foreach ANIMATION,$(ANIMATIONS), \
+		$(DATA_DIRECTORY)/img/objects/$(ANIMATION).png \
+	) \
 	render-streets
 	
 clean-blender:
 	rm -f $(foreach BUILDING,$(BUILDINGS), $(DATA_DIRECTORY)/img/objects/$(BUILDING).png)
 	rm -rf $(foreach BUILDING,$(BUILDINGS), $(SRC_DIRECTORY)/blender/$(BUILDING)/render)
 	rm -rf $(DATA_DIRECTORY)/img/goods
+	rm -f $(foreach ANIMATION,$(ANIMATIONS), $(DATA_DIRECTORY)/img/objects/$(ANIMATION).png)
+	rm -rf $(foreach ANIMATION,$(ANIMATIONS), $(SRC_DIRECTORY)/blender/$(ANIMATION)/render)
 	rm -rf $(SRC_DIRECTORY)/blender/streets/render
 	rm -rf $(DATA_DIRECTORY)/img/objects/street*.png
