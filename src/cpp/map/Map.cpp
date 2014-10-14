@@ -272,7 +272,7 @@ void Map::loadMapFromTMX(const char* filename) {
             screenOffsetY = screenCenterY - (mapClipRect.h / 2);
         }
     }
-    screenZoom = 2;
+    screenZoom = 1;
 
 	// XML-Document wegräumen
 	delete xmlDocument;
