@@ -67,6 +67,12 @@ GraphicsMgr::GraphicsMgr() {
     otherGraphics[OtherGraphic::ADD_BUILDING_DUMMY] = new Graphic("data/img/gui/add-building/dummy.png");
     otherGraphics[OtherGraphic::PRODUCTION_ARROW] = new Graphic("data/img/gui/production-arrow.png");
     otherGraphics[OtherGraphic::PRODUCTION_PLUS] = new Graphic("data/img/gui/production-plus.png");
+
+
+    animations = new Animation*[AnimationType::MAX_ANIMATION];
+    memset(animations, 0, AnimationType::MAX_ANIMATION * sizeof(Animation*));
+
+    animations[AnimationType::CARRIER] = new Animation("data/img/objects/carrier.png", 31, Animation::DEFAULT_FPS);
 }
 
 GraphicsMgr::~GraphicsMgr() {

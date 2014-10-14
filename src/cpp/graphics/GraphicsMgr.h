@@ -3,6 +3,7 @@
 
 #include <SDL.h>
 #include <SDL_image.h>
+#include "graphics/Animation.h"
 #include "graphics/Graphic.h"
 #include "graphics/GraphicsMgr.h"
 
@@ -36,6 +37,16 @@ enum OtherGraphic {
             
     MAX_GRAPHIC // Marker, wie viele Grafiken es gibt
 } OtherGraphic;
+
+
+typedef
+enum AnimationType {
+    // Typ, der Waren hin- und herträgt
+    CARRIER,
+
+    MAX_ANIMATION // Marker, wie viele Animationen es gibt
+} AnimationType;
+
 
 /**
  * @brief Manager, der alle Grafiken verwaltet
@@ -76,6 +87,11 @@ private:
      * @brief Array von Zeigern auf andere Grafiken
      */
     Graphic** otherGraphics;
+
+    /**
+     * @brief Array von Zeigern auf Animationen
+     */
+    Animation** animations;
 
 public:
 	GraphicsMgr();
@@ -122,6 +138,15 @@ public:
      */
     Graphic* const getOtherGraphic(OtherGraphic otherGraphic) const {
         return otherGraphics[otherGraphic];
+    }
+
+    /**
+     * @brief Liefert eine Animation zurück
+     * @param animationType welche Animation
+     * @return Animation
+     */
+    Animation* const getAnimation(AnimationType animationType) const {
+        return animations[animationType];
     }
 
 private:

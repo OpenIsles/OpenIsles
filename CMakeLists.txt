@@ -16,6 +16,7 @@ set(SOURCE_FILES
 	src/cpp/game/Colony.cpp
 	src/cpp/game/Game.cpp
 	src/cpp/game/Player.cpp
+	src/cpp/graphics/Animation.cpp
 	src/cpp/graphics/Graphic.cpp
     src/cpp/graphics/GraphicsMgr.cpp
 	src/cpp/gui/FontMgr.cpp

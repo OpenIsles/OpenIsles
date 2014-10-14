@@ -6,7 +6,7 @@
 
 class Graphic {
 
-private:
+protected:
 	/**
 	 * @brief Dateiname der Grafik
 	 */
@@ -63,7 +63,7 @@ public:
 	 */
 	Graphic(const char* filename);
 
-	~Graphic();
+	virtual ~Graphic();
 
 	/**
 	 * @brief Liefert die Breite der Grafik in Map-Koordinaten zurück
