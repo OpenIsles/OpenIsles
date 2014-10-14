@@ -1,7 +1,7 @@
 #ifndef _BUILDING_H
 #define _BUILDING_H
 
-#include "Structure.h"
+#include "map/Structure.h"
 
 /**
  * @brief Structure, die ein Gebäude darstellt.

@@ -3,7 +3,8 @@
 
 #include <SDL.h>
 #include <SDL_image.h>
-#include "Graphic.h"
+#include "graphics/Graphic.h"
+#include "graphics/GraphicsMgr.h"
 
 enum GoodsType : char;
 enum StructureType : unsigned char;

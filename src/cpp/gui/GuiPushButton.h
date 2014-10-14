@@ -1,7 +1,7 @@
 #ifndef _GUI_PUSH_BUTTON_H
 #define _GUI_PUSH_BUTTON_H
 
-#include "GuiButton.h"
+#include "gui/GuiButton.h"
 
 class SDL_Renderer;
 

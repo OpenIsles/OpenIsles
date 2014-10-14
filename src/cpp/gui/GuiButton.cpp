@@ -1,8 +1,7 @@
 #include "SDL.h"
+#include "graphics/Graphic.h"
 #include "gui/GuiButton.h"
 #include "gui/GuiMgr.h"
-#include "gui/GuiStaticElement.h"
-#include "Graphic.h"
 
 
 GuiButton::GuiButton() {

@@ -16,6 +16,8 @@ set(SOURCE_FILES
 	src/cpp/game/Colony.cpp
 	src/cpp/game/Game.cpp
 	src/cpp/game/Player.cpp
+	src/cpp/graphics/Graphic.cpp
+    src/cpp/graphics/GraphicsMgr.cpp
 	src/cpp/gui/FontMgr.cpp
 	src/cpp/gui/GuiAddBuildingWidget.cpp
 	src/cpp/gui/GuiButton.cpp
@@ -27,8 +29,6 @@ set(SOURCE_FILES
 	src/cpp/map/Map.cpp
 	src/cpp/map/MapUtils.cpp
 	src/cpp/sound/SoundMgr.cpp
-	src/cpp/Graphic.cpp
-	src/cpp/GraphicsMgr.cpp
 	src/cpp/main.cpp
 )
 

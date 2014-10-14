@@ -7,12 +7,12 @@
 #include "config/BuildingConfigMgr.h"
 #include "game/Game.h"
 #include "game/Player.h"
+#include "graphics/GraphicsMgr.h"
 #include "gui/FontMgr.h"
 #include "gui/GuiMgr.h"
 #include "map/Map.h"
 #include "sound/SoundMgr.h"
 #include "utils/FpsCounter.h"
-#include "GraphicsMgr.h"
 
 static SDL_Color colorWhite = {255, 255, 255, 255};
 

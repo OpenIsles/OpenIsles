@@ -2,7 +2,7 @@
 #define _GUI_ADD_BUILDING_WIDGET_H
 
 #include <SDL_render.h>
-#include "GuiBase.h"
+#include "gui/GuiBase.h"
 
 union SDL_Event;
 class Graphic;

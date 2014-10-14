@@ -2,8 +2,8 @@
 #define _MAP_OBJECT_H
 
 #include "game/Player.h"
+#include "graphics/GraphicsMgr.h"
 #include "map/MapUtils.h"
-#include "GraphicsMgr.h"
 
 /**
  * @brief Basisklasse für alles, was sich auf der Karte befinden kann

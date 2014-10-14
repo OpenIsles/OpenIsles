@@ -1,7 +1,7 @@
 #ifndef _STRUCTURE_H
 #define _STRUCTURE_H
 
-#include "MapObject.h"
+#include "map/MapObject.h"
 
 /**
  * Enum zur Unterscheidung der verschiedenen Strukturen

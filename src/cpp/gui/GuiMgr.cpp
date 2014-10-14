@@ -1,13 +1,13 @@
 #include "game/Game.h"
+#include "graphics/Graphic.h"
 #include "gui/GuiAddBuildingWidget.h"
 #include "gui/GuiButton.h"
 #include "gui/GuiMgr.h"
+#include "gui/GuiPushButton.h"
 #include "gui/GuiStaticElement.h"
 #include "gui/Identifiers.h"
 #include "map/Map.h"
 #include "sound/SoundMgr.h"
-#include "Graphic.h"
-#include "GuiPushButton.h"
 
 // Aus main.cpp importiert
 extern bool quitGame;

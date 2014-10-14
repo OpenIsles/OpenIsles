@@ -1,6 +1,6 @@
 #include <algorithm>
+#include "graphics/GraphicsMgr.h"
 #include "map/MapUtils.h"
-#include "GraphicsMgr.h"
 
 
 void MapUtils::mapToScreenCoords(int mapX, int mapY, int& screenX, int& screenY) {

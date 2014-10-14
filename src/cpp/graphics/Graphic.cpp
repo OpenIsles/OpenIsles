@@ -1,6 +1,6 @@
 #include <stdexcept>
 #include <iostream>
-#include "Graphic.h"
+#include "graphics/Graphic.h"
 
 extern SDL_Renderer* renderer;
 

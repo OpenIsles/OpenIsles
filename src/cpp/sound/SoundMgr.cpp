@@ -1,7 +1,6 @@
 #include <iostream>
-#include <memory.h>
 #include <stdexcept>
-#include "SoundMgr.h"
+#include "sound/SoundMgr.h"
 
 SoundMgr::SoundMgr() {
 	// Library initialisieren

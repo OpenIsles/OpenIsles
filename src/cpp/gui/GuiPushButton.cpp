@@ -1,8 +1,8 @@
 #include "SDL.h"
+#include "graphics/Graphic.h"
 #include "gui/GuiMgr.h"
 #include "gui/GuiPushButton.h"
 #include "gui/GuiStaticElement.h"
-#include "Graphic.h"
 
 
 GuiPushButton::GuiPushButton() {

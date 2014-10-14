@@ -1,6 +1,6 @@
 #include "SDL.h"
-#include "GuiStaticElement.h"
-#include "Graphic.h"
+#include "graphics/Graphic.h"
+#include "gui/GuiStaticElement.h"
 
 
 GuiStaticElement::GuiStaticElement() {

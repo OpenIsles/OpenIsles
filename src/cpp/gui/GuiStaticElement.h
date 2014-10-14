@@ -1,7 +1,7 @@
 #ifndef _GUI_STATIC_ELEMENT_H
 #define _GUI_STATIC_ELEMENT_H
 
-#include "GuiBase.h"
+#include "gui/GuiBase.h"
 
 union SDL_Event;
 class Graphic;

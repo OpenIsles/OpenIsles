@@ -2,8 +2,8 @@
 #include <sstream>
 #include <stdexcept>
 #include "game/Colony.h"
+#include "graphics/GraphicsMgr.h"
 #include "map/Structure.h"
-#include "GraphicsMgr.h"
 
 GraphicsMgr::GraphicsMgr() {
 	loadTiles();
