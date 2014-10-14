@@ -435,7 +435,7 @@ void Map::renderMap(SDL_Renderer* renderer) {
 		}
 	}
 
-    // Postionieren wir grade ein neues Gebäude? Dann kurzfristig in die mapObjects-Liste nehmen, damits gerendert wird
+    // Postionieren wir grade ein neues Gebäude?
     Structure* structureBeingAdded = nullptr;
     if (game->getAddingStructure() != NO_STRUCTURE) {
         int mouseScreenX = (mouseCurrentX * screenZoom) + screenOffsetX;
@@ -577,7 +577,7 @@ void Map::renderMap(SDL_Renderer* renderer) {
         }
     }
 
-    // mapObjectBeingAdded gesetzt?
+    // structureBeingAdded gesetzt?
     if (structureBeingAdded != nullptr) {
         // Einzugsbereich jetzt malen, damit er oben drauf is
         drawCatchmentArea(structureBeingAdded);
