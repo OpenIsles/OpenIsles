@@ -108,7 +108,7 @@ $(DATA_DIRECTORY)/img/objects/$(1).png: $(SRC_DIRECTORY)/blender/$(1)/$(1).blend
 	cd $(SRC_DIRECTORY)/blender/$(1); blender -b $$(notdir $$<) -P ../render-animation.py
 
 	# geometry muss angegeben werden, sonst greift der Default von 120x120
-	montage $(SRC_DIRECTORY)/blender/$(1)/render/angle0/* -geometry +0+0 -tile x1 $$@
+	montage -background transparent $(SRC_DIRECTORY)/blender/$(1)/render/angle0/* -geometry +0+0 -tile x1 $$@
 endef
 
 $(foreach ANIMATION,$(ANIMATIONS),$(eval $(call RENDER_ANIMATION,$(ANIMATION))))
