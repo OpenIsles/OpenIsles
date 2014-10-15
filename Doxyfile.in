@@ -1,0 +1,26 @@
+# Project
+PROJECT_NAME = OpenIsles
+
+# Input/Output
+INPUT = ${CMAKE_SOURCE_DIR}/src/cpp
+EXCLUDE = ${CMAKE_SOURCE_DIR}/src/cpp/rapidxml
+RECURSIVE = YES
+OUTPUT_DIRECTORY = ${CMAKE_SOURCE_DIR}/doxygen
+OUTPUT_LANGUAGE = German
+
+# Was soll alles in die Doku rein
+EXTRACT_PRIVATE = YES
+EXTRACT_STATIC = YES
+
+# Ausgabe
+GENERATE_HTML = YES
+HTML_OUTPUT = .
+HTML_FILE_EXTENSION = .html
+SEARCHENGINE = YES
+VERBATIM_HEADERS = NO
+
+GENERATE_LATEX = NO
+
+# Sonstiges
+CASE_SENSE_NAMES = NO     # immer Kleinbuchstaben-Dateinamen verwenden
+WARNINGS = YES

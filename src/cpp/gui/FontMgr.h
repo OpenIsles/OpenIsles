@@ -42,7 +42,7 @@ public:
      * @param x x-Koordinate, wo der Text platziert werden soll
      * @param y y-Koordinate, wo der Text platziert werden soll
      * @param color SDL-Farbe, mit der der Text gezeichnet werden soll
-     * @param color SDL-Farbe, mit der der Schatten gezeichnet werden soll; oder nullptr, wenn kein Schatten gewünscht
+     * @param shadowColor SDL-Farbe, mit der der Schatten gezeichnet werden soll; oder nullptr, wenn kein Schatten gewünscht
      * @param fontName Dateiname der Schriftart, die verwendet werden soll (keinen Pfad angeben!), z.B. "DroidSans-Bold.ttf"
      * @param fontSize Größe der Schriftart
      * @param align Ausrichtung des Texts. Eine Kombination aus RENDERTEXT_?ALIGN_*-Konstanten

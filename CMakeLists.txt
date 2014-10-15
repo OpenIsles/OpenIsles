@@ -42,3 +42,14 @@ add_definitions(${SDL_CFLAGS})
 target_link_libraries(OpenIsles ${SDL2_LIBRARIES} ${SDL2_IMAGE_LIBRARIES} ${SDL2_MIXER_LIBRARIES} ${SDL2_TTF_LIBRARIES})
 
 file(COPY ${CMAKE_SOURCE_DIR}/data DESTINATION ${CMAKE_BINARY_DIR})
+
+# Doxygen
+find_package(Doxygen)
+if(DOXYGEN_FOUND)
+	configure_file(${CMAKE_SOURCE_DIR}/Doxyfile.in ${CMAKE_BINARY_DIR}/Doxyfile)
+	add_custom_target(
+		generate-doxygen
+		rm -rf ${CMAKE_SOURCE_DIR}/doxygen && ${DOXYGEN_EXECUTABLE} ${CMAKE_BINARY_DIR}/Doxyfile
+		VERBATIM
+	)
+endif(DOXYGEN_FOUND)
