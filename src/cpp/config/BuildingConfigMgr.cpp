@@ -78,6 +78,13 @@ BuildingConfigMgr::BuildingConfigMgr() {
     memcpy(configs[StructureType::FORESTERS]->catchmentArea->data, "0011110001111110111111111111111111111111111111110111111000111100", 64);
     configs[StructureType::FORESTERS]->buildingCosts = { 50, 2, 0, 0 };
     configs[StructureType::FORESTERS]->buildingProduction = { GoodsType::WOOD, GoodsType::NO_GOODS, GoodsType::NO_GOODS };
+
+    configs[StructureType::SHEEP_FARM] = new BuildingConfig();
+    configs[StructureType::SHEEP_FARM]->name = "Schaffarm";
+    configs[StructureType::SHEEP_FARM]->catchmentArea = new RectangleData<char>(8, 8);
+    memcpy(configs[StructureType::SHEEP_FARM]->catchmentArea->data, "0011110001111110111111111111111111111111111111110111111000111100", 64);
+    configs[StructureType::SHEEP_FARM]->buildingCosts = { 200, 2, 4, 0 };
+    configs[StructureType::SHEEP_FARM]->buildingProduction = { GoodsType::TOOLS, GoodsType::NO_GOODS, GoodsType::NO_GOODS };
 }
 
 BuildingConfigMgr::~BuildingConfigMgr() {

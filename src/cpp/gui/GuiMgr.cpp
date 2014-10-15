@@ -202,7 +202,11 @@ void GuiMgr::initBuildGui() {
                 { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
                 { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
                 { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
-                { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
+                {
+                    StructureType::SHEEP_FARM,
+                    "Schaffarm",
+                    OtherGraphic::ADD_BUILDING_SHEEP_FARM
+                },
                 { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
                 {
                     StructureType::HERBARY,
