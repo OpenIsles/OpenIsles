@@ -18,8 +18,8 @@ BuildingConfigMgr::BuildingConfigMgr() {
     
     configs[StructureType::CHAPEL] = new BuildingConfig();
     configs[StructureType::CHAPEL]->name = "Kapelle";
-    configs[StructureType::CHAPEL]->catchmentArea = new RectangleData<char>(6, 6);
-    memcpy(configs[StructureType::CHAPEL]->catchmentArea->data, "011110111111111111111111111111011110", 36);
+    configs[StructureType::CHAPEL]->catchmentArea = new RectangleData<char>(18, 17);
+    memcpy(configs[StructureType::CHAPEL]->catchmentArea->data, "000000111111000000000011111111110000000111111111111000001111111111111100011111111111111110011111111111111110111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111011111111111111110011111111111111110001111111111111100000111111111111000000011111111110000000000111111000000", 306);
     configs[StructureType::CHAPEL]->buildingCosts = { 100, 2, 5, 0 };
     configs[StructureType::CHAPEL]->buildingProduction = { GoodsType::NO_GOODS, GoodsType::NO_GOODS, GoodsType::NO_GOODS };
     
