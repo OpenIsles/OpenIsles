@@ -58,7 +58,7 @@ void GuiAddBuildingWidget::renderElement(SDL_Renderer* renderer) {
     SDL_RenderCopy(renderer, buildingGraphic->getTexture(), nullptr, &rect);
 
     // produzierte Waren
-    const BuildingProduction* buildingProduction = buildingConfig->getBuildingProduction();
+    const ProductionSlots* buildingProduction = buildingConfig->getBuildingProduction();
     int productionY = windowY + 160;
     if (buildingProduction->input2.isUsed()) {
         // input + input2 -> output

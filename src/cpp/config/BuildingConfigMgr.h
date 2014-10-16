@@ -2,6 +2,7 @@
 #define _BUILDING_CONFIG_MGR_H
 
 #include "game/GoodsSlot.h"
+#include "map/Building.h"
 #include "utils/RectangleData.h"
 
 
@@ -35,29 +36,6 @@ struct BuildingCosts {
     unsigned int bricks;
     
 } BuildingCosts;
-
-/**
-* @brief Produktions eines Gebäudes
-*/
-typedef
-struct BuildingProduction {
-
-    /**
-     * @brief produzierte Güter
-     */
-    GoodsSlot output;
-
-    /**
-     * @brief verbrauchte Güter
-     */
-    GoodsSlot input;
-
-    /**
-     * @brief weitere verbrauchte Güter, wenn das Gebäude aus zwei verschiedenen Gütern was herstellt
-     */
-    GoodsSlot input2;
-
-} BuildingProduction;
 
 
 typedef
@@ -102,7 +80,7 @@ struct BuildingConfig {
     /**
      * @brief Güter, die verbraucht und hergestellt werden.
      */
-    BuildingProduction buildingProduction;
+    ProductionSlots buildingProduction;
     
     
     ~BuildingConfig() {
@@ -135,7 +113,7 @@ struct BuildingConfig {
     /**
      * @return produzierte und verbrauchte Güter
      */
-    const BuildingProduction* getBuildingProduction() const {
+    const ProductionSlots* getBuildingProduction() const {
         return &buildingProduction;
     }
 

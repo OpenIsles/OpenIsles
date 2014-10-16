@@ -749,13 +749,18 @@ const Building* Map::addBuilding(int mapX, int mapY, StructureType structureType
     SDL_Rect rect;
     MapUtils::mapToDrawScreenCoords(mapX, mapY, graphic, &rect);
 
-	// Objekt anlegen und in die Liste aufnehmen
+	// Objekt anlegen
 	Building* building = new Building();
 	building->setMapCoords(mapX, mapY, graphic->getMapWidth(), graphic->getMapHeight());
 	building->setScreenCoords(rect.x, rect.y, graphic->getWidth(), graphic->getHeight());
 	building->setStructureType(structureType);
     building->setPlayer(player);
 
+    // Defaults für Produktionsdaten setzen
+    const BuildingConfig* buildingConfig = buildingConfigMgr->getConfig(structureType);
+    building->productionSlots = ProductionSlots(buildingConfig->buildingProduction);
+
+    // Objekt in die Liste aufnehmen
 	addMapObject(building);
     
     // Kontor? Einzugbereich in mapTiles aktualisieren

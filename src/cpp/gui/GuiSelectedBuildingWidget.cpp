@@ -1,6 +1,5 @@
 #include <map/Map.h>
 #include "config/BuildingConfigMgr.h"
-#include "game/Colony.h"
 #include "game/Game.h"
 #include "gui/FontMgr.h"
 #include "gui/GuiSelectedBuildingWidget.h"
@@ -53,28 +52,34 @@ void GuiSelectedBuildingWidget::renderElement(SDL_Renderer* renderer) {
         &colorWhite, &colorBlack, "DroidSans-Bold.ttf", 15, RENDERTEXT_HALIGN_CENTER);
 
     // produzierte Waren
-    const BuildingProduction* buildingProduction = buildingConfig->getBuildingProduction();
+    const ProductionSlots* productionSlots = &selectedBuilding->productionSlots;
     int productionY = windowY + 50;
-    if (buildingProduction->input2.isUsed()) {
+    if (productionSlots->input2.isUsed()) {
         // input + input2 -> output
 
-        GuiUtils::drawGoodsBox(windowX + 29, productionY, buildingProduction->input.goodsType, 42);
+        GuiUtils::drawGoodsBox(windowX + 29, productionY,
+            productionSlots->input.goodsType, productionSlots->input.inventory);
         graphicsMgr->getOtherGraphic(OtherGraphic::PRODUCTION_PLUS)->drawAt(windowX + 75, productionY);
-        GuiUtils::drawGoodsBox(windowX + 90, productionY, buildingProduction->input2.goodsType, 42);
+        GuiUtils::drawGoodsBox(windowX + 90, productionY,
+            productionSlots->input2.goodsType, productionSlots->input2.inventory);
         graphicsMgr->getOtherGraphic(OtherGraphic::PRODUCTION_ARROW)->drawAt(windowX + 136, productionY);
-        GuiUtils::drawGoodsBox(windowX + 150, productionY, buildingProduction->output.goodsType, 42);
+        GuiUtils::drawGoodsBox(windowX + 150, productionY,
+            productionSlots->output.goodsType, productionSlots->output.inventory);
     }
-    else if (buildingProduction->input.isUsed()) {
+    else if (productionSlots->input.isUsed()) {
         // input -> output
 
-        GuiUtils::drawGoodsBox(windowX + 60, productionY, buildingProduction->input.goodsType, 42);
+        GuiUtils::drawGoodsBox(windowX + 60, productionY,
+            productionSlots->input.goodsType, productionSlots->input.inventory);
         graphicsMgr->getOtherGraphic(OtherGraphic::PRODUCTION_ARROW)->drawAt(windowX + 106, productionY);
-        GuiUtils::drawGoodsBox(windowX + 120, productionY, buildingProduction->output.goodsType, 42);
+        GuiUtils::drawGoodsBox(windowX + 120, productionY,
+            productionSlots->output.goodsType, productionSlots->output.inventory);
     }
-    else if (buildingProduction->output.isUsed()) {
+    else if (productionSlots->output.isUsed()) {
         // output
 
-        GuiUtils::drawGoodsBox(windowX + 90, productionY, buildingProduction->output.goodsType, 42);
+        GuiUtils::drawGoodsBox(windowX + 90, productionY,
+            productionSlots->output.goodsType, productionSlots->output.inventory);
     }
 
     // TODO Auslastung

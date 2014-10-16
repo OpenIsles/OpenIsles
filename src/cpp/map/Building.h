@@ -1,12 +1,43 @@
 #ifndef _BUILDING_H
 #define _BUILDING_H
 
+#include "game/GoodsSlot.h"
 #include "map/Structure.h"
+
+/**
+ * @brief Enthält die Slots für produzierte und zu verbrauchende Güter eines Gebäudes.
+ */
+typedef
+struct ProductionSlots {
+
+    /**
+     * @brief produzierte Güter
+     */
+    GoodsSlot output;
+
+    /**
+     * @brief verbrauchte Güter
+     */
+    GoodsSlot input;
+
+    /**
+     * @brief weitere verbrauchte Güter, wenn das Gebäude aus zwei verschiedenen Gütern was herstellt
+     */
+    GoodsSlot input2;
+
+} ProductionSlots;
+
 
 /**
  * @brief Structure, die ein Gebäude darstellt.
  */
-class Building : public Structure {     
+class Building : public Structure {
+
+public:
+    /**
+     * @brief Produktionsslots des Gebäudes
+     */
+    ProductionSlots productionSlots;
 
 public:
     Building() {}
