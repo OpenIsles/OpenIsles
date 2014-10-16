@@ -3,25 +3,7 @@
 
 #include <vector>
 #include "config/BuildingConfigMgr.h"
-
-
-/**
- * Enum für die verschiedenen Gütertypen
- */
-typedef
-enum GoodsType : char {
-    // Spezialwert, der dem null-Wert entspricht
-    NO_GOODS = -1,
-
-    // Güter
-    TOOLS = 0,
-    WOOD = 1,
-    BRICKS = 2,
-            
-    // Spezialwert am Ende, damit wir wissen, wie groß wir Arrays etc. machen müssen
-    MAX_GOOD
-            
-} GoodsType;
+#include "game/GoodsSlot.h"
 
 
 /**
@@ -31,14 +13,9 @@ class Colony {
     
 private:
     /**
-     * Lagerbestand pro Gütertyp. Vektor-Indexes siehe GoodsType.
+     * Lagerbestände pro Gütertyp. Vektor-Indexes siehe GoodsType.
      */
-    std::vector<unsigned int> goodsInventory;
-    
-    /**
-     * Lagerkapazität pro Gütertyp. Vektor-Indexes siehe GoodsType.
-     */
-    std::vector<unsigned int> goodsCapacity;
+    std::vector<GoodsSlot> goods;
     
 public:
 	Colony();
@@ -51,7 +28,7 @@ public:
      * @param inventory neuer Lagerbestand
      */
     void setGoodsInventory(GoodsType goodsType, unsigned int inventory) {
-        goodsInventory[goodsType] = inventory;
+        goods[goodsType].inventory = inventory;
     }
     
     /**
@@ -61,7 +38,7 @@ public:
      * @return Lagerbestand
      */
     unsigned int getGoodsInventory(GoodsType goodsType) const {
-        return goodsInventory[goodsType];
+        return goods[goodsType].inventory;
     }
     
     /**
@@ -71,7 +48,7 @@ public:
      * @param capacity neue Lagerkapazität
      */
     void setGoodsCapacity(GoodsType goodsType, unsigned int capacity) {
-        goodsCapacity[goodsType] = capacity;
+        goods[goodsType].capacity = capacity;
     }
     
     /**
@@ -81,7 +58,7 @@ public:
      * @return Lagerkapazität
      */
     unsigned int getGoodsCapacity(GoodsType goodsType) const {
-        return goodsInventory[goodsType];
+        return goods[goodsType].capacity;
     }
     
     /**
@@ -89,9 +66,9 @@ public:
      * @param buildingCosts Gebäudekosten, wo denen die Güterkosten dekrementiert werden.
      */
     void subtractBuildingCosts(const BuildingCosts* buildingCosts) {
-        goodsInventory[GoodsType::TOOLS] -= buildingCosts->tools;
-        goodsInventory[GoodsType::WOOD] -= buildingCosts->wood;
-        goodsInventory[GoodsType::BRICKS] -= buildingCosts->bricks; 
+        goods[GoodsType::TOOLS].inventory -= buildingCosts->tools;
+        goods[GoodsType::WOOD].inventory -= buildingCosts->wood;
+        goods[GoodsType::BRICKS].inventory -= buildingCosts->bricks;
     }
     
 };

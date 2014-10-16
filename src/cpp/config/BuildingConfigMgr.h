@@ -1,10 +1,10 @@
 #ifndef _BUILDING_CONFIG_MGR_H
 #define _BUILDING_CONFIG_MGR_H
 
+#include "game/GoodsSlot.h"
 #include "utils/RectangleData.h"
 
 
-enum GoodsType : char;
 enum StructureType : unsigned char;
 
 
@@ -45,18 +45,17 @@ struct BuildingProduction {
     /**
      * @brief produzierte Güter
      */
-    GoodsType output;
+    GoodsSlot output;
 
     /**
-     * @brief verbrauchte Güter (NO_GOODS, wenn das Gebäude aus dem Nichts herstellt)
+     * @brief verbrauchte Güter
      */
-    GoodsType input;
+    GoodsSlot input;
 
     /**
      * @brief weitere verbrauchte Güter, wenn das Gebäude aus zwei verschiedenen Gütern was herstellt
-     * (NO_GOODS, wenn das Gebäude keine zwei verschiedenen Güter braucht)
      */
-    GoodsType input2;
+    GoodsSlot input2;
 
 } BuildingProduction;
 

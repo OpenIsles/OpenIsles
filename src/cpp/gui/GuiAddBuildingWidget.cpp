@@ -1,9 +1,10 @@
-#include <game/Colony.h>
-#include "SDL.h"
+#include <SDL.h>
 #include "config/BuildingConfigMgr.h"
+#include "game/Colony.h"
 #include "game/Game.h"
 #include "gui/FontMgr.h"
 #include "gui/GuiAddBuildingWidget.h"
+#include "gui/GuiUtils.h"
 
 
 static SDL_Color colorLightBrown = {223, 216, 183, 255};
@@ -59,26 +60,26 @@ void GuiAddBuildingWidget::renderElement(SDL_Renderer* renderer) {
     // produzierte Waren
     const BuildingProduction* buildingProduction = buildingConfig->getBuildingProduction();
     int productionY = windowY + 160;
-    if (buildingProduction->input2 != GoodsType::NO_GOODS) {
+    if (buildingProduction->input2.isUsed()) {
         // input + input2 -> output
 
-        graphicsMgr->getGraphicForGoodsMarketplaceIcon(buildingProduction->input)->drawAt(windowX + 29, productionY);
+        GuiUtils::drawGoodsBox(windowX + 29, productionY, buildingProduction->input.goodsType, -1);
         graphicsMgr->getOtherGraphic(OtherGraphic::PRODUCTION_PLUS)->drawAt(windowX + 75, productionY);
-        graphicsMgr->getGraphicForGoodsMarketplaceIcon(buildingProduction->input2)->drawAt(windowX + 90, productionY);
+        GuiUtils::drawGoodsBox(windowX + 90, productionY, buildingProduction->input2.goodsType, -1);
         graphicsMgr->getOtherGraphic(OtherGraphic::PRODUCTION_ARROW)->drawAt(windowX + 136, productionY);
-        graphicsMgr->getGraphicForGoodsMarketplaceIcon(buildingProduction->output)->drawAt(windowX + 150, productionY);
+        GuiUtils::drawGoodsBox(windowX + 150, productionY, buildingProduction->output.goodsType, -1);
     }
-    else if (buildingProduction->input != GoodsType::NO_GOODS) {
+    else if (buildingProduction->input.isUsed()) {
         // input -> output
 
-        graphicsMgr->getGraphicForGoodsMarketplaceIcon(buildingProduction->input)->drawAt(windowX + 60, productionY);
+        GuiUtils::drawGoodsBox(windowX + 60, productionY, buildingProduction->input.goodsType, -1);
         graphicsMgr->getOtherGraphic(OtherGraphic::PRODUCTION_ARROW)->drawAt(windowX + 106, productionY);
-        graphicsMgr->getGraphicForGoodsMarketplaceIcon(buildingProduction->output)->drawAt(windowX + 120, productionY);
+        GuiUtils::drawGoodsBox(windowX + 120, productionY, buildingProduction->output.goodsType, -1);
     }
-    else if (buildingProduction->output != GoodsType::NO_GOODS) {
+    else if (buildingProduction->output.isUsed()) {
         // output
 
-        graphicsMgr->getGraphicForGoodsMarketplaceIcon(buildingProduction->output)->drawAt(windowX + 90, productionY);
+        GuiUtils::drawGoodsBox(windowX + 90, productionY, buildingProduction->output.goodsType, -1);
     }
 
     // Baukosten

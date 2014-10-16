@@ -4,6 +4,7 @@
 #include "gui/GuiButton.h"
 #include "gui/GuiMgr.h"
 #include "gui/GuiPushButton.h"
+#include "gui/GuiSelectedBuildingWidget.h"
 #include "gui/GuiStaticElement.h"
 #include "gui/Identifiers.h"
 #include "map/Map.h"
@@ -340,10 +341,15 @@ void GuiMgr::initBuildGui() {
         findElement(GUI_ID_PANEL_BUILD)->addChildElement(addBuildingPushButton);
     }
 
-    // Aktuell gewähltes Gebäude: Grafik, was es tut und die Kosten
+    // Gebäudebau: Infos, über zu platzierendes Gebäude
     GuiAddBuildingWidget* addBuildingWidget = new GuiAddBuildingWidget();
     registerElement(GUI_ID_ADD_BUILDING_WIDGET, addBuildingWidget);
     findElement(GUI_ID_PANEL_BUILD)->addChildElement(addBuildingWidget);
+
+    // Aktuell ausgewähltes Gebäude
+    GuiSelectedBuildingWidget* selectedBuildingWidget = new GuiSelectedBuildingWidget();
+    registerElement(GUI_ID_SELECTED_BUILDING_WIDGET, selectedBuildingWidget);
+    findElement(GUI_ID_PANEL_BUILD)->addChildElement(selectedBuildingWidget);
 }
 
 void GuiMgr::registerElement(int identifier, GuiBase* guiElement) {
