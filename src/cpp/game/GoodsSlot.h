@@ -34,9 +34,10 @@ public:
     GoodsType goodsType;
 
     /**
-     * @brief Lagerbestand
+     * @brief Lagerbestand als exakter Wert. Der Benutzer wird immer nur die ganzen Waren zu Gesicht bekommen. Intern
+     * müssen wir aber auch Bruchteile von Waren verwalten.
      */
-    unsigned int inventory;
+    double inventory;
 
     /**
      * @brief Lagerkapazität
@@ -80,6 +81,18 @@ public:
      */
     inline bool isUsed() const {
         return (goodsType != GoodsType::NO_GOODS);
+    }
+
+    /**
+     * @brief Erhöht den Lagerbestand um einen bestimmten Wert. Würde dabei die Lagerkapazität gesprengt werden,
+     * wird soviel wie möglich als Lagerbestand gesetzt.
+     * @param amount Anzahl, um wie viel erhöht werden soll
+     */
+    void increaseInventory(double amount) {
+        inventory += amount;
+        if (inventory > capacity) {
+            inventory = capacity;
+        }
     }
 
 };

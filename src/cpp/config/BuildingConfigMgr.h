@@ -81,7 +81,12 @@ struct BuildingConfig {
      * @brief Güter, die verbraucht und hergestellt werden.
      */
     ProductionSlots buildingProduction;
-    
+
+    /**
+     * @brief gibt an, wie viele Güter pro 60 Sekunden generiert werden
+     */
+    double productionRate = 0;
+
     
     ~BuildingConfig() {
         if (catchmentArea != nullptr) {

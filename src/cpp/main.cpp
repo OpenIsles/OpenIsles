@@ -5,6 +5,7 @@
 #include <cstdlib>
 #include <string>
 #include "config/BuildingConfigMgr.h"
+#include "economics/EconomicsMgr.h"
 #include "game/Game.h"
 #include "game/Player.h"
 #include "graphics/GraphicsMgr.h"
@@ -80,6 +81,11 @@ BuildingConfigMgr* buildingConfigMgr;
  * @brief Zustand des Spiels
  */
 Game* game;
+
+/**
+ * @brief Manager zuständig für die Wirtschaft
+ */
+EconomicsMgr* economicsMgr;
 
 /**
  * @brief Größe des Fensters
@@ -214,7 +220,18 @@ int main(int argc, char** argv) {
 		while (SDL_PollEvent(&event)) {
             guiMgr->onEvent(event);
 		}
-        
+
+        // Wirtschaft ankurbeln ;-)
+        std::list<MapObject*> mapObjects = map->getMapObjects();
+        for (auto iter = mapObjects.rbegin(); iter != mapObjects.rend(); iter++) {
+            MapObject* mapObject = *iter;
+            Structure* structure = dynamic_cast<Structure*>(mapObject);
+
+            if (structure != nullptr) {
+                economicsMgr->update(structure);
+            }
+        }
+
         // Position des Mauszeigers holen
         SDL_GetMouseState(&mouseCurrentX, &mouseCurrentY);
 

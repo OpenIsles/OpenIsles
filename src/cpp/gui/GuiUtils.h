@@ -18,7 +18,7 @@ public:
      * @param goodsType welches Gut
      * @param inventory Lagerbestand, der ausgegeben werden soll (oder -1, wenn keine Anzeige erwünscht)
      */
-    static void drawGoodsBox(int x, int y, GoodsType goodsType, int inventory);
+    static void drawGoodsBox(int x, int y, GoodsType goodsType, double inventory);
 
 };
 

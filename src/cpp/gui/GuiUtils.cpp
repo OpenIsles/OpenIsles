@@ -11,11 +11,12 @@ extern GraphicsMgr* graphicsMgr;
 extern SDL_Renderer* renderer;
 
 
-void GuiUtils::drawGoodsBox(int x, int y, GoodsType goodsType, int inventory) {
+void GuiUtils::drawGoodsBox(int x, int y, GoodsType goodsType, double inventory) {
     graphicsMgr->getGraphicForGoodsMarketplaceIcon(goodsType)->drawAt(x, y);
 
     if (inventory != -1) {
-        std::string inventoryOutput = std::to_string(inventory) + "t";
+        char inventoryOutput[10];
+        sprintf(inventoryOutput, "%.0ft", floor(inventory));
         fontMgr->renderText(renderer, inventoryOutput, x + 40, y + 42, &colorWhite, &colorBlack,
             "DroidSans.ttf", 12, RENDERTEXT_HALIGN_RIGHT | RENDERTEXT_VALIGN_BOTTOM);
     }
