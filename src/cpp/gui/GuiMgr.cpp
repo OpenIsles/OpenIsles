@@ -14,7 +14,6 @@
 extern bool quitGame;
 extern Game* game;
 extern GraphicsMgr* graphicsMgr;
-extern Map* map;
 extern SoundMgr* soundMgr;
 
 
@@ -385,6 +384,8 @@ void GuiMgr::render(SDL_Renderer* renderer) {
 
 void GuiMgr::onEvent(SDL_Event& event) {
     // TODO Event besser queuen und nicht sofort abarbeiten
+
+    Map* map = game->getMap();
     
     // Spiel beenden
     if (event.type == SDL_QUIT) {

@@ -1,18 +1,16 @@
 #include "config/BuildingConfigMgr.h"
-#include "map/Building.h"
-#include "map/Map.h"
-#include "map/MapUtils.h"
+#include "game/Game.h"
 
 // Aus main.cpp importiert
 extern BuildingConfigMgr* buildingConfigMgr;
-extern Map* map;
+extern Game* game;
 
 
 void Building::onClick(int mouseXInBuilding, int mouseYInBuilding) {
 	std::cout << "Klick auf Building " << std::to_string(structureType) << "@(" << std::to_string(mouseXInBuilding)
 			<< ", " << std::to_string(mouseYInBuilding) << ")" << std::endl;
-    
-	map->setSelectedMapObject(this);
+
+    game->getMap()->setSelectedMapObject(this);
 }
 
 bool Building::isInsideCatchmentArea(int mapX, int mapY) const {

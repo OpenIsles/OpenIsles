@@ -89,6 +89,8 @@ struct MapTile {
  */
 class Map {
 
+    friend class GameIO; // GameIO soll zum Laden/Speichern einfach auf die Karte zugreifen können
+
 private:
 	/**
 	 * @brief Breite der Karte in Kacheln
@@ -216,12 +218,6 @@ public:
 	}
 
 	/**
-	 * @brief Lädt eine Karte von einer tiled-TMX-Datei
-	 * @param filename Dateiname der zu ladenden Karte
-	 */
-	void loadMapFromTMX(const char* filename);
-
-	/**
 	 * @brief Rendert die Karte.
 	 * @param renderer SDL-Renderer, auf den gezeichnet wird
 	 */
@@ -317,12 +313,12 @@ private:
 	 * @param height neue Höhe der Karte
 	 */
 	void initNewMap(int newWidth, int newHeight);
-    
+
     /**
      * @brief Aktualisiert die SDL-Texture für die Minimap
      */
     void updateMinimapTexture();
-    
+
     /**
      * Prüft, ob eine bestimmte Struktur an eine bestimmte Position gesetzt werden darf.
      * 

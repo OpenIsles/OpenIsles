@@ -2,12 +2,10 @@
 #include "economics/EconomicsMgr.h"
 #include "game/Colony.h"
 #include "game/Game.h"
-#include "map/Map.h"
 
 // Aus main.cpp importiert
 extern BuildingConfigMgr* buildingConfigMgr;
 extern Game* game;
-extern Map* map;
 
 
 EconomicsMgr::EconomicsMgr() {

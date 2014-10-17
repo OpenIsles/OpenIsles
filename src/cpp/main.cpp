@@ -7,11 +7,11 @@
 #include "config/BuildingConfigMgr.h"
 #include "economics/EconomicsMgr.h"
 #include "game/Game.h"
+#include "game/GameIO.h"
 #include "game/Player.h"
 #include "graphics/GraphicsMgr.h"
 #include "gui/FontMgr.h"
 #include "gui/GuiMgr.h"
-#include "map/Map.h"
 #include "sound/SoundMgr.h"
 #include "utils/FpsCounter.h"
 
@@ -51,11 +51,6 @@ FpsCounter* fpsCounter;
  * @brief Zeichenketten-Puffer für 7 Zeilen Debug-Ausgabe
  */
 std::string debugOutput[7];
-
-/**
- * @brief die Karte
- */
-Map* map;
 
 /**
  * @brief Verwaltung der Schriftarten
@@ -110,8 +105,10 @@ void drawFrame(SDL_Renderer* renderer);
  *********************************************************************************************************************/
 
 void drawFrame(SDL_Renderer* renderer) {
+    Map* map = game->getMap();
+
 	// Karte rendern
-	map->renderMap(renderer);
+    map->renderMap(renderer);
     
     // Resourcen oben an die Karte ran
     game->renderResourcesBar();
@@ -125,7 +122,8 @@ void drawFrame(SDL_Renderer* renderer) {
         const Building* selectedBuilding = reinterpret_cast<const Building*>(selectedMapObject);
         if (selectedBuilding != nullptr) {
             const BuildingConfig* buildingConfig = buildingConfigMgr->getConfig(selectedBuilding->getStructureType());
-            fontMgr->renderText(renderer, buildingConfig->name, 753, 744, &colorWhite, nullptr, "DroidSans-Bold.ttf", 14, RENDERTEXT_HALIGN_RIGHT);
+            fontMgr->renderText(renderer, buildingConfig->name, 753, 744,
+                &colorWhite, nullptr, "DroidSans-Bold.ttf", 14, RENDERTEXT_HALIGN_RIGHT);
         }
     }
     
@@ -138,7 +136,8 @@ void drawFrame(SDL_Renderer* renderer) {
 			continue;
 		}
 
-		fontMgr->renderText(renderer, debugOutput[i], 10, 40 + 15 * i, &colorWhite, nullptr, "DroidSans-Bold.ttf", 14, RENDERTEXT_HALIGN_LEFT);
+		fontMgr->renderText(renderer, debugOutput[i], 10, 40 + 15 * i,
+            &colorWhite, nullptr, "DroidSans-Bold.ttf", 14, RENDERTEXT_HALIGN_LEFT);
 	}
 }
 
@@ -200,18 +199,12 @@ int main(int argc, char** argv) {
     guiMgr = new GuiMgr();
     fpsCounter = new FpsCounter(500);
     
-    Player* myPlayer = new Player(PlayerColor::RED, "Spieler 1");
     game = new Game();
-    game->addPlayer(myPlayer);
-    game->addPlayer(new Player(PlayerColor::YELLOW, "Spieler 2"));
-    game->addPlayer(new Player(PlayerColor::GREEN, "Spieler 3"));
-    game->addPlayer(new Player(PlayerColor::BLUE, "Spieler 4"));
-    game->setCurrentPlayer(myPlayer);
-    
-	map = new Map();
+    GameIO::loadGameFromTMX("data/map/saved-game.tmx");
 
 	// Mainloop //////////////////////////////////////////////////////////////////////////////////////////////////////
 
+    Map* map = game->getMap();
 	while (!quitGame) {
 		fpsCounter->startFrame();
 
@@ -291,7 +284,6 @@ int main(int argc, char** argv) {
 
 	// Game-Deinitialisierung ////////////////////////////////////////////////////////////////////////////////////////
     
-    delete map;
     delete game;
     
     delete fpsCounter;

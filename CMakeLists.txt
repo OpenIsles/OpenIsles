@@ -16,6 +16,7 @@ set(SOURCE_FILES
     src/cpp/economics/EconomicsMgr.cpp
 	src/cpp/game/Colony.cpp
 	src/cpp/game/Game.cpp
+	src/cpp/game/GameIO.cpp
 	src/cpp/game/Player.cpp
 	src/cpp/graphics/Animation.cpp
 	src/cpp/graphics/Graphic.cpp

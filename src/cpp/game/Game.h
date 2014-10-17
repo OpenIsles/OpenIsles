@@ -3,10 +3,11 @@
 
 #include <map>
 #include <vector>
-#include "map/Structure.h"
+#include "map/Map.h"
 
 class Colony;
 class Isle;
+class Map;
 class Player;
 
 /**
@@ -15,6 +16,11 @@ class Player;
 class Game {
 
 private:
+    /**
+     * @brief die Karte. Enthält die Inseln und alles was drauf is
+     */
+    Map* map;
+
     /**
      * @brief Gesetzt, wenn gerade eine neue Struktur auf der Karte positioniert wird, welche.
      */
@@ -38,7 +44,15 @@ private:
 public:
 	Game();
 	~Game();
-    
+
+    Map* getMap() const {
+        return map;
+    }
+
+    void setMap(Map* map) {
+        this->map = map;
+    }
+
     StructureType getAddingStructure() const {
         return addingStructure;
     }

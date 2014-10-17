@@ -2,8 +2,6 @@
 #include "game/Colony.h"
 #include "game/Game.h"
 #include "map/Map.h"
-#include "rapidxml/rapidxml.hpp"
-#include "rapidxml/rapidxml_utils.hpp"
 
 #define SDL_SetTextureDarkened(texture) (SDL_SetTextureColorMod((texture), 160, 160, 160))
 #define SDL_SetTextureNormal(texture) (SDL_SetTextureColorMod((texture), 255, 255, 255))
@@ -44,101 +42,6 @@ extern const int windowWidth;
 extern const int windowHeight;
 
 Map::Map() {
-	loadMapFromTMX("data/map/map.tmx");
-    
-    Player* player1 = game->getPlayer(0);
-    Player* player2 = game->getPlayer(1);
-    Player* player3 = game->getPlayer(2);
-    Player* player4 = game->getPlayer(3);
-
-    addBuilding(52, 39, CHAPEL, player1);
-    addBuilding(51, 35, PIONEERS_HOUSE1, player1);
-    addBuilding(58, 39, SIGNALFIRE, player1);
-    addBuilding(55, 35, HERBARY, player1);
-    addBuilding(50, 32, BRICKYARD, player1);
-    addBuilding(51, 26, BRICKYARD2, player1);
-    addBuilding(45, 24, OFFICE1, player1);
-
-    addBuilding(201, 77, OFFICE1, player1);
-    addBuilding(230, 214, OFFICE1, player2);
-    addBuilding(30, 226, OFFICE1, player3);
-    addBuilding(132, 94, OFFICE1, player4);
-
-	addStructure(48, 30, STREET, player1);
-	addStructure(49, 30, STREET, player1);
-	addStructure(50, 30, STREET, player1);
-	addStructure(51, 30, STREET, player1);
-	addStructure(52, 30, STREET, player1);
-	addStructure(53, 30, STREET, player1);
-	addStructure(54, 30, STREET, player1);
-	addStructure(54, 31, STREET, player1);
-	addStructure(54, 32, STREET, player1);
-	addStructure(54, 33, STREET, player1);
-	addStructure(54, 34, STREET, player1);
-	addStructure(54, 35, STREET, player1);
-	addStructure(54, 36, STREET, player1);
-	addStructure(54, 37, STREET, player1);
-	addStructure(53, 37, STREET, player1);
-	addStructure(52, 37, STREET, player1);
-	addStructure(51, 37, STREET, player1);
-	addStructure(50, 37, STREET, player1);
-	addStructure(49, 37, STREET, player1);
-	addStructure(48, 37, STREET, player1);
-	addStructure(47, 37, STREET, player1);
-	addStructure(47, 36, STREET, player1);
-	addStructure(47, 35, STREET, player1);
-	addStructure(47, 34, STREET, player1);
-	addStructure(47, 33, STREET, player1);
-	addStructure(47, 32, STREET, player1);
-	addStructure(47, 31, STREET, player1);
-	addStructure(47, 30, STREET, player1);
-
-    addStructure(46, 32, STREET, player1);
-    addStructure(46, 34, STREET, player1);
-    addStructure(45, 32, STREET, player1);
-    addStructure(45, 31, STREET, player1);
-    addStructure(45, 33, STREET, player1);
-    addStructure(45, 34, STREET, player1);
-    addStructure(45, 35, STREET, player1);
-    addStructure(44, 34, STREET, player1);
-
-    addStructure(49, 38, STREET, player1);
-    addStructure(50, 36, STREET, player1);
-
-    addStructure(55, 34, STREET, player1);
-    addStructure(56, 34, STREET, player1);
-
-    updateMinimapTexture();
-    
-    MapTile* mapTile = mapTiles->getData(50, 42, nullptr);
-    Colony* colony = game->foundNewColony(mapTile->player, mapTile->isle);
-    colony->setGoodsInventory(GoodsType::TOOLS, 15);
-    colony->setGoodsInventory(GoodsType::WOOD, 30);
-    colony->setGoodsInventory(GoodsType::BRICKS, 2);
-    
-    mapTile = mapTiles->getData(199, 77, nullptr);
-    colony = game->foundNewColony(mapTile->player, mapTile->isle);
-    colony->setGoodsInventory(GoodsType::TOOLS, 5);
-    colony->setGoodsInventory(GoodsType::WOOD, 15);
-    colony->setGoodsInventory(GoodsType::BRICKS, 7);
-
-    mapTile = mapTiles->getData(228, 214, nullptr);
-    colony = game->foundNewColony(mapTile->player, mapTile->isle);
-    colony->setGoodsInventory(GoodsType::TOOLS, 20);
-    colony->setGoodsInventory(GoodsType::WOOD, 30);
-    colony->setGoodsInventory(GoodsType::BRICKS, 10);
-
-    mapTile = mapTiles->getData(28, 226, nullptr);
-    colony = game->foundNewColony(mapTile->player, mapTile->isle);
-    colony->setGoodsInventory(GoodsType::TOOLS, 20);
-    colony->setGoodsInventory(GoodsType::WOOD, 30);
-    colony->setGoodsInventory(GoodsType::BRICKS, 10);
-
-    mapTile = mapTiles->getData(130, 94, nullptr);
-    colony = game->foundNewColony(mapTile->player, mapTile->isle);
-    colony->setGoodsInventory(GoodsType::TOOLS, 20);
-    colony->setGoodsInventory(GoodsType::WOOD, 30);
-    colony->setGoodsInventory(GoodsType::BRICKS, 10);
 }
 
 Map::~Map() {
@@ -194,91 +97,6 @@ MapObject* Map::getMapObjectAt(int mapX, int mapY) const {
     }
 
     return mapTile->mapObject;
-}
-
-// TODO Fehlermanagement, wenn die Datei mal nicht so hübsch aussieht, dass alle Tags da sind
-void Map::loadMapFromTMX(const char* filename) {
-	// Datei öffnen
-	rapidxml::file<> tmxFile(filename);
-
-	rapidxml::xml_document<>* xmlDocument = new rapidxml::xml_document<>();
-	xmlDocument->parse<0>(tmxFile.data());
-
-	rapidxml::xml_node<>* mapNode = xmlDocument->first_node("map", 3, true);
-	int newMapWidth = atoi(mapNode->first_attribute("width", 5, true)->value());
-	int newMapHeight = atoi(mapNode->first_attribute("height", 6, true)->value());
-    
-    initNewMap(newMapWidth, newMapHeight);
-
-	rapidxml::xml_node<>* objectgroupNode = mapNode->first_node("objectgroup", 11, true);
-    for (rapidxml::xml_node<>* objectNode = objectgroupNode->first_node("object", 6, true); objectNode != nullptr; 
-            objectNode = objectNode->next_sibling("object", 6, true)) {
-        
-        const char* nodeType = objectNode->first_attribute("type", 4, true)->value();
-        
-        int x = atoi(objectNode->first_attribute("x", 1, true)->value());
-        int y = atoi(objectNode->first_attribute("y", 1, true)->value());
-        
-        int mapX = x / GraphicsMgr::TILE_HEIGHT; // tiled rechnet merkwürdigerweise auch für X in KachelHÖHE
-        int mapY = y / GraphicsMgr::TILE_HEIGHT; 
-        
-        // Insel
-        if (strcmp(nodeType, "isle") == 0) {
-            // Objekt aus der Tiled-Datei lesen
-            const char* isleName = objectNode->first_attribute("name", 4, true)->value();
-            
-            int isleWidth = atoi(objectNode->first_attribute("width", 5, true)->value());
-            int isleHeight = atoi(objectNode->first_attribute("height", 6, true)->value());
-
-            int isleMapWidth = isleWidth / GraphicsMgr::TILE_HEIGHT; // tiled rechnet merkwürdigerweise auch für X in KachelHÖHE
-            int isleMapHeight = isleHeight / GraphicsMgr::TILE_HEIGHT;
-
-            // Dateiname der Insel zusammenbauen
-            std::string filename = "data/map/isles/";
-            filename.append(isleName);
-            filename.append(".tmx");
-
-            // Insel laden
-            Isle* isle = new Isle(filename.data());
-
-            // Prüfen, ob die Insel wirklich die Größe hat, wie die Karte sie haben will.
-            if (isle->getWidth() != isleMapWidth || isle->getHeight() != isleMapHeight) {
-                std::cerr << "Isle '" << isleName << "' ('" << 
-                        std::to_string(isle->getWidth()) << "x" << std::to_string(isle->getHeight()) <<
-                        ") does not match size on map (" <<
-                        std::to_string(isleMapWidth) << "x" << std::to_string(isleMapHeight) << ")";
-
-                throw new std::runtime_error("Isle does not match size on map");
-            }
-
-            // Insel zur Karte hinzufügen
-            isle->setMapCoords(mapX, mapY, isleMapWidth, isleMapHeight);
-            isles.push_back(isle);
-            
-            for (int my = mapY, isleY = 0; my < mapY + isleMapHeight; my++, isleY++) {
-                for (int mx = mapX, isleX = 0; mx < mapX + isleMapWidth; mx++, isleX++) {
-                    MapTile* mapTile = mapTiles->getData(mx, my, nullptr);
-                    mapTile->tileGraphicIndex = isle->getTileAt(isleX, isleY);
-                    mapTile->isle = isle;
-                }
-            }
-        }
-        // Startpunkt: Diesen Punkt wollen wir auf den Bildschirm zentrieren
-        else if (strcmp(nodeType, "startpoint") == 0) {
-            int screenCenterX, screenCenterY;
-            MapUtils::mapToScreenCoordsCenter(mapX, mapY, screenCenterX, screenCenterY);
-            
-            screenOffsetX = screenCenterX - (mapClipRect.w / 2);
-            screenOffsetY = screenCenterY - (mapClipRect.h / 2);
-        }
-    }
-    screenZoom = 1;
-
-	// XML-Document wegräumen
-	delete xmlDocument;
-    
-    // Minimap erstellen
-    updateMinimapTexture();
 }
 
 void Map::renderMinimap(SDL_Renderer* renderer) {

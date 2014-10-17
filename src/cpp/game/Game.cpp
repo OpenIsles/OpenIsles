@@ -1,9 +1,6 @@
 #include "config/BuildingConfigMgr.h"
-#include "map/Building.h"
-#include "map/Map.h"
 #include "game/Colony.h"
 #include "game/Game.h"
-#include "game/Player.h"
 #include "gui/FontMgr.h"
 
 static SDL_Color colorWhite = {255, 255, 255, 255};
@@ -14,7 +11,6 @@ extern BuildingConfigMgr* buildingConfigMgr;
 extern FontMgr* fontMgr;
 extern Game* game;
 extern GraphicsMgr* graphicsMgr;
-extern Map* map;
 extern SDL_Renderer* renderer;
 extern int mouseCurrentMapX, mouseCurrentMapY;
 

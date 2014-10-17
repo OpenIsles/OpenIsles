@@ -1,4 +1,3 @@
-#include <map/Map.h>
 #include "config/BuildingConfigMgr.h"
 #include "game/Game.h"
 #include "gui/FontMgr.h"
@@ -14,7 +13,6 @@ extern BuildingConfigMgr* buildingConfigMgr;
 extern FontMgr* fontMgr;
 extern Game* game;
 extern GraphicsMgr* graphicsMgr;
-extern Map* map;
 
 
 GuiSelectedBuildingWidget::GuiSelectedBuildingWidget() {
@@ -26,7 +24,7 @@ GuiSelectedBuildingWidget::GuiSelectedBuildingWidget() {
 void GuiSelectedBuildingWidget::renderElement(SDL_Renderer* renderer) {
     const Building* selectedBuilding = nullptr;
 
-    const MapObject* selectedMapObject = map->getSelectedMapObject();
+    const MapObject* selectedMapObject = game->getMap()->getSelectedMapObject();
     if (selectedMapObject != nullptr) {
         selectedBuilding = reinterpret_cast<const Building*>(selectedMapObject);
     }
