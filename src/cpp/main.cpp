@@ -2,8 +2,6 @@
 #include <SDL_image.h>
 #include <SDL_ttf.h>
 #include <iostream>
-#include <cstdlib>
-#include <string>
 #include "config/BuildingConfigMgr.h"
 #include "economics/EconomicsMgr.h"
 #include "game/Game.h"
@@ -14,6 +12,10 @@
 #include "gui/GuiMgr.h"
 #include "sound/SoundMgr.h"
 #include "utils/FpsCounter.h"
+
+#ifdef DEBUG_A_STAR
+#include "pathfinding/AStar.h"
+#endif
 
 static SDL_Color colorWhite = {255, 255, 255, 255};
 
@@ -200,7 +202,7 @@ int main(int argc, char** argv) {
     fpsCounter = new FpsCounter(500);
     
     game = new Game();
-    GameIO::loadGameFromTMX("data/map/saved-game.tmx");
+    GameIO::loadGameFromTMX("data/map/a-star-test.tmx");
 
 	// Mainloop //////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -267,6 +269,14 @@ int main(int argc, char** argv) {
             debugOutput[3] = "";
             debugOutput[4] = "";
         }
+
+#ifdef DEBUG_A_STAR
+        debugOutput[5] = "debugAStar: source = (" +
+            std::to_string(AStar::debugAStar_source.mapX) + ", " +
+            std::to_string(AStar::debugAStar_source.mapY) + "), destination = (" +
+            std::to_string(AStar::debugAStar_destination.mapX) + ", " +
+            std::to_string(AStar::debugAStar_destination.mapY) + ")";
+#endif
 
 		// Frame auf Offscreen-Texture zeichnen
 		SDL_SetRenderTarget(renderer, offscreenTexture);

@@ -24,3 +24,4 @@ GENERATE_LATEX = NO
 # Sonstiges
 CASE_SENSE_NAMES = NO     # immer Kleinbuchstaben-Dateinamen verwenden
 WARNINGS = YES
+PREDEFINED = DEBUG_A_STAR

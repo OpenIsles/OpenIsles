@@ -1,14 +1,17 @@
 #include "game/Game.h"
-#include "graphics/Graphic.h"
 #include "gui/GuiAddBuildingWidget.h"
 #include "gui/GuiButton.h"
 #include "gui/GuiMgr.h"
 #include "gui/GuiPushButton.h"
 #include "gui/GuiSelectedBuildingWidget.h"
-#include "gui/GuiStaticElement.h"
 #include "gui/Identifiers.h"
-#include "map/Map.h"
 #include "sound/SoundMgr.h"
+
+#ifdef DEBUG_A_STAR
+#include "pathfinding/AStar.h"
+
+extern int mouseCurrentMapX, mouseCurrentMapY;
+#endif
 
 // Aus main.cpp importiert
 extern bool quitGame;
@@ -458,6 +461,31 @@ void GuiMgr::onEvent(SDL_Event& event) {
         } else if (event.key.keysym.scancode == SDL_SCANCODE_DELETE) {
             map->deleteSelectedObject();
         }
+
+#ifdef DEBUG_A_STAR
+        bool needToRecalculate = false;
+
+        // A*-Start- und Endkoordinaten festlegen
+        if (event.key.keysym.scancode == SDL_SCANCODE_A) {
+            AStar::debugAStar_source = MapCoordinate(mouseCurrentMapX, mouseCurrentMapY);
+            needToRecalculate = true;
+        } else if (event.key.keysym.scancode == SDL_SCANCODE_S) {
+            AStar::debugAStar_destination = MapCoordinate(mouseCurrentMapX, mouseCurrentMapY);
+            needToRecalculate = true;
+        }
+
+        if (needToRecalculate) {
+            if (AStar::debugAStar_source.mapX > 0 && AStar::debugAStar_source.mapY > 0 &&
+                AStar::debugAStar_destination.mapX > 0 && AStar::debugAStar_destination.mapY > 0) {
+
+                if (AStar::debugAStar_route != nullptr) {
+                    delete AStar::debugAStar_route;
+                }
+
+                AStar::debugAStar_route = AStar::findRoute(AStar::debugAStar_source, AStar::debugAStar_destination);
+            }
+        }
+#endif
     }
     
     // Maustaste in der Karte geklickt

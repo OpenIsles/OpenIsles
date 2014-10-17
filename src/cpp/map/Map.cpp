@@ -3,6 +3,13 @@
 #include "game/Game.h"
 #include "map/Map.h"
 
+#ifdef DEBUG_A_STAR
+#include "gui/FontMgr.h"
+#include "pathfinding/AStar.h"
+
+extern FontMgr* fontMgr;
+#endif
+
 #define SDL_SetTextureDarkened(texture) (SDL_SetTextureColorMod((texture), 160, 160, 160))
 #define SDL_SetTextureNormal(texture) (SDL_SetTextureColorMod((texture), 255, 255, 255))
 
@@ -401,6 +408,44 @@ void Map::renderMap(SDL_Renderer* renderer) {
         drawCatchmentArea(structureBeingAdded);
         delete structureBeingAdded;
     }
+
+#ifdef DEBUG_A_STAR
+    // A*-Route zeichnen (nur bei Maximalzoom, dann sparen wir uns Berechnungen und der Code wird einfacher)
+    if (screenZoom == 1 && AStar::debugAStar_route != nullptr) {
+        SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
+
+        int lastPointX = -1;
+        int lastPointY = -1;
+
+        int i = 1;
+        for (auto iter = AStar::debugAStar_route->cbegin(); iter != AStar::debugAStar_route->cend(); iter++) {
+            MapCoordinate mapCoordinate = *iter;
+
+            int screenX, screenY;
+            MapUtils::mapToScreenCoordsCenter(mapCoordinate.mapX, mapCoordinate.mapY, screenX, screenY);
+
+            screenX -= screenOffsetX;
+            screenY -= screenOffsetY;
+
+            // Verbindungslinie zuerst
+            if (lastPointX != -1) {
+                SDL_SetRenderDrawColor(renderer, 255, 0, 0, 128);
+                SDL_RenderDrawLine(renderer, lastPointX, lastPointY, screenX, screenY);
+            }
+            lastPointX = screenX;
+            lastPointY = screenY;
+
+            // dann Rechteck mit Zahl drin
+            SDL_Rect rect = { screenX - 8, screenY - 8, 16, 16 };
+            SDL_SetRenderDrawColor(renderer, 0, 0, 255, 128);
+            SDL_RenderFillRect(renderer, &rect);
+
+            static SDL_Color colorWhite = {255, 255, 255, 255};
+            fontMgr->renderText(renderer, std::to_string(i++), screenX, screenY, &colorWhite, nullptr,
+                "DroidSans.ttf", 9, RENDERTEXT_HALIGN_CENTER | RENDERTEXT_VALIGN_MIDDLE);
+        }
+    }
+#endif
 
 	// Clipping wieder zurücksetzen, bevor der nächste mit Malen drankommt
 	SDL_RenderSetClipRect(renderer, nullptr);

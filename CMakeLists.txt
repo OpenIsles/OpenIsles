@@ -4,6 +4,9 @@ cmake_minimum_required(VERSION 2.8)
 
 add_definitions("-std=c++11 -Wall -Werror -pedantic")
 
+# Debuginfos für A*-Algorithmus aktivieren
+add_definitions("-DDEBUG_A_STAR")
+
 # TODO pkg-config funktioniert unter Windows nicht
 include(FindPkgConfig)
 pkg_search_module(SDL2 REQUIRED sdl2)
@@ -33,6 +36,7 @@ set(SOURCE_FILES
 	src/cpp/map/Isle.cpp
 	src/cpp/map/Map.cpp
 	src/cpp/map/MapUtils.cpp
+	src/cpp/pathfinding/AStar.cpp
 	src/cpp/sound/SoundMgr.cpp
 	src/cpp/main.cpp
 )

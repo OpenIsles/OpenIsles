@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="isometric" width="40" height="40" tilewidth="64" tileheight="32">
+ <properties>
+  <property name="current_player" value="1"/>
+  <property name="player1_color" value="red"/>
+  <property name="player1_name" value="Spieler 1"/>
+  <property name="player2_color" value="yellow"/>
+  <property name="player2_name" value="Spieler 2"/>
+  <property name="player3_color" value="green"/>
+  <property name="player3_name" value="Spieler 3"/>
+  <property name="player4_color" value="blue"/>
+  <property name="player4_name" value="Spieler 4"/>
+ </properties>
+ <objectgroup name="isles" width="40" height="40">
+  <object name="small1" type="isle" x="128" y="128" width="960" height="960"/>
+  <object type="startpoint" x="512" y="512"/>
+ </objectgroup>
+ <objectgroup name="colonies" width="40" height="40">
+  <object name="Kolonie" type="colony" x="576" y="672" width="32" height="32">
+   <properties>
+    <property name="goods_bricks" value="20"/>
+    <property name="goods_tools" value="20"/>
+    <property name="goods_wood" value="20"/>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+ </objectgroup>
+ <objectgroup name="structures" width="40" height="40">
+  <object name="marketplace" type="building" x="704" y="512" width="128" height="96">
+   <properties>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object name="sheep_farm" type="building" x="288" y="320" width="64" height="64">
+   <properties>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object name="weaving_mill1" type="building" x="448" y="448" width="64" height="64">
+   <properties>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object name="weaving_mill1" type="building" x="384" y="448" width="64" height="64">
+   <properties>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object name="weaving_mill1" type="building" x="448" y="320" width="64" height="64">
+   <properties>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object name="weaving_mill1" type="building" x="448" y="384" width="64" height="64">
+   <properties>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object name="weaving_mill1" type="building" x="544" y="544" width="64" height="64">
+   <properties>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object name="weaving_mill1" type="building" x="640" y="384" width="64" height="64">
+   <properties>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object name="weaving_mill1" type="building" x="576" y="352" width="64" height="64">
+   <properties>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+ </objectgroup>
+</map>
