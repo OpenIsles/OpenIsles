@@ -116,6 +116,8 @@ void Graphic::getPixel(int x, int y, Uint8* r, Uint8* g, Uint8* b, Uint8* a) {
 		case 4:
 			pixelValue = *(Uint32*) ptrToPixel;
 			break;
+        default:
+            throw new std::runtime_error("Illegal bytesPerPixel");
 	}
 
 	// Farbwerte ermitteln
