@@ -17,6 +17,15 @@ Route* AStar::debugAStar_route = nullptr;
 Route* AStar::findRoute(MapCoordinate source, MapCoordinate destination) {
     Map* map = game->getMap();
 
+    // Ermitteln, aus und in welches Gebäude wir die Route berechnen wollen. Dies ist optional, eine Route muss nicht
+    // notwendigerweise ein Gebäude am Anfang/Ende haben. In diesem Fall ist der Building-Zeiger nullptr.
+    Building* sourceBuilding = dynamic_cast<Building*>(
+        map->getMapTileAt(source.mapX, source.mapY)->mapObject);
+
+    Building* destinationBuilding = dynamic_cast<Building*>(
+        map->getMapTileAt(destination.mapX, destination.mapY)->mapObject);
+
+
     /********************* A*-Implementierung. Siehe https://de.wikipedia.org/wiki/A*-Algorithmus *********************/
 
     // Datenstruktur für den Algorithmus
@@ -83,10 +92,15 @@ Route* AStar::findRoute(MapCoordinate source, MapCoordinate destination) {
                     continue; // außerhalb der Karte
                 }
 
+                bool insideSourceOrDestinationBuilding = false;
                 if (mapTile->mapObject != nullptr) {
-                    if (dynamic_cast<Building*>(mapTile->mapObject) != nullptr) {
-                        // TODO prüfen, ob das Start- oder Zielgebäude ist. Falls ja, nicht ignorieren, wir müssen da "durchlaufen" können.
-                        continue;
+                    Building* building = dynamic_cast<Building*>(mapTile->mapObject);
+                    if (building != nullptr) {
+                        if (building == sourceBuilding || building == destinationBuilding) {
+                            insideSourceOrDestinationBuilding = true; // in Start- oder Zielgebäude bewegen is OK
+                        } else {
+                            continue; // anderes Gebäude, Kachel nicht betretbar
+                        }
                     }
                 }
 
@@ -97,7 +111,10 @@ Route* AStar::findRoute(MapCoordinate source, MapCoordinate destination) {
 
                 // g-Wert für den neuen Weg = g(Vorgängerknoten) + c(Vorgängerknoten, aktuellem Knoten)
                 // Unsere Kantengewichte c sind immer 1, da wir alle anliegenden Felder gleich entfernt betrachten.
-                int tentativeG = g[currentNode.mapCoordinate] + 1;
+                // Ausnahme: Innerhalb von Start- und Zielgebäude können wir uns mit Kosten 0 bewegen, da es egal ist,
+                // an welcher Stelle wir ein Gebäude betreten und verlassen.
+                int c = (!insideSourceOrDestinationBuilding) ? 1 : 0;
+                int tentativeG = g[currentNode.mapCoordinate] + c;
 
                 // Haben wir schon einen Weg zu successorMapCoordinate? Ist der Weg besser als der grade gefundene,
                 // dann nix zu tun.
