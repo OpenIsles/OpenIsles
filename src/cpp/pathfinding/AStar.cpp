@@ -92,6 +92,11 @@ Route* AStar::findRoute(MapCoordinate source, MapCoordinate destination) {
                     continue; // außerhalb der Karte
                 }
 
+                // TODO aktuell darf nur auf Grass und Grass2 gebaut werden. Später muss das das Gebäude wissen, wo. Refactoring notwendig, da Codedopplung.
+                if (mapTile->tileGraphicIndex != 2 && mapTile->tileGraphicIndex != 7) {
+                    continue; // nur auf Grass und Grass2 darf man laufen
+                }
+
                 bool insideSourceOrDestinationBuilding = false;
                 if (mapTile->mapObject != nullptr) {
                     Building* building = dynamic_cast<Building*>(mapTile->mapObject);
