@@ -49,10 +49,12 @@ int mouseCurrentMapX, mouseCurrentMapY;
  */
 FpsCounter* fpsCounter;
 
+#ifdef DEBUG
 /**
  * @brief Zeichenketten-Puffer für 7 Zeilen Debug-Ausgabe
  */
 std::string debugOutput[7];
+#endif
 
 /**
  * @brief Verwaltung der Schriftarten
@@ -132,6 +134,7 @@ void drawFrame(SDL_Renderer* renderer) {
     // Minimap auf die GUI rendern
 	map->renderMinimap(renderer);
 
+#ifdef DEBUG
 	// Debugging-Infos rendern
 	for (int i = 0; i < 7; i++) {
 		if (debugOutput[i].empty()) {
@@ -141,6 +144,7 @@ void drawFrame(SDL_Renderer* renderer) {
 		fontMgr->renderText(renderer, debugOutput[i], 10, 40 + 15 * i,
             &colorWhite, nullptr, "DroidSans-Bold.ttf", 14, RENDERTEXT_HALIGN_LEFT);
 	}
+#endif
 }
 
 int main(int argc, char** argv) {
@@ -230,6 +234,7 @@ int main(int argc, char** argv) {
         // Position des Mauszeigers holen
         SDL_GetMouseState(&mouseCurrentX, &mouseCurrentY);
 
+#ifdef DEBUG
 		// Debug-Infos vorbereiten, damit wir sie später einfach nur ausgeben können
 		debugOutput[0] = "FPS: average = " + std::to_string(fpsCounter->getFpsAvg()) + 
                 ", current = " + std::to_string(fpsCounter->getFpsCurrent());
@@ -276,7 +281,8 @@ int main(int argc, char** argv) {
             std::to_string(AStar::debugAStar_source.mapY) + "), destination = (" +
             std::to_string(AStar::debugAStar_destination.mapX) + ", " +
             std::to_string(AStar::debugAStar_destination.mapY) + ")";
-#endif
+#endif // DEBUG_A_STAR
+#endif // DEBUG
 
 		// Frame auf Offscreen-Texture zeichnen
 		SDL_SetRenderTarget(renderer, offscreenTexture);

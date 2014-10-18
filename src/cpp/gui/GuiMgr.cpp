@@ -97,7 +97,8 @@ GuiMgr::GuiMgr() {
     });
     registerElement(GUI_ID_MUSIC_PUSH_BUTTON, musicPushButton);
     findElement(GUI_ID_PANEL_4)->addChildElement(musicPushButton);
-    
+
+#ifdef DEBUG
     // Testzeugs
     graphic = new Graphic("data/img/gui/testbutton.png");
     GuiButton* testButton = new GuiButton();
@@ -110,7 +111,7 @@ GuiMgr::GuiMgr() {
     testButton->setVisible(false);
     registerElement(GUI_ID_TEST_BUTTON1, testButton);
     findElement(GUI_ID_PANEL_3)->addChildElement(testButton);
-    
+
     graphic = new Graphic("data/img/gui/testbutton.png");
     GuiButton* testButton2 = new GuiButton();
     testButton2->setCoords(92, 70, graphic->getWidth(), graphic->getHeight());
@@ -136,6 +137,7 @@ GuiMgr::GuiMgr() {
     });
     registerElement(GUI_ID_TEST_PUSH_BUTTON, testPushButton);
     findElement(GUI_ID_PANEL_3)->addChildElement(testPushButton);
+#endif
 }
 
 GuiMgr::~GuiMgr() {
@@ -436,7 +438,8 @@ void GuiMgr::onEvent(SDL_Event& event) {
         } else if (event.key.keysym.scancode == SDL_SCANCODE_F4) {
             map->setScreenZoom(1);
         }
-        
+
+#ifdef DEBUG
         // Debug-Zwecke
         if (event.key.keysym.scancode == SDL_SCANCODE_1) {
             game->startAddingStructure(StructureType::CHAPEL);
@@ -461,6 +464,7 @@ void GuiMgr::onEvent(SDL_Event& event) {
         } else if (event.key.keysym.scancode == SDL_SCANCODE_DELETE) {
             map->deleteSelectedObject();
         }
+#endif
 
 #ifdef DEBUG_A_STAR
         bool needToRecalculate = false;

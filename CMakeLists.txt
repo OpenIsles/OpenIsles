@@ -4,8 +4,8 @@ cmake_minimum_required(VERSION 2.8)
 
 add_definitions("-std=c++11 -Wall -Werror -pedantic")
 
-# Debuginfos für A*-Algorithmus aktivieren
-add_definitions("-DDEBUG_A_STAR")
+# Debuginfos für Debug-Buildconfig aktivieren
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DDEBUG -DDEBUG_A_STAR")
 
 # TODO pkg-config funktioniert unter Windows nicht
 include(FindPkgConfig)
