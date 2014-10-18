@@ -87,25 +87,28 @@ Route* AStar::findRoute(MapCoordinate source, MapCoordinate destination) {
                 // Prüfen, ob diese Koordinate überhaupt betreten werden darf. Steht da ein Gebäude oder ist sie
                 // außerhalb des zulässigen Einzugsbereichs (TODO), stellt sie keinen Knoten im Algorithmus dar und
                 // wird einfach ignoriert.
-                MapTile* mapTile = map->getMapTileAt(successorMapCoordinate.mapX, successorMapCoordinate.mapY);
-                if (mapTile == nullptr) {
-                    continue; // außerhalb der Karte
+                bool insideSourceOrDestinationBuilding;
+                if (!isTileWalkable(successorMapCoordinate, sourceBuilding,
+                                    destinationBuilding, insideSourceOrDestinationBuilding)) {
+                    continue;
                 }
 
-                // TODO aktuell darf nur auf Grass und Grass2 gebaut werden. Später muss das das Gebäude wissen, wo. Refactoring notwendig, da Codedopplung.
-                if (mapTile->tileGraphicIndex != 2 && mapTile->tileGraphicIndex != 7) {
-                    continue; // nur auf Grass und Grass2 darf man laufen
-                }
+                // Wenn wir quer über die Kacheln laufen, d.h. mapX und mapY gleichzeitig ändern, müssen wir prüfen,
+                // ob die beiden angrenzenden Kacheln auch frei sind. Ist mindestens eine belegt, ist diese Abkürzung
+                // nicht möglich.
+                if (abs(mapXOffset) + abs(mapYOffset) == 2) {
+                    bool unusedVar; // Dummy-Variable für insideSourceOrDestinationBuilding
 
-                bool insideSourceOrDestinationBuilding = false;
-                if (mapTile->mapObject != nullptr) {
-                    Building* building = dynamic_cast<Building*>(mapTile->mapObject);
-                    if (building != nullptr) {
-                        if (building == sourceBuilding || building == destinationBuilding) {
-                            insideSourceOrDestinationBuilding = true; // in Start- oder Zielgebäude bewegen is OK
-                        } else {
-                            continue; // anderes Gebäude, Kachel nicht betretbar
-                        }
+                    MapCoordinate mapCoordinateNextTo1(
+                        currentNode.mapCoordinate.mapX, currentNode.mapCoordinate.mapY + mapYOffset);
+                    if (!isTileWalkable(mapCoordinateNextTo1, sourceBuilding, destinationBuilding, unusedVar)) {
+                        continue;
+                    }
+
+                    MapCoordinate mapCoordinateNextTo2(
+                        currentNode.mapCoordinate.mapX + mapXOffset, currentNode.mapCoordinate.mapY);
+                    if (!isTileWalkable(mapCoordinateNextTo2, sourceBuilding, destinationBuilding, unusedVar)) {
+                        continue;
                     }
                 }
 
@@ -183,4 +186,34 @@ Route* AStar::findRoute(MapCoordinate source, MapCoordinate destination) {
     } while(currentMapCoord.mapX != -1);
 
     return route;
+}
+
+bool AStar::isTileWalkable(MapCoordinate mapCoordinate, Building* sourceBuilding,
+                           Building* destinationBuilding, bool& insideSourceOrDestinationBuilding) {
+
+    Map* map = game->getMap();
+
+    MapTile* mapTile = map->getMapTileAt(mapCoordinate.mapX, mapCoordinate.mapY);
+    if (mapTile == nullptr) {
+        return false; // außerhalb der Karte
+    }
+
+    // TODO aktuell darf nur auf Grass und Grass2 gebaut werden. Später muss das das Gebäude wissen, wo. Refactoring notwendig, da Codedopplung.
+    if (mapTile->tileGraphicIndex != 2 && mapTile->tileGraphicIndex != 7) {
+        return false; // nur auf Grass und Grass2 darf man laufen
+    }
+
+    insideSourceOrDestinationBuilding = false;
+    if (mapTile->mapObject != nullptr) {
+        Building* building = dynamic_cast<Building*>(mapTile->mapObject);
+        if (building != nullptr) {
+            if (building == sourceBuilding || building == destinationBuilding) {
+                insideSourceOrDestinationBuilding = true; // in Start- oder Zielgebäude bewegen is OK
+            } else {
+                return false; // anderes Gebäude, Kachel nicht betretbar
+            }
+        }
+    }
+
+    return true;
 }

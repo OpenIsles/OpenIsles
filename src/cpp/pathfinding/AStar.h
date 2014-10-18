@@ -84,6 +84,21 @@ public:
      */
     static Route* findRoute(MapCoordinate source, MapCoordinate destination);
 
+private:
+    /**
+     * @brief Prüft, ob eine Kachel betreten werden darf, d.h. als Knoten für den A*-Algorithmus betrachtet wird.
+     * @param mapCoordinate zu überprüfende Map-Koordinate (IN)
+     * @param sourceBuilding Zeiger auf das Gebäude, das im Startpunkt der Route liegt
+     *                       oder nullptr, wenn kein Gebäude an dieser Stelle ist (IN)
+     * @param destinationBuilding Zeiger auf das Gebäude, das im Zielpunkt der Route liegt
+     *                            oder nullptr, wenn kein Gebäude an dieser Stelle ist (IN)
+     * @param insideSourceOrDestinationBuilding erhält die Info, ob sich die angefragte Kachel im Start- oder
+     *                                          Zielgebäude (wenn gesetzt) befindet. (OUT)
+     * @return true wenn die Kachel betreten werden darf, sonst false
+     */
+    static bool isTileWalkable(MapCoordinate mapCoordinate, Building* sourceBuilding,
+                               Building* destinationBuilding, bool& insideSourceOrDestinationBuilding);
+
 };
 
 #endif
