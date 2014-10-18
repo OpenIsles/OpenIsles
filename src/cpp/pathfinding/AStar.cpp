@@ -31,7 +31,7 @@ Route* AStar::findRoute(MapCoordinate source, MapCoordinate destination) {
     // Datenstruktur für den Algorithmus
     struct AStarNode {
         MapCoordinate mapCoordinate;           // Koordinaten des Knoten
-        int f;                                 // f-Wert für den Algorithmus = geschätzte Kosten von diesem Knoten zum Ziel
+        double f;                              // f-Wert für den Algorithmus = geschätzte Kosten von diesem Knoten zum Ziel
     };
 
     // MapCoordinate-Komparator, damit das Set und die Map richtig funktionieren
@@ -49,7 +49,7 @@ Route* AStar::findRoute(MapCoordinate source, MapCoordinate destination) {
     std::set<MapCoordinate, MapCoordinateComparator> closedList;
 
     // g-Werte für den Algorithmus. Sie enthalten die gesicherten Kosten, um einen bestimmten Knoten zu erreichen
-    std::map<MapCoordinate, int, MapCoordinateComparator> g;
+    std::map<MapCoordinate, double, MapCoordinateComparator> g;
 
     // Map, die jedem Knoten einen Vorgängerknoten im Pfad zuweist. Wir rekonstruiieren damit am Ende die Route.
     std::map<MapCoordinate, MapCoordinate, MapCoordinateComparator> predecessorInPath;
@@ -96,7 +96,8 @@ Route* AStar::findRoute(MapCoordinate source, MapCoordinate destination) {
                 // Wenn wir quer über die Kacheln laufen, d.h. mapX und mapY gleichzeitig ändern, müssen wir prüfen,
                 // ob die beiden angrenzenden Kacheln auch frei sind. Ist mindestens eine belegt, ist diese Abkürzung
                 // nicht möglich.
-                if (abs(mapXOffset) + abs(mapYOffset) == 2) {
+                bool walkCrossTiles = (abs(mapXOffset) + abs(mapYOffset) == 2);
+                if (walkCrossTiles) {
                     bool unusedVar; // Dummy-Variable für insideSourceOrDestinationBuilding
 
                     MapCoordinate mapCoordinateNextTo1(
@@ -117,12 +118,24 @@ Route* AStar::findRoute(MapCoordinate source, MapCoordinate destination) {
                     continue;
                 }
 
+                /*
+                 * Das Kantengewicht c berechnet sich wie folgt:
+                 *
+                 *   c = 0: Innerhalb von Start- und Zielgebäude können wir uns mit Kosten 0 bewegen, da es egal ist,
+                 *          an welcher Stelle wir ein Gebäude betreten und verlassen.
+                 *
+                 *   c = 1: Bewegen wir uns normal, ist das Kantengewicht immer 1, da wir alle anliegenden Felder
+                 *          gleich entfernt betrachten.
+                 *
+                 * c = 1.5: Für Querlaufen über die Kacheln haben wir ein Kantengewicht von 1.5, d.h. teurer als
+                 *          eine normale Bewegung, aber günstiger als zwei normale Kacheln.
+                 *          Dies ist wichtig, sonst würden wir statt einer geraden Linie zwischendrin quer laufen,
+                 *          nur weil es Richtung Ziel geht (siehe doc/pathfinding-cross-tiles.png für diesen Fall).
+                 */
+                double c = (!insideSourceOrDestinationBuilding) ? (walkCrossTiles ? 1.5 : 1) : 0;
+
                 // g-Wert für den neuen Weg = g(Vorgängerknoten) + c(Vorgängerknoten, aktuellem Knoten)
-                // Unsere Kantengewichte c sind immer 1, da wir alle anliegenden Felder gleich entfernt betrachten.
-                // Ausnahme: Innerhalb von Start- und Zielgebäude können wir uns mit Kosten 0 bewegen, da es egal ist,
-                // an welcher Stelle wir ein Gebäude betreten und verlassen.
-                int c = (!insideSourceOrDestinationBuilding) ? 1 : 0;
-                int tentativeG = g[currentNode.mapCoordinate] + c;
+                double tentativeG = g[currentNode.mapCoordinate] + c;
 
                 // Haben wir schon einen Weg zu successorMapCoordinate? Ist der Weg besser als der grade gefundene,
                 // dann nix zu tun.
@@ -142,9 +155,9 @@ Route* AStar::findRoute(MapCoordinate source, MapCoordinate destination) {
                 g[successorMapCoordinate] = tentativeG;
 
                 // f(successor) = tentativeG + h(successor). h = Manhattan-Distanz zum Ziel
-                int h = abs(destination.mapX - successorMapCoordinate.mapX) +
-                        abs(destination.mapY - successorMapCoordinate.mapY);
-                int f = tentativeG + h;
+                double h = abs(destination.mapX - successorMapCoordinate.mapX) +
+                           abs(destination.mapY - successorMapCoordinate.mapY);
+                double f = tentativeG + h;
 
                 // Zeiger zum Vorgängerknoten setzen
                 predecessorInPath[successorMapCoordinate] = currentNode.mapCoordinate;
