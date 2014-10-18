@@ -22,10 +22,26 @@ struct MapCoordinate {
 
 
     /**
+     * @brief leerer Konstruktur, der eine ungültige Map-Koordinate (-1, -1) darstellt
+     */
+    MapCoordinate() : mapX(-1), mapY(-1) {
+    }
+
+    /**
      * @brief Konstruktur
      */
     MapCoordinate(int mapX, int mapY) : mapX(mapX), mapY(mapY) {
     }
+
+    /**
+     * @brief Gleichheitsoperator
+     * @param otherOp anderer Operand
+     * @return true, wenn dieses Objekt und der andere Operand in beiden Koordinaten übereinstimmen
+     */
+    inline bool operator == (const MapCoordinate& otherOp) const {
+        return ((mapX == otherOp.mapX) && (mapY == otherOp.mapY));
+    }
+
 } MapCoordinate;
 
 
@@ -64,7 +80,7 @@ public:
      * @brief Berechnet eine Route von einer Kachel der Karte zu einer anderen.
      * @param source Ausgangspunkt
      * @param destination Ziel
-     * @return Zeiger auf die berechnete Route
+     * @return Zeiger auf die berechnete Route oder nullptr, wenn keine Route existiert
      */
     static Route* findRoute(MapCoordinate source, MapCoordinate destination);
 
