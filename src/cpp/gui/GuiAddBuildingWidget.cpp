@@ -41,7 +41,7 @@ void GuiAddBuildingWidget::renderElement(SDL_Renderer* renderer) {
         &colorLightBrown, &colorBlack, "DroidSans-Bold.ttf", 15, RENDERTEXT_HALIGN_CENTER);
 
     // Gebäude-Grafik
-    Graphic* buildingGraphic = graphicsMgr->getGraphicForStructure(structureType);
+    MapObjectGraphic* buildingGraphic = graphicsMgr->getGraphicForStructure(structureType);
 
     double scale; // ggf. verkleinert zeichnen, wenn das Gebäude zu groß is
     if (buildingGraphic->getWidth() <= 160) {
@@ -52,10 +52,9 @@ void GuiAddBuildingWidget::renderElement(SDL_Renderer* renderer) {
         scale = 0.5;
     }
 
-    SDL_Rect rect = { 0, 0, (int) (buildingGraphic->getWidth() * scale), (int) (buildingGraphic->getHeight() * scale) };
-    rect.x = windowX + 110 - (rect.w / 2);
-    rect.y = windowY + 40;
-    SDL_RenderCopy(renderer, buildingGraphic->getTexture(), nullptr, &rect);
+    int x = windowX + 110 - (int)(buildingGraphic->getWidth() * scale / 2);
+    int y = windowY + 40;
+    buildingGraphic->drawScaledAt(x, y, scale);
 
     // produzierte Waren
     const ProductionSlots* buildingProduction = buildingConfig->getBuildingProduction();

@@ -99,7 +99,7 @@ void MapUtils::screenToMapCoords(int screenX, int screenY, int& mapX, int& mapY)
 	}
 }
 
-void MapUtils::mapToDrawScreenCoords(int mapX, int mapY, Graphic* graphic, SDL_Rect* rect) {
+void MapUtils::mapToDrawScreenCoords(int mapX, int mapY, MapObjectGraphic* graphic, SDL_Rect* rect) {
     // Größe ist gleich der Grafikgröße
     rect->w = graphic->getWidth();
     rect->h = graphic->getHeight();

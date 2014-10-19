@@ -4,13 +4,8 @@
 
 extern SDL_Renderer* renderer;
 
-Graphic::Graphic(const char* filename) : Graphic(filename, 0, 0) {
-}
-
-Graphic::Graphic(const char* filename, unsigned char mapWidth, unsigned char mapHeight) {
+Graphic::Graphic(const char* filename) {
 	this->filename = filename;
-	this->mapWidth = mapWidth;
-	this->mapHeight = mapHeight;
 
 	SDL_Surface* surface = IMG_Load(filename);
 	if (surface == nullptr) {
@@ -29,8 +24,6 @@ Graphic::Graphic(const char* filename, unsigned char mapWidth, unsigned char map
 	this->surface = surface;
 	this->texture = texture;
     
-    createMaskedTexture();
-
 	std::cout << "Loaded graphic '" << filename << "': size = (" << std::to_string(width) << ", "
 			<< std::to_string(height) << ")" << std::endl;
 }
@@ -38,53 +31,11 @@ Graphic::Graphic(const char* filename, unsigned char mapWidth, unsigned char map
 Graphic::~Graphic() {
 	SDL_FreeSurface(surface);
 	SDL_DestroyTexture(texture);
-    if (textureMasked != nullptr) {
-        SDL_DestroyTexture(textureMasked);
-    }
 
 	filename = nullptr;
 	width = height = -1;
-	mapWidth = mapHeight = 0;
 	surface = nullptr;
 	texture = nullptr;
-    textureMasked = nullptr;
-}
-
-void Graphic::createMaskedTexture() {
-    // Wir können nur 32bit-Grafiken bearbeiten
-    if (surface->format->format != SDL_PIXELFORMAT_ABGR8888) {
-        textureMasked = nullptr;
-        return;
-    }
-    
-    // Pixel abkopieren und ändern
-    unsigned char* pixelsMasked = new unsigned char[surface->h * surface->pitch];
-    memcpy(pixelsMasked, surface->pixels, surface->h * surface->pitch);
-    
-    Uint32* pixelPtr = (Uint32*) pixelsMasked;
-    for (int y = 0; y < surface->h; y++) {
-        pixelPtr = (Uint32*) (((unsigned char*) pixelsMasked) + y * surface->pitch);
-        
-        int x = 0;
-        if (y % 2) {
-            x = 1;
-            pixelPtr++;
-        }
-        
-        for (; x < surface->w; x += 2, pixelPtr += 2) {
-            *pixelPtr &= 0xff000000; // Alpha-Kanel unverändert lassen
-            *pixelPtr |= 0x0037afc8; // Pixelfarbe auf Orange setzen
-        }
-    }
-   
-    // Textur erstellen
-    SDL_Surface* surfaceMasked = SDL_CreateRGBSurfaceFrom(
-            pixelsMasked, surface->w, surface->h, surface->format->BitsPerPixel, surface->pitch,
-            surface->format->Rmask, surface->format->Gmask, surface->format->Bmask, surface->format->Amask);
-
-    textureMasked = SDL_CreateTextureFromSurface(renderer, surfaceMasked);
-    SDL_FreeSurface(surfaceMasked);
-    delete[] pixelsMasked;
 }
 
 void Graphic::getPixel(int x, int y, Uint8* r, Uint8* g, Uint8* b, Uint8* a) {
@@ -122,9 +73,4 @@ void Graphic::getPixel(int x, int y, Uint8* r, Uint8* g, Uint8* b, Uint8* a) {
 
 	// Farbwerte ermitteln
 	SDL_GetRGBA(pixelValue, pixelFormat, r, g, b, a);
-}
-
-void Graphic::drawAt(int x, int y) {
-    SDL_Rect rectDestination = { x, y, width, height };
-    SDL_RenderCopy(renderer, texture, nullptr, &rectDestination);
 }

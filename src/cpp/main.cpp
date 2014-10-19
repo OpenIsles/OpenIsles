@@ -87,6 +87,11 @@ Game* game;
 EconomicsMgr* economicsMgr;
 
 /**
+ * @brief pro Frame wird einmal auf die Uhr geguckt. In dieser Variable steht der SDL-Tickcount.
+ */
+Uint32 sdlTicks;
+
+/**
  * @brief Größe des Fensters
  */
 extern const int windowWidth = 1024;
@@ -213,6 +218,10 @@ int main(int argc, char** argv) {
     Map* map = game->getMap();
 	while (!quitGame) {
 		fpsCounter->startFrame();
+
+        // während eines Frames nur einmal auf die Uhr gucken, damit z.B. beim Blinkend-Zeichnen nicht ein Schnibbel
+        // eines Gebäude gezeichnet und ein anderer ne Millisekunde später nicht mehr
+        sdlTicks = SDL_GetTicks();
 
 		// Events handeln
 		SDL_Event event;

@@ -1,8 +1,10 @@
+#include "graphics/MapObjectGraphic.h"
+
 #ifndef _MAP_UTILS_H
 #define _MAP_UTILS_H
 
 struct SDL_Rect;
-class Graphic;
+class MapObjectGraphic;
 
 /**
  * Klasse mit statischen Helperklassen
@@ -43,10 +45,10 @@ public:
      * 
      * @param mapX Map-X-Koordinate (Eingabe)
 	 * @param mapY Map-Y-Koordinate (Eingabe)
-     * @param graphic zu zeichnende Grafik (Eingabe)
+     * @param graphic zu zeichnende MapObject-Grafik (Eingabe)
      * @param rect SDL-Rechteck mit der Screen-Koordinaten, wo die Grafik hingezeichnet werden muss (Ausgabe)
      */
-    static void mapToDrawScreenCoords(int mapX, int mapY, Graphic* graphic, SDL_Rect* rect);
+    static void mapToDrawScreenCoords(int mapX, int mapY, MapObjectGraphic* graphic, SDL_Rect* rect);
     
 };
 

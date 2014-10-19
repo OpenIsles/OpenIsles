@@ -2,8 +2,6 @@
 #include <sstream>
 #include <stdexcept>
 #include "game/Colony.h"
-#include "graphics/GraphicsMgr.h"
-#include "map/Structure.h"
 
 GraphicsMgr::GraphicsMgr() {
 	loadTiles();
@@ -11,66 +9,66 @@ GraphicsMgr::GraphicsMgr() {
     // anisotropic filtering für die Gebäude aktivieren, damit beim Skalieren das Mask-Overlay ordentlich is
     SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "2");
 
-	structures = new Graphic*[256];
-    memset(structures, 0, 256 * sizeof(Graphic*));
+	structures = new MapObjectGraphic*[256];
+    memset(structures, 0, 256 * sizeof(MapObjectGraphic*));
     
-	structures[StructureType::CHAPEL] = new Graphic("data/img/objects/chapel.png", 2, 1);
-	structures[StructureType::PIONEERS_HOUSE1] = new Graphic("data/img/objects/pioneers-house1.png", 2, 2);
-	structures[StructureType::SIGNALFIRE] = new Graphic("data/img/objects/signalfire.png", 1, 1);
-	structures[StructureType::HERBARY] = new Graphic("data/img/objects/herbary.png", 3, 3);
-	structures[StructureType::BRICKYARD] = new Graphic("data/img/objects/brickyard.png", 4, 2);
-	structures[StructureType::BRICKYARD2] = new Graphic("data/img/objects/brickyard2.png", 2, 4);
-    structures[StructureType::OFFICE1] = new Graphic("data/img/objects/office1.png", 3, 2);
-    structures[StructureType::MARKETPLACE] = new Graphic("data/img/objects/marketplace.png", 4, 3);
-    structures[StructureType::FORESTERS] = new Graphic("data/img/objects/foresters.png", 2, 2);
-    structures[StructureType::SHEEP_FARM] = new Graphic("data/img/objects/sheep-farm.png", 2, 2);
-    structures[StructureType::WEAVING_MILL1] = new Graphic("data/img/objects/weaving-mill1.png", 2, 2);
+	structures[StructureType::CHAPEL] = new MapObjectGraphic("data/img/objects/chapel.png", 2, 1);
+	structures[StructureType::PIONEERS_HOUSE1] = new MapObjectGraphic("data/img/objects/pioneers-house1.png", 2, 2);
+	structures[StructureType::SIGNALFIRE] = new MapObjectGraphic("data/img/objects/signalfire.png", 1, 1);
+	structures[StructureType::HERBARY] = new MapObjectGraphic("data/img/objects/herbary.png", 3, 3);
+	structures[StructureType::BRICKYARD] = new MapObjectGraphic("data/img/objects/brickyard.png", 4, 2);
+	structures[StructureType::BRICKYARD2] = new MapObjectGraphic("data/img/objects/brickyard2.png", 2, 4);
+    structures[StructureType::OFFICE1] = new MapObjectGraphic("data/img/objects/office1.png", 3, 2);
+    structures[StructureType::MARKETPLACE] = new MapObjectGraphic("data/img/objects/marketplace.png", 4, 3);
+    structures[StructureType::FORESTERS] = new MapObjectGraphic("data/img/objects/foresters.png", 2, 2);
+    structures[StructureType::SHEEP_FARM] = new MapObjectGraphic("data/img/objects/sheep-farm.png", 2, 2);
+    structures[StructureType::WEAVING_MILL1] = new MapObjectGraphic("data/img/objects/weaving-mill1.png", 2, 2);
 
-    structures[StructureType::STREET] = new Graphic("data/img/objects/street-straight90.png", 1, 1); // damit was drinsteht. Fürs Malen werden die nachfolgenden Grafiken verwendet
-	structures[StructureType::STREET_STRAIGHT_0] = new Graphic("data/img/objects/street-straight0.png", 1, 1);
-	structures[StructureType::STREET_STRAIGHT_90] = new Graphic("data/img/objects/street-straight90.png", 1, 1);
-	structures[StructureType::STREET_CURVE_0] = new Graphic("data/img/objects/street-curve0.png", 1, 1);
-	structures[StructureType::STREET_CURVE_90] = new Graphic("data/img/objects/street-curve90.png", 1, 1);
-	structures[StructureType::STREET_CURVE_180] = new Graphic("data/img/objects/street-curve180.png", 1, 1);
-	structures[StructureType::STREET_CURVE_270] = new Graphic("data/img/objects/street-curve270.png", 1, 1);
-    structures[StructureType::STREET_TEE_0] = new Graphic("data/img/objects/street-tee0.png", 1, 1);
-    structures[StructureType::STREET_TEE_90] = new Graphic("data/img/objects/street-tee90.png", 1, 1);
-    structures[StructureType::STREET_TEE_180] = new Graphic("data/img/objects/street-tee180.png", 1, 1);
-    structures[StructureType::STREET_TEE_270] = new Graphic("data/img/objects/street-tee270.png", 1, 1);
-    structures[StructureType::STREET_CROSS] = new Graphic("data/img/objects/street-cross.png", 1, 1);
+    structures[StructureType::STREET] = new MapObjectGraphic("data/img/objects/street-straight90.png", 1, 1); // damit was drinsteht. Fürs Malen werden die nachfolgenden Grafiken verwendet
+	structures[StructureType::STREET_STRAIGHT_0] = new MapObjectGraphic("data/img/objects/street-straight0.png", 1, 1);
+	structures[StructureType::STREET_STRAIGHT_90] = new MapObjectGraphic("data/img/objects/street-straight90.png", 1, 1);
+	structures[StructureType::STREET_CURVE_0] = new MapObjectGraphic("data/img/objects/street-curve0.png", 1, 1);
+	structures[StructureType::STREET_CURVE_90] = new MapObjectGraphic("data/img/objects/street-curve90.png", 1, 1);
+	structures[StructureType::STREET_CURVE_180] = new MapObjectGraphic("data/img/objects/street-curve180.png", 1, 1);
+	structures[StructureType::STREET_CURVE_270] = new MapObjectGraphic("data/img/objects/street-curve270.png", 1, 1);
+    structures[StructureType::STREET_TEE_0] = new MapObjectGraphic("data/img/objects/street-tee0.png", 1, 1);
+    structures[StructureType::STREET_TEE_90] = new MapObjectGraphic("data/img/objects/street-tee90.png", 1, 1);
+    structures[StructureType::STREET_TEE_180] = new MapObjectGraphic("data/img/objects/street-tee180.png", 1, 1);
+    structures[StructureType::STREET_TEE_270] = new MapObjectGraphic("data/img/objects/street-tee270.png", 1, 1);
+    structures[StructureType::STREET_CROSS] = new MapObjectGraphic("data/img/objects/street-cross.png", 1, 1);
 
     
-    goodsIcons = new Graphic*[GoodsType::MAX_GOOD];
-    memset(goodsIcons, 0, GoodsType::MAX_GOOD * sizeof(Graphic*));
+    goodsIcons = new PlainGraphic*[GoodsType::MAX_GOOD];
+    memset(goodsIcons, 0, GoodsType::MAX_GOOD * sizeof(PlainGraphic*));
     
-    goodsIcons[GoodsType::TOOLS] = new Graphic("data/img/goods/icon/tools.png");
-    goodsIcons[GoodsType::WOOD] = new Graphic("data/img/goods/icon/wood.png");
-    goodsIcons[GoodsType::BRICKS] = new Graphic("data/img/goods/icon/bricks.png");
+    goodsIcons[GoodsType::TOOLS] = new PlainGraphic("data/img/goods/icon/tools.png");
+    goodsIcons[GoodsType::WOOD] = new PlainGraphic("data/img/goods/icon/wood.png");
+    goodsIcons[GoodsType::BRICKS] = new PlainGraphic("data/img/goods/icon/bricks.png");
 
-    goodsMarketplaceIcons = new Graphic*[GoodsType::MAX_GOOD];
-    memset(goodsMarketplaceIcons, 0, GoodsType::MAX_GOOD * sizeof(Graphic*));
+    goodsMarketplaceIcons = new PlainGraphic*[GoodsType::MAX_GOOD];
+    memset(goodsMarketplaceIcons, 0, GoodsType::MAX_GOOD * sizeof(PlainGraphic*));
 
-    goodsMarketplaceIcons[GoodsType::TOOLS] = new Graphic("data/img/goods/marketplace-icon/tools.png");
-    goodsMarketplaceIcons[GoodsType::WOOD] = new Graphic("data/img/goods/marketplace-icon/wood.png");
-    goodsMarketplaceIcons[GoodsType::BRICKS] = new Graphic("data/img/goods/marketplace-icon/bricks.png");
+    goodsMarketplaceIcons[GoodsType::TOOLS] = new PlainGraphic("data/img/goods/marketplace-icon/tools.png");
+    goodsMarketplaceIcons[GoodsType::WOOD] = new PlainGraphic("data/img/goods/marketplace-icon/wood.png");
+    goodsMarketplaceIcons[GoodsType::BRICKS] = new PlainGraphic("data/img/goods/marketplace-icon/bricks.png");
 
 
-    otherGraphics = new Graphic*[OtherGraphic::MAX_GRAPHIC];
-    memset(otherGraphics, 0, OtherGraphic::MAX_GRAPHIC * sizeof(Graphic*));
+    otherGraphics = new PlainGraphic*[OtherGraphic::MAX_GRAPHIC];
+    memset(otherGraphics, 0, OtherGraphic::MAX_GRAPHIC * sizeof(PlainGraphic*));
     
-    otherGraphics[OtherGraphic::COINS] = new Graphic("data/img/coin.png");
-    otherGraphics[OtherGraphic::PANEL] = new Graphic("data/img/gui/panel.png");
-    otherGraphics[OtherGraphic::STATUSBAR] = new Graphic("data/img/gui/statusbar.png");
-    otherGraphics[OtherGraphic::ADD_BUILDING_GRID] = new Graphic("data/img/gui/add-building/add-building-grid.png");
-    otherGraphics[OtherGraphic::ADD_BUILDING_CHAPEL] = new Graphic("data/img/gui/add-building/chapel.png");
-    otherGraphics[OtherGraphic::ADD_BUILDING_MARKETPLACE] = new Graphic("data/img/gui/add-building/marketplace.png");
-    otherGraphics[OtherGraphic::ADD_BUILDING_OFFICE1] = new Graphic("data/img/gui/add-building/office1.png");
-    otherGraphics[OtherGraphic::ADD_BUILDING_STREET] = new Graphic("data/img/gui/add-building/street.png");
-    otherGraphics[OtherGraphic::ADD_BUILDING_SHEEP_FARM] = new Graphic("data/img/gui/add-building/sheep-farm.png");
-    otherGraphics[OtherGraphic::ADD_BUILDING_WEAVING_MILL1] = new Graphic("data/img/gui/add-building/weaving-mill1.png");
-    otherGraphics[OtherGraphic::ADD_BUILDING_DUMMY] = new Graphic("data/img/gui/add-building/dummy.png");
-    otherGraphics[OtherGraphic::PRODUCTION_ARROW] = new Graphic("data/img/gui/production-arrow.png");
-    otherGraphics[OtherGraphic::PRODUCTION_PLUS] = new Graphic("data/img/gui/production-plus.png");
+    otherGraphics[OtherGraphic::COINS] = new PlainGraphic("data/img/coin.png");
+    otherGraphics[OtherGraphic::PANEL] = new PlainGraphic("data/img/gui/panel.png");
+    otherGraphics[OtherGraphic::STATUSBAR] = new PlainGraphic("data/img/gui/statusbar.png");
+    otherGraphics[OtherGraphic::ADD_BUILDING_GRID] = new PlainGraphic("data/img/gui/add-building/add-building-grid.png");
+    otherGraphics[OtherGraphic::ADD_BUILDING_CHAPEL] = new PlainGraphic("data/img/gui/add-building/chapel.png");
+    otherGraphics[OtherGraphic::ADD_BUILDING_MARKETPLACE] = new PlainGraphic("data/img/gui/add-building/marketplace.png");
+    otherGraphics[OtherGraphic::ADD_BUILDING_OFFICE1] = new PlainGraphic("data/img/gui/add-building/office1.png");
+    otherGraphics[OtherGraphic::ADD_BUILDING_STREET] = new PlainGraphic("data/img/gui/add-building/street.png");
+    otherGraphics[OtherGraphic::ADD_BUILDING_SHEEP_FARM] = new PlainGraphic("data/img/gui/add-building/sheep-farm.png");
+    otherGraphics[OtherGraphic::ADD_BUILDING_WEAVING_MILL1] = new PlainGraphic("data/img/gui/add-building/weaving-mill1.png");
+    otherGraphics[OtherGraphic::ADD_BUILDING_DUMMY] = new PlainGraphic("data/img/gui/add-building/dummy.png");
+    otherGraphics[OtherGraphic::PRODUCTION_ARROW] = new PlainGraphic("data/img/gui/production-arrow.png");
+    otherGraphics[OtherGraphic::PRODUCTION_PLUS] = new PlainGraphic("data/img/gui/production-plus.png");
 
 
     animations = new Animation*[AnimationType::MAX_ANIMATION];
@@ -116,8 +114,8 @@ void GraphicsMgr::loadTiles() {
     // nearest pixel sampling für die Kacheln, damit die fließend ineinander übergehen
     SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "0");
 
-	tiles = new Graphic*[128];
-    memset(tiles, 0, 128 * sizeof(Graphic*));
+	tiles = new MapObjectGraphic*[128];
+    memset(tiles, 0, 128 * sizeof(MapObjectGraphic*));
 
 	std::ifstream inputFileStreamTilesTxt("data/img/tiles/tiles.txt");
 	std::string line;
@@ -137,6 +135,6 @@ void GraphicsMgr::loadTiles() {
 		}
 
 		std::string tileFilepath("data/img/tiles/" + tileFilename);
-		tiles[tileIndex] = new Graphic(tileFilepath.data(), 1, 1);
+		tiles[tileIndex] = new MapObjectGraphic(tileFilepath.data(), 1, 1);
 	}
 }

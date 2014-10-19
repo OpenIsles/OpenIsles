@@ -4,7 +4,7 @@
 #include "gui/GuiBase.h"
 
 union SDL_Event;
-class Graphic;
+class PlainGraphic;
 class SDL_Renderer;
 
 
@@ -17,13 +17,13 @@ protected:
     /**
      * @brief Grafik, die für das Element gerendert wird. Kann nullptr sein, wenn keine Grafik gezeichnet werden soll.
      */
-	Graphic* graphic = nullptr;
+    PlainGraphic* graphic = nullptr;
 
 public:
 	GuiStaticElement();
 	virtual ~GuiStaticElement();
-    
-    Graphic* getGraphic() const {
+
+    PlainGraphic* getGraphic() const {
         return graphic;
     }
 
@@ -31,7 +31,7 @@ public:
      * Setzt die Grafik für das Element.
      * @param graphic Grafik, die verwendet werden soll
      */
-    void setGraphic(Graphic* graphic) {
+    void setGraphic(PlainGraphic* graphic) {
         this->graphic = graphic;
     }
     

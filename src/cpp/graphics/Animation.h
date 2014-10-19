@@ -1,13 +1,13 @@
 #ifndef _ANIMATION_H
 #define _ANIMATION_H
 
-#include "graphics/Graphic.h"
+#include "graphics/PlainGraphic.h"
 
 /**
  * @brief Erweiterte Form der Grafik: Die Animation enthält in einer Grafik mehrere Frames.
  * Alle Frames müssen gleich groß sein und horizontal in der Grafik aneinander gereiht sein.
  */
-class Animation : public Graphic {
+class Animation : public PlainGraphic {
 
 public:
     /**

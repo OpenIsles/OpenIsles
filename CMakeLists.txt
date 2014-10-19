@@ -24,6 +24,8 @@ set(SOURCE_FILES
 	src/cpp/graphics/Animation.cpp
 	src/cpp/graphics/Graphic.cpp
     src/cpp/graphics/GraphicsMgr.cpp
+    src/cpp/graphics/MapObjectGraphic.cpp
+    src/cpp/graphics/PlainGraphic.cpp
 	src/cpp/gui/FontMgr.cpp
 	src/cpp/gui/GuiAddBuildingWidget.cpp
 	src/cpp/gui/GuiButton.cpp

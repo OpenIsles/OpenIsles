@@ -1,4 +1,4 @@
-#include <game/Colony.h>
+#include "game/Colony.h"
 
 #ifndef _GUI_UTILS_H
 #define _GUI_UTILS_H

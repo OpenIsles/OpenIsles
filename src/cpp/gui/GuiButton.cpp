@@ -1,5 +1,5 @@
 #include "SDL.h"
-#include "graphics/Graphic.h"
+#include "graphics/PlainGraphic.h"
 #include "gui/GuiButton.h"
 #include "gui/GuiMgr.h"
 
@@ -14,10 +14,8 @@ void GuiButton::renderElement(SDL_Renderer* renderer) {
     int windowX, windowY;
     getWindowCoords(windowX, windowY);
     
-    Graphic* graphicToUse = (pressed) ? graphicPressed : graphic;
-    
-    SDL_Rect rectDestination = { windowX, windowY, width, height };
-    SDL_RenderCopy(renderer, graphicToUse->getTexture(), nullptr, &rectDestination);
+    PlainGraphic* graphicToUse = (pressed) ? graphicPressed : graphic;
+    graphicToUse->drawAt(windowX, windowY);
 }
 
 void GuiButton::onEventElement(SDL_Event& event) {

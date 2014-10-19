@@ -5,7 +5,8 @@
 #include <SDL_image.h>
 #include "graphics/Animation.h"
 #include "graphics/Graphic.h"
-#include "graphics/GraphicsMgr.h"
+#include "graphics/MapObjectGraphic.h"
+#include "graphics/PlainGraphic.h"
 
 enum GoodsType : char;
 enum StructureType : unsigned char;
@@ -68,27 +69,27 @@ private:
 	/**
 	 * @brief Array von Zeigern auf die Tile-Grafiken
 	 */
-	Graphic** tiles;
+    MapObjectGraphic** tiles;
 
 	/**
 	 * @brief Array von Zeigern auf die Struktur-Grafiken
 	 */
-	Graphic** structures;
+	MapObjectGraphic** structures;
     
     /**
 	 * @brief Array von Zeigern auf die Gütergrafiken (Symbole)
 	 */
-	Graphic** goodsIcons;
+    PlainGraphic** goodsIcons;
 
     /**
      * @brief Array von Zeigern auf die Gütergrafiken (Marketplatz-Symbole)
      */
-    Graphic** goodsMarketplaceIcons;
+    PlainGraphic** goodsMarketplaceIcons;
     
     /**
      * @brief Array von Zeigern auf andere Grafiken
      */
-    Graphic** otherGraphics;
+    PlainGraphic** otherGraphics;
 
     /**
      * @brief Array von Zeigern auf Animationen
@@ -102,43 +103,45 @@ public:
 	/**
 	 * @brief Liefert eine Tile-Grafik
 	 * @param index Index ins Array #tiles dessen Eintrag zurückgeliefert werden soll
+     * @return MapObjectGraphic
 	 */
-	Graphic* const getGraphicForTile(int index) const {
+    MapObjectGraphic* const getGraphicForTile(int index) const {
 		return tiles[index];
 	}
 
 	/**
 	 * @brief Liefert eine Object-Grafik
 	 * @param index Index ins Array #objects dessen Eintrag zurückgeliefert werden soll
+     * @return MapObjectGraphic
 	 */
-	Graphic* const getGraphicForStructure(StructureType structureType) const {
+    MapObjectGraphic* const getGraphicForStructure(StructureType structureType) const {
 		return structures[structureType];
 	}
     
     /**
      * @brief Liefert die Grafik für ein Güter-Symbol zurück
      * @param goodsType Güter-Typ
-     * @return Graphic
+     * @return PlainGraphic
      */
-    Graphic* const getGraphicForGoodsIcon(GoodsType goodsType) const {
+    PlainGraphic* const getGraphicForGoodsIcon(GoodsType goodsType) const {
         return goodsIcons[goodsType];
     }
 
     /**
      * @brief Liefert die Grafik für ein Güter-Symbol (Marktplatz-Symbol) zurück
      * @param goodsType Güter-Typ
-     * @return Graphic
+     * @return PlainGraphic
      */
-    Graphic* const getGraphicForGoodsMarketplaceIcon(GoodsType goodsType) const {
+    PlainGraphic* const getGraphicForGoodsMarketplaceIcon(GoodsType goodsType) const {
         return goodsMarketplaceIcons[goodsType];
     }
     
     /**
      * @brief Liefert eine sonstige Grafik zurück
      * @param otherGraphic welche Grafik
-     * @return Graphic
+     * @return PlainGraphic
      */
-    Graphic* const getOtherGraphic(OtherGraphic otherGraphic) const {
+    PlainGraphic* const getOtherGraphic(OtherGraphic otherGraphic) const {
         return otherGraphics[otherGraphic];
     }
 

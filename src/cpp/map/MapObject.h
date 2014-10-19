@@ -10,25 +10,6 @@
  */
 class MapObject {
 
-public:
-    /**
-     * @brief zeichnet das Objekt maskiert, d.h. gelbem Overlay für Gebäudeplatzierung
-     * @sa #drawingFlags
-     */
-    static const int DRAWING_FLAG_MASKED = (1 << 0);
-
-    /**
-     * @brief zeichnet das Objekt rot eingefärbt
-     * @sa #drawingFlags
-     */
-    static const int DRAWING_FLAG_RED    = (1 << 1);
-
-    /**
-     * @brief zeichnet das Objekt blinkend, d.h. entweder wird die Grafik gezeichnet oder nicht
-     * @sa #drawingFlags
-     */
-    static const int DRAWING_FLAG_BLINK  = (1 << 2);
-
 protected:
 	/**
 	 * @brief Map-Koordinaten des Objekts
@@ -57,7 +38,7 @@ protected:
 
     /**
      * @brief Flags, die angeben, wie das Objekt gezeichnet wird.
-     * Eine Kombination aus DRAWING_FLAG_-Konstanten wird erwartet.
+     * Eine Kombination aus MapObjectGraphic::DRAWING_FLAG_-Konstanten wird erwartet.
      */
     int drawingFlags = 0;
 

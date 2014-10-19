@@ -1,8 +1,7 @@
 #include "SDL.h"
-#include "graphics/Graphic.h"
+#include "graphics/PlainGraphic.h"
 #include "gui/GuiMgr.h"
 #include "gui/GuiPushButton.h"
-#include "gui/GuiStaticElement.h"
 
 
 GuiPushButton::GuiPushButton() {
@@ -15,11 +14,9 @@ GuiPushButton::~GuiPushButton() {
 void GuiPushButton::renderElement(SDL_Renderer* renderer) {
     int windowX, windowY;
     getWindowCoords(windowX, windowY);
-    
-    Graphic* graphicToUse = (pressed) ? graphicPressed : (active ? graphicPressed : graphic);
-    
-    SDL_Rect rectDestination = { windowX, windowY, width, height };
-    SDL_RenderCopy(renderer, graphicToUse->getTexture(), nullptr, &rectDestination);
+
+    PlainGraphic* graphicToUse = (pressed) ? graphicPressed : (active ? graphicPressed : graphic);
+    graphicToUse->drawAt(windowX, windowY);
 }
 
 void GuiPushButton::onEventElement(SDL_Event& event) {

@@ -5,7 +5,7 @@
 extern SDL_Renderer* renderer;
 
 Animation::Animation(const char* filename, unsigned int framesCount, double fps) :
-    Graphic(filename, 0, 0), framesCount(framesCount), fps(fps) {
+    PlainGraphic(filename), framesCount(framesCount), fps(fps) {
 
     // Prüfen, ob die Grafik ordentlich ist. Die Breite muss exakt ein Vielfaches der Framesanzahl sein
     if (width % framesCount != 0) {

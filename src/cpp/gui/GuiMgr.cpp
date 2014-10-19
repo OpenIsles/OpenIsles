@@ -22,14 +22,14 @@ extern SoundMgr* soundMgr;
 
 GuiMgr::GuiMgr() {
     // Panel
-    Graphic* graphic = new Graphic("data/img/gui/panel.png");
+    PlainGraphic* graphic = new PlainGraphic("data/img/gui/panel.png");
 	GuiStaticElement* panel = new GuiStaticElement();
     panel->setCoords(768, 0, graphic->getWidth(), graphic->getHeight());
     panel->setGraphic(graphic);
     registerElement(GUI_ID_PANEL, panel);
     
     // Statusleiste
-    graphic = new Graphic("data/img/gui/statusbar.png");
+    graphic = new PlainGraphic("data/img/gui/statusbar.png");
 	GuiStaticElement* statusBar = new GuiStaticElement();
     statusBar->setCoords(0, 734, graphic->getWidth(), graphic->getHeight());
     statusBar->setGraphic(graphic);
@@ -55,8 +55,8 @@ GuiMgr::GuiMgr() {
     for (int i = 0; i < 4; i++) {
         // Button
         GuiPushButton* panelSwitchPushButton = new GuiPushButton();
-        panelSwitchPushButton->setGraphic(new Graphic(tabGraphics[i][0]));
-        panelSwitchPushButton->setGraphicPressed(new Graphic(tabGraphics[i][1]));
+        panelSwitchPushButton->setGraphic(new PlainGraphic(tabGraphics[i][0]));
+        panelSwitchPushButton->setGraphicPressed(new PlainGraphic(tabGraphics[i][1]));
         panelSwitchPushButton->setCoords(22 + i*55, 235, 48, 64);
         panelSwitchPushButton->setOnClickFunction([this, i]() {
             for (int j = 0; j < 4; j++) {
@@ -83,8 +83,8 @@ GuiMgr::GuiMgr() {
 
     // Buttons auf dem 4. Tab
     GuiPushButton* musicPushButton = new GuiPushButton();
-    musicPushButton->setGraphic(new Graphic("data/img/gui/button-music.png"));
-    musicPushButton->setGraphicPressed(new Graphic("data/img/gui/button-music-pressed.png"));
+    musicPushButton->setGraphic(new PlainGraphic("data/img/gui/button-music.png"));
+    musicPushButton->setGraphicPressed(new PlainGraphic("data/img/gui/button-music-pressed.png"));
     musicPushButton->setCoords(2, 370, 64, 64);
     musicPushButton->setOnClickFunction([this]() {
         bool musicEnabled = ((GuiPushButton*) findElement(GUI_ID_MUSIC_PUSH_BUTTON))->isActive();
@@ -100,11 +100,11 @@ GuiMgr::GuiMgr() {
 
 #ifdef DEBUG
     // Testzeugs
-    graphic = new Graphic("data/img/gui/testbutton.png");
+    graphic = new PlainGraphic("data/img/gui/testbutton.png");
     GuiButton* testButton = new GuiButton();
     testButton->setCoords(12, 70, graphic->getWidth(), graphic->getHeight());
     testButton->setGraphic(graphic);
-    testButton->setGraphicPressed(new Graphic("data/img/gui/testbutton-pressed.png"));
+    testButton->setGraphicPressed(new PlainGraphic("data/img/gui/testbutton-pressed.png"));
     testButton->setOnClickFunction([]() {
         std::cout << "Click1" << std::endl;
     });
@@ -112,11 +112,11 @@ GuiMgr::GuiMgr() {
     registerElement(GUI_ID_TEST_BUTTON1, testButton);
     findElement(GUI_ID_PANEL_3)->addChildElement(testButton);
 
-    graphic = new Graphic("data/img/gui/testbutton.png");
+    graphic = new PlainGraphic("data/img/gui/testbutton.png");
     GuiButton* testButton2 = new GuiButton();
     testButton2->setCoords(92, 70, graphic->getWidth(), graphic->getHeight());
     testButton2->setGraphic(graphic);
-    testButton2->setGraphicPressed(new Graphic("data/img/gui/testbutton-pressed.png"));
+    testButton2->setGraphicPressed(new PlainGraphic("data/img/gui/testbutton-pressed.png"));
     testButton2->setOnClickFunction([]() {
         std::cout << "Click2" << std::endl;
     });
@@ -124,11 +124,11 @@ GuiMgr::GuiMgr() {
     registerElement(GUI_ID_TEST_BUTTON2, testButton2);
     findElement(GUI_ID_PANEL_3)->addChildElement(testButton2);
     
-    graphic = new Graphic("data/img/gui/testbutton.png");
+    graphic = new PlainGraphic("data/img/gui/testbutton.png");
     GuiPushButton* testPushButton = new GuiPushButton();
     testPushButton->setCoords(172, 70, graphic->getWidth(), graphic->getHeight());
     testPushButton->setGraphic(graphic);
-    testPushButton->setGraphicPressed(new Graphic("data/img/gui/testbutton-pressed.png"));
+    testPushButton->setGraphicPressed(new PlainGraphic("data/img/gui/testbutton-pressed.png"));
     testPushButton->setOnClickFunction([this]() {
         GuiPushButton* testPushButton = (GuiPushButton*) findElement(GUI_ID_TEST_PUSH_BUTTON);
         ((GuiPushButton*) findElement(GUI_ID_TEST_BUTTON1))->setVisible(testPushButton->isActive());
@@ -299,7 +299,7 @@ void GuiMgr::initBuildGui() {
     for (int groupIndex = 0; groupIndex < 4; groupIndex++) {
         // Grid
         GuiStaticElement* addBuildingGrid = new GuiStaticElement();
-        Graphic* graphicAddBuildingGrid = graphicsMgr->getOtherGraphic(OtherGraphic::ADD_BUILDING_GRID);
+        PlainGraphic* graphicAddBuildingGrid = graphicsMgr->getOtherGraphic(OtherGraphic::ADD_BUILDING_GRID);
         addBuildingGrid->setCoords(775, 450, graphicAddBuildingGrid->getWidth(), graphicAddBuildingGrid->getHeight());
         addBuildingGrid->setGraphic(graphicAddBuildingGrid);
         addBuildingGrid->setVisible(false);
@@ -316,7 +316,7 @@ void GuiMgr::initBuildGui() {
                 }
 
                 GuiButton* addBuildingButton = new GuiButton();
-                Graphic* graphicAddBuildingButton =
+                PlainGraphic* graphicAddBuildingButton =
                     graphicsMgr->getOtherGraphic(buildingGroups[groupIndex].buildings[buildingIndex].graphic);
                 addBuildingButton->setCoords(
                     12 + 58*gridX, 13 + 58*gridY, graphicAddBuildingButton->getWidth(), graphicAddBuildingButton->getHeight());
@@ -333,8 +333,8 @@ void GuiMgr::initBuildGui() {
 
         // Button für die Gruppe
         GuiPushButton* addBuildingPushButton = new GuiPushButton();
-        addBuildingPushButton->setGraphic(new Graphic(buildingGroups[groupIndex].graphicFilename)); // TODO über GraphicsMgr abwickeln, aktuell Memory-Leak
-        addBuildingPushButton->setGraphicPressed(new Graphic(buildingGroups[groupIndex].graphicPressedFilename)); // TODO über GraphicsMgr abwickeln, aktuell Memory-Leak
+        addBuildingPushButton->setGraphic(new PlainGraphic(buildingGroups[groupIndex].graphicFilename)); // TODO über GraphicsMgr abwickeln, aktuell Memory-Leak
+        addBuildingPushButton->setGraphicPressed(new PlainGraphic(buildingGroups[groupIndex].graphicPressedFilename)); // TODO über GraphicsMgr abwickeln, aktuell Memory-Leak
         addBuildingPushButton->setCoords(7 + groupIndex*55, 370, 52, 64);
         addBuildingPushButton->setOnClickFunction([this, groupIndex ]() {
             bool buttonActive = ((GuiPushButton*) findElement(GUI_ID_ADD_BUILDING_PUSH_BUTTON_BASE + groupIndex))->isActive();

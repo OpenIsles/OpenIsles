@@ -17,7 +17,7 @@ protected:
     /**
      * @brief Grafik, wenn der Button grade runtergedrückt ist
      */
-	Graphic* graphicPressed;
+    PlainGraphic* graphicPressed;
     
     /**
      * @brief gibt an, ob der Button grade im Zustand "runtergedrückt" steht
@@ -32,8 +32,8 @@ protected:
 public:
 	GuiButton();
 	virtual ~GuiButton();
-    
-    Graphic* getGraphicPressed() const {
+
+    PlainGraphic* getGraphicPressed() const {
         return graphicPressed;
     }
 
@@ -41,7 +41,7 @@ public:
      * Setzt die Grafik für das Element, wenn der Button gedrückt ist. Der Destruktur räumt die Grafik am Ende weg.
      * @param graphic frisch geladene Grafik, die verwendet werden soll
      */
-    void setGraphicPressed(Graphic* graphicPressed) {
+    void setGraphicPressed(PlainGraphic* graphicPressed) {
         this->graphicPressed = graphicPressed;
     }
     
