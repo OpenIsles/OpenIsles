@@ -69,6 +69,12 @@ public:
     static MapCoordinate debugAStar_destination;
 
     /**
+     * @brief (nur zu Debugzwecken einkompiliert) Wenn gesetzt, wird die Route auf den Einzugsbereichs dieses Gebäudes
+     * restringiert.
+     */
+    static Building* debugAStar_buildingToUseCatchmentArea;
+
+    /**
      * @brief (nur zu Debugzwecken einkompiliert) Route, die visualisiert werden soll oder nullptr, wenn noch keine
      * Route vorliegt
      */
@@ -80,9 +86,12 @@ public:
      * @brief Berechnet eine Route von einer Kachel der Karte zu einer anderen.
      * @param source Ausgangspunkt
      * @param destination Ziel
+     * @param buildingToUseCatchmentArea Zeiger auf ein Gebäude. Wenn gesetzt, dürfen für die Route nur Kacheln benutzt
+     *                                   werden, die sich im Einzugsbereich dieses Gebäudes befinden. Wird nullptr
+     *                                   verwendet, so dürfen für die Route beliebige Felder benutzt werden.
      * @return Zeiger auf die berechnete Route oder nullptr, wenn keine Route existiert
      */
-    static Route* findRoute(MapCoordinate source, MapCoordinate destination);
+    static Route* findRoute(MapCoordinate source, MapCoordinate destination, Building* buildingToUseCatchmentArea);
 
 private:
     /**
@@ -92,12 +101,16 @@ private:
      *                       oder nullptr, wenn kein Gebäude an dieser Stelle ist (IN)
      * @param destinationBuilding Zeiger auf das Gebäude, das im Zielpunkt der Route liegt
      *                            oder nullptr, wenn kein Gebäude an dieser Stelle ist (IN)
+     * @param buildingToUseCatchmentArea Zeiger auf ein Gebäude. Wenn gesetzt, dürfen für die Route nur Kacheln benutzt
+     *                                   werden, die sich im Einzugsbereich dieses Gebäudes befinden. Wird nullptr
+     *                                   verwendet, so dürfen für die Route beliebige Felder benutzt werden. (IN)
      * @param insideSourceOrDestinationBuilding erhält die Info, ob sich die angefragte Kachel im Start- oder
      *                                          Zielgebäude (wenn gesetzt) befindet. (OUT)
      * @return true wenn die Kachel betreten werden darf, sonst false
      */
     static bool isTileWalkable(MapCoordinate mapCoordinate, Building* sourceBuilding,
-                               Building* destinationBuilding, bool& insideSourceOrDestinationBuilding);
+                               Building* destinationBuilding, Building* buildingToUseCatchmentArea,
+                               bool& insideSourceOrDestinationBuilding);
 
 };
 

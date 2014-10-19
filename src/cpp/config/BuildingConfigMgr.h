@@ -50,10 +50,11 @@ struct BuildingConfig {
      * 
      * Um das Rechteck korrekt anzuwenden, muss dieses symmetrisch um die Gebäudemitte angewandt werden.
      * Bsp: Ein 2x2-Gebäude mit einem 8x4-Einzugsbereich.
-     * 
+     *
+     * <pre>
      * Richtig:                            Falsch:
-     * -------------------------------     -------------------------------     
-     * | | | | | | | | | | | | | | | |     | | | | | | | | | | | | | | | |     
+     * -------------------------------     -------------------------------
+     * | | | | | | | | | | | | | | | |     | | | | | | | | | | | | | | | |
      * ------=================--------     -------------------------------
      * | | | I | | | | | | | I | | | |     | | | | | | | | | | | | | | | |
      * ------I---------------I--------     --------=================------
@@ -64,8 +65,9 @@ struct BuildingConfig {
      * | | | I | | | | | | | I | | | |     | | | | I | | | | | | | I | | |
      * ------=================--------     --------I---------------I------
      * | | | | | | | | | | | | | | | |     | | | | I | | | | | | | I | | |
-     * -------------------------------     --------=================------   
-     * 
+     * -------------------------------     --------=================------
+     * </pre>
+     *
      * Der Einzugsbereich muss desweiteren folgende Bedingungen erfüllen, damit die Anwendung korrekt funktioniert:
      * - Es darf keine Leerzeile/-spalte geben. Das Rechteck muss so klein wie möglich gewählt sein.
      * - Der Einzugsbereich darf nicht nach innen gewölbt sein. Nur runde oder rechteckige Formen sind erlaubt.

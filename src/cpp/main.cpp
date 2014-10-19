@@ -285,11 +285,22 @@ int main(int argc, char** argv) {
         }
 
 #ifdef DEBUG_A_STAR
+        std::string buildingToUseCatchmentAreaString;
+        if (AStar::debugAStar_buildingToUseCatchmentArea != nullptr) {
+            int mapX, mapY;
+            AStar::debugAStar_buildingToUseCatchmentArea->getMapCoords(mapX, mapY);
+
+            buildingToUseCatchmentAreaString = "(" + std::to_string(mapX) + ", " + std::to_string(mapY) + ")";
+        } else {
+            buildingToUseCatchmentAreaString = "nullptr";
+        }
+
         debugOutput[5] = "debugAStar: source = (" +
             std::to_string(AStar::debugAStar_source.mapX) + ", " +
             std::to_string(AStar::debugAStar_source.mapY) + "), destination = (" +
             std::to_string(AStar::debugAStar_destination.mapX) + ", " +
-            std::to_string(AStar::debugAStar_destination.mapY) + ")";
+            std::to_string(AStar::debugAStar_destination.mapY) + "), catchmentAreaBuilding = " +
+            buildingToUseCatchmentAreaString;
 #endif // DEBUG_A_STAR
 #endif // DEBUG
 

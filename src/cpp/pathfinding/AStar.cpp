@@ -1,20 +1,23 @@
 #include <list>
 #include <map>
 #include <set>
+#include "config/BuildingConfigMgr.h"
 #include "game/Game.h"
 #include "pathfinding/AStar.h"
 
 // Aus main.cpp importiert
+extern BuildingConfigMgr* buildingConfigMgr;
 extern Game* game;
 
 #ifdef DEBUG_A_STAR
 MapCoordinate AStar::debugAStar_source = MapCoordinate(-1, -1);
 MapCoordinate AStar::debugAStar_destination = MapCoordinate(-1, -1);
+Building* AStar::debugAStar_buildingToUseCatchmentArea = nullptr;
 Route* AStar::debugAStar_route = nullptr;
 #endif
 
 
-Route* AStar::findRoute(MapCoordinate source, MapCoordinate destination) {
+Route* AStar::findRoute(MapCoordinate source, MapCoordinate destination, Building* buildingToUseCatchmentArea) {
     Map* map = game->getMap();
 
     // Ermitteln, aus und in welches Gebäude wir die Route berechnen wollen. Dies ist optional, eine Route muss nicht
@@ -89,7 +92,8 @@ Route* AStar::findRoute(MapCoordinate source, MapCoordinate destination) {
                 // wird einfach ignoriert.
                 bool insideSourceOrDestinationBuilding;
                 if (!isTileWalkable(successorMapCoordinate, sourceBuilding,
-                                    destinationBuilding, insideSourceOrDestinationBuilding)) {
+                                    destinationBuilding, buildingToUseCatchmentArea,
+                                    insideSourceOrDestinationBuilding)) {
                     continue;
                 }
 
@@ -102,13 +106,15 @@ Route* AStar::findRoute(MapCoordinate source, MapCoordinate destination) {
 
                     MapCoordinate mapCoordinateNextTo1(
                         currentNode.mapCoordinate.mapX, currentNode.mapCoordinate.mapY + mapYOffset);
-                    if (!isTileWalkable(mapCoordinateNextTo1, sourceBuilding, destinationBuilding, unusedVar)) {
+                    if (!isTileWalkable(mapCoordinateNextTo1, sourceBuilding, destinationBuilding,
+                                        buildingToUseCatchmentArea, unusedVar)) {
                         continue;
                     }
 
                     MapCoordinate mapCoordinateNextTo2(
                         currentNode.mapCoordinate.mapX + mapXOffset, currentNode.mapCoordinate.mapY);
-                    if (!isTileWalkable(mapCoordinateNextTo2, sourceBuilding, destinationBuilding, unusedVar)) {
+                    if (!isTileWalkable(mapCoordinateNextTo2, sourceBuilding, destinationBuilding,
+                                        buildingToUseCatchmentArea, unusedVar)) {
                         continue;
                     }
                 }
@@ -202,20 +208,24 @@ Route* AStar::findRoute(MapCoordinate source, MapCoordinate destination) {
 }
 
 bool AStar::isTileWalkable(MapCoordinate mapCoordinate, Building* sourceBuilding,
-                           Building* destinationBuilding, bool& insideSourceOrDestinationBuilding) {
+                           Building* destinationBuilding, Building* buildingToUseCatchmentArea,
+                           bool& insideSourceOrDestinationBuilding) {
 
     Map* map = game->getMap();
 
+    // Kachel überprüfen
     MapTile* mapTile = map->getMapTileAt(mapCoordinate.mapX, mapCoordinate.mapY);
     if (mapTile == nullptr) {
         return false; // außerhalb der Karte
     }
 
+    // Gelände prüfen, kann man darf laufen?
     // TODO aktuell darf nur auf Grass und Grass2 gebaut werden. Später muss das das Gebäude wissen, wo. Refactoring notwendig, da Codedopplung.
     if (mapTile->tileGraphicIndex != 2 && mapTile->tileGraphicIndex != 7) {
         return false; // nur auf Grass und Grass2 darf man laufen
     }
 
+    // Steht ein Gebäude im Weg?
     insideSourceOrDestinationBuilding = false;
     if (mapTile->mapObject != nullptr) {
         Building* building = dynamic_cast<Building*>(mapTile->mapObject);
@@ -225,6 +235,13 @@ bool AStar::isTileWalkable(MapCoordinate mapCoordinate, Building* sourceBuilding
             } else {
                 return false; // anderes Gebäude, Kachel nicht betretbar
             }
+        }
+    }
+
+    // Einschränkung durch Einzugsbereich?
+    if (buildingToUseCatchmentArea != nullptr) {
+        if (!buildingToUseCatchmentArea->isInsideCatchmentArea(mapCoordinate.mapX, mapCoordinate.mapY)) {
+            return false;
         }
     }
 

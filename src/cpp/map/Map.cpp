@@ -485,15 +485,15 @@ void Map::drawCatchmentArea(Structure* structure) {
     SDL_SetRenderDrawColor(renderer, 0xc8, 0xaf, 0x37, 255);
 
     const BuildingConfig* buildingConfig = buildingConfigMgr->getConfig(structure->getStructureType());
-    const RectangleData<char>* catchmentAreaData = buildingConfig->getCatchmentArea();
-    if (catchmentAreaData != nullptr) {
-        for (int y = 0; y < catchmentAreaData->height; y++) {
-            for (int x = 0; x < catchmentAreaData->width; x++) {
+    const RectangleData<char>* catchmentArea = buildingConfig->getCatchmentArea();
+    if (catchmentArea != nullptr) {
+        for (int y = 0; y < catchmentArea->height; y++) {
+            for (int x = 0; x < catchmentArea->width; x++) {
                 int mapX, mapY, mapWidth, mapHeight;
                 structure->getMapCoords(mapX, mapY, mapWidth, mapHeight);
 
-                mapX += x - (catchmentAreaData->width - mapWidth) / 2;
-                mapY += y - (catchmentAreaData->height - mapHeight) / 2;
+                mapX += x - (catchmentArea->width - mapWidth) / 2;
+                mapY += y - (catchmentArea->height - mapHeight) / 2;
 
                 int screenX, screenY;
                 MapUtils::mapToScreenCoords(mapX, mapY, screenX, screenY);
@@ -504,7 +504,7 @@ void Map::drawCatchmentArea(Structure* structure) {
                 // TODO die String-'1'er ersetzen durch echte 1en.
 
                 // Oben rechts
-                if (catchmentAreaData->getData(x, y - 1, '0') == '0' && catchmentAreaData->getData(x, y, '0') == '1') {
+                if (catchmentArea->getData(x, y - 1, '0') == '0' && catchmentArea->getData(x, y, '0') == '1') {
                     SDL_RenderDrawLine(renderer,
                             (screenX + GraphicsMgr::TILE_WIDTH_HALF) / screenZoom, screenY / screenZoom,
                             (screenX + GraphicsMgr::TILE_WIDTH) / screenZoom,
@@ -512,14 +512,14 @@ void Map::drawCatchmentArea(Structure* structure) {
                 }
 
                 // Oben links
-                if (catchmentAreaData->getData(x - 1, y, '0') == '0' && catchmentAreaData->getData(x, y, '0') == '1') {
+                if (catchmentArea->getData(x - 1, y, '0') == '0' && catchmentArea->getData(x, y, '0') == '1') {
                     SDL_RenderDrawLine(renderer,
                             screenX / screenZoom, (screenY + GraphicsMgr::TILE_HEIGHT_HALF) / screenZoom,
                             (screenX + GraphicsMgr::TILE_WIDTH_HALF) / screenZoom, screenY / screenZoom);
                 }
 
                 // Unten rechts
-                if (catchmentAreaData->getData(x, y, '0') == '1' && catchmentAreaData->getData(x + 1, y, '0') == '0') {
+                if (catchmentArea->getData(x, y, '0') == '1' && catchmentArea->getData(x + 1, y, '0') == '0') {
                     SDL_RenderDrawLine(renderer,
                             (screenX + GraphicsMgr::TILE_WIDTH_HALF) / screenZoom,
                             (screenY + GraphicsMgr::TILE_HEIGHT) / screenZoom,
@@ -528,7 +528,7 @@ void Map::drawCatchmentArea(Structure* structure) {
                 }
 
                 // Unten links
-                if (catchmentAreaData->getData(x, y, '0') == '1' && catchmentAreaData->getData(x, y + 1, '0') == '0') {
+                if (catchmentArea->getData(x, y, '0') == '1' && catchmentArea->getData(x, y + 1, '0') == '0') {
                     SDL_RenderDrawLine(renderer,
                             screenX / screenZoom, (screenY + GraphicsMgr::TILE_HEIGHT_HALF) / screenZoom,
                             (screenX + GraphicsMgr::TILE_WIDTH_HALF) / screenZoom,
