@@ -142,6 +142,33 @@ GuiMgr::GuiMgr() {
 }
 
 GuiMgr::~GuiMgr() {
+    // Grafiken wieder wegräumen. Der Konstruktur hat sie alle direkt geladen.
+    // TODO Die Grafiken könnte man alle schön in den GraphicsMgr packen, dann muss man hier den Aufwand nicht betreiben
+    delete ((GuiStaticElement*) findElement(GUI_ID_PANEL))->getGraphic();
+    delete ((GuiStaticElement*) findElement(GUI_ID_STATUS_BAR))->getGraphic();
+
+    for (int i = 0; i < 4; i++) {
+        delete ((GuiPushButton*) findElement(GUI_ID_PANEL_SWITCH_PUSH_BUTTON_BASE + i))->getGraphic();
+        delete ((GuiPushButton*) findElement(GUI_ID_PANEL_SWITCH_PUSH_BUTTON_BASE + i))->getGraphicPressed();
+
+        delete ((GuiPushButton*) findElement(GUI_ID_ADD_BUILDING_PUSH_BUTTON_BASE + i))->getGraphic();
+        delete ((GuiPushButton*) findElement(GUI_ID_ADD_BUILDING_PUSH_BUTTON_BASE + i))->getGraphicPressed();
+    }
+
+    delete ((GuiPushButton*) findElement(GUI_ID_MUSIC_PUSH_BUTTON))->getGraphic();
+    delete ((GuiPushButton*) findElement(GUI_ID_MUSIC_PUSH_BUTTON))->getGraphicPressed();
+
+#ifdef DEBUG
+    // Testzeugs-Grafiken wieder wegräumen
+    delete ((GuiButton*) findElement(GUI_ID_TEST_BUTTON1))->getGraphic();
+    delete ((GuiButton*) findElement(GUI_ID_TEST_BUTTON1))->getGraphicPressed();
+    delete ((GuiButton*) findElement(GUI_ID_TEST_BUTTON2))->getGraphic();
+    delete ((GuiButton*) findElement(GUI_ID_TEST_BUTTON2))->getGraphicPressed();
+    delete ((GuiPushButton*) findElement(GUI_ID_TEST_PUSH_BUTTON))->getGraphic();
+    delete ((GuiPushButton*) findElement(GUI_ID_TEST_PUSH_BUTTON))->getGraphicPressed();
+#endif
+
+    // GUI-Elemente wegräumen
     for (auto iter = identifierMap.cbegin(); iter != identifierMap.cend(); iter++) {
 		GuiBase* guiElement = iter->second;
         delete guiElement;
@@ -334,8 +361,8 @@ void GuiMgr::initBuildGui() {
 
         // Button für die Gruppe
         GuiPushButton* addBuildingPushButton = new GuiPushButton();
-        addBuildingPushButton->setGraphic(new PlainGraphic(buildingGroups[groupIndex].graphicFilename)); // TODO über GraphicsMgr abwickeln, aktuell Memory-Leak
-        addBuildingPushButton->setGraphicPressed(new PlainGraphic(buildingGroups[groupIndex].graphicPressedFilename)); // TODO über GraphicsMgr abwickeln, aktuell Memory-Leak
+        addBuildingPushButton->setGraphic(new PlainGraphic(buildingGroups[groupIndex].graphicFilename));
+        addBuildingPushButton->setGraphicPressed(new PlainGraphic(buildingGroups[groupIndex].graphicPressedFilename));
         addBuildingPushButton->setCoords(7 + groupIndex*55, 370, 52, 64);
         addBuildingPushButton->setOnClickFunction([this, groupIndex ]() {
             bool buttonActive = ((GuiPushButton*) findElement(GUI_ID_ADD_BUILDING_PUSH_BUTTON_BASE + groupIndex))->isActive();

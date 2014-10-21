@@ -30,6 +30,8 @@ Game::~Game() {
 		delete colony;
 	}
 	colonies.clear();
+
+    delete map;
 }
 
 Colony* Game::foundNewColony(Player* player, Isle* isle) {

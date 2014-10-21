@@ -103,6 +103,7 @@ GraphicsMgr::~GraphicsMgr() {
         }
 	}
 	delete[] goodsIcons;
+    delete[] goodsMarketplaceIcons;
     
     for (int i = 0; i < OtherGraphic::MAX_GRAPHIC; i++) {
         if (otherGraphics[i] != nullptr) {
@@ -110,6 +111,13 @@ GraphicsMgr::~GraphicsMgr() {
 		}
 	}
 	delete[] otherGraphics;
+
+    for (int i = 0; i < AnimationType::MAX_ANIMATION; i++) {
+        if (animations[i] != nullptr) {
+            delete animations[i];
+        }
+    }
+    delete[] animations;
 }
 
 void GraphicsMgr::loadTiles() {

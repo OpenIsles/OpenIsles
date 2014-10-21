@@ -641,7 +641,6 @@ void Map::clearMap() {
     selectedMapObject = nullptr;
     
     // Map-Objekte wegräumen
-	// TODO sollte wohl synchronisiert werden
 	for (auto iter = mapObjects.cbegin(); iter != mapObjects.cend(); iter++) {
 		MapObject* mapObject = *iter;
 		delete mapObject;
@@ -664,6 +663,10 @@ void Map::clearMap() {
     }
 
     // Inseln wegräumen
+    for (auto iter = isles.cbegin(); iter != isles.cend(); iter++) {
+        Isle* isle = *iter;
+        delete isle;
+    }
     isles.clear();
     
     // Minimap-Texture wegräumen
