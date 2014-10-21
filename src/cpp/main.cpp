@@ -243,23 +243,24 @@ int main(int argc, char** argv) {
         // Position des Mauszeigers holen
         SDL_GetMouseState(&mouseCurrentX, &mouseCurrentY);
 
+        int screenOffsetX = map->getScreenOffsetX();
+        int screenOffsetY = map->getScreenOffsetY();
+        int screenZoom = map->getScreenZoom();
+
+        int screenX, screenY;
+        screenX = (mouseCurrentX * screenZoom) + screenOffsetX;
+        screenY = (mouseCurrentY * screenZoom) + screenOffsetY;
+        MapUtils::screenToMapCoords(screenX, screenY, mouseCurrentMapX, mouseCurrentMapY);
+
 #ifdef DEBUG
 		// Debug-Infos vorbereiten, damit wir sie später einfach nur ausgeben können
 		debugOutput[0] = "FPS: average = " + std::to_string(fpsCounter->getFpsAvg()) + 
                 ", current = " + std::to_string(fpsCounter->getFpsCurrent());
         
-        int screenOffsetX = map->getScreenOffsetX();
-        int screenOffsetY = map->getScreenOffsetY();
-        int screenZoom = map->getScreenZoom();
-        debugOutput[1] = "Screen: offset = (" + 
+        debugOutput[1] = "Screen: offset = (" +
                 std::to_string(screenOffsetX) + ", " + std::to_string(screenOffsetY) + "), zoom = " +
                 std::to_string(screenZoom);
-        
-        int screenX, screenY;
-        screenX = (mouseCurrentX * screenZoom) + screenOffsetX;
-        screenY = (mouseCurrentY * screenZoom) + screenOffsetY;
-        MapUtils::screenToMapCoords(screenX, screenY, mouseCurrentMapX, mouseCurrentMapY);
-        
+
         debugOutput[2] = "mouse = (" + 
                 std::to_string(mouseCurrentX) + ", " + std::to_string(mouseCurrentY) + "), map = (" +
                 std::to_string(mouseCurrentMapX) + ", " + std::to_string(mouseCurrentMapY) + "), screen = (" +
