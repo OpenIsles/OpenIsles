@@ -56,28 +56,28 @@ void GuiSelectedBuildingWidget::renderElement(SDL_Renderer* renderer) {
         // input + input2 -> output
 
         GuiUtils::drawGoodsBox(windowX + 29, productionY,
-            productionSlots->input.goodsType, productionSlots->input.inventory);
+            productionSlots->input.goodsType, productionSlots->input.inventory, -1);
         graphicsMgr->getOtherGraphic(OtherGraphic::PRODUCTION_PLUS)->drawAt(windowX + 75, productionY);
         GuiUtils::drawGoodsBox(windowX + 90, productionY,
-            productionSlots->input2.goodsType, productionSlots->input2.inventory);
+            productionSlots->input2.goodsType, productionSlots->input2.inventory, -1);
         graphicsMgr->getOtherGraphic(OtherGraphic::PRODUCTION_ARROW)->drawAt(windowX + 136, productionY);
         GuiUtils::drawGoodsBox(windowX + 150, productionY,
-            productionSlots->output.goodsType, productionSlots->output.inventory);
+            productionSlots->output.goodsType, productionSlots->output.inventory, -1);
     }
     else if (productionSlots->input.isUsed()) {
         // input -> output
 
         GuiUtils::drawGoodsBox(windowX + 60, productionY,
-            productionSlots->input.goodsType, productionSlots->input.inventory);
+            productionSlots->input.goodsType, productionSlots->input.inventory, -1);
         graphicsMgr->getOtherGraphic(OtherGraphic::PRODUCTION_ARROW)->drawAt(windowX + 106, productionY);
         GuiUtils::drawGoodsBox(windowX + 120, productionY,
-            productionSlots->output.goodsType, productionSlots->output.inventory);
+            productionSlots->output.goodsType, productionSlots->output.inventory, -1);
     }
     else if (productionSlots->output.isUsed()) {
         // output
 
         GuiUtils::drawGoodsBox(windowX + 90, productionY,
-            productionSlots->output.goodsType, productionSlots->output.inventory);
+            productionSlots->output.goodsType, productionSlots->output.inventory, -1);
     }
 
     // TODO Auslastung

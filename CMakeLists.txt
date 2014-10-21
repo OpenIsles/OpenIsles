@@ -29,6 +29,7 @@ set(SOURCE_FILES
 	src/cpp/gui/FontMgr.cpp
 	src/cpp/gui/GuiAddBuildingWidget.cpp
 	src/cpp/gui/GuiButton.cpp
+	src/cpp/gui/GuiColonyGoodsWidget.cpp
 	src/cpp/gui/GuiMgr.cpp
 	src/cpp/gui/GuiPushButton.cpp
 	src/cpp/gui/GuiSelectedBuildingWidget.cpp

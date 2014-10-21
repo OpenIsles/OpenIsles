@@ -1,6 +1,7 @@
 #include "game/Game.h"
 #include "gui/GuiAddBuildingWidget.h"
 #include "gui/GuiButton.h"
+#include "gui/GuiColonyGoodsWidget.h"
 #include "gui/GuiMgr.h"
 #include "gui/GuiPushButton.h"
 #include "gui/GuiSelectedBuildingWidget.h"
@@ -354,6 +355,11 @@ void GuiMgr::initBuildGui() {
     GuiSelectedBuildingWidget* selectedBuildingWidget = new GuiSelectedBuildingWidget();
     registerElement(GUI_ID_SELECTED_BUILDING_WIDGET, selectedBuildingWidget);
     findElement(GUI_ID_PANEL_BUILD)->addChildElement(selectedBuildingWidget);
+
+    // Warenanzeige der Kolonie, wenn Marktplatz oder Kontor ausgewählt ist
+    GuiColonyGoodsWidget* colonyGoodsWidget = new GuiColonyGoodsWidget();
+    registerElement(GUI_ID_COLONY_GOODS_WIDGET, colonyGoodsWidget);
+    findElement(GUI_ID_PANEL_BUILD)->addChildElement(colonyGoodsWidget);
 }
 
 void GuiMgr::registerElement(int identifier, GuiBase* guiElement) {

@@ -62,23 +62,23 @@ void GuiAddBuildingWidget::renderElement(SDL_Renderer* renderer) {
     if (buildingProduction->input2.isUsed()) {
         // input + input2 -> output
 
-        GuiUtils::drawGoodsBox(windowX + 29, productionY, buildingProduction->input.goodsType, -1);
+        GuiUtils::drawGoodsBox(windowX + 29, productionY, buildingProduction->input.goodsType, -1, -1);
         graphicsMgr->getOtherGraphic(OtherGraphic::PRODUCTION_PLUS)->drawAt(windowX + 75, productionY);
-        GuiUtils::drawGoodsBox(windowX + 90, productionY, buildingProduction->input2.goodsType, -1);
+        GuiUtils::drawGoodsBox(windowX + 90, productionY, buildingProduction->input2.goodsType, -1, -1);
         graphicsMgr->getOtherGraphic(OtherGraphic::PRODUCTION_ARROW)->drawAt(windowX + 136, productionY);
-        GuiUtils::drawGoodsBox(windowX + 150, productionY, buildingProduction->output.goodsType, -1);
+        GuiUtils::drawGoodsBox(windowX + 150, productionY, buildingProduction->output.goodsType, -1, -1);
     }
     else if (buildingProduction->input.isUsed()) {
         // input -> output
 
-        GuiUtils::drawGoodsBox(windowX + 60, productionY, buildingProduction->input.goodsType, -1);
+        GuiUtils::drawGoodsBox(windowX + 60, productionY, buildingProduction->input.goodsType, -1, -1);
         graphicsMgr->getOtherGraphic(OtherGraphic::PRODUCTION_ARROW)->drawAt(windowX + 106, productionY);
-        GuiUtils::drawGoodsBox(windowX + 120, productionY, buildingProduction->output.goodsType, -1);
+        GuiUtils::drawGoodsBox(windowX + 120, productionY, buildingProduction->output.goodsType, -1, -1);
     }
     else if (buildingProduction->output.isUsed()) {
         // output
 
-        GuiUtils::drawGoodsBox(windowX + 90, productionY, buildingProduction->output.goodsType, -1);
+        GuiUtils::drawGoodsBox(windowX + 90, productionY, buildingProduction->output.goodsType, -1, -1);
     }
 
     // Baukosten
