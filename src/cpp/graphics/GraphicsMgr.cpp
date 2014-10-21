@@ -48,6 +48,8 @@ GraphicsMgr::GraphicsMgr() {
     goodsMarketplaceIcons = new PlainGraphic*[GoodsType::MAX_GOOD];
     memset(goodsMarketplaceIcons, 0, GoodsType::MAX_GOOD * sizeof(PlainGraphic*));
 
+    goodsMarketplaceIcons[GoodsType::WOOL] = new PlainGraphic("data/img/goods/marketplace-icon/wool.png");
+    goodsMarketplaceIcons[GoodsType::CLOTH] = new PlainGraphic("data/img/goods/marketplace-icon/cloth.png");
     goodsMarketplaceIcons[GoodsType::TOOLS] = new PlainGraphic("data/img/goods/marketplace-icon/tools.png");
     goodsMarketplaceIcons[GoodsType::WOOD] = new PlainGraphic("data/img/goods/marketplace-icon/wood.png");
     goodsMarketplaceIcons[GoodsType::BRICKS] = new PlainGraphic("data/img/goods/marketplace-icon/bricks.png");

@@ -11,9 +11,11 @@ enum GoodsType : char {
     NO_GOODS = -1,
 
     // Güter
-    TOOLS = 0,
-    WOOD = 1,
-    BRICKS = 2,
+    WOOL = 0,
+    CLOTH,
+    TOOLS,
+    WOOD,
+    BRICKS,
 
     // Spezialwert am Ende, damit wir wissen, wie groß wir Arrays etc. machen müssen
     MAX_GOOD
