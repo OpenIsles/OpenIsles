@@ -44,12 +44,27 @@ public:
     ~Animation() {}
 
     /**
-     * @brief Zeichnet ein Frame
+     * @return Anzahl der Frames in der Animation
+     */
+    unsigned int getFramesCount() const {
+        return framesCount;
+    }
+
+    /**
+     * @return FPS
+     */
+    double getFps() const {
+        return fps;
+    }
+
+/**
+     * @brief Zeichnet ein Frame skaliert
      * @param x x-Koordinate, wo hingezeichnet werden soll
      * @param y y-Koordinate, wo hingezeichnet werden soll
+     * @param scale Skalierungsfaktor
      * @param frame Index, welches Frame gezeichnet werden soll (0 bis framesCount-1)
      */
-    void drawFrameAt(int x, int y, unsigned int frame);
+    void drawFrameScaledAt(int x, int y, double scale, unsigned int frame);
 
 };
 

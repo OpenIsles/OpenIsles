@@ -180,7 +180,7 @@ public:
      * @brief Liefert das MapTile (Infos zu einer Kachel) an einer bestimmten Stelle zurück
      * @param mapX Map-X-Koordiante
      * @param mapY Map-Y-Koordiante
-     * @return Zeiger auf MapTile
+     * @return Zeiger auf MapTile oder nullptr, wenn die Koordinaten außerhalb der Karte sind
      */
 	MapTile* getMapTileAt(int mapX, int mapY) const;
 
@@ -221,7 +221,6 @@ public:
 	 * @brief Rendert die Karte.
 	 * @param renderer SDL-Renderer, auf den gezeichnet wird
 	 */
-	// TODO durch Graphics- oder Render-Manager abstrahieren, damit die Karte nicht die Grafiken kennen muss
 	void renderMap(SDL_Renderer* renderer);
     
     /**

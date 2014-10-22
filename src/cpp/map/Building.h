@@ -1,6 +1,7 @@
 #ifndef _BUILDING_H
 #define _BUILDING_H
 
+#include "economics/Carrier.h"
 #include "game/GoodsSlot.h"
 #include "map/Structure.h"
 
@@ -33,6 +34,16 @@ struct ProductionSlots {
  */
 class Building : public Structure {
 
+    friend class EconomicsMgr; // EconomicsMgr soll zum Bewegen des Trägers einfach zugreifen können
+    friend class Map; // Map soll zum Rendern des Trägers einfach zugreifen können
+
+private:
+    // TODO Aktuell hat jedes Gebäude bis zu einem Träger. Das muss später dynamisch nach Gebäudetyp sein.
+    /**
+     * @brief Träger, der zum Gebäude gehört
+     */
+    Carrier* carrier;
+
 public:
     /**
      * @brief Produktionsslots des Gebäudes
@@ -40,8 +51,14 @@ public:
     ProductionSlots productionSlots;
 
 public:
-    Building() {}
-    virtual ~Building() {}
+    Building() {
+        carrier = nullptr;
+    }
+    virtual ~Building() {
+        if (carrier != nullptr) {
+            delete carrier;
+        }
+    }
     
     /**
      * @brief Testet, ob eine bestimmte Kachel innerhalb des Einzugsgebiets des Gebäudes liegt

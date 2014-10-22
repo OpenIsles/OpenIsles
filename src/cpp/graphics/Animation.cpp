@@ -16,13 +16,13 @@ Animation::Animation(const char* filename, unsigned int framesCount, double fps)
     frameWidth = width / framesCount;
 }
 
-void Animation::drawFrameAt(int x, int y, unsigned int frame) {
+void Animation::drawFrameScaledAt(int x, int y, double scale, unsigned int frame) {
     if (frame < 0 || frame >= framesCount) {
         std::cerr << "Illegal frame " << frame << " for animation '" << filename << "'" << std::endl;
         throw new std::runtime_error("Illegal frame");
     }
 
     SDL_Rect rectSource = { (int)frame * frameWidth, 0, frameWidth, height };
-    SDL_Rect rectDestination = { x, y, frameWidth, height };
+    SDL_Rect rectDestination = { x, y, (int) (frameWidth * scale), (int) (height * scale) };
     SDL_RenderCopy(renderer, texture, &rectSource, &rectDestination);
 }

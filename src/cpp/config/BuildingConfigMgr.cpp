@@ -1,6 +1,6 @@
 #include <string.h>
-#include <game/Colony.h>
 #include "config/BuildingConfigMgr.h"
+#include "game/Colony.h"
 #include "map/Structure.h"
 
 

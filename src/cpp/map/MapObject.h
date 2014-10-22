@@ -46,6 +46,11 @@ public:
 	virtual ~MapObject() {
 	}
 
+    void setMapCoords(int mapX, int mapY) {
+        this->mapX = mapX;
+        this->mapY = mapY;
+    }
+
 	void setMapCoords(int mapX, int mapY, int mapWidth, int mapHeight) {
 		this->mapX = mapX;
 		this->mapY = mapY;

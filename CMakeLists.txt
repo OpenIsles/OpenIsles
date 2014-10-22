@@ -17,6 +17,7 @@ pkg_search_module(SDL2_TTF REQUIRED SDL2_ttf>=2.0.0)
 set(SOURCE_FILES
     src/cpp/config/BuildingConfigMgr.cpp
     src/cpp/economics/EconomicsMgr.cpp
+    src/cpp/economics/Carrier.cpp
 	src/cpp/game/Colony.cpp
 	src/cpp/game/Game.cpp
 	src/cpp/game/GameIO.cpp

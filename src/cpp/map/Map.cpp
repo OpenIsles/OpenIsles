@@ -375,6 +375,41 @@ void Map::renderMap(SDL_Renderer* renderer) {
         }
     }
 
+    // Träger zeichnen
+    // TODO jetzt müssen wir doch wieder alle Map-Objekte durchloopen, weil die Träger nicht auf MapTile sind. Das sollte viel hübscher gemacht werden
+    for (auto iter = mapObjects.cbegin(); iter != mapObjects.cend(); iter++) {
+        MapObject* mapObject = *iter;
+        Building* building = dynamic_cast<Building*>(mapObject);
+        if (building == nullptr) {
+            continue;
+        }
+
+        Carrier* carrier = building->carrier;
+        if (carrier == nullptr) {
+            continue;
+        }
+
+        int mapX, mapY;
+        carrier->getMapCoords(mapX, mapY);
+
+        Animation* animation = graphicsMgr->getAnimation(CARRIER); // TODO später muss die verwendete Animation am Carrier hängen
+
+        int screenX, screenY;
+        MapUtils::mapToScreenCoords(mapX, mapY, screenX, screenY);
+
+        screenX += carrier->xOffsetInTile;
+        screenY += carrier->yOffsetInTile;
+
+        screenX -= screenOffsetX;
+        screenY -= screenOffsetY;
+
+        screenX /= screenZoom;
+        screenY /= screenZoom;
+
+        animation->drawFrameScaledAt(
+            screenX, screenY, (double) 1 / (double) screenZoom, (unsigned int) carrier->animationFrame);
+    }
+
     // structureBeingAdded gesetzt?
     if (structureBeingAdded != nullptr) {
         // Einzugsbereich jetzt malen, damit er oben drauf is

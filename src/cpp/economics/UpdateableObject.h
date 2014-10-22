@@ -1,6 +1,8 @@
 #ifndef _UPDATEABLE_OBJECT_H
 #define _UPDATEABLE_OBJECT_H
 
+#include <SDL.h>
+
 /**
  * @brief Basisklasse für Map-Objekte, die mittels einer Update-Funktion aktualisiert werden können.
  */

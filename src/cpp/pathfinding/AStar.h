@@ -3,6 +3,7 @@
 
 #include <list>
 
+class Building;
 
 /**
  * @brief Datenstruktur, die eine mapX- und mapY-Koordinate enthält
@@ -28,7 +29,9 @@ struct MapCoordinate {
     }
 
     /**
-     * @brief Konstruktur
+     * @brief Konstruktur, der direkt mapX/mapY-Koordinaten bekommt
+     * @param mapX X-Map-Koordiante
+     * @param mapY Y-Map-Koordiante
      */
     MapCoordinate(int mapX, int mapY) : mapX(mapX), mapY(mapY) {
     }
