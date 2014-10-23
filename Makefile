@@ -76,7 +76,7 @@ render-streets: $(SRC_DIRECTORY)/blender/streets/streets.blend
 # Gütersymbole                                                                                                         #
 ########################################################################################################################
 
-GOODS := bricks cloth tools wood wool
+GOODS := bricks cattle cloth tools wood wool
 
 define RENDER_GOODS_ICONS
 $(DATA_DIRECTORY)/img/goods/marketplace-icon/$(1).png $(DATA_DIRECTORY)/img/goods/icon/$(1).png: \
