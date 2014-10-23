@@ -1,3 +1,4 @@
+#include <cassert>
 #include <list>
 #include <map>
 #include <set>
@@ -205,6 +206,69 @@ Route* AStar::findRoute(MapCoordinate source, MapCoordinate destination, Buildin
     } while(currentMapCoord.mapX != -1);
 
     return route;
+}
+
+void AStar::cutRouteInsideBuildings(Route* route) {
+    Map* map = game->getMap();
+
+    // Erst von vorne
+    int hopsToDeleteFromFront = 0;
+    Building* buildingAtFront = nullptr;
+    for (auto iter = route->cbegin(); iter != route->cend(); iter++) {
+        MapCoordinate mapCoordinate = *iter;
+        MapTile* mapTile = map->getMapTileAt(mapCoordinate.mapX, mapCoordinate.mapY);
+        assert(mapTile != nullptr); // Route hätte nicht berechnet werden können, wenn außerhalb der Karte
+
+        Building* buildingThere = dynamic_cast<Building*>(mapTile->mapObject);
+        if (buildingAtFront == nullptr) { // Erster Routenknoten...
+            if (buildingThere == nullptr) {
+                break; // ... kein Gebäude, nix zu tun
+            } else {
+                buildingAtFront = buildingThere; // ... Gebäude merken
+            }
+        } else { // Weiterer Routenknoten...
+            if (buildingAtFront == buildingThere) {
+                hopsToDeleteFromFront++;
+            } else {
+                break; // andere Gebäude hier, fertig.
+            }
+        }
+    }
+
+    // Dann von hinten
+    int hopsToDeleteFromBack = 0;
+    Building* buildingAtBack = nullptr;
+    for (auto iter = route->crbegin(); iter != route->crend(); iter++) {
+        MapCoordinate mapCoordinate = *iter;
+        MapTile* mapTile = map->getMapTileAt(mapCoordinate.mapX, mapCoordinate.mapY);
+        assert(mapTile != nullptr); // Route hätte nicht berechnet werden können, wenn außerhalb der Karte
+
+        Building* buildingThere = dynamic_cast<Building*>(mapTile->mapObject);
+        if (buildingAtBack == nullptr) { // Erster Routenknoten...
+            if (buildingThere == nullptr) {
+                break; // ... kein Gebäude, nix zu tun
+            } else {
+                buildingAtBack = buildingThere; // ... Gebäude merken
+            }
+        } else { // Weiterer Routenknoten...
+            if (buildingAtBack == buildingThere) {
+                hopsToDeleteFromBack++;
+            } else {
+                break; // andere Gebäude hier, fertig.
+            }
+        }
+    }
+
+    assert(buildingAtFront == nullptr || buildingAtBack == nullptr ||
+           (buildingAtFront != buildingAtBack)); // Start- und Endgebäude dürfen nicht gleich sein
+
+    // Route entsprechend beschneiden
+    while (hopsToDeleteFromFront-- > 0) {
+        route->pop_front();
+    }
+    while (hopsToDeleteFromBack-- > 0) {
+        route->pop_back();
+    }
 }
 
 bool AStar::isTileWalkable(MapCoordinate mapCoordinate, Building* sourceBuilding,

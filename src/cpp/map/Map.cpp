@@ -418,15 +418,23 @@ void Map::renderMap(SDL_Renderer* renderer) {
     }
 
 #ifdef DEBUG_A_STAR
+    Route* routeToDraw = AStar::debugAStar_route;
+
+    // Wenn Gebäude ausgewählt -> Trägerroute anzeigen
+    const Building* selectedBuilding = dynamic_cast<const Building*>(getSelectedMapObject());
+    if (selectedBuilding != nullptr) {
+        routeToDraw = (selectedBuilding->carrier != nullptr) ? selectedBuilding->carrier->route : nullptr;
+    }
+
     // A*-Route zeichnen (nur bei Maximalzoom, dann sparen wir uns Berechnungen und der Code wird einfacher)
-    if (screenZoom == 1 && AStar::debugAStar_route != nullptr) {
+    if (screenZoom == 1 && routeToDraw != nullptr) {
         SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 
         int lastPointX = -1;
         int lastPointY = -1;
 
         int i = 1;
-        for (auto iter = AStar::debugAStar_route->cbegin(); iter != AStar::debugAStar_route->cend(); iter++) {
+        for (auto iter = routeToDraw->cbegin(); iter != routeToDraw->cend(); iter++) {
             MapCoordinate mapCoordinate = *iter;
 
             int screenX, screenY;

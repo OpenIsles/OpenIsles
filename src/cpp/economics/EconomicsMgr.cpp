@@ -134,6 +134,8 @@ FindBuildingToGetGoodsFromResult EconomicsMgr::findBuildingToGetGoodsFrom(Buildi
                 continue; // gibt keinen Weg dahin
             }
 
+            AStar::cutRouteInsideBuildings(route);
+
             // Juhuu! Dieses Gebäude kommt in Frage
             FindBuildingToGetGoodsFromResult result;
             result.building = buildingThere;

@@ -526,6 +526,7 @@ void GuiMgr::onEvent(SDL_Event& event) {
                 AStar::debugAStar_route = AStar::findRoute(
                     AStar::debugAStar_source, AStar::debugAStar_destination,
                     AStar::debugAStar_buildingToUseCatchmentArea);
+                AStar::cutRouteInsideBuildings(AStar::debugAStar_route);
             }
         }
 #endif

@@ -96,6 +96,36 @@ public:
      */
     static Route* findRoute(MapCoordinate source, MapCoordinate destination, Building* buildingToUseCatchmentArea);
 
+    /**
+     * @brief Kürzt ggf. eine gegebene Route, wenn an Start- und/oder Endpunkt ein Gebäude liegt und mehrere
+     * Routenschritte innerhalb desselben Gebäudes liegen. Die Route wird so verändert, dass nur genau eine Kachel
+     * des Gebäudes in der Route liegt.
+     *
+     * Beispiel:
+     * <pre>
+     * O------>                            Zielgebäude
+     * |    mapX                         |-------------|
+     * |                                 | (6)  |      |
+     * | mapY                            |-------------|
+     * v                                 | (5)  |      |
+     *                                   |-------------|
+     *                            (4)
+     *
+     *      Startgebäude    (3)
+     *     |-------------|
+     *     | (1)  |  (2) |
+     *     |-------------|
+     *     |      |      |
+     *     |-------------|
+     *
+     * </pre>
+     * Verwendet man die Map-Koordinaten eines Gebäudes als Start- und Endpunkte, ergibt sich obiges Beispiel.
+     * Diese Methode entfernt die Knoten (1) und (6) aus der Route.
+     *
+     * @param route Route, die bearbeitet wird
+     */
+    static void cutRouteInsideBuildings(Route* route);
+
 private:
     /**
      * @brief Prüft, ob eine Kachel betreten werden darf, d.h. als Knoten für den A*-Algorithmus betrachtet wird.
