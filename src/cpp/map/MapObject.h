@@ -20,16 +20,6 @@ protected:
 	 * @brief Größe des Objekts in Map-Koordinaten
 	 */
 	int mapWidth, mapHeight;
-
-	/**
-	 * @brief berechnete X-Screen-Koordinaten, an dem die Grafik gezeichnet werden muss
-	 */
-	int screenX, screenY;
-
-	/**
-	 * @brief Größe der Grafik
-	 */
-	int screenWidth, screenHeight;
     
     /**
      * @brief Spieler, dem das Objekt gehört, oder nullptr für spielerlose Objekte
@@ -70,25 +60,6 @@ public:
 		mapHeight = this->mapHeight;
 	}
 
-	void setScreenCoords(int screenX, int screenY, int screenWidth, int screenHeight) {
-		this->screenX = screenX;
-		this->screenY = screenY;
-		this->screenWidth = screenWidth;
-		this->screenHeight = screenHeight;
-	}
-    
-    void getScreenCoords(int& screenX, int& screenY) const {
-		screenX = this->screenX;
-		screenY = this->screenY;
-	}
-
-	void getScreenCoords(int& screenX, int& screenY, int& screenWidth, int& screenHeight) const {
-		screenX = this->screenX;
-		screenY = this->screenY;
-		screenWidth = this->screenWidth;
-		screenHeight = this->screenHeight;
-	}
-    
     /**
      * Ermittelt de Screen-Koordinaten des Mittelpunkts des Objekts
      * @param screenCenterX Referenz, die die X-Screen-Koordinate des Mittelpunkts empfängt

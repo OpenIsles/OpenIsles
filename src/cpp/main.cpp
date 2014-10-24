@@ -268,21 +268,13 @@ int main(int argc, char** argv) {
     
         if (map->getSelectedMapObject() != nullptr) {
             int mapX, mapY, mapWidth, mapHeight;
-            int screenX, screenY, screenWidth, screenHeight;
-            
             map->getSelectedMapObject()->getMapCoords(mapX, mapY, mapWidth, mapHeight);
-            map->getSelectedMapObject()->getScreenCoords(screenX, screenY, screenWidth, screenHeight);
             
             debugOutput[3] = "selectedMapObject on mapCoords (" + 
                     std::to_string(mapX) + ", " + std::to_string(mapY) + "), size = (" +
                     std::to_string(mapWidth) + ", " + std::to_string(mapHeight) + ")";
-            
-            debugOutput[4] = "selectedMapObject on screenCoords (" + 
-                    std::to_string(screenX) + ", " + std::to_string(screenY) + "), size = (" + 
-                    std::to_string(screenWidth) + ", " + std::to_string(screenHeight) + ")";
         } else {
             debugOutput[3] = "";
-            debugOutput[4] = "";
         }
 
 #ifdef DEBUG_A_STAR
@@ -296,7 +288,7 @@ int main(int argc, char** argv) {
             buildingToUseCatchmentAreaString = "nullptr";
         }
 
-        debugOutput[5] = "debugAStar: source = (" +
+        debugOutput[4] = "debugAStar: source = (" +
             std::to_string(AStar::debugAStar_source.mapX) + ", " +
             std::to_string(AStar::debugAStar_source.mapY) + "), destination = (" +
             std::to_string(AStar::debugAStar_destination.mapX) + ", " +

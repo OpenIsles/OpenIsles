@@ -284,7 +284,6 @@ void Map::renderMap(SDL_Renderer* renderer) {
             structureBeingAdded = new Structure();
             structureBeingAdded->setStructureType(structureType);
             structureBeingAdded->setMapCoords(mapX, mapY, graphic->getMapWidth(), graphic->getMapHeight());
-            structureBeingAdded->setScreenCoords(rect.x, rect.y, rect.w, rect.h);
             structureBeingAdded->setDrawingFlags(drawingFlags);
         }
     }
@@ -327,7 +326,7 @@ void Map::renderMap(SDL_Renderer* renderer) {
             Structure* structure = dynamic_cast<Structure*>(mapObject); // TODO nullptr sollte nicht passieren; später checken, wenn wir Bäume und sowas haben
             int drawingFlags = structure->getDrawingFlags();
 
-            StructureType structureType = structure->getStructureType();;
+            StructureType structureType = structure->getStructureType();
 
             // Sonderfall: Straße
             if (structureType == StructureType::STREET) {
@@ -605,14 +604,9 @@ void Map::addMapObject(MapObject* mapObject) {
 const Structure* Map::addStructure(int mapX, int mapY, StructureType structureType, Player* player) {
     MapObjectGraphic* graphic = graphicsMgr->getGraphicForStructure(structureType);
     
-	// Position in Screen-Koordinaten berechnen, an dem sich die Grafik befinden muss.
-    SDL_Rect rect;
-    MapUtils::mapToDrawScreenCoords(mapX, mapY, graphic, &rect);
-
 	// Objekt anlegen und in die Liste aufnehmen
 	Structure* structure = new Structure();
 	structure->setMapCoords(mapX, mapY, graphic->getMapWidth(), graphic->getMapHeight());
-	structure->setScreenCoords(rect.x, rect.y, graphic->getWidth(), graphic->getHeight());
 	structure->setStructureType(structureType);
     structure->setPlayer(player);
 
@@ -624,14 +618,9 @@ const Structure* Map::addStructure(int mapX, int mapY, StructureType structureTy
 const Building* Map::addBuilding(int mapX, int mapY, StructureType structureType, Player* player) {
     MapObjectGraphic* graphic = graphicsMgr->getGraphicForStructure(structureType);
     
-	// Position in Screen-Koordinaten berechnen, an dem sich die Grafik befinden muss.
-    SDL_Rect rect;
-    MapUtils::mapToDrawScreenCoords(mapX, mapY, graphic, &rect);
-
 	// Objekt anlegen
 	Building* building = new Building();
 	building->setMapCoords(mapX, mapY, graphic->getMapWidth(), graphic->getMapHeight());
-	building->setScreenCoords(rect.x, rect.y, graphic->getWidth(), graphic->getHeight());
 	building->setStructureType(structureType);
     building->setPlayer(player);
 
@@ -761,8 +750,17 @@ void Map::onClickInMap(int mouseX, int mouseY) {
 			continue;
 		}
 
-		int screenX, screenY, screenWidth, screenHeight;
-		building->getScreenCoords(screenX, screenY, screenWidth, screenHeight);
+        int mapX, mapY;
+        building->getMapCoords(mapX, mapY);
+        MapObjectGraphic* graphic = graphicsMgr->getGraphicForStructure(building->getStructureType());
+
+        SDL_Rect rect;
+        MapUtils::mapToDrawScreenCoords(mapX, mapY, graphic, &rect);
+
+        int screenX = rect.x;
+        int screenY = rect.y;
+        int screenWidth = graphic->getWidth();
+        int screenHeight = graphic->getHeight();
 
 		// Außerhalb der Boundary-Box des Objekt geklickt?
 		if (mouseAtScreenX < screenX) {
