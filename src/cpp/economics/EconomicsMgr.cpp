@@ -43,11 +43,10 @@ void EconomicsMgr::update(Structure* structure) {
             FindBuildingToGetGoodsFromResult result = findBuildingToGetGoodsFrom(building);
             if (result.building != nullptr) {
                 // Träger anlegen und zuweisen
-                int mapX, mapY;
-                building->getMapCoords(mapX, mapY);
+                MapCoordinate firstHopOnRoute = result.route->front();
 
-                Carrier* carrier = new Carrier(result.building, result.route, result.goods);
-                carrier->setMapCoords(mapX, mapY);
+                Carrier* carrier = new Carrier(result.building, result.route, result.goods, true);
+                carrier->setMapCoords(firstHopOnRoute.mapX, firstHopOnRoute.mapY);
 
                 building->carrier = carrier;
             }
@@ -58,15 +57,106 @@ void EconomicsMgr::update(Structure* structure) {
             Carrier* carrier = building->carrier;
             Animation* animation = graphicsMgr->getAnimation(CARRIER); // TODO später muss die verwendete Animation am Carrier hängen
 
-            // Bewegen
+            // Animieren
             carrier->animationFrame += (double) ticksPastSinceLastUpdate / 1000 * animation->getFps();
             while (carrier->animationFrame >= animation->getFramesCount()) {
                 carrier->animationFrame -= animation->getFramesCount();
             }
-            // TODO Position entsprechend der Route ändern
+
+            // Bewegen
+            double speed = 0.75; // erstmal fix, die Animation muss man eh nochmal anpassen, weil das Männchen mehr schwebt, als läuft
+
+            MapCoordinate nextHopOnRoute = *carrier->nextHopInRoute;
+            double stepX = speed * (nextHopOnRoute.mapX - carrier->mapX);
+            double stepY = speed * (nextHopOnRoute.mapY - carrier->mapY);
+
+            // TODO Wir machen einen minimalen Fehler, dass wir bei Erreichen der nächsten Kachel, wieder auf 0 setzen
+            // und nicht versuchen, den "Rest" der vergangenen Zeit anzuwenden und ein Stückchen weiterzulaufen.
+
+            carrier->mapXFraction += (double) ticksPastSinceLastUpdate / 1000 * stepX;
+            carrier->mapYFraction += (double) ticksPastSinceLastUpdate / 1000 * stepY;
+            bool hopReached = false;
+
+            if (carrier->mapXFraction <= -1) {
+                carrier->mapXFraction = 0;
+                carrier->mapX--;
+                hopReached = true;
+            } else if (carrier->mapXFraction >= 1) {
+                carrier->mapXFraction = 0;
+                carrier->mapX++;
+                hopReached = true;
+            }
+            if (carrier->mapYFraction <= -1) {
+                carrier->mapYFraction = 0;
+                carrier->mapY--;
+                hopReached = true;
+            } else if (carrier->mapYFraction >= 1) {
+                carrier->mapYFraction = 0;
+                carrier->mapY++;
+                hopReached = true;
+            }
+
+            // Wir haben den nächsten Schritt in der Route erreicht
+            if (hopReached) {
+                carrier->nextHopInRoute++;
+
+                // Route fertig?
+                if (carrier->nextHopInRoute == carrier->route->cend()) {
+                    MapTile* mapTile = game->getMap()->getMapTileAt(carrier->mapX, carrier->mapY);
+                    Building* targetBuilding = dynamic_cast<Building*>(mapTile->mapObject);
+
+                    // targetBuilding == nullptr -> Nutzer hat die Map inzwischen geändert und das Zielgebäude abgerissen
+                    // Der Träger verschwindet einfach
+                    if (targetBuilding == nullptr) {
+                        delete carrier;
+                        building->carrier = nullptr;
+                    }
+
+                    // Das war Hinweg -> Waren aufladen und Träger auf Rückweg schicken
+                    else if (carrier->onOutboundTrip) {
+                        // Waren aufladen
+                        int goodsWeCollect = (int) targetBuilding->productionSlots.output.inventory;
+                        targetBuilding->productionSlots.output.inventory -= goodsWeCollect;
+
+                        Route* route = carrier->route;
+                        Route* returnRoute = AStar::findRoute(route->back(), route->front(), building);
+
+                        delete carrier;
+                        building->carrier = nullptr;
+
+                        // Es kann sein, dass es keine Rückroute gibt, wenn der Nutzer inzwischen die Map verändert hat.
+                        // In diesem Fall hat er Pech gehabt, die Waren verschwinden mit dem Träger
+                        if (returnRoute != nullptr) {
+                            AStar::cutRouteInsideBuildings(returnRoute);
+
+                            MapCoordinate firstHopOnReturnRoute = returnRoute->front();
+
+                            Carrier* returnCarrier = new Carrier(
+                                building, returnRoute, targetBuilding->productionSlots.output.goodsType, false);
+                            returnCarrier->setMapCoords(firstHopOnReturnRoute.mapX, firstHopOnReturnRoute.mapY);
+                            returnCarrier->carriedGoods.inventory = goodsWeCollect;
+
+                            building->carrier = returnCarrier;
+                        }
+                    }
+
+                    // Das war Rückweg -> Waren ausladen und Träger zerstören
+                    else if (!carrier->onOutboundTrip) {
+                        // Gucken, in welchen Slot die Waren müssen
+                        if (building->productionSlots.input.goodsType == carrier->carriedGoods.goodsType) {
+                            building->productionSlots.input.increaseInventory(carrier->carriedGoods.inventory);
+                        }
+                        else if (building->productionSlots.input2.goodsType == carrier->carriedGoods.goodsType) {
+                            building->productionSlots.input2.increaseInventory(carrier->carriedGoods.inventory);
+                        }
+
+                        delete carrier;
+                        building->carrier = nullptr;
+                    }
+                }
+            }
         }
     }
-
 
     building->setLastUpdateTime(ticksNow);
 }

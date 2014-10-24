@@ -3,15 +3,19 @@
 enum GoodsType : char;
 
 
-Carrier::Carrier(Building* owningBuilding, Route* route, GoodsType goodsType) :
-    owningBuilding(owningBuilding), route(route) {
+Carrier::Carrier(Building* owningBuilding, Route* route, GoodsType goodsType, bool onOutboundTrip) :
+    owningBuilding(owningBuilding), route(route), onOutboundTrip(onOutboundTrip) {
 
     carriedGoods.goodsType = goodsType;
 
     // Animation initialisieren
-    xOffsetInTile = 0;
-    yOffsetInTile = 0;
+    mapXFraction = 0;
+    mapYFraction = 0;
     animationFrame = 0;
+
+    // Route initialisieren
+    nextHopInRoute = route->cbegin();
+    nextHopInRoute++;
 }
 
 Carrier::~Carrier() {

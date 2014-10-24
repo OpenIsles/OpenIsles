@@ -8,6 +8,11 @@ void MapUtils::mapToScreenCoords(int mapX, int mapY, int& screenX, int& screenY)
 	screenY = (mapX + mapY) * GraphicsMgr::TILE_HEIGHT_HALF;
 }
 
+void MapUtils::mapToScreenCoords(double mapX, double mapY, int& screenX, int& screenY) {
+    screenX = (int) ((mapX - mapY) * GraphicsMgr::TILE_WIDTH_HALF);
+    screenY = (int) ((mapX + mapY) * GraphicsMgr::TILE_HEIGHT_HALF);
+}
+
 void MapUtils::mapToScreenCoordsCenter(int mapX, int mapY, int& screenX, int& screenY) {
 	screenX = (mapX - mapY) * GraphicsMgr::TILE_WIDTH_HALF + GraphicsMgr::TILE_WIDTH_HALF;
 	screenY = (mapX + mapY) * GraphicsMgr::TILE_HEIGHT_HALF + GraphicsMgr::TILE_HEIGHT_HALF;
@@ -108,4 +113,15 @@ void MapUtils::mapToDrawScreenCoords(int mapX, int mapY, MapObjectGraphic* graph
     mapToScreenCoords(mapX, mapY, rect->x, rect->y);
 	rect->x -= graphic->getWidth() - (graphic->getMapWidth() + 1) * GraphicsMgr::TILE_WIDTH_HALF;
 	rect->y -= graphic->getHeight() - (graphic->getMapWidth() + graphic->getMapHeight()) * GraphicsMgr::TILE_HEIGHT_HALF;
+}
+
+void MapUtils::mapToDrawScreenCoords(double mapX, double mapY, MapObjectGraphic* graphic, SDL_Rect* rect) {
+    // Größe ist gleich der Grafikgröße
+    rect->w = graphic->getWidth();
+    rect->h = graphic->getHeight();
+
+    // Grafik an die richtige Stelle schieben. Das muss ausgehend von der zu belegenden Tile-Fläche berechnet werden.
+    mapToScreenCoords(mapX, mapY, rect->x, rect->y);
+    rect->x -= graphic->getWidth() - (graphic->getMapWidth() + 1) * GraphicsMgr::TILE_WIDTH_HALF;
+    rect->y -= graphic->getHeight() - (graphic->getMapWidth() + graphic->getMapHeight()) * GraphicsMgr::TILE_HEIGHT_HALF;
 }

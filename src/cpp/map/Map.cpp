@@ -394,10 +394,10 @@ void Map::renderMap(SDL_Renderer* renderer) {
         Animation* animation = graphicsMgr->getAnimation(CARRIER); // TODO später muss die verwendete Animation am Carrier hängen
 
         SDL_Rect rect;
-        MapUtils::mapToDrawScreenCoords(mapX, mapY, animation, &rect);
+        double mapXExact = (double) mapX + carrier->mapXFraction;
+        double mapYExact = (double) mapY + carrier->mapYFraction;
 
-        rect.x += carrier->xOffsetInTile;
-        rect.y += carrier->yOffsetInTile;
+        MapUtils::mapToDrawScreenCoords(mapXExact, mapYExact, animation, &rect);
 
         rect.x -= screenOffsetX;
         rect.y -= screenOffsetY;

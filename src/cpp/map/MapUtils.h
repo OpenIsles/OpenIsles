@@ -20,6 +20,18 @@ public:
 	 * @param screenY Screen-Y-Koordinate (Ausgabe)
 	 */
 	static void mapToScreenCoords(int mapX, int mapY, int& screenX, int& screenY);
+
+    /**
+     * @brief Rechnet Map- in Screen-Koordinaten um. Die Screen-Koordinaten sind die der oberen linken Ecke der Kachel.
+     * Diese Methode ist von der Funktion analog mapToScreenCoords(int, int, int&, int&), rechnet aber mit double-
+     * Eingabewerten. Die Ergebniskoordinaten sind Ganzzahlen.
+     *
+     * @param mapX Map-X-Koordinate (Eingabe)
+     * @param mapY Map-Y-Koordinate (Eingabe)
+     * @param screenX Screen-X-Koordinate (Ausgabe)
+     * @param screenY Screen-Y-Koordinate (Ausgabe)
+    */
+    static void mapToScreenCoords(double mapX, double mapY, int& screenX, int& screenY);
     
     /**
 	 * @brief Rechnet Map- in Screen-Koordinaten um. Die Screen-Koordinaten sind in der Mitte der Kachel.
@@ -49,6 +61,19 @@ public:
      * @param rect SDL-Rechteck mit der Screen-Koordinaten, wo die Grafik hingezeichnet werden muss (Ausgabe)
      */
     static void mapToDrawScreenCoords(int mapX, int mapY, MapObjectGraphic* graphic, SDL_Rect* rect);
+
+    /**
+     * @brief Berechnet ausgehend von Map-Koordinaten und einer Grafik das SDL-Rechteck, an welche Stelle
+     * die Grafik gesetzt werden muss.
+     * Diese Methode ist von der Funktion analog mapToDrawScreenCoords(int, int, MapObjectGraphic*, SDL_Rect*),
+     * rechnet aber mit double-Eingabewerten.
+     *
+     * @param mapX Map-X-Koordinate (Eingabe)
+     * @param mapY Map-Y-Koordinate (Eingabe)
+     * @param graphic zu zeichnende MapObject-Grafik (Eingabe)
+     * @param rect SDL-Rechteck mit der Screen-Koordinaten, wo die Grafik hingezeichnet werden muss (Ausgabe)
+     */
+    static void mapToDrawScreenCoords(double mapX, double mapY, MapObjectGraphic* graphic, SDL_Rect* rect);
     
 };
 

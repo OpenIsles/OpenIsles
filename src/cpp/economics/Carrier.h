@@ -24,7 +24,7 @@ private:
 
     /**
      * @brief Route, die der Träger abzulaufen hat.
-     * Die Route wird zerstört, wenn das Träger-Objekt zerstört wird.
+     * Die Route wird spätestens zerstört, wenn das Träger-Objekt zerstört wird.
      */
     Route* route;
 
@@ -34,14 +34,28 @@ private:
     GoodsSlot carriedGoods;
 
     /**
-     * @brief X-Pixel-Offset der Animation innerhalb der Kachel
+     * @brief Flag, das angibt, ob wir auf dem Hin- oder dem Rückweg sind.
+     * - `true` = Hinweg, d.h. Waren am Ziel aufladen und danach auf den Rückweg machen
+     * - `false` = Rückweg, d.h. Waren am Ziel ausladen und den Träger zerstören
      */
-    int xOffsetInTile;
+    bool onOutboundTrip;
 
     /**
-     * @brief Y-Pixel-Offset der Animation innerhalb der Kachel
+     * @brief X-Map-Koordinate-Offset, der auf den normalen mapX-Wert addiert wird
+     * Der Offset bewegt sich im Bereich 0.0 bis <1.0.
      */
-    int yOffsetInTile;
+    double mapXFraction;
+
+    /**
+    * @brief Y-Map-Koordinate-Offset, der auf den normalen mapY-Wert addiert wird
+    * Der Offset bewegt sich im Bereich 0.0 bis <1.0.
+    */
+    double mapYFraction;
+
+    /**
+     * @brief Iterator in @ref route, der auf die nächste Kachel zeigt, zu der der Träger laufen muss.
+     */
+    Route::const_iterator nextHopInRoute;
 
     // TODO Animation sollte spezifiert sein, aktuell is fix die eine Animation in Verwendung
 
@@ -54,12 +68,13 @@ private:
 
 public:
     /**
-     * @brief Konstruiert einen neuen Träger mit einem konkreten Abholauftrag.
+     * @brief Konstruiert einen neuen Träger mit einem konkreten Abhol-/Lieferauftrag.
      * @param owningBuilding Gebäude, zu dem dieser Träger gehört.
      * @param route Route, die der Träger ablaufen soll
-     * @param goodsType Warentyp, der abzuholen ist
+     * @param goodsType Warentyp, der abzuholen bzw. zu liefern ist
+     * @param onOutboundTrip `true` für Hinweg, `false` für Rückweg.
      */
-    Carrier(Building* owningBuilding, Route* route, GoodsType goodsType);
+    Carrier(Building* owningBuilding, Route* route, GoodsType goodsType, bool onOutboundTrip);
 
     /**
      * @brief Destruktor. Räumt die Route mit weg.

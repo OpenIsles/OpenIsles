@@ -69,7 +69,7 @@ public:
         return fps;
     }
 
-/**
+    /**
      * @brief Zeichnet ein Frame skaliert
      * @param x x-Koordinate, wo hingezeichnet werden soll
      * @param y y-Koordinate, wo hingezeichnet werden soll

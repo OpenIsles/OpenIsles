@@ -10,6 +10,8 @@
  */
 class MapObject {
 
+    friend class EconomicsMgr; // EconomicsMgr soll zum Aktualisieren des Trägers einfach zugreifen können
+
 protected:
 	/**
 	 * @brief Map-Koordinaten des Objekts
