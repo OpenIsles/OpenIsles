@@ -97,6 +97,13 @@ public:
         }
     }
 
+    /**
+     * @brief Überprüft, ob die Lager voll sind
+     * @return true, wenn das Lager voll ist, sonst false
+     */
+    inline bool isInventoryFull() const {
+        return (inventory >= capacity);
+    }
 };
 
 #endif

@@ -172,8 +172,21 @@ FindBuildingToGetGoodsFromResult EconomicsMgr::findBuildingToGetGoodsFrom(Buildi
     // Welche Waren brauchen wir überhaupt?
     GoodsType goodsRequired1 = buildingConfig->getBuildingProduction()->input.goodsType;
     GoodsType goodsRequired2 = buildingConfig->getBuildingProduction()->input2.goodsType;
+
+    // Wir brauchen nur, wenn die Lager nicht voll sind
+    if (goodsRequired1 != GoodsType::NO_GOODS) {
+        if (building->productionSlots.input.isInventoryFull()) {
+            goodsRequired1 = GoodsType::NO_GOODS;
+        }
+    }
+    if (goodsRequired2 != GoodsType::NO_GOODS) {
+        if (building->productionSlots.input2.isInventoryFull()) {
+            goodsRequired2 = GoodsType::NO_GOODS;
+        }
+    }
+
     if (goodsRequired1 == GoodsType::NO_GOODS && goodsRequired2 == GoodsType::NO_GOODS) {
-        return FindBuildingToGetGoodsFromResult(); // Wir brauchen keine Waren
+        return FindBuildingToGetGoodsFromResult(); // Wir brauchen (aktuell?) keine Waren
     }
 
     // Meinen Einzugsbereich durchsehen (TODO: und Liste aller Gebäude innerhalb anfertigen)
