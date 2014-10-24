@@ -76,7 +76,7 @@ GraphicsMgr::GraphicsMgr() {
     animations = new Animation*[AnimationType::MAX_ANIMATION];
     memset(animations, 0, AnimationType::MAX_ANIMATION * sizeof(Animation*));
 
-    animations[AnimationType::CARRIER] = new Animation("data/img/objects/carrier.png", 31, Animation::DEFAULT_FPS);
+    animations[AnimationType::CARRIER] = new Animation("data/img/objects/carrier.png", 1, 1, 31, Animation::DEFAULT_FPS);
 }
 
 GraphicsMgr::~GraphicsMgr() {

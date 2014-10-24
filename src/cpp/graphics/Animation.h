@@ -1,13 +1,13 @@
 #ifndef _ANIMATION_H
 #define _ANIMATION_H
 
-#include "graphics/PlainGraphic.h"
+#include "graphics/MapObjectGraphic.h"
 
 /**
- * @brief Erweiterte Form der Grafik: Die Animation enthält in einer Grafik mehrere Frames.
+ * @brief Erweiterte Form der Map-Grafik: Die Animation enthält in einer Grafik mehrere Frames.
  * Alle Frames müssen gleich groß sein und horizontal in der Grafik aneinander gereiht sein.
  */
-class Animation : public PlainGraphic {
+class Animation : public MapObjectGraphic {
 
 public:
     /**
@@ -36,12 +36,24 @@ public:
     /**
      * @brief Konstruktor für eine Animation
      * @param filename Dateiname der zu ladenden Animationsgrafik
+     * @param mapWidth Breite in mapCoords
+     * @param mapHeight Höhe in mapCoords
      * @param framesCount Anzahl der Frames, die sich in dieser Datei befinden
      * @param fps FPS = Geschwindigkeit, wie viele Frames pro Sekunde abgespielt werden sollen
      */
-    Animation(const char* filename, unsigned int framesCount, double fps);
+    Animation(const char* filename, unsigned char mapWidth, unsigned char mapHeight,
+              unsigned int framesCount, double fps);
 
     ~Animation() {}
+
+
+    /**
+    * @brief Liefert die Breite eines Frames zurück
+    * @return Breite des Frames
+    */
+    virtual int getWidth() const override {
+        return frameWidth;
+    }
 
     /**
      * @return Anzahl der Frames in der Animation

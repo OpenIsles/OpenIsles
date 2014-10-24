@@ -393,20 +393,20 @@ void Map::renderMap(SDL_Renderer* renderer) {
 
         Animation* animation = graphicsMgr->getAnimation(CARRIER); // TODO später muss die verwendete Animation am Carrier hängen
 
-        int screenX, screenY;
-        MapUtils::mapToScreenCoords(mapX, mapY, screenX, screenY);
+        SDL_Rect rect;
+        MapUtils::mapToDrawScreenCoords(mapX, mapY, animation, &rect);
 
-        screenX += carrier->xOffsetInTile;
-        screenY += carrier->yOffsetInTile;
+        rect.x += carrier->xOffsetInTile;
+        rect.y += carrier->yOffsetInTile;
 
-        screenX -= screenOffsetX;
-        screenY -= screenOffsetY;
+        rect.x -= screenOffsetX;
+        rect.y -= screenOffsetY;
 
-        screenX /= screenZoom;
-        screenY /= screenZoom;
+        rect.x /= screenZoom;
+        rect.y /= screenZoom;
 
         animation->drawFrameScaledAt(
-            screenX, screenY, (double) 1 / (double) screenZoom, (unsigned int) carrier->animationFrame);
+            rect.x, rect.y, (double) 1 / (double) screenZoom, (unsigned int) carrier->animationFrame);
     }
 
     // structureBeingAdded gesetzt?

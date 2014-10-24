@@ -51,7 +51,7 @@ public:
 	 * @brief Liefert die Breite der Grafik zurück
 	 * @return Breite der Grafik
 	 */
-	int getWidth() const {
+    virtual int getWidth() const {
 		return width;
 	}
 

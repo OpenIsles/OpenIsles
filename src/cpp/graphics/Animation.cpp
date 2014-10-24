@@ -4,8 +4,9 @@
 
 extern SDL_Renderer* renderer;
 
-Animation::Animation(const char* filename, unsigned int framesCount, double fps) :
-    PlainGraphic(filename), framesCount(framesCount), fps(fps) {
+Animation::Animation(const char* filename, unsigned char mapWidth, unsigned char mapHeight,
+                     unsigned int framesCount, double fps) :
+    MapObjectGraphic(filename, mapWidth, mapHeight), framesCount(framesCount), fps(fps) {
 
     // Prüfen, ob die Grafik ordentlich ist. Die Breite muss exakt ein Vielfaches der Framesanzahl sein
     if (width % framesCount != 0) {
