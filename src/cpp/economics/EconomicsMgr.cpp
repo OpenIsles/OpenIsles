@@ -89,10 +89,8 @@ void EconomicsMgr::update(Structure* structure) {
     }
 
 
-    // Gebäude, die Waren einsammeln:
-
-    // TODO erstmal nur fix für Webstuben
-    if (structureType == StructureType::WEAVING_MILL1) {
+    // Gebäude, die Waren einsammeln
+    if (building->productionSlots.input.isUsed()) {
         // Ist der Träger zu Hause? Gucken, wo was zu holen is und Abholung einleiten
         if (building->carrier == nullptr) {
 
