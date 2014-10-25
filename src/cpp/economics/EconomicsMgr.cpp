@@ -1,3 +1,4 @@
+#include <algorithm>
 #include "config/BuildingConfigMgr.h"
 #include "economics/EconomicsMgr.h"
 #include "game/Colony.h"
@@ -25,13 +26,68 @@ void EconomicsMgr::update(Structure* structure) {
     StructureType structureType = building->getStructureType();
     const BuildingConfig* buildingConfig = buildingConfigMgr->getConfig(structureType);
 
-    // Produktion durchführen
     Uint32 ticksNow = SDL_GetTicks();
     Uint32 ticksPastSinceLastUpdate = ticksNow - building->getLastUpdateTime();
 
-    // TODO Produktion abhängig machen von Input-Waren und deren Verfügbarkeit
-    double goodsProduced = (double)ticksPastSinceLastUpdate / 60000 * buildingConfig->productionRate;
-    building->productionSlots.output.increaseInventory(goodsProduced);
+    /* Produktion durchführen
+     *
+     * Es wird nur für jede vergangene Ticks produziert, für die alle Eingabewaren da waren und auch nur
+     * solange das Ausgabewarenlager nicht voll ist.
+     * Der folgende Code ermittelt erst, wie viel verbraucht würde, wenn in allen ticksPastSinceLastUpdate
+     * die Voraussetzungen erfüllt sind. Dann wird ermittelt, wie viele Ticks lang pro Slot die Voraussetzungen
+     * wirklich erfüllt sind. Mit dem Minimum dieser Tick-Werte wird dann die Produktion durchgeführt.
+     */
+    if (buildingConfig->getBuildingProduction()->output.isUsed() &&
+        !building->productionSlots.output.isInventoryFull()) {
+
+        Uint32 ticksInputConsumed = 0, ticksInput2Consumed = 0; // Zeiten, in denen wirklich verbraucht wurde
+        double inputConsumed, input2Consumed, outputProduced;   // verbrauchte/produzierte Güter
+
+        // Haben wir Eingabegüter, dann wird nur produziert, wie diese verfügbar sind
+        if (buildingConfig->getBuildingProduction()->input.isUsed()) {
+            inputConsumed = (double) ticksPastSinceLastUpdate / 60000 * buildingConfig->inputConsumptionRate;
+
+            // nur verbrauchen, was auch da is
+            if (inputConsumed > building->productionSlots.input.inventory) {
+                inputConsumed = building->productionSlots.input.inventory;
+            }
+            ticksInputConsumed = (Uint32) (inputConsumed * 60000 / buildingConfig->inputConsumptionRate);
+
+            if (buildingConfig->getBuildingProduction()->input2.isUsed()) {
+                input2Consumed = (double) ticksPastSinceLastUpdate / 60000 * buildingConfig->input2ConsumptionRate;
+
+                // nur verbrauchen, was auch da is
+                if (input2Consumed > building->productionSlots.input2.inventory) {
+                    input2Consumed = building->productionSlots.input2.inventory;
+                }
+                ticksInput2Consumed = (Uint32) (input2Consumed * 60000 / buildingConfig->input2ConsumptionRate);
+            }
+        }
+
+        // Minimum-Ticks ermitteln, in denen wirklich produziert wurde
+        Uint32 ticksWeReallyProduced = ticksPastSinceLastUpdate;
+        if (buildingConfig->getBuildingProduction()->input.isUsed()) {
+            ticksWeReallyProduced = std::min(ticksWeReallyProduced, ticksInputConsumed);
+
+            if (buildingConfig->getBuildingProduction()->input2.isUsed()) {
+                ticksWeReallyProduced = std::min(ticksWeReallyProduced, ticksInput2Consumed);
+            }
+        }
+
+        // Jetzt die Produktion durchführen
+        if (buildingConfig->getBuildingProduction()->input.isUsed()) {
+            inputConsumed = (double) ticksWeReallyProduced / 60000 * buildingConfig->inputConsumptionRate;
+            building->productionSlots.input.decreaseInventory(inputConsumed);
+
+            if (buildingConfig->getBuildingProduction()->input2.isUsed()) {
+                input2Consumed = (double) ticksWeReallyProduced / 60000 * buildingConfig->input2ConsumptionRate;
+                building->productionSlots.input2.decreaseInventory(input2Consumed);
+            }
+        }
+        outputProduced = (double) ticksWeReallyProduced / 60000 * buildingConfig->productionRate;
+        building->productionSlots.output.increaseInventory(outputProduced);
+    }
+
 
     // Gebäude, die Waren einsammeln:
 

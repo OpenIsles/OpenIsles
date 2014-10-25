@@ -41,6 +41,8 @@ BuildingConfigMgr::BuildingConfigMgr() {
         GoodsSlot(GoodsType::WOOD, 3)
     };
     configs[StructureType::SIGNALFIRE]->productionRate = 1.5;
+    configs[StructureType::SIGNALFIRE]->inputConsumptionRate = 1.5;
+    configs[StructureType::SIGNALFIRE]->input2ConsumptionRate = 1.5;
 
     configs[StructureType::HERBARY] = new BuildingConfig();
     configs[StructureType::HERBARY]->name = "Kräuterfeld";
@@ -53,6 +55,7 @@ BuildingConfigMgr::BuildingConfigMgr() {
         GoodsSlot()
     };
     configs[StructureType::HERBARY]->productionRate = 2.4;
+    configs[StructureType::HERBARY]->inputConsumptionRate = 3.6;
 
     configs[StructureType::BRICKYARD] = new BuildingConfig();
     configs[StructureType::BRICKYARD]->name = "Steinbruch";
@@ -114,7 +117,7 @@ BuildingConfigMgr::BuildingConfigMgr() {
         GoodsSlot(),
         GoodsSlot()
     };
-    configs[StructureType::SHEEP_FARM]->productionRate = 2.98;
+    configs[StructureType::SHEEP_FARM]->productionRate = 30;
 
     configs[StructureType::WEAVING_MILL1] = new BuildingConfig();
     configs[StructureType::WEAVING_MILL1]->name = "Webstube";
@@ -126,7 +129,8 @@ BuildingConfigMgr::BuildingConfigMgr() {
         GoodsSlot(GoodsType::WOOL, 7),
         GoodsSlot()
     };
-    configs[StructureType::WEAVING_MILL1]->productionRate = 5.5;
+    configs[StructureType::WEAVING_MILL1]->productionRate = 10.0;
+    configs[StructureType::WEAVING_MILL1]->inputConsumptionRate = 5.0;
 }
 
 BuildingConfigMgr::~BuildingConfigMgr() {

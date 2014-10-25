@@ -98,6 +98,18 @@ public:
     }
 
     /**
+     * @brief Erniedrigt den Lagerbestand um einen bestimmten Wert. Würde dabei negativer Lagerbestand rauskommen,
+     * wird der Lagerbestand auf 0 gesetzt.
+     * @param amount Anzahl, um wie viel erniedrigt werden soll
+     */
+    void decreaseInventory(double amount) {
+        inventory -= amount;
+        if (inventory < 0) {
+            inventory = 0;
+        }
+    }
+
+    /**
      * @brief Überprüft, ob die Lager voll sind
      * @return true, wenn das Lager voll ist, sonst false
      */

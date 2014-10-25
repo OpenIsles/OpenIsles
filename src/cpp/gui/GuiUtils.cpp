@@ -28,6 +28,12 @@ void GuiUtils::drawGoodsBox(int x, int y, GoodsType goodsType, double inventory,
             sprintf(inventoryOutput, "%.0ft", floor(inventory));
             fontMgr->renderText(renderer, inventoryOutput, x + 40, y + 42, &colorWhite, &colorBlack,
                 "DroidSans.ttf", 12, RENDERTEXT_HALIGN_RIGHT | RENDERTEXT_VALIGN_BOTTOM);
+
+#ifdef DEBUG_ECONOMICS
+            sprintf(inventoryOutput, "%.4ft", inventory);
+            fontMgr->renderText(renderer, inventoryOutput, x + 40, y + 55, &colorWhite, &colorBlack,
+                "DroidSans.ttf", 12, RENDERTEXT_HALIGN_RIGHT | RENDERTEXT_VALIGN_BOTTOM);
+#endif
         }
     }
 }

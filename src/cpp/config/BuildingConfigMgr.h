@@ -89,6 +89,16 @@ struct BuildingConfig {
      */
     double productionRate = 0;
 
+    /**
+     * @brief gibt an, wie viele Güter vom ersten Input-Slot pro 60 Sekunden verbraucht werden
+     */
+    double inputConsumptionRate = 0;
+
+    /**
+     * @brief gibt an, wie viele Güter vom zweiten Input-Slot pro 60 Sekunden verbraucht werden
+     */
+    double input2ConsumptionRate = 0;
+
     
     ~BuildingConfig() {
         if (catchmentArea != nullptr) {
