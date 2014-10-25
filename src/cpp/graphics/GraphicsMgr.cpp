@@ -83,6 +83,8 @@ GraphicsMgr::GraphicsMgr() {
     memset(animations, 0, AnimationType::MAX_ANIMATION * sizeof(Animation*));
 
     animations[AnimationType::CARRIER] = new Animation("data/img/objects/carrier.png", 1, 1, 31, Animation::DEFAULT_FPS);
+    animations[AnimationType::CART_WITHOUT_CARGO] = new Animation("data/img/objects/cart-without-cargo.png", 1, 1, 32, Animation::DEFAULT_FPS);
+    animations[AnimationType::CART_WITH_CARGO] = new Animation("data/img/objects/cart-with-cargo.png", 1, 1, 32, Animation::DEFAULT_FPS);
 }
 
 GraphicsMgr::~GraphicsMgr() {

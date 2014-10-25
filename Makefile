@@ -114,6 +114,18 @@ endef
 $(foreach ANIMATION,$(ANIMATIONS),$(eval $(call RENDER_ANIMATION,$(ANIMATION))))
 
 ########################################################################################################################
+# Marktkarren-Animation                                                                                               #
+########################################################################################################################
+
+render-cart: $(SRC_DIRECTORY)/blender/cart/cart.blend
+	mkdir -p $(DATA_DIRECTORY)/img/objects
+	cd $(SRC_DIRECTORY)/blender/cart; blender -b $(notdir $<) -P render-cart.py
+
+	# geometry muss angegeben werden, sonst greift der Default von 120x120
+	montage -background transparent $(SRC_DIRECTORY)/blender/cart/render/without_cargo/angle0/* -geometry +0+0 -tile x1 $(DATA_DIRECTORY)/img/objects/cart-without-cargo.png
+	montage -background transparent $(SRC_DIRECTORY)/blender/cart/render/with_cargo/angle0/* -geometry +0+0 -tile x1 $(DATA_DIRECTORY)/img/objects/cart-with-cargo.png
+
+########################################################################################################################
 # PHONYs um alle Blender-Sachen zu rendern und zu cleanen                                                              #
 ########################################################################################################################
 
@@ -128,7 +140,8 @@ render-blender: \
 	$(foreach ANIMATION,$(ANIMATIONS), \
 		$(DATA_DIRECTORY)/img/objects/$(ANIMATION).png \
 	) \
-	render-streets
+	render-streets \
+	render-cart
 	
 clean-blender:
 	rm -f $(foreach BUILDING,$(BUILDINGS), $(DATA_DIRECTORY)/img/objects/$(BUILDING).png)
@@ -138,3 +151,5 @@ clean-blender:
 	rm -rf $(foreach ANIMATION,$(ANIMATIONS), $(SRC_DIRECTORY)/blender/$(ANIMATION)/render)
 	rm -rf $(SRC_DIRECTORY)/blender/streets/render
 	rm -rf $(DATA_DIRECTORY)/img/objects/street*.png
+	rm -rf $(DATA_DIRECTORY)/img/objects/cart-without-cargo.png
+	rm -rf $(DATA_DIRECTORY)/img/objects/cart-with-cargo.png

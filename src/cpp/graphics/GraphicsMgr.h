@@ -49,6 +49,10 @@ enum AnimationType {
     // Typ, der Waren hin- und herträgt
     CARRIER,
 
+    // Marktkarren
+    CART_WITHOUT_CARGO,
+    CART_WITH_CARGO,
+
     MAX_ANIMATION // Marker, wie viele Animationen es gibt
 } AnimationType;
 
