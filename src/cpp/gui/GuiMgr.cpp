@@ -244,7 +244,11 @@ void GuiMgr::initBuildGui() {
                     "Schaffarm",
                     OtherGraphic::ADD_BUILDING_SHEEP_FARM
                 },
-                { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
+                {
+                    StructureType::CATTLE_FARM,
+                    "Rinderfarm",
+                    OtherGraphic::ADD_BUILDING_CATTLE_FARM
+                },
                 {
                     StructureType::HERBARY,
                     "Kräuterfeld",

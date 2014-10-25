@@ -32,6 +32,7 @@ enum OtherGraphic {
     ADD_BUILDING_STREET,
     ADD_BUILDING_SHEEP_FARM,
     ADD_BUILDING_WEAVING_MILL1,
+    ADD_BUILDING_CATTLE_FARM,
     ADD_BUILDING_DUMMY,
 
     // Plus-Zeichen und Pfeil für Produktion eines Gebäudes

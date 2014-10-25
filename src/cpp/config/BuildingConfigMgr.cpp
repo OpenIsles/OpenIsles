@@ -131,6 +131,18 @@ BuildingConfigMgr::BuildingConfigMgr() {
     };
     configs[StructureType::WEAVING_MILL1]->productionRate = 10.0;
     configs[StructureType::WEAVING_MILL1]->inputConsumptionRate = 5.0;
+
+    configs[StructureType::CATTLE_FARM] = new BuildingConfig();
+    configs[StructureType::CATTLE_FARM]->name = "Rinderfarm";
+    configs[StructureType::CATTLE_FARM]->catchmentArea = new RectangleData<char>(6, 6);
+    memcpy(configs[StructureType::CATTLE_FARM]->catchmentArea->data, "011110111111111111111111111111011110", 36);
+    configs[StructureType::CATTLE_FARM]->buildingCosts = { 100, 1, 4, 0 };
+    configs[StructureType::CATTLE_FARM]->buildingProduction = {
+        GoodsSlot(GoodsType::CATTLE, 4),
+        GoodsSlot(),
+        GoodsSlot()
+    };
+    configs[StructureType::CATTLE_FARM]->productionRate = 7.5;
 }
 
 BuildingConfigMgr::~BuildingConfigMgr() {

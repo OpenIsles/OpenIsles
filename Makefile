@@ -52,7 +52,7 @@ $(DATA_DIRECTORY)/img/gui/add-building/add-building-grid.png: $(SRC_DIRECTORY)/b
 # Gebäude                                                                                                              #
 ########################################################################################################################
 
-BUILDINGS := chapel foresters marketplace office1 pioneers-house1 sheep-farm weaving-mill1
+BUILDINGS := chapel cattle-farm foresters marketplace office1 pioneers-house1 sheep-farm weaving-mill1
 
 define RENDER_BUILDING
 $(DATA_DIRECTORY)/img/objects/$(1).png: $(SRC_DIRECTORY)/blender/$(1)/$(1).blend

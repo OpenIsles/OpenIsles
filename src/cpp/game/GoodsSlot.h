@@ -12,6 +12,7 @@ enum GoodsType : char {
 
     // Güter
     WOOL = 0,
+    CATTLE,
     CLOTH,
     TOOLS,
     WOOD,
