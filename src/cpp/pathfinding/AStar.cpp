@@ -15,10 +15,13 @@ MapCoordinate AStar::debugAStar_source = MapCoordinate(-1, -1);
 MapCoordinate AStar::debugAStar_destination = MapCoordinate(-1, -1);
 Building* AStar::debugAStar_buildingToUseCatchmentArea = nullptr;
 Route* AStar::debugAStar_route = nullptr;
+bool AStar::debugAStar_useStreetOnly = false;
 #endif
 
 
-Route* AStar::findRoute(MapCoordinate source, MapCoordinate destination, Building* buildingToUseCatchmentArea) {
+Route* AStar::findRoute(MapCoordinate source, MapCoordinate destination,
+                        Building* buildingToUseCatchmentArea, bool useStreetOnly) {
+
     Map* map = game->getMap();
 
     // Ermitteln, aus und in welches Gebäude wir die Route berechnen wollen. Dies ist optional, eine Route muss nicht
@@ -94,7 +97,7 @@ Route* AStar::findRoute(MapCoordinate source, MapCoordinate destination, Buildin
                 bool insideSourceOrDestinationBuilding;
                 if (!isTileWalkable(successorMapCoordinate, sourceBuilding,
                                     destinationBuilding, buildingToUseCatchmentArea,
-                                    insideSourceOrDestinationBuilding)) {
+                                    useStreetOnly, insideSourceOrDestinationBuilding)) {
                     continue;
                 }
 
@@ -108,14 +111,14 @@ Route* AStar::findRoute(MapCoordinate source, MapCoordinate destination, Buildin
                     MapCoordinate mapCoordinateNextTo1(
                         currentNode.mapCoordinate.mapX, currentNode.mapCoordinate.mapY + mapYOffset);
                     if (!isTileWalkable(mapCoordinateNextTo1, sourceBuilding, destinationBuilding,
-                                        buildingToUseCatchmentArea, unusedVar)) {
+                                        buildingToUseCatchmentArea, useStreetOnly, unusedVar)) {
                         continue;
                     }
 
                     MapCoordinate mapCoordinateNextTo2(
                         currentNode.mapCoordinate.mapX + mapXOffset, currentNode.mapCoordinate.mapY);
                     if (!isTileWalkable(mapCoordinateNextTo2, sourceBuilding, destinationBuilding,
-                                        buildingToUseCatchmentArea, unusedVar)) {
+                                        buildingToUseCatchmentArea, useStreetOnly, unusedVar)) {
                         continue;
                     }
                 }
@@ -273,7 +276,7 @@ void AStar::cutRouteInsideBuildings(Route* route) {
 
 bool AStar::isTileWalkable(MapCoordinate mapCoordinate, Building* sourceBuilding,
                            Building* destinationBuilding, Building* buildingToUseCatchmentArea,
-                           bool& insideSourceOrDestinationBuilding) {
+                           bool useStreetOnly, bool& insideSourceOrDestinationBuilding) {
 
     Map* map = game->getMap();
 
@@ -283,8 +286,7 @@ bool AStar::isTileWalkable(MapCoordinate mapCoordinate, Building* sourceBuilding
         return false; // außerhalb der Karte
     }
 
-    // Gelände prüfen, kann man darf laufen?
-    // TODO aktuell darf nur auf Grass und Grass2 gebaut werden. Später muss das das Gebäude wissen, wo. Refactoring notwendig, da Codedopplung.
+    // TODO aktuell darf nur auf Grass und Grass2 gebaut werden. Später muss das das Gelände wissen, wo. Refactoring notwendig, da Codedopplung.
     if (mapTile->tileGraphicIndex != 2 && mapTile->tileGraphicIndex != 7) {
         return false; // nur auf Grass und Grass2 darf man laufen
     }
@@ -299,6 +301,13 @@ bool AStar::isTileWalkable(MapCoordinate mapCoordinate, Building* sourceBuilding
             } else {
                 return false; // anderes Gebäude, Kachel nicht betretbar
             }
+        }
+    }
+
+    // Gelände prüfen, kann man darf laufen?
+    if (useStreetOnly) {
+        if (!insideSourceOrDestinationBuilding && !map->isStreetAt(mapCoordinate.mapX, mapCoordinate.mapY)) {
+            return false; // keine Straße da
         }
     }
 

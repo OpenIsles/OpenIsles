@@ -173,7 +173,7 @@ void EconomicsMgr::update(Structure* structure) {
                         targetBuilding->productionSlots.output.inventory -= goodsWeCollect;
 
                         Route* route = carrier->route;
-                        Route* returnRoute = AStar::findRoute(route->back(), route->front(), building);
+                        Route* returnRoute = AStar::findRoute(route->back(), route->front(), building, false);
 
                         delete carrier;
                         building->carrier = nullptr;
@@ -286,7 +286,7 @@ FindBuildingToGetGoodsFromResult EconomicsMgr::findBuildingToGetGoodsFrom(Buildi
             buildingThere->getMapCoords(mapXDestination, mapYDestination);
             MapCoordinate mapCoordinateDestination = MapCoordinate(mapXDestination, mapYDestination);
 
-            Route* route = AStar::findRoute(mapCoordinateSource, mapCoordinateDestination, building);
+            Route* route = AStar::findRoute(mapCoordinateSource, mapCoordinateDestination, building, false);
             if (route == nullptr) {
                 continue; // gibt keinen Weg dahin
             }

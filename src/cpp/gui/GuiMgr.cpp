@@ -521,6 +521,9 @@ void GuiMgr::onEvent(SDL_Event& event) {
             MapTile* mapTile = game->getMap()->getMapTileAt(mouseCurrentMapX, mouseCurrentMapY);
             AStar::debugAStar_buildingToUseCatchmentArea = dynamic_cast<Building*>(mapTile->mapObject);
             needToRecalculate = true;
+        } else if (event.key.keysym.scancode == SDL_SCANCODE_F) {
+            AStar::debugAStar_useStreetOnly = !AStar::debugAStar_useStreetOnly;
+            needToRecalculate = true;
         }
 
         if (needToRecalculate) {
@@ -533,8 +536,12 @@ void GuiMgr::onEvent(SDL_Event& event) {
 
                 AStar::debugAStar_route = AStar::findRoute(
                     AStar::debugAStar_source, AStar::debugAStar_destination,
-                    AStar::debugAStar_buildingToUseCatchmentArea);
-                AStar::cutRouteInsideBuildings(AStar::debugAStar_route);
+                    AStar::debugAStar_buildingToUseCatchmentArea,
+                    AStar::debugAStar_useStreetOnly);
+
+                if (AStar::debugAStar_route != nullptr) {
+                    AStar::cutRouteInsideBuildings(AStar::debugAStar_route);
+                }
             }
         }
 #endif

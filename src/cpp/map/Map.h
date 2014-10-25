@@ -281,6 +281,14 @@ public:
      */
     void deleteSelectedObject();
 
+    /**
+     * @brief Ermittelt, ob an einer bestimmten Stelle ein Weg liegt.
+     * @param mapX Map-X-Koordinate
+     * @param mapY Map-Y-Koordinate
+     * @return true, wenn ein Weg (Feldweg oder Pflasterstraße) da ist; sonst false.
+     */
+    bool isStreetAt(int mapX, int mapY);
+
 private:
     /**
      * @brief Prüft die Map-Koordinaten auf ihre Gültigkeit, ob sie außerhalb der Karte liegen.
@@ -372,14 +380,6 @@ private:
      * TODO Feldweg
      */
     StructureType getConcreteStreetStructureType(int mapX, int mapY, StructureType abstractStreetStructureType);
-
-    /**
-     * @brief Ermittelt, ob an einer bestimmten Stelle ein Weg liegt.
-     * @param mapX Map-X-Koordinate
-     * @param mapY Map-Y-Koordinate
-     * @return true, wenn ein Weg (Feldweg oder Pflasterstraße) da ist; sonst false.
-     */
-    bool isStreetAt(int mapX, int mapY);
 };
 
 #endif

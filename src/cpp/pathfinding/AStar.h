@@ -82,6 +82,12 @@ public:
      * Route vorliegt
      */
     static Route* debugAStar_route;
+
+    /**
+     * @brief (nur zu Debugzwecken einkompiliert) `true`, um die Route ausschließlich für Wege zu plannen, `false` um
+     * auch über Gras laufen zu können
+     */
+    static bool debugAStar_useStreetOnly;
 #endif
 
 public:
@@ -92,9 +98,11 @@ public:
      * @param buildingToUseCatchmentArea Zeiger auf ein Gebäude. Wenn gesetzt, dürfen für die Route nur Kacheln benutzt
      *                                   werden, die sich im Einzugsbereich dieses Gebäudes befinden. Wird nullptr
      *                                   verwendet, so dürfen für die Route beliebige Felder benutzt werden.
+     * @param useStreetOnly `true`, um nur Straßen für die Route zu verwenden, `false` erlaubt auch über Gras zu laufen
      * @return Zeiger auf die berechnete Route oder nullptr, wenn keine Route existiert
      */
-    static Route* findRoute(MapCoordinate source, MapCoordinate destination, Building* buildingToUseCatchmentArea);
+    static Route* findRoute(MapCoordinate source, MapCoordinate destination,
+                            Building* buildingToUseCatchmentArea, bool useStreetOnly);
 
     /**
      * @brief Kürzt ggf. eine gegebene Route, wenn an Start- und/oder Endpunkt ein Gebäude liegt und mehrere
@@ -137,13 +145,14 @@ private:
      * @param buildingToUseCatchmentArea Zeiger auf ein Gebäude. Wenn gesetzt, dürfen für die Route nur Kacheln benutzt
      *                                   werden, die sich im Einzugsbereich dieses Gebäudes befinden. Wird nullptr
      *                                   verwendet, so dürfen für die Route beliebige Felder benutzt werden. (IN)
+     * @param useStreetOnly `true`, um nur Straßen für die Route zu verwenden, `false` erlaubt auch über Gras zu laufen (IN)
      * @param insideSourceOrDestinationBuilding erhält die Info, ob sich die angefragte Kachel im Start- oder
      *                                          Zielgebäude (wenn gesetzt) befindet. (OUT)
      * @return true wenn die Kachel betreten werden darf, sonst false
      */
     static bool isTileWalkable(MapCoordinate mapCoordinate, Building* sourceBuilding,
                                Building* destinationBuilding, Building* buildingToUseCatchmentArea,
-                               bool& insideSourceOrDestinationBuilding);
+                               bool useStreetOnly, bool& insideSourceOrDestinationBuilding);
 
 };
 

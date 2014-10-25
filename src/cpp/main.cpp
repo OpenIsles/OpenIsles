@@ -293,7 +293,8 @@ int main(int argc, char** argv) {
             std::to_string(AStar::debugAStar_source.mapY) + "), destination = (" +
             std::to_string(AStar::debugAStar_destination.mapX) + ", " +
             std::to_string(AStar::debugAStar_destination.mapY) + "), catchmentAreaBuilding = " +
-            buildingToUseCatchmentAreaString;
+            buildingToUseCatchmentAreaString + ", useStreetOnly = " +
+            (AStar::debugAStar_useStreetOnly ? "true" : "false");
 #endif // DEBUG_A_STAR
 #endif // DEBUG
 
