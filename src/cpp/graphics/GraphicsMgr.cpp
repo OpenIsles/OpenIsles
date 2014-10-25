@@ -24,6 +24,7 @@ GraphicsMgr::GraphicsMgr() {
     structures[StructureType::SHEEP_FARM] = new MapObjectGraphic("data/img/objects/sheep-farm.png", 2, 2);
     structures[StructureType::WEAVING_MILL1] = new MapObjectGraphic("data/img/objects/weaving-mill1.png", 2, 2);
     structures[StructureType::CATTLE_FARM] = new MapObjectGraphic("data/img/objects/cattle-farm.png", 2, 2);
+    structures[StructureType::BUTCHERS] = new MapObjectGraphic("data/img/objects/butchers.png", 2, 2);
 
     structures[StructureType::STREET] = new MapObjectGraphic("data/img/objects/street-straight90.png", 1, 1); // damit was drinsteht. Fürs Malen werden die nachfolgenden Grafiken verwendet
 	structures[StructureType::STREET_STRAIGHT_0] = new MapObjectGraphic("data/img/objects/street-straight0.png", 1, 1);
@@ -50,11 +51,12 @@ GraphicsMgr::GraphicsMgr() {
     memset(goodsMarketplaceIcons, 0, GoodsType::MAX_GOOD * sizeof(PlainGraphic*));
 
     goodsMarketplaceIcons[GoodsType::WOOL] = new PlainGraphic("data/img/goods/marketplace-icon/wool.png");
+    goodsMarketplaceIcons[GoodsType::CATTLE] = new PlainGraphic("data/img/goods/marketplace-icon/cattle.png");
+    goodsMarketplaceIcons[GoodsType::FOOD] = new PlainGraphic("data/img/goods/marketplace-icon/food.png");
     goodsMarketplaceIcons[GoodsType::CLOTH] = new PlainGraphic("data/img/goods/marketplace-icon/cloth.png");
     goodsMarketplaceIcons[GoodsType::TOOLS] = new PlainGraphic("data/img/goods/marketplace-icon/tools.png");
     goodsMarketplaceIcons[GoodsType::WOOD] = new PlainGraphic("data/img/goods/marketplace-icon/wood.png");
     goodsMarketplaceIcons[GoodsType::BRICKS] = new PlainGraphic("data/img/goods/marketplace-icon/bricks.png");
-    goodsMarketplaceIcons[GoodsType::CATTLE] = new PlainGraphic("data/img/goods/marketplace-icon/cattle.png");
 
 
     otherGraphics = new PlainGraphic*[OtherGraphic::MAX_GRAPHIC];
@@ -71,6 +73,7 @@ GraphicsMgr::GraphicsMgr() {
     otherGraphics[OtherGraphic::ADD_BUILDING_SHEEP_FARM] = new PlainGraphic("data/img/gui/add-building/sheep-farm.png");
     otherGraphics[OtherGraphic::ADD_BUILDING_WEAVING_MILL1] = new PlainGraphic("data/img/gui/add-building/weaving-mill1.png");
     otherGraphics[OtherGraphic::ADD_BUILDING_CATTLE_FARM] = new PlainGraphic("data/img/gui/add-building/cattle-farm.png");
+    otherGraphics[OtherGraphic::ADD_BUILDING_BUTCHERS] = new PlainGraphic("data/img/gui/add-building/butchers.png");
     otherGraphics[OtherGraphic::ADD_BUILDING_DUMMY] = new PlainGraphic("data/img/gui/add-building/dummy.png");
     otherGraphics[OtherGraphic::PRODUCTION_ARROW] = new PlainGraphic("data/img/gui/production-arrow.png");
     otherGraphics[OtherGraphic::PRODUCTION_PLUS] = new PlainGraphic("data/img/gui/production-plus.png");

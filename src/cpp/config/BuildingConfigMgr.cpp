@@ -143,6 +143,19 @@ BuildingConfigMgr::BuildingConfigMgr() {
         GoodsSlot()
     };
     configs[StructureType::CATTLE_FARM]->productionRate = 7.5;
+
+    configs[StructureType::BUTCHERS] = new BuildingConfig();
+    configs[StructureType::BUTCHERS]->name = "Fleischerei";
+    configs[StructureType::BUTCHERS]->catchmentArea = new RectangleData<char>(22, 22);
+    memcpy(configs[StructureType::BUTCHERS]->catchmentArea->data, "0000000111111110000000000001111111111110000000001111111111111100000001111111111111111000001111111111111111110001111111111111111111100111111111111111111110111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111110111111111111111111110011111111111111111111000111111111111111111000001111111111111111000000011111111111111000000000111111111111000000000000111111110000000", 484);
+    configs[StructureType::BUTCHERS]->buildingCosts = { 150, 3, 6, 0 };
+    configs[StructureType::BUTCHERS]->buildingProduction = {
+        GoodsSlot(GoodsType::FOOD, 4),
+        GoodsSlot(GoodsType::CATTLE, 4),
+        GoodsSlot()
+    };
+    configs[StructureType::BUTCHERS]->productionRate = 5;
+    configs[StructureType::BUTCHERS]->inputConsumptionRate = 10;
 }
 
 BuildingConfigMgr::~BuildingConfigMgr() {

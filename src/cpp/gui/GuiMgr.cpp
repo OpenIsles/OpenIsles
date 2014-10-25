@@ -213,7 +213,11 @@ void GuiMgr::initBuildGui() {
                     "Webstube",
                     OtherGraphic::ADD_BUILDING_WEAVING_MILL1
                 },
-                { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
+                {
+                    StructureType::BUTCHERS,
+                    "Fleischerei",
+                    OtherGraphic::ADD_BUILDING_BUTCHERS
+                },
                 {
                     StructureType::BRICKYARD,
                     "Steinmetz",
