@@ -90,7 +90,7 @@ void Game::renderResourcesBar() {
         
         graphicsMgr->getGraphicForGoodsIcon(goodsType)->drawAt(x, 5);
         
-        int goodsInventory = colony->getGoodsInventory(goodsType);
+        int goodsInventory = colony->getGoods(goodsType).inventory;
         std::string outputString = std::to_string(goodsInventory);
         if (buildingCosts != nullptr) {
             outputString += " ("; 

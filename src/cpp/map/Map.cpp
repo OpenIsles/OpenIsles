@@ -391,7 +391,7 @@ void Map::renderMap(SDL_Renderer* renderer) {
         int mapX, mapY;
         carrier->getMapCoords(mapX, mapY);
 
-        Animation* animation = graphicsMgr->getAnimation(CARRIER); // TODO später muss die verwendete Animation am Carrier hängen
+        Animation* animation = carrier->getAnimation();
 
         SDL_Rect rect;
         double mapXExact = (double) mapX + carrier->mapXFraction;
@@ -486,9 +486,9 @@ unsigned char Map::isAllowedToPlaceStructure(int mapX, int mapY, StructureType s
     if (colony != nullptr) {
         const BuildingCosts* buildingCosts = buildingConfigMgr->getConfig(structureType)->getBuildingCosts();
         if ((buildingCosts->coins > currentPlayer->coins) ||
-            (buildingCosts->tools > colony->getGoodsInventory(GoodsType::TOOLS)) ||
-            (buildingCosts->wood > colony->getGoodsInventory(GoodsType::WOOD)) ||
-            (buildingCosts->bricks > colony->getGoodsInventory(GoodsType::BRICKS))) {
+            (buildingCosts->tools > colony->getGoods(GoodsType::TOOLS).inventory) ||
+            (buildingCosts->wood > colony->getGoods(GoodsType::WOOD).inventory) ||
+            (buildingCosts->bricks > colony->getGoods(GoodsType::BRICKS).inventory)) {
                 result |= PLACING_STRUCTURE_NO_RESOURCES;
         }
     }

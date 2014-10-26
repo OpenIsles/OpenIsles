@@ -57,7 +57,10 @@ private:
      */
     Route::const_iterator nextHopInRoute;
 
-    // TODO Animation sollte spezifiert sein, aktuell is fix die eine Animation in Verwendung
+    /**
+     * @brief verwendete Animation für den Träger
+     */
+    Animation* animation;
 
     /**
      * @brief aktueller Frame der Animation, die grade abgespielt wird. Dieser Wert ist ein double, da fortlaufend
@@ -75,6 +78,15 @@ public:
      * @param onOutboundTrip `true` für Hinweg, `false` für Rückweg.
      */
     Carrier(Building* owningBuilding, Route* route, GoodsType goodsType, bool onOutboundTrip);
+
+
+    Animation* getAnimation() const {
+        return animation;
+    }
+
+    void setAnimation(Animation* animation) {
+        this->animation = animation;
+    }
 
     /**
      * @brief Destruktor. Räumt die Route mit weg.

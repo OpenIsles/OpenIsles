@@ -82,6 +82,15 @@ public:
 	 * @param mouseYInBuilding Y-Koordinate innerhalb des Gebäude, wo geklickt wurde
 	 */
 	void onClick(int mouseXInBuilding, int mouseYInBuilding);
+
+    /**
+     * @brief Prüft, ob das Gebäude ein Lagergebäude (Kontor oder Marketplatz), von welchem ALLE Waren abgeholt und
+     * bezogen werden können.
+     * @return `true` wenn Lagergebäude (Kontor oder Marketplatz), sonst `false`
+     */
+    bool isStorageBuilding() const {
+        return (structureType == MARKETPLACE || structureType == OFFICE1);
+    }
 };
 
 #endif

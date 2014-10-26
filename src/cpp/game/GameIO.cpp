@@ -192,12 +192,12 @@ void GameIO::loadColonies(rapidxml::xml_node<>* objectgroupColoniesNode) {
         Colony* colony = game->foundNewColony(player, mapTile->isle);
 
         // Waren
-        colony->setGoodsInventory(GoodsType::TOOLS,
-            atoi(getPropertyValueFromPropertiesNode(propertiesNode, "goods_tools")));
-        colony->setGoodsInventory(GoodsType::WOOD,
-            atoi(getPropertyValueFromPropertiesNode(propertiesNode, "goods_wood")));
-        colony->setGoodsInventory(GoodsType::BRICKS,
-            atoi(getPropertyValueFromPropertiesNode(propertiesNode, "goods_bricks")));
+        colony->getGoods(GoodsType::TOOLS).inventory =
+            atoi(getPropertyValueFromPropertiesNode(propertiesNode, "goods_tools"));
+        colony->getGoods(GoodsType::WOOD).inventory =
+            atoi(getPropertyValueFromPropertiesNode(propertiesNode, "goods_wood"));
+        colony->getGoods(GoodsType::BRICKS).inventory =
+            atoi(getPropertyValueFromPropertiesNode(propertiesNode, "goods_bricks"));
     }
 }
 

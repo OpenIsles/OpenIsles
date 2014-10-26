@@ -20,45 +20,13 @@ private:
 public:
 	Colony();
 	~Colony();
-    
+
     /**
-     * Ändert den Lagerbestand eines Guts
-     * 
-     * @param goodsType Gütertyp
-     * @param inventory neuer Lagerbestand
+     * @brief Liefert den Slot für einen bestimmten Warentyp zurück. Dieser enthält Lagerbestand und -Kapazität.
+     * @return Slot für den angeforderten Warentyp
      */
-    void setGoodsInventory(GoodsType goodsType, unsigned int inventory) {
-        goods[goodsType].inventory = inventory;
-    }
-    
-    /**
-     * Liefert den Lagerbestand eines Guts
-     * 
-     * @param goodsType Gütertyp
-     * @return Lagerbestand
-     */
-    unsigned int getGoodsInventory(GoodsType goodsType) const {
-        return goods[goodsType].inventory;
-    }
-    
-    /**
-     * Ändert die Lagerkapazität eines Guts
-     * 
-     * @param goodsType Gütertyp
-     * @param capacity neue Lagerkapazität
-     */
-    void setGoodsCapacity(GoodsType goodsType, unsigned int capacity) {
-        goods[goodsType].capacity = capacity;
-    }
-    
-    /**
-     * Liefert die Lagerkapazität eines Guts
-     * 
-     * @param goodsType Gütertyp
-     * @return Lagerkapazität
-     */
-    unsigned int getGoodsCapacity(GoodsType goodsType) const {
-        return goods[goodsType].capacity;
+    GoodsSlot& getGoods(GoodsType goodsType) {
+        return goods[goodsType];
     }
     
     /**

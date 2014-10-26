@@ -50,8 +50,10 @@ void GuiColonyGoodsWidget::renderElement(SDL_Renderer* renderer) {
     int y = windowY + 60;
     for (int i = 0; i < GoodsType::MAX_GOOD; i++) {
         GoodsType goodsType = (GoodsType) i;
-        int inventory = colony->getGoodsInventory(goodsType);
-        int capacity = colony->getGoodsCapacity(goodsType);
+        GoodsSlot goods = colony->getGoods(goodsType);
+        
+        int inventory = (int) floor(goods.inventory);
+        int capacity = (int) floor(goods.capacity);
 
         GuiUtils::drawGoodsBox(x, y, goodsType, inventory, capacity);
 

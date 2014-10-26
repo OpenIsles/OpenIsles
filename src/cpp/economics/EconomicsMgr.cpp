@@ -90,7 +90,8 @@ void EconomicsMgr::update(Structure* structure) {
 
 
     // Gebäude, die Waren einsammeln
-    if (building->productionSlots.input.isUsed()) {
+    bool isStorageBuilding = building->isStorageBuilding();
+    if (building->productionSlots.input.isUsed() || isStorageBuilding) {
         // Ist der Träger zu Hause? Gucken, wo was zu holen is und Abholung einleiten
         if (building->carrier == nullptr) {
 
@@ -101,6 +102,8 @@ void EconomicsMgr::update(Structure* structure) {
 
                 Carrier* carrier = new Carrier(result.building, result.route, result.goods, true);
                 carrier->setMapCoords(firstHopOnRoute.mapX, firstHopOnRoute.mapY);
+                carrier->setAnimation(
+                    graphicsMgr->getAnimation(isStorageBuilding ? CART_WITHOUT_CARGO : CARRIER));
 
                 building->carrier = carrier;
             }
@@ -109,7 +112,7 @@ void EconomicsMgr::update(Structure* structure) {
         // Träger unterwegs? fortbewegen
         else if (building->carrier != nullptr) {
             Carrier* carrier = building->carrier;
-            Animation* animation = graphicsMgr->getAnimation(CARRIER); // TODO später muss die verwendete Animation am Carrier hängen
+            Animation* animation = carrier->getAnimation();
 
             // Animieren
             carrier->animationFrame += (double) ticksPastSinceLastUpdate / 1000 * animation->getFps();
@@ -173,7 +176,7 @@ void EconomicsMgr::update(Structure* structure) {
                         targetBuilding->productionSlots.output.inventory -= goodsWeCollect;
 
                         Route* route = carrier->route;
-                        Route* returnRoute = AStar::findRoute(route->back(), route->front(), building, false);
+                        Route* returnRoute = AStar::findRoute(route->back(), route->front(), building, isStorageBuilding);
 
                         delete carrier;
                         building->carrier = nullptr;
@@ -188,6 +191,8 @@ void EconomicsMgr::update(Structure* structure) {
                             Carrier* returnCarrier = new Carrier(
                                 building, returnRoute, targetBuilding->productionSlots.output.goodsType, false);
                             returnCarrier->setMapCoords(firstHopOnReturnRoute.mapX, firstHopOnReturnRoute.mapY);
+                            returnCarrier->setAnimation(
+                                graphicsMgr->getAnimation(isStorageBuilding ? CART_WITH_CARGO : CARRIER));
                             returnCarrier->carriedGoods.inventory = goodsWeCollect;
 
                             building->carrier = returnCarrier;
@@ -196,12 +201,24 @@ void EconomicsMgr::update(Structure* structure) {
 
                     // Das war Rückweg -> Waren ausladen und Träger zerstören
                     else if (!carrier->onOutboundTrip) {
-                        // Gucken, in welchen Slot die Waren müssen
-                        if (building->productionSlots.input.goodsType == carrier->carriedGoods.goodsType) {
-                            building->productionSlots.input.increaseInventory(carrier->carriedGoods.inventory);
+                        // Lagergebäude: Waren der Kolonie gutschreiben
+                        if (isStorageBuilding) {
+                            int mapX, mapY;
+                            building->getMapCoords(mapX, mapY);
+                            MapTile* mapTile = game->getMap()->getMapTileAt(mapX, mapY);
+                            Colony* colony = game->getColony(mapTile->player, mapTile->isle);
+
+                            colony->getGoods(carrier->carriedGoods.goodsType).increaseInventory(
+                                carrier->carriedGoods.inventory);
                         }
-                        else if (building->productionSlots.input2.goodsType == carrier->carriedGoods.goodsType) {
-                            building->productionSlots.input2.increaseInventory(carrier->carriedGoods.inventory);
+                        // Produktionsgebäude: Gucken, in welchen Slot die Waren müssen
+                        else {
+                            if (building->productionSlots.input.goodsType == carrier->carriedGoods.goodsType) {
+                                building->productionSlots.input.increaseInventory(carrier->carriedGoods.inventory);
+                            }
+                            else if (building->productionSlots.input2.goodsType == carrier->carriedGoods.goodsType) {
+                                building->productionSlots.input2.increaseInventory(carrier->carriedGoods.inventory);
+                            }
                         }
 
                         delete carrier;
@@ -224,23 +241,29 @@ FindBuildingToGetGoodsFromResult EconomicsMgr::findBuildingToGetGoodsFrom(Buildi
     }
 
     // Welche Waren brauchen wir überhaupt?
-    GoodsType goodsRequired1 = buildingConfig->getBuildingProduction()->input.goodsType;
-    GoodsType goodsRequired2 = buildingConfig->getBuildingProduction()->input2.goodsType;
+    GoodsType goodsRequired1 = GoodsType::NO_GOODS;
+    GoodsType goodsRequired2 = GoodsType::NO_GOODS;
 
-    // Wir brauchen nur, wenn die Lager nicht voll sind
-    if (goodsRequired1 != GoodsType::NO_GOODS) {
-        if (building->productionSlots.input.isInventoryFull()) {
-            goodsRequired1 = GoodsType::NO_GOODS;
-        }
-    }
-    if (goodsRequired2 != GoodsType::NO_GOODS) {
-        if (building->productionSlots.input2.isInventoryFull()) {
-            goodsRequired2 = GoodsType::NO_GOODS;
-        }
-    }
+    bool isStorageBuilding = building->isStorageBuilding();
+    if (!isStorageBuilding) {
+        goodsRequired1 = buildingConfig->getBuildingProduction()->input.goodsType;
+        goodsRequired2 = buildingConfig->getBuildingProduction()->input2.goodsType;
 
-    if (goodsRequired1 == GoodsType::NO_GOODS && goodsRequired2 == GoodsType::NO_GOODS) {
-        return FindBuildingToGetGoodsFromResult(); // Wir brauchen (aktuell?) keine Waren
+        // Wir brauchen nur, wenn die Lager nicht voll sind
+        if (goodsRequired1 != GoodsType::NO_GOODS) {
+            if (building->productionSlots.input.isInventoryFull()) {
+                goodsRequired1 = GoodsType::NO_GOODS;
+            }
+        }
+        if (goodsRequired2 != GoodsType::NO_GOODS) {
+            if (building->productionSlots.input2.isInventoryFull()) {
+                goodsRequired2 = GoodsType::NO_GOODS;
+            }
+        }
+
+        if (goodsRequired1 == GoodsType::NO_GOODS && goodsRequired2 == GoodsType::NO_GOODS) {
+            return FindBuildingToGetGoodsFromResult(); // Wir brauchen (aktuell?) keine Waren
+        }
     }
 
     // Meinen Einzugsbereich durchsehen (TODO: und Liste aller Gebäude innerhalb anfertigen)
@@ -266,8 +289,9 @@ FindBuildingToGetGoodsFromResult EconomicsMgr::findBuildingToGetGoodsFrom(Buildi
 
             // Liefert das Gebäude was passendes?
             const BuildingConfig* buildingThereConfig = buildingConfigMgr->getConfig(buildingThere->getStructureType());
-            if (buildingThereConfig->getBuildingProduction()->output.goodsType != goodsRequired1 &&
-                buildingThereConfig->getBuildingProduction()->output.goodsType != goodsRequired2) {
+            if (!isStorageBuilding && (
+                    buildingThereConfig->getBuildingProduction()->output.goodsType != goodsRequired1 &&
+                    buildingThereConfig->getBuildingProduction()->output.goodsType != goodsRequired2)) {
 
                 continue; // produziert nix passendes
             }
@@ -275,6 +299,18 @@ FindBuildingToGetGoodsFromResult EconomicsMgr::findBuildingToGetGoodsFrom(Buildi
             // Waren zum Abholen da?
             if (buildingThere->productionSlots.output.inventory < 1) {
                 continue;
+            }
+
+            // Lagergebäude: Wir holen nur ab, wenn die Lager der Kolonie nicht schon voll sind
+            if (isStorageBuilding) {
+                int mapX, mapY;
+                building->getMapCoords(mapX, mapY);
+                MapTile* mapTile = game->getMap()->getMapTileAt(mapX, mapY);
+                Colony* colony = game->getColony(mapTile->player, mapTile->isle);
+
+                if (colony->getGoods(buildingThere->productionSlots.output.goodsType).isInventoryFull()) {
+                    continue;
+                }
             }
 
             // Checken, ob eine Route dahin existiert
@@ -286,7 +322,7 @@ FindBuildingToGetGoodsFromResult EconomicsMgr::findBuildingToGetGoodsFrom(Buildi
             buildingThere->getMapCoords(mapXDestination, mapYDestination);
             MapCoordinate mapCoordinateDestination = MapCoordinate(mapXDestination, mapYDestination);
 
-            Route* route = AStar::findRoute(mapCoordinateSource, mapCoordinateDestination, building, false);
+            Route* route = AStar::findRoute(mapCoordinateSource, mapCoordinateDestination, building, isStorageBuilding);
             if (route == nullptr) {
                 continue; // gibt keinen Weg dahin
             }
