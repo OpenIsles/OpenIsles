@@ -391,7 +391,7 @@ void GuiMgr::initBuildGui() {
     registerElement(GUI_ID_SELECTED_BUILDING_WIDGET, selectedBuildingWidget);
     findElement(GUI_ID_PANEL_BUILD)->addChildElement(selectedBuildingWidget);
 
-    // Warenanzeige der Kolonie, wenn Marktplatz oder Kontor ausgewählt ist
+    // Warenanzeige der Siedlung, wenn Marktplatz oder Kontor ausgewählt ist
     GuiColonyGoodsWidget* colonyGoodsWidget = new GuiColonyGoodsWidget();
     registerElement(GUI_ID_COLONY_GOODS_WIDGET, colonyGoodsWidget);
     findElement(GUI_ID_PANEL_BUILD)->addChildElement(colonyGoodsWidget);

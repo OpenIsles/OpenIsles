@@ -30,7 +30,7 @@ public:
     }
     
     /**
-     * @brief Erniedrigt die Lagerbestände der Güter der Kolonie für den Bau eines Gebäudes
+     * @brief Erniedrigt die Lagerbestände der Güter der Siedlung für den Bau eines Gebäudes
      * @param buildingCosts Gebäudekosten, wo denen die Güterkosten dekrementiert werden.
      */
     void subtractBuildingCosts(const BuildingCosts* buildingCosts) {

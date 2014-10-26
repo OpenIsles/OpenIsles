@@ -9,7 +9,7 @@ class SDL_Renderer;
 
 
 /**
-* @brief GUI-Widget, dass den aktuellen Lagerbestand der Kolonie anzeigt
+* @brief GUI-Widget, dass den aktuellen Lagerbestand der Siedlung anzeigt
 */
 class GuiColonyGoodsWidget : public GuiBase {
 

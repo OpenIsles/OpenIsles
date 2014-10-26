@@ -33,14 +33,11 @@ void GuiColonyGoodsWidget::renderElement(SDL_Renderer* renderer) {
     int windowX, windowY;
     getWindowCoords(windowX, windowY);
 
-    // Name der Kolonie
-    int mapX, mapY;
-    selectedBuilding->getMapCoords(mapX, mapY);
-    Isle* isle = game->getMap()->getMapTileAt(mapX, mapY)->isle;
-    Colony* colony = game->getColony(selectedBuilding->getPlayer(), isle);
+    // Name der Siedlung
+    Colony* colony = game->getColony(selectedBuilding);
 
     // TODO sicherstellen, dass immer nur ein Widget angezeigt wird; aktuell is unten drunter noch das GuiSelectedBuildingWidget
-//    fontMgr->renderText(renderer, "Koloniename", windowX + width/2, windowY + 15, // TODO Kolonie aus Savegame laden; is da schon drin
+//    fontMgr->renderText(renderer, "Siedlungsname", windowX + width/2, windowY + 15, // TODO Siedlungsname aus Savegame laden; is da schon drin
 //        &colorLightBrown, &colorBlack, "DroidSans-Bold.ttf", 15, RENDERTEXT_HALIGN_CENTER);
 
     // Waren
@@ -51,7 +48,7 @@ void GuiColonyGoodsWidget::renderElement(SDL_Renderer* renderer) {
     for (int i = 0; i < GoodsType::MAX_GOOD; i++) {
         GoodsType goodsType = (GoodsType) i;
         GoodsSlot goods = colony->getGoods(goodsType);
-        
+
         int inventory = (int) floor(goods.inventory);
         int capacity = (int) floor(goods.capacity);
 

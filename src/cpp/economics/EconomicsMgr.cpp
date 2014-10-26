@@ -201,12 +201,9 @@ void EconomicsMgr::update(Structure* structure) {
 
                     // Das war Rückweg -> Waren ausladen und Träger zerstören
                     else if (!carrier->onOutboundTrip) {
-                        // Lagergebäude: Waren der Kolonie gutschreiben
+                        // Lagergebäude: Waren der Siedlung gutschreiben
                         if (isStorageBuilding) {
-                            int mapX, mapY;
-                            building->getMapCoords(mapX, mapY);
-                            MapTile* mapTile = game->getMap()->getMapTileAt(mapX, mapY);
-                            Colony* colony = game->getColony(mapTile->player, mapTile->isle);
+                            Colony* colony = game->getColony(building);
 
                             colony->getGoods(carrier->carriedGoods.goodsType).increaseInventory(
                                 carrier->carriedGoods.inventory);
@@ -301,12 +298,9 @@ FindBuildingToGetGoodsFromResult EconomicsMgr::findBuildingToGetGoodsFrom(Buildi
                 continue;
             }
 
-            // Lagergebäude: Wir holen nur ab, wenn die Lager der Kolonie nicht schon voll sind
+            // Lagergebäude: Wir holen nur ab, wenn die Lager der Siedlung nicht schon voll sind
             if (isStorageBuilding) {
-                int mapX, mapY;
-                building->getMapCoords(mapX, mapY);
-                MapTile* mapTile = game->getMap()->getMapTileAt(mapX, mapY);
-                Colony* colony = game->getColony(mapTile->player, mapTile->isle);
+                Colony* colony = game->getColony(building);
 
                 if (colony->getGoods(buildingThere->productionSlots.output.goodsType).isInventoryFull()) {
                     continue;

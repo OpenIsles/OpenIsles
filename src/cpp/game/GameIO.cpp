@@ -51,7 +51,7 @@ void GameIO::loadGameFromTMX(const char* filename) {
     // Karte und Inseln laden
     loadMap(objectgroupIslesNode);
 
-    // Kolonien laden
+    // Siedlungen laden
     loadColonies(objectgroupColoniesNode);
 
     // Strukturen und Gebäude laden
@@ -188,7 +188,7 @@ void GameIO::loadColonies(rapidxml::xml_node<>* objectgroupColoniesNode) {
         Player* player = game->getPlayer(playerNr - 1);
         MapTile* mapTile = map->mapTiles->getData(mapX, mapY, nullptr);
 
-        // Kolonie anlegen
+        // Siedlung anlegen
         Colony* colony = game->foundNewColony(player, mapTile->isle);
 
         // Waren

@@ -131,6 +131,14 @@ public:
      * @return Colony oder nullptr, wenn keine Siedlung da ist
      */
     Colony* getColony(Player* player, Isle* isle);
+
+    /**
+     * Liefert die Siedlung zurück, in der ein bestimmtes MapObject sich befindet.
+     *
+     * @param mapObject MapObject
+     * @return Colony oder nullptr, wenn keine Siedlung da ist
+     */
+    Colony* getColony(const MapObject* mapObject);
     
     /**
      * @brief rendert die Leiste mit den Resourcen, wenn notwendig

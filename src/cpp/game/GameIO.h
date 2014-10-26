@@ -30,7 +30,7 @@ private:
     static void loadMap(rapidxml::xml_node<>* objectgroupIslesNode);
 
     /**
-     * @brief Lädt die Kolonien aus der tiled-TMX-Datei
+     * @brief Lädt die Siedlungen aus der tiled-TMX-Datei
      * @param objectgroupColoniesNode <objectgroup>-Knoten der "colonies"-Ebene aus der tiled-Datei
      */
     static void loadColonies(rapidxml::xml_node<>* objectgroupColoniesNode);

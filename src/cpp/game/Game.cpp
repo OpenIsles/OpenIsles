@@ -52,6 +52,14 @@ Colony* Game::getColony(Player* player, Isle* isle) {
     return iter->second;
 }
 
+Colony* Game::getColony(const MapObject* mapObject) {
+    int mapX, mapY;
+    mapObject->getMapCoords(mapX, mapY);
+    MapTile* mapTile = map->getMapTileAt(mapX, mapY);
+
+    return getColony(mapTile->player, mapTile->isle);
+}
+
 void Game::renderResourcesBar() {
     Player* currentPlayer = game->getCurrentPlayer();
     StructureType addingStructure = game->getAddingStructure();
@@ -70,7 +78,7 @@ void Game::renderResourcesBar() {
     fontMgr->renderText(renderer, outputString, 42, 10,
                         &colorWhite, &colorBlack, "DroidSans-Bold.ttf", 18, RENDERTEXT_HALIGN_LEFT);
     
-    // Kolonie, wo der Cursor grade is
+    // Siedlung, wo der Cursor grade is
     MapTile* mapTileAtCursor = map->getMapTileAt(mouseCurrentMapX, mouseCurrentMapY);
     if (mapTileAtCursor == nullptr || mapTileAtCursor->player != currentPlayer) {
         return;
