@@ -4,7 +4,7 @@ cmake_minimum_required(VERSION 2.8)
 
 add_definitions("-std=c++11 -Wall -Werror -pedantic")
 
-# Debuginfos für Debug-Buildconfig aktivieren
+# Debuginfos für Debug-Buildconfig aktivieren - nicht vergessen, neue Variablen in die Doxyfile.in einzutragen
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DDEBUG -DDEBUG_A_STAR -DDEBUG_ECONOMICS")
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -DNDEBUG")
 
