@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <set>
 #include "config/BuildingConfigMgr.h"
 #include "economics/EconomicsMgr.h"
 #include "game/Colony.h"
@@ -105,7 +106,7 @@ void EconomicsMgr::updateCarrier(Building* building) {
             // Träger anlegen und zuweisen
             MapCoordinate firstHopOnRoute = result.route->front();
 
-            Carrier* carrier = new Carrier(result.building, result.route, result.goods, true);
+            Carrier* carrier = new Carrier(result.building, result.route, result.goodsSlot.goodsType, true);
             carrier->setMapCoords(firstHopOnRoute.mapX, firstHopOnRoute.mapY);
             carrier->setAnimation(
                 graphicsMgr->getAnimation(isStorageBuilding ? CART_WITHOUT_CARGO : CARRIER));
@@ -181,6 +182,7 @@ void EconomicsMgr::updateCarrier(Building* building) {
                     // Waren aufladen
                     int goodsWeCollect = (int) targetBuilding->productionSlots.output.inventory;
                     targetBuilding->productionSlots.output.inventory -= goodsWeCollect;
+                    targetBuilding->lastGoodsCollections = sdlTicks;
 
                     Route* route = carrier->route;
                     Route* returnRoute = AStar::findRoute(route->back(), route->front(), building, isStorageBuilding);
@@ -267,7 +269,12 @@ FindBuildingToGetGoodsFromResult EconomicsMgr::findBuildingToGetGoodsFrom(Buildi
         }
     }
 
-    // Meinen Einzugsbereich durchsehen (TODO: und Liste aller Gebäude innerhalb anfertigen)
+    // Meinen Einzugsbereich durchsehen und Liste aller Gebäude innerhalb anfertigen, die als Ziel in Frage kommen
+    std::list<FindBuildingToGetGoodsFromResult> potentialResults;
+
+    std::set<Building*> buildingChecked; // Gebäude in dieses Set aufnehmen, wenn wir es schon behandelt haben.
+                                         // Da wir kachelweise arbeiten, erhalten wir dasselbe Gebäude mehrfach.
+
     Map* map = game->getMap();
     for (int y = 0; y < catchmentArea->height; y++) {
         for (int x = 0; x < catchmentArea->width; x++) {
@@ -287,6 +294,14 @@ FindBuildingToGetGoodsFromResult EconomicsMgr::findBuildingToGetGoodsFrom(Buildi
             if (buildingThere == nullptr) {
                 continue;
             }
+
+            // Gebäude in Set einfügen bzw. gucken, ob wir das Gebäude schon haben
+            std::pair<std::set<Building*>::iterator, bool> setInsertionResult = buildingChecked.insert(buildingThere);
+            if (!setInsertionResult.second) {
+                continue; // Dieses Gebäude hatten wir schon mal
+            }
+
+            // TODO Es muss verhindert werden, dass zwei Träger zum selben Ziel unterwegs sind
 
             // Liefert das Gebäude was passendes?
             const BuildingConfig* buildingThereConfig = buildingConfigMgr->getConfig(buildingThere->getStructureType());
@@ -328,16 +343,69 @@ FindBuildingToGetGoodsFromResult EconomicsMgr::findBuildingToGetGoodsFrom(Buildi
             AStar::cutRouteInsideBuildings(route);
 
             // Juhuu! Dieses Gebäude kommt in Frage
-            FindBuildingToGetGoodsFromResult result;
-            result.building = buildingThere;
-            result.route = route;
-            result.goods = buildingThereConfig->getBuildingProduction()->output.goodsType;
-            return result; // TODO Testweise nehmen wir das erstbeste Gebäude
+            FindBuildingToGetGoodsFromResult potentialResult;
+            potentialResult.building = buildingThere;
+            potentialResult.route = route;
+            potentialResult.goodsSlot.goodsType = buildingThereConfig->getBuildingProduction()->output.goodsType;
+            potentialResult.goodsSlot.inventory = buildingThere->productionSlots.output.inventory;
+            potentialResult.goodsSlot.capacity = buildingThere->productionSlots.output.capacity;
+            potentialResult.lastGoodsCollections = buildingThere->lastGoodsCollections;
+            potentialResults.push_back(potentialResult);
         }
     }
 
-    // TODO Liste sortieren und besten Treffer wählen
-    // TODO Es muss verhindert werden, dass zwei Träger zum selben Ziel unterwegs sind
+    // Keine Ziele? Ok, dann sind wir fertig
+    if (potentialResults.empty()) {
+        return FindBuildingToGetGoodsFromResult();
+    }
 
-    return FindBuildingToGetGoodsFromResult();
+    // Liste sortieren und besten (siehe Methodenkommentar) Treffer wählen:
+    struct FindBuildingToGetGoodsFromResultComparator {
+        bool operator() (const FindBuildingToGetGoodsFromResult& result1,
+                         const FindBuildingToGetGoodsFromResult& result2) const {
+
+            // Rohstoffgebäude und Lager nicht voll? Dann unwichtiger, als andere Gebäude
+            if (result1.goodsSlot.isRawMaterial() && !result1.goodsSlot.isInventoryFull() &&
+                !result2.goodsSlot.isRawMaterial()) {
+
+                return false;
+            }
+            else if (result2.goodsSlot.isRawMaterial() && !result2.goodsSlot.isInventoryFull() &&
+                     !result1.goodsSlot.isRawMaterial()) {
+
+                return true;
+            }
+
+            // höherer Lagerbestand hat Vorrang
+            double inventoryRatio1 = result1.goodsSlot.inventory / (double) result1.goodsSlot.capacity;
+            double inventoryRatio2 = result2.goodsSlot.inventory / (double) result2.goodsSlot.capacity;
+
+            if (inventoryRatio1 > inventoryRatio2) {
+                return true;
+            } else if (inventoryRatio1 < inventoryRatio2) {
+                return false;
+            }
+
+            // Lagerbestand ist gleich: Dann den nehmen, der länger nicht abgeholt wurde
+            return result1.lastGoodsCollections < result2.lastGoodsCollections;
+        }
+    };
+
+    potentialResults.sort(FindBuildingToGetGoodsFromResultComparator());
+    FindBuildingToGetGoodsFromResult bestResult = potentialResults.front();
+
+#ifdef DEBUG_ECONOMICS
+    int mapX, mapY;
+    building->getMapCoords(mapX, mapY);
+
+    std::cout << "potentialResults for (" << mapX << ", " << mapY << "):" << std::endl;
+
+    int i = 1;
+    for (auto iter = potentialResults.cbegin(); iter != potentialResults.cend(); iter++, i++) {
+        std::cout << i << ": " << *iter << std::endl;
+    }
+    std::cout << "-----------------------------" << std::endl;
+#endif
+
+    return bestResult;
 }

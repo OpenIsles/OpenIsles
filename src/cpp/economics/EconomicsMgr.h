@@ -2,6 +2,7 @@
 #define _ECONOMICS_MGR_H
 
 #include <map>
+#include <iostream>
 #include "map/Building.h"
 
 struct Structure;
@@ -12,19 +13,26 @@ struct Structure;
 struct FindBuildingToGetGoodsFromResult {
 
     /**
-     * @brief Gebäude, von dem wir waren holen sollten (oder nullptr, wenn grade nix zu holen is)
+     * @brief Gebäude, von dem wir waren holen sollten (oder `nullptr`, wenn grade nix zu holen is)
      */
     Building* building;
 
     /**
-     * @brief berechnete Route zu dem Gebäude (oder null, wenn building leer ist)
+     * @brief berechnete Route zu dem Gebäude (oder `nullptr`, wenn building leer ist)
      */
     Route* route;
 
     /**
-     * @brief Warentyp, den wir dort holen sollen (NO_GOODS, wenn building leer ist)
+     * @brief GoodsSlot. Enthält die Info, welchen Warentyp wir dort holen sollen (`NO_GOODS`, wenn building leer ist),
+     * wie hoch der Lagerbestand und die Lagerkapazität ist (um auswerten zu können, wie "gut" dieses Ergebnis ist)
+     * @sa EconomicsMgr::findBuildingToGetGoodsFrom()
      */
-    GoodsType goods;
+    GoodsSlot goodsSlot;
+
+    /**
+     * @brief SDL_GetTicks-Wert, wann zuletzt eine Abholung der Waren bei diesem Gebäude stattgefunden hat
+     */
+    Uint32 lastGoodsCollections;
 
     /**
      * leerer Konstruktur, der ein "nix zu holen"-Ergebnis anlegt
@@ -32,8 +40,28 @@ struct FindBuildingToGetGoodsFromResult {
     FindBuildingToGetGoodsFromResult() {
         building = nullptr;
         route = nullptr;
-        goods = GoodsType::NO_GOODS;
+        goodsSlot.goodsType = GoodsType::NO_GOODS;
+        lastGoodsCollections = 0;
     }
+
+#ifdef DEBUG_ECONOMICS
+    /**
+     * @brief (nur zu Debugzwecken einkompiliert) Ausgabe-Operator, um dieses Hilfsstruktur auszugeben
+     * @param outputStream Ausgabestream, auf den geschrieben wird
+     * @param result Objekt, was ausgegeben werden soll
+     * @return Ausgabestream, sodass das Chaining funktioniert
+     */
+    friend std::ostream& operator<< (std::ostream& outputStream, FindBuildingToGetGoodsFromResult const& result) {
+        int mapX, mapY;
+        result.building->getMapCoords(mapX, mapY);
+
+        return outputStream << "{ building = (" << mapX << ", " << mapY << "), routeLen = " <<
+            result.route->size() << ", goods = ( goodsType = " << result.goodsSlot.goodsType <<
+            ", inventory = " << result.goodsSlot.inventory << " of " << result.goodsSlot.capacity <<
+            ", ratio = " << (result.goodsSlot.inventory / result.goodsSlot.capacity) <<
+            " ), lastGoodsCollections = " << result.lastGoodsCollections << " }";
+    }
+#endif
 
 };
 
@@ -78,10 +106,15 @@ private:
     void updateCarrier(Building* building);
 
     /**
-     * @brief Sucht für ein angegebenes Gebäude das beste Gebäude, um Waren von diesen zu beziehen
-     * "bestes" bedeutet hierbei, dass es Güter hat, die wir brauchen und entsprechender Lagerbestand vorhanden ist.
-     * Gebäude mit höherem Lagerbestand werden bevorzugt, dass wir nicht ständig vom selben nahen Gebäude 1t abholen,
-     * während ein paar Kacheln weiter die Lager überlaufen.
+     * @brief Sucht für ein angegebenes Gebäude das beste Gebäude, um Waren von diesen zu beziehen.
+     *
+     * "bestes" bedeutet hierbei:
+     *  - Gebäude, die Rohstoffe herstellen, sind grundsätzlich nicht so wichtig, da ihre Waren von Produktionsgebäuden
+     *    abgeholt werden. Ausnahme: Lager ist absolut voll. Das bedeutet, kein Produktionsgebäude in Reichweite und
+     *    wir müssen die Waren in Marktplatz/Kontor laden.
+     *  - Je voller das Lager (prozentual), desto besser der Treffer.
+     *  - Haben zwei Gebäude gleichen Lagerstand, wird das Gebäude bevorzugt, von dem länger nicht abgeholt wurde
+     *
      * @param building Gebäude, für welches wir eine Warenzulieferung suchen
      * @return Ergebnisstruktur, siehe Dokumentation dort
      */

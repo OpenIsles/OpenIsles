@@ -10,11 +10,15 @@ enum GoodsType : char {
     // Spezialwert, der dem null-Wert entspricht
     NO_GOODS = -1,
 
-    // Güter
+    // Rohstoffe
     WOOL = 0,
     CATTLE,
+
+    // Güter
     FOOD,
     CLOTH,
+
+    // Baumaterialen
     TOOLS,
     WOOD,
     BRICKS,
@@ -113,10 +117,19 @@ public:
 
     /**
      * @brief Überprüft, ob die Lager voll sind
-     * @return true, wenn das Lager voll ist, sonst false
+     * @return `true`, wenn das Lager voll ist, sonst `false`
      */
     inline bool isInventoryFull() const {
         return (inventory >= capacity);
+    }
+
+
+    /**
+     * @brief Ermittelt, ob der Güterslot einen Rohstoff hält.
+     * @return `true`, wenn wir einen Rohstoff haben, sonst `false`
+     */
+    inline bool isRawMaterial() const {
+        return (goodsType == WOOL || goodsType == CATTLE);
     }
 };
 

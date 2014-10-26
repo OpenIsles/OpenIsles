@@ -41,7 +41,7 @@ struct MapCoordinate {
      * @param otherOp anderer Operand
      * @return true, wenn dieses Objekt und der andere Operand in beiden Koordinaten übereinstimmen
      */
-    inline bool operator == (const MapCoordinate& otherOp) const {
+    inline bool operator== (const MapCoordinate& otherOp) const {
         return ((mapX == otherOp.mapX) && (mapY == otherOp.mapY));
     }
 

@@ -44,6 +44,11 @@ private:
      */
     Carrier* carrier;
 
+    /**
+     * @brief SDL_GetTicks-Wert, wann zuletzt die Waren bei diesem Gebäude abgeholt wurden
+     */
+    Uint32 lastGoodsCollections;
+
 public:
     /**
      * @brief Produktionsslots des Gebäudes
@@ -53,6 +58,7 @@ public:
 public:
     Building() {
         carrier = nullptr;
+        lastGoodsCollections = 0;
     }
     virtual ~Building() {
         if (carrier != nullptr) {
