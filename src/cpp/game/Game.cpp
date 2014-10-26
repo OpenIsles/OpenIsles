@@ -16,6 +16,7 @@ extern int mouseCurrentMapX, mouseCurrentMapY;
 
 
 Game::Game() {
+    speed = 1;
 }
 
 Game::~Game() {

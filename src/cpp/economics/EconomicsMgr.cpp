@@ -45,25 +45,26 @@ void EconomicsMgr::updateProduction(Building* building) {
     Uint32 ticksPastSinceLastUpdate = sdlTicks - building->getLastUpdateTime();
     Uint32 ticksInputConsumed = 0, ticksInput2Consumed = 0; // Zeiten, in denen wirklich verbraucht wurde
     double inputConsumed, input2Consumed, outputProduced;   // verbrauchte/produzierte Güter
+    double oneMinuteTicks = (double) 60000 / game->getSpeed();
 
     // Haben wir Eingabegüter, dann wird nur produziert, wie diese verfügbar sind
     if (buildingConfig->getBuildingProduction()->input.isUsed()) {
-        inputConsumed = (double) ticksPastSinceLastUpdate / 60000 * buildingConfig->inputConsumptionRate;
+        inputConsumed = (double) ticksPastSinceLastUpdate / oneMinuteTicks * buildingConfig->inputConsumptionRate;
 
         // nur verbrauchen, was auch da is
         if (inputConsumed > building->productionSlots.input.inventory) {
             inputConsumed = building->productionSlots.input.inventory;
         }
-        ticksInputConsumed = (Uint32) (inputConsumed * 60000 / buildingConfig->inputConsumptionRate);
+        ticksInputConsumed = (Uint32) (inputConsumed * oneMinuteTicks / buildingConfig->inputConsumptionRate);
 
         if (buildingConfig->getBuildingProduction()->input2.isUsed()) {
-            input2Consumed = (double) ticksPastSinceLastUpdate / 60000 * buildingConfig->input2ConsumptionRate;
+            input2Consumed = (double) ticksPastSinceLastUpdate / oneMinuteTicks * buildingConfig->input2ConsumptionRate;
 
             // nur verbrauchen, was auch da is
             if (input2Consumed > building->productionSlots.input2.inventory) {
                 input2Consumed = building->productionSlots.input2.inventory;
             }
-            ticksInput2Consumed = (Uint32) (input2Consumed * 60000 / buildingConfig->input2ConsumptionRate);
+            ticksInput2Consumed = (Uint32) (input2Consumed * oneMinuteTicks / buildingConfig->input2ConsumptionRate);
         }
     }
 
@@ -79,15 +80,15 @@ void EconomicsMgr::updateProduction(Building* building) {
 
     // Jetzt die Produktion durchführen
     if (buildingConfig->getBuildingProduction()->input.isUsed()) {
-        inputConsumed = (double) ticksWeReallyProduced / 60000 * buildingConfig->inputConsumptionRate;
+        inputConsumed = (double) ticksWeReallyProduced / oneMinuteTicks * buildingConfig->inputConsumptionRate;
         building->productionSlots.input.decreaseInventory(inputConsumed);
 
         if (buildingConfig->getBuildingProduction()->input2.isUsed()) {
-            input2Consumed = (double) ticksWeReallyProduced / 60000 * buildingConfig->input2ConsumptionRate;
+            input2Consumed = (double) ticksWeReallyProduced / oneMinuteTicks * buildingConfig->input2ConsumptionRate;
             building->productionSlots.input2.decreaseInventory(input2Consumed);
         }
     }
-    outputProduced = (double) ticksWeReallyProduced / 60000 * buildingConfig->productionRate;
+    outputProduced = (double) ticksWeReallyProduced / oneMinuteTicks * buildingConfig->productionRate;
     building->productionSlots.output.increaseInventory(outputProduced);
 }
 
@@ -118,12 +119,13 @@ void EconomicsMgr::updateCarrier(Building* building) {
     // Träger unterwegs? fortbewegen
     else if (building->carrier != nullptr) {
         Uint32 ticksPastSinceLastUpdate = sdlTicks - building->getLastUpdateTime();
+        double oneSecondTicks = (double) 1000 / game->getSpeed();
 
         Carrier* carrier = building->carrier;
         Animation* animation = carrier->getAnimation();
 
         // Animieren
-        carrier->animationFrame += (double) ticksPastSinceLastUpdate / 1000 * animation->getFps();
+        carrier->animationFrame += (double) ticksPastSinceLastUpdate / oneSecondTicks * animation->getFps();
         while (carrier->animationFrame >= animation->getFramesCount()) {
             carrier->animationFrame -= animation->getFramesCount();
         }
@@ -138,8 +140,8 @@ void EconomicsMgr::updateCarrier(Building* building) {
         // TODO Wir machen einen minimalen Fehler, dass wir bei Erreichen der nächsten Kachel, wieder auf 0 setzen
         // und nicht versuchen, den "Rest" der vergangenen Zeit anzuwenden und ein Stückchen weiterzulaufen.
 
-        carrier->mapXFraction += (double) ticksPastSinceLastUpdate / 1000 * stepX;
-        carrier->mapYFraction += (double) ticksPastSinceLastUpdate / 1000 * stepY;
+        carrier->mapXFraction += (double) ticksPastSinceLastUpdate / oneSecondTicks * stepX;
+        carrier->mapYFraction += (double) ticksPastSinceLastUpdate / oneSecondTicks * stepY;
         bool hopReached = false;
 
         if (carrier->mapXFraction <= -1) {

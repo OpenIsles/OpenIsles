@@ -464,7 +464,10 @@ void GuiMgr::onEvent(SDL_Event& event) {
     if (event.type == SDL_KEYDOWN) {
         if (event.key.keysym.scancode == SDL_SCANCODE_ESCAPE) {
             quitGame = true;
-        } else if (event.key.keysym.scancode == SDL_SCANCODE_UP) {
+        }
+
+        // Scrolling der Karte
+        else if (event.key.keysym.scancode == SDL_SCANCODE_UP) {
             map->scroll(0, -16);
         } else if (event.key.keysym.scancode == SDL_SCANCODE_DOWN) {
             map->scroll(0, 16);
@@ -472,12 +475,33 @@ void GuiMgr::onEvent(SDL_Event& event) {
             map->scroll(-16, 0);
         } else if (event.key.keysym.scancode == SDL_SCANCODE_RIGHT) {
             map->scroll(16, 0);
-        } else if (event.key.keysym.scancode == SDL_SCANCODE_F2) {
+        }
+
+        // Karte zoomen
+        else if (event.key.keysym.scancode == SDL_SCANCODE_F2) {
             map->setScreenZoom(4);
         } else if (event.key.keysym.scancode == SDL_SCANCODE_F3) {
             map->setScreenZoom(2);
         } else if (event.key.keysym.scancode == SDL_SCANCODE_F4) {
             map->setScreenZoom(1);
+        }
+
+        // Spielgeschwindigkeit
+        else if (event.key.keysym.scancode == SDL_SCANCODE_F5) {
+            game->setSpeed(1);
+        } else if (event.key.keysym.scancode == SDL_SCANCODE_F6) {
+            game->setSpeed(2);
+        } else if (event.key.keysym.scancode == SDL_SCANCODE_F7) {
+            game->setSpeed(4);
+        } else if (event.key.keysym.scancode == SDL_SCANCODE_F8) {
+            if (event.key.keysym.mod & KMOD_SHIFT) {
+                game->setSpeed(8);
+            }
+#ifdef DEBUG
+            else {
+                game->setSpeed(50); // Debug-Ultra-Speed :-)
+            }
+#endif
         }
 
 #ifdef DEBUG

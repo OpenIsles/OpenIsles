@@ -41,6 +41,11 @@ private:
      */
     std::map<std::pair<Player*, Isle*>, Colony*> colonies;
 
+    /**
+     * @brief Spielgeschwindigkeit in Vielfachen der Normalgeschwindigkeit
+     */
+    double speed;
+
 public:
 	Game();
 	~Game();
@@ -144,7 +149,24 @@ public:
      * @brief rendert die Leiste mit den Resourcen, wenn notwendig
      */
     void renderResourcesBar();
-    
+
+
+    /**
+     * @brief Liefert die Spielgeschwindigkeit zurück.
+     * @return Spielgeschwindigkeit in Vielfachen der Normalgeschwindigkeit
+     */
+    double getSpeed() const {
+        return speed;
+    }
+
+    /**
+     * @brief Ändert die Spielgeschwindigkeit
+     * @param speed neue Spielgeschwindigkeit
+     */
+    void setSpeed(double speed) {
+        this->speed = speed;
+    }
+
 };
 
 #endif
