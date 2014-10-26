@@ -24,210 +24,213 @@ void EconomicsMgr::update(Structure* structure) {
         return;
     }
 
+    updateProduction(building);
+    updateCarrier(building);
+
+    building->setLastUpdateTime(sdlTicks);
+}
+
+void EconomicsMgr::updateProduction(Building* building) {
     StructureType structureType = building->getStructureType();
     const BuildingConfig* buildingConfig = buildingConfigMgr->getConfig(structureType);
 
-    Uint32 ticksNow = sdlTicks;
-    Uint32 ticksPastSinceLastUpdate = ticksNow - building->getLastUpdateTime();
+    // Produziert eh nix bzw. Lager schon voll? Dann nix zu tun.
+    if (!buildingConfig->getBuildingProduction()->output.isUsed() ||
+        building->productionSlots.output.isInventoryFull()) {
 
-    /* Produktion durchführen
-     *
-     * Es wird nur für jede vergangene Ticks produziert, für die alle Eingabewaren da waren und auch nur
-     * solange das Ausgabewarenlager nicht voll ist.
-     * Der folgende Code ermittelt erst, wie viel verbraucht würde, wenn in allen ticksPastSinceLastUpdate
-     * die Voraussetzungen erfüllt sind. Dann wird ermittelt, wie viele Ticks lang pro Slot die Voraussetzungen
-     * wirklich erfüllt sind. Mit dem Minimum dieser Tick-Werte wird dann die Produktion durchgeführt.
-     */
-    if (buildingConfig->getBuildingProduction()->output.isUsed() &&
-        !building->productionSlots.output.isInventoryFull()) {
+        return;
+    }
 
-        Uint32 ticksInputConsumed = 0, ticksInput2Consumed = 0; // Zeiten, in denen wirklich verbraucht wurde
-        double inputConsumed, input2Consumed, outputProduced;   // verbrauchte/produzierte Güter
+    Uint32 ticksPastSinceLastUpdate = sdlTicks - building->getLastUpdateTime();
+    Uint32 ticksInputConsumed = 0, ticksInput2Consumed = 0; // Zeiten, in denen wirklich verbraucht wurde
+    double inputConsumed, input2Consumed, outputProduced;   // verbrauchte/produzierte Güter
 
-        // Haben wir Eingabegüter, dann wird nur produziert, wie diese verfügbar sind
-        if (buildingConfig->getBuildingProduction()->input.isUsed()) {
-            inputConsumed = (double) ticksPastSinceLastUpdate / 60000 * buildingConfig->inputConsumptionRate;
+    // Haben wir Eingabegüter, dann wird nur produziert, wie diese verfügbar sind
+    if (buildingConfig->getBuildingProduction()->input.isUsed()) {
+        inputConsumed = (double) ticksPastSinceLastUpdate / 60000 * buildingConfig->inputConsumptionRate;
+
+        // nur verbrauchen, was auch da is
+        if (inputConsumed > building->productionSlots.input.inventory) {
+            inputConsumed = building->productionSlots.input.inventory;
+        }
+        ticksInputConsumed = (Uint32) (inputConsumed * 60000 / buildingConfig->inputConsumptionRate);
+
+        if (buildingConfig->getBuildingProduction()->input2.isUsed()) {
+            input2Consumed = (double) ticksPastSinceLastUpdate / 60000 * buildingConfig->input2ConsumptionRate;
 
             // nur verbrauchen, was auch da is
-            if (inputConsumed > building->productionSlots.input.inventory) {
-                inputConsumed = building->productionSlots.input.inventory;
+            if (input2Consumed > building->productionSlots.input2.inventory) {
+                input2Consumed = building->productionSlots.input2.inventory;
             }
-            ticksInputConsumed = (Uint32) (inputConsumed * 60000 / buildingConfig->inputConsumptionRate);
-
-            if (buildingConfig->getBuildingProduction()->input2.isUsed()) {
-                input2Consumed = (double) ticksPastSinceLastUpdate / 60000 * buildingConfig->input2ConsumptionRate;
-
-                // nur verbrauchen, was auch da is
-                if (input2Consumed > building->productionSlots.input2.inventory) {
-                    input2Consumed = building->productionSlots.input2.inventory;
-                }
-                ticksInput2Consumed = (Uint32) (input2Consumed * 60000 / buildingConfig->input2ConsumptionRate);
-            }
+            ticksInput2Consumed = (Uint32) (input2Consumed * 60000 / buildingConfig->input2ConsumptionRate);
         }
-
-        // Minimum-Ticks ermitteln, in denen wirklich produziert wurde
-        Uint32 ticksWeReallyProduced = ticksPastSinceLastUpdate;
-        if (buildingConfig->getBuildingProduction()->input.isUsed()) {
-            ticksWeReallyProduced = std::min(ticksWeReallyProduced, ticksInputConsumed);
-
-            if (buildingConfig->getBuildingProduction()->input2.isUsed()) {
-                ticksWeReallyProduced = std::min(ticksWeReallyProduced, ticksInput2Consumed);
-            }
-        }
-
-        // Jetzt die Produktion durchführen
-        if (buildingConfig->getBuildingProduction()->input.isUsed()) {
-            inputConsumed = (double) ticksWeReallyProduced / 60000 * buildingConfig->inputConsumptionRate;
-            building->productionSlots.input.decreaseInventory(inputConsumed);
-
-            if (buildingConfig->getBuildingProduction()->input2.isUsed()) {
-                input2Consumed = (double) ticksWeReallyProduced / 60000 * buildingConfig->input2ConsumptionRate;
-                building->productionSlots.input2.decreaseInventory(input2Consumed);
-            }
-        }
-        outputProduced = (double) ticksWeReallyProduced / 60000 * buildingConfig->productionRate;
-        building->productionSlots.output.increaseInventory(outputProduced);
     }
 
+    // Minimum-Ticks ermitteln, in denen wirklich produziert wurde
+    Uint32 ticksWeReallyProduced = ticksPastSinceLastUpdate;
+    if (buildingConfig->getBuildingProduction()->input.isUsed()) {
+        ticksWeReallyProduced = std::min(ticksWeReallyProduced, ticksInputConsumed);
 
-    // Gebäude, die Waren einsammeln
+        if (buildingConfig->getBuildingProduction()->input2.isUsed()) {
+            ticksWeReallyProduced = std::min(ticksWeReallyProduced, ticksInput2Consumed);
+        }
+    }
+
+    // Jetzt die Produktion durchführen
+    if (buildingConfig->getBuildingProduction()->input.isUsed()) {
+        inputConsumed = (double) ticksWeReallyProduced / 60000 * buildingConfig->inputConsumptionRate;
+        building->productionSlots.input.decreaseInventory(inputConsumed);
+
+        if (buildingConfig->getBuildingProduction()->input2.isUsed()) {
+            input2Consumed = (double) ticksWeReallyProduced / 60000 * buildingConfig->input2ConsumptionRate;
+            building->productionSlots.input2.decreaseInventory(input2Consumed);
+        }
+    }
+    outputProduced = (double) ticksWeReallyProduced / 60000 * buildingConfig->productionRate;
+    building->productionSlots.output.increaseInventory(outputProduced);
+}
+
+void EconomicsMgr::updateCarrier(Building* building) {
     bool isStorageBuilding = building->isStorageBuilding();
-    if (building->productionSlots.input.isUsed() || isStorageBuilding) {
-        // Ist der Träger zu Hause? Gucken, wo was zu holen is und Abholung einleiten
-        if (building->carrier == nullptr) {
 
-            FindBuildingToGetGoodsFromResult result = findBuildingToGetGoodsFrom(building);
-            if (result.building != nullptr) {
-                // Träger anlegen und zuweisen
-                MapCoordinate firstHopOnRoute = result.route->front();
+    // Weder Lagergebäude (was Marktkarren hat), noch Produktionsgebäude (was Eingabegüter hat)? Nix zu tun
+    if (!building->productionSlots.input.isUsed() && !isStorageBuilding) {
+        return;
+    }
 
-                Carrier* carrier = new Carrier(result.building, result.route, result.goods, true);
-                carrier->setMapCoords(firstHopOnRoute.mapX, firstHopOnRoute.mapY);
-                carrier->setAnimation(
-                    graphicsMgr->getAnimation(isStorageBuilding ? CART_WITHOUT_CARGO : CARRIER));
+    // Ist der Träger zu Hause? Gucken, wo was zu holen is und Abholung einleiten
+    if (building->carrier == nullptr) {
+        FindBuildingToGetGoodsFromResult result = findBuildingToGetGoodsFrom(building);
+        if (result.building != nullptr) {
+            // Träger anlegen und zuweisen
+            MapCoordinate firstHopOnRoute = result.route->front();
 
-                building->carrier = carrier;
-            }
+            Carrier* carrier = new Carrier(result.building, result.route, result.goods, true);
+            carrier->setMapCoords(firstHopOnRoute.mapX, firstHopOnRoute.mapY);
+            carrier->setAnimation(
+                graphicsMgr->getAnimation(isStorageBuilding ? CART_WITHOUT_CARGO : CARRIER));
+
+            building->carrier = carrier;
+        }
+    }
+
+    // Träger unterwegs? fortbewegen
+    else if (building->carrier != nullptr) {
+        Uint32 ticksPastSinceLastUpdate = sdlTicks - building->getLastUpdateTime();
+
+        Carrier* carrier = building->carrier;
+        Animation* animation = carrier->getAnimation();
+
+        // Animieren
+        carrier->animationFrame += (double) ticksPastSinceLastUpdate / 1000 * animation->getFps();
+        while (carrier->animationFrame >= animation->getFramesCount()) {
+            carrier->animationFrame -= animation->getFramesCount();
         }
 
-        // Träger unterwegs? fortbewegen
-        else if (building->carrier != nullptr) {
-            Carrier* carrier = building->carrier;
-            Animation* animation = carrier->getAnimation();
+        // Bewegen
+        double speed = 0.75; // erstmal fix, die Animation muss man eh nochmal anpassen, weil das Männchen mehr schwebt, als läuft
 
-            // Animieren
-            carrier->animationFrame += (double) ticksPastSinceLastUpdate / 1000 * animation->getFps();
-            while (carrier->animationFrame >= animation->getFramesCount()) {
-                carrier->animationFrame -= animation->getFramesCount();
-            }
+        MapCoordinate nextHopOnRoute = *carrier->nextHopInRoute;
+        double stepX = speed * (nextHopOnRoute.mapX - carrier->mapX);
+        double stepY = speed * (nextHopOnRoute.mapY - carrier->mapY);
 
-            // Bewegen
-            double speed = 0.75; // erstmal fix, die Animation muss man eh nochmal anpassen, weil das Männchen mehr schwebt, als läuft
+        // TODO Wir machen einen minimalen Fehler, dass wir bei Erreichen der nächsten Kachel, wieder auf 0 setzen
+        // und nicht versuchen, den "Rest" der vergangenen Zeit anzuwenden und ein Stückchen weiterzulaufen.
 
-            MapCoordinate nextHopOnRoute = *carrier->nextHopInRoute;
-            double stepX = speed * (nextHopOnRoute.mapX - carrier->mapX);
-            double stepY = speed * (nextHopOnRoute.mapY - carrier->mapY);
+        carrier->mapXFraction += (double) ticksPastSinceLastUpdate / 1000 * stepX;
+        carrier->mapYFraction += (double) ticksPastSinceLastUpdate / 1000 * stepY;
+        bool hopReached = false;
 
-            // TODO Wir machen einen minimalen Fehler, dass wir bei Erreichen der nächsten Kachel, wieder auf 0 setzen
-            // und nicht versuchen, den "Rest" der vergangenen Zeit anzuwenden und ein Stückchen weiterzulaufen.
+        if (carrier->mapXFraction <= -1) {
+            carrier->mapXFraction = 0;
+            carrier->mapX--;
+            hopReached = true;
+        } else if (carrier->mapXFraction >= 1) {
+            carrier->mapXFraction = 0;
+            carrier->mapX++;
+            hopReached = true;
+        }
+        if (carrier->mapYFraction <= -1) {
+            carrier->mapYFraction = 0;
+            carrier->mapY--;
+            hopReached = true;
+        } else if (carrier->mapYFraction >= 1) {
+            carrier->mapYFraction = 0;
+            carrier->mapY++;
+            hopReached = true;
+        }
 
-            carrier->mapXFraction += (double) ticksPastSinceLastUpdate / 1000 * stepX;
-            carrier->mapYFraction += (double) ticksPastSinceLastUpdate / 1000 * stepY;
-            bool hopReached = false;
+        // Wir haben den nächsten Schritt in der Route erreicht
+        if (hopReached) {
+            carrier->nextHopInRoute++;
 
-            if (carrier->mapXFraction <= -1) {
-                carrier->mapXFraction = 0;
-                carrier->mapX--;
-                hopReached = true;
-            } else if (carrier->mapXFraction >= 1) {
-                carrier->mapXFraction = 0;
-                carrier->mapX++;
-                hopReached = true;
-            }
-            if (carrier->mapYFraction <= -1) {
-                carrier->mapYFraction = 0;
-                carrier->mapY--;
-                hopReached = true;
-            } else if (carrier->mapYFraction >= 1) {
-                carrier->mapYFraction = 0;
-                carrier->mapY++;
-                hopReached = true;
-            }
+            // Route fertig?
+            if (carrier->nextHopInRoute == carrier->route->cend()) {
+                MapTile* mapTile = game->getMap()->getMapTileAt(carrier->mapX, carrier->mapY);
+                Building* targetBuilding = dynamic_cast<Building*>(mapTile->mapObject);
 
-            // Wir haben den nächsten Schritt in der Route erreicht
-            if (hopReached) {
-                carrier->nextHopInRoute++;
-
-                // Route fertig?
-                if (carrier->nextHopInRoute == carrier->route->cend()) {
-                    MapTile* mapTile = game->getMap()->getMapTileAt(carrier->mapX, carrier->mapY);
-                    Building* targetBuilding = dynamic_cast<Building*>(mapTile->mapObject);
-
-                    // targetBuilding == nullptr -> Nutzer hat die Map inzwischen geändert und das Zielgebäude abgerissen
-                    // Der Träger verschwindet einfach
-                    if (targetBuilding == nullptr) {
-                        delete carrier;
-                        building->carrier = nullptr;
-                    }
+                // targetBuilding == nullptr -> Nutzer hat die Map inzwischen geändert und das Zielgebäude abgerissen
+                // Der Träger verschwindet einfach
+                if (targetBuilding == nullptr) {
+                    delete carrier;
+                    building->carrier = nullptr;
+                }
 
                     // Das war Hinweg -> Waren aufladen und Träger auf Rückweg schicken
-                    else if (carrier->onOutboundTrip) {
-                        // Waren aufladen
-                        int goodsWeCollect = (int) targetBuilding->productionSlots.output.inventory;
-                        targetBuilding->productionSlots.output.inventory -= goodsWeCollect;
+                else if (carrier->onOutboundTrip) {
+                    // Waren aufladen
+                    int goodsWeCollect = (int) targetBuilding->productionSlots.output.inventory;
+                    targetBuilding->productionSlots.output.inventory -= goodsWeCollect;
 
-                        Route* route = carrier->route;
-                        Route* returnRoute = AStar::findRoute(route->back(), route->front(), building, isStorageBuilding);
+                    Route* route = carrier->route;
+                    Route* returnRoute = AStar::findRoute(route->back(), route->front(), building, isStorageBuilding);
 
-                        delete carrier;
-                        building->carrier = nullptr;
+                    delete carrier;
+                    building->carrier = nullptr;
 
-                        // Es kann sein, dass es keine Rückroute gibt, wenn der Nutzer inzwischen die Map verändert hat.
-                        // In diesem Fall hat er Pech gehabt, die Waren verschwinden mit dem Träger
-                        if (returnRoute != nullptr) {
-                            AStar::cutRouteInsideBuildings(returnRoute);
+                    // Es kann sein, dass es keine Rückroute gibt, wenn der Nutzer inzwischen die Map verändert hat.
+                    // In diesem Fall hat er Pech gehabt, die Waren verschwinden mit dem Träger
+                    if (returnRoute != nullptr) {
+                        AStar::cutRouteInsideBuildings(returnRoute);
 
-                            MapCoordinate firstHopOnReturnRoute = returnRoute->front();
+                        MapCoordinate firstHopOnReturnRoute = returnRoute->front();
 
-                            Carrier* returnCarrier = new Carrier(
-                                building, returnRoute, targetBuilding->productionSlots.output.goodsType, false);
-                            returnCarrier->setMapCoords(firstHopOnReturnRoute.mapX, firstHopOnReturnRoute.mapY);
-                            returnCarrier->setAnimation(
-                                graphicsMgr->getAnimation(isStorageBuilding ? CART_WITH_CARGO : CARRIER));
-                            returnCarrier->carriedGoods.inventory = goodsWeCollect;
+                        Carrier* returnCarrier = new Carrier(
+                            building, returnRoute, targetBuilding->productionSlots.output.goodsType, false);
+                        returnCarrier->setMapCoords(firstHopOnReturnRoute.mapX, firstHopOnReturnRoute.mapY);
+                        returnCarrier->setAnimation(
+                            graphicsMgr->getAnimation(isStorageBuilding ? CART_WITH_CARGO : CARRIER));
+                        returnCarrier->carriedGoods.inventory = goodsWeCollect;
 
-                            building->carrier = returnCarrier;
-                        }
+                        building->carrier = returnCarrier;
                     }
+                }
 
                     // Das war Rückweg -> Waren ausladen und Träger zerstören
-                    else if (!carrier->onOutboundTrip) {
-                        // Lagergebäude: Waren der Siedlung gutschreiben
-                        if (isStorageBuilding) {
-                            Colony* colony = game->getColony(building);
+                else if (!carrier->onOutboundTrip) {
+                    // Lagergebäude: Waren der Siedlung gutschreiben
+                    if (isStorageBuilding) {
+                        Colony* colony = game->getColony(building);
 
-                            colony->getGoods(carrier->carriedGoods.goodsType).increaseInventory(
-                                carrier->carriedGoods.inventory);
-                        }
-                        // Produktionsgebäude: Gucken, in welchen Slot die Waren müssen
-                        else {
-                            if (building->productionSlots.input.goodsType == carrier->carriedGoods.goodsType) {
-                                building->productionSlots.input.increaseInventory(carrier->carriedGoods.inventory);
-                            }
-                            else if (building->productionSlots.input2.goodsType == carrier->carriedGoods.goodsType) {
-                                building->productionSlots.input2.increaseInventory(carrier->carriedGoods.inventory);
-                            }
-                        }
-
-                        delete carrier;
-                        building->carrier = nullptr;
+                        colony->getGoods(carrier->carriedGoods.goodsType).increaseInventory(
+                            carrier->carriedGoods.inventory);
                     }
+                        // Produktionsgebäude: Gucken, in welchen Slot die Waren müssen
+                    else {
+                        if (building->productionSlots.input.goodsType == carrier->carriedGoods.goodsType) {
+                            building->productionSlots.input.increaseInventory(carrier->carriedGoods.inventory);
+                        }
+                        else if (building->productionSlots.input2.goodsType == carrier->carriedGoods.goodsType) {
+                            building->productionSlots.input2.increaseInventory(carrier->carriedGoods.inventory);
+                        }
+                    }
+
+                    delete carrier;
+                    building->carrier = nullptr;
                 }
             }
         }
     }
-
-    building->setLastUpdateTime(ticksNow);
 }
 
 FindBuildingToGetGoodsFromResult EconomicsMgr::findBuildingToGetGoodsFrom(Building* building) {

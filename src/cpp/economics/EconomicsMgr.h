@@ -56,6 +56,28 @@ public:
 
 private:
     /**
+     * @brief Führt die Produktion für ein Gebäude durch. Es wird nur für jene vergangene Ticks produziert, für die
+     * alle Eingabewaren da waren und auch nur solange das Ausgabewarenlager nicht voll ist.
+     *
+     * Algorithmus:
+     * Es wird ermittelt, wie viel verbraucht würde, wenn in allen vergangenen Ticks die Voraussetzungen erfüllt sind.
+     * Dann wird ermittelt, wie viele Ticks lang pro Slot die Voraussetzungen wirklich erfüllt sind. Mit dem Minimum
+     * dieser Tick-Werte wird dann die Produktion durchgeführt.
+     *
+     * @param building Gebäude, für welches die Produktion durchgeführt werden soll
+     */
+    void updateProduction(Building* building);
+
+    /**
+     * @brief Aktualisiert den (TODO: die) Träger für ein Gebäude.
+     * Der Träger wird losgeschickt, um passende Waren abzuholen bzw. wenn er schon unterwegs ist, wird er animiert,
+     * fortbewegt und am Zielort die entsprechenden Operationen durchgeführt, um die Waren umzuladen.
+     *
+     * @param building Gebäude, für welches die Träger aktualisiert werden sollen
+     */
+    void updateCarrier(Building* building);
+
+    /**
      * @brief Sucht für ein angegebenes Gebäude das beste Gebäude, um Waren von diesen zu beziehen
      * "bestes" bedeutet hierbei, dass es Güter hat, die wir brauchen und entsprechender Lagerbestand vorhanden ist.
      * Gebäude mit höherem Lagerbestand werden bevorzugt, dass wir nicht ständig vom selben nahen Gebäude 1t abholen,
