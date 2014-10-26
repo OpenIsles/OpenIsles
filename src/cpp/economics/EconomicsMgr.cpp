@@ -181,6 +181,12 @@ void EconomicsMgr::updateCarrier(Building* building) {
                 else if (carrier->onOutboundTrip) {
                     // Waren aufladen
                     int goodsWeCollect = (int) targetBuilding->productionSlots.output.inventory;
+
+                    // Ein Träger kann maximal 6t Waren halten
+                    if (goodsWeCollect > 6) {
+                        goodsWeCollect = 6;
+                    }
+
                     targetBuilding->productionSlots.output.inventory -= goodsWeCollect;
                     targetBuilding->lastGoodsCollections = sdlTicks;
 
