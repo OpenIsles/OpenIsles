@@ -8,6 +8,7 @@
 extern BuildingConfigMgr* buildingConfigMgr;
 extern Game* game;
 extern GraphicsMgr* graphicsMgr;
+extern Uint32 sdlTicks;
 
 
 EconomicsMgr::EconomicsMgr() {
@@ -26,7 +27,7 @@ void EconomicsMgr::update(Structure* structure) {
     StructureType structureType = building->getStructureType();
     const BuildingConfig* buildingConfig = buildingConfigMgr->getConfig(structureType);
 
-    Uint32 ticksNow = SDL_GetTicks();
+    Uint32 ticksNow = sdlTicks;
     Uint32 ticksPastSinceLastUpdate = ticksNow - building->getLastUpdateTime();
 
     /* Produktion durchführen
