@@ -109,9 +109,6 @@ private:
      * @brief Sucht für ein angegebenes Gebäude das beste Gebäude, um Waren von diesen zu beziehen.
      *
      * "bestes" bedeutet hierbei:
-     *  - Gebäude, die Rohstoffe herstellen, sind grundsätzlich nicht so wichtig, da ihre Waren von Produktionsgebäuden
-     *    abgeholt werden. Ausnahme: Lager ist absolut voll. Das bedeutet, kein Produktionsgebäude in Reichweite und
-     *    wir müssen die Waren in Marktplatz/Kontor laden.
      *  - Je voller das Lager (prozentual), desto besser der Treffer.
      *  - Haben zwei Gebäude gleichen Lagerstand, wird das Gebäude bevorzugt, von dem länger nicht abgeholt wurde
      *

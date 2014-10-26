@@ -323,11 +323,22 @@ FindBuildingToGetGoodsFromResult EconomicsMgr::findBuildingToGetGoodsFrom(Buildi
                 continue;
             }
 
-            // Lagergebäude: Wir holen nur ab, wenn die Lager der Siedlung nicht schon voll sind
+            // Lagergebäude
             if (isStorageBuilding) {
                 Colony* colony = game->getColony(building);
 
-                if (colony->getGoods(buildingThere->productionSlots.output.goodsType).isInventoryFull()) {
+                GoodsSlot* buildingThereOutputProductionSlot = &buildingThere->productionSlots.output;
+
+                // Wir holen nur ab, wenn die Lager der Siedlung nicht schon voll sind
+                if (colony->getGoods(buildingThereOutputProductionSlot->goodsType).isInventoryFull()) {
+                    continue;
+                }
+
+                // Gebäude, die Rohstoffe herstellen, werden grundsätzlich nur vom Marktkarren abgeholt,
+                // wenn die Lager voll sind
+                if (buildingThereOutputProductionSlot->isRawMaterial() &&
+                    !buildingThereOutputProductionSlot->isInventoryFull()) {
+
                     continue;
                 }
             }
@@ -369,18 +380,6 @@ FindBuildingToGetGoodsFromResult EconomicsMgr::findBuildingToGetGoodsFrom(Buildi
     struct FindBuildingToGetGoodsFromResultComparator {
         bool operator() (const FindBuildingToGetGoodsFromResult& result1,
                          const FindBuildingToGetGoodsFromResult& result2) const {
-
-            // Rohstoffgebäude und Lager nicht voll? Dann unwichtiger, als andere Gebäude
-            if (result1.goodsSlot.isRawMaterial() && !result1.goodsSlot.isInventoryFull() &&
-                !result2.goodsSlot.isRawMaterial()) {
-
-                return false;
-            }
-            else if (result2.goodsSlot.isRawMaterial() && !result2.goodsSlot.isInventoryFull() &&
-                     !result1.goodsSlot.isRawMaterial()) {
-
-                return true;
-            }
 
             // höherer Lagerbestand hat Vorrang
             double inventoryRatio1 = result1.goodsSlot.inventory / (double) result1.goodsSlot.capacity;
