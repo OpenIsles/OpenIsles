@@ -43,6 +43,7 @@ enum StructureType : unsigned char {
     WEAVING_MILL1 = 111,
     CATTLE_FARM = 112,
     BUTCHERS = 113,
+    TOOLSMITHS = 114,
             
     MAX_STRUCTURE // Marker, wie viel Platz wir im Array brauchen
 } StructureType;

@@ -25,6 +25,7 @@ GraphicsMgr::GraphicsMgr() {
     structures[StructureType::WEAVING_MILL1] = new MapObjectGraphic("data/img/objects/weaving-mill1.png", 2, 2);
     structures[StructureType::CATTLE_FARM] = new MapObjectGraphic("data/img/objects/cattle-farm.png", 2, 2);
     structures[StructureType::BUTCHERS] = new MapObjectGraphic("data/img/objects/butchers.png", 2, 2);
+    structures[StructureType::TOOLSMITHS] = new MapObjectGraphic("data/img/objects/toolsmiths.png", 2, 2);
 
     structures[StructureType::STREET] = new MapObjectGraphic("data/img/objects/street-straight90.png", 1, 1); // damit was drinsteht. Fürs Malen werden die nachfolgenden Grafiken verwendet
 	structures[StructureType::STREET_STRAIGHT_0] = new MapObjectGraphic("data/img/objects/street-straight0.png", 1, 1);
@@ -74,6 +75,7 @@ GraphicsMgr::GraphicsMgr() {
     otherGraphics[OtherGraphic::ADD_BUILDING_WEAVING_MILL1] = new PlainGraphic("data/img/gui/add-building/weaving-mill1.png");
     otherGraphics[OtherGraphic::ADD_BUILDING_CATTLE_FARM] = new PlainGraphic("data/img/gui/add-building/cattle-farm.png");
     otherGraphics[OtherGraphic::ADD_BUILDING_BUTCHERS] = new PlainGraphic("data/img/gui/add-building/butchers.png");
+    otherGraphics[OtherGraphic::ADD_BUILDING_TOOLSMITHS] = new PlainGraphic("data/img/gui/add-building/toolsmiths.png");
     otherGraphics[OtherGraphic::ADD_BUILDING_DUMMY] = new PlainGraphic("data/img/gui/add-building/dummy.png");
     otherGraphics[OtherGraphic::PRODUCTION_ARROW] = new PlainGraphic("data/img/gui/production-arrow.png");
     otherGraphics[OtherGraphic::PRODUCTION_PLUS] = new PlainGraphic("data/img/gui/production-plus.png");
