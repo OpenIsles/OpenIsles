@@ -3,6 +3,7 @@
 
 #include "map/MapObject.h"
 #include "utils/RectangleData.h"
+#include "utils/StringFormat.h"
 
 /**
  * Stellt eine Insel dar. Sie wird als Teil in einer Karte (Map) eingesetzt.
@@ -33,7 +34,7 @@ public:
 
 	unsigned char getTileAt(int x, int y) const {
         if (x < 0 || y < 0 || x >= tiles->width || y >= tiles->height) {
-            std::cerr << "mapCoords (" << std::to_string(x) << ", " + std::to_string(y) << ") out of bounds";
+            std::cerr << "mapCoords (" << toString(x) << ", " + toString(y) << ") out of bounds";
         }
 
         return tiles->getData(x, y, 0);

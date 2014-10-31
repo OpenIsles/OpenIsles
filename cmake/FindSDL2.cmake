@@ -42,7 +42,7 @@ endif()
 
 find_library(SDL2_LIBRARY
     NAMES SDL2
-    HINTS ENV SDL2DIR
+    HINTS ENV SDL2_DIR
     PATH_SUFFIXES lib ${VC_LIB_PATH_SUFFIX}
 )
 

@@ -2,6 +2,7 @@
 #include "game/Colony.h"
 #include "game/Game.h"
 #include "map/Map.h"
+#include "utils/StringFormat.h"
 
 #ifdef DEBUG_A_STAR
 #include "gui/FontMgr.h"
@@ -456,7 +457,7 @@ void Map::renderMap(SDL_Renderer* renderer) {
             SDL_RenderFillRect(renderer, &rect);
 
             static SDL_Color colorWhite = {255, 255, 255, 255};
-            fontMgr->renderText(renderer, std::to_string(i++), screenX, screenY, &colorWhite, nullptr,
+            fontMgr->renderText(renderer, toString(i++), screenX, screenY, &colorWhite, nullptr,
                 "DroidSans.ttf", 9, RENDERTEXT_HALIGN_CENTER | RENDERTEXT_VALIGN_MIDDLE);
         }
     }
@@ -895,7 +896,7 @@ StructureType Map::getConcreteStreetStructureType(int mapX, int mapY, StructureT
     }
 
     // TODO Feldweg
-    throw new std::runtime_error("Illegal abstractStreetStructureType " + std::to_string(abstractStreetStructureType));
+    throw new std::runtime_error("Illegal abstractStreetStructureType " + toString(abstractStreetStructureType));
 }
 
 bool Map::isStreetAt(int mapX, int mapY) {

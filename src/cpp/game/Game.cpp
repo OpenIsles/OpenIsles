@@ -2,6 +2,7 @@
 #include "game/Colony.h"
 #include "game/Game.h"
 #include "gui/FontMgr.h"
+#include "utils/StringFormat.h"
 
 static SDL_Color colorWhite = {255, 255, 255, 255};
 static SDL_Color colorBlack = {0, 0, 0, 255};
@@ -70,10 +71,10 @@ void Game::renderResourcesBar() {
     // Münzenguthaben
     graphicsMgr->getOtherGraphic(OtherGraphic::COINS)->drawAt(15, 8);
     
-    std::string outputString = std::to_string(currentPlayer->coins);
+    std::string outputString = toString(currentPlayer->coins);
     if (buildingCosts != nullptr) {
         outputString += " ("; 
-        outputString += std::to_string(buildingCosts->coins);
+        outputString += toString(buildingCosts->coins);
         outputString += ")";
     }
     fontMgr->renderText(renderer, outputString, 42, 10,
@@ -100,10 +101,10 @@ void Game::renderResourcesBar() {
         graphicsMgr->getGraphicForGoodsIcon(goodsType)->drawAt(x, 5);
         
         int goodsInventory = colony->getGoods(goodsType).inventory;
-        std::string outputString = std::to_string(goodsInventory);
+        std::string outputString = toString(goodsInventory);
         if (buildingCosts != nullptr) {
             outputString += " ("; 
-            outputString += std::to_string(
+            outputString += toString(
                 (goodsType == GoodsType::TOOLS) ? buildingCosts->tools :
                 (goodsType == GoodsType::WOOD) ? buildingCosts->wood :
                 (goodsType == GoodsType::BRICKS) ? buildingCosts->bricks : 0);

@@ -2,12 +2,12 @@ project(OpenIsles)
 
 cmake_minimum_required(VERSION 2.8)
 
-# Windows
-if(MSVC)
-    # add_definitions("-std=c++11 -Wall -Werror -pedantic") TODO Warnungen etc. unter MSVC
+add_definitions("-std=c++11 -Wall -Werror -pedantic")
 
-    # Warning bei Enums mit "::" deaktivieren - @see http://stackoverflow.com/q/7757707/2992323
-    add_definitions("/clr")
+# Windows
+if(CYGWIN)
+    set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DWINDOWS")
+    add_definitions("-mcmodel=medium")
 
     # SDL2: pkg-config funktioniert unter Windows nicht, drum benutzen wir unser eigenen CMake-Script
     set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
@@ -23,8 +23,8 @@ if(MSVC)
     include_directories("${SDL2_TTF_INCLUDE_DIR}")
 
 # Linux
-else(MSVC)
-    add_definitions("-std=c++11 -Wall -Werror -pedantic")
+else(CYGWIN)
+    set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DLINUX")
 
     # SDL2: pkg-config und sdl2-config unter Linux nutzen
     include(FindPkgConfig)
@@ -36,7 +36,7 @@ else(MSVC)
     # sdl2-config für die Include-Verzeichnisse
     exec_program(sdl2-config ARGS "--cflags" OUTPUT_VARIABLE SDL2_CFLAGS)
     add_definitions(${SDL2_CFLAGS})
-endif(MSVC)
+endif(CYGWIN)
 
 # Debuginfos für Debug-Buildconfig aktivieren - nicht vergessen, neue Variablen in die Doxyfile.in einzutragen
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DDEBUG -DDEBUG_A_STAR -DDEBUG_ECONOMICS")
@@ -70,13 +70,23 @@ set(SOURCE_FILES
     src/cpp/map/MapUtils.cpp
     src/cpp/pathfinding/AStar.cpp
     src/cpp/sound/SoundMgr.cpp
+    src/cpp/utils/StringFormat.cpp
     src/cpp/main.cpp
 )
 
 add_executable(OpenIsles ${SOURCE_FILES})
 include_directories(${CMAKE_SOURCE_DIR}/src/cpp)
 
-target_link_libraries(OpenIsles ${SDL2_LIBRARIES} ${SDL2_IMAGE_LIBRARIES} ${SDL2_MIXER_LIBRARIES} ${SDL2_TTF_LIBRARIES})
+# Windows
+if(CYGWIN)
+    target_link_libraries(OpenIsles ${SDL2_LIBRARY} ${SDL2_IMAGE_LIBRARY} ${SDL2_MIXER_LIBRARY} ${SDL2_TTF_LIBRARY})
+
+# Linux
+else(CYGWIN)
+    target_link_libraries(OpenIsles ${SDL2_LIBRARIES} ${SDL2_IMAGE_LIBRARIES} ${SDL2_MIXER_LIBRARIES} ${SDL2_TTF_LIBRARIES})
+
+endif(CYGWIN)
+
 
 file(COPY ${CMAKE_SOURCE_DIR}/data DESTINATION ${CMAKE_BINARY_DIR})
 

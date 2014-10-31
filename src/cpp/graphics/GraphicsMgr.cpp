@@ -1,3 +1,6 @@
+#ifdef WINDOWS
+#include <cstring>
+#endif
 #include <fstream>
 #include <sstream>
 #include <stdexcept>

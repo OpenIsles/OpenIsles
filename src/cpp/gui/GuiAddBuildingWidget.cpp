@@ -5,6 +5,7 @@
 #include "gui/FontMgr.h"
 #include "gui/GuiAddBuildingWidget.h"
 #include "gui/GuiUtils.h"
+#include "utils/StringFormat.h"
 
 
 static SDL_Color colorLightBrown = {223, 216, 183, 255};
@@ -85,21 +86,21 @@ void GuiAddBuildingWidget::renderElement(SDL_Renderer* renderer) {
     int costsY = productionY + 60;
 
     graphicsMgr->getOtherGraphic(OtherGraphic::COINS)->drawAt(windowX, costsY);
-    fontMgr->renderText(renderer, std::to_string(buildingConfig->getBuildingCosts()->coins), windowX + 35, costsY + 12,
+    fontMgr->renderText(renderer, toString(buildingConfig->getBuildingCosts()->coins), windowX + 35, costsY + 12,
         &colorWhite, &colorBlack, "DroidSans-Bold.ttf", 14, RENDERTEXT_HALIGN_LEFT | RENDERTEXT_VALIGN_MIDDLE);
 
     costsY += 30;
 
     graphicsMgr->getGraphicForGoodsIcon(GoodsType::TOOLS)->drawAt(windowX, costsY);
-    fontMgr->renderText(renderer, std::to_string(buildingConfig->getBuildingCosts()->tools), windowX + 35, costsY + 16,
+    fontMgr->renderText(renderer, toString(buildingConfig->getBuildingCosts()->tools), windowX + 35, costsY + 16,
         &colorWhite, &colorBlack, "DroidSans-Bold.ttf", 14, RENDERTEXT_HALIGN_LEFT | RENDERTEXT_VALIGN_MIDDLE);
 
     graphicsMgr->getGraphicForGoodsIcon(GoodsType::WOOD)->drawAt(windowX + 60, costsY);
-    fontMgr->renderText(renderer, std::to_string(buildingConfig->getBuildingCosts()->wood), windowX + 95, costsY + 16,
+    fontMgr->renderText(renderer, toString(buildingConfig->getBuildingCosts()->wood), windowX + 95, costsY + 16,
         &colorWhite, &colorBlack, "DroidSans-Bold.ttf", 14, RENDERTEXT_HALIGN_LEFT | RENDERTEXT_VALIGN_MIDDLE);
 
     graphicsMgr->getGraphicForGoodsIcon(GoodsType::BRICKS)->drawAt(windowX + 120, costsY);
-    fontMgr->renderText(renderer, std::to_string(buildingConfig->getBuildingCosts()->bricks), windowX + 155, costsY + 16,
+    fontMgr->renderText(renderer, toString(buildingConfig->getBuildingCosts()->bricks), windowX + 155, costsY + 16,
         &colorWhite, &colorBlack, "DroidSans-Bold.ttf", 14, RENDERTEXT_HALIGN_LEFT | RENDERTEXT_VALIGN_MIDDLE);
 
 }
