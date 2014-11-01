@@ -179,17 +179,28 @@ void EconomicsMgr::updateCarrier(Building* building) {
                     building->carrier = nullptr;
                 }
 
-                    // Das war Hinweg -> Waren aufladen und Träger auf Rückweg schicken
+                // Das war Hinweg -> Waren aufladen und Träger auf Rückweg schicken
                 else if (carrier->onOutboundTrip) {
                     // Waren aufladen
-                    int goodsWeCollect = (int) targetBuilding->productionSlots.output.inventory;
+                    GoodsSlot* goodsSlotToTakeFrom;
+                    if (targetBuilding->isStorageBuilding()) {
+                        // Lagergebäude: Waren aus der Siedlung aufladen
+                        Colony* colony = game->getColony(targetBuilding);
+                        goodsSlotToTakeFrom = &colony->getGoods(carrier->carriedGoods.goodsType);
+                    } else {
+                        // Waren aus dem Gebäude aufladen
+                        goodsSlotToTakeFrom = &targetBuilding->productionSlots.output;
+                    }
+
+                    // TODO BUG: Wir sollten nicht mehr aufladen, als im Ziellager abgeladen werden kann. Aktuell gehen wir los, weil 0,3t Platz ist, laden 6t auf und verlieren alles!
+                    int goodsWeCollect = (int) goodsSlotToTakeFrom->inventory;
 
                     // Ein Träger kann maximal 6t Waren halten
                     if (goodsWeCollect > 6) {
                         goodsWeCollect = 6;
                     }
 
-                    targetBuilding->productionSlots.output.inventory -= goodsWeCollect;
+                    goodsSlotToTakeFrom->inventory -= goodsWeCollect;
                     targetBuilding->lastGoodsCollections = sdlTicks;
 
                     Route* route = carrier->route;
@@ -206,7 +217,7 @@ void EconomicsMgr::updateCarrier(Building* building) {
                         MapCoordinate firstHopOnReturnRoute = returnRoute->front();
 
                         Carrier* returnCarrier = new Carrier(
-                            building, returnRoute, targetBuilding->productionSlots.output.goodsType, false);
+                            building, returnRoute, goodsSlotToTakeFrom->goodsType, false);
                         returnCarrier->setMapCoords(firstHopOnReturnRoute.mapX, firstHopOnReturnRoute.mapY);
                         returnCarrier->setAnimation(
                             graphicsMgr->getAnimation(isStorageBuilding ? CART_WITH_CARGO : CARRIER));
@@ -216,24 +227,26 @@ void EconomicsMgr::updateCarrier(Building* building) {
                     }
                 }
 
-                    // Das war Rückweg -> Waren ausladen und Träger zerstören
+                // Das war Rückweg -> Waren ausladen und Träger zerstören
                 else if (!carrier->onOutboundTrip) {
+                    GoodsSlot* goodsSlotToUnloadTo;
+
                     // Lagergebäude: Waren der Siedlung gutschreiben
                     if (isStorageBuilding) {
                         Colony* colony = game->getColony(building);
-
-                        colony->getGoods(carrier->carriedGoods.goodsType).increaseInventory(
-                            carrier->carriedGoods.inventory);
+                        goodsSlotToUnloadTo = &colony->getGoods(carrier->carriedGoods.goodsType);
                     }
-                        // Produktionsgebäude: Gucken, in welchen Slot die Waren müssen
+                    // Produktionsgebäude: Gucken, in welchen Slot die Waren müssen
                     else {
                         if (building->productionSlots.input.goodsType == carrier->carriedGoods.goodsType) {
-                            building->productionSlots.input.increaseInventory(carrier->carriedGoods.inventory);
+                            goodsSlotToUnloadTo = &building->productionSlots.input;
                         }
                         else if (building->productionSlots.input2.goodsType == carrier->carriedGoods.goodsType) {
-                            building->productionSlots.input2.increaseInventory(carrier->carriedGoods.inventory);
+                            goodsSlotToUnloadTo = &building->productionSlots.input2;
                         }
                     }
+
+                    goodsSlotToUnloadTo->increaseInventory(carrier->carriedGoods.inventory);
 
                     delete carrier;
                     building->carrier = nullptr;
@@ -251,7 +264,17 @@ FindBuildingToGetGoodsFromResult EconomicsMgr::findBuildingToGetGoodsFrom(Buildi
         return FindBuildingToGetGoodsFromResult(); // kein Einzugsbereich
     }
 
-    // Welche Waren brauchen wir überhaupt?
+    /*
+     * Anno 1602 macht es so: Ein Gebäude, was zwei Waren braucht, schickt den Träger hintereinander los für die Waren,
+     * Nur, wenn die erste Ware auf Lager ist, wird der Träger mit dem Auftrag, die zweite Waren zu holen, losgeschickt.
+     * Ist die erste Ware nicht verfügbar, wird die zweite Ware auch niemals geholt, selbst wie diese da wäre.
+     *
+     * Wir verbessern diesen Mechanismus: Wir versuchen grundsätzlich so viele Waren wie möglich abzuholen. Stehen
+     * mehrere zur Verfügung, so  wählen wir die beste Alternative, nämlich die für die Ware, die drigender gebraucht
+     * wird. Somit würde die zweite Ware geholt werden, selbst wenn die erste noch nicht zur Verfügung steht.
+     */
+
+    // Welche Ware brauchen wir überhaupt?
     GoodsType goodsRequired1 = GoodsType::NO_GOODS;
     GoodsType goodsRequired2 = GoodsType::NO_GOODS;
 
@@ -311,9 +334,15 @@ FindBuildingToGetGoodsFromResult EconomicsMgr::findBuildingToGetGoodsFrom(Buildi
 
             // TODO Es muss verhindert werden, dass zwei Träger zum selben Ziel unterwegs sind
 
+            // Von Lagergebäude zu Lagergebäude wird nix transportiert
+            bool isStorgeBuildingThere = buildingThere->isStorageBuilding();
+            if (isStorageBuilding && isStorgeBuildingThere) {
+                continue;
+            }
+
             // Liefert das Gebäude was passendes?
             const BuildingConfig* buildingThereConfig = buildingConfigMgr->getConfig(buildingThere->getStructureType());
-            if (!isStorageBuilding && (
+            if (!isStorageBuilding && !isStorgeBuildingThere && (
                     buildingThereConfig->getBuildingProduction()->output.goodsType != goodsRequired1 &&
                     buildingThereConfig->getBuildingProduction()->output.goodsType != goodsRequired2)) {
 
@@ -321,11 +350,11 @@ FindBuildingToGetGoodsFromResult EconomicsMgr::findBuildingToGetGoodsFrom(Buildi
             }
 
             // Waren zum Abholen da?
-            if (buildingThere->productionSlots.output.inventory < 1) {
+            if (!isStorgeBuildingThere && buildingThere->productionSlots.output.inventory < 1) {
                 continue;
             }
 
-            // Lagergebäude
+            // Bin ich ein Lagergebäude?
             if (isStorageBuilding) {
                 Colony* colony = game->getColony(building);
 
@@ -361,14 +390,64 @@ FindBuildingToGetGoodsFromResult EconomicsMgr::findBuildingToGetGoodsFrom(Buildi
 
             AStar::cutRouteInsideBuildings(route);
 
-            // Juhuu! Dieses Gebäude kommt in Frage
             FindBuildingToGetGoodsFromResult potentialResult;
             potentialResult.building = buildingThere;
             potentialResult.route = route;
-            potentialResult.goodsSlot.goodsType = buildingThereConfig->getBuildingProduction()->output.goodsType;
-            potentialResult.goodsSlot.inventory = buildingThere->productionSlots.output.inventory;
-            potentialResult.goodsSlot.capacity = buildingThere->productionSlots.output.capacity;
-            potentialResult.lastGoodsCollections = buildingThere->lastGoodsCollections;
+
+            // Ist das Zielgebäude ein Lagergebäude? Produktionsgebäuden können sich Waren auch von dort holen
+            if (isStorgeBuildingThere) {
+                Colony* colony = game->getColony(buildingThere); // TODO Es sollte getColony(buildingThere) == getColony(building) gelten, da Kolonie-übergreifend eh nix gehen darf.
+
+                bool goods1CanBeFetchedFromStorage = false;
+                bool goods2CanBeFetchedFromStorage = false;
+
+                if ((goodsRequired1 != GoodsType::NO_GOODS) && colony->getGoods(goodsRequired1).inventory > 0) {
+                    goods1CanBeFetchedFromStorage = true;
+                }
+                if ((goodsRequired2 != GoodsType::NO_GOODS) && colony->getGoods(goodsRequired2).inventory > 0) {
+                    goods2CanBeFetchedFromStorage = true;
+                }
+
+                GoodsType goodsTypeWeChoose;
+
+                // Nix passendes in der Kolonie?
+                if (!goods1CanBeFetchedFromStorage && !goods2CanBeFetchedFromStorage) {
+                    continue;
+                }
+
+                // Ein Lagerhaus bietet unter Umständen zwei Waren an, die wir brauchen. Falls ja, entscheiden wir
+                // uns hier bereits, welche wir haben wollen. Wir wählen die, wo wir prozentual weniger auf Lager
+                // haben.
+                else if (goods1CanBeFetchedFromStorage && goods2CanBeFetchedFromStorage) {
+                    if ((building->productionSlots.input.inventory / building->productionSlots.input.capacity) <
+                        (building->productionSlots.input2.inventory / building->productionSlots.input2.capacity)) {
+
+                        goodsTypeWeChoose = goodsRequired1;
+                    } else {
+                        goodsTypeWeChoose = goodsRequired2;
+                    }
+                }
+
+                // Nur genaue eine Ware verfügbar?
+                else if (goods1CanBeFetchedFromStorage) {
+                    goodsTypeWeChoose = goodsRequired1;
+                } else if (goods2CanBeFetchedFromStorage) {
+                    goodsTypeWeChoose = goodsRequired2;
+                }
+
+                potentialResult.goodsSlot.goodsType = goodsTypeWeChoose;
+                potentialResult.goodsSlot.inventory = colony->getGoods(goodsTypeWeChoose).inventory;
+                potentialResult.goodsSlot.capacity = colony->getGoods(goodsTypeWeChoose).capacity;
+                potentialResult.lastGoodsCollections = sdlTicks + 1; // Zeit in der Zukunft nehmen, damit diese Route als letztes verwendet wird
+            }
+            else {
+                potentialResult.goodsSlot.goodsType = buildingThereConfig->getBuildingProduction()->output.goodsType;
+                potentialResult.goodsSlot.inventory = buildingThere->productionSlots.output.inventory;
+                potentialResult.goodsSlot.capacity = buildingThere->productionSlots.output.capacity;
+                potentialResult.lastGoodsCollections = buildingThere->lastGoodsCollections;
+            }
+
+            // Juhuu! Dieses Gebäude kommt in Frage
             potentialResults.push_back(potentialResult);
         }
     }
