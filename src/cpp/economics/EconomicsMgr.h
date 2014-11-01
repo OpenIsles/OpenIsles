@@ -117,7 +117,7 @@ private:
     GoodsSlot* findGoodsSlotToUnloadTo(Building* building, Carrier* carrier);
 
     /**
-     * @brief Sucht für ein angegebenes Gebäude das beste Gebäude, um Waren von diesen zu beziehen.
+     * @brief Sucht für ein angegebenes Gebäude das beste Gebäude, um Waren zu beziehen.
      *
      * "bestes" bedeutet hierbei:
      *  - Je voller das Lager (prozentual), desto besser der Treffer.

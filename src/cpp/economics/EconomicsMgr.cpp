@@ -114,6 +114,12 @@ void EconomicsMgr::updateCarrier(Building* building) {
                 graphicsMgr->getAnimation(isStorageBuilding ? CART_WITHOUT_CARGO : CARRIER));
 
             building->carrier = carrier;
+
+            // Slot markieren, dass nicht ein zweiter Träger hinläuft.
+            // Zu einem Lagergebäude dürfen natürlich mehrere hinlaufen und sich bedienen.
+            if (!result.building->isStorageBuilding()) {
+                result.building->productionSlots.output.markedForPickup = true;
+            }
         }
     }
 
@@ -234,6 +240,11 @@ void EconomicsMgr::updateCarrier(Building* building) {
                         returnCarrier->carriedGoods.inventory = goodsWeCollect;
 
                         building->carrier = returnCarrier;
+
+                        // Slot wieder freimachen
+                        if (goodsSlotToTakeFrom->markedForPickup) {
+                            goodsSlotToTakeFrom->markedForPickup = false;
+                        }
                     }
                 }
 
@@ -347,8 +358,6 @@ FindBuildingToGetGoodsFromResult EconomicsMgr::findBuildingToGetGoodsFrom(Buildi
                 continue; // Dieses Gebäude hatten wir schon mal
             }
 
-            // TODO Es muss verhindert werden, dass zwei Träger zum selben Ziel unterwegs sind
-
             // Von Lagergebäude zu Lagergebäude wird nix transportiert
             bool isStorgeBuildingThere = buildingThere->isStorageBuilding();
             if (isStorageBuilding && isStorgeBuildingThere) {
@@ -362,6 +371,12 @@ FindBuildingToGetGoodsFromResult EconomicsMgr::findBuildingToGetGoodsFrom(Buildi
                     buildingThereConfig->getBuildingProduction()->output.goodsType != goodsRequired2)) {
 
                 continue; // produziert nix passendes
+            }
+
+            // Von diesem Slot holt schon ein anderer Träger ab. Verhindern, dass zwei Träger zum selben Ziel
+            // unterwegs sind.
+            if (!isStorgeBuildingThere && buildingThere->productionSlots.output.markedForPickup) {
+                continue;
             }
 
             // Waren zum Abholen da?
@@ -413,27 +428,27 @@ FindBuildingToGetGoodsFromResult EconomicsMgr::findBuildingToGetGoodsFrom(Buildi
             if (isStorgeBuildingThere) {
                 Colony* colony = game->getColony(buildingThere); // TODO Es sollte getColony(buildingThere) == getColony(building) gelten, da Kolonie-übergreifend eh nix gehen darf.
 
-                bool goods1CanBeFetchedFromStorage = false;
-                bool goods2CanBeFetchedFromStorage = false;
+                bool goods1CanBePickedUpFromStorage = false;
+                bool goods2CanBePickedUpFromStorage = false;
 
                 if ((goodsRequired1 != GoodsType::NO_GOODS) && colony->getGoods(goodsRequired1).inventory > 0) {
-                    goods1CanBeFetchedFromStorage = true;
+                    goods1CanBePickedUpFromStorage = true;
                 }
                 if ((goodsRequired2 != GoodsType::NO_GOODS) && colony->getGoods(goodsRequired2).inventory > 0) {
-                    goods2CanBeFetchedFromStorage = true;
+                    goods2CanBePickedUpFromStorage = true;
                 }
 
                 GoodsType goodsTypeWeChoose;
 
                 // Nix passendes in der Kolonie?
-                if (!goods1CanBeFetchedFromStorage && !goods2CanBeFetchedFromStorage) {
+                if (!goods1CanBePickedUpFromStorage && !goods2CanBePickedUpFromStorage) {
                     continue;
                 }
 
                 // Ein Lagerhaus bietet unter Umständen zwei Waren an, die wir brauchen. Falls ja, entscheiden wir
                 // uns hier bereits, welche wir haben wollen. Wir wählen die, wo wir prozentual weniger auf Lager
                 // haben.
-                else if (goods1CanBeFetchedFromStorage && goods2CanBeFetchedFromStorage) {
+                else if (goods1CanBePickedUpFromStorage && goods2CanBePickedUpFromStorage) {
                     if ((building->productionSlots.input.inventory / building->productionSlots.input.capacity) <
                         (building->productionSlots.input2.inventory / building->productionSlots.input2.capacity)) {
 
@@ -444,9 +459,9 @@ FindBuildingToGetGoodsFromResult EconomicsMgr::findBuildingToGetGoodsFrom(Buildi
                 }
 
                 // Nur genaue eine Ware verfügbar?
-                else if (goods1CanBeFetchedFromStorage) {
+                else if (goods1CanBePickedUpFromStorage) {
                     goodsTypeWeChoose = goodsRequired1;
-                } else if (goods2CanBeFetchedFromStorage) {
+                } else if (goods2CanBePickedUpFromStorage) {
                     goodsTypeWeChoose = goodsRequired2;
                 }
 

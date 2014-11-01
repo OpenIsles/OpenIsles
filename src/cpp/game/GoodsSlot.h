@@ -32,6 +32,7 @@ enum GoodsType : char {
 /**
 * @brief stellt einen Slot für Waren dar. Diese Klasse hält die Infos, ob mit dem Slot was assoziiert is,
 * wenn ja, welches Gut und hält zusätzlich eine aktuelle und eine maximale Warenmenge.
+* Außerdem erhält der Slot ein Flag, ob bereits Träger zur Abholung unterwegs sind.
 */
 class GoodsSlot {
 
@@ -52,14 +53,18 @@ public:
      */
     unsigned int capacity;
 
+    /**
+     * @brief Flag, um zu markieren, dass ein Träger von diesem Slot eine Abholung durchführen wird. Hiermit
+     * wird verhindert, dass zwei oder noch mehr Träger zum selben Gebäude laufen und am Ende nur einer effektiv
+     * was abholen kann.
+     */
+    bool markedForPickup;
+
 public:
     /**
      * @brief Konstruktur, um einen unbenutzten Slot anzulegen
      */
-    GoodsSlot() {
-        goodsType = GoodsType::NO_GOODS;
-        inventory = 0;
-        capacity = 0;
+    GoodsSlot() : GoodsSlot(NO_GOODS) {
     }
 
     /**
@@ -67,9 +72,7 @@ public:
      * Lagerbestand und -kapazität werden auf 0 gesetzt.
      * @param goodsType Gut
      */
-    GoodsSlot(GoodsType goodsType) : goodsType(goodsType) {
-        inventory = 0;
-        capacity = 0;
+    GoodsSlot(GoodsType goodsType) : GoodsSlot(goodsType, 0) {
     }
 
     /**
@@ -80,6 +83,7 @@ public:
      */
     GoodsSlot(GoodsType goodsType, unsigned int capacity) : goodsType(goodsType), capacity(capacity) {
         inventory = 0;
+        markedForPickup = false;
     }
 
 
