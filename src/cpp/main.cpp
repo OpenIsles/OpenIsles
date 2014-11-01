@@ -215,7 +215,7 @@ int main(int argc, char** argv) {
     fpsCounter = new FpsCounter(500);
     
     game = new Game();
-    GameIO::loadGameFromTMX("data/map/a-star-test.tmx");
+    GameIO::loadGameFromTMX("data/map/empty-map.tmx");
 
 	// Mainloop //////////////////////////////////////////////////////////////////////////////////////////////////////
 

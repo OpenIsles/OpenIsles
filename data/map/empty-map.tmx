@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="isometric" width="150" height="150" tilewidth="64" tileheight="32">
+ <properties>
+  <property name="current_player" value="1"/>
+  <property name="player1_color" value="red"/>
+  <property name="player1_name" value="Spieler 1"/>
+  <property name="player2_color" value="yellow"/>
+  <property name="player2_name" value="Spieler 2"/>
+  <property name="player3_color" value="green"/>
+  <property name="player3_name" value="Spieler 3"/>
+  <property name="player4_color" value="blue"/>
+  <property name="player4_name" value="Spieler 4"/>
+ </properties>
+ <objectgroup name="isles" width="150" height="150">
+  <object type="startpoint" x="1216" y="1088"/>
+  <object name="large1" type="isle" x="96" y="96" width="2560" height="2560"/>
+  <object name="small1" type="isle" x="1248" y="2688" width="960" height="960"/>
+ </objectgroup>
+ <objectgroup name="colonies" width="150" height="150">
+  <object name="Kolonie" type="colony" x="832" y="896" width="32" height="32">
+   <properties>
+    <property name="goods_bricks" value="30"/>
+    <property name="goods_cattle" value="5"/>
+    <property name="goods_cloth" value="0"/>
+    <property name="goods_food" value="0"/>
+    <property name="goods_tools" value="30"/>
+    <property name="goods_wood" value="30"/>
+    <property name="goods_wool" value="5"/>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+ </objectgroup>
+ <objectgroup name="structures" width="150" height="150">
+  <object name="marketplace" type="building" x="1120" y="768" width="128" height="96">
+   <properties>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object name="marketplace" type="building" x="960" y="1280" width="128" height="96">
+   <properties>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object name="office1" type="building" x="896" y="576" width="96" height="64">
+   <properties>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object name="marketplace" type="building" x="1536" y="1856" width="128" height="96">
+   <properties>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+ </objectgroup>
+</map>
