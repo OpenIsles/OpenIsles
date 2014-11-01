@@ -1,3 +1,6 @@
+#ifdef WINDOWS
+#include <cstring>
+#endif
 #include "graphics/MapObjectGraphic.h"
 
 // Aus main.cpp importiert

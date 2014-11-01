@@ -70,7 +70,7 @@ void GameIO::loadPlayers(rapidxml::xml_node<>* mapNode) {
     int currentPlayerNr = atoi(getPropertyValueFromPropertiesNode(propertiesNode, "current_player"));
 
     for (int i = 1; i <= 4; i++) {
-        std::string playerAttrPrefix = "player" + std::to_string(i) + "_";
+        std::string playerAttrPrefix = "player" + toString(i) + "_";
 
         // Spielerfarbe
         std::string playerColorAttrName = playerAttrPrefix + "color";
@@ -137,9 +137,9 @@ void GameIO::loadMap(rapidxml::xml_node<>* objectgroupIslesNode) {
             // Prüfen, ob die Insel wirklich die Größe hat, wie die Karte sie haben will.
             if (isle->getWidth() != isleMapWidth || isle->getHeight() != isleMapHeight) {
                 std::cerr << "Isle '" << isleName << "' ('" <<
-                    std::to_string(isle->getWidth()) << "x" << std::to_string(isle->getHeight()) <<
+                    toString(isle->getWidth()) << "x" << toString(isle->getHeight()) <<
                     ") does not match size on map (" <<
-                    std::to_string(isleMapWidth) << "x" << std::to_string(isleMapHeight) << ")";
+                    toString(isleMapWidth) << "x" << toString(isleMapHeight) << ")";
 
                 throw new std::runtime_error("Isle does not match size on map");
             }

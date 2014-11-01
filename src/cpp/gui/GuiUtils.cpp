@@ -1,3 +1,7 @@
+#ifdef WINDOWS
+#include <cmath>
+#include <cstdio>
+#endif
 #include "gui/FontMgr.h"
 #include "gui/GuiUtils.h"
 

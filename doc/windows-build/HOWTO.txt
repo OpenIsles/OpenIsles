@@ -1,0 +1,51 @@
+HOWTO ... unter Windows kompilieren
+======-----------------------------
+
+- Windows 7 (wichtig: 64bit-Windows für CLion notwendig!) aufsetzen
+
+- MinGW installieren:
+  - http://www.mingw.org/ -> Downloads -> Installer -> mingw-get-setup.exe
+  - Installer starten und folgende Pakete installieren.
+    Die meisten installieren sich auf Grund von Abhängigkeiten selber, wenn man base, gcc, g++ und make auswählt.
+    - mingw32-base (bin)
+    - mingw32-binutils (bin)
+    - mingw32-gcc (bin+dev+lic)
+    - mingw32-gcc-g++ (bin+dev)
+    - mingw32-gdb (bin)
+    - mingw32-libgcc (dll)
+    - mingw32-libgmp (dll)
+    - mingw32-libgomp (dll)
+    - mingw32-libiconv (dll)
+    - mingw32-libintl (dll)
+    - mingw32-libmpc (dll)
+    - mingw32-libmpfr (dll)
+    - mingw32-libpthread-old (dll)
+    - mingw32-libpthreadgc (dll)
+    - mingw32-libquadmath (dll)
+    - mingw32-libssp (dll)
+    - mingw32-libstdc++ (dll)
+    - mingw32-libz (dll)
+    - mingw32-make (bin)
+    - mingw32-mingw-get (bin+gui+lic)
+    - mingw32-mingwrt (dev+dll)
+    - mingw32-w32api (dev)
+
+- CLion für Windows installieren
+  (mit dem M$ Visual Studio wird das nie was, da der halbe Quellcode umgeschrieben werden müsste)
+
+  - Unter Settings / Buildchains, sollte MinGW ausgewählt sein und die Prüfungen, auf Compiler & Co erfolgreich sein.
+
+- libSDL-Development-Libraries herunterladen (jeweils MinGW 32/64-bit wählen):
+  - https://www.libsdl.org/download-2.0.php
+  - https://www.libsdl.org/projects/SDL_image/
+  - https://www.libsdl.org/projects/SDL_mixer/
+  - https://www.libsdl.org/projects/SDL_ttf/
+  - ... und entpacken
+  
+- CMake-Variablen in CLion einrichten. Beim ersten Buildversuch sollten diese rot markiert werden.
+  Siehe Screenshot cmake-variables.png. Es müssen die i686-w64-Varianten verwendet werden.
+
+- Die Anwendung sollte nun kompilieren und erfolgreich linken.
+
+- Zum Starten müssen die dll-Dateien aus den jeweiligen bin-Verzeichnissen der SDL-Libraries (wieder die
+  i686-w64-Varianten) in das Ausgabeverzeichnis, wo sich die fertige EXE nun befindet, kopiert werden.

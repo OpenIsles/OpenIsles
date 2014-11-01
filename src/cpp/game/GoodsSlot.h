@@ -8,7 +8,7 @@
 typedef
 enum GoodsType : char {
     // Spezialwert, der dem null-Wert entspricht
-    NO_GOODS = -1,
+    NO_GOODS = 127,
 
     // Rohstoffe
     WOOL = 0,

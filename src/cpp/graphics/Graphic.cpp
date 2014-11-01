@@ -1,6 +1,7 @@
 #include <stdexcept>
 #include <iostream>
 #include "graphics/Graphic.h"
+#include "utils/StringFormat.h"
 
 extern SDL_Renderer* renderer;
 
@@ -24,8 +25,8 @@ Graphic::Graphic(const char* filename) {
 	this->surface = surface;
 	this->texture = texture;
     
-	std::cout << "Loaded graphic '" << filename << "': size = (" << std::to_string(width) << ", "
-			<< std::to_string(height) << ")" << std::endl;
+	std::cout << "Loaded graphic '" << filename << "': size = (" << toString(width) << ", "
+			<< toString(height) << ")" << std::endl;
 }
 
 Graphic::~Graphic() {

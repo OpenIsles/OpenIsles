@@ -1,3 +1,6 @@
+#ifdef WINDOWS
+#define SDL_MAIN_HANDLED
+#endif
 #include <SDL.h>
 #include <SDL_image.h>
 #include <SDL_ttf.h>
@@ -12,6 +15,7 @@
 #include "gui/GuiMgr.h"
 #include "sound/SoundMgr.h"
 #include "utils/FpsCounter.h"
+#include "utils/StringFormat.h"
 
 #ifdef DEBUG_A_STAR
 #include "pathfinding/AStar.h"
@@ -254,25 +258,25 @@ int main(int argc, char** argv) {
 
 #ifdef DEBUG
 		// Debug-Infos vorbereiten, damit wir sie später einfach nur ausgeben können
-		debugOutput[0] = "FPS: average = " + std::to_string(fpsCounter->getFpsAvg()) + 
-                ", current = " + std::to_string(fpsCounter->getFpsCurrent());
+		debugOutput[0] = "FPS: average = " + toString(fpsCounter->getFpsAvg()) +
+                ", current = " + toString(fpsCounter->getFpsCurrent());
         
         debugOutput[1] = "Screen: offset = (" +
-                std::to_string(screenOffsetX) + ", " + std::to_string(screenOffsetY) + "), zoom = " +
-                std::to_string(screenZoom);
+                toString(screenOffsetX) + ", " + toString(screenOffsetY) + "), zoom = " +
+                toString(screenZoom);
 
         debugOutput[2] = "mouse = (" + 
-                std::to_string(mouseCurrentX) + ", " + std::to_string(mouseCurrentY) + "), map = (" +
-                std::to_string(mouseCurrentMapX) + ", " + std::to_string(mouseCurrentMapY) + "), screen = (" +
-                std::to_string(screenX) + ", " + std::to_string(screenY) + ")";
+                toString(mouseCurrentX) + ", " + toString(mouseCurrentY) + "), map = (" +
+                toString(mouseCurrentMapX) + ", " + toString(mouseCurrentMapY) + "), screen = (" +
+                toString(screenX) + ", " + toString(screenY) + ")";
     
         if (map->getSelectedMapObject() != nullptr) {
             int mapX, mapY, mapWidth, mapHeight;
             map->getSelectedMapObject()->getMapCoords(mapX, mapY, mapWidth, mapHeight);
             
             debugOutput[3] = "selectedMapObject on mapCoords (" + 
-                    std::to_string(mapX) + ", " + std::to_string(mapY) + "), size = (" +
-                    std::to_string(mapWidth) + ", " + std::to_string(mapHeight) + ")";
+                    toString(mapX) + ", " + toString(mapY) + "), size = (" +
+                    toString(mapWidth) + ", " + toString(mapHeight) + ")";
         } else {
             debugOutput[3] = "";
         }
@@ -283,16 +287,16 @@ int main(int argc, char** argv) {
             int mapX, mapY;
             AStar::debugAStar_buildingToUseCatchmentArea->getMapCoords(mapX, mapY);
 
-            buildingToUseCatchmentAreaString = "(" + std::to_string(mapX) + ", " + std::to_string(mapY) + ")";
+            buildingToUseCatchmentAreaString = "(" + toString(mapX) + ", " + toString(mapY) + ")";
         } else {
             buildingToUseCatchmentAreaString = "nullptr";
         }
 
         debugOutput[4] = "debugAStar: source = (" +
-            std::to_string(AStar::debugAStar_source.mapX) + ", " +
-            std::to_string(AStar::debugAStar_source.mapY) + "), destination = (" +
-            std::to_string(AStar::debugAStar_destination.mapX) + ", " +
-            std::to_string(AStar::debugAStar_destination.mapY) + "), catchmentAreaBuilding = " +
+            toString(AStar::debugAStar_source.mapX) + ", " +
+            toString(AStar::debugAStar_source.mapY) + "), destination = (" +
+            toString(AStar::debugAStar_destination.mapX) + ", " +
+            toString(AStar::debugAStar_destination.mapY) + "), catchmentAreaBuilding = " +
             buildingToUseCatchmentAreaString + ", useStreetOnly = " +
             (AStar::debugAStar_useStreetOnly ? "true" : "false");
 #endif // DEBUG_A_STAR
