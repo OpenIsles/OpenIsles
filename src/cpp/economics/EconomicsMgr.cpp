@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <cassert>
 #include <set>
 #include "config/BuildingConfigMgr.h"
 #include "economics/EconomicsMgr.h"
@@ -192,8 +193,17 @@ void EconomicsMgr::updateCarrier(Building* building) {
                         goodsSlotToTakeFrom = &targetBuilding->productionSlots.output;
                     }
 
-                    // TODO BUG: Wir sollten nicht mehr aufladen, als im Ziellager abgeladen werden kann. Aktuell gehen wir los, weil 0,3t Platz ist, laden 6t auf und verlieren alles!
                     int goodsWeCollect = (int) goodsSlotToTakeFrom->inventory;
+
+                    // Wir dürfen nicht mehr aufladen, als im Ziellager abgeladen werden kann, sonst gehen die Waren
+                    // verloren. Wir müssen hier in Ganzzahlen denken: Haben wir 2,999t Platz, dürfen wir nicht 3t
+                    // aufladen, sondern nur 2t.
+                    GoodsSlot* goodsSlotWeWillUnloadToLater = findGoodsSlotToUnloadTo(building, carrier);
+                    int remainingCapacityToUnloadLater = (int) (
+                        (double) goodsSlotWeWillUnloadToLater->capacity - goodsSlotWeWillUnloadToLater->inventory);
+                    if (goodsWeCollect > remainingCapacityToUnloadLater) {
+                        goodsWeCollect = remainingCapacityToUnloadLater;
+                    }
 
                     // Ein Träger kann maximal 6t Waren halten
                     if (goodsWeCollect > 6) {
@@ -229,23 +239,7 @@ void EconomicsMgr::updateCarrier(Building* building) {
 
                 // Das war Rückweg -> Waren ausladen und Träger zerstören
                 else if (!carrier->onOutboundTrip) {
-                    GoodsSlot* goodsSlotToUnloadTo;
-
-                    // Lagergebäude: Waren der Siedlung gutschreiben
-                    if (isStorageBuilding) {
-                        Colony* colony = game->getColony(building);
-                        goodsSlotToUnloadTo = &colony->getGoods(carrier->carriedGoods.goodsType);
-                    }
-                    // Produktionsgebäude: Gucken, in welchen Slot die Waren müssen
-                    else {
-                        if (building->productionSlots.input.goodsType == carrier->carriedGoods.goodsType) {
-                            goodsSlotToUnloadTo = &building->productionSlots.input;
-                        }
-                        else if (building->productionSlots.input2.goodsType == carrier->carriedGoods.goodsType) {
-                            goodsSlotToUnloadTo = &building->productionSlots.input2;
-                        }
-                    }
-
+                    GoodsSlot* goodsSlotToUnloadTo = findGoodsSlotToUnloadTo(building, carrier);
                     goodsSlotToUnloadTo->increaseInventory(carrier->carriedGoods.inventory);
 
                     delete carrier;
@@ -253,6 +247,27 @@ void EconomicsMgr::updateCarrier(Building* building) {
                 }
             }
         }
+    }
+}
+
+GoodsSlot* EconomicsMgr::findGoodsSlotToUnloadTo(Building* building, Carrier* carrier) {
+    bool isStorageBuilding = building->isStorageBuilding();
+
+    // Lagergebäude: Waren der Siedlung gutschreiben
+    if (isStorageBuilding) {
+        Colony* colony = game->getColony(building);
+        return &colony->getGoods(carrier->carriedGoods.goodsType);
+    }
+        // Produktionsgebäude: Gucken, in welchen Slot die Waren müssen
+    else {
+        if (building->productionSlots.input.goodsType == carrier->carriedGoods.goodsType) {
+            return &building->productionSlots.input;
+        }
+        else if (building->productionSlots.input2.goodsType == carrier->carriedGoods.goodsType) {
+            return &building->productionSlots.input2;
+        }
+
+        assert(false); // Der Träger passt nicht zu den Gebäude-Slots!? Darf nicht passieren.
     }
 }
 
@@ -285,12 +300,12 @@ FindBuildingToGetGoodsFromResult EconomicsMgr::findBuildingToGetGoodsFrom(Buildi
 
         // Wir brauchen nur, wenn die Lager nicht voll sind
         if (goodsRequired1 != GoodsType::NO_GOODS) {
-            if (building->productionSlots.input.isInventoryFull()) {
+            if (building->productionSlots.input.getRemainingCapacity() < 1) {
                 goodsRequired1 = GoodsType::NO_GOODS;
             }
         }
         if (goodsRequired2 != GoodsType::NO_GOODS) {
-            if (building->productionSlots.input2.isInventoryFull()) {
+            if (building->productionSlots.input2.getRemainingCapacity() < 1) {
                 goodsRequired2 = GoodsType::NO_GOODS;
             }
         }
@@ -361,7 +376,7 @@ FindBuildingToGetGoodsFromResult EconomicsMgr::findBuildingToGetGoodsFrom(Buildi
                 GoodsSlot* buildingThereOutputProductionSlot = &buildingThere->productionSlots.output;
 
                 // Wir holen nur ab, wenn die Lager der Siedlung nicht schon voll sind
-                if (colony->getGoods(buildingThereOutputProductionSlot->goodsType).isInventoryFull()) {
+                if (colony->getGoods(buildingThereOutputProductionSlot->goodsType).getRemainingCapacity() < 1) {
                     continue;
                 }
 

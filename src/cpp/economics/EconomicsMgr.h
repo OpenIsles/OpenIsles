@@ -106,6 +106,17 @@ private:
     void updateCarrier(Building* building);
 
     /**
+     * @brief Sucht für ein Gebäude einen GoodsSlot, in welchen ein Träger seine Waren laden soll.
+     * Handelt es sich bei dem Gebäude um ein Lagergebäude, wird der passende Slot in der Kolonie zurückgegeben,
+     * ansonsten wird der passende Slot `input` oder `input2` vom Gebäude zurückgegeben.
+     *
+     * @param building Gebäude, das das Ziel des Trägers ist
+     * @param carrier Träger, der Waren hält und diese ausladen möchte
+     * @return GoodsSlot, in welchen die Waren ausgeladen werden sollten
+     */
+    GoodsSlot* findGoodsSlotToUnloadTo(Building* building, Carrier* carrier);
+
+    /**
      * @brief Sucht für ein angegebenes Gebäude das beste Gebäude, um Waren von diesen zu beziehen.
      *
      * "bestes" bedeutet hierbei:

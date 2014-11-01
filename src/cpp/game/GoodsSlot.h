@@ -123,7 +123,6 @@ public:
         return (inventory >= capacity);
     }
 
-
     /**
      * @brief Ermittelt, ob der Güterslot einen Rohstoff hält.
      * @return `true`, wenn wir einen Rohstoff haben, sonst `false`
@@ -131,6 +130,15 @@ public:
     inline bool isRawMaterial() const {
         return (goodsType == WOOL || goodsType == CATTLE);
     }
+
+    /**
+     * @brief Liefert die Rest-Lagerkapazität für diesen Slot.
+     * @return Rest-Lagerkapazität für diesen Slot
+     */
+    inline double getRemainingCapacity() const {
+        return (double) capacity - inventory;
+    }
+
 };
 
 #endif
