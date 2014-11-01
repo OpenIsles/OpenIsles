@@ -364,8 +364,13 @@ FindBuildingToGetGoodsFromResult EconomicsMgr::findBuildingToGetGoodsFrom(Buildi
                 continue;
             }
 
-            // Liefert das Gebäude was passendes?
+            // Gebäude, die gar nix produzieren, bringen uns nix, z.B. öffentliche Gebäude.
             const BuildingConfig* buildingThereConfig = buildingConfigMgr->getConfig(buildingThere->getStructureType());
+            if (!isStorgeBuildingThere && !buildingThereConfig->getBuildingProduction()->output.isUsed()) {
+                continue;
+            }
+
+            // Liefert das Gebäude was passendes?
             if (!isStorageBuilding && !isStorgeBuildingThere && (
                     buildingThereConfig->getBuildingProduction()->output.goodsType != goodsRequired1 &&
                     buildingThereConfig->getBuildingProduction()->output.goodsType != goodsRequired2)) {
