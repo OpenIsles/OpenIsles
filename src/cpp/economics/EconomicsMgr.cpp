@@ -279,6 +279,7 @@ GoodsSlot* EconomicsMgr::findGoodsSlotToUnloadTo(Building* building, Carrier* ca
         }
 
         assert(false); // Der Träger passt nicht zu den Gebäude-Slots!? Darf nicht passieren.
+        return nullptr;
     }
 }
 
