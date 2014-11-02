@@ -632,9 +632,12 @@ const Building* Map::addBuilding(int mapX, int mapY, StructureType structureType
     // Objekt in die Liste aufnehmen
 	addMapObject(building);
     
-    // Kontor? Einzugbereich in mapTiles aktualisieren
+    // Kontor oder Marktplatz? Einzugbereich in mapTiles aktualisieren und Lagerkapazität der Kolonie erhöhen
     if (structureType == OFFICE1 || structureType == MARKETPLACE) {
         addOfficeCatchmentAreaToMap(*building);
+
+        Colony* colony = game->getColony(building);
+        colony->increaseGoodsCapacity(10);
     }
 
 	return building;
@@ -857,6 +860,20 @@ void Map::deleteSelectedObject() {
             getMapTileAt(mx, my)->mapObject = nullptr;
         }
     }
+
+    // Kontor oder Marktplatz? Einzugbereich in mapTiles aktualisieren und Lagerkapazität der Kolonie erhöhen
+    Structure* selectedStructure = dynamic_cast<Structure*>(selectedMapObject);
+    if (selectedStructure != nullptr) {
+        StructureType structureType = selectedStructure->getStructureType();
+        if (structureType == MARKETPLACE) {
+            Colony* colony = game->getColony(selectedStructure);
+            colony->decreaseGoodsCapacity(10);
+        }
+    }
+
+    // TODO Wenn wir wirklich ordentlich ein Gebäude abreißen, müssen bei Marktplatz/Kontor die Kolonie-Einzugsbereiche
+    // aktualisiert, die Gebäude außerhalb, die nicht in einem anderen Einzugsgebiet liegen, zerstört werden.
+    // Beim Abriss des Kontors muss zusätzlich die Kolonie zerstört werden.
 
 
     delete selectedMapObject;

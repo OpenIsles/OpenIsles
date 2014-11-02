@@ -120,6 +120,26 @@ public:
     }
 
     /**
+     * @brief Erhöht die Lagerkapazität um einen bestimmten Wert.
+     * @param amount Anzahl, um wie viel erhöht werden soll
+     */
+    void increaseCapacity(unsigned int amount) {
+        capacity += amount;
+    }
+
+    /**
+     * @brief Erniedrigt die Lagerkapazität um einen bestimmten Wert. Würde dabei das Lager durch bestehenden
+     * Lagerbestand gesprengt werden, wird der Lagerbestand entsprechend verringert.
+     * @param amount Anzahl, um wie viel erniedrigt werden soll
+     */
+    void decreaseCapacity(double amount) {
+        capacity -= amount;
+        if (inventory > capacity) {
+            inventory = capacity;
+        }
+    }
+
+    /**
      * @brief Überprüft, ob die Lager voll sind
      * @return `true`, wenn das Lager voll ist, sonst `false`
      */

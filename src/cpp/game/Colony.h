@@ -18,6 +18,9 @@ private:
     std::vector<GoodsSlot> goods;
     
 public:
+    /**
+     * Legt eine neue Kolonie mit 30t Lagerkapazität in allen Slots an.
+     */
 	Colony();
 	~Colony();
 
@@ -38,7 +41,20 @@ public:
         goods[GoodsType::WOOD].inventory -= buildingCosts->wood;
         goods[GoodsType::BRICKS].inventory -= buildingCosts->bricks;
     }
-    
+
+    /**
+     * @brief Erhöht die Lagerkapazität der Kolonie um einen bestimmten Wert. Es werden damit die Lagerkapazitäten
+     * in allen Slots erhöht.
+     * @param amount Anzahl, um wie viel erhöht werden soll
+     */
+    void increaseGoodsCapacity(unsigned int amount);
+
+    /**
+     * @brief Erniedrigt die Lagerkapazität der Kolonie um einen bestimmten Wert. Es werden damit die Lagerkapazitäten
+     * in allen Slots erniedrigt. Überstehende Waren gehen verloren.
+     * @param amount Anzahl, um wie viel erniedrigt werden soll
+     */
+    void decreaseGoodsCapacity(unsigned int amount);
 };
 
 #endif

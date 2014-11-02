@@ -11,3 +11,15 @@ Colony::Colony() : goods(GoodsType::MAX_GOOD) {
 Colony::~Colony() {
     
 }
+
+void Colony::increaseGoodsCapacity(unsigned int amount) {
+    for (int i = 0; i < GoodsType::MAX_GOOD; i++) {
+        goods[i].increaseCapacity(amount);
+    }
+}
+
+void Colony::decreaseGoodsCapacity(unsigned int amount) {
+    for (int i = 0; i < GoodsType::MAX_GOOD; i++) {
+        goods[i].decreaseCapacity(amount);
+    }
+}
