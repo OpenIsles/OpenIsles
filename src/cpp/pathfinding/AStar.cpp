@@ -286,9 +286,9 @@ bool AStar::isTileWalkable(MapCoordinate mapCoordinate, Building* sourceBuilding
         return false; // außerhalb der Karte
     }
 
-    // TODO aktuell darf nur auf Grass und Grass2 gebaut werden. Später muss das das Gelände wissen, wo. Refactoring notwendig, da Codedopplung.
-    if (mapTile->tileGraphicIndex != 2 && mapTile->tileGraphicIndex != 7) {
-        return false; // nur auf Grass und Grass2 darf man laufen
+    // TODO aktuell darf nur auf Grass gebaut werden. Später muss das das Gelände wissen, wo. Refactoring notwendig, da Codedopplung.
+    if (mapTile->tileGraphicIndex != 5) {
+        return false; // nur auf Grass darf man laufen
     }
 
     // Steht ein Gebäude im Weg?

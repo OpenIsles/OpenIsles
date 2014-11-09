@@ -7,21 +7,25 @@ TILESET_WIDTH := 4
 CREATE_TARGET_DIRECTORY = mkdir -p $(@D)
 
 
-.PHONY: all clean build-tiles clean-tiles build-gui clean-gui render-blender clean-blender
+.PHONY: all clean render-tiles build-gui clean-gui render-blender clean-blender
 
-all: build-tiles build-gui render-blender
+all: build-gui render-blender
 
-clean: clean-tiles clean-gui clean-blender
+clean: clean-gui clean-blender
 
 
-build-tiles:
-	awk 'NF > 0 && /^[^#]/ { print "convert $(SRC_DIRECTORY)/xcf/tileset-src.xcf -crop 64x32+" $$2 "+" $$3 " $(DATA_DIRECTORY)/img/tiles/alpha-mask.png -alpha Off -compose CopyOpacity -composite $(DATA_DIRECTORY)/img/tiles/" $$4 }' $(DATA_DIRECTORY)/img/tiles/tiles.txt | bash
-	convert -size $$(($(TILESET_WIDTH)*64))x256 canvas:transparent $(DATA_DIRECTORY)/img/tiles/tileset.png
-	awk 'NF > 0 && /^[^#]/ { print "convert $(DATA_DIRECTORY)/img/tiles/tileset.png $(DATA_DIRECTORY)/img/tiles/" $$4 " -geometry +" (($$1-1)%$(TILESET_WIDTH))*64 "+" int(($$1-1)/$(TILESET_WIDTH))*32 " -composite $(DATA_DIRECTORY)/img/tiles/tileset.png" }' $(DATA_DIRECTORY)/img/tiles/tiles.txt | bash
-	
-clean-tiles:
-	awk 'NF > 0 && /^[^#]/ { print "rm -f $(DATA_DIRECTORY)/img/tiles/" $$4 }' $(DATA_DIRECTORY)/img/tiles/tiles.txt | bash
-	rm -f $(DATA_DIRECTORY)/img/tiles/tileset.png
+########################################################################################################################
+# Gelände-Kacheln                                                                                                      #
+########################################################################################################################
+
+render-tiles: $(SRC_DIRECTORY)/blender/tiles/tiles.blend
+	rm -f $(SRC_DIRECTORY)/blender/tiles/render/tileset.png
+
+	mkdir -p $(DATA_DIRECTORY)/img/tiles
+	cd $(SRC_DIRECTORY)/blender/tiles; blender -b $(notdir $<) -P render.py
+	cp $(SRC_DIRECTORY)/blender/tiles/render/* $(DATA_DIRECTORY)/img/tiles
+
+	montage -background transparent $(SRC_DIRECTORY)/blender/tiles/render/* -tile 4x4 -geometry 64x64+0+0 $(SRC_DIRECTORY)/blender/tiles/render/tileset.png
 
 ########################################################################################################################
 # GUI                                                                                                                  #
@@ -141,6 +145,7 @@ render-blender: \
 	$(foreach ANIMATION,$(ANIMATIONS), \
 		$(DATA_DIRECTORY)/img/objects/$(ANIMATION).png \
 	) \
+	render-tiles \
 	render-streets \
 	render-cart
 	
@@ -150,6 +155,9 @@ clean-blender:
 	rm -rf $(DATA_DIRECTORY)/img/goods
 	rm -f $(foreach ANIMATION,$(ANIMATIONS), $(DATA_DIRECTORY)/img/objects/$(ANIMATION).png)
 	rm -rf $(foreach ANIMATION,$(ANIMATIONS), $(SRC_DIRECTORY)/blender/$(ANIMATION)/render)
+	rm -rf $(SRC_DIRECTORY)/blender/cart/render
+	rm -rf $(DATA_DIRECTORY)/img/tiles
+	rm -rf $(SRC_DIRECTORY)/blender/tiles/render
 	rm -rf $(SRC_DIRECTORY)/blender/streets/render
 	rm -rf $(DATA_DIRECTORY)/img/objects/street*.png
 	rm -rf $(DATA_DIRECTORY)/img/objects/cart-without-cargo.png

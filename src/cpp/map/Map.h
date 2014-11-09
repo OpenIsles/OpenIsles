@@ -74,7 +74,7 @@ struct MapTile {
     
     MapTile() {
         // TODO Konstante/Enum
-        tileGraphicIndex = 1; // Ozean
+        tileGraphicIndex = 14; // Ozean
         isle = nullptr;
         player = nullptr;
         mapObject = nullptr;

@@ -171,7 +171,7 @@ void Map::updateMinimapTexture() {
             unsigned char tile = mapTile->tileGraphicIndex;
             Player* player = mapTile->player;
             
-            *(pixelPtr++) = (tile == 1) ? 0x000090 : (player != nullptr ? ((Uint32) player->getColor()) : 0x008000);
+            *(pixelPtr++) = (tile == 14) ? 0x000090 : (player != nullptr ? ((Uint32) player->getColor()) : 0x008000);
         }
     }
     
@@ -218,9 +218,13 @@ void Map::renderMap(SDL_Renderer* renderer) {
 	SDL_RenderSetClipRect(renderer, &sdlMapClipRect);
 
 	// Kacheln rendern
-	SDL_Rect rectDestination = { 0, 0, GraphicsMgr::TILE_WIDTH / screenZoom, GraphicsMgr::TILE_HEIGHT / screenZoom };
 	for (int mapY = mapYStart; mapY <= mapYEnd; mapY++) {
 		for (int mapX = mapXStart; mapX <= mapXEnd; mapX++) {
+            MapObjectGraphic* tileGraphic =
+                graphicsMgr->getGraphicForTile(getMapTileAt(mapX, mapY)->tileGraphicIndex);
+
+            SDL_Rect rectDestination = {
+                0, 0, tileGraphic->getWidth() / screenZoom, tileGraphic->getHeight() / screenZoom };
 			MapUtils::mapToScreenCoords(mapX, mapY, rectDestination.x, rectDestination.y);
 
 			// Scrolling-Offset anwenden
@@ -236,9 +240,6 @@ void Map::renderMap(SDL_Renderer* renderer) {
 					|| rectDestination.y + GraphicsMgr::TILE_HEIGHT < mapClipRect.y) {
 				continue;
 			}
-
-            MapObjectGraphic* tileGraphic =
-                    graphicsMgr->getGraphicForTile(getMapTileAt(mapX, mapY)->tileGraphicIndex);
 
             int drawingFlags = 0;
 			if (selectedMapObject != nullptr) {
@@ -512,8 +513,8 @@ unsigned char Map::isAllowedToPlaceStructure(int mapX, int mapY, StructureType s
                 mapTile->player == nullptr || mapTile->player != game->getCurrentPlayer() ||
 
                     // Gelände passt nicht
-                        // TODO aktuell darf nur auf Grass und Grass2 gebaut werden. Später muss das das Gebäude wissen, wo.
-                        (mapTile->tileGraphicIndex != 2 && mapTile->tileGraphicIndex != 7)
+                        // TODO aktuell darf nur auf Grass gebaut werden. Später muss das das Gebäude wissen, wo.
+                        (mapTile->tileGraphicIndex != 5)
                 ) {
                 result |= PLACING_STRUCTURE_ROOM_NOT_UNLOCK;
                 return result;

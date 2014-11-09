@@ -140,24 +140,18 @@ void GraphicsMgr::loadTiles() {
 	tiles = new MapObjectGraphic*[128];
     memset(tiles, 0, 128 * sizeof(MapObjectGraphic*));
 
-	std::ifstream inputFileStreamTilesTxt("data/img/tiles/tiles.txt");
-	std::string line;
-	int lineNr = 0;
-	while (std::getline(inputFileStreamTilesTxt, line)) {
-		lineNr++;
-
-		// Leerzeilen und Kommentarzeilen überspringen
-		if (line.empty() || line.data()[0] == '#')
-			continue;
-
-		std::istringstream inputStringStream(line);
-		int tileIndex, xOffset, yOffset;
-		std::string tileFilename;
-		if (!(inputStringStream >> tileIndex >> xOffset >> yOffset >> tileFilename)) {
-			throw new std::runtime_error("Error in tiles.txt line " + lineNr);
-		}
-
-		std::string tileFilepath("data/img/tiles/" + tileFilename);
-		tiles[tileIndex] = new MapObjectGraphic(tileFilepath.data(), 1, 1);
-	}
+    tiles[1] = new MapObjectGraphic("data/img/tiles/grass-ne.png", 1, 1);
+    tiles[2] = new MapObjectGraphic("data/img/tiles/grass-nw.png", 1, 1);
+    tiles[3] = new MapObjectGraphic("data/img/tiles/grass-se.png", 1, 1);
+    tiles[4] = new MapObjectGraphic("data/img/tiles/grass-sw.png", 1, 1);
+    tiles[5] = new MapObjectGraphic("data/img/tiles/grass.png", 1, 1);
+    tiles[6] = new MapObjectGraphic("data/img/tiles/isle-e.png", 1, 1);
+    tiles[7] = new MapObjectGraphic("data/img/tiles/isle-n.png", 1, 1);
+    tiles[8] = new MapObjectGraphic("data/img/tiles/isle-ne.png", 1, 1);
+    tiles[9] = new MapObjectGraphic("data/img/tiles/isle-nw.png", 1, 1);
+    tiles[10] = new MapObjectGraphic("data/img/tiles/isle-s.png", 1, 1);
+    tiles[11] = new MapObjectGraphic("data/img/tiles/isle-se.png", 1, 1);
+    tiles[12] = new MapObjectGraphic("data/img/tiles/isle-sw.png", 1, 1);
+    tiles[13] = new MapObjectGraphic("data/img/tiles/isle-w.png", 1, 1);
+    tiles[14] = new MapObjectGraphic("data/img/tiles/water.png", 1, 1);
 }
