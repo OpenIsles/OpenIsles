@@ -504,8 +504,7 @@ void Map::drawCatchmentArea(Structure* structure) {
                 MapCoordUtils::mapToScreenCoords(mapX, mapY, screenX, screenY);
 
                 int drawX = (screenX - screenOffsetX) / screenZoom;
-                int drawY = (screenY - screenOffsetY) / screenZoom;
-                drawY -= GraphicsMgr::ELEVATION_HEIGHT;
+                int drawY = (screenY - screenOffsetY - GraphicsMgr::ELEVATION_HEIGHT) / screenZoom;
 
                 // An der Kachel jede der 4 Seiten untersuchen, ob wir eine Linie malen müssen.
                 // TODO die String-'1'er ersetzen durch echte 1en.
