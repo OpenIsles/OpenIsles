@@ -160,7 +160,7 @@ void GameIO::loadMap(rapidxml::xml_node<>* objectgroupIslesNode) {
             // Startpunkt: Diesen Punkt wollen wir auf den Bildschirm zentrieren
         else if (strcmp(nodeType, "startpoint") == 0) {
             int screenCenterX, screenCenterY;
-            MapUtils::mapToScreenCoordsCenter(mapX, mapY, screenCenterX, screenCenterY);
+            MapCoordUtils::mapToScreenCoordsCenter(mapX, mapY, screenCenterX, screenCenterY);
 
             map->screenOffsetX = screenCenterX - (map->mapClipRect.w / 2);
             map->screenOffsetY = screenCenterY - (map->mapClipRect.h / 2);

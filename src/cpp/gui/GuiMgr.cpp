@@ -11,7 +11,7 @@
 #ifdef DEBUG_A_STAR
 #include "pathfinding/AStar.h"
 
-extern int mouseCurrentMapX, mouseCurrentMapY;
+extern int mouseCurrentX, mouseCurrentY;
 #endif
 
 // Aus main.cpp importiert
@@ -537,6 +537,9 @@ void GuiMgr::onEvent(SDL_Event& event) {
 
 #ifdef DEBUG_A_STAR
         bool needToRecalculate = false;
+
+        int mouseCurrentMapX, mouseCurrentMapY;
+        MapCoordUtils::getMapCoordsUnderMouse(mouseCurrentMapX, mouseCurrentMapY);
 
         // A*-Start- und Endkoordinaten festlegen
         if (event.key.keysym.scancode == SDL_SCANCODE_A) {

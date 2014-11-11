@@ -64,13 +64,30 @@ enum AnimationType {
 class GraphicsMgr {
 
 public:
-	/**
-	 * @brief Größe einer Kachel
-	 */
+    /**
+     * @brief Breite einer Kachel in Pixel
+     */
 	static const int TILE_WIDTH = 64;
+
+    /**
+     * @brief Höhe einer Kachel in Pixel
+     */
 	static const int TILE_HEIGHT = 32;
+
+    /**
+     * @brief Halbe Breite einer Kachel in Pixel
+     */
 	static const int TILE_WIDTH_HALF = TILE_WIDTH / 2;
+
+    /**
+     * @brief Halbe Höhe einer Kachel in Pixel
+     */
 	static const int TILE_HEIGHT_HALF = TILE_HEIGHT / 2;
+
+    /**
+     * @brief Höhe der Elevation in Pixel. Entspricht dem e in doc/map-coords.xcf
+     */
+    static const int ELEVATION_HEIGHT = 32;
 
 private:
 	/**

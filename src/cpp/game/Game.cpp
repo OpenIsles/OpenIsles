@@ -13,7 +13,6 @@ extern FontMgr* fontMgr;
 extern Game* game;
 extern GraphicsMgr* graphicsMgr;
 extern SDL_Renderer* renderer;
-extern int mouseCurrentMapX, mouseCurrentMapY;
 
 
 Game::Game() {
@@ -81,6 +80,9 @@ void Game::renderResourcesBar() {
                         &colorWhite, &colorBlack, "DroidSans-Bold.ttf", 18, RENDERTEXT_HALIGN_LEFT);
     
     // Siedlung, wo der Cursor grade is
+    int mouseCurrentMapX, mouseCurrentMapY;
+    MapCoordUtils::getMapCoordsUnderMouse(mouseCurrentMapX, mouseCurrentMapY);
+
     MapTile* mapTileAtCursor = map->getMapTileAt(mouseCurrentMapX, mouseCurrentMapY);
     if (mapTileAtCursor == nullptr || mapTileAtCursor->player != currentPlayer) {
         return;

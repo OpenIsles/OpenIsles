@@ -39,14 +39,9 @@ SDL_Renderer* renderer;
 GraphicsMgr* graphicsMgr;
 
 /**
- * @brief aktuelle Position des Mauszeigers
+ * @brief aktuelle Position des Mauszeigers in Fenster-Koordinaten
  */
 int mouseCurrentX, mouseCurrentY;
-
-/**
- * @brief aktuelle Map-Koordinaten unter dem Mauszeiger
- */
-int mouseCurrentMapX, mouseCurrentMapY;
 
 /**
  * @brief FPS-Counter
@@ -247,6 +242,7 @@ int main(int argc, char** argv) {
         // Position des Mauszeigers holen
         SDL_GetMouseState(&mouseCurrentX, &mouseCurrentY);
 
+#ifdef DEBUG
         int screenOffsetX = map->getScreenOffsetX();
         int screenOffsetY = map->getScreenOffsetY();
         int screenZoom = map->getScreenZoom();
@@ -254,9 +250,10 @@ int main(int argc, char** argv) {
         int screenX, screenY;
         screenX = (mouseCurrentX * screenZoom) + screenOffsetX;
         screenY = (mouseCurrentY * screenZoom) + screenOffsetY;
-        MapUtils::screenToMapCoords(screenX, screenY, mouseCurrentMapX, mouseCurrentMapY);
 
-#ifdef DEBUG
+        int mouseCurrentMapX, mouseCurrentMapY;
+        MapCoordUtils::getMapCoordsUnderMouse(mouseCurrentMapX, mouseCurrentMapY);
+
 		// Debug-Infos vorbereiten, damit wir sie später einfach nur ausgeben können
 		debugOutput[0] = "FPS: average = " + toString(fpsCounter->getFpsAvg()) +
                 ", current = " + toString(fpsCounter->getFpsCurrent());
@@ -266,7 +263,7 @@ int main(int argc, char** argv) {
                 toString(screenZoom);
 
         debugOutput[2] = "mouse = (" + 
-                toString(mouseCurrentX) + ", " + toString(mouseCurrentY) + "), map = (" +
+                toString(mouseCurrentX) + ", " + toString(mouseCurrentY) + "), mapElevated = (" +
                 toString(mouseCurrentMapX) + ", " + toString(mouseCurrentMapY) + "), screen = (" +
                 toString(screenX) + ", " + toString(screenY) + ")";
     

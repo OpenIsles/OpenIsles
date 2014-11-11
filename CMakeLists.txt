@@ -69,7 +69,7 @@ set(SOURCE_FILES
     src/cpp/map/Building.cpp
     src/cpp/map/Isle.cpp
     src/cpp/map/Map.cpp
-    src/cpp/map/MapUtils.cpp
+    src/cpp/map/MapCoordUtils.cpp
     src/cpp/pathfinding/AStar.cpp
     src/cpp/sound/SoundMgr.cpp
     src/cpp/utils/StringFormat.cpp

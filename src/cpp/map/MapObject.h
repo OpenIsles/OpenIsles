@@ -3,7 +3,7 @@
 
 #include "game/Player.h"
 #include "graphics/GraphicsMgr.h"
-#include "map/MapUtils.h"
+#include "map/MapCoordUtils.h"
 
 /**
  * @brief Basisklasse für alles, was sich auf der Karte befinden kann
@@ -62,28 +62,6 @@ public:
 		mapHeight = this->mapHeight;
 	}
 
-    /**
-     * Ermittelt de Screen-Koordinaten des Mittelpunkts des Objekts
-     * @param screenCenterX Referenz, die die X-Screen-Koordinate des Mittelpunkts empfängt
-     * @param screenCenterY Referenz, die die Y-Screen-Koordinate des Mittelpunkts empfängt
-     */
-    void getScreenCoordsCenter(int& screenCenterX, int& screenCenterY) const {
-        // Mittelpunkt aus den beiden Screen-Koordinaten an den beiden Ecken des Objekts bestimmen
-        int screenXUpperLeft, screenYUpperLeft;
-        int screenXLowerRight, screenYLowerRight;
-        
-        MapUtils::mapToScreenCoords(mapX, mapY, screenXUpperLeft, screenYUpperLeft);
-        MapUtils::mapToScreenCoords(mapX + mapWidth - 1, mapY + mapHeight - 1, screenXLowerRight, screenYLowerRight);
-        
-        screenCenterX = (screenXUpperLeft + screenXLowerRight) / 2;
-        screenCenterY = (screenYUpperLeft + screenYLowerRight) / 2;
-        
-        // ScreenCoords sind in der oberen linken Ecke einer Kachel.
-        // Wir wollen die Mitte der Kachel, also noch ne halbe Kacheln draufaddieren.
-        screenCenterX += GraphicsMgr::TILE_WIDTH_HALF;
-        screenCenterY += GraphicsMgr::TILE_HEIGHT_HALF;
-    }
-    
     Player* getPlayer() const {
         return player;
     }
