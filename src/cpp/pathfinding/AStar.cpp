@@ -287,7 +287,7 @@ bool AStar::isTileWalkable(MapCoordinate mapCoordinate, Building* sourceBuilding
     }
 
     const MapTileConfig* mapTileConfig = configMgr->getMapTileConfig(mapTile->tileIndex);
-    if (mapTileConfig->isWalkableAndBuildable) {
+    if (!mapTileConfig->isWalkableAndBuildable) {
         return false; // nur auf Grass darf man laufen
     }
 
