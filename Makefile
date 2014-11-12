@@ -18,6 +18,44 @@ clean: clean-gui clean-blender
 # Gelände-Kacheln                                                                                                      #
 ########################################################################################################################
 
+# Kacheln aufzählen, damit wir die Reihenfolge im Tileset kontrollieren können
+TILES := \
+	$(SRC_DIRECTORY)/blender/tiles/render/grass.png \
+	$(SRC_DIRECTORY)/blender/tiles/render/isle-se.png \
+	$(SRC_DIRECTORY)/blender/tiles/render/isle-s.png \
+	$(SRC_DIRECTORY)/blender/tiles/render/isle-sw.png \
+	$(SRC_DIRECTORY)/blender/tiles/render/isle-w.png \
+	$(SRC_DIRECTORY)/blender/tiles/render/isle-nw.png \
+	$(SRC_DIRECTORY)/blender/tiles/render/isle-n.png \
+	$(SRC_DIRECTORY)/blender/tiles/render/isle-ne.png \
+	$(SRC_DIRECTORY)/blender/tiles/render/isle-e.png \
+	$(SRC_DIRECTORY)/blender/tiles/render/grass-se.png \
+	$(SRC_DIRECTORY)/blender/tiles/render/grass-sw.png \
+	$(SRC_DIRECTORY)/blender/tiles/render/grass-nw.png \
+	$(SRC_DIRECTORY)/blender/tiles/render/grass-ne.png \
+	$(SRC_DIRECTORY)/blender/tiles/render/water.png \
+	$(SRC_DIRECTORY)/blender/tiles/render/beach-se.png \
+	$(SRC_DIRECTORY)/blender/tiles/render/beach-s1.png \
+	$(SRC_DIRECTORY)/blender/tiles/render/beach-s2.png \
+	$(SRC_DIRECTORY)/blender/tiles/render/beach-s3.png \
+	$(SRC_DIRECTORY)/blender/tiles/render/beach-sw.png \
+	$(SRC_DIRECTORY)/blender/tiles/render/beach-w1.png \
+	$(SRC_DIRECTORY)/blender/tiles/render/beach-w2.png \
+	$(SRC_DIRECTORY)/blender/tiles/render/beach-w3.png \
+	$(SRC_DIRECTORY)/blender/tiles/render/beach-nw.png \
+	$(SRC_DIRECTORY)/blender/tiles/render/beach-n1.png \
+	$(SRC_DIRECTORY)/blender/tiles/render/beach-n2.png \
+	$(SRC_DIRECTORY)/blender/tiles/render/beach-n3.png \
+	$(SRC_DIRECTORY)/blender/tiles/render/beach-ne.png \
+	$(SRC_DIRECTORY)/blender/tiles/render/beach-e1.png \
+	$(SRC_DIRECTORY)/blender/tiles/render/beach-e2.png \
+	$(SRC_DIRECTORY)/blender/tiles/render/beach-e3.png \
+	$(SRC_DIRECTORY)/blender/tiles/render/beach.png \
+	$(SRC_DIRECTORY)/blender/tiles/render/water-se.png \
+	$(SRC_DIRECTORY)/blender/tiles/render/water-sw.png \
+	$(SRC_DIRECTORY)/blender/tiles/render/water-nw.png \
+	$(SRC_DIRECTORY)/blender/tiles/render/water-ne.png
+
 render-tiles: $(SRC_DIRECTORY)/blender/tiles/tiles.blend
 	rm -f $(SRC_DIRECTORY)/blender/tiles/render/tileset.png
 
@@ -25,7 +63,7 @@ render-tiles: $(SRC_DIRECTORY)/blender/tiles/tiles.blend
 	cd $(SRC_DIRECTORY)/blender/tiles; blender -b $(notdir $<) -P render.py
 	cp $(SRC_DIRECTORY)/blender/tiles/render/* $(DATA_DIRECTORY)/img/tiles
 
-	montage -background transparent $(SRC_DIRECTORY)/blender/tiles/render/* -tile 4x4 -geometry 64x64+0+0 $(SRC_DIRECTORY)/blender/tiles/render/tileset.png
+	montage -background transparent $(TILES) -tile 8x5 -geometry 64x64+0+0 $(SRC_DIRECTORY)/blender/tiles/render/tileset.png
 
 ########################################################################################################################
 # GUI                                                                                                                  #

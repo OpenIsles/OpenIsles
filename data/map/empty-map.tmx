@@ -14,7 +14,10 @@
  <objectgroup name="isles" width="150" height="150">
   <object type="startpoint" x="1216" y="1088"/>
   <object name="large1" type="isle" x="96" y="96" width="2560" height="2560"/>
-  <object name="small1" type="isle" x="1248" y="2688" width="960" height="960"/>
+  <object name="small1" type="isle" x="224" y="2848" width="960" height="960"/>
+  <object name="medium1" type="isle" x="1440" y="2976" width="1600" height="1600"/>
+  <object name="medium1" type="isle" x="3072" y="480" width="1600" height="1600"/>
+  <object name="small1" type="isle" x="3442" y="2606" width="960" height="960"/>
  </objectgroup>
  <objectgroup name="colonies" width="150" height="150">
   <object name="Kolonie" type="colony" x="832" y="896" width="32" height="32">
