@@ -1,5 +1,5 @@
 #include <SDL.h>
-#include "config/BuildingConfigMgr.h"
+#include "config/ConfigMgr.h"
 #include "game/Colony.h"
 #include "game/Game.h"
 #include "gui/FontMgr.h"
@@ -13,7 +13,7 @@ static SDL_Color colorBlack = {0, 0, 0, 255};
 static SDL_Color colorWhite = {255, 255, 255, 255};
 
 // Aus main.cpp importiert
-extern BuildingConfigMgr* buildingConfigMgr;
+extern ConfigMgr* configMgr;
 extern FontMgr* fontMgr;
 extern Game* game;
 extern GraphicsMgr* graphicsMgr;
@@ -35,7 +35,7 @@ void GuiAddBuildingWidget::renderElement(SDL_Renderer* renderer) {
     int windowX, windowY;
     getWindowCoords(windowX, windowY);
 
-    const BuildingConfig* buildingConfig = buildingConfigMgr->getConfig(structureType);
+    const BuildingConfig* buildingConfig = configMgr->getBuildingConfig(structureType);
 
     // Gebäudename
     fontMgr->renderText(renderer, buildingConfig->getName(), windowX + width/2, windowY + 15,

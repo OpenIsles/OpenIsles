@@ -1,4 +1,4 @@
-#include "config/BuildingConfigMgr.h"
+#include "config/ConfigMgr.h"
 #include "game/Game.h"
 #include "gui/FontMgr.h"
 #include "gui/GuiSelectedBuildingWidget.h"
@@ -9,7 +9,7 @@ static SDL_Color colorBlack = {0, 0, 0, 255};
 static SDL_Color colorWhite = {255, 255, 255, 255};
 
 // Aus main.cpp importiert
-extern BuildingConfigMgr* buildingConfigMgr;
+extern ConfigMgr* configMgr;
 extern FontMgr* fontMgr;
 extern Game* game;
 extern GraphicsMgr* graphicsMgr;
@@ -43,7 +43,7 @@ void GuiSelectedBuildingWidget::renderElement(SDL_Renderer* renderer) {
     getWindowCoords(windowX, windowY);
 
     StructureType structureType = selectedBuilding->getStructureType();
-    const BuildingConfig* buildingConfig = buildingConfigMgr->getConfig(structureType);
+    const BuildingConfig* buildingConfig = configMgr->getBuildingConfig(structureType);
 
     // Gebäudename
     fontMgr->renderText(renderer, buildingConfig->getName(), windowX + width/2, windowY + 15,

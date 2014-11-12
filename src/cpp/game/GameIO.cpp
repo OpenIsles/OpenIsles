@@ -151,7 +151,7 @@ void GameIO::loadMap(rapidxml::xml_node<>* objectgroupIslesNode) {
             for (int my = mapY, isleY = 0; my < mapY + isleMapHeight; my++, isleY++) {
                 for (int mx = mapX, isleX = 0; mx < mapX + isleMapWidth; mx++, isleX++) {
                     MapTile* mapTile = map->mapTiles->getData(mx, my, nullptr);
-                    mapTile->tileGraphicIndex = isle->getTileAt(isleX, isleY);
+                    mapTile->tileIndex = isle->getTileAt(isleX, isleY);
                     mapTile->isle = isle;
                 }
             }

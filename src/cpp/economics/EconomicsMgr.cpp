@@ -1,13 +1,13 @@
 #include <algorithm>
 #include <cassert>
 #include <set>
-#include "config/BuildingConfigMgr.h"
+#include "config/ConfigMgr.h"
 #include "economics/EconomicsMgr.h"
 #include "game/Colony.h"
 #include "game/Game.h"
 
 // Aus main.cpp importiert
-extern BuildingConfigMgr* buildingConfigMgr;
+extern ConfigMgr* configMgr;
 extern Game* game;
 extern GraphicsMgr* graphicsMgr;
 extern Uint32 sdlTicks;
@@ -34,7 +34,7 @@ void EconomicsMgr::update(Structure* structure) {
 
 void EconomicsMgr::updateProduction(Building* building) {
     StructureType structureType = building->getStructureType();
-    const BuildingConfig* buildingConfig = buildingConfigMgr->getConfig(structureType);
+    const BuildingConfig* buildingConfig = configMgr->getBuildingConfig(structureType);
 
     // Produziert eh nix bzw. Lager schon voll? Dann nix zu tun.
     if (!buildingConfig->getBuildingProduction()->output.isUsed() ||
@@ -285,7 +285,7 @@ GoodsSlot* EconomicsMgr::findGoodsSlotToUnloadTo(Building* building, Carrier* ca
 
 FindBuildingToGetGoodsFromResult EconomicsMgr::findBuildingToGetGoodsFrom(Building* building) {
     StructureType structureType = building->getStructureType();
-    const BuildingConfig* buildingConfig = buildingConfigMgr->getConfig(structureType);
+    const BuildingConfig* buildingConfig = configMgr->getBuildingConfig(structureType);
     const RectangleData<char>* catchmentArea = buildingConfig->getCatchmentArea();
     if (catchmentArea == nullptr) {
         return FindBuildingToGetGoodsFromResult(); // kein Einzugsbereich
@@ -366,7 +366,7 @@ FindBuildingToGetGoodsFromResult EconomicsMgr::findBuildingToGetGoodsFrom(Buildi
             }
 
             // Gebäude, die gar nix produzieren, bringen uns nix, z.B. öffentliche Gebäude.
-            const BuildingConfig* buildingThereConfig = buildingConfigMgr->getConfig(buildingThere->getStructureType());
+            const BuildingConfig* buildingThereConfig = configMgr->getBuildingConfig(buildingThere->getStructureType());
             if (!isStorgeBuildingThere && !buildingThereConfig->getBuildingProduction()->output.isUsed()) {
                 continue;
             }

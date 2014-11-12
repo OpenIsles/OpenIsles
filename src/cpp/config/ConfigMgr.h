@@ -1,7 +1,8 @@
-#ifndef _BUILDING_CONFIG_MGR_H
-#define _BUILDING_CONFIG_MGR_H
+#ifndef _CONFIG_MGR_H
+#define _CONFIG_MGR_H
 
 #include "game/GoodsSlot.h"
+#include "graphics/MapObjectGraphic.h"
 #include "map/Building.h"
 #include "utils/RectangleData.h"
 
@@ -138,29 +139,95 @@ struct BuildingConfig {
 
 
 /**
- * @brief Klasse, die die Konfiguration der Gebäude enthält
+ * @brief Infos über eine bestimmte Geländekachel
  */
-class BuildingConfigMgr {
+typedef
+struct MapTileConfig {
+
+    /**
+     * Dateiname der Grafik
+     */
+    const char* graphicsFile;
+
+    /**
+     * @brief Flag, ob diese Kachel grundsätzlich für das Drauflaufen (Routing-Algorithmus) und
+     * Bebauen (Setzen neuer Gebäude/Strukturen) geeignet ist.
+     */
+    bool isWalkableAndBuildable;
+
+    /**
+     * @brief Flag, ob die Kachel Ozean ist. Wird für die Pixel auf der Minimap benutzt.
+     */
+    bool isOcean;
+
+} MapTileConfig;
+
+
+/**
+ * @brief Klasse, die die Konfiguration enthält
+ */
+class ConfigMgr {
     
 private:
-    BuildingConfig** configs;  
+    /**
+     * Array mit Zeigern auf die Gebäude-Konfigurationen
+     */
+    BuildingConfig** buildingConfigs;
+
+    /**
+     * Array mit Zeigern auf die Gebäude-Konfigurationen
+     */
+    MapTileConfig** mapTileConfigs;
 
 public:
-    // TODO aus Datei einlesen
+    // TODO alles aus Datei einlesen
     /**
      * @brief Konstruiert die Konfiguration
      */
-    BuildingConfigMgr();
-    ~BuildingConfigMgr();
+    ConfigMgr();
+
+    /**
+     * Gibt den belegten Speicher der Konfigurationen wieder frei
+     */
+    ~ConfigMgr();
     
     /**
      * @brief Liefert die Konfiguration eines Gebäudes zurück
      * @param structureType Typ des Gebäudes
      * @return Konfiguration
      */
-    const BuildingConfig* const getConfig(StructureType structureType) {
-        return configs[structureType];
+    const BuildingConfig* const getBuildingConfig(StructureType structureType) {
+        return buildingConfigs[structureType];
     }
+
+    /**
+     * @brief Liefert die Konfiguration einer Gelände-Kachel zurück
+     * @param tileIndex Index der Kachel
+     * @return Konfiguration
+     */
+    const MapTileConfig* const getMapTileConfig(unsigned char tileIndex) {
+        return mapTileConfigs[tileIndex];
+    }
+
+private:
+    /**
+     * @brief Konstruiert (TODO aus einer Datei laden) die Konfiguration der Gebäude
+     */
+    void loadBuildingConfig();
+
+    /**
+     * @brief Lädt die Konfiguration der Gelände-Kacheln
+     */
+    void loadTilesConfig();
+
+    /**
+     * @brief Helper, der aus einem XML-Attribut einen Bool-Wert liest. Der Wert muss entweder "true" oder "false"
+     * sein. Ist das Attribut nicht vorhanden, wird ein bestimmter Default-Wert benutzt.
+     *
+     * @param attribute XML-Attribut (kann `nullptr` sein)
+     * @param defaultValue Default-Wert, der verwendet wird, wenn das Attribut nicht vorhanden ist.
+     */
+    bool xmlAttributeToBool(rapidxml::xml_attribute<>* attribute, bool defaultValue);
 };
 
 #endif

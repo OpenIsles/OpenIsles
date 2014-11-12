@@ -45,7 +45,7 @@ set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DDEBUG -DDEBUG_A_STAR -DDEB
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -DNDEBUG")
 
 set(SOURCE_FILES
-    src/cpp/config/BuildingConfigMgr.cpp
+    src/cpp/config/ConfigMgr.cpp
     src/cpp/economics/EconomicsMgr.cpp
     src/cpp/economics/Carrier.cpp
     src/cpp/game/Colony.cpp

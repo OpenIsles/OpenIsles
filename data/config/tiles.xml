@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tiles-config>
+    <tiles>
+        <tile tile-index="1" graphic-file="data/img/tiles/grass.png" walkable-and-buildable="true" />
+        
+        <tile tile-index="2" graphic-file="data/img/tiles/isle-se.png" />
+        <tile tile-index="3" graphic-file="data/img/tiles/isle-s.png" />
+        <tile tile-index="4" graphic-file="data/img/tiles/isle-sw.png" />
+        <tile tile-index="5" graphic-file="data/img/tiles/isle-w.png" />
+        <tile tile-index="6" graphic-file="data/img/tiles/isle-nw.png" />
+        <tile tile-index="7" graphic-file="data/img/tiles/isle-n.png" />
+        <tile tile-index="8" graphic-file="data/img/tiles/isle-ne.png" />
+        <tile tile-index="9" graphic-file="data/img/tiles/isle-e.png" />
+
+        <tile tile-index="10" graphic-file="data/img/tiles/grass-se.png" />
+        <tile tile-index="11" graphic-file="data/img/tiles/grass-sw.png" />
+        <tile tile-index="12" graphic-file="data/img/tiles/grass-nw.png" />
+        <tile tile-index="13" graphic-file="data/img/tiles/grass-ne.png" />
+
+        <tile tile-index="14" graphic-file="data/img/tiles/water.png" ocean="true" />
+
+        <tile tile-index="15" graphic-file="data/img/tiles/beach-se.png" ocean="true" />
+        <tile tile-index="16" graphic-file="data/img/tiles/beach-s1.png" ocean="true" />
+        <tile tile-index="17" graphic-file="data/img/tiles/beach-s2.png" ocean="true" />
+        <tile tile-index="18" graphic-file="data/img/tiles/beach-s3.png" ocean="true" />
+        <tile tile-index="19" graphic-file="data/img/tiles/beach-sw.png" ocean="true" />
+        <tile tile-index="20" graphic-file="data/img/tiles/beach-w1.png" ocean="true" />
+        <tile tile-index="21" graphic-file="data/img/tiles/beach-w2.png" ocean="true" />
+        <tile tile-index="22" graphic-file="data/img/tiles/beach-w3.png" ocean="true" />
+        <tile tile-index="23" graphic-file="data/img/tiles/beach-nw.png" ocean="true" />
+        <tile tile-index="24" graphic-file="data/img/tiles/beach-n1.png" ocean="true" />
+        <tile tile-index="25" graphic-file="data/img/tiles/beach-n2.png" ocean="true" />
+        <tile tile-index="26" graphic-file="data/img/tiles/beach-n3.png" ocean="true" />
+        <tile tile-index="27" graphic-file="data/img/tiles/beach-ne.png" ocean="true" />
+        <tile tile-index="28" graphic-file="data/img/tiles/beach-e1.png" ocean="true" />
+        <tile tile-index="29" graphic-file="data/img/tiles/beach-e2.png" ocean="true" />
+        <tile tile-index="30" graphic-file="data/img/tiles/beach-e3.png" ocean="true" />
+
+        <tile tile-index="31" graphic-file="data/img/tiles/beach.png" />
+
+        <tile tile-index="32" graphic-file="data/img/tiles/water-se.png" />
+        <tile tile-index="33" graphic-file="data/img/tiles/water-sw.png" />
+        <tile tile-index="34" graphic-file="data/img/tiles/water-nw.png" />
+        <tile tile-index="35" graphic-file="data/img/tiles/water-ne.png" />
+    </tiles>
+    
+</tiles-config>

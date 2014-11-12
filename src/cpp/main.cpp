@@ -5,7 +5,7 @@
 #include <SDL_image.h>
 #include <SDL_ttf.h>
 #include <iostream>
-#include "config/BuildingConfigMgr.h"
+#include "config/ConfigMgr.h"
 #include "economics/EconomicsMgr.h"
 #include "game/Game.h"
 #include "game/GameIO.h"
@@ -71,9 +71,9 @@ GuiMgr* guiMgr;
 SoundMgr* soundMgr;
 
 /**
- * @brief Die Konfiguration der Gebäude
+ * @brief Konfigurations-Manager
  */
-BuildingConfigMgr* buildingConfigMgr;
+ConfigMgr* configMgr;
 
 /**
  * @brief Zustand des Spiels
@@ -129,7 +129,7 @@ void drawFrame(SDL_Renderer* renderer) {
     if (selectedMapObject != nullptr) {
         const Building* selectedBuilding = reinterpret_cast<const Building*>(selectedMapObject);
         if (selectedBuilding != nullptr) {
-            const BuildingConfig* buildingConfig = buildingConfigMgr->getConfig(selectedBuilding->getStructureType());
+            const BuildingConfig* buildingConfig = configMgr->getBuildingConfig(selectedBuilding->getStructureType());
             fontMgr->renderText(renderer, buildingConfig->name, 753, 744,
                 &colorWhite, nullptr, "DroidSans-Bold.ttf", 14, RENDERTEXT_HALIGN_RIGHT);
         }
@@ -203,7 +203,7 @@ int main(int argc, char** argv) {
 	// Game-Initialisierung //////////////////////////////////////////////////////////////////////////////////////////
 
 	soundMgr = new SoundMgr();
-    buildingConfigMgr = new BuildingConfigMgr();
+    configMgr = new ConfigMgr();     // Der GraphicsMgr braucht die Dateinamen vom ConfigMgr
 	graphicsMgr = new GraphicsMgr();
     fontMgr = new FontMgr();
     guiMgr = new GuiMgr();
@@ -321,7 +321,7 @@ int main(int argc, char** argv) {
 	delete guiMgr;
     delete fontMgr;
 	delete graphicsMgr;
-    delete buildingConfigMgr;
+    delete configMgr;
 	delete soundMgr;
 
 	// Library-Deinitialisierung /////////////////////////////////////////////////////////////////////////////////////

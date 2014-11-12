@@ -9,7 +9,7 @@
 //static SDL_Color colorBlack = {0, 0, 0, 255};
 
 // Aus main.cpp importiert
-extern BuildingConfigMgr* buildingConfigMgr;
+extern ConfigMgr* configMgr;
 extern FontMgr* fontMgr;
 extern Game* game;
 extern GraphicsMgr* graphicsMgr;

@@ -1,8 +1,8 @@
-#include "config/BuildingConfigMgr.h"
+#include "config/ConfigMgr.h"
 #include "game/Game.h"
 
 // Aus main.cpp importiert
-extern BuildingConfigMgr* buildingConfigMgr;
+extern ConfigMgr* configMgr;
 extern Game* game;
 
 
@@ -14,7 +14,7 @@ void Building::onClick(int mouseXInBuilding, int mouseYInBuilding) {
 }
 
 bool Building::isInsideCatchmentArea(int mapX, int mapY) const {
-    const BuildingConfig* buildingConfig = buildingConfigMgr->getConfig(structureType);
+    const BuildingConfig* buildingConfig = configMgr->getBuildingConfig(structureType);
     const RectangleData<char>* catchmentArea = buildingConfig->getCatchmentArea();
     
     // Gebäude hat keinen Einzugsbereich?

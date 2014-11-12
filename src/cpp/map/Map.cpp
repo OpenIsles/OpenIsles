@@ -1,4 +1,4 @@
-#include "config/BuildingConfigMgr.h"
+#include "config/ConfigMgr.h"
 #include "game/Colony.h"
 #include "game/Game.h"
 #include "map/Map.h"
@@ -12,7 +12,7 @@ extern FontMgr* fontMgr;
 #endif
 
 // Aus main.cpp importiert
-extern BuildingConfigMgr* buildingConfigMgr;
+extern ConfigMgr* configMgr;
 extern Game* game;
 extern GraphicsMgr* graphicsMgr;
 extern SDL_Renderer* renderer;
@@ -142,11 +142,12 @@ void Map::updateMinimapTexture() {
             int mapY = (int) ((float) y * scaleFactor);
             
             MapTile* mapTile = mapTiles->getData(mapX, mapY, nullptr);
-            
-            unsigned char tile = mapTile->tileGraphicIndex;
+
+            const MapTileConfig* mapTileConfig = configMgr->getMapTileConfig(mapTile->tileIndex);
             Player* player = mapTile->player;
             
-            *(pixelPtr++) = (tile == 14) ? 0x000090 : (player != nullptr ? ((Uint32) player->getColor()) : 0x008000);
+            *(pixelPtr++) =
+                (mapTileConfig->isOcean) ? 0x000090 : (player != nullptr ? ((Uint32) player->getColor()) : 0x008000);
         }
     }
     
@@ -195,8 +196,7 @@ void Map::renderMap(SDL_Renderer* renderer) {
 	// Kacheln rendern
 	for (int mapY = mapYStart; mapY <= mapYEnd; mapY++) {
 		for (int mapX = mapXStart; mapX <= mapXEnd; mapX++) {
-            MapObjectGraphic* tileGraphic =
-                graphicsMgr->getGraphicForTile(getMapTileAt(mapX, mapY)->tileGraphicIndex);
+            MapObjectGraphic* tileGraphic = graphicsMgr->getGraphicForTile(getMapTileAt(mapX, mapY)->tileIndex);
 
             SDL_Rect rectDestination;
             MapCoordUtils::mapToDrawCoords(mapX, mapY, 0, tileGraphic, &rectDestination);
@@ -447,7 +447,7 @@ unsigned char Map::isAllowedToPlaceStructure(int mapX, int mapY, StructureType s
     Colony* colony = game->getColony(currentPlayer, isle);
     
     if (colony != nullptr) {
-        const BuildingCosts* buildingCosts = buildingConfigMgr->getConfig(structureType)->getBuildingCosts();
+        const BuildingCosts* buildingCosts = configMgr->getBuildingConfig(structureType)->getBuildingCosts();
         if ((buildingCosts->coins > currentPlayer->coins) ||
             (buildingCosts->tools > colony->getGoods(GoodsType::TOOLS).inventory) ||
             (buildingCosts->wood > colony->getGoods(GoodsType::WOOD).inventory) ||
@@ -461,22 +461,18 @@ unsigned char Map::isAllowedToPlaceStructure(int mapX, int mapY, StructureType s
     for (int y = mapY; y < mapY + graphic->getMapHeight(); y++) {
         for (int x = mapX; x < mapX + graphic->getMapWidth(); x++) {
             MapTile* mapTile = mapTiles->getData(x, y, nullptr);
-            if (
-                // Da steht was im Weg
-                mapTile->mapObject != nullptr
-                ) {
+
+            if (mapTile->mapObject != nullptr) {                  // Da steht was im Weg
                 result |= PLACING_STRUCTURE_SOMETHING_IN_THE_WAY;
                 return result;
             }
 
-            if (
-                // Gebiet nicht erschlossen oder nicht unseres
-                mapTile->player == nullptr || mapTile->player != game->getCurrentPlayer() ||
+            const MapTileConfig* mapTileConfig = configMgr->getMapTileConfig(mapTile->tileIndex);
 
-                    // Gelände passt nicht
-                        // TODO aktuell darf nur auf Grass gebaut werden. Später muss das das Gebäude wissen, wo.
-                        (mapTile->tileGraphicIndex != 5)
-                ) {
+            if (mapTile->player == nullptr ||                     // Gebiet nicht erschlossen, ..,
+                mapTile->player != game->getCurrentPlayer() ||    // ... nicht unseres...
+                !mapTileConfig->isWalkableAndBuildable) {         // ... oder Gelände passt nicht
+
                 result |= PLACING_STRUCTURE_ROOM_NOT_UNLOCK;
                 return result;
             }
@@ -489,7 +485,7 @@ unsigned char Map::isAllowedToPlaceStructure(int mapX, int mapY, StructureType s
 void Map::drawCatchmentArea(Structure* structure) {
     SDL_SetRenderDrawColor(renderer, 0xc8, 0xaf, 0x37, 255);
 
-    const BuildingConfig* buildingConfig = buildingConfigMgr->getConfig(structure->getStructureType());
+    const BuildingConfig* buildingConfig = configMgr->getBuildingConfig(structure->getStructureType());
     const RectangleData<char>* catchmentArea = buildingConfig->getCatchmentArea();
     if (catchmentArea != nullptr) {
         for (int y = 0; y < catchmentArea->height; y++) {
@@ -589,7 +585,7 @@ const Building* Map::addBuilding(int mapX, int mapY, StructureType structureType
     building->setPlayer(player);
 
     // Defaults für Produktionsdaten setzen
-    const BuildingConfig* buildingConfig = buildingConfigMgr->getConfig(structureType);
+    const BuildingConfig* buildingConfig = configMgr->getBuildingConfig(structureType);
     building->productionSlots = ProductionSlots(buildingConfig->buildingProduction);
 
     // Objekt in die Liste aufnehmen
@@ -610,7 +606,7 @@ void Map::addOfficeCatchmentAreaToMap(const Building& building) {
     int buildingMapX, buildingMapY;
     building.getMapCoords(buildingMapX, buildingMapY);
     
-    const BuildingConfig* buildingConfig = buildingConfigMgr->getConfig(building.getStructureType());
+    const BuildingConfig* buildingConfig = configMgr->getBuildingConfig(building.getStructureType());
     RectangleData<char>* catchmentArea = buildingConfig->getCatchmentArea();
     
     // TODO Sehr hässlich, aber tuts erstmal sicher, ohne Gefahr.
@@ -768,7 +764,7 @@ void Map::onClickInMapWhileAddingStructure(int mapX, int mapY) {
     
     // Resourcen bezahlen
     Colony* colony = game->getColony(currentPlayer, getMapTileAt(mapX, mapY)->isle);
-    const BuildingCosts* buildingCosts = buildingConfigMgr->getConfig(structureType)->getBuildingCosts();
+    const BuildingCosts* buildingCosts = configMgr->getBuildingConfig(structureType)->getBuildingCosts();
     currentPlayer->coins -= buildingCosts->coins;
     colony->subtractBuildingCosts(buildingCosts);
     

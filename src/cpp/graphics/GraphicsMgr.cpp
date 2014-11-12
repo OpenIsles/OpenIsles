@@ -1,10 +1,11 @@
 #ifdef WINDOWS
 #include <cstring>
 #endif
-#include <fstream>
-#include <sstream>
-#include <stdexcept>
 #include "game/Colony.h"
+
+// Aus main.cpp importiert
+extern ConfigMgr* configMgr;
+
 
 GraphicsMgr::GraphicsMgr() {
 	loadTiles();
@@ -140,40 +141,12 @@ void GraphicsMgr::loadTiles() {
 	tiles = new MapObjectGraphic*[128];
     memset(tiles, 0, 128 * sizeof(MapObjectGraphic*));
 
-    // TODO Liste in Datei auslagern und mit Makefile gemeinsam nutzen
-    tiles[1] = new MapObjectGraphic("data/img/tiles/grass.png", 1, 1);
-	tiles[2] = new MapObjectGraphic("data/img/tiles/isle-se.png", 1, 1);
-	tiles[3] = new MapObjectGraphic("data/img/tiles/isle-s.png", 1, 1);
-	tiles[4] = new MapObjectGraphic("data/img/tiles/isle-sw.png", 1, 1);
-	tiles[5] = new MapObjectGraphic("data/img/tiles/isle-w.png", 1, 1);
-	tiles[6] = new MapObjectGraphic("data/img/tiles/isle-nw.png", 1, 1);
-	tiles[7] = new MapObjectGraphic("data/img/tiles/isle-n.png", 1, 1);
-	tiles[8] = new MapObjectGraphic("data/img/tiles/isle-ne.png", 1, 1);
-	tiles[9] = new MapObjectGraphic("data/img/tiles/isle-e.png", 1, 1);
-	tiles[10] = new MapObjectGraphic("data/img/tiles/grass-se.png", 1, 1);
-	tiles[11] = new MapObjectGraphic("data/img/tiles/grass-sw.png", 1, 1);
-	tiles[12] = new MapObjectGraphic("data/img/tiles/grass-nw.png", 1, 1);
-	tiles[13] = new MapObjectGraphic("data/img/tiles/grass-ne.png", 1, 1);
-    tiles[14] = new MapObjectGraphic("data/img/tiles/water.png", 1, 1);
-	tiles[15] = new MapObjectGraphic("data/img/tiles/beach-se.png", 1, 1);
-	tiles[16] = new MapObjectGraphic("data/img/tiles/beach-s1.png", 1, 1);
-	tiles[17] = new MapObjectGraphic("data/img/tiles/beach-s2.png", 1, 1);
-	tiles[18] = new MapObjectGraphic("data/img/tiles/beach-s3.png", 1, 1);
-	tiles[19] = new MapObjectGraphic("data/img/tiles/beach-sw.png", 1, 1);
-	tiles[20] = new MapObjectGraphic("data/img/tiles/beach-w1.png", 1, 1);
-	tiles[21] = new MapObjectGraphic("data/img/tiles/beach-w2.png", 1, 1);
-	tiles[22] = new MapObjectGraphic("data/img/tiles/beach-w3.png", 1, 1);
-	tiles[23] = new MapObjectGraphic("data/img/tiles/beach-nw.png", 1, 1);
-	tiles[24] = new MapObjectGraphic("data/img/tiles/beach-n1.png", 1, 1);
-	tiles[25] = new MapObjectGraphic("data/img/tiles/beach-n2.png", 1, 1);
-	tiles[26] = new MapObjectGraphic("data/img/tiles/beach-n3.png", 1, 1);
-	tiles[27] = new MapObjectGraphic("data/img/tiles/beach-ne.png", 1, 1);
-	tiles[28] = new MapObjectGraphic("data/img/tiles/beach-e1.png", 1, 1);
-	tiles[29] = new MapObjectGraphic("data/img/tiles/beach-e2.png", 1, 1);
-	tiles[30] = new MapObjectGraphic("data/img/tiles/beach-e3.png", 1, 1);
-    tiles[31] = new MapObjectGraphic("data/img/tiles/beach.png", 1, 1);
-	tiles[32] = new MapObjectGraphic("data/img/tiles/water-se.png", 1, 1);
-	tiles[33] = new MapObjectGraphic("data/img/tiles/water-sw.png", 1, 1);
-	tiles[34] = new MapObjectGraphic("data/img/tiles/water-nw.png", 1, 1);
-	tiles[35] = new MapObjectGraphic("data/img/tiles/water-ne.png", 1, 1);
+    for (unsigned char tileIndex = 0; tileIndex < 128; tileIndex++) {
+        const MapTileConfig* mapTileConfig = configMgr->getMapTileConfig(tileIndex);
+        if (mapTileConfig == nullptr) {
+            continue;
+        }
+
+        tiles[tileIndex] = new MapObjectGraphic(mapTileConfig->graphicsFile, 1, 1);
+    }
 }

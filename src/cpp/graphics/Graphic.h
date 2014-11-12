@@ -11,7 +11,7 @@ class Graphic {
 
 protected:
 	/**
-	 * @brief Dateiname der Grafik
+	 * @brief Dateiname der Grafik (durch ConfigMgr verwaltet)
 	 */
 	const char* filename;
 

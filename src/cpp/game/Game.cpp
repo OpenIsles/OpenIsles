@@ -1,4 +1,4 @@
-#include "config/BuildingConfigMgr.h"
+#include "config/ConfigMgr.h"
 #include "game/Colony.h"
 #include "game/Game.h"
 #include "gui/FontMgr.h"
@@ -8,7 +8,7 @@ static SDL_Color colorWhite = {255, 255, 255, 255};
 static SDL_Color colorBlack = {0, 0, 0, 255};
 
 // Aus main.cpp importiert
-extern BuildingConfigMgr* buildingConfigMgr;
+extern ConfigMgr* configMgr;
 extern FontMgr* fontMgr;
 extern Game* game;
 extern GraphicsMgr* graphicsMgr;
@@ -65,7 +65,7 @@ void Game::renderResourcesBar() {
     Player* currentPlayer = game->getCurrentPlayer();
     StructureType addingStructure = game->getAddingStructure();
     const BuildingCosts* buildingCosts = (addingStructure != StructureType::NO_STRUCTURE) ? 
-        buildingConfigMgr->getConfig(addingStructure)->getBuildingCosts() : nullptr;
+        configMgr->getBuildingConfig(addingStructure)->getBuildingCosts() : nullptr;
     
     // Münzenguthaben
     graphicsMgr->getOtherGraphic(OtherGraphic::COINS)->drawAt(15, 8);

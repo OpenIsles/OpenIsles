@@ -47,12 +47,12 @@
  * Diese Klasse fasst alles zusammen, was wir zu einer Map-Koordinate wissen müssen.
  */
 struct MapTile {
-    
+
     /**
-     * @brief Index in Graphics.tiles, welche Grafik die Kachel hat
+     * @brief Index der Gelände-Kachel
      */
-    unsigned char tileGraphicIndex;
-    
+    unsigned char tileIndex;
+
     /**
      * @brief Zeiger auf die Insel (durch Map.isles verwaltet), die sich an dieser Stelle befindet
      * oder nullptr, wenn dort Ozean ist.
@@ -73,8 +73,8 @@ struct MapTile {
 
     
     MapTile() {
-        // TODO Konstante/Enum
-        tileGraphicIndex = 14; // Ozean
+        // TODO in die Config bringen. Aktuell is aber noch unklar, ob wir mehrere isOcean-Kacheln haben werden
+        tileIndex = 14; // Ozean
         isle = nullptr;
         player = nullptr;
         mapObject = nullptr;

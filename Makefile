@@ -18,43 +18,7 @@ clean: clean-gui clean-blender
 # Gelände-Kacheln                                                                                                      #
 ########################################################################################################################
 
-# Kacheln aufzählen, damit wir die Reihenfolge im Tileset kontrollieren können
-TILES := \
-	$(SRC_DIRECTORY)/blender/tiles/render/grass.png \
-	$(SRC_DIRECTORY)/blender/tiles/render/isle-se.png \
-	$(SRC_DIRECTORY)/blender/tiles/render/isle-s.png \
-	$(SRC_DIRECTORY)/blender/tiles/render/isle-sw.png \
-	$(SRC_DIRECTORY)/blender/tiles/render/isle-w.png \
-	$(SRC_DIRECTORY)/blender/tiles/render/isle-nw.png \
-	$(SRC_DIRECTORY)/blender/tiles/render/isle-n.png \
-	$(SRC_DIRECTORY)/blender/tiles/render/isle-ne.png \
-	$(SRC_DIRECTORY)/blender/tiles/render/isle-e.png \
-	$(SRC_DIRECTORY)/blender/tiles/render/grass-se.png \
-	$(SRC_DIRECTORY)/blender/tiles/render/grass-sw.png \
-	$(SRC_DIRECTORY)/blender/tiles/render/grass-nw.png \
-	$(SRC_DIRECTORY)/blender/tiles/render/grass-ne.png \
-	$(SRC_DIRECTORY)/blender/tiles/render/water.png \
-	$(SRC_DIRECTORY)/blender/tiles/render/beach-se.png \
-	$(SRC_DIRECTORY)/blender/tiles/render/beach-s1.png \
-	$(SRC_DIRECTORY)/blender/tiles/render/beach-s2.png \
-	$(SRC_DIRECTORY)/blender/tiles/render/beach-s3.png \
-	$(SRC_DIRECTORY)/blender/tiles/render/beach-sw.png \
-	$(SRC_DIRECTORY)/blender/tiles/render/beach-w1.png \
-	$(SRC_DIRECTORY)/blender/tiles/render/beach-w2.png \
-	$(SRC_DIRECTORY)/blender/tiles/render/beach-w3.png \
-	$(SRC_DIRECTORY)/blender/tiles/render/beach-nw.png \
-	$(SRC_DIRECTORY)/blender/tiles/render/beach-n1.png \
-	$(SRC_DIRECTORY)/blender/tiles/render/beach-n2.png \
-	$(SRC_DIRECTORY)/blender/tiles/render/beach-n3.png \
-	$(SRC_DIRECTORY)/blender/tiles/render/beach-ne.png \
-	$(SRC_DIRECTORY)/blender/tiles/render/beach-e1.png \
-	$(SRC_DIRECTORY)/blender/tiles/render/beach-e2.png \
-	$(SRC_DIRECTORY)/blender/tiles/render/beach-e3.png \
-	$(SRC_DIRECTORY)/blender/tiles/render/beach.png \
-	$(SRC_DIRECTORY)/blender/tiles/render/water-se.png \
-	$(SRC_DIRECTORY)/blender/tiles/render/water-sw.png \
-	$(SRC_DIRECTORY)/blender/tiles/render/water-nw.png \
-	$(SRC_DIRECTORY)/blender/tiles/render/water-ne.png
+TILES = `php $(SRC_DIRECTORY)/php/get-tile-for-makefile.php`
 
 render-tiles: $(SRC_DIRECTORY)/blender/tiles/tiles.blend
 	rm -f $(SRC_DIRECTORY)/blender/tiles/render/tileset.png

@@ -2,12 +2,12 @@
 #include <list>
 #include <map>
 #include <set>
-#include "config/BuildingConfigMgr.h"
+#include "config/ConfigMgr.h"
 #include "game/Game.h"
 #include "pathfinding/AStar.h"
 
 // Aus main.cpp importiert
-extern BuildingConfigMgr* buildingConfigMgr;
+extern ConfigMgr* configMgr;
 extern Game* game;
 
 #ifdef DEBUG_A_STAR
@@ -286,8 +286,8 @@ bool AStar::isTileWalkable(MapCoordinate mapCoordinate, Building* sourceBuilding
         return false; // außerhalb der Karte
     }
 
-    // TODO aktuell darf nur auf Grass gebaut werden. Später muss das das Gelände wissen, wo. Refactoring notwendig, da Codedopplung.
-    if (mapTile->tileGraphicIndex != 5) {
+    const MapTileConfig* mapTileConfig = configMgr->getMapTileConfig(mapTile->tileIndex);
+    if (mapTileConfig->isWalkableAndBuildable) {
         return false; // nur auf Grass darf man laufen
     }
 

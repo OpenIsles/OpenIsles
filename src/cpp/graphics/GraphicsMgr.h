@@ -7,6 +7,8 @@
 #include "graphics/Graphic.h"
 #include "graphics/MapObjectGraphic.h"
 #include "graphics/PlainGraphic.h"
+#include "rapidxml/rapidxml.hpp"
+#include "rapidxml/rapidxml_utils.hpp"
 
 enum GoodsType : char;
 enum StructureType : unsigned char;
@@ -126,11 +128,11 @@ public:
 
 	/**
 	 * @brief Liefert eine Tile-Grafik
-	 * @param index Index ins Array #tiles dessen Eintrag zurückgeliefert werden soll
+	 * @param tileIndex Index ins Array #tiles dessen Eintrag zurückgeliefert werden soll
      * @return MapObjectGraphic
 	 */
-    MapObjectGraphic* const getGraphicForTile(int index) const {
-		return tiles[index];
+    MapObjectGraphic* const getGraphicForTile(int tileIndex) const {
+		return tiles[tileIndex];
 	}
 
 	/**

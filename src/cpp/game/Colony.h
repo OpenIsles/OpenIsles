@@ -2,7 +2,7 @@
 #define _COLONY_H
 
 #include <vector>
-#include "config/BuildingConfigMgr.h"
+#include "config/ConfigMgr.h"
 #include "game/GoodsSlot.h"
 
 
