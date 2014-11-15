@@ -3,7 +3,7 @@ import math
 
 def showTile(objectNameToShow):
     for obj in bpy.data.objects:
-        if tile_object.name.startswith('tile-'):
+        if obj.name.startswith('tile-'):
             obj.hide_render = not(objectNameToShow == obj);
 
 bpy.data.scenes["Scene"].render.resolution_percentage = 100

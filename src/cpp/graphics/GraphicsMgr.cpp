@@ -80,6 +80,7 @@ GraphicsMgr::GraphicsMgr() {
     otherGraphics[OtherGraphic::ADD_BUILDING_CATTLE_FARM] = new PlainGraphic("data/img/gui/add-building/cattle-farm.png");
     otherGraphics[OtherGraphic::ADD_BUILDING_BUTCHERS] = new PlainGraphic("data/img/gui/add-building/butchers.png");
     otherGraphics[OtherGraphic::ADD_BUILDING_TOOLSMITHS] = new PlainGraphic("data/img/gui/add-building/toolsmiths.png");
+    otherGraphics[OtherGraphic::ADD_BUILDING_HOUSE] = new PlainGraphic("data/img/gui/add-building/house.png");
     otherGraphics[OtherGraphic::ADD_BUILDING_DUMMY] = new PlainGraphic("data/img/gui/add-building/dummy.png");
     otherGraphics[OtherGraphic::PRODUCTION_ARROW] = new PlainGraphic("data/img/gui/production-arrow.png");
     otherGraphics[OtherGraphic::PRODUCTION_PLUS] = new PlainGraphic("data/img/gui/production-plus.png");

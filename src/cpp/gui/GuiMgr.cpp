@@ -321,8 +321,8 @@ void GuiMgr::initBuildGui() {
                     OtherGraphic::ADD_BUILDING_STREET
                 }, {
                     StructureType::PIONEERS_HOUSE1,
-                    "Pionier-Haus",
-                    OtherGraphic::ADD_BUILDING_DUMMY
+                    "Haus",
+                    OtherGraphic::ADD_BUILDING_HOUSE
                 }, {
                     StructureType::MARKETPLACE,
                     "Marktplatz",
