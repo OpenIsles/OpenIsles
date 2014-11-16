@@ -34,6 +34,7 @@ enum StructureType : unsigned char {
     PIONEERS_HOUSE1,
     PIONEERS_HOUSE2,
     PIONEERS_HOUSE3,
+    PIONEERS_HOUSE4,
     SIGNALFIRE,
     HERBARY,
     BRICKYARD,

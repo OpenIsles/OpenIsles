@@ -762,7 +762,7 @@ void Map::onClickInMapWhileAddingStructure(int mapX, int mapY) {
             std::random_device randomDevice;
             std::default_random_engine randomEngine(randomDevice());
             std::uniform_int_distribution<int> randomPioneerHouse(
-                StructureType::PIONEERS_HOUSE1, StructureType::PIONEERS_HOUSE3);
+                StructureType::PIONEERS_HOUSE1, StructureType::PIONEERS_HOUSE4);
 
             structureType = (StructureType) randomPioneerHouse(randomEngine);
         }
