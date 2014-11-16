@@ -59,7 +59,7 @@ $(DATA_DIRECTORY)/img/gui/add-building/add-building-grid.png: $(SRC_DIRECTORY)/b
 ########################################################################################################################
 
 BUILDINGS := butchers chapel cattle-farm foresters marketplace office1 \
-             pioneers-house1 pioneers-house2 pioneers-house3 pioneers-house4 \
+             pioneers-house1 pioneers-house2 pioneers-house3 pioneers-house4 pioneers-house5 \
              sheep-farm toolsmiths weaving-mill1
 
 define RENDER_BUILDING

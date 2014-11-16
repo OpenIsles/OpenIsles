@@ -21,6 +21,7 @@ GraphicsMgr::GraphicsMgr() {
     structures[StructureType::PIONEERS_HOUSE2] = new MapObjectGraphic("data/img/objects/pioneers-house2.png", 2, 2);
     structures[StructureType::PIONEERS_HOUSE3] = new MapObjectGraphic("data/img/objects/pioneers-house3.png", 2, 2);
     structures[StructureType::PIONEERS_HOUSE4] = new MapObjectGraphic("data/img/objects/pioneers-house4.png", 2, 2);
+    structures[StructureType::PIONEERS_HOUSE5] = new MapObjectGraphic("data/img/objects/pioneers-house5.png", 2, 2);
 	structures[StructureType::SIGNALFIRE] = new MapObjectGraphic("data/img/objects/signalfire.png", 1, 1);
 	structures[StructureType::HERBARY] = new MapObjectGraphic("data/img/objects/herbary.png", 3, 3);
 	structures[StructureType::BRICKYARD] = new MapObjectGraphic("data/img/objects/brickyard.png", 4, 2);

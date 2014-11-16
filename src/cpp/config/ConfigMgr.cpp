@@ -44,7 +44,7 @@ void ConfigMgr::loadBuildingConfig() {
     buildingConfigs[StructureType::CHAPEL]->buildingCosts = { 100, 2, 5, 0 };
     buildingConfigs[StructureType::CHAPEL]->buildingProduction = { GoodsSlot(), GoodsSlot(), GoodsSlot() };
 
-    for (int i = StructureType::PIONEERS_HOUSE1; i <= StructureType::PIONEERS_HOUSE4; i++) {
+    for (int i = StructureType::PIONEERS_HOUSE1; i <= StructureType::PIONEERS_HOUSE5; i++) {
         buildingConfigs[i] = new BuildingConfig();
         buildingConfigs[i]->name = "Haus (Pioniere)";
         buildingConfigs[i]->catchmentArea = new RectangleData<char>(14, 14);
