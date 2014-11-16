@@ -15,35 +15,37 @@ enum StructureType : unsigned char {
     
     // Strukturen
     STREET = 1,               // wird als MapObject verwendet
-    STREET_STRAIGHT_0 = 2,    // werden nur zum Zeichnen verwendet und können nicht direkt platziert werden
-    STREET_STRAIGHT_90 = 3,   //  "
-    STREET_CURVE_0 = 4,       //  "
-    STREET_CURVE_90 = 5,      //  "
-    STREET_CURVE_180 = 6,     //  "
-    STREET_CURVE_270 = 7,     //  "
-    STREET_TEE_0 = 8,         //  "
-    STREET_TEE_90 = 9,        //  "
-    STREET_TEE_180 = 10,      //  "
-    STREET_TEE_270 = 11,      //  "
-    STREET_CROSS = 12,        //  "
+    STREET_STRAIGHT_0,        // werden nur zum Zeichnen verwendet und können nicht direkt platziert werden
+    STREET_STRAIGHT_90,       //  "
+    STREET_CURVE_0,           //  "
+    STREET_CURVE_90,          //  "
+    STREET_CURVE_180,         //  "
+    STREET_CURVE_270,         //  "
+    STREET_TEE_0,             //  "
+    STREET_TEE_90,            //  "
+    STREET_TEE_180,           //  "
+    STREET_TEE_270,           //  "
+    STREET_CROSS,             //  "
     
     // Gebäude
     START_BUILDINGS = 101, // Marker, um zu unterscheiden, ob Structure oder Building angelegt werden
             
     CHAPEL = 101,
-    PIONEERS_HOUSE1 = 102,
-    SIGNALFIRE = 103,
-    HERBARY = 104,
-    BRICKYARD = 105,
-    BRICKYARD2 = 106,
-    OFFICE1 = 107,
-    MARKETPLACE = 108,
-    FORESTERS = 109,
-    SHEEP_FARM = 110,
-    WEAVING_MILL1 = 111,
-    CATTLE_FARM = 112,
-    BUTCHERS = 113,
-    TOOLSMITHS = 114,
+    PIONEERS_HOUSE1,
+    PIONEERS_HOUSE2,
+    PIONEERS_HOUSE3,
+    SIGNALFIRE,
+    HERBARY,
+    BRICKYARD,
+    BRICKYARD2,
+    OFFICE1,
+    MARKETPLACE,
+    FORESTERS,
+    SHEEP_FARM,
+    WEAVING_MILL1,
+    CATTLE_FARM,
+    BUTCHERS,
+    TOOLSMITHS,
             
     MAX_STRUCTURE // Marker, wie viel Platz wir im Array brauchen
 } StructureType;

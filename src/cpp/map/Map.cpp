@@ -757,6 +757,16 @@ void Map::onClickInMapWhileAddingStructure(int mapX, int mapY) {
     // Gebäude platzieren und Modus verlassen
     Player* currentPlayer = game->getCurrentPlayer();
     if (structureType >= START_BUILDINGS) {
+        // Sonderfall Haus: Wir wählen zufällig eins aus
+        if (structureType == StructureType::PIONEERS_HOUSE1) {
+            std::random_device randomDevice;
+            std::default_random_engine randomEngine(randomDevice());
+            std::uniform_int_distribution<int> randomPioneerHouse(
+                StructureType::PIONEERS_HOUSE1, StructureType::PIONEERS_HOUSE3);
+
+            structureType = (StructureType) randomPioneerHouse(randomEngine);
+        }
+
         addBuilding(mapX, mapY, structureType, currentPlayer);
     } else {
         addStructure(mapX, mapY, structureType, currentPlayer);

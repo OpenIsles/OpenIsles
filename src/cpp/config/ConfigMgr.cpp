@@ -44,12 +44,14 @@ void ConfigMgr::loadBuildingConfig() {
     buildingConfigs[StructureType::CHAPEL]->buildingCosts = { 100, 2, 5, 0 };
     buildingConfigs[StructureType::CHAPEL]->buildingProduction = { GoodsSlot(), GoodsSlot(), GoodsSlot() };
 
-    buildingConfigs[StructureType::PIONEERS_HOUSE1] = new BuildingConfig();
-    buildingConfigs[StructureType::PIONEERS_HOUSE1]->name = "Haus (Pioniere)";
-    buildingConfigs[StructureType::PIONEERS_HOUSE1]->catchmentArea = new RectangleData<char>(14, 14);
-    memcpy(buildingConfigs[StructureType::PIONEERS_HOUSE1]->catchmentArea->data, "0000111111000000011111111000001111111111000111111111111011111111111111111111111111111111111111111111111111111111111111111111111111111111111101111111111110001111111111000001111111100000001111110000", 196);
-    buildingConfigs[StructureType::PIONEERS_HOUSE1]->buildingCosts = { 0, 0, 3, 0 };
-    buildingConfigs[StructureType::PIONEERS_HOUSE1]->buildingProduction = { GoodsSlot(), GoodsSlot(), GoodsSlot() };
+    for (int i = StructureType::PIONEERS_HOUSE1; i <= StructureType::PIONEERS_HOUSE3; i++) {
+        buildingConfigs[i] = new BuildingConfig();
+        buildingConfigs[i]->name = "Haus (Pioniere)";
+        buildingConfigs[i]->catchmentArea = new RectangleData<char>(14, 14);
+        memcpy(buildingConfigs[i]->catchmentArea->data, "0000111111000000011111111000001111111111000111111111111011111111111111111111111111111111111111111111111111111111111111111111111111111111111101111111111110001111111111000001111111100000001111110000", 196);
+        buildingConfigs[i]->buildingCosts = { 0, 0, 3, 0 };
+        buildingConfigs[i]->buildingProduction = { GoodsSlot(), GoodsSlot(), GoodsSlot() };
+    }
 
     buildingConfigs[StructureType::SIGNALFIRE] = new BuildingConfig();
     buildingConfigs[StructureType::SIGNALFIRE]->name = "Signalturm";
