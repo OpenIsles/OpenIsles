@@ -63,10 +63,10 @@ BUILDINGS := butchers chapel cattle-farm foresters marketplace office1 \
              sheep-farm toolsmiths weaving-mill1
 
 define RENDER_BUILDING
-$(DATA_DIRECTORY)/img/objects/$(1).png: $(SRC_DIRECTORY)/blender/$(1)/$(1).blend
+$(DATA_DIRECTORY)/img/objects/$(1).png: $(SRC_DIRECTORY)/blender/buildings/$(1)/$(1).blend
 	$$(CREATE_TARGET_DIRECTORY)
-	cd $(SRC_DIRECTORY)/blender/$(1); blender -b $$(notdir $$<) -P ../render-building.py
-	cp $(SRC_DIRECTORY)/blender/$(1)/render/angle0.png $$@
+	cd $(SRC_DIRECTORY)/blender/buildings/$(1); blender -b $$(notdir $$<) -P ../render-building.py
+	cp $(SRC_DIRECTORY)/blender/buildings/$(1)/render/angle0.png $$@
 endef
 
 $(foreach BUILDING,$(BUILDINGS),$(eval $(call RENDER_BUILDING,$(BUILDING))))
@@ -111,12 +111,12 @@ $(foreach GOOD,$(GOODS),$(eval $(call RENDER_GOODS_ICONS,$(GOOD))))
 ANIMATIONS := carrier
 
 define RENDER_ANIMATION
-$(DATA_DIRECTORY)/img/objects/$(1).png: $(SRC_DIRECTORY)/blender/$(1)/$(1).blend
+$(DATA_DIRECTORY)/img/objects/$(1).png: $(SRC_DIRECTORY)/blender/animations/$(1)/$(1).blend
 	$$(CREATE_TARGET_DIRECTORY)
-	cd $(SRC_DIRECTORY)/blender/$(1); blender -b $$(notdir $$<) -P ../render-animation.py
+	cd $(SRC_DIRECTORY)/blender/animations/$(1); blender -b $$(notdir $$<) -P ../render-animation.py
 
 	# geometry muss angegeben werden, sonst greift der Default von 120x120
-	montage -background transparent $(SRC_DIRECTORY)/blender/$(1)/render/angle0/* -geometry +0+0 -tile x1 $$@
+	montage -background transparent $(SRC_DIRECTORY)/blender/animations/$(1)/render/angle0/* -geometry +0+0 -tile x1 $$@
 endef
 
 $(foreach ANIMATION,$(ANIMATIONS),$(eval $(call RENDER_ANIMATION,$(ANIMATION))))
@@ -125,13 +125,13 @@ $(foreach ANIMATION,$(ANIMATIONS),$(eval $(call RENDER_ANIMATION,$(ANIMATION))))
 # Marktkarren-Animation                                                                                               #
 ########################################################################################################################
 
-render-cart: $(SRC_DIRECTORY)/blender/cart/cart.blend
+render-cart: $(SRC_DIRECTORY)/blender/animations/cart/cart.blend
 	mkdir -p $(DATA_DIRECTORY)/img/objects
-	cd $(SRC_DIRECTORY)/blender/cart; blender -b $(notdir $<) -P render-cart.py
+	cd $(SRC_DIRECTORY)/blender/animations/cart; blender -b $(notdir $<) -P render-cart.py
 
 	# geometry muss angegeben werden, sonst greift der Default von 120x120
-	montage -background transparent $(SRC_DIRECTORY)/blender/cart/render/without_cargo/angle0/* -geometry +0+0 -tile x1 $(DATA_DIRECTORY)/img/objects/cart-without-cargo.png
-	montage -background transparent $(SRC_DIRECTORY)/blender/cart/render/with_cargo/angle0/* -geometry +0+0 -tile x1 $(DATA_DIRECTORY)/img/objects/cart-with-cargo.png
+	montage -background transparent $(SRC_DIRECTORY)/blender/animations/cart/render/without_cargo/angle0/* -geometry +0+0 -tile x1 $(DATA_DIRECTORY)/img/objects/cart-without-cargo.png
+	montage -background transparent $(SRC_DIRECTORY)/blender/animations/cart/render/with_cargo/angle0/* -geometry +0+0 -tile x1 $(DATA_DIRECTORY)/img/objects/cart-with-cargo.png
 
 ########################################################################################################################
 # PHONYs um alle Blender-Sachen zu rendern und zu cleanen                                                              #
@@ -154,11 +154,11 @@ render-blender: \
 	
 clean-blender:
 	rm -f $(foreach BUILDING,$(BUILDINGS), $(DATA_DIRECTORY)/img/objects/$(BUILDING).png)
-	rm -rf $(foreach BUILDING,$(BUILDINGS), $(SRC_DIRECTORY)/blender/$(BUILDING)/render)
+	rm -rf $(foreach BUILDING,$(BUILDINGS), $(SRC_DIRECTORY)/blender/buildings/$(BUILDING)/render)
 	rm -rf $(DATA_DIRECTORY)/img/goods
 	rm -f $(foreach ANIMATION,$(ANIMATIONS), $(DATA_DIRECTORY)/img/objects/$(ANIMATION).png)
-	rm -rf $(foreach ANIMATION,$(ANIMATIONS), $(SRC_DIRECTORY)/blender/$(ANIMATION)/render)
-	rm -rf $(SRC_DIRECTORY)/blender/cart/render
+	rm -rf $(foreach ANIMATION,$(ANIMATIONS), $(SRC_DIRECTORY)/blender/animations/$(ANIMATION)/render)
+	rm -rf $(SRC_DIRECTORY)/blender/animations/cart/render
 	rm -rf $(DATA_DIRECTORY)/img/tiles
 	rm -rf $(SRC_DIRECTORY)/blender/tiles/render
 	rm -rf $(SRC_DIRECTORY)/blender/streets/render
