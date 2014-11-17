@@ -88,6 +88,10 @@ GraphicsMgr::GraphicsMgr() {
     otherGraphics[OtherGraphic::ADD_BUILDING_DUMMY] = new PlainGraphic("data/img/gui/add-building/dummy.png");
     otherGraphics[OtherGraphic::PRODUCTION_ARROW] = new PlainGraphic("data/img/gui/production-arrow.png");
     otherGraphics[OtherGraphic::PRODUCTION_PLUS] = new PlainGraphic("data/img/gui/production-plus.png");
+    otherGraphics[OtherGraphic::COAT_OF_ARMS_POPULATION_RED] = new PlainGraphic("data/img/gui/coat-of-arms/population/red.png");
+    otherGraphics[OtherGraphic::COAT_OF_ARMS_POPULATION_BLUE] = new PlainGraphic("data/img/gui/coat-of-arms/population/blue.png");
+    otherGraphics[OtherGraphic::COAT_OF_ARMS_POPULATION_YELLOW] = new PlainGraphic("data/img/gui/coat-of-arms/population/yellow.png");
+    otherGraphics[OtherGraphic::COAT_OF_ARMS_POPULATION_WHITE] = new PlainGraphic("data/img/gui/coat-of-arms/population/white.png");
 
 
     animations = new Animation*[AnimationType::MAX_ANIMATION];

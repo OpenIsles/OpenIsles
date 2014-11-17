@@ -13,9 +13,14 @@ class Colony {
     
 private:
     /**
-     * Lagerbestände pro Gütertyp. Vektor-Indexes siehe GoodsType.
+     * @brief Lagerbestände pro Gütertyp. Vektor-Indexes siehe GoodsType.
      */
     std::vector<GoodsSlot> goods;
+
+    /**
+     * @brief Einwohner der Siedlung
+     */
+    unsigned int population;
     
 public:
     /**
@@ -55,6 +60,14 @@ public:
      * @param amount Anzahl, um wie viel erniedrigt werden soll
      */
     void decreaseGoodsCapacity(unsigned int amount);
+
+    /**
+     * @brief Liefert die Einwohnerzahl der Siedlung zurück
+     * @return Einwohnerzahl
+     */
+    unsigned int getPopulation() const {
+        return population;
+    }
 };
 
 #endif

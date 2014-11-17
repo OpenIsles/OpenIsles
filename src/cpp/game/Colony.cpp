@@ -6,6 +6,8 @@ Colony::Colony() : goods(GoodsType::MAX_GOOD) {
         goods[i].inventory = 0;
         goods[i].capacity = 30;
     }
+
+    population = 0;
 }
 
 Colony::~Colony() {

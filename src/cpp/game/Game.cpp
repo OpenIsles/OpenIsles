@@ -84,7 +84,7 @@ void Game::renderResourcesBar() {
     MapCoordUtils::getMapCoordsUnderMouse(mouseCurrentMapX, mouseCurrentMapY);
 
     MapTile* mapTileAtCursor = map->getMapTileAt(mouseCurrentMapX, mouseCurrentMapY);
-    if (mapTileAtCursor == nullptr || mapTileAtCursor->player != currentPlayer) {
+    if (mapTileAtCursor == nullptr) {
         return;
     }
     
@@ -93,27 +93,37 @@ void Game::renderResourcesBar() {
         return;
     }
     Colony* colony = iter->second;
-    
-    GoodsType goodsToDraw[] = { GoodsType::TOOLS, GoodsType::WOOD, GoodsType::BRICKS };
-    int x = 290;
-    for (unsigned int i = 0; i < sizeof(goodsToDraw); i++, x += 110) {
-        GoodsType goodsType = goodsToDraw[i];
-        
-        
-        graphicsMgr->getGraphicForGoodsIcon(goodsType)->drawAt(x, 5);
-        
-        int goodsInventory = colony->getGoods(goodsType).inventory;
-        std::string outputString = toString(goodsInventory);
-        if (buildingCosts != nullptr) {
-            outputString += " ("; 
-            outputString += toString(
-                (goodsType == GoodsType::TOOLS) ? buildingCosts->tools :
-                (goodsType == GoodsType::WOOD) ? buildingCosts->wood :
-                (goodsType == GoodsType::BRICKS) ? buildingCosts->bricks : 0);
-            outputString += ")";
+
+    // Waren (nur für den eigenen Spieler)
+    if (mapTileAtCursor->player == currentPlayer) {
+        GoodsType goodsToDraw[] = { GoodsType::TOOLS, GoodsType::WOOD, GoodsType::BRICKS };
+        int x = 290;
+        for (unsigned int i = 0; i < sizeof(goodsToDraw); i++, x += 110) {
+            GoodsType goodsType = goodsToDraw[i];
+            graphicsMgr->getGraphicForGoodsIcon(goodsType)->drawAt(x, 5);
+
+            int goodsInventory = (int) colony->getGoods(goodsType).inventory;
+            outputString = toString(goodsInventory);
+            if (buildingCosts != nullptr) {
+                outputString += " (";
+                outputString += toString(
+                    (goodsType == GoodsType::TOOLS) ? buildingCosts->tools :
+                        (goodsType == GoodsType::WOOD) ? buildingCosts->wood :
+                            (goodsType == GoodsType::BRICKS) ? buildingCosts->bricks : 0);
+                outputString += ")";
+            }
+
+            fontMgr->renderText(renderer, outputString, x + 35, 10,
+                &colorWhite, &colorBlack, "DroidSans-Bold.ttf", 18, RENDERTEXT_HALIGN_LEFT);
         }
-        
-        fontMgr->renderText(renderer, outputString, x + 35, 10,
-                            &colorWhite, &colorBlack, "DroidSans-Bold.ttf", 18, RENDERTEXT_HALIGN_LEFT);
     }
+
+    // Einwohnerzahl (immer anzeigen)
+    PlainGraphic* populationIconGraphic = graphicsMgr->getOtherGraphic((OtherGraphic)
+        (OtherGraphic::COAT_OF_ARMS_POPULATION + mapTileAtCursor->player->getColorIndex()));
+    populationIconGraphic->drawAt(655, 6);
+
+    outputString = toString(colony->getPopulation());
+    fontMgr->renderText(renderer, outputString, 690, 10,
+        &colorWhite, &colorBlack, "DroidSans-Bold.ttf", 18, RENDERTEXT_HALIGN_LEFT);
 }

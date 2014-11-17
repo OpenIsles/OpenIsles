@@ -6,7 +6,7 @@
   <property name="player1_name" value="Spieler 1"/>
   <property name="player2_color" value="yellow"/>
   <property name="player2_name" value="Spieler 2"/>
-  <property name="player3_color" value="green"/>
+  <property name="player3_color" value="white"/>
   <property name="player3_name" value="Spieler 3"/>
   <property name="player4_color" value="blue"/>
   <property name="player4_name" value="Spieler 4"/>

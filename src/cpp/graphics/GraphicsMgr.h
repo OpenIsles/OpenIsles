@@ -43,6 +43,13 @@ enum OtherGraphic {
     // Plus-Zeichen und Pfeil für Produktion eines Gebäudes
     PRODUCTION_ARROW,
     PRODUCTION_PLUS,
+
+    // Wappen
+    COAT_OF_ARMS_POPULATION,
+    COAT_OF_ARMS_POPULATION_RED = COAT_OF_ARMS_POPULATION + PLAYER_RED,
+    COAT_OF_ARMS_POPULATION_BLUE = COAT_OF_ARMS_POPULATION + PLAYER_BLUE,
+    COAT_OF_ARMS_POPULATION_YELLOW = COAT_OF_ARMS_POPULATION + PLAYER_YELLOW,
+    COAT_OF_ARMS_POPULATION_WHITE = COAT_OF_ARMS_POPULATION + PLAYER_WHITE,
             
     MAX_GRAPHIC // Marker, wie viele Grafiken es gibt
 } OtherGraphic;
@@ -124,7 +131,14 @@ private:
     Animation** animations;
 
 public:
+    /**
+     * @brief Lädt alle Grafiken für das Spiel
+     */
 	GraphicsMgr();
+
+    /**
+     * @brief Entlädt die Grafiken und gibt den Speicher wieder frei
+     */
 	~GraphicsMgr();
 
 	/**

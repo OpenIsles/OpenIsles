@@ -79,12 +79,12 @@ void GameIO::loadPlayers(rapidxml::xml_node<>* mapNode) {
 
         if (strcmp(playerColorAttrValue, "red") == 0) {
             playerColor = PlayerColor::RED;
-        } else if (strcmp(playerColorAttrValue, "yellow") == 0) {
-            playerColor = PlayerColor::YELLOW;
-        } else if (strcmp(playerColorAttrValue, "green") == 0) {
-            playerColor = PlayerColor::GREEN;
         } else if (strcmp(playerColorAttrValue, "blue") == 0) {
             playerColor = PlayerColor::BLUE;
+        } else if (strcmp(playerColorAttrValue, "yellow") == 0) {
+            playerColor = PlayerColor::YELLOW;
+        } else if (strcmp(playerColorAttrValue, "white") == 0) {
+            playerColor = PlayerColor::WHITE;
         } else {
             throw new std::runtime_error("Illegal player color");
         }

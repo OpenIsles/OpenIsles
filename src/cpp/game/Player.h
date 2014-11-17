@@ -1,25 +1,34 @@
 #ifndef _PLAYER_H
 #define _PLAYER_H
 
+#include <stdexcept>
 #include "SDL.h"
 
 /**
- * Enum für die verschiedenen Spielerfarben.
+ * @brief Enum für die verschiedenen Spielerfarben.
  * Zugewiesene Werte sind im Format 0xAARRGGBB.
  */
 enum class PlayerColor : Uint32 {
     
-    RED    = 0xffff0000,
-    YELLOW = 0xffffff00,
-    GREEN  = 0xff00ff00,
-    BLUE   = 0xff00bfff,
+    RED    = 0xffaf2707,
+    BLUE   = 0xff1088df,
+    YELLOW = 0xfff8c030,
+    WHITE  = 0xffc0c0c0,
     
 };
+
+// Defines, um Offsets für die Spielerfarben auf Bezeichner anwenden zu können, siehe Player::getColorIndex().
+#define PLAYER_RED    0
+#define PLAYER_BLUE   1
+#define PLAYER_YELLOW 2
+#define PLAYER_WHITE  3
 
 /**
  * @brief Klasse, die einen Spieler darstellt
  */
 class Player {
+
+    friend class Game; // Beim Hinzufügen eines Spielers wird der index gesetzt
     
 public:
     /**
@@ -56,6 +65,23 @@ public:
         return name;
     }
 
+    /**
+     * @brief Liefert des Farbindex des Spielers zurück. Das entspricht dem Wert einer der Defines `PLAYER_*`.
+     * @return Farbindex des Spielers im Bereich von 0 bis 3.
+     */
+    int getColorIndex() const {
+        if (color == PlayerColor::RED) {
+            return PLAYER_RED;
+        } else if (color == PlayerColor::BLUE) {
+            return PLAYER_BLUE;
+        } else if (color == PlayerColor::YELLOW) {
+            return PLAYER_YELLOW;
+        } else if (color == PlayerColor::WHITE) {
+            return PLAYER_WHITE;
+        }
+
+        throw new std::runtime_error("Illegal player color");
+    }
 };
 
 #endif
