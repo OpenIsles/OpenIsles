@@ -7,7 +7,7 @@ TILESET_WIDTH := 4
 CREATE_TARGET_DIRECTORY = mkdir -p $(@D)
 
 
-.PHONY: all clean render-tiles build-gui clean-gui render-blender clean-blender
+.PHONY: all clean render-tiles build-gui clean-gui render-cart render-coat-of-arms render-blender clean-blender
 
 all: build-gui render-blender
 
@@ -105,7 +105,7 @@ endef
 $(foreach GOOD,$(GOODS),$(eval $(call RENDER_GOODS_ICONS,$(GOOD))))
 
 ########################################################################################################################
-# Animationen                                                                                                         #
+# Animationen                                                                                                          #
 ########################################################################################################################
 
 ANIMATIONS := carrier
@@ -122,7 +122,7 @@ endef
 $(foreach ANIMATION,$(ANIMATIONS),$(eval $(call RENDER_ANIMATION,$(ANIMATION))))
 
 ########################################################################################################################
-# Marktkarren-Animation                                                                                               #
+# Marktkarren-Animation                                                                                                #
 ########################################################################################################################
 
 render-cart: $(SRC_DIRECTORY)/blender/animations/cart/cart.blend
@@ -132,6 +132,39 @@ render-cart: $(SRC_DIRECTORY)/blender/animations/cart/cart.blend
 	# geometry muss angegeben werden, sonst greift der Default von 120x120
 	montage -background transparent $(SRC_DIRECTORY)/blender/animations/cart/render/without_cargo/angle0/* -geometry +0+0 -tile x1 $(DATA_DIRECTORY)/img/objects/cart-without-cargo.png
 	montage -background transparent $(SRC_DIRECTORY)/blender/animations/cart/render/with_cargo/angle0/* -geometry +0+0 -tile x1 $(DATA_DIRECTORY)/img/objects/cart-with-cargo.png
+
+########################################################################################################################
+# Banner                                                                                                               #
+########################################################################################################################
+
+render-coat-of-arms: $(SRC_DIRECTORY)/blender/ui/coat-of-arms/coat-of-arms.blend $(DATA_DIRECTORY)/img/population-man.png
+	mkdir -p $(DATA_DIRECTORY)/img/gui/coat-of-arms
+	cd $(SRC_DIRECTORY)/blender/ui/coat-of-arms; blender -b coat-of-arms.blend -P render.py
+
+	cp -rf $(SRC_DIRECTORY)/blender/ui/coat-of-arms/render/* $(DATA_DIRECTORY)/img/gui/coat-of-arms
+	rm -rf $(SRC_DIRECTORY)/blender/ui/coat-of-arms/render
+
+	mkdir $(DATA_DIRECTORY)/img/gui/coat-of-arms/population
+	for color in blue red white yellow; \
+		do convert -background transparent $(DATA_DIRECTORY)/img/gui/coat-of-arms/small/$$color.png \
+		           -gravity north-west -extent 30x30 \
+		           $(DATA_DIRECTORY)/img/population-man.png -geometry +11+0 -composite \
+		           $(DATA_DIRECTORY)/img/gui/coat-of-arms/population/$$color.png; \
+	done
+
+########################################################################################################################
+# Sonstige Blender-Sachen                                                                                              #
+########################################################################################################################
+
+$(DATA_DIRECTORY)/img/coin.png: $(SRC_DIRECTORY)/blender/ui/coin/coin.blend
+	mkdir -p $(DATA_DIRECTORY)/img/objects
+	blender -b $< -o //coin\#.png -f 1
+	mv $(SRC_DIRECTORY)/blender/ui/coin/coin1.png $@
+	
+$(DATA_DIRECTORY)/img/population-man.png: $(SRC_DIRECTORY)/blender/ui/population-man/population-man.blend
+	mkdir -p $(DATA_DIRECTORY)/img/objects
+	blender -b $< -o //population-man\#.png -f 1
+	mv $(SRC_DIRECTORY)/blender/ui/population-man/population-man1.png $@
 
 ########################################################################################################################
 # PHONYs um alle Blender-Sachen zu rendern und zu cleanen                                                              #
@@ -150,7 +183,10 @@ render-blender: \
 	) \
 	render-tiles \
 	render-streets \
-	render-cart
+	render-cart \
+	render-coat-of-arms \
+	$(DATA_DIRECTORY)/img/coin.png \
+	$(DATA_DIRECTORY)/img/population-man.png
 	
 clean-blender:
 	rm -f $(foreach BUILDING,$(BUILDINGS), $(DATA_DIRECTORY)/img/objects/$(BUILDING).png)
@@ -165,3 +201,6 @@ clean-blender:
 	rm -rf $(DATA_DIRECTORY)/img/objects/street*.png
 	rm -rf $(DATA_DIRECTORY)/img/objects/cart-without-cargo.png
 	rm -rf $(DATA_DIRECTORY)/img/objects/cart-with-cargo.png
+	rm -rf $(DATA_DIRECTORY)/img/gui/coat-of-arms
+	rm -rf $(DATA_DIRECTORY)/img/coin.png
+	rm -rf $(DATA_DIRECTORY)/img/population-man.png
