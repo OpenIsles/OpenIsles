@@ -499,6 +499,21 @@ void GuiMgr::onEvent(SDL_Event& event) {
 #endif
         }
 
+        // Panel umschalten
+        else if (event.key.keysym.scancode == SDL_SCANCODE_B) {
+            panelState.selectedPanelButton = PanelButton::ADD_BUILDING;
+            updateGuiFromPanelState();
+        } else if (event.key.keysym.scancode == SDL_SCANCODE_K) {
+            panelState.selectedPanelButton = PanelButton::MILITARY;
+            updateGuiFromPanelState();
+        } else if (event.key.keysym.scancode == SDL_SCANCODE_I) {
+            panelState.selectedPanelButton = PanelButton::INFO;
+            updateGuiFromPanelState();
+        } else if (event.key.keysym.scancode == SDL_SCANCODE_O) {
+            panelState.selectedPanelButton = PanelButton::OPTIONS;
+            updateGuiFromPanelState();
+        }
+
 #ifdef DEBUG
         // Debug-Zwecke
         if (event.key.keysym.scancode == SDL_SCANCODE_1) {
