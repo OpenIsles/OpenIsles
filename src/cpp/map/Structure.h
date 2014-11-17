@@ -59,16 +59,16 @@ typedef
 enum BuildingGroup : unsigned char {
 
     // Handwerksbetriebe
-    CRAFTSMAN,
+    CRAFTSMAN = 0,
 
     // Farmen & Plantagen
-    FARM,
+    FARM = 1,
 
     // Hafenanlagen
-    PORT,
+    PORT = 2,
 
     // Öffentliche Gebäude
-    PUBLIC
+    PUBLIC = 3
 
 } BuildingGroup;
 

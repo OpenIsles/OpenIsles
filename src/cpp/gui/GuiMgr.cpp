@@ -22,6 +22,10 @@ extern SoundMgr* soundMgr;
 
 
 GuiMgr::GuiMgr() {
+    //////////////////////////////////////////////////////////////////////////////////////////
+    // GUI-Elemente anlegen //////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////
+
     // Panel
     PlainGraphic* graphic = new PlainGraphic("data/img/gui/panel.png");
 	GuiStaticElement* panel = new GuiStaticElement();
@@ -60,12 +64,8 @@ GuiMgr::GuiMgr() {
         panelSwitchPushButton->setGraphicPressed(new PlainGraphic(tabGraphics[i][1]));
         panelSwitchPushButton->setCoords(22 + i*55, 235, 48, 64);
         panelSwitchPushButton->setOnClickFunction([this, i]() {
-            for (int j = 0; j < 4; j++) {
-                bool active = (j == i);
-                
-                ((GuiPushButton*) findElement(GUI_ID_PANEL_SWITCH_PUSH_BUTTON_BASE + j))->setActive(active);
-                findElement(GUI_ID_PANEL_BASE + j)->setVisible(active);
-            }
+            panelState.selectedPanelButton = (PanelButton) i;;
+            updateGuiFromPanelState();
         });
         registerElement(GUI_ID_PANEL_SWITCH_PUSH_BUTTON_BASE + i, panelSwitchPushButton);
         panel->addChildElement(panelSwitchPushButton);
@@ -77,10 +77,12 @@ GuiMgr::GuiMgr() {
         registerElement(GUI_ID_PANEL_BASE + i, panelSwitch);
         panel->addChildElement(panelSwitch);
     }
-    ((GuiPushButton*) findElement(GUI_ID_PANEL_SWITCH_PUSH_BUTTON_BUILD))->triggerOnClick();
-    
+
     // Buttons auf dem 1. Tab
-    initBuildGui();
+    initGuiForPanelAddBuilding();
+
+    // Panels auf dem 3. Tab
+    initGuiForPanelInfo();
 
     // Buttons auf dem 4. Tab
     GuiPushButton* musicPushButton = new GuiPushButton();
@@ -97,48 +99,20 @@ GuiMgr::GuiMgr() {
         }
     });
     registerElement(GUI_ID_MUSIC_PUSH_BUTTON, musicPushButton);
-    findElement(GUI_ID_PANEL_4)->addChildElement(musicPushButton);
+    findElement(GUI_ID_PANEL_OPTIONS)->addChildElement(musicPushButton);
 
-#ifdef DEBUG
-    // Testzeugs
-    graphic = new PlainGraphic("data/img/gui/testbutton.png");
-    GuiButton* testButton = new GuiButton();
-    testButton->setCoords(12, 70, graphic->getWidth(), graphic->getHeight());
-    testButton->setGraphic(graphic);
-    testButton->setGraphicPressed(new PlainGraphic("data/img/gui/testbutton-pressed.png"));
-    testButton->setOnClickFunction([]() {
-        std::cout << "Click1" << std::endl;
-    });
-    testButton->setVisible(false);
-    registerElement(GUI_ID_TEST_BUTTON1, testButton);
-    findElement(GUI_ID_PANEL_3)->addChildElement(testButton);
+    //////////////////////////////////////////////////////////////////////////////////////////
+    // Zustand initialisieren ////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////
 
-    graphic = new PlainGraphic("data/img/gui/testbutton.png");
-    GuiButton* testButton2 = new GuiButton();
-    testButton2->setCoords(92, 70, graphic->getWidth(), graphic->getHeight());
-    testButton2->setGraphic(graphic);
-    testButton2->setGraphicPressed(new PlainGraphic("data/img/gui/testbutton-pressed.png"));
-    testButton2->setOnClickFunction([]() {
-        std::cout << "Click2" << std::endl;
-    });
-    testButton2->setVisible(false);
-    registerElement(GUI_ID_TEST_BUTTON2, testButton2);
-    findElement(GUI_ID_PANEL_3)->addChildElement(testButton2);
-    
-    graphic = new PlainGraphic("data/img/gui/testbutton.png");
-    GuiPushButton* testPushButton = new GuiPushButton();
-    testPushButton->setCoords(172, 70, graphic->getWidth(), graphic->getHeight());
-    testPushButton->setGraphic(graphic);
-    testPushButton->setGraphicPressed(new PlainGraphic("data/img/gui/testbutton-pressed.png"));
-    testPushButton->setOnClickFunction([this]() {
-        GuiPushButton* testPushButton = (GuiPushButton*) findElement(GUI_ID_TEST_PUSH_BUTTON);
-        ((GuiPushButton*) findElement(GUI_ID_TEST_BUTTON1))->setVisible(testPushButton->isActive());
-        ((GuiPushButton*) findElement(GUI_ID_TEST_BUTTON2))->setVisible(testPushButton->isActive());
-        std::cout << "Click im PushButton: " << (testPushButton->isActive() ? "active" : "inactive") << std::endl;
-    });
-    registerElement(GUI_ID_TEST_PUSH_BUTTON, testPushButton);
-    findElement(GUI_ID_PANEL_3)->addChildElement(testPushButton);
-#endif
+    panelState.selectedPanelButton = PanelButton::INFO;
+
+    // Initial ist für den Gebäudebau der Förster ausgewählt
+    panelState.selectedBuildingGroup = BuildingGroup::FARM;
+    panelState.addingStructure = StructureType::FORESTERS;
+    panelState.buildingMenuOpen = false;
+
+    updateGuiFromPanelState();
 }
 
 GuiMgr::~GuiMgr() {
@@ -158,16 +132,6 @@ GuiMgr::~GuiMgr() {
     delete ((GuiPushButton*) findElement(GUI_ID_MUSIC_PUSH_BUTTON))->getGraphic();
     delete ((GuiPushButton*) findElement(GUI_ID_MUSIC_PUSH_BUTTON))->getGraphicPressed();
 
-#ifdef DEBUG
-    // Testzeugs-Grafiken wieder wegräumen
-    delete ((GuiButton*) findElement(GUI_ID_TEST_BUTTON1))->getGraphic();
-    delete ((GuiButton*) findElement(GUI_ID_TEST_BUTTON1))->getGraphicPressed();
-    delete ((GuiButton*) findElement(GUI_ID_TEST_BUTTON2))->getGraphic();
-    delete ((GuiButton*) findElement(GUI_ID_TEST_BUTTON2))->getGraphicPressed();
-    delete ((GuiPushButton*) findElement(GUI_ID_TEST_PUSH_BUTTON))->getGraphic();
-    delete ((GuiPushButton*) findElement(GUI_ID_TEST_PUSH_BUTTON))->getGraphicPressed();
-#endif
-
     // GUI-Elemente wegräumen
     for (auto iter = identifierMap.cbegin(); iter != identifierMap.cend(); iter++) {
 		GuiBase* guiElement = iter->second;
@@ -176,7 +140,7 @@ GuiMgr::~GuiMgr() {
     identifierMap.clear();
 }
 
-void GuiMgr::initBuildGui() {
+void GuiMgr::initGuiForPanelAddBuilding() {
     // TODO in Config auslagern
     static struct {
         BuildingGroup buildingGroup;
@@ -286,21 +250,20 @@ void GuiMgr::initBuildGui() {
                 { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
                 { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
                 { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
-                { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
-                { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
-                { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
                 {
                     StructureType::OFFICE1,
                     "Kontor I",
                     OtherGraphic::ADD_BUILDING_OFFICE1
-                }
+                },
+                { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
+                { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
+                { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY }
             }
         }, {
             BuildingGroup::PUBLIC,
             "Öffentliche Gebäude",
             "data/img/gui/button-add-building-public.png",
             "data/img/gui/button-add-building-public-pressed.png", {
-                { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
                 { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
                 { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
                 { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
@@ -331,7 +294,8 @@ void GuiMgr::initBuildGui() {
                     StructureType::CHAPEL,
                     "Kapelle",
                     OtherGraphic::ADD_BUILDING_CHAPEL
-                }
+                },
+                { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY }
             }
         }
     };
@@ -362,9 +326,10 @@ void GuiMgr::initBuildGui() {
                     12 + 58*gridX, 13 + 58*gridY, graphicAddBuildingButton->getWidth(), graphicAddBuildingButton->getHeight());
                 addBuildingButton->setGraphic(graphicAddBuildingButton);
                 addBuildingButton->setGraphicPressed(graphicAddBuildingButton);
-                addBuildingButton->setOnClickFunction([this, structureType, buildingIndex, groupIndex]() {
-                    game->startAddingStructure(structureType);
-                    findElement(GUI_ID_ADD_BUILDING_GRID_BASE + groupIndex)->setVisible(false);
+                addBuildingButton->setOnClickFunction([this, structureType]() {
+                    panelState.addingStructure = structureType;
+                    panelState.buildingMenuOpen = false;
+                    updateGuiFromPanelState();
                 });
                 registerElement(GUI_ID_ADD_BUILDING_GRID_BUTTON_BASE + groupIndex * 16 + buildingIndex, addBuildingButton);
                 addBuildingGrid->addChildElement(addBuildingButton);
@@ -376,10 +341,28 @@ void GuiMgr::initBuildGui() {
         addBuildingPushButton->setGraphic(new PlainGraphic(buildingGroups[groupIndex].graphicFilename));
         addBuildingPushButton->setGraphicPressed(new PlainGraphic(buildingGroups[groupIndex].graphicPressedFilename));
         addBuildingPushButton->setCoords(7 + groupIndex*55, 370, 52, 64);
-        addBuildingPushButton->setOnClickFunction([this, groupIndex ]() {
-            bool buttonActive = ((GuiPushButton*) findElement(GUI_ID_ADD_BUILDING_PUSH_BUTTON_BASE + groupIndex))->isActive();
+        addBuildingPushButton->setOnClickFunction([this, groupIndex]() {
+            // Wenn man die Gruppe nochmal klickt, die bereits ausgewählt ist und das ausgewählte Gebäude nicht
+            // aus dieser Gruppe ist, wird das Gebäude gewechselt und eins aus der Gruppe genommen
+            if (panelState.selectedBuildingGroup == (BuildingGroup) groupIndex && panelState.buildingMenuOpen) {
+                bool addingStructureInSelectedBuildingGroup = false;
+                for (int i = 0; i < 16; i++) {
+                    if (buildingGroups[groupIndex].buildings[i].structureType == panelState.addingStructure) {
+                        addingStructureInSelectedBuildingGroup = true;
+                        break;
+                    }
+                }
 
-            findElement(GUI_ID_ADD_BUILDING_GRID_BASE + groupIndex)->setVisible(buttonActive);
+                if (!addingStructureInSelectedBuildingGroup) {
+                    // Gebäude unten links nehmen (= Index 12 von 16)
+                    panelState.addingStructure = buildingGroups[groupIndex].buildings[12].structureType;
+                }
+            }
+            else {
+                panelState.selectedBuildingGroup = (BuildingGroup) groupIndex;
+                panelState.buildingMenuOpen = true;
+            }
+            updateGuiFromPanelState();
         });
         registerElement(GUI_ID_ADD_BUILDING_PUSH_BUTTON_BASE + groupIndex, addBuildingPushButton);
         findElement(GUI_ID_PANEL_BUILD)->addChildElement(addBuildingPushButton);
@@ -389,16 +372,19 @@ void GuiMgr::initBuildGui() {
     GuiAddBuildingWidget* addBuildingWidget = new GuiAddBuildingWidget();
     registerElement(GUI_ID_ADD_BUILDING_WIDGET, addBuildingWidget);
     findElement(GUI_ID_PANEL_BUILD)->addChildElement(addBuildingWidget);
+}
+
+void GuiMgr::initGuiForPanelInfo() {
 
     // Aktuell ausgewähltes Gebäude
     GuiSelectedBuildingWidget* selectedBuildingWidget = new GuiSelectedBuildingWidget();
     registerElement(GUI_ID_SELECTED_BUILDING_WIDGET, selectedBuildingWidget);
-    findElement(GUI_ID_PANEL_BUILD)->addChildElement(selectedBuildingWidget);
+    findElement(GUI_ID_PANEL_INFO)->addChildElement(selectedBuildingWidget);
 
     // Warenanzeige der Siedlung, wenn Marktplatz oder Kontor ausgewählt ist
     GuiColonyGoodsWidget* colonyGoodsWidget = new GuiColonyGoodsWidget();
     registerElement(GUI_ID_COLONY_GOODS_WIDGET, colonyGoodsWidget);
-    findElement(GUI_ID_PANEL_BUILD)->addChildElement(colonyGoodsWidget);
+    findElement(GUI_ID_PANEL_INFO)->addChildElement(colonyGoodsWidget);
 }
 
 void GuiMgr::registerElement(int identifier, GuiBase* guiElement) {
@@ -452,8 +438,13 @@ void GuiMgr::onEvent(SDL_Event& event) {
         // Rechtsklick...
         else if (event.button.button == SDL_BUTTON_RIGHT) {
             // Platzieren wir ein Gebäude -> abbrechen
-            if (game->isAddingStructure()) {
-                game->endAddingStructure();
+            if (panelState.selectedPanelButton == PanelButton::ADD_BUILDING) {
+                if (panelState.buildingMenuOpen) {
+                    panelState.buildingMenuOpen = false;
+                } else {
+                    panelState.selectedPanelButton = PanelButton::INFO;
+                }
+                updateGuiFromPanelState();
             }
             // Ist ein Gebäude auf der Karte markieren -> deselektieren
             else if(map->getSelectedMapObject() != nullptr) {
@@ -511,25 +502,55 @@ void GuiMgr::onEvent(SDL_Event& event) {
 #ifdef DEBUG
         // Debug-Zwecke
         if (event.key.keysym.scancode == SDL_SCANCODE_1) {
-            game->startAddingStructure(StructureType::CHAPEL);
+            panelState.selectedPanelButton = PanelButton::ADD_BUILDING;
+            panelState.selectedBuildingGroup = BuildingGroup::PUBLIC;
+            panelState.addingStructure = StructureType::CHAPEL;
+            updateGuiFromPanelState();
         } else if (event.key.keysym.scancode == SDL_SCANCODE_2) {
-            game->startAddingStructure(StructureType::PIONEERS_HOUSE1);
+            panelState.selectedPanelButton = PanelButton::ADD_BUILDING;
+            panelState.selectedBuildingGroup = BuildingGroup::PUBLIC;
+            panelState.addingStructure = StructureType::PIONEERS_HOUSE1;
+            updateGuiFromPanelState();
         } else if (event.key.keysym.scancode == SDL_SCANCODE_3) {
-            game->startAddingStructure(StructureType::SIGNALFIRE);
+            panelState.selectedPanelButton = PanelButton::ADD_BUILDING;
+            panelState.selectedBuildingGroup = BuildingGroup::PUBLIC;
+            panelState.addingStructure = StructureType::SIGNALFIRE;
+            updateGuiFromPanelState();
         } else if (event.key.keysym.scancode == SDL_SCANCODE_4) {
-            game->startAddingStructure(StructureType::HERBARY);
+            panelState.selectedPanelButton = PanelButton::ADD_BUILDING;
+            panelState.selectedBuildingGroup = BuildingGroup::FARM;
+            panelState.addingStructure = StructureType::HERBARY;
+            updateGuiFromPanelState();
         } else if (event.key.keysym.scancode == SDL_SCANCODE_5) {
-            game->startAddingStructure(StructureType::BRICKYARD);
+            panelState.selectedPanelButton = PanelButton::ADD_BUILDING;
+            panelState.selectedBuildingGroup = BuildingGroup::CRAFTSMAN;
+            panelState.addingStructure = StructureType::BRICKYARD;
+            updateGuiFromPanelState();
         } else if (event.key.keysym.scancode == SDL_SCANCODE_6) {
-            game->startAddingStructure(StructureType::BRICKYARD2);
+            panelState.selectedPanelButton = PanelButton::ADD_BUILDING;
+            panelState.selectedBuildingGroup = BuildingGroup::CRAFTSMAN;
+            panelState.addingStructure = StructureType::BRICKYARD2;
+            updateGuiFromPanelState();
         } else if (event.key.keysym.scancode == SDL_SCANCODE_7) {
-            game->startAddingStructure(StructureType::OFFICE1);
+            panelState.selectedPanelButton = PanelButton::ADD_BUILDING;
+            panelState.selectedBuildingGroup = BuildingGroup::PUBLIC;
+            panelState.addingStructure = StructureType::OFFICE1;
+            updateGuiFromPanelState();
         } else if (event.key.keysym.scancode == SDL_SCANCODE_8) {
-            game->startAddingStructure(StructureType::STREET);
+            panelState.selectedPanelButton = PanelButton::ADD_BUILDING;
+            panelState.selectedBuildingGroup = BuildingGroup::PUBLIC;
+            panelState.addingStructure = StructureType::STREET;
+            updateGuiFromPanelState();
         } else if (event.key.keysym.scancode == SDL_SCANCODE_9) {
-            game->startAddingStructure(StructureType::MARKETPLACE);
+            panelState.selectedPanelButton = PanelButton::ADD_BUILDING;
+            panelState.selectedBuildingGroup = BuildingGroup::PUBLIC;
+            panelState.addingStructure = StructureType::MARKETPLACE;
+            updateGuiFromPanelState();
         } else if (event.key.keysym.scancode == SDL_SCANCODE_0) {
-            game->startAddingStructure(StructureType::FORESTERS);
+            panelState.selectedPanelButton = PanelButton::ADD_BUILDING;
+            panelState.selectedBuildingGroup = BuildingGroup::FARM;
+            panelState.addingStructure = StructureType::FORESTERS;
+            updateGuiFromPanelState();
         } else if (event.key.keysym.scancode == SDL_SCANCODE_DELETE) {
             map->deleteSelectedObject();
         }
@@ -602,5 +623,26 @@ void GuiMgr::onEvent(SDL_Event& event) {
         }
         
         guiElement->onEvent(event);
+    }
+}
+
+void GuiMgr::updateGuiFromPanelState() {
+    // Einen der 4 Buttons wählen und passendes Panel anzeigen
+    for (int i = 0; i < 4; i++) {
+        bool active = (i == (int) (panelState.selectedPanelButton));
+
+        ((GuiPushButton*) findElement(GUI_ID_PANEL_SWITCH_PUSH_BUTTON_BASE + i))->setActive(active);
+        findElement(GUI_ID_PANEL_BASE + i)->setVisible(active);
+    }
+
+    // Baumenü: gewählte Kategorie
+    for (int i = 0; i < 4; i++) {
+        bool active = (
+            (panelState.selectedPanelButton == PanelButton::ADD_BUILDING) &&
+            (i == (int) (panelState.selectedBuildingGroup))
+        );
+
+        ((GuiPushButton*) findElement(GUI_ID_ADD_BUILDING_PUSH_BUTTON_BASE + i))->setActive(active);
+        findElement(GUI_ID_ADD_BUILDING_GRID_BASE + i)->setVisible(active && panelState.buildingMenuOpen);
     }
 }

@@ -7,9 +7,6 @@ extern Game* game;
 
 
 void Building::onClick(int mouseXInBuilding, int mouseYInBuilding) {
-	std::cout << "Klick auf Building " << toString(structureType) << "@(" << toString(mouseXInBuilding)
-			<< ", " << toString(mouseYInBuilding) << ")" << std::endl;
-
     game->getMap()->setSelectedMapObject(this);
 }
 

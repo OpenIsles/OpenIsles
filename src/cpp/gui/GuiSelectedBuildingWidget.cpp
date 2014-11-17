@@ -2,6 +2,7 @@
 #include "game/Game.h"
 #include "gui/FontMgr.h"
 #include "gui/GuiSelectedBuildingWidget.h"
+#include "gui/GuiMgr.h"
 #include "gui/GuiUtils.h"
 
 
@@ -13,6 +14,7 @@ extern ConfigMgr* configMgr;
 extern FontMgr* fontMgr;
 extern Game* game;
 extern GraphicsMgr* graphicsMgr;
+extern GuiMgr* guiMgr;
 
 
 GuiSelectedBuildingWidget::GuiSelectedBuildingWidget() {
@@ -33,7 +35,7 @@ void GuiSelectedBuildingWidget::renderElement(SDL_Renderer* renderer) {
         // Kein Gebäude ausgewählt, dann nix zu tun
         return;
     }
-    if (game->isAddingStructure()) {
+    if (guiMgr->getPanelState().selectedPanelButton == PanelButton::ADD_BUILDING) {
         // Wenn wir ein Gebäude platzieren, dürfen wir dieses Widget nicht zeichnen, damit sich das nicht mit dem
         // GuiAddBuildingWidget überschneidet.
         return;

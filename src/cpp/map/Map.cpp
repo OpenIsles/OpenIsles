@@ -1,6 +1,7 @@
 #include "config/ConfigMgr.h"
 #include "game/Colony.h"
 #include "game/Game.h"
+#include "gui/GuiMgr.h"
 #include "map/Map.h"
 #include "utils/StringFormat.h"
 
@@ -15,6 +16,7 @@ extern FontMgr* fontMgr;
 extern ConfigMgr* configMgr;
 extern Game* game;
 extern GraphicsMgr* graphicsMgr;
+extern GuiMgr* guiMgr;
 extern SDL_Renderer* renderer;
 extern int mouseCurrentX, mouseCurrentY;
 extern const int windowWidth;
@@ -224,11 +226,11 @@ void Map::renderMap(SDL_Renderer* renderer) {
 
     // Postionieren wir grade ein neues Gebäude?
     Structure* structureBeingAdded = nullptr;
-    if (game->getAddingStructure() != NO_STRUCTURE) {
+    if (guiMgr->getPanelState().selectedPanelButton == PanelButton::ADD_BUILDING) {
         int mapX, mapY;
         MapCoordUtils::getMapCoordsUnderMouse(mapX, mapY);
 
-        StructureType structureType = game->getAddingStructure();
+        StructureType structureType = guiMgr->getPanelState().addingStructure;
         unsigned char allowedToPlaceStructure = isAllowedToPlaceStructure(mapX, mapY, structureType);
 
         // Auf dem Ozean malen wir gar nix.
@@ -689,7 +691,7 @@ void Map::onClick(int mouseX, int mouseY) {
 
 void Map::onClickInMap(int mouseX, int mouseY) {
 	// Grade beim Platzieren eines neuen Gebäudes?
-    if (game->isAddingStructure()) {
+    if (guiMgr->getPanelState().selectedPanelButton == PanelButton::ADD_BUILDING) {
         int mapX, mapY;
         MapCoordUtils::getMapCoordsUnderMouse(mapX, mapY);
         
@@ -748,7 +750,7 @@ void Map::onClickInMap(int mouseX, int mouseY) {
 }
 
 void Map::onClickInMapWhileAddingStructure(int mapX, int mapY) {
-    StructureType structureType = game->getAddingStructure();
+    StructureType structureType = guiMgr->getPanelState().addingStructure;
     if (isAllowedToPlaceStructure(mapX, mapY, structureType) != PLACING_STRUCTURE_ALLOWED) {
         // Dürfen wir hier/jetzt nicht setzen, ignorieren wir den Klick
         return;
@@ -777,10 +779,6 @@ void Map::onClickInMapWhileAddingStructure(int mapX, int mapY) {
     const BuildingCosts* buildingCosts = configMgr->getBuildingConfig(structureType)->getBuildingCosts();
     currentPlayer->coins -= buildingCosts->coins;
     colony->subtractBuildingCosts(buildingCosts);
-    
-    // TODO Status der Shift-Taste aus dem Event bis hierhin durchschleußen.
-    // Wenn gedrückt, "Gebäude platzieren"-Modus nicht verlassen, damit wir mehrere Gebäude auf einmal setzen können.
-    game->endAddingStructure();
 }
 
 void Map::onClickInMinimap(int mouseX, int mouseY) {

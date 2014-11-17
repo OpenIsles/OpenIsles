@@ -2,6 +2,7 @@
 #include "game/Colony.h"
 #include "game/Game.h"
 #include "gui/FontMgr.h"
+#include "gui/GuiMgr.h"
 #include "utils/StringFormat.h"
 
 static SDL_Color colorWhite = {255, 255, 255, 255};
@@ -12,6 +13,7 @@ extern ConfigMgr* configMgr;
 extern FontMgr* fontMgr;
 extern Game* game;
 extern GraphicsMgr* graphicsMgr;
+extern GuiMgr* guiMgr;
 extern SDL_Renderer* renderer;
 
 
@@ -63,9 +65,9 @@ Colony* Game::getColony(const MapObject* mapObject) {
 
 void Game::renderResourcesBar() {
     Player* currentPlayer = game->getCurrentPlayer();
-    StructureType addingStructure = game->getAddingStructure();
-    const BuildingCosts* buildingCosts = (addingStructure != StructureType::NO_STRUCTURE) ? 
-        configMgr->getBuildingConfig(addingStructure)->getBuildingCosts() : nullptr;
+    PanelState panelState = guiMgr->getPanelState();
+    const BuildingCosts* buildingCosts = (panelState.selectedPanelButton == PanelButton::ADD_BUILDING) ?
+        configMgr->getBuildingConfig(panelState.addingStructure)->getBuildingCosts() : nullptr;
     
     // Münzenguthaben
     graphicsMgr->getOtherGraphic(OtherGraphic::COINS)->drawAt(15, 8);

@@ -10,6 +10,66 @@ class GuiStaticElement;
 class GuiPushButton;
 class SDL_Renderer;
 
+enum BuildingGroup : unsigned char;
+enum StructureType : unsigned char;
+
+
+/**
+* Enum für 4 Buttons, um die Panels umzuschalten
+*/
+typedef
+enum PanelButton : unsigned char {
+
+    /**
+     * @brief Baumenü
+     */
+    ADD_BUILDING = 0,
+
+    /**
+     * @brief Kampfmenü
+     */
+    MILITARY = 1,
+
+    /**
+     * @brief Info-Panel
+     */
+    INFO = 2,
+
+    /**
+     * @brief Einstellungs-Panel
+     */
+    OPTIONS = 3
+
+} PanelButton;
+
+
+/**
+ * @brief Struktur für den Zustand des Panels auf der rechten Seite
+ */
+typedef
+struct PanelState {
+    /**
+     * @brief ausgewählter Button (4 Buttons, die die Panels umschalten)
+     */
+    PanelButton selectedPanelButton;
+
+    /**
+     * @brief zuletzt/aktuell gewählte Kategorie im Baumenü
+     */
+    BuildingGroup selectedBuildingGroup;
+
+    /**
+     * @brief zuletzt/aktuell gewählte Struktur im Baumenü
+     */
+    StructureType addingStructure;
+
+    /**
+     * @brief Flag, was angibt, ob das Popup-Menü mit den einzelnen Gebäuden aufgeklappt ist
+     */
+    bool buildingMenuOpen;
+
+} PanelState;
+
 
 /**
  * GUI-Manager. Verwaltet alle GUI-Elemente.
@@ -27,6 +87,11 @@ private:
      * @brief Map, die alle registrierten Gui-Elemente enthält und durch ihre Identifier referenziert.
      */
     std::map<int, GuiBase*> identifierMap;
+
+    /**
+     * @brief Zustand des Panels auf der rechten Seite
+     */
+    PanelState panelState;
 
 public:
 	GuiMgr();
@@ -47,12 +112,25 @@ public:
      * @param event SDL-Event
      */
     void onEvent(SDL_Event& event);
-    
+
+    /**
+     * @brief Liefert den aktuellen Zustand des Panels zurück
+     * @return Zustand des Panels
+     */
+    PanelState const& getPanelState() const {
+        return panelState;
+    }
+
 private:
     /**
-     * @brief Initialisiert die GUI für "Gebäude bauen". Wird vom Konstruktor aufgerufen.
+     * @brief Initialisiert die GUI für den ersten Tab ("Gebäude bauen") im Panel. Wird vom Konstruktor aufgerufen.
      */
-    void initBuildGui();
+    void initGuiForPanelAddBuilding();
+
+    /**
+     * @brief Initialisiert die GUI für den dritten Tab ("Info") im Panel. Wird vom Konstruktor aufgerufen.
+     */
+    void initGuiForPanelInfo();
 
     /**
      * @brief Registriert ein neues GUI-Element
@@ -68,6 +146,11 @@ private:
      */
     GuiBase* findElement(int identifier);
 
+    /**
+     * @brief Aktualisiert die Sichtbarkeit der GUI-Komponenten des Panels ausgehend vom Stand der aktuellen
+     * Variablen #panelState.
+     */
+    void updateGuiFromPanelState();
 };
 
 #endif

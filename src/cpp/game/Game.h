@@ -20,11 +20,6 @@ private:
      * @brief die Karte. Enthält die Inseln und alles was drauf is
      */
     Map* map;
-
-    /**
-     * @brief Gesetzt, wenn gerade eine neue Struktur auf der Karte positioniert wird, welche.
-     */
-	StructureType addingStructure = StructureType::NO_STRUCTURE;
     
     /**
      * @brief Vektor von Spielern
@@ -56,33 +51,6 @@ public:
 
     void setMap(Map* map) {
         this->map = map;
-    }
-
-    StructureType getAddingStructure() const {
-        return addingStructure;
-    }
-    
-    /**
-     * @return true, wenn wir grade ein Gebäude positionieren, sonst false
-     */
-    bool isAddingStructure() const {
-        return (addingStructure != StructureType::NO_STRUCTURE);
-    }
-
-    /**
-     * @brief Wechselt in den "Gebäude platzieren"-Modus, bzw. wenn wir schon drin waren, wechselt das zu platzierende
-     * Gebäude
-     * @param addingStructure
-     */
-    void startAddingStructure(StructureType addingStructure) {
-        this->addingStructure = addingStructure;
-    }
-    
-    /**
-     * @brief Beendet den "Gebäude platzieren"-Modus
-     */
-    void endAddingStructure() {
-        this->addingStructure = StructureType::NO_STRUCTURE;
     }
     
     /**

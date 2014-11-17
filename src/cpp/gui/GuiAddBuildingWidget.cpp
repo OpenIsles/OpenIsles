@@ -4,6 +4,7 @@
 #include "game/Game.h"
 #include "gui/FontMgr.h"
 #include "gui/GuiAddBuildingWidget.h"
+#include "gui/GuiMgr.h"
 #include "gui/GuiUtils.h"
 #include "utils/StringFormat.h"
 
@@ -17,6 +18,7 @@ extern ConfigMgr* configMgr;
 extern FontMgr* fontMgr;
 extern Game* game;
 extern GraphicsMgr* graphicsMgr;
+extern GuiMgr* guiMgr;
 
 
 GuiAddBuildingWidget::GuiAddBuildingWidget() {
@@ -26,8 +28,8 @@ GuiAddBuildingWidget::GuiAddBuildingWidget() {
 }
 
 void GuiAddBuildingWidget::renderElement(SDL_Renderer* renderer) {
-    StructureType structureType = game->getAddingStructure();
-    if (structureType == NO_STRUCTURE) {
+    PanelState panelState = guiMgr->getPanelState();
+    if (panelState.selectedPanelButton != PanelButton::ADD_BUILDING) {
         // wenn wir nix platzieren, sollten das Widget eigentlich auch nicht sichtbar sein
         return;
     }
@@ -35,6 +37,7 @@ void GuiAddBuildingWidget::renderElement(SDL_Renderer* renderer) {
     int windowX, windowY;
     getWindowCoords(windowX, windowY);
 
+    StructureType structureType = panelState.addingStructure;
     const BuildingConfig* buildingConfig = configMgr->getBuildingConfig(structureType);
 
     // Gebäudename
