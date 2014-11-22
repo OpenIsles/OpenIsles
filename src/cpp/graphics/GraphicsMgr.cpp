@@ -22,10 +22,7 @@ GraphicsMgr::GraphicsMgr() {
     structures[StructureType::PIONEERS_HOUSE3] = new MapObjectGraphic("data/img/objects/pioneers-house3.png", 2, 2);
     structures[StructureType::PIONEERS_HOUSE4] = new MapObjectGraphic("data/img/objects/pioneers-house4.png", 2, 2);
     structures[StructureType::PIONEERS_HOUSE5] = new MapObjectGraphic("data/img/objects/pioneers-house5.png", 2, 2);
-	structures[StructureType::SIGNALFIRE] = new MapObjectGraphic("data/img/objects/signalfire.png", 1, 1);
-	structures[StructureType::HERBARY] = new MapObjectGraphic("data/img/objects/herbary.png", 3, 3);
-	structures[StructureType::BRICKYARD] = new MapObjectGraphic("data/img/objects/brickyard.png", 4, 2);
-	structures[StructureType::BRICKYARD2] = new MapObjectGraphic("data/img/objects/brickyard2.png", 2, 4);
+	structures[StructureType::STONEMASON] = new MapObjectGraphic("data/img/objects/stonemason.png", 2, 2);
     structures[StructureType::OFFICE1] = new MapObjectGraphic("data/img/objects/office1.png", 3, 2);
     structures[StructureType::MARKETPLACE] = new MapObjectGraphic("data/img/objects/marketplace.png", 4, 3);
     structures[StructureType::FORESTERS] = new MapObjectGraphic("data/img/objects/foresters.png", 2, 2);
@@ -85,6 +82,7 @@ GraphicsMgr::GraphicsMgr() {
     otherGraphics[OtherGraphic::ADD_BUILDING_BUTCHERS] = new PlainGraphic("data/img/gui/add-building/butchers.png");
     otherGraphics[OtherGraphic::ADD_BUILDING_TOOLSMITHS] = new PlainGraphic("data/img/gui/add-building/toolsmiths.png");
     otherGraphics[OtherGraphic::ADD_BUILDING_HOUSE] = new PlainGraphic("data/img/gui/add-building/house.png");
+    otherGraphics[OtherGraphic::ADD_BUILDING_STONEMASON] = new PlainGraphic("data/img/gui/add-building/stonemason.png");
     otherGraphics[OtherGraphic::ADD_BUILDING_DUMMY] = new PlainGraphic("data/img/gui/add-building/dummy.png");
     otherGraphics[OtherGraphic::PRODUCTION_ARROW] = new PlainGraphic("data/img/gui/production-arrow.png");
     otherGraphics[OtherGraphic::PRODUCTION_PLUS] = new PlainGraphic("data/img/gui/production-plus.png");

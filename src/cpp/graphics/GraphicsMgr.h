@@ -38,6 +38,7 @@ enum OtherGraphic {
     ADD_BUILDING_BUTCHERS,
     ADD_BUILDING_TOOLSMITHS,
     ADD_BUILDING_HOUSE,
+    ADD_BUILDING_STONEMASON,
     ADD_BUILDING_DUMMY,
 
     // Plus-Zeichen und Pfeil für Produktion eines Gebäudes

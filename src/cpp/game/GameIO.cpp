@@ -247,14 +247,8 @@ void GameIO::loadStructures(rapidxml::xml_node<>* objectgroupStructuresNode) {
                 structureType = StructureType::CHAPEL;
             } else if (strcmp(nodeNameValue, "pioneers_house1") == 0) {
                 structureType = StructureType::PIONEERS_HOUSE1;
-            } else if (strcmp(nodeNameValue, "signalfire") == 0) {
-                structureType = StructureType::SIGNALFIRE;
-            } else if (strcmp(nodeNameValue, "herbary") == 0) {
-                structureType = StructureType::HERBARY;
-            } else if (strcmp(nodeNameValue, "brickyard") == 0) {
-                structureType = StructureType::BRICKYARD;
-            } else if (strcmp(nodeNameValue, "brickyard2") == 0) {
-                structureType = StructureType::BRICKYARD2;
+            } else if (strcmp(nodeNameValue, "stonemason") == 0) {
+                structureType = StructureType::STONEMASON;
             } else if (strcmp(nodeNameValue, "office1") == 0) {
                 structureType = StructureType::OFFICE1;
             } else if (strcmp(nodeNameValue, "marketplace") == 0) {

@@ -98,26 +98,6 @@
     <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="herbary" type="building" x="1760" y="1120" width="96" height="96">
-   <properties>
-    <property name="player" value="1"/>
-   </properties>
-  </object>
-  <object name="brickyard" type="building" x="1600" y="1024" width="128" height="64">
-   <properties>
-    <property name="player" value="1"/>
-   </properties>
-  </object>
-  <object name="brickyard2" type="building" x="1632" y="832" width="64" height="128">
-   <properties>
-    <property name="player" value="1"/>
-   </properties>
-  </object>
-  <object name="signalfire" type="building" x="1856" y="1248" width="32" height="32">
-   <properties>
-    <property name="player" value="1"/>
-   </properties>
-  </object>
   <object name="office1" type="building" x="1440" y="768" width="96" height="64">
    <properties>
     <property name="player" value="1"/>

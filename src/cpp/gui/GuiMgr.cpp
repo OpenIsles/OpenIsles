@@ -164,7 +164,11 @@ void GuiMgr::initGuiForPanelAddBuilding() {
                 { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
                 { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
                 { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
-                { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
+                {
+                    StructureType::STONEMASON,
+                    "Steinmetz",
+                    OtherGraphic::ADD_BUILDING_STONEMASON
+                },
                 { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
                 { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
                 {
@@ -186,15 +190,8 @@ void GuiMgr::initGuiForPanelAddBuilding() {
                     "Fleischerei",
                     OtherGraphic::ADD_BUILDING_BUTCHERS
                 },
-                {
-                    StructureType::BRICKYARD,
-                    "Steinmetz",
-                    OtherGraphic::ADD_BUILDING_DUMMY
-                }, {
-                    StructureType::BRICKYARD2,
-                    "Steinmetz (gedreht)",
-                    OtherGraphic::ADD_BUILDING_DUMMY
-                }
+                { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
+                { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY }
             }
         }, {
             BuildingGroup::FARM,
@@ -221,11 +218,8 @@ void GuiMgr::initGuiForPanelAddBuilding() {
                     "Rinderfarm",
                     OtherGraphic::ADD_BUILDING_CATTLE_FARM
                 },
+                { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
                 {
-                    StructureType::HERBARY,
-                    "Kräuterfeld",
-                    OtherGraphic::ADD_BUILDING_DUMMY
-                }, {
                     StructureType::FORESTERS,
                     "Förster",
                     OtherGraphic::ADD_BUILDING_DUMMY
@@ -274,11 +268,8 @@ void GuiMgr::initGuiForPanelAddBuilding() {
                 { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
                 { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
                 { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
+                { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
                 {
-                    StructureType::SIGNALFIRE,
-                    "Signalfeuer",
-                    OtherGraphic::ADD_BUILDING_DUMMY
-                }, {
                     StructureType::STREET,
                     "Plasterstraße",
                     OtherGraphic::ADD_BUILDING_STREET
@@ -516,55 +507,10 @@ void GuiMgr::onEvent(SDL_Event& event) {
 
 #ifdef DEBUG
         // Debug-Zwecke
-        if (event.key.keysym.scancode == SDL_SCANCODE_1) {
-            panelState.selectedPanelButton = PanelButton::ADD_BUILDING;
-            panelState.selectedBuildingGroup = BuildingGroup::PUBLIC;
-            panelState.addingStructure = StructureType::CHAPEL;
-            updateGuiFromPanelState();
-        } else if (event.key.keysym.scancode == SDL_SCANCODE_2) {
-            panelState.selectedPanelButton = PanelButton::ADD_BUILDING;
-            panelState.selectedBuildingGroup = BuildingGroup::PUBLIC;
-            panelState.addingStructure = StructureType::PIONEERS_HOUSE1;
-            updateGuiFromPanelState();
-        } else if (event.key.keysym.scancode == SDL_SCANCODE_3) {
-            panelState.selectedPanelButton = PanelButton::ADD_BUILDING;
-            panelState.selectedBuildingGroup = BuildingGroup::PUBLIC;
-            panelState.addingStructure = StructureType::SIGNALFIRE;
-            updateGuiFromPanelState();
-        } else if (event.key.keysym.scancode == SDL_SCANCODE_4) {
-            panelState.selectedPanelButton = PanelButton::ADD_BUILDING;
-            panelState.selectedBuildingGroup = BuildingGroup::FARM;
-            panelState.addingStructure = StructureType::HERBARY;
-            updateGuiFromPanelState();
-        } else if (event.key.keysym.scancode == SDL_SCANCODE_5) {
-            panelState.selectedPanelButton = PanelButton::ADD_BUILDING;
-            panelState.selectedBuildingGroup = BuildingGroup::CRAFTSMAN;
-            panelState.addingStructure = StructureType::BRICKYARD;
-            updateGuiFromPanelState();
-        } else if (event.key.keysym.scancode == SDL_SCANCODE_6) {
-            panelState.selectedPanelButton = PanelButton::ADD_BUILDING;
-            panelState.selectedBuildingGroup = BuildingGroup::CRAFTSMAN;
-            panelState.addingStructure = StructureType::BRICKYARD2;
-            updateGuiFromPanelState();
-        } else if (event.key.keysym.scancode == SDL_SCANCODE_7) {
-            panelState.selectedPanelButton = PanelButton::ADD_BUILDING;
-            panelState.selectedBuildingGroup = BuildingGroup::PUBLIC;
-            panelState.addingStructure = StructureType::OFFICE1;
-            updateGuiFromPanelState();
-        } else if (event.key.keysym.scancode == SDL_SCANCODE_8) {
+        if (event.key.keysym.scancode == SDL_SCANCODE_8) {
             panelState.selectedPanelButton = PanelButton::ADD_BUILDING;
             panelState.selectedBuildingGroup = BuildingGroup::PUBLIC;
             panelState.addingStructure = StructureType::STREET;
-            updateGuiFromPanelState();
-        } else if (event.key.keysym.scancode == SDL_SCANCODE_9) {
-            panelState.selectedPanelButton = PanelButton::ADD_BUILDING;
-            panelState.selectedBuildingGroup = BuildingGroup::PUBLIC;
-            panelState.addingStructure = StructureType::MARKETPLACE;
-            updateGuiFromPanelState();
-        } else if (event.key.keysym.scancode == SDL_SCANCODE_0) {
-            panelState.selectedPanelButton = PanelButton::ADD_BUILDING;
-            panelState.selectedBuildingGroup = BuildingGroup::FARM;
-            panelState.addingStructure = StructureType::FORESTERS;
             updateGuiFromPanelState();
         } else if (event.key.keysym.scancode == SDL_SCANCODE_DELETE) {
             map->deleteSelectedObject();

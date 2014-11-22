@@ -53,56 +53,17 @@ void ConfigMgr::loadBuildingConfig() {
         buildingConfigs[i]->buildingProduction = { GoodsSlot(), GoodsSlot(), GoodsSlot() };
     }
 
-    buildingConfigs[StructureType::SIGNALFIRE] = new BuildingConfig();
-    buildingConfigs[StructureType::SIGNALFIRE]->name = "Signalturm";
-    buildingConfigs[StructureType::SIGNALFIRE]->catchmentArea = new RectangleData<char>(5, 5);
-    memcpy(buildingConfigs[StructureType::SIGNALFIRE]->catchmentArea->data, "0010001110111110111000100", 25);
-    buildingConfigs[StructureType::SIGNALFIRE]->buildingCosts = { 50, 1, 7, 0 };
-    buildingConfigs[StructureType::SIGNALFIRE]->buildingProduction = {
-        GoodsSlot(GoodsType::BRICKS, 5),
-        GoodsSlot(GoodsType::TOOLS, 10),
-        GoodsSlot(GoodsType::WOOD, 3)
-    };
-    buildingConfigs[StructureType::SIGNALFIRE]->productionRate = 1.5;
-    buildingConfigs[StructureType::SIGNALFIRE]->inputConsumptionRate = 1.5;
-    buildingConfigs[StructureType::SIGNALFIRE]->input2ConsumptionRate = 1.5;
-
-    buildingConfigs[StructureType::HERBARY] = new BuildingConfig();
-    buildingConfigs[StructureType::HERBARY]->name = "Kräuterfeld";
-    buildingConfigs[StructureType::HERBARY]->catchmentArea = new RectangleData<char>(11, 11);
-    memcpy(buildingConfigs[StructureType::HERBARY]->catchmentArea->data, "0000111000000011111000011111111100111111111011111111111111111111111111111111101111111110011111111100001111100000001110000", 121);
-    buildingConfigs[StructureType::HERBARY]->buildingCosts = { 100, 0, 0, 0 };
-    buildingConfigs[StructureType::HERBARY]->buildingProduction = {
-        GoodsSlot(GoodsType::TOOLS, 4),
-        GoodsSlot(GoodsType::BRICKS, 4),
-        GoodsSlot()
-    };
-    buildingConfigs[StructureType::HERBARY]->productionRate = 2.4;
-    buildingConfigs[StructureType::HERBARY]->inputConsumptionRate = 3.6;
-
-    buildingConfigs[StructureType::BRICKYARD] = new BuildingConfig();
-    buildingConfigs[StructureType::BRICKYARD]->name = "Steinbruch";
-    buildingConfigs[StructureType::BRICKYARD]->catchmentArea = new RectangleData<char>(10, 6);
-    memcpy(buildingConfigs[StructureType::BRICKYARD]->catchmentArea->data, "001111110001111111101111111111111111111101111111100011111100", 60);
-    buildingConfigs[StructureType::BRICKYARD]->buildingCosts = { 100, 5, 5, 0 };
-    buildingConfigs[StructureType::BRICKYARD]->buildingProduction = {
-        GoodsSlot(GoodsType::BRICKS, 10),
+    buildingConfigs[StructureType::STONEMASON] = new BuildingConfig();
+    buildingConfigs[StructureType::STONEMASON]->name = "Steinbruch";
+    buildingConfigs[StructureType::STONEMASON]->catchmentArea = new RectangleData<char>(16, 16);
+    memcpy(buildingConfigs[StructureType::STONEMASON]->catchmentArea->data, "0000011111100000000111111111100000111111111111000111111111111110011111111111111011111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111101111111111111100111111111111110001111111111110000011111111110000000011111100000", 256);
+    buildingConfigs[StructureType::STONEMASON]->buildingCosts = { 100, 5, 5, 0 };
+    buildingConfigs[StructureType::STONEMASON]->buildingProduction = {
+        GoodsSlot(GoodsType::BRICKS, 8),
         GoodsSlot(),
         GoodsSlot()
     };
-    buildingConfigs[StructureType::BRICKYARD]->productionRate = 0.7;
-
-    buildingConfigs[StructureType::BRICKYARD2] = new BuildingConfig();
-    buildingConfigs[StructureType::BRICKYARD2]->name = "Steinbruch (gedreht)";
-    buildingConfigs[StructureType::BRICKYARD2]->catchmentArea = new RectangleData<char>(6, 10);
-    memcpy(buildingConfigs[StructureType::BRICKYARD2]->catchmentArea->data, "001100011110111111111111111111111111111111111111011110001100", 60);
-    buildingConfigs[StructureType::BRICKYARD2]->buildingCosts = { 100, 5, 5, 0 };
-    buildingConfigs[StructureType::BRICKYARD2]->buildingProduction = {
-        GoodsSlot(GoodsType::BRICKS, 10),
-        GoodsSlot(),
-        GoodsSlot()
-    };
-    buildingConfigs[StructureType::BRICKYARD2]->productionRate = 0.7;
+    buildingConfigs[StructureType::STONEMASON]->productionRate = 2.9;
 
     buildingConfigs[StructureType::OFFICE1] = new BuildingConfig();
     buildingConfigs[StructureType::OFFICE1]->name = "Kontor";
