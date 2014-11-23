@@ -1,2 +1,8 @@
-/.idea
+# CLion-Intera
+.idea
+
+# Generierte Doxygen-Doku
 /doxygen
+
+# gerenderte Zwischenbilder, die im Source-Verzeichnis liegen
+render/
