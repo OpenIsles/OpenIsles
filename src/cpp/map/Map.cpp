@@ -597,15 +597,24 @@ const Building* Map::addBuilding(int mapX, int mapY, StructureType structureType
     const BuildingConfig* buildingConfig = configMgr->getBuildingConfig(structureType);
     building->productionSlots = ProductionSlots(buildingConfig->buildingProduction);
 
-    // Objekt in die Liste aufnehmen
+    // Objekt in die Liste aufnehmen.
 	addMapObject(building);
     
     // Kontor oder Marktplatz? Einzugbereich in mapTiles aktualisieren und Lagerkapazität der Kolonie erhöhen
     if (structureType == OFFICE1 || structureType == MARKETPLACE) {
         addOfficeCatchmentAreaToMap(*building);
+    }
 
-        Colony* colony = game->getColony(building);
+    Colony* colony = game->getColony(building); // Colony kann erst gefunden werden, wenn addOfficeCatchmentAreaToMap() aufgerufen wurde
+    if (structureType == OFFICE1 || structureType == MARKETPLACE) {
         colony->increaseGoodsCapacity(10);
+    }
+
+    // Einwohner setzen
+    if (building->isHouse()) {
+        // TODO Start-Einwohnerzahl setzen
+    } else {
+        building->addInhabitants(buildingConfig->inhabitants);
     }
 
 	return building;

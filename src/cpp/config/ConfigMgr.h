@@ -100,6 +100,12 @@ struct BuildingConfig {
      */
     double input2ConsumptionRate = 0;
 
+    /**
+     * @brief gibt für Nicht-Wohngebäude an, wie viele Einwohner sich im Gebäude befinden. Jede Plantage,
+     * jeder Produktionsbetrieb, wie auch öffentliche Gebäude haben diese fixe Einwohnerzahl pro Gebäude.
+     */
+    unsigned char inhabitants = 0;
+
     
     ~BuildingConfig() {
         if (catchmentArea != nullptr) {

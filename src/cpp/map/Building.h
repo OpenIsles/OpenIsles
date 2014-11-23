@@ -55,11 +55,18 @@ public:
      */
     ProductionSlots productionSlots;
 
+    /**
+     * @brief gibt an, wie viele Einwohner sich im Gebäude befinden.
+     */
+    unsigned char inhabitants;
+
 public:
     Building() {
         carrier = nullptr;
         lastGoodsCollections = 0;
+        inhabitants = 0;
     }
+
     virtual ~Building() {
         if (carrier != nullptr) {
             delete carrier;
@@ -97,6 +104,25 @@ public:
     bool isStorageBuilding() const {
         return (structureType == MARKETPLACE || structureType == OFFICE1);
     }
+
+    /**
+    * @brief Prüft, ob das Gebäude ein Haus ist
+    * @return `true` wenn Haus, sonst `false`
+    */
+    bool isHouse() const {
+        return (structureType == PIONEERS_HOUSE1 || structureType == PIONEERS_HOUSE2 ||
+                structureType == PIONEERS_HOUSE3 || structureType == PIONEERS_HOUSE4 ||
+                structureType == PIONEERS_HOUSE5);
+    }
+
+    /**
+     * @brief Ändert die Einwohner innerhalb des Gebäudes. Positive Werte fügen Bewohner hinzu, negative nehmen
+     * welche weg.
+     *
+     * Diese Methode aktualisiert gleich die Einwohnerzahl der Kolonie. Es sollte immer diese Methode benutzt werden,
+     * um Einwohner zu ändern.
+     */
+    void addInhabitants(char amount);
 };
 
 #endif

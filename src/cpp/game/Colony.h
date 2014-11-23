@@ -17,6 +17,7 @@ private:
      */
     std::vector<GoodsSlot> goods;
 
+public:
     /**
      * @brief Einwohner der Siedlung
      */
@@ -60,14 +61,6 @@ public:
      * @param amount Anzahl, um wie viel erniedrigt werden soll
      */
     void decreaseGoodsCapacity(unsigned int amount);
-
-    /**
-     * @brief Liefert die Einwohnerzahl der Siedlung zurück
-     * @return Einwohnerzahl
-     */
-    unsigned int getPopulation() const {
-        return population;
-    }
 };
 
 #endif

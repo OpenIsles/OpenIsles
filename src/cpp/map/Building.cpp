@@ -1,4 +1,5 @@
 #include "config/ConfigMgr.h"
+#include "game/Colony.h"
 #include "game/Game.h"
 
 // Aus main.cpp importiert
@@ -44,4 +45,15 @@ bool Building::isInsideCatchmentArea(MapObject* mapObject) const {
         }
     }
     return false;
+}
+
+void Building::addInhabitants(char amount) {
+    if ((int) inhabitants + amount < 0) {
+        throw new std::runtime_error("Cannot have negative inhabitants");
+    }
+
+    inhabitants += amount;
+
+    Colony* colony = game->getColony(this);
+    colony->population += amount;
 }

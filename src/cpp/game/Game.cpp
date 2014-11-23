@@ -125,7 +125,7 @@ void Game::renderResourcesBar() {
         (OtherGraphic::COAT_OF_ARMS_POPULATION + mapTileAtCursor->player->getColorIndex()));
     populationIconGraphic->drawAt(655, 6);
 
-    outputString = toString(colony->getPopulation());
+    outputString = toString(colony->population);
     fontMgr->renderText(renderer, outputString, 690, 10,
         &colorWhite, &colorBlack, "DroidSans-Bold.ttf", 18, RENDERTEXT_HALIGN_LEFT);
 }
