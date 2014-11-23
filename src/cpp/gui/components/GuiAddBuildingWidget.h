@@ -2,15 +2,12 @@
 #define _GUI_ADD_BUILDING_WIDGET_H
 
 #include <SDL_render.h>
-#include "gui/GuiBase.h"
-
-union SDL_Event;
-class SDL_Renderer;
+#include "gui/components/GuiBase.h"
 
 
 /**
- * @brief GUI-Widget, was das Gebäude anzeigt, was aktuell platziert wird. Zusätzlich enthält es die Controls zum Drehen
- * (TODO), die Baukosten und die Infos, was es produziert.
+ * @brief GUI-Widget, was das Gebäude anzeigt, was aktuell platziert wird. Zusätzlich enthält es die Controls
+ * zum Drehen (TODO), die Baukosten und die Infos, was es produziert.
  */
 class GuiAddBuildingWidget : public GuiBase {
 

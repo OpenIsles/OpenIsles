@@ -206,7 +206,10 @@ int main(int argc, char** argv) {
     configMgr = new ConfigMgr();     // Der GraphicsMgr braucht die Dateinamen vom ConfigMgr
 	graphicsMgr = new GraphicsMgr();
     fontMgr = new FontMgr();
+
     guiMgr = new GuiMgr();
+    guiMgr->initGui();
+
     fpsCounter = new FpsCounter(500);
     
     game = new Game();

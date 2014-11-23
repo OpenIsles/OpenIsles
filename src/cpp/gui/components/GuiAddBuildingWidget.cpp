@@ -3,9 +3,9 @@
 #include "game/Colony.h"
 #include "game/Game.h"
 #include "gui/FontMgr.h"
-#include "gui/GuiAddBuildingWidget.h"
 #include "gui/GuiMgr.h"
 #include "gui/GuiUtils.h"
+#include "gui/components/GuiAddBuildingWidget.h"
 #include "utils/StringFormat.h"
 
 
@@ -22,22 +22,16 @@ extern GuiMgr* guiMgr;
 
 
 GuiAddBuildingWidget::GuiAddBuildingWidget() {
-    setCoords(8, 0, 210, 320);
+    setCoords(13, 8, 210, 320);
 
     // TODO Child-Buttons zum Drehen hinzufügen
 }
 
 void GuiAddBuildingWidget::renderElement(SDL_Renderer* renderer) {
-    PanelState panelState = guiMgr->getPanelState();
-    if (panelState.selectedPanelButton != PanelButton::ADD_BUILDING) {
-        // wenn wir nix platzieren, sollten das Widget eigentlich auch nicht sichtbar sein
-        return;
-    }
-
     int windowX, windowY;
     getWindowCoords(windowX, windowY);
 
-    StructureType structureType = panelState.addingStructure;
+    StructureType structureType = guiMgr->getPanelState().addingStructure;
     const BuildingConfig* buildingConfig = configMgr->getBuildingConfig(structureType);
 
     // Gebäudename

@@ -1,8 +1,8 @@
 #include <SDL.h>
-#include <game/Game.h>
+#include "game/Game.h"
 #include "gui/FontMgr.h"
-#include "gui/GuiColonyGoodsWidget.h"
 #include "gui/GuiUtils.h"
+#include "gui/panel-widgets/GuiColonyGoodsWidget.h"
 
 
 //static SDL_Color colorLightBrown = {223, 216, 183, 255};
@@ -16,7 +16,6 @@ extern GraphicsMgr* graphicsMgr;
 
 
 GuiColonyGoodsWidget::GuiColonyGoodsWidget() {
-    setCoords(8, 0, 210, 320);
 }
 
 void GuiColonyGoodsWidget::renderElement(SDL_Renderer* renderer) {
@@ -36,15 +35,14 @@ void GuiColonyGoodsWidget::renderElement(SDL_Renderer* renderer) {
     // Name der Siedlung
     Colony* colony = game->getColony(selectedBuilding);
 
-    // TODO sicherstellen, dass immer nur ein Widget angezeigt wird; aktuell is unten drunter noch das GuiSelectedBuildingWidget
 //    fontMgr->renderText(renderer, "Siedlungsname", windowX + width/2, windowY + 15, // TODO Siedlungsname aus Savegame laden; is da schon drin
 //        &colorLightBrown, &colorBlack, "DroidSans-Bold.ttf", 15, RENDERTEXT_HALIGN_CENTER);
 
     // Waren
-    int xStart = windowX + 9;
+    int xStart = windowX + 22;
 
     int x = xStart;
-    int y = windowY + 60;
+    int y = windowY + 68;
     for (int i = 0; i < GoodsType::MAX_GOOD; i++) {
         GoodsType goodsType = (GoodsType) i;
         GoodsSlot goods = colony->getGoods(goodsType);

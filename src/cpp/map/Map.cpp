@@ -80,6 +80,13 @@ MapObject* Map::getMapObjectAt(int mapX, int mapY) const {
     return mapTile->mapObject;
 }
 
+void Map::setSelectedMapObject(MapObject* selectedMapObject) {
+    this->selectedMapObject = selectedMapObject;
+
+    // Dem GuiMgr Bescheid geben, damit er das Panel umschaltet
+    guiMgr->onSelectedMapObjectChanged(selectedMapObject);
+}
+
 void Map::renderMinimap(SDL_Renderer* renderer) {
     // Nur die Kartenfläche vollmalen
 	SDL_Rect sdlMinimapClipRect(minimapClipRect);
@@ -746,7 +753,7 @@ void Map::onClickInMap(int mouseX, int mouseY) {
 	}
 
 	// TODO später ggf. weitere Events
-	selectedMapObject = nullptr;
+    setSelectedMapObject(nullptr);
 }
 
 void Map::onClickInMapWhileAddingStructure(int mapX, int mapY) {
@@ -835,8 +842,8 @@ void Map::deleteSelectedObject() {
 
 
     delete selectedMapObject;
-    
-    selectedMapObject = nullptr;
+
+    setSelectedMapObject(nullptr);
 }
 
 StructureType Map::getConcreteStreetStructureType(int mapX, int mapY, StructureType abstractStreetStructureType) {

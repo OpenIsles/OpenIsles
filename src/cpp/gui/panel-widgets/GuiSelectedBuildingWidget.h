@@ -2,16 +2,13 @@
 #define _GUI_SELECTED_BUILDING_WIDGET_H
 
 #include <SDL.h>
-#include "gui/GuiBase.h"
-
-union SDL_Event;
-class SDL_Renderer;
+#include "gui/panel-widgets/GuiPanelWidget.h"
 
 
 /**
  * @brief GUI-Widget mit den Informationen des aktuell ausgewählten Gebäudes.
  */
-class GuiSelectedBuildingWidget : public GuiBase {
+class GuiSelectedBuildingWidget : public GuiPanelWidget {
 
 public:
     GuiSelectedBuildingWidget();

@@ -1,7 +1,7 @@
 #ifndef _GUI_STATIC_ELEMENT_H
 #define _GUI_STATIC_ELEMENT_H
 
-#include "gui/GuiBase.h"
+#include "gui/components/GuiBase.h"
 
 union SDL_Event;
 class PlainGraphic;

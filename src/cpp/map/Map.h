@@ -213,9 +213,13 @@ public:
 		return selectedMapObject;
 	}
 
-	void setSelectedMapObject(MapObject* selectedMapObject) {
-		this->selectedMapObject = selectedMapObject;
-	}
+    /**
+     * @brief Schaltet das aktuell gewählte MapObject um.
+     * Diese Methode sagt dem GuiMgr Bescheid, damit das Panel rechts angepasst wird.
+     *
+     * @param selectedMapObject Das neue MapObject, was gewählt sein soll oder `nullptr`, um abzuwählen
+     */
+	void setSelectedMapObject(MapObject* selectedMapObject);
 
 	/**
 	 * @brief Rendert die Karte.

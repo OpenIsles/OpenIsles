@@ -2,7 +2,7 @@
 #define _GUI_BUTTON_H
 
 #include <functional>
-#include "gui/GuiStaticElement.h"
+#include "gui/components/GuiStaticElement.h"
 
 class Graphic;
 class SDL_Renderer;

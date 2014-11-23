@@ -1,5 +1,5 @@
 #include "graphics/PlainGraphic.h"
-#include "gui/GuiStaticElement.h"
+#include "gui/components/GuiStaticElement.h"
 
 
 GuiStaticElement::GuiStaticElement() {

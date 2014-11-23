@@ -1,13 +1,16 @@
 #ifndef _GUI_MGR_H
 #define _GUI_MGR_H
 
+#include <SDL.h>
 #include <map>
-#include "SDL.h"
+#include "gui/panel-widgets/GuiBuildMenuWidget.h"
 
 class GuiBase;
 class GuiButton;
 class GuiStaticElement;
 class GuiPushButton;
+class GuiPanelWidget;
+class MapObject;
 class SDL_Renderer;
 
 enum BuildingGroup : unsigned char;
@@ -48,10 +51,14 @@ enum PanelButton : unsigned char {
  */
 typedef
 struct PanelState {
+    // 4 Buttons oben /////////////////////////////////////////////////////////////////////////////
+
     /**
      * @brief ausgewählter Button (4 Buttons, die die Panels umschalten)
      */
     PanelButton selectedPanelButton;
+
+    // Panel Baumenü //////////////////////////////////////////////////////////////////////////////
 
     /**
      * @brief zuletzt/aktuell gewählte Kategorie im Baumenü
@@ -68,6 +75,14 @@ struct PanelState {
      */
     bool buildingMenuOpen;
 
+    // gezeigtes Panel ////////////////////////////////////////////////////////////////////////////
+
+    /**
+     * @brief Aktives GUI-Panel-Widget, was gerade gezeigt wird. Es kann immer nur maximal ein solches Widget
+     * sichtbar sein. Ist gar nix gezeigt, so kann hier `nullptr` gesetzt werden.
+     */
+    GuiPanelWidget* activeGuiPanelWidget;
+
 } PanelState;
 
 
@@ -75,6 +90,10 @@ struct PanelState {
  * GUI-Manager. Verwaltet alle GUI-Elemente.
  */
 class GuiMgr {
+
+    // Die Widgets dürfen den inneren Zustand des GuiMgrs manipulieren
+    friend class GuiBuildMenuWidget;
+    friend class GuiOptionsMenuWidget;
 
 private:
 	/**
@@ -96,6 +115,13 @@ private:
 public:
 	GuiMgr();
 	~GuiMgr();
+
+    /**
+     * @brief Legt alle GUI-Elemente an. Diese Methode muss direkt nach dem Konstrutor aufgerufen werden.
+     * Der Konstruktor selber kann dies nicht erledigt, da die erzeugten GUI-Komponenten auf den guiMgr zugreifen.
+     * D.h. der muss zu diesem Zeitpunkt bereits gesetzt sein.
+     */
+    void initGui();
     
     void getStartClickCoords(int& startClickX, int& startClickY) {
         startClickX = this->startClickX;
@@ -108,10 +134,16 @@ public:
 	void render(SDL_Renderer* renderer);
     
     /**
-     * Callback, der ein Event handelt
+     * @brief Callback, der ein Event handelt
      * @param event SDL-Event
      */
     void onEvent(SDL_Event& event);
+
+    /**
+     * @brief Callback, der sich drum kümmert, wenn auf der Karte ein anderes MapObject ausgewählt wurde.
+     * @param newSelectedMapObject das neu gewählte MapObject oder `nullptr`, wenn abgewählt wurde
+     */
+    void onSelectedMapObjectChanged(MapObject* newSelectedMapObject);
 
     /**
      * @brief Liefert den aktuellen Zustand des Panels zurück
@@ -123,14 +155,9 @@ public:
 
 private:
     /**
-     * @brief Initialisiert die GUI für den ersten Tab ("Gebäude bauen") im Panel. Wird vom Konstruktor aufgerufen.
+     * @brief Legt alle Panel-Widgets an
      */
-    void initGuiForPanelAddBuilding();
-
-    /**
-     * @brief Initialisiert die GUI für den dritten Tab ("Info") im Panel. Wird vom Konstruktor aufgerufen.
-     */
-    void initGuiForPanelInfo();
+    void initPanelWidgets();
 
     /**
      * @brief Registriert ein neues GUI-Element

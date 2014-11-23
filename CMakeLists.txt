@@ -58,13 +58,16 @@ set(SOURCE_FILES
     src/cpp/graphics/MapObjectGraphic.cpp
     src/cpp/graphics/PlainGraphic.cpp
     src/cpp/gui/FontMgr.cpp
-    src/cpp/gui/GuiAddBuildingWidget.cpp
-    src/cpp/gui/GuiButton.cpp
-    src/cpp/gui/GuiColonyGoodsWidget.cpp
+    src/cpp/gui/components/GuiAddBuildingWidget.cpp
+    src/cpp/gui/components/GuiButton.cpp
+    src/cpp/gui/components/GuiPushButton.cpp
+    src/cpp/gui/components/GuiStaticElement.cpp
+    src/cpp/gui/panel-widgets/GuiSelectedBuildingWidget.cpp
+    src/cpp/gui/panel-widgets/GuiBuildMenuWidget.cpp
+    src/cpp/gui/panel-widgets/GuiColonyGoodsWidget.cpp
+    src/cpp/gui/panel-widgets/GuiDummyWidget.cpp
+    src/cpp/gui/panel-widgets/GuiOptionsMenuWidget.cpp
     src/cpp/gui/GuiMgr.cpp
-    src/cpp/gui/GuiPushButton.cpp
-    src/cpp/gui/GuiSelectedBuildingWidget.cpp
-    src/cpp/gui/GuiStaticElement.cpp
     src/cpp/gui/GuiUtils.cpp
     src/cpp/map/Building.cpp
     src/cpp/map/Isle.cpp

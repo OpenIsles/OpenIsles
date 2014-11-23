@@ -2,16 +2,13 @@
 #define _GUI_COLONY_GOODS_WIDGET_H
 
 #include <SDL.h>
-#include "gui/GuiBase.h"
-
-union SDL_Event;
-class SDL_Renderer;
+#include "gui/panel-widgets/GuiPanelWidget.h"
 
 
 /**
-* @brief GUI-Widget, dass den aktuellen Lagerbestand der Siedlung anzeigt
+* @brief GUI-Panel-Widget, dass den aktuellen Lagerbestand der Siedlung anzeigt
 */
-class GuiColonyGoodsWidget : public GuiBase {
+class GuiColonyGoodsWidget : public GuiPanelWidget {
 
 public:
     GuiColonyGoodsWidget();
