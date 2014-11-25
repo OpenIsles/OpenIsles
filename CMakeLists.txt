@@ -105,3 +105,18 @@ if(DOXYGEN_FOUND)
         VERBATIM
     )
 endif(DOXYGEN_FOUND)
+
+# Tests
+enable_testing()
+
+find_package(GTest REQUIRED)
+include_directories(${GTEST_INCLUDE_DIRS})
+
+set(TEST_FILES
+    test/test.cpp
+)
+
+add_executable(OpenIsles-Tests ${TEST_FILES})
+target_link_libraries(OpenIsles-Tests ${GTEST_BOTH_LIBRARIES} pthread) # BOTH-Variable benutzen, damit wir uns an jeder Testdatei die main()-Methode sparen
+
+add_test(OpenIslesTests OpenIsles-Tests)
