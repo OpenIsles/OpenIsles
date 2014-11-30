@@ -96,11 +96,6 @@ Uint32 sdlTicks;
 extern const int windowWidth = 1024;
 extern const int windowHeight = 768;
 
-/**
- * @brief Bool-Flag, um die Mainloop zu breaken und das Spiel zu beenden
- */
-bool quitGame = false;
-
 /*********************************************************************************************************************
  * Prototypen                                                                                                        *
  *********************************************************************************************************************/
@@ -215,7 +210,7 @@ int main(int argc, char** argv) {
 	// Mainloop //////////////////////////////////////////////////////////////////////////////////////////////////////
 
     Map* map = game->getMap();
-	while (!quitGame) {
+	while (!guiMgr->hasToQuitGame()) {
 		fpsCounter->startFrame();
 
         // während eines Frames nur einmal auf die Uhr gucken, damit z.B. beim Blinkend-Zeichnen nicht ein Schnibbel

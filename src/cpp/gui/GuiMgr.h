@@ -112,6 +112,11 @@ private:
      */
     PanelState panelState;
 
+    /**
+     * Flag, was gesetzt wird, wenn die Anwendung beendet werden soll.
+     */
+    bool quitGame;
+
 public:
 	GuiMgr();
 	~GuiMgr();
@@ -151,6 +156,16 @@ public:
      */
     PanelState const& getPanelState() const {
         return panelState;
+    }
+
+    /**
+     * @brief Ermittelt, ob der Benutzer das Spiel via UI beenden will. Die Hauptschleife muss dieses Flag checken
+     * und falls gesetzt, die Anwendung beenden.
+     *
+     * @return `true`, um das Spiel zu beenden.
+     */
+    bool hasToQuitGame() const {
+        return quitGame;
     }
 
 private:

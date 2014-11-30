@@ -24,7 +24,6 @@ extern int mouseCurrentX, mouseCurrentY;
 #endif
 
 // Aus main.cpp importiert
-extern bool quitGame;
 extern ConfigMgr* configMgr;
 extern FontMgr* fontMgr;
 extern Game* game;
@@ -33,7 +32,7 @@ extern SoundMgr* soundMgr;
 extern SDL_Renderer* renderer;
 
 
-GuiMgr::GuiMgr() {
+GuiMgr::GuiMgr() : quitGame(false) {
 }
 
 GuiMgr::~GuiMgr() {
