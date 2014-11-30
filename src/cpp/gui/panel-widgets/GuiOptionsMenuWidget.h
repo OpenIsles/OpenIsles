@@ -2,6 +2,7 @@
 #define _GUI_OPTIONS_MENU_WIDGET_H
 
 #include <SDL_render.h>
+#include "gui/components/GuiPushButton.h"
 #include "gui/panel-widgets/GuiPanelWidget.h"
 
 

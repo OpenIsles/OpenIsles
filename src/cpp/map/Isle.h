@@ -1,6 +1,7 @@
 #ifndef _ISLE_H
 #define _ISLE_H
 
+#include <iostream>
 #include "map/MapObject.h"
 #include "utils/RectangleData.h"
 #include "utils/StringFormat.h"

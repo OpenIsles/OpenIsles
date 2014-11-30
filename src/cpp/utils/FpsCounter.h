@@ -1,6 +1,7 @@
 #ifndef _FPS_COUNTER_H
 #define	_FPS_COUNTER_H
 
+#include <SDL.h>
 #include <list>
 
 /**

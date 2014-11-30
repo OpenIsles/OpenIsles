@@ -3,6 +3,7 @@
 
 #include <SDL.h>
 #include <SDL_image.h>
+#include "game/Player.h"
 #include "graphics/Animation.h"
 #include "graphics/Graphic.h"
 #include "graphics/MapObjectGraphic.h"
