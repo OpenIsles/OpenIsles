@@ -2,11 +2,12 @@
 #include <iostream>
 #include "graphics/Animation.h"
 
-extern SDL_Renderer* renderer;
 
-Animation::Animation(const char* filename, unsigned char mapWidth, unsigned char mapHeight,
+Animation::Animation(SDL_Renderer* const renderer, const char* filename,
+                     unsigned char mapWidth, unsigned char mapHeight,
                      unsigned int framesCount, double fps) :
-    MapObjectGraphic(filename, mapWidth, mapHeight), framesCount(framesCount), fps(fps) {
+    MapObjectGraphic(renderer, filename, mapWidth, mapHeight), framesCount(framesCount), fps(fps)
+{
 
     // Prüfen, ob die Grafik ordentlich ist. Die Breite muss exakt ein Vielfaches der Framesanzahl sein
     if (width % framesCount != 0) {

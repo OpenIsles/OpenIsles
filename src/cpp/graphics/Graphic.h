@@ -9,6 +9,9 @@
  */
 class Graphic {
 
+protected: // Dependencies
+	SDL_Renderer* const renderer;
+
 protected:
 	/**
 	 * @brief Dateiname der Grafik (durch ConfigMgr verwaltet)
@@ -38,9 +41,10 @@ protected:
 public:
     /**
      * @brief Konstruktor. Lädt die Grafik.
+	 * @param renderer (Dependency)
      * @param filename Dateiname der zu ladenden Grafik
      */
-    Graphic(const char* filename);
+    Graphic(SDL_Renderer* const renderer, const char* filename);
 
     /**
      * @brief Destruktor. Entlädt die Grafik und gibt Speicher frei.

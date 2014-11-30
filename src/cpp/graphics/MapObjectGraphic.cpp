@@ -4,13 +4,13 @@
 #include "graphics/MapObjectGraphic.h"
 
 // Aus main.cpp importiert
-extern SDL_Renderer* renderer;
 extern Uint32 sdlTicks;
 
 
-MapObjectGraphic::MapObjectGraphic(const char* filename, unsigned char mapWidth, unsigned char mapHeight) :
-    PlainGraphic(filename), mapWidth(mapWidth), mapHeight(mapHeight) {
-
+MapObjectGraphic::MapObjectGraphic(
+    SDL_Renderer* const renderer, const char* filename, unsigned char mapWidth, unsigned char mapHeight) :
+    PlainGraphic(renderer, filename), mapWidth(mapWidth), mapHeight(mapHeight)
+{
     createMaskedTexture();
 }
 

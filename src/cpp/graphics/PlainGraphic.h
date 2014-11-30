@@ -13,9 +13,10 @@ class PlainGraphic : public Graphic {
 public:
     /**
      * @brief Konstruktor. Lädt die Grafik.
+     * @param renderer (Dependency)
      * @param filename Dateiname der zu ladenden Grafik
      */
-    PlainGraphic(const char* filename);
+    PlainGraphic(SDL_Renderer* const renderer, const char* filename);
 
     /**
      * @brief Destruktor. Entlädt die Grafik und gibt Speicher frei.

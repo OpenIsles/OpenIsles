@@ -59,11 +59,13 @@ private:
 public:
     /**
      * @brief Konstruktor. Lädt die Grafik.
+     * @param renderer (Dependency)
      * @param filename Dateiname der zu ladenden Grafik
      * @param mapWidth Breite in mapCoords
      * @param mapHeight Höhe in mapCoords
      */
-    MapObjectGraphic(const char* filename, unsigned char mapWidth, unsigned char mapHeight);
+    MapObjectGraphic(
+        SDL_Renderer* const renderer, const char* filename, unsigned char mapWidth, unsigned char mapHeight);
 
     /**
      * @brief Destruktor. Entlädt die Grafik und gibt Speicher frei.

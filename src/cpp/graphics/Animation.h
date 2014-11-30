@@ -35,13 +35,14 @@ private:
 public:
     /**
      * @brief Konstruktor für eine Animation
+     * @param renderer (Dependency)
      * @param filename Dateiname der zu ladenden Animationsgrafik
      * @param mapWidth Breite in mapCoords
      * @param mapHeight Höhe in mapCoords
      * @param framesCount Anzahl der Frames, die sich in dieser Datei befinden
      * @param fps FPS = Geschwindigkeit, wie viele Frames pro Sekunde abgespielt werden sollen
      */
-    Animation(const char* filename, unsigned char mapWidth, unsigned char mapHeight,
+    Animation(SDL_Renderer* const renderer, const char* filename, unsigned char mapWidth, unsigned char mapHeight,
               unsigned int framesCount, double fps);
 
     ~Animation() {}

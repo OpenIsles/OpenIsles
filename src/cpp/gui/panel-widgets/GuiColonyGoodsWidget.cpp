@@ -1,7 +1,10 @@
 #include <SDL.h>
+#include "config/ConfigMgr.h"
+#include "game/Colony.h"
 #include "game/Game.h"
+#include "graphics/GraphicsMgr.h"
 #include "gui/FontMgr.h"
-#include "gui/GuiUtils.h"
+#include "gui/GuiMgr.h"
 #include "gui/panel-widgets/GuiColonyGoodsWidget.h"
 
 
@@ -13,6 +16,7 @@ extern ConfigMgr* configMgr;
 extern FontMgr* fontMgr;
 extern Game* game;
 extern GraphicsMgr* graphicsMgr;
+extern GuiMgr* guiMgr;
 
 
 GuiColonyGoodsWidget::GuiColonyGoodsWidget() {
@@ -50,7 +54,7 @@ void GuiColonyGoodsWidget::renderElement(SDL_Renderer* renderer) {
         int inventory = (int) floor(goods.inventory);
         int capacity = (int) floor(goods.capacity);
 
-        GuiUtils::drawGoodsBox(x, y, goodsType, inventory, capacity);
+        guiMgr->drawGoodsBox(x, y, goodsType, inventory, capacity);
 
         if (i % 4 == 3) {
             x = xStart;

@@ -225,13 +225,13 @@ public:
 	 * @brief Rendert die Karte.
 	 * @param renderer SDL-Renderer, auf den gezeichnet wird
 	 */
-	void renderMap(SDL_Renderer* renderer);
+	void renderMap(SDL_Renderer* const renderer);
     
     /**
 	 * @brief Rendert die Minimap
 	 * @param renderer SDL-Renderer, auf den gezeichnet wird
 	 */
-    void renderMinimap(SDL_Renderer* renderer);
+    void renderMinimap(SDL_Renderer* const renderer);
 
 	/**
 	 * @brief Scrollt die Karte
@@ -342,11 +342,11 @@ private:
     unsigned char isAllowedToPlaceStructure(int mapX, int mapY, StructureType structureType);
     
     /**
-     * Zeichnet den Einzugsbereich eines Gebäudes. Hilfsmethode von renderMap().
-     *
+     * @brief Zeichnet den Einzugsbereich eines Gebäudes. Hilfsmethode von renderMap().
+     * @param renderer (Dependency)
      * @param structure Struktur
      */
-    void drawCatchmentArea(Structure* structure);
+    void drawCatchmentArea(SDL_Renderer* const renderer, Structure* structure);
     
     /**
 	 * @brief interner Klickhandler, wenn in die Karte geklickt wurde. Diese Methode wird garantiert nur aufgerufen,

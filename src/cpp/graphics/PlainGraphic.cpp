@@ -1,11 +1,7 @@
-#include <stdexcept>
-#include <iostream>
 #include "graphics/PlainGraphic.h"
 
-extern SDL_Renderer* renderer;
 
-
-PlainGraphic::PlainGraphic(const char* filename) : Graphic(filename) {
+PlainGraphic::PlainGraphic(SDL_Renderer* const renderer, const char* filename) : Graphic(renderer, filename) {
 }
 
 PlainGraphic::~PlainGraphic() {

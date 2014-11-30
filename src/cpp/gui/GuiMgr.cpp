@@ -29,10 +29,12 @@ extern FontMgr* fontMgr;
 extern Game* game;
 extern GraphicsMgr* graphicsMgr;
 extern SoundMgr* soundMgr;
-extern SDL_Renderer* renderer;
 
 
-GuiMgr::GuiMgr() : quitGame(false) {
+GuiMgr::GuiMgr(SDL_Renderer* renderer) :
+    renderer(renderer),
+    quitGame(false)
+{
 }
 
 GuiMgr::~GuiMgr() {
@@ -44,9 +46,6 @@ GuiMgr::~GuiMgr() {
     for (int i = 0; i < 4; i++) {
         delete ((GuiPushButton*) findElement(GUI_ID_PANEL_SWITCH_PUSH_BUTTON_BASE + i))->getGraphic();
         delete ((GuiPushButton*) findElement(GUI_ID_PANEL_SWITCH_PUSH_BUTTON_BASE + i))->getGraphicPressed();
-
-        delete ((GuiPushButton*) findElement(GUI_ID_ADD_BUILDING_PUSH_BUTTON_BASE + i))->getGraphic();
-        delete ((GuiPushButton*) findElement(GUI_ID_ADD_BUILDING_PUSH_BUTTON_BASE + i))->getGraphicPressed();
     }
 
     // GUI-Elemente wegräumen
@@ -63,14 +62,14 @@ void GuiMgr::initGui() {
     //////////////////////////////////////////////////////////////////////////////////////////
 
     // Panel
-    PlainGraphic* graphic = new PlainGraphic("data/img/gui/panel.png");
+    PlainGraphic* graphic = new PlainGraphic(renderer, "data/img/gui/panel.png");
     GuiStaticElement* panel = new GuiStaticElement();
     panel->setCoords(768, 0, graphic->getWidth(), graphic->getHeight());
     panel->setGraphic(graphic);
     registerElement(GUI_ID_PANEL, panel);
 
     // Statusleiste
-    graphic = new PlainGraphic("data/img/gui/statusbar.png");
+    graphic = new PlainGraphic(renderer, "data/img/gui/statusbar.png");
     GuiStaticElement* statusBar = new GuiStaticElement();
     statusBar->setCoords(0, 734, graphic->getWidth(), graphic->getHeight());
     statusBar->setGraphic(graphic);
@@ -113,8 +112,8 @@ void GuiMgr::initGui() {
     for (int i = 0; i < 4; i++) {
         // Button
         GuiPushButton* panelSwitchPushButton = new GuiPushButton();
-        panelSwitchPushButton->setGraphic(new PlainGraphic(tabGraphics[i]->graphicFilename));
-        panelSwitchPushButton->setGraphicPressed(new PlainGraphic(tabGraphics[i]->graphicPressedFilename));
+        panelSwitchPushButton->setGraphic(new PlainGraphic(renderer, tabGraphics[i]->graphicFilename));
+        panelSwitchPushButton->setGraphicPressed(new PlainGraphic(renderer, tabGraphics[i]->graphicPressedFilename));
         panelSwitchPushButton->setCoords(22 + i*55, 235, 48, 64);
         panelSwitchPushButton->setOnClickFunction([this, i]() {
             panelState.selectedPanelButton = tabGraphics[i]->panelButtonToActive;
@@ -505,4 +504,33 @@ void GuiMgr::renderResourcesBar() {
     outputString = toString(colony->population);
     fontMgr->renderText(renderer, outputString, 690, 10,
         &colorWhite, &colorBlack, "DroidSans-Bold.ttf", 18, RENDERTEXT_HALIGN_LEFT);
+}
+
+void GuiMgr::drawGoodsBox(int x, int y, GoodsType goodsType, double inventory, double capacity) {
+    graphicsMgr->getGraphicForGoodsMarketplaceIcon(goodsType)->drawAt(x, y);
+
+    if (inventory != -1) {
+        // Balken anzeigen
+        if (capacity != -1) {
+            int barHeight = (int) (inventory / capacity * 42);
+
+            SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+            SDL_Rect rect = { x + 38, y + (42 - barHeight), 4, barHeight };
+            SDL_RenderFillRect(renderer, &rect);
+        }
+            // Bestand anzeigen
+        else {
+            char inventoryOutput[10];
+            sprintf(inventoryOutput, "%.0ft", floor(inventory));
+            fontMgr->renderText(renderer, inventoryOutput, x + 40, y + 42, &colorWhite, &colorBlack,
+                "DroidSans.ttf", 12, RENDERTEXT_HALIGN_RIGHT | RENDERTEXT_VALIGN_BOTTOM);
+        }
+
+#ifdef DEBUG_ECONOMICS
+        char inventoryOutput[10];
+        sprintf(inventoryOutput, "%.4ft", inventory);
+        fontMgr->renderText(renderer, inventoryOutput, x + 40, y + 55, &colorWhite, &colorBlack,
+            "DroidSans.ttf", 12, RENDERTEXT_HALIGN_RIGHT | RENDERTEXT_VALIGN_BOTTOM);
+#endif
+    }
 }

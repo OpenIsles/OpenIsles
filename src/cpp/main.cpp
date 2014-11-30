@@ -29,11 +29,6 @@ static SDL_Color colorWhite = {255, 255, 255, 255};
  *********************************************************************************************************************/
 
 /**
- * @brief SDL-Renderer
- */
-SDL_Renderer* renderer;
-
-/**
  * @brief Grafik-Manager
  */
 GraphicsMgr* graphicsMgr;
@@ -170,7 +165,7 @@ int main(int argc, char** argv) {
 	SDL_SetWindowIcon(window, surfaceAppIcon);
 	SDL_FreeSurface(surfaceAppIcon);
 
-	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_TARGETTEXTURE);
+    SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_TARGETTEXTURE);
 	if (renderer == nullptr) {
 		std::cerr << "SDL could not create renderer: " << SDL_GetError() << std::endl;
 		SDL_DestroyWindow(window);
@@ -196,10 +191,10 @@ int main(int argc, char** argv) {
 
 	soundMgr = new SoundMgr();
     configMgr = new ConfigMgr();     // Der GraphicsMgr braucht die Dateinamen vom ConfigMgr
-	graphicsMgr = new GraphicsMgr();
+	graphicsMgr = new GraphicsMgr(renderer);
     fontMgr = new FontMgr();
 
-    guiMgr = new GuiMgr();
+    guiMgr = new GuiMgr(renderer);
     guiMgr->initGui();
 
     fpsCounter = new FpsCounter(500);

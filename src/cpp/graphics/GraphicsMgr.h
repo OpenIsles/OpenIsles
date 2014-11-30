@@ -42,6 +42,16 @@ enum OtherGraphic {
     ADD_BUILDING_STONEMASON,
     ADD_BUILDING_DUMMY,
 
+    // Grafiken für die Gruppen vom "Gebäude bauen"-Menü
+    ADD_BUILDING_GROUP_CRAFTSMAN,
+    ADD_BUILDING_GROUP_CRAFTSMAN_PRESSED,
+    ADD_BUILDING_GROUP_FARM,
+    ADD_BUILDING_GROUP_FARM_PRESSED,
+    ADD_BUILDING_GROUP_PORT,
+    ADD_BUILDING_GROUP_PORT_PRESSED,
+    ADD_BUILDING_GROUP_PUBLIC,
+    ADD_BUILDING_GROUP_PUBLIC_PRESSED,
+
     // Plus-Zeichen und Pfeil für Produktion eines Gebäudes
     PRODUCTION_ARROW,
     PRODUCTION_PLUS,
@@ -52,6 +62,10 @@ enum OtherGraphic {
     COAT_OF_ARMS_POPULATION_BLUE = COAT_OF_ARMS_POPULATION + PLAYER_BLUE,
     COAT_OF_ARMS_POPULATION_YELLOW = COAT_OF_ARMS_POPULATION + PLAYER_YELLOW,
     COAT_OF_ARMS_POPULATION_WHITE = COAT_OF_ARMS_POPULATION + PLAYER_WHITE,
+
+    // Optionen-Panel
+    MUSIC,
+    MUSIC_PRESSED,
             
     MAX_GRAPHIC // Marker, wie viele Grafiken es gibt
 } OtherGraphic;
@@ -102,6 +116,9 @@ public:
     static const int ELEVATION_HEIGHT = 32;
 
 private:
+    // Dependencies
+    SDL_Renderer* const renderer;
+
 	/**
 	 * @brief Array von Zeigern auf die Tile-Grafiken
 	 */
@@ -135,8 +152,9 @@ private:
 public:
     /**
      * @brief Lädt alle Grafiken für das Spiel
+     * @param renderer (Dependency)
      */
-	GraphicsMgr();
+	GraphicsMgr(SDL_Renderer* const renderer);
 
     /**
      * @brief Entlädt die Grafiken und gibt den Speicher wieder frei
@@ -181,7 +199,7 @@ public:
     
     /**
      * @brief Liefert eine sonstige Grafik zurück
-     * @param otherGraphic welche Grafik
+     * @param otherGraphic welche Grafikb
      * @return PlainGraphic
      */
     PlainGraphic* const getOtherGraphic(OtherGraphic otherGraphic) const {
@@ -195,6 +213,14 @@ public:
      */
     Animation* const getAnimation(AnimationType animationType) const {
         return animations[animationType];
+    }
+
+    /**
+     * @brief Liefert den Renderer zurück.
+     * @return SDL-Renderer
+     */
+    SDL_Renderer* const getRenderer() const {
+        return renderer;
     }
 
 private:

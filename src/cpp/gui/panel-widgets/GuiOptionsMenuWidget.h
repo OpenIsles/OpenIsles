@@ -11,18 +11,9 @@
 */
 class GuiOptionsMenuWidget : public GuiPanelWidget {
 
-private:
-    /**
-     * @brief Button
-     *
-     * TODO wieder wegräumen, wenn die Grafik des Buttons über den GraphicsMgr verwaltet wird. Dann brauchen
-     * wir keine Referenz mehr
-     */
-    GuiPushButton* musicPushButton;
-
 public:
     GuiOptionsMenuWidget();
-    virtual ~GuiOptionsMenuWidget();
+    virtual ~GuiOptionsMenuWidget() {}
 
     /**
     * @brief Zeichnet das Element (ohne Kinder)

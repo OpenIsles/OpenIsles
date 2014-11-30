@@ -3,11 +3,8 @@
 #include "graphics/Graphic.h"
 #include "utils/StringFormat.h"
 
-extern SDL_Renderer* renderer;
 
-Graphic::Graphic(const char* filename) {
-	this->filename = filename;
-
+Graphic::Graphic(SDL_Renderer* const renderer, const char* filename) : renderer(renderer), filename(filename) {
 	SDL_Surface* surface = IMG_Load(filename);
 	if (surface == nullptr) {
 		std::cerr << "Could not load graphic '" << filename << "': " << IMG_GetError() << std::endl;

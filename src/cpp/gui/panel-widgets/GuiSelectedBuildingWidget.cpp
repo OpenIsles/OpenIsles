@@ -2,7 +2,6 @@
 #include "game/Game.h"
 #include "gui/FontMgr.h"
 #include "gui/GuiMgr.h"
-#include "gui/GuiUtils.h"
 #include "gui/panel-widgets/GuiSelectedBuildingWidget.h"
 
 
@@ -55,28 +54,28 @@ void GuiSelectedBuildingWidget::renderElement(SDL_Renderer* renderer) {
     if (productionSlots->input2.isUsed()) {
         // input + input2 -> output
 
-        GuiUtils::drawGoodsBox(windowX + 42, productionY,
+        guiMgr->drawGoodsBox(windowX + 42, productionY,
             productionSlots->input.goodsType, productionSlots->input.inventory, -1);
         graphicsMgr->getOtherGraphic(OtherGraphic::PRODUCTION_PLUS)->drawAt(windowX + 88, productionY);
-        GuiUtils::drawGoodsBox(windowX + 103, productionY,
+        guiMgr->drawGoodsBox(windowX + 103, productionY,
             productionSlots->input2.goodsType, productionSlots->input2.inventory, -1);
         graphicsMgr->getOtherGraphic(OtherGraphic::PRODUCTION_ARROW)->drawAt(windowX + 149, productionY);
-        GuiUtils::drawGoodsBox(windowX + 163, productionY,
+        guiMgr->drawGoodsBox(windowX + 163, productionY,
             productionSlots->output.goodsType, productionSlots->output.inventory, -1);
     }
     else if (productionSlots->input.isUsed()) {
         // input -> output
 
-        GuiUtils::drawGoodsBox(windowX + 73, productionY,
+        guiMgr->drawGoodsBox(windowX + 73, productionY,
             productionSlots->input.goodsType, productionSlots->input.inventory, -1);
         graphicsMgr->getOtherGraphic(OtherGraphic::PRODUCTION_ARROW)->drawAt(windowX + 119, productionY);
-        GuiUtils::drawGoodsBox(windowX + 133, productionY,
+        guiMgr->drawGoodsBox(windowX + 133, productionY,
             productionSlots->output.goodsType, productionSlots->output.inventory, -1);
     }
     else if (productionSlots->output.isUsed()) {
         // output
 
-        GuiUtils::drawGoodsBox(windowX + 103, productionY,
+        guiMgr->drawGoodsBox(windowX + 103, productionY,
             productionSlots->output.goodsType, productionSlots->output.inventory, -1);
     }
 

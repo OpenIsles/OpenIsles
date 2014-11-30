@@ -68,7 +68,6 @@ set(SOURCE_FILES
     src/cpp/gui/panel-widgets/GuiDummyWidget.cpp
     src/cpp/gui/panel-widgets/GuiOptionsMenuWidget.cpp
     src/cpp/gui/GuiMgr.cpp
-    src/cpp/gui/GuiUtils.cpp
     src/cpp/map/Building.cpp
     src/cpp/map/Isle.cpp
     src/cpp/map/Map.cpp

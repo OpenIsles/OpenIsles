@@ -17,7 +17,6 @@ extern ConfigMgr* configMgr;
 extern Game* game;
 extern GraphicsMgr* graphicsMgr;
 extern GuiMgr* guiMgr;
-extern SDL_Renderer* renderer;
 extern int mouseCurrentX, mouseCurrentY;
 extern const int windowWidth;
 extern const int windowHeight;
@@ -161,6 +160,7 @@ void Map::updateMinimapTexture() {
     }
     
     // Daten zur Texture umwandeln
+    SDL_Renderer* const renderer = graphicsMgr->getRenderer();
     SDL_Surface* surface = SDL_CreateRGBSurfaceFrom(
             pixelData, minimapClipRect.w, minimapClipRect.h, 32, minimapClipRect.w * 4, 0, 0, 0, 0);
     minimapTexture = SDL_CreateTextureFromSurface(renderer, surface);
@@ -382,7 +382,7 @@ void Map::renderMap(SDL_Renderer* renderer) {
     // structureBeingAdded gesetzt?
     if (structureBeingAdded != nullptr) {
         // Einzugsbereich jetzt malen, damit er oben drauf is
-        drawCatchmentArea(structureBeingAdded);
+        drawCatchmentArea(renderer, structureBeingAdded);
         delete structureBeingAdded;
     }
 
@@ -491,7 +491,7 @@ unsigned char Map::isAllowedToPlaceStructure(int mapX, int mapY, StructureType s
     return result;
 }
 
-void Map::drawCatchmentArea(Structure* structure) {
+void Map::drawCatchmentArea(SDL_Renderer* const renderer, Structure* structure) {
     SDL_SetRenderDrawColor(renderer, 0xc8, 0xaf, 0x37, 255);
 
     const BuildingConfig* buildingConfig = configMgr->getBuildingConfig(structure->getStructureType());
@@ -646,7 +646,7 @@ void Map::addOfficeCatchmentAreaToMap(const Building& building) {
             mapTile->player = building.getPlayer();
         }
     }
-    
+
     updateMinimapTexture();
 }
 

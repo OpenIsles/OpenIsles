@@ -13,9 +13,9 @@ extern SoundMgr* soundMgr;
 
 
 GuiOptionsMenuWidget::GuiOptionsMenuWidget() {
-    musicPushButton = new GuiPushButton();
-    musicPushButton->setGraphic(new PlainGraphic("data/img/gui/button-music.png"));
-    musicPushButton->setGraphicPressed(new PlainGraphic("data/img/gui/button-music-pressed.png"));
+    GuiPushButton* musicPushButton = new GuiPushButton();
+    musicPushButton->setGraphic(graphicsMgr->getOtherGraphic(OtherGraphic::MUSIC));
+    musicPushButton->setGraphicPressed(graphicsMgr->getOtherGraphic(OtherGraphic::MUSIC_PRESSED));
     musicPushButton->setCoords(7, 378, 64, 64);
     musicPushButton->setOnClickFunction([this]() {
         bool musicEnabled = ((GuiPushButton*) guiMgr->findElement(GUI_ID_MUSIC_PUSH_BUTTON))->isActive();
@@ -28,10 +28,4 @@ GuiOptionsMenuWidget::GuiOptionsMenuWidget() {
     });
     guiMgr->registerElement(GUI_ID_MUSIC_PUSH_BUTTON, musicPushButton);
     addChildElement(musicPushButton);
-}
-
-GuiOptionsMenuWidget::~GuiOptionsMenuWidget() {
-    // TODO Die Grafiken könnte man alle schön in den GraphicsMgr packen, dann muss man hier den Aufwand nicht betreiben
-    delete musicPushButton->getGraphic();
-    delete musicPushButton->getGraphicPressed();
 }

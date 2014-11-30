@@ -18,8 +18,8 @@ GuiBuildMenuWidget::GuiBuildMenuWidget() {
     static struct {
         BuildingGroup buildingGroup;
         const char* name;
-        const char* graphicFilename;
-        const char* graphicPressedFilename;
+        OtherGraphic graphic;
+        OtherGraphic graphicPressed;
 
         struct {
             StructureType structureType;
@@ -31,8 +31,8 @@ GuiBuildMenuWidget::GuiBuildMenuWidget() {
         {
             BuildingGroup::CRAFTSMAN,
             "Handwerksbetriebe",
-            "data/img/gui/button-add-building-craftsman.png",
-            "data/img/gui/button-add-building-craftsman-pressed.png", {
+            OtherGraphic::ADD_BUILDING_GROUP_CRAFTSMAN,
+            OtherGraphic::ADD_BUILDING_GROUP_CRAFTSMAN_PRESSED, {
             { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
             { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
             { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
@@ -69,8 +69,8 @@ GuiBuildMenuWidget::GuiBuildMenuWidget() {
         }, {
             BuildingGroup::FARM,
             "Farmen & Plantagen",
-            "data/img/gui/button-add-building-farm.png",
-            "data/img/gui/button-add-building-farm-pressed.png", {
+            OtherGraphic::ADD_BUILDING_GROUP_FARM,
+            OtherGraphic::ADD_BUILDING_GROUP_FARM_PRESSED, {
                 { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
                 { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
                 { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
@@ -103,8 +103,8 @@ GuiBuildMenuWidget::GuiBuildMenuWidget() {
         }, {
             BuildingGroup::PORT,
             "Hafenanlagen",
-            "data/img/gui/button-add-building-port.png",
-            "data/img/gui/button-add-building-port-pressed.png", {
+            OtherGraphic::ADD_BUILDING_GROUP_PORT,
+            OtherGraphic::ADD_BUILDING_GROUP_PORT_PRESSED, {
                 { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
                 { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
                 { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
@@ -129,8 +129,8 @@ GuiBuildMenuWidget::GuiBuildMenuWidget() {
         }, {
             BuildingGroup::PUBLIC,
             "Öffentliche Gebäude",
-            "data/img/gui/button-add-building-public.png",
-            "data/img/gui/button-add-building-public-pressed.png", {
+            OtherGraphic::ADD_BUILDING_GROUP_PUBLIC,
+            OtherGraphic::ADD_BUILDING_GROUP_PUBLIC_PRESSED, {
                 { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
                 { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
                 { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
@@ -202,8 +202,8 @@ GuiBuildMenuWidget::GuiBuildMenuWidget() {
 
         // Button für die Gruppe
         GuiPushButton* addBuildingPushButton = new GuiPushButton();
-        addBuildingPushButton->setGraphic(new PlainGraphic(buildingGroups[groupIndex].graphicFilename));
-        addBuildingPushButton->setGraphicPressed(new PlainGraphic(buildingGroups[groupIndex].graphicPressedFilename));
+        addBuildingPushButton->setGraphic(graphicsMgr->getOtherGraphic(buildingGroups[groupIndex].graphic));
+        addBuildingPushButton->setGraphicPressed(graphicsMgr->getOtherGraphic(buildingGroups[groupIndex].graphicPressed));
         addBuildingPushButton->setCoords(12 + groupIndex * 55, 378, 52, 64);
         addBuildingPushButton->setOnClickFunction([ this, groupIndex ]() {
             // Wenn man die Gruppe nochmal klickt, die bereits ausgewählt ist und das ausgewählte Gebäude nicht
