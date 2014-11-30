@@ -38,11 +38,6 @@ GraphicsMgr* graphicsMgr;
  */
 int mouseCurrentX, mouseCurrentY;
 
-/**
- * @brief FPS-Counter
- */
-FpsCounter* fpsCounter;
-
 #ifdef DEBUG
 /**
  * @brief Zeichenketten-Puffer für 7 Zeilen Debug-Ausgabe
@@ -197,7 +192,7 @@ int main(int argc, char** argv) {
     guiMgr = new GuiMgr(renderer);
     guiMgr->initGui();
 
-    fpsCounter = new FpsCounter(500);
+    FpsCounter* fpsCounter = new FpsCounter(500);
     
     game = new Game();
     GameIO::loadGameFromTMX("data/map/empty-map.tmx");
