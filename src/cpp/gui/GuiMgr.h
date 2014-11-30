@@ -178,6 +178,11 @@ private:
      * Variablen #panelState.
      */
     void updateGuiFromPanelState();
+
+    /**
+     * @brief rendert die Leiste mit den Resourcen, wenn notwendig
+     */
+    void renderResourcesBar();
 };
 
 #endif

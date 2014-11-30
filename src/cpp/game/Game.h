@@ -112,12 +112,6 @@ public:
      * @return Colony oder nullptr, wenn keine Siedlung da ist
      */
     Colony* getColony(const MapObject* mapObject);
-    
-    /**
-     * @brief rendert die Leiste mit den Resourcen, wenn notwendig
-     */
-    void renderResourcesBar();
-
 
     /**
      * @brief Liefert die Spielgeschwindigkeit zurück.

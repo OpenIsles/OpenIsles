@@ -1,4 +1,7 @@
+#include "config/ConfigMgr.h"
+#include "game/Colony.h"
 #include "game/Game.h"
+#include "gui/FontMgr.h"
 #include "gui/GuiMgr.h"
 #include "gui/components/GuiAddBuildingWidget.h"
 #include "gui/components/GuiButton.h"
@@ -11,6 +14,9 @@
 #include "gui/Identifiers.h"
 #include "sound/SoundMgr.h"
 
+static SDL_Color colorWhite = {255, 255, 255, 255};
+static SDL_Color colorBlack = {0, 0, 0, 255};
+
 #ifdef DEBUG_A_STAR
 #include "pathfinding/AStar.h"
 
@@ -19,9 +25,12 @@ extern int mouseCurrentX, mouseCurrentY;
 
 // Aus main.cpp importiert
 extern bool quitGame;
+extern ConfigMgr* configMgr;
+extern FontMgr* fontMgr;
 extern Game* game;
 extern GraphicsMgr* graphicsMgr;
 extern SoundMgr* soundMgr;
+extern SDL_Renderer* renderer;
 
 
 GuiMgr::GuiMgr() {
@@ -184,6 +193,7 @@ GuiBase* GuiMgr::findElement(int identifier) {
 }
 
 void GuiMgr::render(SDL_Renderer* renderer) {
+    // Alle GUI-Elemente rendern
     for (auto iter = identifierMap.cbegin(); iter != identifierMap.cend(); iter++) {
 		GuiBase* guiElement = iter->second;
         
@@ -194,6 +204,9 @@ void GuiMgr::render(SDL_Renderer* renderer) {
         
         guiElement->render(renderer);
     }
+
+    // Zum Schluss die Resourcen-Leiste oben an die Karte ran
+    renderResourcesBar();
 }
 
 void GuiMgr::onEvent(SDL_Event& event) {
@@ -428,4 +441,69 @@ void GuiMgr::updateGuiFromPanelState() {
         ((GuiPushButton*) findElement(GUI_ID_ADD_BUILDING_PUSH_BUTTON_BASE + i))->setActive(active);
         findElement(GUI_ID_ADD_BUILDING_GRID_BASE + i)->setVisible(active && panelState.buildingMenuOpen);
     }
+}
+
+void GuiMgr::renderResourcesBar() {
+    Player* currentPlayer = game->getCurrentPlayer();
+    const BuildingCosts* buildingCosts = (panelState.selectedPanelButton == PanelButton::ADD_BUILDING) ?
+        configMgr->getBuildingConfig(panelState.addingStructure)->getBuildingCosts() : nullptr;
+
+    // Münzenguthaben
+    graphicsMgr->getOtherGraphic(OtherGraphic::COINS)->drawAt(15, 8);
+
+    std::string outputString = toString(currentPlayer->coins);
+    if (buildingCosts != nullptr) {
+        outputString += " (";
+        outputString += toString(buildingCosts->coins);
+        outputString += ")";
+    }
+    fontMgr->renderText(renderer, outputString, 42, 10,
+        &colorWhite, &colorBlack, "DroidSans-Bold.ttf", 18, RENDERTEXT_HALIGN_LEFT);
+
+    // Siedlung, wo der Cursor grade is
+    int mouseCurrentMapX, mouseCurrentMapY;
+    MapCoordUtils::getMapCoordsUnderMouse(mouseCurrentMapX, mouseCurrentMapY);
+
+    MapTile* mapTileAtCursor = game->getMap()->getMapTileAt(mouseCurrentMapX, mouseCurrentMapY);
+    if (mapTileAtCursor == nullptr) {
+        return;
+    }
+
+    Colony* colony = game->getColony(mapTileAtCursor->player, mapTileAtCursor->isle);
+    if (colony == nullptr) {
+        return;
+    }
+
+    // Waren (nur für den eigenen Spieler)
+    if (mapTileAtCursor->player == currentPlayer) {
+        GoodsType goodsToDraw[] = { GoodsType::TOOLS, GoodsType::WOOD, GoodsType::BRICKS };
+        int x = 290;
+        for (unsigned int i = 0; i < sizeof(goodsToDraw); i++, x += 110) {
+            GoodsType goodsType = goodsToDraw[i];
+            graphicsMgr->getGraphicForGoodsIcon(goodsType)->drawAt(x, 5);
+
+            int goodsInventory = (int) colony->getGoods(goodsType).inventory;
+            outputString = toString(goodsInventory);
+            if (buildingCosts != nullptr) {
+                outputString += " (";
+                outputString += toString(
+                    (goodsType == GoodsType::TOOLS) ? buildingCosts->tools :
+                        (goodsType == GoodsType::WOOD) ? buildingCosts->wood :
+                            (goodsType == GoodsType::BRICKS) ? buildingCosts->bricks : 0);
+                outputString += ")";
+            }
+
+            fontMgr->renderText(renderer, outputString, x + 35, 10,
+                &colorWhite, &colorBlack, "DroidSans-Bold.ttf", 18, RENDERTEXT_HALIGN_LEFT);
+        }
+    }
+
+    // Einwohnerzahl (immer anzeigen)
+    PlainGraphic* populationIconGraphic = graphicsMgr->getOtherGraphic((OtherGraphic)
+        (OtherGraphic::COAT_OF_ARMS_POPULATION + mapTileAtCursor->player->getColorIndex()));
+    populationIconGraphic->drawAt(655, 6);
+
+    outputString = toString(colony->population);
+    fontMgr->renderText(renderer, outputString, 690, 10,
+        &colorWhite, &colorBlack, "DroidSans-Bold.ttf", 18, RENDERTEXT_HALIGN_LEFT);
 }

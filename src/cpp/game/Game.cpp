@@ -5,16 +5,12 @@
 #include "gui/GuiMgr.h"
 #include "utils/StringFormat.h"
 
-static SDL_Color colorWhite = {255, 255, 255, 255};
-static SDL_Color colorBlack = {0, 0, 0, 255};
-
 // Aus main.cpp importiert
 extern ConfigMgr* configMgr;
 extern FontMgr* fontMgr;
 extern Game* game;
 extern GraphicsMgr* graphicsMgr;
 extern GuiMgr* guiMgr;
-extern SDL_Renderer* renderer;
 
 
 Game::Game() {
@@ -61,71 +57,4 @@ Colony* Game::getColony(const MapObject* mapObject) {
     MapTile* mapTile = map->getMapTileAt(mapX, mapY);
 
     return getColony(mapTile->player, mapTile->isle);
-}
-
-void Game::renderResourcesBar() {
-    Player* currentPlayer = game->getCurrentPlayer();
-    PanelState panelState = guiMgr->getPanelState();
-    const BuildingCosts* buildingCosts = (panelState.selectedPanelButton == PanelButton::ADD_BUILDING) ?
-        configMgr->getBuildingConfig(panelState.addingStructure)->getBuildingCosts() : nullptr;
-    
-    // Münzenguthaben
-    graphicsMgr->getOtherGraphic(OtherGraphic::COINS)->drawAt(15, 8);
-    
-    std::string outputString = toString(currentPlayer->coins);
-    if (buildingCosts != nullptr) {
-        outputString += " ("; 
-        outputString += toString(buildingCosts->coins);
-        outputString += ")";
-    }
-    fontMgr->renderText(renderer, outputString, 42, 10,
-                        &colorWhite, &colorBlack, "DroidSans-Bold.ttf", 18, RENDERTEXT_HALIGN_LEFT);
-    
-    // Siedlung, wo der Cursor grade is
-    int mouseCurrentMapX, mouseCurrentMapY;
-    MapCoordUtils::getMapCoordsUnderMouse(mouseCurrentMapX, mouseCurrentMapY);
-
-    MapTile* mapTileAtCursor = map->getMapTileAt(mouseCurrentMapX, mouseCurrentMapY);
-    if (mapTileAtCursor == nullptr) {
-        return;
-    }
-    
-    auto iter = colonies.find(std::pair<Player*, Isle*>(mapTileAtCursor->player, mapTileAtCursor->isle));
-    if (iter == colonies.end()) {
-        return;
-    }
-    Colony* colony = iter->second;
-
-    // Waren (nur für den eigenen Spieler)
-    if (mapTileAtCursor->player == currentPlayer) {
-        GoodsType goodsToDraw[] = { GoodsType::TOOLS, GoodsType::WOOD, GoodsType::BRICKS };
-        int x = 290;
-        for (unsigned int i = 0; i < sizeof(goodsToDraw); i++, x += 110) {
-            GoodsType goodsType = goodsToDraw[i];
-            graphicsMgr->getGraphicForGoodsIcon(goodsType)->drawAt(x, 5);
-
-            int goodsInventory = (int) colony->getGoods(goodsType).inventory;
-            outputString = toString(goodsInventory);
-            if (buildingCosts != nullptr) {
-                outputString += " (";
-                outputString += toString(
-                    (goodsType == GoodsType::TOOLS) ? buildingCosts->tools :
-                        (goodsType == GoodsType::WOOD) ? buildingCosts->wood :
-                            (goodsType == GoodsType::BRICKS) ? buildingCosts->bricks : 0);
-                outputString += ")";
-            }
-
-            fontMgr->renderText(renderer, outputString, x + 35, 10,
-                &colorWhite, &colorBlack, "DroidSans-Bold.ttf", 18, RENDERTEXT_HALIGN_LEFT);
-        }
-    }
-
-    // Einwohnerzahl (immer anzeigen)
-    PlainGraphic* populationIconGraphic = graphicsMgr->getOtherGraphic((OtherGraphic)
-        (OtherGraphic::COAT_OF_ARMS_POPULATION + mapTileAtCursor->player->getColorIndex()));
-    populationIconGraphic->drawAt(655, 6);
-
-    outputString = toString(colony->population);
-    fontMgr->renderText(renderer, outputString, 690, 10,
-        &colorWhite, &colorBlack, "DroidSans-Bold.ttf", 18, RENDERTEXT_HALIGN_LEFT);
 }

@@ -117,9 +117,6 @@ void drawFrame(SDL_Renderer* renderer) {
 
 	// Karte rendern
     map->renderMap(renderer);
-    
-    // Resourcen oben an die Karte ran
-    game->renderResourcesBar();
 
 	// UI rendern
 	guiMgr->render(renderer);
