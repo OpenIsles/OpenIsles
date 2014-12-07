@@ -2,6 +2,7 @@
 #define _GUI_BUILD_MENU_WIDGET_H
 
 #include <SDL_render.h>
+#include "Context.h"
 #include "gui/panel-widgets/GuiPanelWidget.h"
 
 
@@ -11,7 +12,7 @@
 class GuiBuildMenuWidget : public GuiPanelWidget {
 
 public:
-    GuiBuildMenuWidget();
+    GuiBuildMenuWidget(const Context* const context);
     virtual ~GuiBuildMenuWidget() {}
 
     /**

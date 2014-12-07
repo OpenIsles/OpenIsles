@@ -3,17 +3,19 @@
 
 #include <map>
 #include <vector>
-#include "map/Map.h"
+#include "Context.h"
 
+class Building;
 class Colony;
 class Isle;
 class Map;
+class MapObject;
 class Player;
 
 /**
  * @brief Klasse, die den Zustand des Spiels beinhaltet
  */
-class Game {
+class Game : public ContextAware {
 
 private:
     /**
@@ -42,15 +44,11 @@ private:
     double speed;
 
 public:
-	Game();
+	Game(const Context* const context);
 	~Game();
 
     Map* getMap() const {
         return map;
-    }
-
-    void setMap(Map* map) {
-        this->map = map;
     }
     
     /**
@@ -128,6 +126,18 @@ public:
     void setSpeed(double speed) {
         this->speed = speed;
     }
+
+    /**
+     * @brief Ändert die Einwohner innerhalb eines Gebäudes. Positive Werte fügen Bewohner hinzu, negative nehmen
+     * welche weg.
+     *
+     * Diese Methode aktualisiert gleich die Einwohnerzahl der Kolonie. Es sollte immer diese Methode benutzt werden,
+     * um Einwohner zu ändern.
+     *
+     * @param building Gebäude, dessen Einwohner geändert werden sollen
+     * @param amount Bevölkerung, die hinzukommen soll
+     */
+    void addInhabitantsToBuilding(Building* building, char amount);
 
 };
 

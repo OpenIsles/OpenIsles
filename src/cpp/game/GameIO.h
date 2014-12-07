@@ -12,34 +12,39 @@ class GameIO {
 public:
     /**
      * @brief Lädt einen Spielstand von einer tiled-TMX-Datei
+     * @param game Spiel, in das der Spielstand geladen werden soll
      * @param filename Dateiname mit den zu ladenden Spielstand-Daten
      */
-    static void loadGameFromTMX(const char* filename);
+    static void loadGameFromTMX(Game* game, const char* filename);
 
 private:
     /**
      * @brief Lädt die Spieler aus der tiled-TMX-Datei
+     * @param game Spiel, in das der Spielstand geladen werden soll
      * @param mapNode <map>-Knoten aus der tiled-Datei
      */
-    static void loadPlayers(rapidxml::xml_node<>* mapNode);
+    static void loadPlayers(Game* game, rapidxml::xml_node<>* mapNode);
 
     /**
      * @brief Lädt die Karte und Inseln aus der tiled-TMX-Datei
+     * @param game Spiel, in das der Spielstand geladen werden soll
      * @param objectgroupIslesNode <objectgroup>-Knoten der "isles"-Ebene aus der tiled-Datei
      */
-    static void loadMap(rapidxml::xml_node<>* objectgroupIslesNode);
+    static void loadMap(Game* game, rapidxml::xml_node<>* objectgroupIslesNode);
 
     /**
      * @brief Lädt die Siedlungen aus der tiled-TMX-Datei
+     * @param game Spiel, in das der Spielstand geladen werden soll
      * @param objectgroupColoniesNode <objectgroup>-Knoten der "colonies"-Ebene aus der tiled-Datei
      */
-    static void loadColonies(rapidxml::xml_node<>* objectgroupColoniesNode);
+    static void loadColonies(Game* game, rapidxml::xml_node<>* objectgroupColoniesNode);
 
     /**
      * @brief Lädt die Strukturen und Gebäude aus der tiled-TMX-Datei
+     * @param game Spiel, in das der Spielstand geladen werden soll
      * @param objectgroupStructuresNode <objectgroup>-Knoten der "structures"-Ebene aus der tiled-Datei
      */
-    static void loadStructures(rapidxml::xml_node<>* objectgroupStructuresNode);
+    static void loadStructures(Game* game, rapidxml::xml_node<>* objectgroupStructuresNode);
 
 
     /**

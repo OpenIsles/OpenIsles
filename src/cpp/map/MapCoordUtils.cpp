@@ -2,12 +2,7 @@
 #include "game/Game.h"
 #include "graphics/GraphicsMgr.h"
 #include "map/Building.h"
-#include "map/MapCoordUtils.h"
-
-// Aus main.cpp importiert
-extern int mouseCurrentX, mouseCurrentY;
-extern Game* game;
-extern GraphicsMgr* graphicsMgr;
+#include "map/Map.h"
 
 
 void MapCoordUtils::mapToScreenCoords(int mapX, int mapY, int& screenX, int& screenY) {
@@ -112,7 +107,7 @@ void MapCoordUtils::screenToMapCoords(int screenX, int screenY, int& mapX, int& 
 }
 
 void MapCoordUtils::screenToDrawCoords(
-    int screenX, int screenY, int elevation, MapObjectGraphic* graphic, SDL_Rect* rect) {
+	Map* map, int screenX, int screenY, int elevation, MapObjectGraphic* graphic, SDL_Rect* rect) {
 
     rect->x = screenX - (
         graphic->getWidth() - (graphic->getMapWidth() + 1) * GraphicsMgr::TILE_WIDTH_HALF);
@@ -123,7 +118,6 @@ void MapCoordUtils::screenToDrawCoords(
     rect->y -= elevation * GraphicsMgr::ELEVATION_HEIGHT;
 
     // Scrolling-Offset anwenden
-    Map* map = game->getMap();
     rect->x -= map->getScreenOffsetX();
     rect->y -= map->getScreenOffsetY();
 
@@ -136,32 +130,37 @@ void MapCoordUtils::screenToDrawCoords(
     rect->h = graphic->getHeight() / screenZoom;
 }
 
-void MapCoordUtils::mapToDrawCoords(int mapX, int mapY, int elevation, MapObjectGraphic* graphic, SDL_Rect* rect) {
+void MapCoordUtils::mapToDrawCoords(
+	Map* map, int mapX, int mapY, int elevation, MapObjectGraphic* graphic, SDL_Rect* rect) {
+
     int screenX, screenY;
     mapToScreenCoords(mapX, mapY, screenX, screenY);
 
-    screenToDrawCoords(screenX, screenY, elevation, graphic, rect);
+    screenToDrawCoords(map, screenX, screenY, elevation, graphic, rect);
 }
 
-void MapCoordUtils::mapToDrawCoords(double mapX, double mapY, int elevation, MapObjectGraphic* graphic, SDL_Rect* rect) {
+void MapCoordUtils::mapToDrawCoords(
+	Map* map, double mapX, double mapY, int elevation, MapObjectGraphic* graphic, SDL_Rect* rect) {
+
     int screenX, screenY;
     mapToScreenCoords(mapX, mapY, screenX, screenY);
 
-    screenToDrawCoords(screenX, screenY, elevation, graphic, rect);
+    screenToDrawCoords(map, screenX, screenY, elevation, graphic, rect);
 }
 
-void MapCoordUtils::getDrawCoordsForBuilding(Building* building, SDL_Rect* rect) {
+void MapCoordUtils::getDrawCoordsForBuilding(Map* map, GraphicsMgr* graphicsMgr, Building* building, SDL_Rect* rect) {
     int mapX, mapY;
     building->getMapCoords(mapX, mapY);
 
     MapObjectGraphic* graphic = graphicsMgr->getGraphicForStructure(building->getStructureType());
     const int elevation = 1; // TODO für Gebäude wie Anlegestelle, Fischerhütte etc. muss auf 0 gesetzt werden
 
-    mapToDrawCoords(mapX, mapY, elevation, graphic, rect);
+    mapToDrawCoords(map, mapX, mapY, elevation, graphic, rect);
 }
 
-void MapCoordUtils::getMapCoordsUnderMouse(int& mouseCurrentMapX, int& mouseCurrentMapY) {
-    Map* map = game->getMap();
+void MapCoordUtils::getMapCoordsUnderMouse(
+	Map* map, int mouseCurrentX, int mouseCurrentY, int& mouseCurrentMapX, int& mouseCurrentMapY) {
+
     int screenZoom = map->getScreenZoom();
 
     int mouseScreenX = (mouseCurrentX * screenZoom) + map->getScreenOffsetX();

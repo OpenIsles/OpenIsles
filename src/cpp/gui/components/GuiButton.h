@@ -2,6 +2,7 @@
 #define _GUI_BUTTON_H
 
 #include <functional>
+#include "Context.h"
 #include "gui/components/GuiStaticElement.h"
 
 class Graphic;
@@ -30,7 +31,7 @@ protected:
     std::function<void()> onClickFunction = []{};
 
 public:
-	GuiButton();
+	GuiButton(const Context* const context);
 	virtual ~GuiButton();
 
     PlainGraphic* getGraphicPressed() const {

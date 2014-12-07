@@ -1,11 +1,10 @@
 #ifndef _GUI_STATIC_ELEMENT_H
 #define _GUI_STATIC_ELEMENT_H
 
+#include <SDL.h>
+#include "Context.h"
+#include "graphics/PlainGraphic.h"
 #include "gui/components/GuiBase.h"
-
-union SDL_Event;
-class PlainGraphic;
-class SDL_Renderer;
 
 
 /**
@@ -20,7 +19,7 @@ protected:
     PlainGraphic* graphic = nullptr;
 
 public:
-	GuiStaticElement();
+	GuiStaticElement(const Context* const context);
 	virtual ~GuiStaticElement();
 
     PlainGraphic* getGraphic() const {

@@ -5,15 +5,10 @@
 #include "economics/EconomicsMgr.h"
 #include "game/Colony.h"
 #include "game/Game.h"
-
-// Aus main.cpp importiert
-extern ConfigMgr* configMgr;
-extern Game* game;
-extern GraphicsMgr* graphicsMgr;
-extern Uint32 sdlTicks;
+#include "map/Map.h"
 
 
-EconomicsMgr::EconomicsMgr() {
+EconomicsMgr::EconomicsMgr(const Context* const context) : ContextAware(context) {
 }
 
 EconomicsMgr::~EconomicsMgr() {
@@ -29,12 +24,12 @@ void EconomicsMgr::update(Structure* structure) {
     updateProduction(building);
     updateCarrier(building);
 
-    building->setLastUpdateTime(sdlTicks);
+    building->setLastUpdateTime(context->sdlTicks);
 }
 
 void EconomicsMgr::updateProduction(Building* building) {
     StructureType structureType = building->getStructureType();
-    const BuildingConfig* buildingConfig = configMgr->getBuildingConfig(structureType);
+    const BuildingConfig* buildingConfig = context->configMgr->getBuildingConfig(structureType);
 
     // Produziert eh nix bzw. Lager schon voll? Dann nix zu tun.
     if (!buildingConfig->getBuildingProduction()->output.isUsed() ||
@@ -43,10 +38,10 @@ void EconomicsMgr::updateProduction(Building* building) {
         return;
     }
 
-    Uint32 ticksPastSinceLastUpdate = sdlTicks - building->getLastUpdateTime();
+    Uint32 ticksPastSinceLastUpdate = context->sdlTicks - building->getLastUpdateTime();
     Uint32 ticksInputConsumed = 0, ticksInput2Consumed = 0; // Zeiten, in denen wirklich verbraucht wurde
     double inputConsumed, input2Consumed, outputProduced;   // verbrauchte/produzierte Güter
-    double oneMinuteTicks = (double) 60000 / game->getSpeed();
+    double oneMinuteTicks = (double) 60000 / context->game->getSpeed();
 
     // Haben wir Eingabegüter, dann wird nur produziert, wie diese verfügbar sind
     if (buildingConfig->getBuildingProduction()->input.isUsed()) {
@@ -111,7 +106,7 @@ void EconomicsMgr::updateCarrier(Building* building) {
             Carrier* carrier = new Carrier(result.building, result.route, result.goodsSlot.goodsType, true);
             carrier->setMapCoords(firstHopOnRoute.mapX, firstHopOnRoute.mapY);
             carrier->setAnimation(
-                graphicsMgr->getAnimation(isStorageBuilding ? CART_WITHOUT_CARGO : CARRIER));
+                context->graphicsMgr->getAnimation(isStorageBuilding ? CART_WITHOUT_CARGO : CARRIER));
 
             building->carrier = carrier;
 
@@ -125,8 +120,8 @@ void EconomicsMgr::updateCarrier(Building* building) {
 
     // Träger unterwegs? fortbewegen
     else if (building->carrier != nullptr) {
-        Uint32 ticksPastSinceLastUpdate = sdlTicks - building->getLastUpdateTime();
-        double oneSecondTicks = (double) 1000 / game->getSpeed();
+        Uint32 ticksPastSinceLastUpdate = context->sdlTicks - building->getLastUpdateTime();
+        double oneSecondTicks = (double) 1000 / context->game->getSpeed();
 
         Carrier* carrier = building->carrier;
         Animation* animation = carrier->getAnimation();
@@ -176,7 +171,7 @@ void EconomicsMgr::updateCarrier(Building* building) {
 
             // Route fertig?
             if (carrier->nextHopInRoute == carrier->route->cend()) {
-                MapTile* mapTile = game->getMap()->getMapTileAt(carrier->mapX, carrier->mapY);
+                MapTile* mapTile = context->game->getMap()->getMapTileAt(carrier->mapX, carrier->mapY);
                 Building* targetBuilding = dynamic_cast<Building*>(mapTile->mapObject);
 
                 // targetBuilding == nullptr -> Nutzer hat die Map inzwischen geändert und das Zielgebäude abgerissen
@@ -192,7 +187,7 @@ void EconomicsMgr::updateCarrier(Building* building) {
                     GoodsSlot* goodsSlotToTakeFrom;
                     if (targetBuilding->isStorageBuilding()) {
                         // Lagergebäude: Waren aus der Siedlung aufladen
-                        Colony* colony = game->getColony(targetBuilding);
+                        Colony* colony = context->game->getColony(targetBuilding);
                         goodsSlotToTakeFrom = &colony->getGoods(carrier->carriedGoods.goodsType);
                     } else {
                         // Waren aus dem Gebäude aufladen
@@ -217,10 +212,13 @@ void EconomicsMgr::updateCarrier(Building* building) {
                     }
 
                     goodsSlotToTakeFrom->inventory -= goodsWeCollect;
-                    targetBuilding->lastGoodsCollections = sdlTicks;
+                    targetBuilding->lastGoodsCollections = context->sdlTicks;
 
                     Route* route = carrier->route;
-                    Route* returnRoute = AStar::findRoute(route->back(), route->front(), building, isStorageBuilding);
+                    AStar* aStar = new AStar(context, route->back(), route->front(), building, isStorageBuilding);
+                    aStar->cutRouteInsideBuildings();
+                    Route* returnRoute = aStar->getRoute();
+                    delete aStar;
 
                     delete carrier;
                     building->carrier = nullptr;
@@ -228,15 +226,13 @@ void EconomicsMgr::updateCarrier(Building* building) {
                     // Es kann sein, dass es keine Rückroute gibt, wenn der Nutzer inzwischen die Map verändert hat.
                     // In diesem Fall hat er Pech gehabt, die Waren verschwinden mit dem Träger
                     if (returnRoute != nullptr) {
-                        AStar::cutRouteInsideBuildings(returnRoute);
-
                         MapCoordinate firstHopOnReturnRoute = returnRoute->front();
 
                         Carrier* returnCarrier = new Carrier(
                             building, returnRoute, goodsSlotToTakeFrom->goodsType, false);
                         returnCarrier->setMapCoords(firstHopOnReturnRoute.mapX, firstHopOnReturnRoute.mapY);
                         returnCarrier->setAnimation(
-                            graphicsMgr->getAnimation(isStorageBuilding ? CART_WITH_CARGO : CARRIER));
+                            context->graphicsMgr->getAnimation(isStorageBuilding ? CART_WITH_CARGO : CARRIER));
                         returnCarrier->carriedGoods.inventory = goodsWeCollect;
 
                         building->carrier = returnCarrier;
@@ -266,7 +262,7 @@ GoodsSlot* EconomicsMgr::findGoodsSlotToUnloadTo(Building* building, Carrier* ca
 
     // Lagergebäude: Waren der Siedlung gutschreiben
     if (isStorageBuilding) {
-        Colony* colony = game->getColony(building);
+        Colony* colony = context->game->getColony(building);
         return &colony->getGoods(carrier->carriedGoods.goodsType);
     }
         // Produktionsgebäude: Gucken, in welchen Slot die Waren müssen
@@ -285,7 +281,7 @@ GoodsSlot* EconomicsMgr::findGoodsSlotToUnloadTo(Building* building, Carrier* ca
 
 FindBuildingToGetGoodsFromResult EconomicsMgr::findBuildingToGetGoodsFrom(Building* building) {
     StructureType structureType = building->getStructureType();
-    const BuildingConfig* buildingConfig = configMgr->getBuildingConfig(structureType);
+    const BuildingConfig* buildingConfig = context->configMgr->getBuildingConfig(structureType);
     const RectangleData<char>* catchmentArea = buildingConfig->getCatchmentArea();
     if (catchmentArea == nullptr) {
         return FindBuildingToGetGoodsFromResult(); // kein Einzugsbereich
@@ -333,7 +329,7 @@ FindBuildingToGetGoodsFromResult EconomicsMgr::findBuildingToGetGoodsFrom(Buildi
     std::set<Building*> buildingChecked; // Gebäude in dieses Set aufnehmen, wenn wir es schon behandelt haben.
                                          // Da wir kachelweise arbeiten, erhalten wir dasselbe Gebäude mehrfach.
 
-    Map* map = game->getMap();
+    Map* map = context->game->getMap();
     for (int y = 0; y < catchmentArea->height; y++) {
         for (int x = 0; x < catchmentArea->width; x++) {
             int mapX, mapY, mapWidth, mapHeight;
@@ -366,7 +362,7 @@ FindBuildingToGetGoodsFromResult EconomicsMgr::findBuildingToGetGoodsFrom(Buildi
             }
 
             // Gebäude, die gar nix produzieren, bringen uns nix, z.B. öffentliche Gebäude.
-            const BuildingConfig* buildingThereConfig = configMgr->getBuildingConfig(buildingThere->getStructureType());
+            const BuildingConfig* buildingThereConfig = context->configMgr->getBuildingConfig(buildingThere->getStructureType());
             if (!isStorgeBuildingThere && !buildingThereConfig->getBuildingProduction()->output.isUsed()) {
                 continue;
             }
@@ -392,7 +388,7 @@ FindBuildingToGetGoodsFromResult EconomicsMgr::findBuildingToGetGoodsFrom(Buildi
 
             // Bin ich ein Lagergebäude?
             if (isStorageBuilding) {
-                Colony* colony = game->getColony(building);
+                Colony* colony = context->game->getColony(building);
 
                 GoodsSlot* buildingThereOutputProductionSlot = &buildingThere->productionSlots.output;
 
@@ -419,12 +415,13 @@ FindBuildingToGetGoodsFromResult EconomicsMgr::findBuildingToGetGoodsFrom(Buildi
             buildingThere->getMapCoords(mapXDestination, mapYDestination);
             MapCoordinate mapCoordinateDestination = MapCoordinate(mapXDestination, mapYDestination);
 
-            Route* route = AStar::findRoute(mapCoordinateSource, mapCoordinateDestination, building, isStorageBuilding);
+            AStar* aStar = new AStar(context, mapCoordinateSource, mapCoordinateDestination, building, isStorageBuilding);
+            aStar->cutRouteInsideBuildings();
+            Route* route = aStar->getRoute();
+            delete aStar;
             if (route == nullptr) {
                 continue; // gibt keinen Weg dahin
             }
-
-            AStar::cutRouteInsideBuildings(route);
 
             FindBuildingToGetGoodsFromResult potentialResult;
             potentialResult.building = buildingThere;
@@ -432,7 +429,7 @@ FindBuildingToGetGoodsFromResult EconomicsMgr::findBuildingToGetGoodsFrom(Buildi
 
             // Ist das Zielgebäude ein Lagergebäude? Produktionsgebäuden können sich Waren auch von dort holen
             if (isStorgeBuildingThere) {
-                Colony* colony = game->getColony(buildingThere); // TODO Es sollte getColony(buildingThere) == getColony(building) gelten, da Kolonie-übergreifend eh nix gehen darf.
+                Colony* colony = context->game->getColony(buildingThere); // TODO Es sollte getColony(buildingThere) == getColony(building) gelten, da Kolonie-übergreifend eh nix gehen darf.
 
                 bool goods1CanBePickedUpFromStorage = false;
                 bool goods2CanBePickedUpFromStorage = false;
@@ -474,7 +471,7 @@ FindBuildingToGetGoodsFromResult EconomicsMgr::findBuildingToGetGoodsFrom(Buildi
                 potentialResult.goodsSlot.goodsType = goodsTypeWeChoose;
                 potentialResult.goodsSlot.inventory = colony->getGoods(goodsTypeWeChoose).inventory;
                 potentialResult.goodsSlot.capacity = colony->getGoods(goodsTypeWeChoose).capacity;
-                potentialResult.lastGoodsCollections = sdlTicks + 1; // Zeit in der Zukunft nehmen, damit diese Route als letztes verwendet wird
+                potentialResult.lastGoodsCollections = context->sdlTicks + 1; // Zeit in der Zukunft nehmen, damit diese Route als letztes verwendet wird
             }
             else {
                 potentialResult.goodsSlot.goodsType = buildingThereConfig->getBuildingProduction()->output.goodsType;

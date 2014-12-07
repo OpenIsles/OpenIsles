@@ -3,9 +3,6 @@
 #endif
 #include "graphics/MapObjectGraphic.h"
 
-// Aus main.cpp importiert
-extern Uint32 sdlTicks;
-
 
 MapObjectGraphic::MapObjectGraphic(
     SDL_Renderer* const renderer, const char* filename, unsigned char mapWidth, unsigned char mapHeight) :
@@ -60,7 +57,7 @@ void MapObjectGraphic::createMaskedTexture() {
     delete[] pixelsMasked;
 }
 
-void MapObjectGraphic::draw(SDL_Rect* rectSource, SDL_Rect* rectDestination, int drawingFlags) {
+void MapObjectGraphic::draw(SDL_Rect* rectSource, SDL_Rect* rectDestination, int drawingFlags, Uint32 sdlTicks) {
     // Blinkmodus? Grafik nur in der ersten Hälfte eines Intervalls zeichnen
     if ((drawingFlags & DRAWING_FLAG_BLINK) && (sdlTicks % 800 < 400)) {
         return;

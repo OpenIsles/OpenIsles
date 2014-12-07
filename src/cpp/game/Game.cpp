@@ -1,20 +1,15 @@
 #include "config/ConfigMgr.h"
+#include "economics/EconomicsMgr.h"
 #include "game/Colony.h"
 #include "game/Game.h"
-#include "gui/FontMgr.h"
+#include "game/Player.h"
 #include "gui/GuiMgr.h"
-#include "utils/StringFormat.h"
-
-// Aus main.cpp importiert
-extern ConfigMgr* configMgr;
-extern FontMgr* fontMgr;
-extern Game* game;
-extern GraphicsMgr* graphicsMgr;
-extern GuiMgr* guiMgr;
+#include "map/Map.h"
 
 
-Game::Game() {
+Game::Game(const Context* const context) : ContextAware(context) {
     speed = 1;
+    map = new Map(context);
 }
 
 Game::~Game() {
@@ -57,4 +52,15 @@ Colony* Game::getColony(const MapObject* mapObject) {
     MapTile* mapTile = map->getMapTileAt(mapX, mapY);
 
     return getColony(mapTile->player, mapTile->isle);
+}
+
+void Game::addInhabitantsToBuilding(Building* building, char amount) {
+    if ((int) building->inhabitants + amount < 0) {
+        throw new std::runtime_error("Cannot have negative inhabitants");
+    }
+
+    building->inhabitants += amount;
+
+    Colony* colony = getColony(building);
+    colony->population += amount;
 }

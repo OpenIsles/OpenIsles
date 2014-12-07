@@ -3,13 +3,11 @@
 #endif
 #include <SDL.h>
 #include "config/ConfigMgr.h"
-#include "graphics/GraphicsMgr.h"
-
-// Aus main.cpp importiert
-extern ConfigMgr* configMgr;
 
 
-GraphicsMgr::GraphicsMgr(SDL_Renderer* const renderer) : renderer(renderer) {
+GraphicsMgr::GraphicsMgr(SDL_Renderer* const renderer, const ConfigMgr* const configMgr) :
+    renderer(renderer), configMgr(configMgr) {
+
 	loadTiles();
 
     // anisotropic filtering für die Gebäude aktivieren, damit beim Skalieren das Mask-Overlay ordentlich is

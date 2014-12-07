@@ -2,13 +2,12 @@
 #include "game/Colony.h"
 #include "game/Game.h"
 #include "game/GameIO.h"
+#include "map/Map.h"
 
-// Aus main.cpp importiert
-extern Game* game;
 
 // TODO allgemein: Fehlermanagement, wenn die Datei mal nicht so hübsch aussieht, dass alle Tags da sind
 
-void GameIO::loadGameFromTMX(const char* filename) {
+void GameIO::loadGameFromTMX(Game* game, const char* filename) {
     // TODO aktuell kann diese Methode nur mit einem frischen Game-Objekt aufgerufen werden. Nochmal laden = vorher saubermachen
 
     // Datei öffnen
@@ -18,13 +17,10 @@ void GameIO::loadGameFromTMX(const char* filename) {
     xmlDocument->parse<0>(tmxFile.data());
 
     // Kartengröße einlesen und Map anlegen
-    Map* map = new Map();
-    game->setMap(map);
-
     rapidxml::xml_node<>* mapNode = xmlDocument->first_node("map", 3, true);
     int newMapWidth = atoi(mapNode->first_attribute("width", 5, true)->value());
     int newMapHeight = atoi(mapNode->first_attribute("height", 6, true)->value());
-    map->initNewMap(newMapWidth, newMapHeight);
+    game->getMap()->initNewMap(newMapWidth, newMapHeight);
 
     // Ebenen durchgehen.
     rapidxml::xml_node<>* objectgroupIslesNode = nullptr;
@@ -46,16 +42,16 @@ void GameIO::loadGameFromTMX(const char* filename) {
     }
 
     // Spieler laden
-    loadPlayers(mapNode);
+    loadPlayers(game, mapNode);
 
     // Karte und Inseln laden
-    loadMap(objectgroupIslesNode);
+    loadMap(game, objectgroupIslesNode);
 
     // Siedlungen laden
-    loadColonies(objectgroupColoniesNode);
+    loadColonies(game, objectgroupColoniesNode);
 
     // Strukturen und Gebäude laden
-    loadStructures(objectgroupStructuresNode);
+    loadStructures(game, objectgroupStructuresNode);
 
     // XML-Document wegräumen
     delete xmlDocument;
@@ -64,7 +60,7 @@ void GameIO::loadGameFromTMX(const char* filename) {
     game->getMap()->updateMinimapTexture();
 }
 
-void GameIO::loadPlayers(rapidxml::xml_node<>* mapNode) {
+void GameIO::loadPlayers(Game* game, rapidxml::xml_node<>* mapNode) {
     rapidxml::xml_node<>* propertiesNode = mapNode->first_node("properties", 10, true);
 
     int currentPlayerNr = atoi(getPropertyValueFromPropertiesNode(propertiesNode, "current_player"));
@@ -103,7 +99,7 @@ void GameIO::loadPlayers(rapidxml::xml_node<>* mapNode) {
     }
 }
 
-void GameIO::loadMap(rapidxml::xml_node<>* objectgroupIslesNode) {
+void GameIO::loadMap(Game* game, rapidxml::xml_node<>* objectgroupIslesNode) {
     Map* map = game->getMap();
 
     // Inseln einlesen
@@ -169,7 +165,7 @@ void GameIO::loadMap(rapidxml::xml_node<>* objectgroupIslesNode) {
     map->screenZoom = 1;
 }
 
-void GameIO::loadColonies(rapidxml::xml_node<>* objectgroupColoniesNode) {
+void GameIO::loadColonies(Game* game, rapidxml::xml_node<>* objectgroupColoniesNode) {
     Map* map = game->getMap();
 
     for (rapidxml::xml_node<>* objectNode = objectgroupColoniesNode->first_node("object", 6, true); objectNode != nullptr;
@@ -209,7 +205,7 @@ void GameIO::loadColonies(rapidxml::xml_node<>* objectgroupColoniesNode) {
     }
 }
 
-void GameIO::loadStructures(rapidxml::xml_node<>* objectgroupStructuresNode) {
+void GameIO::loadStructures(Game* game, rapidxml::xml_node<>* objectgroupStructuresNode) {
     Map* map = game->getMap();
 
     for (rapidxml::xml_node<>* objectNode = objectgroupStructuresNode->first_node("object", 6, true); objectNode != nullptr;

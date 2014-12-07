@@ -2,6 +2,7 @@
 #define _GUI_PANEL_WIDGET_H
 
 #include <SDL_render.h>
+#include "gui/GuiMgr.h"
 #include "gui/components/GuiBase.h"
 
 union SDL_Event;
@@ -18,7 +19,7 @@ class SDL_Renderer;
 class GuiPanelWidget : public GuiBase {
 
 public:
-    GuiPanelWidget() {
+    GuiPanelWidget(const Context* const context) : GuiBase(context) {
         setCoords(10, 312, 236, 446);
     }
     virtual ~GuiPanelWidget() {}

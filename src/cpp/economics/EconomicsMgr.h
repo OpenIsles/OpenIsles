@@ -3,6 +3,7 @@
 
 #include <map>
 #include <iostream>
+#include "Context.h"
 #include "map/Building.h"
 
 struct Structure;
@@ -69,10 +70,10 @@ struct FindBuildingToGetGoodsFromResult {
 /**
  * @brief Manager, der die Wirtschaft übernimmt
  */
-class EconomicsMgr {
+class EconomicsMgr : public ContextAware {
 
 public:
-    EconomicsMgr();
+    EconomicsMgr(const Context* const context);
     ~EconomicsMgr();
 
     /**

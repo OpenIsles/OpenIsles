@@ -2,7 +2,6 @@
 #include "game/Colony.h"
 #include "game/Game.h"
 #include "gui/FontMgr.h"
-#include "gui/GuiMgr.h"
 #include "gui/components/GuiAddBuildingWidget.h"
 #include "gui/components/GuiButton.h"
 #include "gui/components/GuiPushButton.h"
@@ -12,26 +11,18 @@
 #include "gui/panel-widgets/GuiOptionsMenuWidget.h"
 #include "gui/panel-widgets/GuiSelectedBuildingWidget.h"
 #include "gui/Identifiers.h"
-#include "sound/SoundMgr.h"
+#include "map/Map.h"
 
 static SDL_Color colorWhite = {255, 255, 255, 255};
 static SDL_Color colorBlack = {0, 0, 0, 255};
 
 #ifdef DEBUG_A_STAR
 #include "pathfinding/AStar.h"
-
-extern int mouseCurrentX, mouseCurrentY;
 #endif
 
-// Aus main.cpp importiert
-extern ConfigMgr* configMgr;
-extern FontMgr* fontMgr;
-extern Game* game;
-extern GraphicsMgr* graphicsMgr;
-extern SoundMgr* soundMgr;
 
-
-GuiMgr::GuiMgr(SDL_Renderer* renderer) :
+GuiMgr::GuiMgr(const Context* const context, SDL_Renderer* renderer) :
+    ContextAware(context),
     renderer(renderer),
     quitGame(false)
 {
@@ -63,14 +54,14 @@ void GuiMgr::initGui() {
 
     // Panel
     PlainGraphic* graphic = new PlainGraphic(renderer, "data/img/gui/panel.png");
-    GuiStaticElement* panel = new GuiStaticElement();
+    GuiStaticElement* panel = new GuiStaticElement(context);
     panel->setCoords(768, 0, graphic->getWidth(), graphic->getHeight());
     panel->setGraphic(graphic);
     registerElement(GUI_ID_PANEL, panel);
 
     // Statusleiste
     graphic = new PlainGraphic(renderer, "data/img/gui/statusbar.png");
-    GuiStaticElement* statusBar = new GuiStaticElement();
+    GuiStaticElement* statusBar = new GuiStaticElement(context);
     statusBar->setCoords(0, 734, graphic->getWidth(), graphic->getHeight());
     statusBar->setGraphic(graphic);
     registerElement(GUI_ID_STATUS_BAR, statusBar);
@@ -111,7 +102,7 @@ void GuiMgr::initGui() {
 
     for (int i = 0; i < 4; i++) {
         // Button
-        GuiPushButton* panelSwitchPushButton = new GuiPushButton();
+        GuiPushButton* panelSwitchPushButton = new GuiPushButton(context);
         panelSwitchPushButton->setGraphic(new PlainGraphic(renderer, tabGraphics[i]->graphicFilename));
         panelSwitchPushButton->setGraphicPressed(new PlainGraphic(renderer, tabGraphics[i]->graphicPressedFilename));
         panelSwitchPushButton->setCoords(22 + i*55, 235, 48, 64);
@@ -142,32 +133,32 @@ void GuiMgr::initPanelWidgets() {
     GuiBase* panel = findElement(GUI_ID_PANEL);
 
     // ausgewähltes Gebäude (Infos über Produktion und intere Lagerbestände des Gebäudes)
-    GuiSelectedBuildingWidget* selectedBuildingWidget = new GuiSelectedBuildingWidget();
+    GuiSelectedBuildingWidget* selectedBuildingWidget = new GuiSelectedBuildingWidget(context);
     registerElement(GUI_ID_SELECTED_BUILDING_PANEL_WIDGET, selectedBuildingWidget);
     panel->addChildElement(selectedBuildingWidget);
 
     // Kolonie-Warenübersicht
-    GuiColonyGoodsWidget* colonyGoodsWidget = new GuiColonyGoodsWidget();
+    GuiColonyGoodsWidget* colonyGoodsWidget = new GuiColonyGoodsWidget(context);
     registerElement(GUI_ID_COLONY_GOODS_PANEL_WIDGET, colonyGoodsWidget);
     panel->addChildElement(colonyGoodsWidget);
 
     // Baumenü
-    GuiBuildMenuWidget* buildMenuWidget = new GuiBuildMenuWidget();
+    GuiBuildMenuWidget* buildMenuWidget = new GuiBuildMenuWidget(context);
     registerElement(GUI_ID_BUILD_MENU_PANEL_WIDGET, buildMenuWidget);
     panel->addChildElement(buildMenuWidget);
 
     // Kampfmenü
-    GuiDummyWidget* dummyWidget1 = new GuiDummyWidget();
+    GuiDummyWidget* dummyWidget1 = new GuiDummyWidget(context);
     registerElement(GUI_ID_MILITARY_PANEL_WIDGET, dummyWidget1);
     panel->addChildElement(dummyWidget1);
 
     // Spielerstatus (Infomenü)
-    GuiDummyWidget* dummyWidget2 = new GuiDummyWidget();
+    GuiDummyWidget* dummyWidget2 = new GuiDummyWidget(context);
     registerElement(GUI_ID_PLAYER_STATUS_PANEL_WIDGET, dummyWidget2);
     panel->addChildElement(dummyWidget2);
 
     // Optionen-Menü
-    GuiOptionsMenuWidget* optionsMenuWidget = new GuiOptionsMenuWidget();
+    GuiOptionsMenuWidget* optionsMenuWidget = new GuiOptionsMenuWidget(context);
     registerElement(GUI_ID_OPTIONS_MENU_PANEL_WIDGET, optionsMenuWidget);
     panel->addChildElement(optionsMenuWidget);
 }
@@ -210,6 +201,7 @@ void GuiMgr::render(SDL_Renderer* renderer) {
 void GuiMgr::onEvent(SDL_Event& event) {
     // TODO Event besser queuen und nicht sofort abarbeiten
 
+    Game* game = context->game;
     Map* map = game->getMap();
     
     // Spiel beenden
@@ -329,7 +321,8 @@ void GuiMgr::onEvent(SDL_Event& event) {
         bool needToRecalculate = false;
 
         int mouseCurrentMapX, mouseCurrentMapY;
-        MapCoordUtils::getMapCoordsUnderMouse(mouseCurrentMapX, mouseCurrentMapY);
+        MapCoordUtils::getMapCoordsUnderMouse(
+            map, context->mouseCurrentX, context->mouseCurrentY, mouseCurrentMapX, mouseCurrentMapY);
 
         // A*-Start- und Endkoordinaten festlegen
         if (event.key.keysym.scancode == SDL_SCANCODE_A) {
@@ -355,14 +348,11 @@ void GuiMgr::onEvent(SDL_Event& event) {
                     delete AStar::debugAStar_route;
                 }
 
-                AStar::debugAStar_route = AStar::findRoute(
-                    AStar::debugAStar_source, AStar::debugAStar_destination,
-                    AStar::debugAStar_buildingToUseCatchmentArea,
-                    AStar::debugAStar_useStreetOnly);
-
-                if (AStar::debugAStar_route != nullptr) {
-                    AStar::cutRouteInsideBuildings(AStar::debugAStar_route);
-                }
+                AStar* aStar = new AStar(context, AStar::debugAStar_source, AStar::debugAStar_destination,
+                    AStar::debugAStar_buildingToUseCatchmentArea, AStar::debugAStar_useStreetOnly);
+                aStar->cutRouteInsideBuildings();
+                AStar::debugAStar_route = aStar->getRoute();
+                delete aStar;
             }
         }
 #endif
@@ -442,12 +432,12 @@ void GuiMgr::updateGuiFromPanelState() {
 }
 
 void GuiMgr::renderResourcesBar() {
-    Player* currentPlayer = game->getCurrentPlayer();
+    Player* currentPlayer = context->game->getCurrentPlayer();
     const BuildingCosts* buildingCosts = (panelState.selectedPanelButton == PanelButton::ADD_BUILDING) ?
-        configMgr->getBuildingConfig(panelState.addingStructure)->getBuildingCosts() : nullptr;
+        context->configMgr->getBuildingConfig(panelState.addingStructure)->getBuildingCosts() : nullptr;
 
     // Münzenguthaben
-    graphicsMgr->getOtherGraphic(OtherGraphic::COINS)->drawAt(15, 8);
+    context->graphicsMgr->getOtherGraphic(OtherGraphic::COINS)->drawAt(15, 8);
 
     std::string outputString = toString(currentPlayer->coins);
     if (buildingCosts != nullptr) {
@@ -455,19 +445,20 @@ void GuiMgr::renderResourcesBar() {
         outputString += toString(buildingCosts->coins);
         outputString += ")";
     }
-    fontMgr->renderText(renderer, outputString, 42, 10,
+    context->fontMgr->renderText(renderer, outputString, 42, 10,
         &colorWhite, &colorBlack, "DroidSans-Bold.ttf", 18, RENDERTEXT_HALIGN_LEFT);
 
     // Siedlung, wo der Cursor grade is
     int mouseCurrentMapX, mouseCurrentMapY;
-    MapCoordUtils::getMapCoordsUnderMouse(mouseCurrentMapX, mouseCurrentMapY);
+    MapCoordUtils::getMapCoordsUnderMouse(
+        context->game->getMap(), context->mouseCurrentX, context->mouseCurrentY, mouseCurrentMapX, mouseCurrentMapY);
 
-    MapTile* mapTileAtCursor = game->getMap()->getMapTileAt(mouseCurrentMapX, mouseCurrentMapY);
+    MapTile* mapTileAtCursor = context->game->getMap()->getMapTileAt(mouseCurrentMapX, mouseCurrentMapY);
     if (mapTileAtCursor == nullptr) {
         return;
     }
 
-    Colony* colony = game->getColony(mapTileAtCursor->player, mapTileAtCursor->isle);
+    Colony* colony = context->game->getColony(mapTileAtCursor->player, mapTileAtCursor->isle);
     if (colony == nullptr) {
         return;
     }
@@ -478,7 +469,7 @@ void GuiMgr::renderResourcesBar() {
         int x = 290;
         for (unsigned int i = 0; i < sizeof(goodsToDraw); i++, x += 110) {
             GoodsType goodsType = goodsToDraw[i];
-            graphicsMgr->getGraphicForGoodsIcon(goodsType)->drawAt(x, 5);
+            context->graphicsMgr->getGraphicForGoodsIcon(goodsType)->drawAt(x, 5);
 
             int goodsInventory = (int) colony->getGoods(goodsType).inventory;
             outputString = toString(goodsInventory);
@@ -491,23 +482,23 @@ void GuiMgr::renderResourcesBar() {
                 outputString += ")";
             }
 
-            fontMgr->renderText(renderer, outputString, x + 35, 10,
+            context->fontMgr->renderText(renderer, outputString, x + 35, 10,
                 &colorWhite, &colorBlack, "DroidSans-Bold.ttf", 18, RENDERTEXT_HALIGN_LEFT);
         }
     }
 
     // Einwohnerzahl (immer anzeigen)
-    PlainGraphic* populationIconGraphic = graphicsMgr->getOtherGraphic((OtherGraphic)
+    PlainGraphic* populationIconGraphic = context->graphicsMgr->getOtherGraphic((OtherGraphic)
         (OtherGraphic::COAT_OF_ARMS_POPULATION + mapTileAtCursor->player->getColorIndex()));
     populationIconGraphic->drawAt(655, 6);
 
     outputString = toString(colony->population);
-    fontMgr->renderText(renderer, outputString, 690, 10,
+    context->fontMgr->renderText(renderer, outputString, 690, 10,
         &colorWhite, &colorBlack, "DroidSans-Bold.ttf", 18, RENDERTEXT_HALIGN_LEFT);
 }
 
 void GuiMgr::drawGoodsBox(int x, int y, GoodsType goodsType, double inventory, double capacity) {
-    graphicsMgr->getGraphicForGoodsMarketplaceIcon(goodsType)->drawAt(x, y);
+    context->graphicsMgr->getGraphicForGoodsMarketplaceIcon(goodsType)->drawAt(x, y);
 
     if (inventory != -1) {
         // Balken anzeigen
@@ -522,14 +513,14 @@ void GuiMgr::drawGoodsBox(int x, int y, GoodsType goodsType, double inventory, d
         else {
             char inventoryOutput[10];
             sprintf(inventoryOutput, "%.0ft", floor(inventory));
-            fontMgr->renderText(renderer, inventoryOutput, x + 40, y + 42, &colorWhite, &colorBlack,
+            context->fontMgr->renderText(renderer, inventoryOutput, x + 40, y + 42, &colorWhite, &colorBlack,
                 "DroidSans.ttf", 12, RENDERTEXT_HALIGN_RIGHT | RENDERTEXT_VALIGN_BOTTOM);
         }
 
 #ifdef DEBUG_ECONOMICS
         char inventoryOutput[10];
         sprintf(inventoryOutput, "%.4ft", inventory);
-        fontMgr->renderText(renderer, inventoryOutput, x + 40, y + 55, &colorWhite, &colorBlack,
+        context->fontMgr->renderText(renderer, inventoryOutput, x + 40, y + 55, &colorWhite, &colorBlack,
             "DroidSans.ttf", 12, RENDERTEXT_HALIGN_RIGHT | RENDERTEXT_VALIGN_BOTTOM);
 #endif
     }

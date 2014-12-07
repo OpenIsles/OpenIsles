@@ -1,5 +1,4 @@
 #include "map/Structure.h"
-#include "gui/GuiMgr.h"
 #include "gui/Identifiers.h"
 #include "gui/components/GuiAddBuildingWidget.h"
 #include "gui/components/GuiButton.h"
@@ -8,12 +7,7 @@
 #include "gui/panel-widgets/GuiBuildMenuWidget.h"
 
 
-// Aus main.cpp importiert
-extern GraphicsMgr* graphicsMgr;
-extern GuiMgr* guiMgr;
-
-
-GuiBuildMenuWidget::GuiBuildMenuWidget() {
+GuiBuildMenuWidget::GuiBuildMenuWidget(const Context* const context) : GuiPanelWidget(context) {
     // TODO in Config auslagern
     static struct {
         BuildingGroup buildingGroup;
@@ -166,12 +160,12 @@ GuiBuildMenuWidget::GuiBuildMenuWidget() {
 
     for (int groupIndex = 0; groupIndex < 4; groupIndex++) {
         // Grid
-        GuiStaticElement* addBuildingGrid = new GuiStaticElement();
-        PlainGraphic* graphicAddBuildingGrid = graphicsMgr->getOtherGraphic(OtherGraphic::ADD_BUILDING_GRID);
+        GuiStaticElement* addBuildingGrid = new GuiStaticElement(context);
+        PlainGraphic* graphicAddBuildingGrid = context->graphicsMgr->getOtherGraphic(OtherGraphic::ADD_BUILDING_GRID);
         addBuildingGrid->setCoords(775, 450, graphicAddBuildingGrid->getWidth(), graphicAddBuildingGrid->getHeight());
         addBuildingGrid->setGraphic(graphicAddBuildingGrid);
         addBuildingGrid->setVisible(false);
-        guiMgr->registerElement(GUI_ID_ADD_BUILDING_GRID_BASE + groupIndex, addBuildingGrid);
+        context->guiMgr->registerElement(GUI_ID_ADD_BUILDING_GRID_BASE + groupIndex, addBuildingGrid);
 
         // Buttons im Grid
         for (int gridY = 0; gridY < 4; gridY++) {
@@ -183,37 +177,37 @@ GuiBuildMenuWidget::GuiBuildMenuWidget() {
                     continue;
                 }
 
-                GuiButton* addBuildingButton = new GuiButton();
+                GuiButton* addBuildingButton = new GuiButton(context);
                 PlainGraphic* graphicAddBuildingButton =
-                    graphicsMgr->getOtherGraphic(buildingGroups[groupIndex].buildings[buildingIndex].graphic);
+                    context->graphicsMgr->getOtherGraphic(buildingGroups[groupIndex].buildings[buildingIndex].graphic);
                 addBuildingButton->setCoords(
                     12 + 58 * gridX, 13 + 58 * gridY, graphicAddBuildingButton->getWidth(), graphicAddBuildingButton->getHeight());
                 addBuildingButton->setGraphic(graphicAddBuildingButton);
                 addBuildingButton->setGraphicPressed(graphicAddBuildingButton);
-                addBuildingButton->setOnClickFunction([ this, structureType ]() {
-                    guiMgr->panelState.addingStructure = structureType;
-                    guiMgr->panelState.buildingMenuOpen = false;
-                    guiMgr->updateGuiFromPanelState();
+                addBuildingButton->setOnClickFunction([ this, context, structureType ]() {
+                    context->guiMgr->panelState.addingStructure = structureType;
+                    context->guiMgr->panelState.buildingMenuOpen = false;
+                    context->guiMgr->updateGuiFromPanelState();
                 });
-                guiMgr->registerElement(GUI_ID_ADD_BUILDING_GRID_BUTTON_BASE + groupIndex * 16 + buildingIndex, addBuildingButton);
+                context->guiMgr->registerElement(GUI_ID_ADD_BUILDING_GRID_BUTTON_BASE + groupIndex * 16 + buildingIndex, addBuildingButton);
                 addBuildingGrid->addChildElement(addBuildingButton);
             }
         }
 
         // Button für die Gruppe
-        GuiPushButton* addBuildingPushButton = new GuiPushButton();
-        addBuildingPushButton->setGraphic(graphicsMgr->getOtherGraphic(buildingGroups[groupIndex].graphic));
-        addBuildingPushButton->setGraphicPressed(graphicsMgr->getOtherGraphic(buildingGroups[groupIndex].graphicPressed));
+        GuiPushButton* addBuildingPushButton = new GuiPushButton(context);
+        addBuildingPushButton->setGraphic(context->graphicsMgr->getOtherGraphic(buildingGroups[groupIndex].graphic));
+        addBuildingPushButton->setGraphicPressed(context->graphicsMgr->getOtherGraphic(buildingGroups[groupIndex].graphicPressed));
         addBuildingPushButton->setCoords(12 + groupIndex * 55, 378, 52, 64);
-        addBuildingPushButton->setOnClickFunction([ this, groupIndex ]() {
+        addBuildingPushButton->setOnClickFunction([ this, context, groupIndex ]() {
             // Wenn man die Gruppe nochmal klickt, die bereits ausgewählt ist und das ausgewählte Gebäude nicht
             // aus dieser Gruppe ist, wird das Gebäude gewechselt und eins aus der Gruppe genommen
-            if (guiMgr->panelState.selectedBuildingGroup == (BuildingGroup) groupIndex &&
-                guiMgr->panelState.buildingMenuOpen) {
+            if (context->guiMgr->panelState.selectedBuildingGroup == (BuildingGroup) groupIndex &&
+                context->guiMgr->panelState.buildingMenuOpen) {
 
                 bool addingStructureInSelectedBuildingGroup = false;
                 for (int i = 0; i < 16; i++) {
-                    if (buildingGroups[groupIndex].buildings[i].structureType == guiMgr->panelState.addingStructure) {
+                    if (buildingGroups[groupIndex].buildings[i].structureType == context->guiMgr->panelState.addingStructure) {
                         addingStructureInSelectedBuildingGroup = true;
                         break;
                     }
@@ -221,21 +215,21 @@ GuiBuildMenuWidget::GuiBuildMenuWidget() {
 
                 if (!addingStructureInSelectedBuildingGroup) {
                     // Gebäude unten links nehmen (= Index 12 von 16)
-                    guiMgr->panelState.addingStructure = buildingGroups[groupIndex].buildings[12].structureType;
+                    context->guiMgr->panelState.addingStructure = buildingGroups[groupIndex].buildings[12].structureType;
                 }
             }
             else {
-                guiMgr->panelState.selectedBuildingGroup = (BuildingGroup) groupIndex;
-                guiMgr->panelState.buildingMenuOpen = true;
+                context->guiMgr->panelState.selectedBuildingGroup = (BuildingGroup) groupIndex;
+                context->guiMgr->panelState.buildingMenuOpen = true;
             }
-            guiMgr->updateGuiFromPanelState();
+            context->guiMgr->updateGuiFromPanelState();
         });
-        guiMgr->registerElement(GUI_ID_ADD_BUILDING_PUSH_BUTTON_BASE + groupIndex, addBuildingPushButton);
+        context->guiMgr->registerElement(GUI_ID_ADD_BUILDING_PUSH_BUTTON_BASE + groupIndex, addBuildingPushButton);
         addChildElement(addBuildingPushButton);
     }
 
     // Gebäudebau: Infos, über zu platzierendes Gebäude
-    GuiAddBuildingWidget* addBuildingWidget = new GuiAddBuildingWidget();
-    guiMgr->registerElement(GUI_ID_ADD_BUILDING_WIDGET, addBuildingWidget);
+    GuiAddBuildingWidget* addBuildingWidget = new GuiAddBuildingWidget(context);
+    context->guiMgr->registerElement(GUI_ID_ADD_BUILDING_WIDGET, addBuildingWidget);
     addChildElement(addBuildingWidget);
 }

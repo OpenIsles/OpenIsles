@@ -202,7 +202,7 @@ public:
      * @param structureType Typ des Gebäudes
      * @return Konfiguration
      */
-    const BuildingConfig* const getBuildingConfig(StructureType structureType) {
+    const BuildingConfig* const getBuildingConfig(StructureType structureType) const {
         return buildingConfigs[structureType];
     }
 
@@ -211,7 +211,7 @@ public:
      * @param tileIndex Index der Kachel
      * @return Konfiguration
      */
-    const MapTileConfig* const getMapTileConfig(unsigned char tileIndex) {
+    const MapTileConfig* const getMapTileConfig(unsigned char tileIndex) const {
         return mapTileConfigs[tileIndex];
     }
 

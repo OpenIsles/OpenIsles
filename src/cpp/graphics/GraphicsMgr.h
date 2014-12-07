@@ -14,6 +14,8 @@
 enum GoodsType : char;
 enum StructureType : unsigned char;
 
+class ConfigMgr;
+
 typedef
 enum OtherGraphic {
     // Münzensymbol
@@ -118,6 +120,7 @@ public:
 private:
     // Dependencies
     SDL_Renderer* const renderer;
+    const ConfigMgr* const configMgr;
 
 	/**
 	 * @brief Array von Zeigern auf die Tile-Grafiken
@@ -153,8 +156,9 @@ public:
     /**
      * @brief Lädt alle Grafiken für das Spiel
      * @param renderer (Dependency)
+     * @param configMgr (Dependency)
      */
-	GraphicsMgr(SDL_Renderer* const renderer);
+	GraphicsMgr(SDL_Renderer* const renderer, const ConfigMgr* const configMgr);
 
     /**
      * @brief Entlädt die Grafiken und gibt den Speicher wieder frei

@@ -2,6 +2,7 @@
 #define _GUI_OPTIONS_MENU_WIDGET_H
 
 #include <SDL_render.h>
+#include "Context.h"
 #include "gui/components/GuiPushButton.h"
 #include "gui/panel-widgets/GuiPanelWidget.h"
 
@@ -12,7 +13,7 @@
 class GuiOptionsMenuWidget : public GuiPanelWidget {
 
 public:
-    GuiOptionsMenuWidget();
+    GuiOptionsMenuWidget(const Context* const context);
     virtual ~GuiOptionsMenuWidget() {}
 
     /**

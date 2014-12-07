@@ -4,11 +4,8 @@
 #include <set>
 #include "config/ConfigMgr.h"
 #include "game/Game.h"
+#include "map/Map.h"
 #include "pathfinding/AStar.h"
-
-// Aus main.cpp importiert
-extern ConfigMgr* configMgr;
-extern Game* game;
 
 #ifdef DEBUG_A_STAR
 MapCoordinate AStar::debugAStar_source = MapCoordinate(-1, -1);
@@ -19,10 +16,10 @@ bool AStar::debugAStar_useStreetOnly = false;
 #endif
 
 
-Route* AStar::findRoute(MapCoordinate source, MapCoordinate destination,
-                        Building* buildingToUseCatchmentArea, bool useStreetOnly) {
+AStar::AStar(const Context* const context, MapCoordinate source, MapCoordinate destination,
+             Building* buildingToUseCatchmentArea, bool useStreetOnly) : ContextAware(context) {
 
-    Map* map = game->getMap();
+    Map* map = context->game->getMap();
 
     // Ermitteln, aus und in welches Gebäude wir die Route berechnen wollen. Dies ist optional, eine Route muss nicht
     // notwendigerweise ein Gebäude am Anfang/Ende haben. In diesem Fall ist der Building-Zeiger nullptr.
@@ -196,23 +193,26 @@ Route* AStar::findRoute(MapCoordinate source, MapCoordinate destination,
 
     // openList ist leer, d.h. es existiert keine Route
     if (openList.empty()) {
-        return nullptr;
+        route = nullptr;
+        return;
     }
 
     // Ergebnisroute zusammenbauen, indem die Knoten zurückverfolgt werden. Wir bauen die Route damit von hinten her auf.
     MapCoordinate currentMapCoord = destination;
 
-    Route* route = new Route();
+    route = new Route();
     do {
         route->push_front(currentMapCoord);
         currentMapCoord = predecessorInPath[currentMapCoord]; // existiert kein Eintrag, wird implizit ein (-1, -1) angelegt
     } while(currentMapCoord.mapX != -1);
-
-    return route;
 }
 
-void AStar::cutRouteInsideBuildings(Route* route) {
-    Map* map = game->getMap();
+void AStar::cutRouteInsideBuildings() {
+    if (route == nullptr) {
+        return;
+    }
+
+    Map* map = context->game->getMap();
 
     // Erst von vorne
     int hopsToDeleteFromFront = 0;
@@ -278,7 +278,7 @@ bool AStar::isTileWalkable(MapCoordinate mapCoordinate, Building* sourceBuilding
                            Building* destinationBuilding, Building* buildingToUseCatchmentArea,
                            bool useStreetOnly, bool& insideSourceOrDestinationBuilding) {
 
-    Map* map = game->getMap();
+    Map* map = context->game->getMap();
 
     // Kachel überprüfen
     MapTile* mapTile = map->getMapTileAt(mapCoordinate.mapX, mapCoordinate.mapY);
@@ -286,7 +286,7 @@ bool AStar::isTileWalkable(MapCoordinate mapCoordinate, Building* sourceBuilding
         return false; // außerhalb der Karte
     }
 
-    const MapTileConfig* mapTileConfig = configMgr->getMapTileConfig(mapTile->tileIndex);
+    const MapTileConfig* mapTileConfig = context->configMgr->getMapTileConfig(mapTile->tileIndex);
     if (!mapTileConfig->isWalkableAndBuildable) {
         return false; // nur auf Grass darf man laufen
     }
@@ -313,7 +313,7 @@ bool AStar::isTileWalkable(MapCoordinate mapCoordinate, Building* sourceBuilding
 
     // Einschränkung durch Einzugsbereich?
     if (buildingToUseCatchmentArea != nullptr) {
-        if (!buildingToUseCatchmentArea->isInsideCatchmentArea(mapCoordinate.mapX, mapCoordinate.mapY)) {
+        if (!buildingToUseCatchmentArea->isInsideCatchmentArea(context->configMgr, mapCoordinate.mapX, mapCoordinate.mapY)) {
             return false;
         }
     }

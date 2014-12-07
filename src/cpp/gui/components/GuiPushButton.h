@@ -1,6 +1,7 @@
 #ifndef _GUI_PUSH_BUTTON_H
 #define _GUI_PUSH_BUTTON_H
 
+#include "Context.h"
 #include "gui/components/GuiButton.h"
 
 class SDL_Renderer;
@@ -19,7 +20,7 @@ private:
     bool active = false;
 
 public:
-	GuiPushButton();
+	GuiPushButton(const Context* const context);
 	virtual ~GuiPushButton();
     
     /**

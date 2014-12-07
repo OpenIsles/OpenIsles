@@ -1,17 +1,8 @@
 #include "config/ConfigMgr.h"
-#include "game/Colony.h"
 #include "game/Game.h"
 
-// Aus main.cpp importiert
-extern ConfigMgr* configMgr;
-extern Game* game;
 
-
-void Building::onClick(int mouseXInBuilding, int mouseYInBuilding) {
-    game->getMap()->setSelectedMapObject(this);
-}
-
-bool Building::isInsideCatchmentArea(int mapX, int mapY) const {
+bool Building::isInsideCatchmentArea(ConfigMgr* configMgr, int mapX, int mapY) const {
     const BuildingConfig* buildingConfig = configMgr->getBuildingConfig(structureType);
     const RectangleData<char>* catchmentArea = buildingConfig->getCatchmentArea();
     
@@ -33,27 +24,16 @@ bool Building::isInsideCatchmentArea(int mapX, int mapY) const {
     return (catchmentArea->data[y * catchmentArea->width + x] == '1');
 }
 
-bool Building::isInsideCatchmentArea(MapObject* mapObject) const {
+bool Building::isInsideCatchmentArea(ConfigMgr* configMgr, MapObject* mapObject) const {
     int testX, testY, testWidth, testHeight;
     mapObject->getMapCoords(testX, testY, testWidth, testHeight);
 
     for (int y = testY; y < testY + testHeight; y++) {
         for (int x = testX; x < testX + testWidth; x++) {
-            if (isInsideCatchmentArea(x, y)) {
+            if (isInsideCatchmentArea(configMgr, x, y)) {
                 return true;
             }
         }
     }
     return false;
-}
-
-void Building::addInhabitants(char amount) {
-    if ((int) inhabitants + amount < 0) {
-        throw new std::runtime_error("Cannot have negative inhabitants");
-    }
-
-    inhabitants += amount;
-
-    Colony* colony = game->getColony(this);
-    colony->population += amount;
 }

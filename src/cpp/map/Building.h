@@ -75,26 +75,22 @@ public:
     
     /**
      * @brief Testet, ob eine bestimmte Kachel innerhalb des Einzugsgebiets des Gebäudes liegt
+     * @param configMgr Dependency
      * @param mapX X-Map-Koordinate, die getestet wird
      * @param mapY Y-Map-Koordinate, die getestet wird
      * @return true, wenn die Kachel innerhalb des Einzugsgebiets liegt; sonst false
      */
-    bool isInsideCatchmentArea(int mapX, int mapY) const;
+    bool isInsideCatchmentArea(ConfigMgr* configMgr, int mapX, int mapY) const;
     
     /**
      * @brief Testet, ob ein bestimmtes Map-Objekt innerhalb des Einzugsgebiets des Gebäudes liegt. Dies ist immer dann
      * der Fall, wenn mindestens eine Kachel des Mapobjekts im Einzuggebiet liegt.
+     *
+     * @param configMgr Dependency
      * @param mapObject Map-Objekt, was getestet wird
      * @return true, wenn das Map-Objekt innerhalb des Einzugsgebiets liegt; sonst false
      */
-    bool isInsideCatchmentArea(MapObject* mapObject) const;
-    
-	/**
-	 * @brief Callback, der sich um einen Mausklick auf das Gebäude kümmert
-	 * @param mouseXInBuilding X-Koordinate innerhalb des Gebäude, wo geklickt wurde
-	 * @param mouseYInBuilding Y-Koordinate innerhalb des Gebäude, wo geklickt wurde
-	 */
-	void onClick(int mouseXInBuilding, int mouseYInBuilding);
+    bool isInsideCatchmentArea(ConfigMgr* configMgr, MapObject* mapObject) const;
 
     /**
      * @brief Prüft, ob das Gebäude ein Lagergebäude (Kontor oder Marketplatz), von welchem ALLE Waren abgeholt und
@@ -115,14 +111,6 @@ public:
                 structureType == PIONEERS_HOUSE5);
     }
 
-    /**
-     * @brief Ändert die Einwohner innerhalb des Gebäudes. Positive Werte fügen Bewohner hinzu, negative nehmen
-     * welche weg.
-     *
-     * Diese Methode aktualisiert gleich die Einwohnerzahl der Kolonie. Es sollte immer diese Methode benutzt werden,
-     * um Einwohner zu ändern.
-     */
-    void addInhabitants(char amount);
 };
 
 #endif

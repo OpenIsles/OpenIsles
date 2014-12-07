@@ -2,6 +2,7 @@
 #define _GUI_BASE_H
 
 #include <list>
+#include "Context.h"
 
 union SDL_Event;
 class SDL_Renderer;
@@ -10,9 +11,9 @@ class SDL_Renderer;
 /**
  * Basisklasse für alle GUI-Elemente
  */
-class GuiBase {
+class GuiBase : public ContextAware {
 
-protected: 
+protected:
     /**
      * @brief Position des Elements in Pixelkoordinaten. Ist das Element ein Child-Element eines anderen Elements,
      * so sind die Koordinaten relativ zu diesem Parent, ansonsten sind es Fensterkoordinaten.
@@ -42,7 +43,7 @@ protected:
     GuiBase* parentElement = nullptr;
 
 public:
-	GuiBase() {
+	GuiBase(const Context* const context) : ContextAware(context) {
         visible = true;
     }
 	virtual ~GuiBase() {}

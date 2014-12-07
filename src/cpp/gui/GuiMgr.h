@@ -3,8 +3,8 @@
 
 #include <SDL.h>
 #include <map>
+#include "Context.h"
 #include "game/GoodsSlot.h"
-#include "gui/panel-widgets/GuiBuildMenuWidget.h"
 
 class GuiBase;
 class GuiButton;
@@ -90,7 +90,7 @@ struct PanelState {
 /**
  * GUI-Manager. Verwaltet alle GUI-Elemente.
  */
-class GuiMgr {
+class GuiMgr : public ContextAware {
 
     // Die Widgets dürfen den inneren Zustand des GuiMgrs manipulieren
     friend class GuiBuildMenuWidget;
@@ -122,7 +122,7 @@ private:
     bool quitGame;
 
 public:
-	GuiMgr(SDL_Renderer* renderer);
+	GuiMgr(const Context* const context, SDL_Renderer* renderer);
 	~GuiMgr();
 
     /**

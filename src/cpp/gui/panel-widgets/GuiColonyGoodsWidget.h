@@ -2,6 +2,7 @@
 #define _GUI_COLONY_GOODS_WIDGET_H
 
 #include <SDL.h>
+#include "Context.h"
 #include "gui/panel-widgets/GuiPanelWidget.h"
 
 
@@ -11,7 +12,7 @@
 class GuiColonyGoodsWidget : public GuiPanelWidget {
 
 public:
-    GuiColonyGoodsWidget();
+    GuiColonyGoodsWidget(const Context* const context);
     virtual ~GuiColonyGoodsWidget() {}
 
     /**

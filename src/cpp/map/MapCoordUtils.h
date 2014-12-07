@@ -5,6 +5,7 @@
 
 struct SDL_Rect;
 class Building;
+class Map;
 class MapObjectGraphic;
 
 /**
@@ -92,14 +93,16 @@ public:
     /**
      * @brief Berechnet ausgehend von Map-Koordinaten und einer Grafik das SDL-Rechteck, an welche Stelle
      * die Grafik gesetzt werden muss.
-     * 
+     *
+     * @param map (Dependency)
      * @param mapX Map-X-Koordinate (Eingabe)
 	 * @param mapY Map-Y-Koordinate (Eingabe)
      * @param elevation Elevation, auf die die Grafik gezeichnet werden soll (Eingabe)
      * @param graphic zu zeichnende MapObject-Grafik (Eingabe)
      * @param rect SDL-Rechteck mit den Draw-Koordinaten, wo die Grafik hingezeichnet werden muss (Ausgabe)
      */
-    static void mapToDrawCoords(int mapX, int mapY, int elevation, MapObjectGraphic* graphic, SDL_Rect* rect);
+    static void mapToDrawCoords(
+        Map* map, int mapX, int mapY, int elevation, MapObjectGraphic* graphic, SDL_Rect* rect);
 
     /**
      * @brief Berechnet ausgehend von Map-Koordinaten und einer Grafik das SDL-Rechteck, an welche Stelle
@@ -107,29 +110,37 @@ public:
      * Diese Methode ist von der Funktion analog mapToDrawCoords(int, int, int, MapObjectGraphic*, SDL_Rect*),
      * rechnet aber mit double-Eingabewerten.
      *
+     * @param map (Dependency)
      * @param mapX Map-X-Koordinate (Eingabe)
      * @param mapY Map-Y-Koordinate (Eingabe)
      * @param elevation Elevation, auf die die Grafik gezeichnet werden soll (Eingabe)
      * @param graphic zu zeichnende MapObject-Grafik (Eingabe)
      * @param rect SDL-Rechteck mit den Draw-Koordinaten, wo die Grafik hingezeichnet werden muss (Ausgabe)
      */
-    static void mapToDrawCoords(double mapX, double mapY, int elevation, MapObjectGraphic* graphic, SDL_Rect* rect);
+    static void mapToDrawCoords(
+        Map* map, double mapX, double mapY, int elevation, MapObjectGraphic* graphic, SDL_Rect* rect);
 
     /**
      * @brief Berechnet für ein bestimmtes Gebäude das SDL-Rechteck, an welche Stelle die Grafik gesetzt werden muss.
+     * @param map (Dependency)
+     * @param graphicsMgr (Dependency)
      * @param building Gebäude (Eingabe)
      * @param rect SDL-Rechteck mit den Draw-Koordinaten, wo die Grafik hingezeichnet werden muss (Ausgabe)
      */
-    static void getDrawCoordsForBuilding(Building* building, SDL_Rect* rect);
+    static void getDrawCoordsForBuilding(Map* map, GraphicsMgr* graphicsMgr, Building* building, SDL_Rect* rect);
 
     /**
      * @brief Ermittelt für die aktuelle Position des Mauszeigers, welche Map-Koordinate dort liegt.
      * Es wird immer die elevatete Position genommen, selbst, wenn der Mauszeiger auf dem Wasser steht.
      *
+     * @param map (Dependency)
+     * @param mouseCurrentX X-Koordinate des Mauszeigers (Eingabe)
+     * @param mouseCurrentY Y-Koordinate des Mauszeigers (Eingabe)
      * @param mouseCurrentMapX Map-X-Koordinate (Ausgabe)
      * @param mouseCurrentMapY Map-Y-Koordinate (Ausgabe)
      */
-    static void getMapCoordsUnderMouse(int& mouseCurrentMapX, int& mouseCurrentMapY);
+    static void getMapCoordsUnderMouse(
+        Map* map, int mouseCurrentX, int mouseCurrentY, int& mouseCurrentMapX, int& mouseCurrentMapY);
 
 private:
     /**
@@ -137,13 +148,15 @@ private:
      * Draw-Koordinaten um.
      * Interne Helper-Methode von mapToDrawCoords().
      *
+     * @param map (Dependency)
      * @param screenX Screen-X-Koordinate (Eingabe)
      * @param screenY Screen-Y-Koordinate (Eingabe)
      * @param elevation Elevation, auf die die Grafik gezeichnet werden soll (Eingabe)
      * @param graphic zu zeichnende MapObject-Grafik (Eingabe)
      * @param rect SDL-Rechteck mit den Draw-Koordinaten, wo die Grafik hingezeichnet werden muss (Ausgabe)
      */
-    static void screenToDrawCoords(int screenX, int screenY, int elevation, MapObjectGraphic* graphic, SDL_Rect* rect);
+    static void screenToDrawCoords(
+        Map* map, int screenX, int screenY, int elevation, MapObjectGraphic* graphic, SDL_Rect* rect);
 
 };
 

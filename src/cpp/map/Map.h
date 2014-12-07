@@ -6,9 +6,17 @@
 #include <iostream>
 #include <list>
 #include <string.h>
+#include "Context.h"
+#include "gui/GuiMgr.h"
 #include "map/Building.h"
 #include "map/Isle.h"
 #include "utils/RectangleData.h"
+
+// Fenster-Größe
+
+#define WINDOW_WIDTH 1024
+#define WINDOW_HEIGHT 768
+
 
 // Konstanten für isAllowedToPlaceStructure()
 
@@ -87,7 +95,7 @@ struct MapTile {
 /**
  * @brief Stellt die Karte dar
  */
-class Map {
+class Map : public ContextAware {
 
     friend class GameIO; // GameIO soll zum Laden/Speichern einfach auf die Karte zugreifen können
 
@@ -165,7 +173,7 @@ private:
    const SDL_Rect minimapClipRect = { 796, 28, 200, 200 };
 
 public:
-	Map();
+	Map(const Context* const context);
 	~Map();
 
 	int getHeight() const {

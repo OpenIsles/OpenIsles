@@ -94,8 +94,9 @@ public:
      * @param rectSource Quell-Rechteck der Zeichenoperation oder nullptr, wenn die komplette Grafik verwendet werden soll
      * @param rectDestination Ziel-Rechteck der Zeichenoperation oder nullptr, wenn ganzflächig gemalt werden soll
      * @param drawingFlags Bitmaske aus DRAWING_FLAG_*-Konstanten, die angeben, wie die Grafik gezeichnet werden soll
+     * @param sdlTicks aktuelle Ticks aus `Context`, um den Blinke-Zustand zu kennen
      */
-    void draw(SDL_Rect* rectSource, SDL_Rect* rectDestination, int drawingFlags);
+    void draw(SDL_Rect* rectSource, SDL_Rect* rectDestination, int drawingFlags, Uint32 sdlTicks);
 
 private:
     /**

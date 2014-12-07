@@ -1,27 +1,15 @@
 #include "config/ConfigMgr.h"
 #include "game/Colony.h"
 #include "game/Game.h"
-#include "gui/GuiMgr.h"
 #include "map/Map.h"
 #include "utils/StringFormat.h"
 
 #ifdef DEBUG_A_STAR
 #include "gui/FontMgr.h"
 #include "pathfinding/AStar.h"
-
-extern FontMgr* fontMgr;
 #endif
 
-// Aus main.cpp importiert
-extern ConfigMgr* configMgr;
-extern Game* game;
-extern GraphicsMgr* graphicsMgr;
-extern GuiMgr* guiMgr;
-extern int mouseCurrentX, mouseCurrentY;
-extern const int windowWidth;
-extern const int windowHeight;
-
-Map::Map() {
+Map::Map(const Context* const context) : ContextAware(context) {
 }
 
 Map::~Map() {
@@ -83,13 +71,13 @@ void Map::setSelectedMapObject(MapObject* selectedMapObject) {
     this->selectedMapObject = selectedMapObject;
 
     // Dem GuiMgr Bescheid geben, damit er das Panel umschaltet
-    guiMgr->onSelectedMapObjectChanged(selectedMapObject);
+    context->guiMgr->onSelectedMapObjectChanged(selectedMapObject);
 }
 
 void Map::renderMinimap(SDL_Renderer* renderer) {
     // Nur die Kartenfläche vollmalen
 	SDL_Rect sdlMinimapClipRect(minimapClipRect);
-	sdlMinimapClipRect.y = windowHeight - (sdlMinimapClipRect.y + sdlMinimapClipRect.h); // SDL misst das Rechteck von UNTEN, kp, warum und ob das ein Bug is
+	sdlMinimapClipRect.y = WINDOW_HEIGHT - (sdlMinimapClipRect.y + sdlMinimapClipRect.h); // SDL misst das Rechteck von UNTEN, kp, warum und ob das ein Bug is
 	SDL_RenderSetClipRect(renderer, &sdlMinimapClipRect);
     
     float scaleFactor = (float) width / (float) minimapClipRect.w;
@@ -151,7 +139,7 @@ void Map::updateMinimapTexture() {
             
             MapTile* mapTile = mapTiles->getData(mapX, mapY, nullptr);
 
-            const MapTileConfig* mapTileConfig = configMgr->getMapTileConfig(mapTile->tileIndex);
+            const MapTileConfig* mapTileConfig = context->configMgr->getMapTileConfig(mapTile->tileIndex);
             Player* player = mapTile->player;
             
             *(pixelPtr++) =
@@ -160,7 +148,7 @@ void Map::updateMinimapTexture() {
     }
     
     // Daten zur Texture umwandeln
-    SDL_Renderer* const renderer = graphicsMgr->getRenderer();
+    SDL_Renderer* const renderer = context->graphicsMgr->getRenderer();
     SDL_Surface* surface = SDL_CreateRGBSurfaceFrom(
             pixelData, minimapClipRect.w, minimapClipRect.h, 32, minimapClipRect.w * 4, 0, 0, 0, 0);
     minimapTexture = SDL_CreateTextureFromSurface(renderer, surface);
@@ -199,16 +187,16 @@ void Map::renderMap(SDL_Renderer* renderer) {
 
 	// Nur die Kartenfläche vollmalen
 	SDL_Rect sdlMapClipRect(mapClipRect);
-	sdlMapClipRect.y = windowHeight - (sdlMapClipRect.y + sdlMapClipRect.h); // SDL misst das Rechteck von UNTEN, kp, warum und ob das ein Bug is
+	sdlMapClipRect.y = WINDOW_HEIGHT - (sdlMapClipRect.y + sdlMapClipRect.h); // SDL misst das Rechteck von UNTEN, kp, warum und ob das ein Bug is
 	SDL_RenderSetClipRect(renderer, &sdlMapClipRect);
 
 	// Kacheln rendern
 	for (int mapY = mapYStart; mapY <= mapYEnd; mapY++) {
 		for (int mapX = mapXStart; mapX <= mapXEnd; mapX++) {
-            MapObjectGraphic* tileGraphic = graphicsMgr->getGraphicForTile(getMapTileAt(mapX, mapY)->tileIndex);
+            MapObjectGraphic* tileGraphic = context->graphicsMgr->getGraphicForTile(getMapTileAt(mapX, mapY)->tileIndex);
 
             SDL_Rect rectDestination;
-            MapCoordUtils::mapToDrawCoords(mapX, mapY, 0, tileGraphic, &rectDestination);
+            MapCoordUtils::mapToDrawCoords(this, mapX, mapY, 0, tileGraphic, &rectDestination);
 
 			// Clipping
 			if (rectDestination.x >= mapClipRect.x + mapClipRect.w || rectDestination.y >= mapClipRect.y + mapClipRect.h
@@ -221,29 +209,29 @@ void Map::renderMap(SDL_Renderer* renderer) {
 			if (selectedMapObject != nullptr) {
                 Building* selectedBuilding = dynamic_cast<Building*>(selectedMapObject);
                 bool insideCatchmentArea = 
-                    (selectedBuilding != nullptr && selectedBuilding->isInsideCatchmentArea(mapX, mapY));
+                    (selectedBuilding != nullptr && selectedBuilding->isInsideCatchmentArea(context->configMgr, mapX, mapY));
               
                 if (!insideCatchmentArea) {
                     drawingFlags |= MapObjectGraphic::DRAWING_FLAG_DARKENED;
                 }
 			}
-            tileGraphic->draw(nullptr, &rectDestination, drawingFlags);
+            tileGraphic->draw(nullptr, &rectDestination, drawingFlags, context->sdlTicks);
 		}
 	}
 
     // Postionieren wir grade ein neues Gebäude?
     Structure* structureBeingAdded = nullptr;
-    if (guiMgr->getPanelState().selectedPanelButton == PanelButton::ADD_BUILDING) {
+    if (context->guiMgr->getPanelState().selectedPanelButton == PanelButton::ADD_BUILDING) {
         int mapX, mapY;
-        MapCoordUtils::getMapCoordsUnderMouse(mapX, mapY);
+        MapCoordUtils::getMapCoordsUnderMouse(this, context->mouseCurrentX, context->mouseCurrentY, mapX, mapY);
 
-        StructureType structureType = guiMgr->getPanelState().addingStructure;
+        StructureType structureType = context->guiMgr->getPanelState().addingStructure;
         unsigned char allowedToPlaceStructure = isAllowedToPlaceStructure(mapX, mapY, structureType);
 
         // Auf dem Ozean malen wir gar nix.
         // Is was im Weg, malen wir auch nicht. // TODO wir müssen eine flache Kachel malen, sonst sieht man ja gar nix
         if (!(allowedToPlaceStructure & (PLACING_STRUCTURE_OUTSIDE_OF_ISLE | PLACING_STRUCTURE_SOMETHING_IN_THE_WAY))) {
-            MapObjectGraphic* graphic = graphicsMgr->getGraphicForStructure(structureType);
+            MapObjectGraphic* graphic = context->graphicsMgr->getGraphicForStructure(structureType);
 
             int drawingFlags = MapObjectGraphic::DRAWING_FLAG_MASKED;
             if (allowedToPlaceStructure & PLACING_STRUCTURE_ROOM_NOT_UNLOCK) {
@@ -306,7 +294,7 @@ void Map::renderMap(SDL_Renderer* renderer) {
                 structureType = getConcreteStreetStructureType(mapX, mapY, structureType);
             }
 
-            MapObjectGraphic* mapObjectGraphic = graphicsMgr->getGraphicForStructure(structureType);
+            MapObjectGraphic* mapObjectGraphic = context->graphicsMgr->getGraphicForStructure(structureType);
 
             int xInMapObject =
                 ((moMapHeight - 1) - tileOffsetYInMapObject + tileOffsetXInMapObject) * GraphicsMgr::TILE_WIDTH_HALF;
@@ -332,13 +320,13 @@ void Map::renderMap(SDL_Renderer* renderer) {
             if (selectedMapObject != nullptr) {
                 Building* selectedBuilding = dynamic_cast<Building*>(selectedMapObject);
                 bool insideCatchmentArea =
-                    (selectedBuilding != nullptr && selectedBuilding->isInsideCatchmentArea(structure));
+                    (selectedBuilding != nullptr && selectedBuilding->isInsideCatchmentArea(context->configMgr, structure));
 
                 if (!insideCatchmentArea) {
                     drawingFlags |= MapObjectGraphic::DRAWING_FLAG_DARKENED;
                 }
             }
-            mapObjectGraphic->draw(&rectSource, &rectDestination, drawingFlags);
+            mapObjectGraphic->draw(&rectSource, &rectDestination, drawingFlags, context->sdlTicks);
 
             // In mapObjectAlreadyDrawnThere die Kacheln-Spalte als erledigt markieren
             do {
@@ -373,7 +361,7 @@ void Map::renderMap(SDL_Renderer* renderer) {
         double mapXExact = (double) mapX + carrier->mapXFraction;
         double mapYExact = (double) mapY + carrier->mapYFraction;
 
-        MapCoordUtils::mapToDrawCoords(mapXExact, mapYExact, 1, animation, &rect);
+        MapCoordUtils::mapToDrawCoords(this, mapXExact, mapYExact, 1, animation, &rect);
 
         animation->drawFrameScaledAt(
             rect.x, rect.y, (double) 1 / (double) screenZoom, (unsigned int) carrier->animationFrame);
@@ -428,7 +416,7 @@ void Map::renderMap(SDL_Renderer* renderer) {
             SDL_RenderFillRect(renderer, &rect);
 
             static SDL_Color colorWhite = {255, 255, 255, 255};
-            fontMgr->renderText(renderer, toString(i++), screenX, screenY, &colorWhite, nullptr,
+            context->fontMgr->renderText(renderer, toString(i++), screenX, screenY, &colorWhite, nullptr,
                 "DroidSans.ttf", 9, RENDERTEXT_HALIGN_CENTER | RENDERTEXT_VALIGN_MIDDLE);
         }
     }
@@ -452,11 +440,11 @@ unsigned char Map::isAllowedToPlaceStructure(int mapX, int mapY, StructureType s
     unsigned char result = PLACING_STRUCTURE_ALLOWED;
     
     // Resourcen checken
-    Player* currentPlayer = game->getCurrentPlayer();
-    Colony* colony = game->getColony(currentPlayer, isle);
+    Player* currentPlayer = context->game->getCurrentPlayer();
+    Colony* colony = context->game->getColony(currentPlayer, isle);
     
     if (colony != nullptr) {
-        const BuildingCosts* buildingCosts = configMgr->getBuildingConfig(structureType)->getBuildingCosts();
+        const BuildingCosts* buildingCosts = context->configMgr->getBuildingConfig(structureType)->getBuildingCosts();
         if ((buildingCosts->coins > currentPlayer->coins) ||
             (buildingCosts->tools > colony->getGoods(GoodsType::TOOLS).inventory) ||
             (buildingCosts->wood > colony->getGoods(GoodsType::WOOD).inventory) ||
@@ -466,7 +454,7 @@ unsigned char Map::isAllowedToPlaceStructure(int mapX, int mapY, StructureType s
     }
     
     // Checken, ob alles frei is, um das Gebäude zu setzen
-    MapObjectGraphic* graphic = graphicsMgr->getGraphicForStructure(structureType);
+    MapObjectGraphic* graphic = context->graphicsMgr->getGraphicForStructure(structureType);
     for (int y = mapY; y < mapY + graphic->getMapHeight(); y++) {
         for (int x = mapX; x < mapX + graphic->getMapWidth(); x++) {
             MapTile* mapTile = mapTiles->getData(x, y, nullptr);
@@ -476,10 +464,10 @@ unsigned char Map::isAllowedToPlaceStructure(int mapX, int mapY, StructureType s
                 return result;
             }
 
-            const MapTileConfig* mapTileConfig = configMgr->getMapTileConfig(mapTile->tileIndex);
+            const MapTileConfig* mapTileConfig = context->configMgr->getMapTileConfig(mapTile->tileIndex);
 
             if (mapTile->player == nullptr ||                     // Gebiet nicht erschlossen, ..,
-                mapTile->player != game->getCurrentPlayer() ||    // ... nicht unseres...
+                mapTile->player != context->game->getCurrentPlayer() ||    // ... nicht unseres...
                 !mapTileConfig->isWalkableAndBuildable) {         // ... oder Gelände passt nicht
 
                 result |= PLACING_STRUCTURE_ROOM_NOT_UNLOCK;
@@ -494,7 +482,7 @@ unsigned char Map::isAllowedToPlaceStructure(int mapX, int mapY, StructureType s
 void Map::drawCatchmentArea(SDL_Renderer* const renderer, Structure* structure) {
     SDL_SetRenderDrawColor(renderer, 0xc8, 0xaf, 0x37, 255);
 
-    const BuildingConfig* buildingConfig = configMgr->getBuildingConfig(structure->getStructureType());
+    const BuildingConfig* buildingConfig = context->configMgr->getBuildingConfig(structure->getStructureType());
     const RectangleData<char>* catchmentArea = buildingConfig->getCatchmentArea();
     if (catchmentArea != nullptr) {
         for (int y = 0; y < catchmentArea->height; y++) {
@@ -571,7 +559,7 @@ void Map::addMapObject(MapObject* mapObject) {
 }
 
 const Structure* Map::addStructure(int mapX, int mapY, StructureType structureType, Player* player) {
-    MapObjectGraphic* graphic = graphicsMgr->getGraphicForStructure(structureType);
+    MapObjectGraphic* graphic = context->graphicsMgr->getGraphicForStructure(structureType);
     
 	// Objekt anlegen und in die Liste aufnehmen
 	Structure* structure = new Structure();
@@ -585,7 +573,7 @@ const Structure* Map::addStructure(int mapX, int mapY, StructureType structureTy
 }
 
 const Building* Map::addBuilding(int mapX, int mapY, StructureType structureType, Player* player) {
-    MapObjectGraphic* graphic = graphicsMgr->getGraphicForStructure(structureType);
+    MapObjectGraphic* graphic = context->graphicsMgr->getGraphicForStructure(structureType);
     
 	// Objekt anlegen
 	Building* building = new Building();
@@ -594,7 +582,7 @@ const Building* Map::addBuilding(int mapX, int mapY, StructureType structureType
     building->setPlayer(player);
 
     // Defaults für Produktionsdaten setzen
-    const BuildingConfig* buildingConfig = configMgr->getBuildingConfig(structureType);
+    const BuildingConfig* buildingConfig = context->configMgr->getBuildingConfig(structureType);
     building->productionSlots = ProductionSlots(buildingConfig->buildingProduction);
 
     // Objekt in die Liste aufnehmen.
@@ -605,7 +593,7 @@ const Building* Map::addBuilding(int mapX, int mapY, StructureType structureType
         addOfficeCatchmentAreaToMap(*building);
     }
 
-    Colony* colony = game->getColony(building); // Colony kann erst gefunden werden, wenn addOfficeCatchmentAreaToMap() aufgerufen wurde
+    Colony* colony = context->game->getColony(building); // Colony kann erst gefunden werden, wenn addOfficeCatchmentAreaToMap() aufgerufen wurde
     if (structureType == OFFICE1 || structureType == MARKETPLACE) {
         colony->increaseGoodsCapacity(10);
     }
@@ -614,7 +602,7 @@ const Building* Map::addBuilding(int mapX, int mapY, StructureType structureType
     if (building->isHouse()) {
         // TODO Start-Einwohnerzahl setzen
     } else {
-        building->addInhabitants(buildingConfig->inhabitants);
+        context->game->addInhabitantsToBuilding(building, buildingConfig->inhabitants);
     }
 
 	return building;
@@ -624,7 +612,7 @@ void Map::addOfficeCatchmentAreaToMap(const Building& building) {
     int buildingMapX, buildingMapY;
     building.getMapCoords(buildingMapX, buildingMapY);
     
-    const BuildingConfig* buildingConfig = configMgr->getBuildingConfig(building.getStructureType());
+    const BuildingConfig* buildingConfig = context->configMgr->getBuildingConfig(building.getStructureType());
     RectangleData<char>* catchmentArea = buildingConfig->getCatchmentArea();
     
     // TODO Sehr hässlich, aber tuts erstmal sicher, ohne Gefahr.
@@ -634,7 +622,7 @@ void Map::addOfficeCatchmentAreaToMap(const Building& building) {
         for (int mapX = buildingMapX - catchmentArea->width/2 - 1;
                  mapX <= buildingMapX + catchmentArea->width/2 + 1; mapX++) {
             
-            if (!building.isInsideCatchmentArea(mapX, mapY)) {
+            if (!building.isInsideCatchmentArea(context->configMgr, mapX, mapY)) {
                 continue;
             }
             
@@ -707,9 +695,9 @@ void Map::onClick(int mouseX, int mouseY) {
 
 void Map::onClickInMap(int mouseX, int mouseY) {
 	// Grade beim Platzieren eines neuen Gebäudes?
-    if (guiMgr->getPanelState().selectedPanelButton == PanelButton::ADD_BUILDING) {
+    if (context->guiMgr->getPanelState().selectedPanelButton == PanelButton::ADD_BUILDING) {
         int mapX, mapY;
-        MapCoordUtils::getMapCoordsUnderMouse(mapX, mapY);
+        MapCoordUtils::getMapCoordsUnderMouse(this, context->mouseCurrentX, context->mouseCurrentY, mapX, mapY);
         
         onClickInMapWhileAddingStructure(mapX, mapY);
         return;
@@ -730,7 +718,7 @@ void Map::onClickInMap(int mouseX, int mouseY) {
 		}
 
         SDL_Rect rect;
-        MapCoordUtils::getDrawCoordsForBuilding(building, &rect);
+        MapCoordUtils::getDrawCoordsForBuilding(this, context->graphicsMgr, building, &rect);
 
         // Außerhalb der Boundary-Box des Objekt geklickt?
         // TODO für Gebäude mit elevation=0 ggf. anpassen
@@ -751,12 +739,12 @@ void Map::onClickInMap(int mouseX, int mouseY) {
 		Uint8 r, g, b, a;
 		int x = (mouseX - rect.x) * screenZoom;
 		int y = (mouseY - rect.y) * screenZoom;
-        MapObjectGraphic* graphic = graphicsMgr->getGraphicForStructure(building->getStructureType());
+        MapObjectGraphic* graphic = context->graphicsMgr->getGraphicForStructure(building->getStructureType());
         graphic->getPixel(x, y, &r, &g, &b, &a);
 
 		// Checken, ob Pixel un-transparent genug ist, um es als Treffer zu nehmen
 		if (a > 127) {
-			building->onClick(x, y);
+            setSelectedMapObject(building);
 			return;
 		}
 	}
@@ -766,14 +754,14 @@ void Map::onClickInMap(int mouseX, int mouseY) {
 }
 
 void Map::onClickInMapWhileAddingStructure(int mapX, int mapY) {
-    StructureType structureType = guiMgr->getPanelState().addingStructure;
+    StructureType structureType = context->guiMgr->getPanelState().addingStructure;
     if (isAllowedToPlaceStructure(mapX, mapY, structureType) != PLACING_STRUCTURE_ALLOWED) {
         // Dürfen wir hier/jetzt nicht setzen, ignorieren wir den Klick
         return;
     }
     
     // Gebäude platzieren und Modus verlassen
-    Player* currentPlayer = game->getCurrentPlayer();
+    Player* currentPlayer = context->game->getCurrentPlayer();
     if (structureType >= START_BUILDINGS) {
         // Sonderfall Haus: Wir wählen zufällig eins aus
         if (structureType == StructureType::PIONEERS_HOUSE1) {
@@ -791,8 +779,8 @@ void Map::onClickInMapWhileAddingStructure(int mapX, int mapY) {
     }
     
     // Resourcen bezahlen
-    Colony* colony = game->getColony(currentPlayer, getMapTileAt(mapX, mapY)->isle);
-    const BuildingCosts* buildingCosts = configMgr->getBuildingConfig(structureType)->getBuildingCosts();
+    Colony* colony = context->game->getColony(currentPlayer, getMapTileAt(mapX, mapY)->isle);
+    const BuildingCosts* buildingCosts = context->configMgr->getBuildingConfig(structureType)->getBuildingCosts();
     currentPlayer->coins -= buildingCosts->coins;
     colony->subtractBuildingCosts(buildingCosts);
 }
@@ -840,7 +828,7 @@ void Map::deleteSelectedObject() {
     if (selectedStructure != nullptr) {
         StructureType structureType = selectedStructure->getStructureType();
         if (structureType == MARKETPLACE) {
-            Colony* colony = game->getColony(selectedStructure);
+            Colony* colony = context->game->getColony(selectedStructure);
             colony->decreaseGoodsCapacity(10);
         }
     }

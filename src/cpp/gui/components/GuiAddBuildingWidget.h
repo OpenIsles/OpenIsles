@@ -2,6 +2,7 @@
 #define _GUI_ADD_BUILDING_WIDGET_H
 
 #include <SDL_render.h>
+#include "Context.h"
 #include "gui/components/GuiBase.h"
 
 
@@ -12,7 +13,7 @@
 class GuiAddBuildingWidget : public GuiBase {
 
 public:
-    GuiAddBuildingWidget();
+    GuiAddBuildingWidget(const Context* const context);
     virtual ~GuiAddBuildingWidget() {}
 
     /**

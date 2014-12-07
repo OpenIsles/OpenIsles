@@ -2,6 +2,7 @@
 #define _A_STAR_H
 
 #include <list>
+#include "Context.h"
 
 class Building;
 
@@ -57,7 +58,7 @@ typedef std::list<MapCoordinate> Route;
 /**
  * @brief Pathfinding-Algorithmus A*
  */
-class AStar {
+class AStar : public ContextAware {
 
 #ifdef DEBUG_A_STAR
 public:
@@ -90,22 +91,28 @@ public:
     static bool debugAStar_useStreetOnly;
 #endif
 
+private:
+    /**
+     * @brief berechnete Route
+     */
+    Route* route;
+
 public:
     /**
      * @brief Berechnet eine Route von einer Kachel der Karte zu einer anderen.
+     * @param context Dependency
      * @param source Ausgangspunkt
      * @param destination Ziel
      * @param buildingToUseCatchmentArea Zeiger auf ein Gebäude. Wenn gesetzt, dürfen für die Route nur Kacheln benutzt
      *                                   werden, die sich im Einzugsbereich dieses Gebäudes befinden. Wird nullptr
      *                                   verwendet, so dürfen für die Route beliebige Felder benutzt werden.
      * @param useStreetOnly `true`, um nur Straßen für die Route zu verwenden, `false` erlaubt auch über Gras zu laufen
-     * @return Zeiger auf die berechnete Route oder nullptr, wenn keine Route existiert
      */
-    static Route* findRoute(MapCoordinate source, MapCoordinate destination,
-                            Building* buildingToUseCatchmentArea, bool useStreetOnly);
+    AStar(const Context* const context, MapCoordinate source, MapCoordinate destination,
+          Building* buildingToUseCatchmentArea, bool useStreetOnly);
 
     /**
-     * @brief Kürzt ggf. eine gegebene Route, wenn an Start- und/oder Endpunkt ein Gebäude liegt und mehrere
+     * @brief Kürzt ggf. die berechnete Route, wenn an Start- und/oder Endpunkt ein Gebäude liegt und mehrere
      * Routenschritte innerhalb desselben Gebäudes liegen. Die Route wird so verändert, dass nur genau eine Kachel
      * des Gebäudes in der Route liegt.
      *
@@ -130,9 +137,17 @@ public:
      * Verwendet man die Map-Koordinaten eines Gebäudes als Start- und Endpunkte, ergibt sich obiges Beispiel.
      * Diese Methode entfernt die Knoten (1) und (6) aus der Route.
      *
-     * @param route Route, die bearbeitet wird
+     * Wurde sowieso keine Route gefunden, ist diese Methode eine No-Op.
      */
-    static void cutRouteInsideBuildings(Route* route);
+    void cutRouteInsideBuildings();
+
+    /**
+     * @brief Liefert die berechnete Route zurück.
+     * @return Zeiger auf die berechnete Route oder nullptr, wenn keine Route existiert.
+     */
+    Route* getRoute() const {
+        return route;
+    }
 
 private:
     /**
@@ -150,9 +165,9 @@ private:
      *                                          Zielgebäude (wenn gesetzt) befindet. (OUT)
      * @return true wenn die Kachel betreten werden darf, sonst false
      */
-    static bool isTileWalkable(MapCoordinate mapCoordinate, Building* sourceBuilding,
-                               Building* destinationBuilding, Building* buildingToUseCatchmentArea,
-                               bool useStreetOnly, bool& insideSourceOrDestinationBuilding);
+    bool isTileWalkable(MapCoordinate mapCoordinate, Building* sourceBuilding,
+                        Building* destinationBuilding, Building* buildingToUseCatchmentArea,
+                        bool useStreetOnly, bool& insideSourceOrDestinationBuilding);
 
 };
 

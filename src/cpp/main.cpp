@@ -5,14 +5,14 @@
 #include <SDL_image.h>
 #include <SDL_ttf.h>
 #include <iostream>
+#include "Context.h"
 #include "config/ConfigMgr.h"
 #include "economics/EconomicsMgr.h"
 #include "game/Game.h"
 #include "game/GameIO.h"
-#include "game/Player.h"
-#include "graphics/GraphicsMgr.h"
 #include "gui/FontMgr.h"
 #include "gui/GuiMgr.h"
+#include "map/Map.h"
 #include "sound/SoundMgr.h"
 #include "utils/FpsCounter.h"
 #include "utils/StringFormat.h"
@@ -28,91 +28,41 @@ static SDL_Color colorWhite = {255, 255, 255, 255};
  * globale Variablen                                                                                                 *
  *********************************************************************************************************************/
 
-/**
- * @brief Grafik-Manager
- */
-GraphicsMgr* graphicsMgr;
-
-/**
- * @brief aktuelle Position des Mauszeigers in Fenster-Koordinaten
- */
-int mouseCurrentX, mouseCurrentY;
-
 #ifdef DEBUG
 /**
  * @brief Zeichenketten-Puffer für 7 Zeilen Debug-Ausgabe
  */
-std::string debugOutput[7];
+static std::string debugOutput[7];
 #endif
-
-/**
- * @brief Verwaltung der Schriftarten
- */
-FontMgr* fontMgr;
-
-/**
- * @brief die Benutzeroberfläche
- */
-GuiMgr* guiMgr;
-
-/**
- * @brief der Sound-Manager
- */
-SoundMgr* soundMgr;
-
-/**
- * @brief Konfigurations-Manager
- */
-ConfigMgr* configMgr;
-
-/**
- * @brief Zustand des Spiels
- */
-Game* game;
-
-/**
- * @brief Manager zuständig für die Wirtschaft
- */
-EconomicsMgr* economicsMgr;
-
-/**
- * @brief pro Frame wird einmal auf die Uhr geguckt. In dieser Variable steht der SDL-Tickcount.
- */
-Uint32 sdlTicks;
-
-/**
- * @brief Größe des Fensters
- */
-extern const int windowWidth = 1024;
-extern const int windowHeight = 768;
 
 /*********************************************************************************************************************
  * Prototypen                                                                                                        *
  *********************************************************************************************************************/
 
 int main(int argc, char** argv);
-void drawFrame(SDL_Renderer* renderer);
+void drawFrame(const Context& context, SDL_Renderer* renderer);
 
 /*********************************************************************************************************************
  * Implementierung                                                                                                   *
  *********************************************************************************************************************/
 
-void drawFrame(SDL_Renderer* renderer) {
-    Map* map = game->getMap();
+void drawFrame(const Context& context, SDL_Renderer* renderer) {
+    Map* map = context.game->getMap();
 
 	// Karte rendern
     map->renderMap(renderer);
 
 	// UI rendern
-	guiMgr->render(renderer);
+    context.guiMgr->render(renderer);
     
     // Statuszeile
     const MapObject* selectedMapObject = map->getSelectedMapObject();
     if (selectedMapObject != nullptr) {
         const Building* selectedBuilding = reinterpret_cast<const Building*>(selectedMapObject);
         if (selectedBuilding != nullptr) {
-            const BuildingConfig* buildingConfig = configMgr->getBuildingConfig(selectedBuilding->getStructureType());
-            fontMgr->renderText(renderer, buildingConfig->name, 753, 744,
+            const BuildingConfig* buildingConfig =
+                context.configMgr->getBuildingConfig(selectedBuilding->getStructureType());
+            context.fontMgr->renderText(renderer, buildingConfig->name, 753, 744,
                 &colorWhite, nullptr, "DroidSans-Bold.ttf", 14, RENDERTEXT_HALIGN_RIGHT);
         }
     }
@@ -127,7 +77,7 @@ void drawFrame(SDL_Renderer* renderer) {
 			continue;
 		}
 
-		fontMgr->renderText(renderer, debugOutput[i], 10, 40 + 15 * i,
+        context.fontMgr->renderText(renderer, debugOutput[i], 10, 40 + 15 * i,
             &colorWhite, nullptr, "DroidSans-Bold.ttf", 14, RENDERTEXT_HALIGN_LEFT);
 	}
 #endif
@@ -150,8 +100,8 @@ int main(int argc, char** argv) {
 		return EXIT_FAILURE;
 	}
 
-	SDL_Window* window = SDL_CreateWindow("OpenIsles", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, windowWidth,
-			windowHeight, SDL_WINDOW_SHOWN);
+	SDL_Window* window = SDL_CreateWindow(
+        "OpenIsles", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_SHOWN);
 	if (window == nullptr) {
 		std::cerr << "SDL could not create window: " << SDL_GetError() << std::endl;
 		return EXIT_FAILURE;
@@ -167,8 +117,8 @@ int main(int argc, char** argv) {
 		return EXIT_FAILURE;
 	}
 
-	SDL_Texture* offscreenTexture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET,
-			windowWidth, windowHeight);
+	SDL_Texture* offscreenTexture = SDL_CreateTexture(
+        renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, WINDOW_WIDTH, WINDOW_HEIGHT);
 
 	if ((IMG_Init(IMG_INIT_PNG) & IMG_INIT_PNG) != IMG_INIT_PNG) {
 		std::cerr << "Could not init SDL-image: " << IMG_GetError() << std::endl;
@@ -184,18 +134,33 @@ int main(int argc, char** argv) {
 
 	// Game-Initialisierung //////////////////////////////////////////////////////////////////////////////////////////
 
-	soundMgr = new SoundMgr();
-    configMgr = new ConfigMgr();     // Der GraphicsMgr braucht die Dateinamen vom ConfigMgr
-	graphicsMgr = new GraphicsMgr(renderer);
-    fontMgr = new FontMgr();
+    Context context = Context();
 
-    guiMgr = new GuiMgr(renderer);
+	SoundMgr* soundMgr = new SoundMgr();
+    context.soundMgr = soundMgr;
+
+    ConfigMgr* configMgr = new ConfigMgr();
+    context.configMgr = configMgr;
+
+	GraphicsMgr* graphicsMgr = new GraphicsMgr(renderer, configMgr);
+    context.graphicsMgr = graphicsMgr;
+
+    FontMgr* fontMgr = new FontMgr();
+    context.fontMgr = fontMgr;
+
+    GuiMgr* guiMgr = new GuiMgr(&context, renderer);
+    context.guiMgr = guiMgr;
     guiMgr->initGui();
+
+    EconomicsMgr* economicsMgr = new EconomicsMgr(&context);
+    context.economicsMgr = economicsMgr;
 
     FpsCounter* fpsCounter = new FpsCounter(500);
     
-    game = new Game();
-    GameIO::loadGameFromTMX("data/map/empty-map.tmx");
+    Game* game = new Game(&context);
+    context.game = game;
+
+    GameIO::loadGameFromTMX(game, "data/map/empty-map.tmx");
 
 	// Mainloop //////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -205,7 +170,7 @@ int main(int argc, char** argv) {
 
         // während eines Frames nur einmal auf die Uhr gucken, damit z.B. beim Blinkend-Zeichnen nicht ein Schnibbel
         // eines Gebäude gezeichnet und ein anderer ne Millisekunde später nicht mehr
-        sdlTicks = SDL_GetTicks();
+        context.sdlTicks = SDL_GetTicks();
 
 		// Events handeln
 		SDL_Event event;
@@ -225,7 +190,7 @@ int main(int argc, char** argv) {
         }
 
         // Position des Mauszeigers holen
-        SDL_GetMouseState(&mouseCurrentX, &mouseCurrentY);
+        SDL_GetMouseState(&context.mouseCurrentX, &context.mouseCurrentY);
 
 #ifdef DEBUG
         int screenOffsetX = map->getScreenOffsetX();
@@ -233,11 +198,12 @@ int main(int argc, char** argv) {
         int screenZoom = map->getScreenZoom();
 
         int screenX, screenY;
-        screenX = (mouseCurrentX * screenZoom) + screenOffsetX;
-        screenY = (mouseCurrentY * screenZoom) + screenOffsetY;
+        screenX = (context.mouseCurrentX * screenZoom) + screenOffsetX;
+        screenY = (context.mouseCurrentY * screenZoom) + screenOffsetY;
 
         int mouseCurrentMapX, mouseCurrentMapY;
-        MapCoordUtils::getMapCoordsUnderMouse(mouseCurrentMapX, mouseCurrentMapY);
+        MapCoordUtils::getMapCoordsUnderMouse(
+            map, context.mouseCurrentX, context.mouseCurrentY, mouseCurrentMapX, mouseCurrentMapY);
 
 		// Debug-Infos vorbereiten, damit wir sie später einfach nur ausgeben können
 		debugOutput[0] = "FPS: average = " + toString(fpsCounter->getFpsAvg()) +
@@ -248,7 +214,7 @@ int main(int argc, char** argv) {
                 toString(screenZoom);
 
         debugOutput[2] = "mouse = (" + 
-                toString(mouseCurrentX) + ", " + toString(mouseCurrentY) + "), mapElevated = (" +
+                toString(context.mouseCurrentX) + ", " + toString(context.mouseCurrentY) + "), mapElevated = (" +
                 toString(mouseCurrentMapX) + ", " + toString(mouseCurrentMapY) + "), screen = (" +
                 toString(screenX) + ", " + toString(screenY) + ")";
     
@@ -288,7 +254,7 @@ int main(int argc, char** argv) {
 		SDL_SetRenderTarget(renderer, offscreenTexture);
         SDL_SetRenderDrawColor(renderer, 0, 0, 128, 255);
 		SDL_RenderClear(renderer);
-		drawFrame(renderer);
+		drawFrame(context, renderer);
 
 		// Frame fertig. Erst jetzt komplett in Fenster übertragen, um Flackern zu unterbinden
 		SDL_SetRenderTarget(renderer, nullptr);
@@ -303,6 +269,7 @@ int main(int argc, char** argv) {
     delete game;
     
     delete fpsCounter;
+    delete economicsMgr;
 	delete guiMgr;
     delete fontMgr;
 	delete graphicsMgr;

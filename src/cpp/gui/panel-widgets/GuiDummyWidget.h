@@ -2,6 +2,7 @@
 #define _GUI_DUMMY_WIDGET_H
 
 #include <SDL_render.h>
+#include "Context.h"
 #include "gui/panel-widgets/GuiPanelWidget.h"
 
 
@@ -12,7 +13,7 @@
 class GuiDummyWidget : public GuiPanelWidget {
 
 public:
-    GuiDummyWidget();
+    GuiDummyWidget(const Context* const context);
     virtual ~GuiDummyWidget() {}
 
     /**

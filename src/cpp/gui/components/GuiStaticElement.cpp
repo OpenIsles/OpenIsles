@@ -1,8 +1,7 @@
-#include "graphics/PlainGraphic.h"
 #include "gui/components/GuiStaticElement.h"
 
 
-GuiStaticElement::GuiStaticElement() {
+GuiStaticElement::GuiStaticElement(const Context* const context) : GuiBase(context) {
 }
 
 GuiStaticElement::~GuiStaticElement() {
