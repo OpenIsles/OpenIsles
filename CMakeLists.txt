@@ -1,7 +1,10 @@
 project(OpenIsles)
 #set(CMAKE_VERBOSE_MAKEFILE on)
 
-cmake_minimum_required(VERSION 2.8.11)
+cmake_minimum_required(VERSION 2.8.12) #  target_compile_options() gibts erst seit v2.8.12
+
+
+## Quelldateien ########################################################################################################
 
 set(COMMON_SOURCE_FILES
     src/cpp/config/ConfigMgr.cpp
@@ -46,8 +49,22 @@ set(GRAPHICS_SOURCE_FILES
 set(SOUND_SOURCE_FILES
     src/cpp/sound/sdl/SDLSoundMgr.cpp
 )
+set(TEST_FILES
+    test/test.cpp
+)
+
+
+## Einstellungen für alle Targets ######################################################################################
 
 add_definitions("-std=c++11 -Wall -Werror -pedantic")
+include_directories(${CMAKE_SOURCE_DIR}/src/cpp)
+
+# Debuginfos für Debug-Buildconfig aktivieren - nicht vergessen, neue Variablen in die Doxyfile.in einzutragen
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DDEBUG -DDEBUG_A_STAR -DDEBUG_ECONOMICS")
+set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -DNDEBUG")
+
+
+## Target: OpenIsles - das Spiel selber ################################################################################
 
 add_executable(OpenIsles
     src/cpp/main.cpp
@@ -72,10 +89,10 @@ if(MINGW)
     find_package(SDL2_ttf 2.0 REQUIRED)
 
     # sdl2-config gibts auch nicht. also konfigurieren wir die Include-Verzeichnisse für den Compiler manuell
-    include_directories("${SDL2_INCLUDE_DIR}")
-    include_directories("${SDL2_IMAGE_INCLUDE_DIR}")
-    include_directories("${SDL2_MIXER_INCLUDE_DIR}")
-    include_directories("${SDL2_TTF_INCLUDE_DIR}")
+    target_include_directories(OpenIsles PUBLIC "${SDL2_INCLUDE_DIR}")
+    target_include_directories(OpenIsles PUBLIC "${SDL2_IMAGE_INCLUDE_DIR}")
+    target_include_directories(OpenIsles PUBLIC "${SDL2_MIXER_INCLUDE_DIR}")
+    target_include_directories(OpenIsles PUBLIC "${SDL2_TTF_INCLUDE_DIR}")
 
 # Linux
 else(MINGW)
@@ -90,14 +107,9 @@ else(MINGW)
 
     # sdl2-config für die Include-Verzeichnisse
     execute_process(COMMAND "sdl2-config" "--cflags" OUTPUT_VARIABLE SDL2_CFLAGS OUTPUT_STRIP_TRAILING_WHITESPACE)
-    add_definitions(${SDL2_CFLAGS})
+    separate_arguments(SDL2_CFLAGS UNIX_COMMAND "${SDL2_CFLAGS}")
+    target_compile_options(OpenIsles PUBLIC ${SDL2_CFLAGS})
 endif(MINGW)
-
-# Debuginfos für Debug-Buildconfig aktivieren - nicht vergessen, neue Variablen in die Doxyfile.in einzutragen
-set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DDEBUG -DDEBUG_A_STAR -DDEBUG_ECONOMICS")
-set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -DNDEBUG")
-
-include_directories(${CMAKE_SOURCE_DIR}/src/cpp)
 
 # Windows
 if(MINGW)
@@ -112,7 +124,26 @@ endif(MINGW)
 
 file(COPY ${CMAKE_SOURCE_DIR}/data DESTINATION ${CMAKE_BINARY_DIR})
 
-# Doxygen
+
+## Target: OpenIsles-Tests - die Tests #################################################################################
+
+enable_testing()
+
+add_executable(OpenIsles-Tests
+    ${COMMON_SOURCE_FILES}
+    ${TEST_FILES}
+)
+
+find_package(GTest REQUIRED)
+target_include_directories(OpenIsles-Tests PUBLIC ${GTEST_INCLUDE_DIRS})
+target_compile_definitions(OpenIsles-Tests PUBLIC "-DNO_SDL")
+target_link_libraries(OpenIsles-Tests ${GTEST_BOTH_LIBRARIES} pthread) # BOTH-Variable benutzen, damit wir uns an jeder Testdatei die main()-Methode sparen
+
+add_test(OpenIslesTests OpenIsles-Tests)
+
+
+## Doxygen #############################################################################################################
+
 find_package(Doxygen)
 if(DOXYGEN_FOUND)
     configure_file(${CMAKE_SOURCE_DIR}/Doxyfile.in ${CMAKE_BINARY_DIR}/Doxyfile)
@@ -122,22 +153,3 @@ if(DOXYGEN_FOUND)
         VERBATIM
     )
 endif(DOXYGEN_FOUND)
-
-# Tests
-enable_testing()
-
-find_package(GTest REQUIRED)
-include_directories(${GTEST_INCLUDE_DIRS})
-
-set(TEST_FILES
-    test/test.cpp
-)
-
-add_executable(OpenIsles-Tests
-    ${COMMON_SOURCE_FILES}
-    ${TEST_FILES}
-)
-target_compile_definitions(OpenIsles-Tests PRIVATE "-DNO_SDL")
-target_link_libraries(OpenIsles-Tests ${GTEST_BOTH_LIBRARIES} pthread) # BOTH-Variable benutzen, damit wir uns an jeder Testdatei die main()-Methode sparen
-
-add_test(OpenIslesTests OpenIsles-Tests)
