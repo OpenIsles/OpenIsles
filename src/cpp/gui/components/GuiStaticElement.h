@@ -3,7 +3,7 @@
 
 #include <SDL.h>
 #include "Context.h"
-#include "graphics/PlainGraphic.h"
+#include "graphics/graphic/IPlainGraphic.h"
 #include "gui/components/GuiBase.h"
 
 
@@ -16,13 +16,13 @@ protected:
     /**
      * @brief Grafik, die für das Element gerendert wird. Kann nullptr sein, wenn keine Grafik gezeichnet werden soll.
      */
-    PlainGraphic* graphic = nullptr;
+    IPlainGraphic* graphic = nullptr;
 
 public:
 	GuiStaticElement(const Context* const context);
 	virtual ~GuiStaticElement();
 
-    PlainGraphic* getGraphic() const {
+    IPlainGraphic* getGraphic() const {
         return graphic;
     }
 
@@ -30,14 +30,14 @@ public:
      * Setzt die Grafik für das Element.
      * @param graphic Grafik, die verwendet werden soll
      */
-    void setGraphic(PlainGraphic* graphic) {
+    void setGraphic(IPlainGraphic* graphic) {
         this->graphic = graphic;
     }
     
 	/**
 	 * @brief Zeichnet das Element (ohne Kinder)
 	 */
-	virtual void renderElement(SDL_Renderer* renderer);
+	virtual void renderElement(IRenderer* renderer);
     
     /**
      * @brief Callback, der ein Event handelt

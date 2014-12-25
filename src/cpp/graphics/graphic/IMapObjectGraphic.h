@@ -1,15 +1,15 @@
-#ifndef _MAP_OBJECT_GRAPHIC_H
-#define _MAP_OBJECT_GRAPHIC_H
+#ifndef _I_MAP_OBJECT_GRAPHIC_H
+#define _I_MAP_OBJECT_GRAPHIC_H
 
-#include <SDL.h>
-#include <SDL_image.h>
-#include "graphics/PlainGraphic.h"
+#include "graphics/graphic/IPlainGraphic.h"
+#include "graphics/renderer/IRenderer.h"
+#include "utils/Rect.h"
 
 /**
-* @brief Grafik eines MapObjects. Die Grafik hat eine fixe Größe in Map-Koordinaten zugeordnet, sodass sie in das
-* Kachelsystem der Map gezeichnet werden kann
-*/
-class MapObjectGraphic : public PlainGraphic {
+ * @brief Interface für die Grafik eines MapObjects. Die Grafik hat eine fixe Größe in Map-Koordinaten zugeordnet,
+ * sodass sie in das Kachelsystem der Map gezeichnet werden kann
+ */
+class IMapObjectGraphic : public virtual IPlainGraphic {
 
 public:
     /**
@@ -38,56 +38,23 @@ public:
      */
     static const int DRAWING_FLAG_DARKENED = (1 << 3);
 
-
-private:
-    /**
-     * @brief Breite (X-Richtung) der Grafik in Map-Koordinaten
-     */
-    unsigned char mapWidth;
-
-    /**
-     * @brief Höhe (Y-Richtung) der Grafik in Map-Koordinaten
-     */
-    unsigned char mapHeight;
-
-    /**
-     * @brief SDL-Texture der maskierten Grafik zurück. Diese wird verwendet, wenn ein neues Gebäude
-     * positioniert wird.
-     */
-    SDL_Texture* textureMasked;
-
 public:
-    /**
-     * @brief Konstruktor. Lädt die Grafik.
-     * @param renderer (Dependency)
-     * @param filename Dateiname der zu ladenden Grafik
-     * @param mapWidth Breite in mapCoords
-     * @param mapHeight Höhe in mapCoords
-     */
-    MapObjectGraphic(
-        SDL_Renderer* const renderer, const char* filename, unsigned char mapWidth, unsigned char mapHeight);
-
     /**
      * @brief Destruktor. Entlädt die Grafik und gibt Speicher frei.
      */
-    virtual ~MapObjectGraphic();
+    virtual ~IMapObjectGraphic() {}
 
     /**
      * @brief Liefert die Breite der Grafik in Map-Koordinaten zurück
      * @return Breite der Grafik in Map-Koordinaten
      */
-    unsigned char getMapWidth() const {
-        return mapWidth;
-    }
+    virtual unsigned char getMapWidth() const = 0;
 
     /**
      * @brief Liefert die Höhe der Grafik in Map-Koordinaten zurück
      * @return Breite der Höhe in Map-Koordinaten
      */
-    unsigned char getMapHeight() const {
-        return mapHeight;
-    }
-
+    virtual unsigned char getMapHeight() const = 0;
 
     /**
      * @brief Zeichnet die Grafik mit bestimmten Drawing-Flags. Quell- und Zielbereich können beliebig gewählt werden.
@@ -96,13 +63,7 @@ public:
      * @param drawingFlags Bitmaske aus DRAWING_FLAG_*-Konstanten, die angeben, wie die Grafik gezeichnet werden soll
      * @param sdlTicks aktuelle Ticks aus `Context`, um den Blinke-Zustand zu kennen
      */
-    void draw(SDL_Rect* rectSource, SDL_Rect* rectDestination, int drawingFlags, Uint32 sdlTicks);
-
-private:
-    /**
-     * @brief Erzeugt @ref textureMasked. Erwartet, dass @ref surface bereits mit der Grafik befüllt ist.
-     */
-    void createMaskedTexture();
+    virtual void draw(Rect* rectSource, Rect* rectDestination, int drawingFlags, uint32_t sdlTicks) = 0;
 
 };
 

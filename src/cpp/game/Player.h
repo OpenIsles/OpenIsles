@@ -2,13 +2,12 @@
 #define _PLAYER_H
 
 #include <stdexcept>
-#include "SDL.h"
 
 /**
  * @brief Enum für die verschiedenen Spielerfarben.
  * Zugewiesene Werte sind im Format 0xAARRGGBB.
  */
-enum class PlayerColor : Uint32 {
+enum class PlayerColor : unsigned int {
     
     RED    = 0xffaf2707,
     BLUE   = 0xff1088df,

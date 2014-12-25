@@ -3,8 +3,7 @@
 #include "gui/Identifiers.h"
 #include "gui/components/GuiPushButton.h"
 #include "gui/panel-widgets/GuiOptionsMenuWidget.h"
-#include "sound/SoundMgr.h"
-
+#include "sound/sdl/SDLSoundMgr.h"
 
 
 GuiOptionsMenuWidget::GuiOptionsMenuWidget(const Context* const context) : GuiPanelWidget(context) {

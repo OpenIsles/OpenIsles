@@ -1,15 +1,17 @@
 #include <SDL.h>
 #include "config/ConfigMgr.h"
 #include "game/Game.h"
-#include "gui/FontMgr.h"
+#include "graphics/graphic/IMapObjectGraphic.h"
+#include "graphics/mgr/IFontMgr.h"
 #include "gui/GuiMgr.h"
 #include "gui/components/GuiAddBuildingWidget.h"
+#include "utils/Color.h"
 #include "utils/StringFormat.h"
 
 
-static SDL_Color colorLightBrown = {223, 216, 183, 255};
-static SDL_Color colorBlack = {0, 0, 0, 255};
-static SDL_Color colorWhite = {255, 255, 255, 255};
+static Color colorLightBrown = Color(223, 216, 183, 255);
+static Color colorBlack = Color(0, 0, 0, 255);
+static Color colorWhite = Color(255, 255, 255, 255);
 
 
 
@@ -19,7 +21,7 @@ GuiAddBuildingWidget::GuiAddBuildingWidget(const Context* const context) : GuiBa
     // TODO Child-Buttons zum Drehen hinzufügen
 }
 
-void GuiAddBuildingWidget::renderElement(SDL_Renderer* renderer) {
+void GuiAddBuildingWidget::renderElement(IRenderer* renderer) {
     int windowX, windowY;
     getWindowCoords(windowX, windowY);
 
@@ -31,7 +33,7 @@ void GuiAddBuildingWidget::renderElement(SDL_Renderer* renderer) {
         &colorLightBrown, &colorBlack, "DroidSans-Bold.ttf", 15, RENDERTEXT_HALIGN_CENTER);
 
     // Gebäude-Grafik
-    MapObjectGraphic* buildingGraphic = context->graphicsMgr->getGraphicForStructure(structureType);
+    IMapObjectGraphic* buildingGraphic = context->graphicsMgr->getGraphicForStructure(structureType);
 
     double scale; // ggf. verkleinert zeichnen, wenn das Gebäude zu groß is
     if (buildingGraphic->getWidth() <= 160) {

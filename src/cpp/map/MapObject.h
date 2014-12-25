@@ -2,7 +2,7 @@
 #define _MAP_OBJECT_H
 
 #include "game/Player.h"
-#include "graphics/GraphicsMgr.h"
+#include "graphics/mgr/IGraphicsMgr.h"
 #include "map/MapCoordUtils.h"
 
 /**

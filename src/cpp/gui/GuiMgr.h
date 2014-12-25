@@ -1,10 +1,14 @@
 #ifndef _GUI_MGR_H
 #define _GUI_MGR_H
 
+#ifndef NO_SDL
 #include <SDL.h>
+#endif
+
 #include <map>
 #include "Context.h"
 #include "game/GoodsSlot.h"
+#include "graphics/renderer/IRenderer.h"
 
 class GuiBase;
 class GuiButton;
@@ -19,8 +23,8 @@ enum StructureType : unsigned char;
 
 
 /**
-* Enum für 4 Buttons, um die Panels umzuschalten
-*/
+ * Enum für 4 Buttons, um die Panels umzuschalten
+ */
 typedef
 enum PanelButton : unsigned char {
 
@@ -98,7 +102,7 @@ class GuiMgr : public ContextAware {
 
 private:
     // Dependencies
-    SDL_Renderer* const renderer;
+    IRenderer* const renderer;
 
     /**
      * @brief Fenster-Koordinaten, an dem der letzte Click gestartet wurde.
@@ -122,7 +126,7 @@ private:
     bool quitGame;
 
 public:
-	GuiMgr(const Context* const context, SDL_Renderer* renderer);
+	GuiMgr(const Context* const context, IRenderer* renderer);
 	~GuiMgr();
 
     /**
@@ -140,19 +144,34 @@ public:
 	/**
 	 * @brief Zeichnet die Benutzeroberfläche
 	 */
-	void render(SDL_Renderer* renderer);
-    
+	void render();
+
+#ifndef NO_SDL
     /**
      * @brief Callback, der ein Event handelt
      * @param event SDL-Event
      */
     void onEvent(SDL_Event& event);
+#endif
 
     /**
      * @brief Callback, der sich drum kümmert, wenn auf der Karte ein anderes MapObject ausgewählt wurde.
      * @param newSelectedMapObject das neu gewählte MapObject oder `nullptr`, wenn abgewählt wurde
      */
     void onSelectedMapObjectChanged(MapObject* newSelectedMapObject);
+
+    /**
+     * @brief Callback, der in den Datenstrukturen der GUI-Komponenten notwendige Arbeiten erledigt,
+     * wenn ein neues Spiel gestartet wird. Zu diesem Zeitpunkt hat das Game und die Map schon alles fertig für
+     * das neue Spiel.
+     */
+    void onNewGame();
+
+    /**
+     * @brief Callback, wenn sich Einzugsgebiete von Lagergebäuden ändern. Wir benachrichtigen dann die Minimap,
+     * die diese Info braucht.
+     */
+    void onOfficeCatchmentAreaChanged();
 
     /**
      * @brief Liefert den aktuellen Zustand des Panels zurück

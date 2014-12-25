@@ -14,7 +14,7 @@ class Building;
 class Carrier : public MapObject, public UpdateableObject {
 
     friend class EconomicsMgr; // EconomicsMgr soll zum Aktualisieren des Trägers einfach zugreifen können
-    friend class Map; // Map soll zum Rendern des Trägers einfach zugreifen können
+    friend class GuiMap; // GuiMap soll zum Rendern des Trägers einfach zugreifen können
 
 private:
     /**
@@ -60,7 +60,7 @@ private:
     /**
      * @brief verwendete Animation für den Träger
      */
-    Animation* animation;
+    IAnimation* animation;
 
     /**
      * @brief aktueller Frame der Animation, die grade abgespielt wird. Dieser Wert ist ein double, da fortlaufend
@@ -80,11 +80,11 @@ public:
     Carrier(Building* owningBuilding, Route* route, GoodsType goodsType, bool onOutboundTrip);
 
 
-    Animation* getAnimation() const {
+    IAnimation* getAnimation() const {
         return animation;
     }
 
-    void setAnimation(Animation* animation) {
+    void setAnimation(IAnimation* animation) {
         this->animation = animation;
     }
 

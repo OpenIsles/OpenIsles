@@ -20,18 +20,18 @@ private:
     /**
      * @brief Liste mit den gemessenen Zeiten
      */
-    std::list<Uint32> samples;
+    std::list<uint32_t> samples;
     
     /**
      * @brief Summe aller Element in der Liste. Wir wollen für die FPS-Berechnung nicht jedes Mal die Liste
      * durchloopen und die Summe bilden.
      */
-    Uint32 sumSamples = 0;
+    uint32_t sumSamples = 0;
     
     /**
      * @brief Zeitstempel bei Start des Frames
      */
-    Uint32 currentFrameStartTime;
+    uint32_t currentFrameStartTime;
     
 public:
     /**
@@ -52,11 +52,11 @@ public:
      * @brief Muss aufgerufen werden, wenn wir mit dem Frame fertig sind.
      */
     void endFrame() {
-        Uint32 currentFrameEndTime = SDL_GetTicks();
-        Uint32 newSample = currentFrameEndTime - currentFrameStartTime;
+        uint32_t currentFrameEndTime = SDL_GetTicks();
+        uint32_t newSample = currentFrameEndTime - currentFrameStartTime;
         
         if (samples.size() == maxSamplesCount) {
-            Uint32 frontSample = samples.front();
+            uint32_t frontSample = samples.front();
             
             samples.pop_front();
             sumSamples -= frontSample;
@@ -88,8 +88,8 @@ public:
         if (countSamples == 0) {
             return 0.0;
         }
-        
-        Uint32 latestSample = samples.back();
+
+        uint32_t latestSample = samples.back();
         return 1000.0 / (double) latestSample;
     }
     

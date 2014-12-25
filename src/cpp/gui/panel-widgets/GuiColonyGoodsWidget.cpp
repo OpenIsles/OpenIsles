@@ -2,19 +2,20 @@
 #include "config/ConfigMgr.h"
 #include "game/Colony.h"
 #include "game/Game.h"
-//#include "gui/FontMgr.h"
+//#include "gui/SDLFontMgr.h"
 #include "gui/panel-widgets/GuiColonyGoodsWidget.h"
 #include "map/Map.h"
+//#include "utils/Color.h"
 
 
-//static SDL_Color colorLightBrown = {223, 216, 183, 255};
-//static SDL_Color colorBlack = {0, 0, 0, 255};
+//static Color colorLightBrown = Color(223, 216, 183, 255);
+//static Color colorBlack = Color(0, 0, 0, 255);
 
 
 GuiColonyGoodsWidget::GuiColonyGoodsWidget(const Context* const context) : GuiPanelWidget(context) {
 }
 
-void GuiColonyGoodsWidget::renderElement(SDL_Renderer* renderer) {
+void GuiColonyGoodsWidget::renderElement(IRenderer* renderer) {
     const Building* selectedBuilding = reinterpret_cast<const Building*>(context->game->getMap()->getSelectedMapObject());
     if (selectedBuilding == nullptr) {
         return;

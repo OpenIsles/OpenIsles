@@ -1,12 +1,14 @@
 #include <stdexcept>
 #include <iostream>
-#include "graphics/Animation.h"
+#include "graphics/graphic/sdl/SDLAnimation.h"
+#include "graphics/renderer/sdl/SDLRenderer.h"
+#include "utils/Rect.h"
 
 
-Animation::Animation(SDL_Renderer* const renderer, const char* filename,
+SDLAnimation::SDLAnimation(IRenderer* const renderer, const char* filename,
                      unsigned char mapWidth, unsigned char mapHeight,
                      unsigned int framesCount, double fps) :
-    MapObjectGraphic(renderer, filename, mapWidth, mapHeight), framesCount(framesCount), fps(fps)
+    SDLMapObjectGraphic(renderer, filename, mapWidth, mapHeight), framesCount(framesCount), fps(fps)
 {
 
     // Prüfen, ob die Grafik ordentlich ist. Die Breite muss exakt ein Vielfaches der Framesanzahl sein
@@ -18,7 +20,7 @@ Animation::Animation(SDL_Renderer* const renderer, const char* filename,
     frameWidth = width / framesCount;
 }
 
-void Animation::drawFrameScaledAt(int x, int y, double scale, unsigned int frame) {
+void SDLAnimation::drawFrameScaledAt(int x, int y, double scale, unsigned int frame) {
     if (frame < 0 || frame >= framesCount) {
         std::cerr << "Illegal frame " << frame << " for animation '" << filename << "'" << std::endl;
         throw new std::runtime_error("Illegal frame");
@@ -26,5 +28,6 @@ void Animation::drawFrameScaledAt(int x, int y, double scale, unsigned int frame
 
     SDL_Rect rectSource = { (int)frame * frameWidth, 0, frameWidth, height };
     SDL_Rect rectDestination = { x, y, (int) (frameWidth * scale), (int) (height * scale) };
-    SDL_RenderCopy(renderer, texture, &rectSource, &rectDestination);
+    SDL_Renderer* sdlRealRenderer = (dynamic_cast<SDLRenderer*>(renderer))->getRealRenderer();
+    SDL_RenderCopy(sdlRealRenderer, texture, &rectSource, &rectDestination);
 }

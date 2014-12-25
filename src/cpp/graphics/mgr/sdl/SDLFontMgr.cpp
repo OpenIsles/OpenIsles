@@ -1,23 +1,27 @@
-#include "gui/FontMgr.h"
+#include "graphics/mgr/sdl/SDLFontMgr.h"
+#include "graphics/renderer/sdl/SDLRenderer.h"
+#include "utils/Color.h"
+#include "utils/Rect.h"
 
-FontMgr::FontMgr() {
+SDLFontMgr::SDLFontMgr() {
     // Schriften vorladen, von denen wir wissen, dass wir sie sicher brauchen
     getFont("DroidSans-Bold.ttf", 14);
 }
 
-FontMgr::~FontMgr() {
+SDLFontMgr::~SDLFontMgr() {
     for (auto iter = ttfFonts.cbegin(); iter != ttfFonts.cend(); iter++) {
         TTF_CloseFont(iter->second);
     }
 }
 
-void FontMgr::renderText(SDL_Renderer* renderer, std::string string, int x, int y,
-                         SDL_Color* color, SDL_Color* shadowColor, std::string fontName, int fontSize, int align) {
+void SDLFontMgr::renderText(IRenderer* renderer, std::string string, int x, int y,
+                            Color* color, Color* shadowColor, std::string fontName, int fontSize, int align) {
     
     TTF_Font* ttfFont = getFont(fontName, fontSize);
-    SDL_Surface* surfaceText = TTF_RenderUTF8_Solid(ttfFont, string.data(), *color);
+    SDL_Color sdlColor = { color->r, color->g, color->b, color->a };
+    SDL_Surface* surfaceText = TTF_RenderUTF8_Solid(ttfFont, string.data(), sdlColor);
     
-    SDL_Rect rectDestination;
+    Rect rectDestination;
     rectDestination.w = surfaceText->w;
     rectDestination.h = surfaceText->h;
     
@@ -46,25 +50,34 @@ void FontMgr::renderText(SDL_Renderer* renderer, std::string string, int x, int 
             rectDestination.y = y - surfaceText->h / 2;
             break;
     }
+
+    SDL_Renderer* sdlRealRenderer = (dynamic_cast<SDLRenderer*>(renderer))->getRealRenderer();
     
     if (shadowColor != nullptr) {
-        SDL_Rect rectDestinationShadow = { 
-            rectDestination.x + 1, rectDestination.y + 1, rectDestination.w, rectDestination.h };
-        
-        SDL_Surface* surfaceTextShadow = TTF_RenderUTF8_Solid(ttfFont, string.data(), *shadowColor);
-        SDL_Texture* textureTextShadow = SDL_CreateTextureFromSurface(renderer, surfaceTextShadow);
+        Rect rectDestinationShadow(
+            rectDestination.x + 1, rectDestination.y + 1, rectDestination.w, rectDestination.h);
+
+        SDL_Color sdlShadowColor = { shadowColor->r, shadowColor->g, shadowColor->b, shadowColor->a };
+        SDL_Surface* surfaceTextShadow = TTF_RenderUTF8_Solid(ttfFont, string.data(), sdlShadowColor);
+        SDL_Texture* textureTextShadow = SDL_CreateTextureFromSurface(sdlRealRenderer, surfaceTextShadow);
         SDL_FreeSurface(surfaceTextShadow);
-        SDL_RenderCopy(renderer, textureTextShadow, nullptr, &rectDestinationShadow);
+
+        SDL_Rect sdlRectDistinationShadow = {
+            rectDestinationShadow.x, rectDestinationShadow.y, rectDestinationShadow.w, rectDestinationShadow.h };
+        SDL_RenderCopy(sdlRealRenderer, textureTextShadow, nullptr, &sdlRectDistinationShadow);
         SDL_DestroyTexture(textureTextShadow);
     }
     
-	SDL_Texture* textureText = SDL_CreateTextureFromSurface(renderer, surfaceText);
+	SDL_Texture* textureText = SDL_CreateTextureFromSurface(sdlRealRenderer, surfaceText);
 	SDL_FreeSurface(surfaceText);
-	SDL_RenderCopy(renderer, textureText, nullptr, &rectDestination);
+
+    SDL_Rect sdlRectDestination = {
+        rectDestination.x, rectDestination.y, rectDestination.w, rectDestination.h };
+	SDL_RenderCopy(sdlRealRenderer, textureText, nullptr, &sdlRectDestination);
 	SDL_DestroyTexture(textureText);
 }
 
-TTF_Font* FontMgr::getFont(std::string fontName, int fontSize) {
+TTF_Font* SDLFontMgr::getFont(std::string fontName, int fontSize) {
     std::pair<std::string, int> mapKey = std::pair<std::string, int>(fontName, fontSize);
     auto iter = ttfFonts.find(mapKey);
     

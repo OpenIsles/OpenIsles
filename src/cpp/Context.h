@@ -1,15 +1,15 @@
 #ifndef _CONTEXT_H
 #define _CONTEXT_H
 
-#include <SDL.h>
+#include <cstdint>
 
 class ConfigMgr;
 class EconomicsMgr;
-class FontMgr;
 class Game;
-class GraphicsMgr;
 class GuiMgr;
-class SoundMgr;
+class IFontMgr;
+class IGraphicsMgr;
+class ISoundMgr;
 
 /**
  * @brief Diese Klasse enthält die Referenzen auf alle benötigten Mgr-Klassen. Sie wird in den meisten Konstruktoren
@@ -33,12 +33,12 @@ struct Context {
     /**
      * @brief Verwaltung der Schriftarten
      */
-    FontMgr* fontMgr;
+    IFontMgr* fontMgr;
 
     /**
      * @brief Grafik-Manager
      */
-    GraphicsMgr* graphicsMgr;
+    IGraphicsMgr* graphicsMgr;
 
     /**
      * @brief die Benutzeroberfläche
@@ -48,7 +48,7 @@ struct Context {
     /**
      * @brief der Sound-Manager
      */
-    SoundMgr* soundMgr;
+    ISoundMgr* soundMgr;
 
     /**
      * @brief Zustand des Spiels
@@ -58,7 +58,7 @@ struct Context {
     /**
      * @brief pro Frame wird einmal auf die Uhr geguckt. In dieser Variable steht der SDL-Tickcount.
      */
-    Uint32 sdlTicks;
+    uint32_t sdlTicks;
 
     /**
      * @brief aktuelle Position des Mauszeigers in Fenster-Koordinaten

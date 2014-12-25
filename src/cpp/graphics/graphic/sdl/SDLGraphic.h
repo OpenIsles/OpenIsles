@@ -1,16 +1,18 @@
-#ifndef _GRAPHIC_H
-#define _GRAPHIC_H
+#ifndef _SDL_GRAPHIC_H
+#define _SDL_GRAPHIC_H
 
 #include <SDL.h>
 #include <SDL_image.h>
+#include "graphics/graphic/IGraphic.h"
+#include "graphics/renderer/IRenderer.h"
 
 /**
  * @brief Basisklasse für alle Grafiken. Kann nix außer die Grafik zu laden und entladen
  */
-class Graphic {
+class SDLGraphic : public virtual IGraphic {
 
 protected: // Dependencies
-	SDL_Renderer* const renderer;
+	IRenderer* const renderer;
 
 protected:
 	/**
@@ -44,12 +46,12 @@ public:
 	 * @param renderer (Dependency)
      * @param filename Dateiname der zu ladenden Grafik
      */
-    Graphic(SDL_Renderer* const renderer, const char* filename);
+    SDLGraphic(IRenderer* const renderer, const char* filename);
 
     /**
      * @brief Destruktor. Entlädt die Grafik und gibt Speicher frei.
      */
-	virtual ~Graphic();
+	virtual ~SDLGraphic();
 
 	/**
 	 * @brief Liefert die Breite der Grafik zurück
@@ -63,7 +65,7 @@ public:
 	 * @brief Liefert die Höhe der Grafik zurück
 	 * @return Höhe der Grafik
 	 */
-	int getHeight() const {
+	virtual int getHeight() const {
 		return height;
 	}
 
@@ -76,7 +78,7 @@ public:
 	 * @param b wird auf den Blau-Wert des Pixels gesetzt (OUT)
 	 * @param a wird auf den Alpha-Wert des Pixels gesetzt (OUT) 0 = voll transparent, 255 = absolut undurchsichtig
 	 */
-	void getPixel(int x, int y, Uint8* r, Uint8* g, Uint8* b, Uint8* a);
+	virtual void getPixel(int x, int y, unsigned char* r, unsigned char* g, unsigned char* b, unsigned char* a);
 
 };
 

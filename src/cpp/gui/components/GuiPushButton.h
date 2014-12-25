@@ -41,7 +41,7 @@ public:
     /**
 	 * @brief Zeichnet das Element (ohne Kinder)
 	 */
-	virtual void renderElement(SDL_Renderer* renderer);
+	virtual void renderElement(IRenderer* renderer);
     
     /**
      * @brief Callback, der ein Event handelt

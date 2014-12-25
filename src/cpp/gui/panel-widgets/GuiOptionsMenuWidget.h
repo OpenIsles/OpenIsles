@@ -8,8 +8,8 @@
 
 
 /**
-* @brief GUI-Panel-Widget, was das Optionen-Menü anzeigt
-*/
+ * @brief GUI-Panel-Widget, was das Optionen-Menü anzeigt
+ */
 class GuiOptionsMenuWidget : public GuiPanelWidget {
 
 public:
@@ -17,16 +17,16 @@ public:
     virtual ~GuiOptionsMenuWidget() {}
 
     /**
-    * @brief Zeichnet das Element (ohne Kinder)
-    */
-    virtual void renderElement(SDL_Renderer* renderer) {
+     * @brief Zeichnet das Element (ohne Kinder)
+     */
+    virtual void renderElement(IRenderer* renderer) {
         // nix tun
     }
 
     /**
-    * @brief Callback, der ein Event handelt
-    * @param event SDL-Event
-    */
+     * @brief Callback, der ein Event handelt
+     * @param event SDL-Event
+     */
     virtual void onEventElement(SDL_Event& event) {
         // nix tun
     }

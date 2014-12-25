@@ -1,17 +1,19 @@
 #ifdef WINDOWS
 #include <cstring>
 #endif
-#include "graphics/MapObjectGraphic.h"
+
+#include "graphics/graphic/sdl/SDLMapObjectGraphic.h"
+#include "graphics/renderer/sdl/SDLRenderer.h"
 
 
-MapObjectGraphic::MapObjectGraphic(
-    SDL_Renderer* const renderer, const char* filename, unsigned char mapWidth, unsigned char mapHeight) :
-    PlainGraphic(renderer, filename), mapWidth(mapWidth), mapHeight(mapHeight)
+SDLMapObjectGraphic::SDLMapObjectGraphic(
+    IRenderer* const renderer, const char* filename, unsigned char mapWidth, unsigned char mapHeight) :
+    SDLPlainGraphic(renderer, filename), mapWidth(mapWidth), mapHeight(mapHeight)
 {
     createMaskedTexture();
 }
 
-MapObjectGraphic::~MapObjectGraphic() {
+SDLMapObjectGraphic::~SDLMapObjectGraphic() {
     if (textureMasked != nullptr) {
         SDL_DestroyTexture(textureMasked);
     }
@@ -20,7 +22,7 @@ MapObjectGraphic::~MapObjectGraphic() {
     textureMasked = nullptr;
 }
 
-void MapObjectGraphic::createMaskedTexture() {
+void SDLMapObjectGraphic::createMaskedTexture() {
     // Wir können nur 32bit-Grafiken bearbeiten
     if (surface->format->format != SDL_PIXELFORMAT_ABGR8888) {
         textureMasked = nullptr;
@@ -31,9 +33,9 @@ void MapObjectGraphic::createMaskedTexture() {
     unsigned char* pixelsMasked = new unsigned char[surface->h * surface->pitch];
     memcpy(pixelsMasked, surface->pixels, surface->h * surface->pitch);
 
-    Uint32* pixelPtr = (Uint32*) pixelsMasked;
+    uint32_t* pixelPtr = (uint32_t*) pixelsMasked;
     for (int y = 0; y < surface->h; y++) {
-        pixelPtr = (Uint32*) (((unsigned char*) pixelsMasked) + y * surface->pitch);
+        pixelPtr = (uint32_t*) (((unsigned char*) pixelsMasked) + y * surface->pitch);
 
         int x = 0;
         if (y % 2) {
@@ -52,12 +54,13 @@ void MapObjectGraphic::createMaskedTexture() {
         pixelsMasked, surface->w, surface->h, surface->format->BitsPerPixel, surface->pitch,
         surface->format->Rmask, surface->format->Gmask, surface->format->Bmask, surface->format->Amask);
 
-    textureMasked = SDL_CreateTextureFromSurface(renderer, surfaceMasked);
+    SDL_Renderer* sdlRealRenderer = (dynamic_cast<SDLRenderer*>(renderer))->getRealRenderer();
+    textureMasked = SDL_CreateTextureFromSurface(sdlRealRenderer, surfaceMasked);
     SDL_FreeSurface(surfaceMasked);
     delete[] pixelsMasked;
 }
 
-void MapObjectGraphic::draw(SDL_Rect* rectSource, SDL_Rect* rectDestination, int drawingFlags, Uint32 sdlTicks) {
+void SDLMapObjectGraphic::draw(Rect* rectSource, Rect* rectDestination, int drawingFlags, uint32_t sdlTicks) {
     // Blinkmodus? Grafik nur in der ersten Hälfte eines Intervalls zeichnen
     if ((drawingFlags & DRAWING_FLAG_BLINK) && (sdlTicks % 800 < 400)) {
         return;
@@ -75,5 +78,29 @@ void MapObjectGraphic::draw(SDL_Rect* rectSource, SDL_Rect* rectDestination, int
         SDL_SetTextureColorMod(textureToDraw, 255, 255, 255);
     }
 
-    SDL_RenderCopy(renderer, textureToDraw, rectSource, rectDestination);
+    SDL_Renderer* sdlRealRenderer = (dynamic_cast<SDLRenderer*>(renderer))->getRealRenderer();
+
+    SDL_Rect* sdlRectSource;
+    if (rectSource != nullptr) {
+        sdlRectSource = new SDL_Rect{ rectSource->x, rectSource->y, rectSource->w, rectSource->h };
+    } else {
+        sdlRectSource = nullptr;
+    }
+
+    SDL_Rect* sdlRectDestination;
+    if (rectDestination != nullptr) {
+        sdlRectDestination = new SDL_Rect
+            { rectDestination->x, rectDestination->y, rectDestination->w, rectDestination->h };
+    } else {
+        sdlRectDestination = nullptr;
+    }
+
+    SDL_RenderCopy(sdlRealRenderer, textureToDraw, sdlRectSource, sdlRectDestination);
+
+    if (sdlRectSource != nullptr) {
+        delete sdlRectSource;
+    }
+    if (sdlRectDestination != nullptr) {
+        delete sdlRectDestination;
+    }
 }

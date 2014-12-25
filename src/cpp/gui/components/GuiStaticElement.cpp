@@ -7,7 +7,7 @@ GuiStaticElement::GuiStaticElement(const Context* const context) : GuiBase(conte
 GuiStaticElement::~GuiStaticElement() {
 }
 
-void GuiStaticElement::renderElement(SDL_Renderer* renderer) {
+void GuiStaticElement::renderElement(IRenderer* renderer) {
     int windowX, windowY;
     getWindowCoords(windowX, windowY);
     

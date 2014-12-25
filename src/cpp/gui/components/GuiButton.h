@@ -5,7 +5,7 @@
 #include "Context.h"
 #include "gui/components/GuiStaticElement.h"
 
-class Graphic;
+class SDLGraphic;
 class SDL_Renderer;
 
 
@@ -18,7 +18,7 @@ protected:
     /**
      * @brief Grafik, wenn der Button grade runtergedrückt ist
      */
-    PlainGraphic* graphicPressed;
+    IPlainGraphic* graphicPressed;
     
     /**
      * @brief gibt an, ob der Button grade im Zustand "runtergedrückt" steht
@@ -34,7 +34,7 @@ public:
 	GuiButton(const Context* const context);
 	virtual ~GuiButton();
 
-    PlainGraphic* getGraphicPressed() const {
+    IPlainGraphic* getGraphicPressed() const {
         return graphicPressed;
     }
 
@@ -42,7 +42,7 @@ public:
      * Setzt die Grafik für das Element, wenn der Button gedrückt ist. Der Destruktur räumt die Grafik am Ende weg.
      * @param graphic frisch geladene Grafik, die verwendet werden soll
      */
-    void setGraphicPressed(PlainGraphic* graphicPressed) {
+    void setGraphicPressed(IPlainGraphic* graphicPressed) {
         this->graphicPressed = graphicPressed;
     }
     
@@ -60,7 +60,7 @@ public:
     /**
 	 * @brief Zeichnet das Element (ohne Kinder)
 	 */
-	virtual void renderElement(SDL_Renderer* renderer);
+	virtual void renderElement(IRenderer* renderer);
     
     /**
      * @brief Callback, der ein Event handelt

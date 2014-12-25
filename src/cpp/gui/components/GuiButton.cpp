@@ -1,5 +1,5 @@
 #include <SDL.h>
-#include "graphics/PlainGraphic.h"
+#include "graphics/graphic/IPlainGraphic.h"
 #include "gui/GuiMgr.h"
 #include "gui/components/GuiButton.h"
 
@@ -10,20 +10,26 @@ GuiButton::GuiButton(const Context* const context) : GuiStaticElement(context) {
 GuiButton::~GuiButton() {
 }
 
-void GuiButton::renderElement(SDL_Renderer* renderer) {
+void GuiButton::renderElement(IRenderer* renderer) {
     int windowX, windowY;
     getWindowCoords(windowX, windowY);
     
-    PlainGraphic* graphicToUse = (pressed) ? graphicPressed : graphic;
+    IPlainGraphic* graphicToUse = (pressed) ? graphicPressed : graphic;
     graphicToUse->drawAt(windowX, windowY);
 }
 
 void GuiButton::onEventElement(SDL_Event& event) {
-    if (event.type == SDL_MOUSEBUTTONDOWN && hitTest(event.button.x, event.button.y)) {
+    if (event.type == SDL_MOUSEBUTTONDOWN &&
+        event.button.button == SDL_BUTTON_LEFT &&
+        hitTest(event.button.x, event.button.y)) {
+
         pressed = true;
     }
     
-    if (event.type == SDL_MOUSEBUTTONUP && pressed) {
+    if (event.type == SDL_MOUSEBUTTONUP &&
+        event.button.button == SDL_BUTTON_LEFT &&
+        pressed) {
+
         pressed = false;
         onClickFunction();
     }

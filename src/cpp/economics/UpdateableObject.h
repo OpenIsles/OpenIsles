@@ -1,7 +1,7 @@
 #ifndef _UPDATEABLE_OBJECT_H
 #define _UPDATEABLE_OBJECT_H
 
-#include <SDL.h>
+#include "utils/Ticks.h"
 
 /**
  * @brief Basisklasse für Map-Objekte, die mittels einer Update-Funktion aktualisiert werden können.
@@ -12,19 +12,19 @@ protected:
     /**
      * @brief SDL_GetTicks-Wert, wann zuletzt dieses Objekt aktualisiert wurde
      */
-    Uint32 lastUpdateTime;
+    uint32_t lastUpdateTime;
 
 public:
     UpdateableObject() {
         // Bei Instanziierung sofort den Wert setzen, damit immer was Sinnvolles drinsteht.
-        lastUpdateTime = SDL_GetTicks();
+        lastUpdateTime = getTicks();
     }
 
-    Uint32 getLastUpdateTime() const {
+    uint32_t getLastUpdateTime() const {
         return lastUpdateTime;
     }
 
-    void setLastUpdateTime(Uint32 lastUpdateTime) {
+    void setLastUpdateTime(uint32_t lastUpdateTime) {
         this->lastUpdateTime = lastUpdateTime;
     }
 };

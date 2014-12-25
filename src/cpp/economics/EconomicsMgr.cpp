@@ -38,8 +38,8 @@ void EconomicsMgr::updateProduction(Building* building) {
         return;
     }
 
-    Uint32 ticksPastSinceLastUpdate = context->sdlTicks - building->getLastUpdateTime();
-    Uint32 ticksInputConsumed = 0, ticksInput2Consumed = 0; // Zeiten, in denen wirklich verbraucht wurde
+    unsigned int ticksPastSinceLastUpdate = context->sdlTicks - building->getLastUpdateTime();
+    unsigned int ticksInputConsumed = 0, ticksInput2Consumed = 0; // Zeiten, in denen wirklich verbraucht wurde
     double inputConsumed, input2Consumed, outputProduced;   // verbrauchte/produzierte Güter
     double oneMinuteTicks = (double) 60000 / context->game->getSpeed();
 
@@ -51,7 +51,7 @@ void EconomicsMgr::updateProduction(Building* building) {
         if (inputConsumed > building->productionSlots.input.inventory) {
             inputConsumed = building->productionSlots.input.inventory;
         }
-        ticksInputConsumed = (Uint32) (inputConsumed * oneMinuteTicks / buildingConfig->inputConsumptionRate);
+        ticksInputConsumed = (unsigned int) (inputConsumed * oneMinuteTicks / buildingConfig->inputConsumptionRate);
 
         if (buildingConfig->getBuildingProduction()->input2.isUsed()) {
             input2Consumed = (double) ticksPastSinceLastUpdate / oneMinuteTicks * buildingConfig->input2ConsumptionRate;
@@ -60,12 +60,12 @@ void EconomicsMgr::updateProduction(Building* building) {
             if (input2Consumed > building->productionSlots.input2.inventory) {
                 input2Consumed = building->productionSlots.input2.inventory;
             }
-            ticksInput2Consumed = (Uint32) (input2Consumed * oneMinuteTicks / buildingConfig->input2ConsumptionRate);
+            ticksInput2Consumed = (unsigned int) (input2Consumed * oneMinuteTicks / buildingConfig->input2ConsumptionRate);
         }
     }
 
     // Minimum-Ticks ermitteln, in denen wirklich produziert wurde
-    Uint32 ticksWeReallyProduced = ticksPastSinceLastUpdate;
+    unsigned int ticksWeReallyProduced = ticksPastSinceLastUpdate;
     if (buildingConfig->getBuildingProduction()->input.isUsed()) {
         ticksWeReallyProduced = std::min(ticksWeReallyProduced, ticksInputConsumed);
 
@@ -120,11 +120,11 @@ void EconomicsMgr::updateCarrier(Building* building) {
 
     // Träger unterwegs? fortbewegen
     else if (building->carrier != nullptr) {
-        Uint32 ticksPastSinceLastUpdate = context->sdlTicks - building->getLastUpdateTime();
+        unsigned int ticksPastSinceLastUpdate = context->sdlTicks - building->getLastUpdateTime();
         double oneSecondTicks = (double) 1000 / context->game->getSpeed();
 
         Carrier* carrier = building->carrier;
-        Animation* animation = carrier->getAnimation();
+        IAnimation* animation = carrier->getAnimation();
 
         // Animieren
         carrier->animationFrame += (double) ticksPastSinceLastUpdate / oneSecondTicks * animation->getFps();

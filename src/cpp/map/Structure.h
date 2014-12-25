@@ -1,7 +1,6 @@
 #ifndef _STRUCTURE_H
 #define _STRUCTURE_H
 
-#include <SDL.h>
 #include "economics/UpdateableObject.h"
 #include "map/MapObject.h"
 

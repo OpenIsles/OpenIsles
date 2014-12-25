@@ -13,6 +13,15 @@ class SDL_Renderer;
  */
 class GuiBase : public ContextAware {
 
+    friend class GuiMgr; // guiMgr.registerElement() setzt id
+
+private:
+    /**
+     * ID mit welcher das GUI-Element registriert ist. Der GuiMgr setzt es einmalig, wenn guiMgr.registerElement()
+     * aufgerufen wird. Es sollte nicht von Hand geändert werden
+     */
+    int id;
+
 protected:
     /**
      * @brief Position des Elements in Pixelkoordinaten. Ist das Element ein Child-Element eines anderen Elements,
@@ -47,6 +56,10 @@ public:
         visible = true;
     }
 	virtual ~GuiBase() {}
+
+    int getId() const {
+        return id;
+    }
 
     void getCoords(int& x, int& y, int& width, int& height) {
         x = this->x;
@@ -102,7 +115,7 @@ public:
     /**
 	 * @brief Zeichnet das Element und rekursiv seine Kinder
 	 */
-    void render(SDL_Renderer* renderer) {
+    void render(IRenderer* renderer) {
         if (!visible) {
             return;
         }
@@ -133,7 +146,7 @@ public:
 	/**
 	 * @brief Zeichnet das Element (ohne Kinder)
 	 */
-	virtual void renderElement(SDL_Renderer* renderer) = 0;
+	virtual void renderElement(IRenderer* renderer) = 0;
     
     /**
      * @brief Callback, der ein Event handelt

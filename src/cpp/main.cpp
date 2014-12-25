@@ -1,19 +1,19 @@
 #ifdef WINDOWS
 #define SDL_MAIN_HANDLED
 #endif
-#include <SDL.h>
-#include <SDL_image.h>
-#include <SDL_ttf.h>
 #include <iostream>
 #include "Context.h"
 #include "config/ConfigMgr.h"
 #include "economics/EconomicsMgr.h"
 #include "game/Game.h"
 #include "game/GameIO.h"
-#include "gui/FontMgr.h"
+#include "graphics/mgr/sdl/SDLFontMgr.h"
+#include "graphics/mgr/sdl/SDLGraphicsMgr.h"
+#include "graphics/renderer/sdl/SDLRenderer.h"
 #include "gui/GuiMgr.h"
 #include "map/Map.h"
-#include "sound/SoundMgr.h"
+#include "sound/sdl/SDLSoundMgr.h"
+#include "utils/Color.h"
 #include "utils/FpsCounter.h"
 #include "utils/StringFormat.h"
 
@@ -21,7 +21,7 @@
 #include "pathfinding/AStar.h"
 #endif
 
-static SDL_Color colorWhite = {255, 255, 255, 255};
+static Color colorWhite = Color(255, 255, 255, 255);
 
 
 /*********************************************************************************************************************
@@ -40,20 +40,17 @@ static std::string debugOutput[7];
  *********************************************************************************************************************/
 
 int main(int argc, char** argv);
-void drawFrame(const Context& context, SDL_Renderer* renderer);
+void drawFrame(const Context& context, IRenderer* renderer);
 
 /*********************************************************************************************************************
  * Implementierung                                                                                                   *
  *********************************************************************************************************************/
 
-void drawFrame(const Context& context, SDL_Renderer* renderer) {
+void drawFrame(const Context& context, IRenderer* renderer) {
     Map* map = context.game->getMap();
 
-	// Karte rendern
-    map->renderMap(renderer);
-
 	// UI rendern
-    context.guiMgr->render(renderer);
+    context.guiMgr->render();
     
     // Statuszeile
     const MapObject* selectedMapObject = map->getSelectedMapObject();
@@ -66,9 +63,6 @@ void drawFrame(const Context& context, SDL_Renderer* renderer) {
                 &colorWhite, nullptr, "DroidSans-Bold.ttf", 14, RENDERTEXT_HALIGN_RIGHT);
         }
     }
-    
-    // Minimap auf die GUI rendern
-	map->renderMinimap(renderer);
 
 #ifdef DEBUG
 	// Debugging-Infos rendern
@@ -85,70 +79,25 @@ void drawFrame(const Context& context, SDL_Renderer* renderer) {
 
 int main(int argc, char** argv) {
 	// Library-Initialisierung ///////////////////////////////////////////////////////////////////////////////////////
-
-	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_EVENTS) != 0) {
-		std::cerr << "SDL could not be initialized: " << SDL_GetError() << std::endl;
-		return EXIT_FAILURE;
-	}
-
-	atexit(SDL_Quit);
-	std::cout << "SDL initialisert" << std::endl;
-
-	SDL_Surface* surfaceAppIcon = IMG_Load("data/img/appicon.png");
-	if (surfaceAppIcon == nullptr) {
-		std::cerr << "Could not load graphic 'data/img/appicon.png': " << IMG_GetError() << std::endl;
-		return EXIT_FAILURE;
-	}
-
-	SDL_Window* window = SDL_CreateWindow(
-        "OpenIsles", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_SHOWN);
-	if (window == nullptr) {
-		std::cerr << "SDL could not create window: " << SDL_GetError() << std::endl;
-		return EXIT_FAILURE;
-	}
-
-	SDL_SetWindowIcon(window, surfaceAppIcon);
-	SDL_FreeSurface(surfaceAppIcon);
-
-    SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_TARGETTEXTURE);
-	if (renderer == nullptr) {
-		std::cerr << "SDL could not create renderer: " << SDL_GetError() << std::endl;
-		SDL_DestroyWindow(window);
-		return EXIT_FAILURE;
-	}
-
-	SDL_Texture* offscreenTexture = SDL_CreateTexture(
-        renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, WINDOW_WIDTH, WINDOW_HEIGHT);
-
-	if ((IMG_Init(IMG_INIT_PNG) & IMG_INIT_PNG) != IMG_INIT_PNG) {
-		std::cerr << "Could not init SDL-image: " << IMG_GetError() << std::endl;
-		return EXIT_FAILURE;
-	}
-	atexit(IMG_Quit);
-
-	if (TTF_Init() != 0) {
-		std::cerr << "Could not init SDL-TTF: " << TTF_GetError() << std::endl;
-		return EXIT_FAILURE;
-	}
-	atexit(TTF_Quit);
+    IRenderer* sdlRenderer = new SDLRenderer();
 
 	// Game-Initialisierung //////////////////////////////////////////////////////////////////////////////////////////
 
     Context context = Context();
 
-	SoundMgr* soundMgr = new SoundMgr();
-    context.soundMgr = soundMgr;
+	ISoundMgr* sdlSoundMgr = new SDLSoundMgr();
+    context.soundMgr = sdlSoundMgr;
 
     ConfigMgr* configMgr = new ConfigMgr();
     context.configMgr = configMgr;
 
-	GraphicsMgr* graphicsMgr = new GraphicsMgr(renderer, configMgr);
-    context.graphicsMgr = graphicsMgr;
+	IGraphicsMgr* sdlGraphicsMgr = new SDLGraphicsMgr(sdlRenderer, configMgr);
+    context.graphicsMgr = sdlGraphicsMgr;
 
-    FontMgr* fontMgr = new FontMgr();
-    context.fontMgr = fontMgr;
+    IFontMgr* sdlFontMgr = new SDLFontMgr();
+    context.fontMgr = sdlFontMgr;
 
-    GuiMgr* guiMgr = new GuiMgr(&context, renderer);
+    GuiMgr* guiMgr = new GuiMgr(&context, sdlRenderer);
     context.guiMgr = guiMgr;
     guiMgr->initGui();
 
@@ -160,7 +109,7 @@ int main(int argc, char** argv) {
     Game* game = new Game(&context);
     context.game = game;
 
-    GameIO::loadGameFromTMX(game, "data/map/empty-map.tmx");
+    game->loadGameFromTMX("data/map/empty-map.tmx");
 
 	// Mainloop //////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -250,16 +199,9 @@ int main(int argc, char** argv) {
 #endif // DEBUG_A_STAR
 #endif // DEBUG
 
-		// Frame auf Offscreen-Texture zeichnen
-		SDL_SetRenderTarget(renderer, offscreenTexture);
-        SDL_SetRenderDrawColor(renderer, 0, 0, 128, 255);
-		SDL_RenderClear(renderer);
-		drawFrame(context, renderer);
-
-		// Frame fertig. Erst jetzt komplett in Fenster übertragen, um Flackern zu unterbinden
-		SDL_SetRenderTarget(renderer, nullptr);
-		SDL_RenderCopy(renderer, offscreenTexture, nullptr, nullptr);
-		SDL_RenderPresent(renderer);
+        sdlRenderer->startFrame();
+		drawFrame(context, sdlRenderer);
+        sdlRenderer->endFrame();
 
 		fpsCounter->endFrame();
 	}
@@ -271,17 +213,14 @@ int main(int argc, char** argv) {
     delete fpsCounter;
     delete economicsMgr;
 	delete guiMgr;
-    delete fontMgr;
-	delete graphicsMgr;
+    delete sdlFontMgr;
+	delete sdlGraphicsMgr;
     delete configMgr;
-	delete soundMgr;
+	delete sdlSoundMgr;
 
 	// Library-Deinitialisierung /////////////////////////////////////////////////////////////////////////////////////
 
-	SDL_DestroyTexture(offscreenTexture);
-	SDL_DestroyRenderer(renderer);
-	SDL_DestroyWindow(window);
-	SDL_Quit();
+	delete sdlRenderer;
 
 	return EXIT_SUCCESS;
 }

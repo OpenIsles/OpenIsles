@@ -1,19 +1,20 @@
 #include "config/ConfigMgr.h"
 #include "game/Game.h"
-#include "gui/FontMgr.h"
+#include "graphics/mgr/IFontMgr.h"
 #include "gui/panel-widgets/GuiSelectedBuildingWidget.h"
 #include "map/Map.h"
+#include "utils/Color.h"
 
 
-static SDL_Color colorBlack = {0, 0, 0, 255};
-static SDL_Color colorWhite = {255, 255, 255, 255};
+static Color colorBlack = Color(0, 0, 0, 255);
+static Color colorWhite = Color(255, 255, 255, 255);
 
 
 GuiSelectedBuildingWidget::GuiSelectedBuildingWidget(const Context* const context) : GuiPanelWidget(context) {
     // TODO Child-Buttons für Stilllegen und "Abholung verbieten"
 }
 
-void GuiSelectedBuildingWidget::renderElement(SDL_Renderer* renderer) {
+void GuiSelectedBuildingWidget::renderElement(IRenderer* renderer) {
     const Building* selectedBuilding = nullptr;
 
     const MapObject* selectedMapObject = context->game->getMap()->getSelectedMapObject();

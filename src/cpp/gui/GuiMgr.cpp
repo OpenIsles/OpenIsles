@@ -1,10 +1,13 @@
 #include "config/ConfigMgr.h"
 #include "game/Colony.h"
 #include "game/Game.h"
-#include "gui/FontMgr.h"
+#include "graphics/graphic/sdl/SDLPlainGraphic.h"
+#include "graphics/mgr/IFontMgr.h"
 #include "gui/components/GuiAddBuildingWidget.h"
 #include "gui/components/GuiButton.h"
 #include "gui/components/GuiPushButton.h"
+#include "gui/components/GuiMap.h"
+#include "gui/components/GuiMinimap.h"
 #include "gui/panel-widgets/GuiBuildMenuWidget.h"
 #include "gui/panel-widgets/GuiColonyGoodsWidget.h"
 #include "gui/panel-widgets/GuiDummyWidget.h"
@@ -12,16 +15,18 @@
 #include "gui/panel-widgets/GuiSelectedBuildingWidget.h"
 #include "gui/Identifiers.h"
 #include "map/Map.h"
+#include "utils/Color.h"
+#include "utils/Rect.h"
 
-static SDL_Color colorWhite = {255, 255, 255, 255};
-static SDL_Color colorBlack = {0, 0, 0, 255};
+static Color colorWhite = Color(255, 255, 255, 255);
+static Color colorBlack = Color(0, 0, 0, 255);
 
 #ifdef DEBUG_A_STAR
 #include "pathfinding/AStar.h"
 #endif
 
 
-GuiMgr::GuiMgr(const Context* const context, SDL_Renderer* renderer) :
+GuiMgr::GuiMgr(const Context* const context, IRenderer* renderer) :
     ContextAware(context),
     renderer(renderer),
     quitGame(false)
@@ -52,15 +57,24 @@ void GuiMgr::initGui() {
     // GUI-Elemente anlegen //////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////////
 
+    // Karte
+    GuiMap* guiMap = new GuiMap(context);
+    registerElement(GUI_ID_MAP, guiMap);
+
     // Panel
-    PlainGraphic* graphic = new PlainGraphic(renderer, "data/img/gui/panel.png");
+    IPlainGraphic* graphic = new SDLPlainGraphic(renderer, "data/img/gui/panel.png");
     GuiStaticElement* panel = new GuiStaticElement(context);
     panel->setCoords(768, 0, graphic->getWidth(), graphic->getHeight());
     panel->setGraphic(graphic);
     registerElement(GUI_ID_PANEL, panel);
 
+    // Minimap
+    GuiMinimap* guiMinimap = new GuiMinimap(context);
+    registerElement(GUI_ID_MINIMAP, guiMinimap);
+    panel->addChildElement(guiMinimap);
+
     // Statusleiste
-    graphic = new PlainGraphic(renderer, "data/img/gui/statusbar.png");
+    graphic = new SDLPlainGraphic(renderer, "data/img/gui/statusbar.png");
     GuiStaticElement* statusBar = new GuiStaticElement(context);
     statusBar->setCoords(0, 734, graphic->getWidth(), graphic->getHeight());
     statusBar->setGraphic(graphic);
@@ -103,8 +117,8 @@ void GuiMgr::initGui() {
     for (int i = 0; i < 4; i++) {
         // Button
         GuiPushButton* panelSwitchPushButton = new GuiPushButton(context);
-        panelSwitchPushButton->setGraphic(new PlainGraphic(renderer, tabGraphics[i]->graphicFilename));
-        panelSwitchPushButton->setGraphicPressed(new PlainGraphic(renderer, tabGraphics[i]->graphicPressedFilename));
+        panelSwitchPushButton->setGraphic(new SDLPlainGraphic(renderer, tabGraphics[i]->graphicFilename));
+        panelSwitchPushButton->setGraphicPressed(new SDLPlainGraphic(renderer, tabGraphics[i]->graphicPressedFilename));
         panelSwitchPushButton->setCoords(22 + i*55, 235, 48, 64);
         panelSwitchPushButton->setOnClickFunction([this, i]() {
             panelState.selectedPanelButton = tabGraphics[i]->panelButtonToActive;
@@ -169,6 +183,7 @@ void GuiMgr::registerElement(int identifier, GuiBase* guiElement) {
     }
     
     identifierMap[identifier] = guiElement;
+    guiElement->id = identifier;
 }
 
 GuiBase* GuiMgr::findElement(int identifier) {
@@ -181,7 +196,7 @@ GuiBase* GuiMgr::findElement(int identifier) {
     return iter->second;
 }
 
-void GuiMgr::render(SDL_Renderer* renderer) {
+void GuiMgr::render() {
     // Alle GUI-Elemente rendern
     for (auto iter = identifierMap.cbegin(); iter != identifierMap.cend(); iter++) {
 		GuiBase* guiElement = iter->second;
@@ -198,6 +213,7 @@ void GuiMgr::render(SDL_Renderer* renderer) {
     renderResourcesBar();
 }
 
+#ifndef NO_SDL
 void GuiMgr::onEvent(SDL_Event& event) {
     // TODO Event besser queuen und nicht sofort abarbeiten
 
@@ -230,7 +246,7 @@ void GuiMgr::onEvent(SDL_Event& event) {
             }
             // Ist ein Gebäude auf der Karte markieren -> deselektieren
             else if(map->getSelectedMapObject() != nullptr) {
-                map->setSelectedMapObject(nullptr);
+                game->setSelectedMapObject(nullptr);
             }
             
             return;
@@ -278,7 +294,7 @@ void GuiMgr::onEvent(SDL_Event& event) {
             else {
                 game->setSpeed(50); // Debug-Ultra-Speed :-)
             }
-#endif
+#endif // DEBUG
         }
 
         // Panel umschalten
@@ -312,10 +328,8 @@ void GuiMgr::onEvent(SDL_Event& event) {
             panelState.addingStructure = StructureType::STREET;
             panelState.activeGuiPanelWidget = (GuiPanelWidget*) findElement(GUI_ID_BUILD_MENU_PANEL_WIDGET);
             updateGuiFromPanelState();
-        } else if (event.key.keysym.scancode == SDL_SCANCODE_DELETE) {
-            map->deleteSelectedObject();
         }
-#endif
+#endif // DEBUG
 
 #ifdef DEBUG_A_STAR
         bool needToRecalculate = false;
@@ -355,22 +369,7 @@ void GuiMgr::onEvent(SDL_Event& event) {
                 delete aStar;
             }
         }
-#endif
-    }
-    
-    // Maustaste in der Karte geklickt
-    if (event.type == SDL_MOUSEBUTTONUP && event.button.button == SDL_BUTTON_LEFT) {
-        if (abs(event.button.x - startClickX) < 3 && abs(event.button.y - startClickY) < 3) {
-            map->onClick(event.button.x, event.button.y);
-        }
-    }
-    
-    // Die GUI-Elemente sollen nur Linksklicks mitkriegen, der Rest interessiert die eh nicht
-    if (event.type != SDL_MOUSEBUTTONDOWN && event.type != SDL_MOUSEBUTTONUP) {
-        return;
-    }
-    if (event.button.button != SDL_BUTTON_LEFT) {
-        return;
+#endif // DEBUG_A_STAR
     }
     
     for (auto iter = identifierMap.cbegin(); iter != identifierMap.cend(); iter++) {
@@ -384,6 +383,7 @@ void GuiMgr::onEvent(SDL_Event& event) {
         guiElement->onEvent(event);
     }
 }
+#endif // NO_SDL
 
 void GuiMgr::onSelectedMapObjectChanged(MapObject* newSelectedMapObject) {
     if (newSelectedMapObject == nullptr) {
@@ -401,6 +401,15 @@ void GuiMgr::onSelectedMapObjectChanged(MapObject* newSelectedMapObject) {
 
     panelState.selectedPanelButton = PanelButton::INFO;
     updateGuiFromPanelState();
+}
+
+void GuiMgr::onNewGame() {
+    ((GuiMap*) findElement(GUI_ID_MAP))->onNewGame();
+    ((GuiMinimap*) findElement(GUI_ID_MINIMAP))->updateMinimapTexture();
+}
+
+void GuiMgr::onOfficeCatchmentAreaChanged() {
+    ((GuiMinimap*) findElement(GUI_ID_MINIMAP))->updateMinimapTexture();
 }
 
 void GuiMgr::updateGuiFromPanelState() {
@@ -488,7 +497,7 @@ void GuiMgr::renderResourcesBar() {
     }
 
     // Einwohnerzahl (immer anzeigen)
-    PlainGraphic* populationIconGraphic = context->graphicsMgr->getOtherGraphic((OtherGraphic)
+    IPlainGraphic* populationIconGraphic = context->graphicsMgr->getOtherGraphic((OtherGraphic)
         (OtherGraphic::COAT_OF_ARMS_POPULATION + mapTileAtCursor->player->getColorIndex()));
     populationIconGraphic->drawAt(655, 6);
 
@@ -505,9 +514,9 @@ void GuiMgr::drawGoodsBox(int x, int y, GoodsType goodsType, double inventory, d
         if (capacity != -1) {
             int barHeight = (int) (inventory / capacity * 42);
 
-            SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
-            SDL_Rect rect = { x + 38, y + (42 - barHeight), 4, barHeight };
-            SDL_RenderFillRect(renderer, &rect);
+            renderer->setDrawColor(Color(255, 0, 0, 255));
+            Rect rect(x + 38, y + (42 - barHeight), 4, barHeight);
+            renderer->fillRect(rect);
         }
             // Bestand anzeigen
         else {

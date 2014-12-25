@@ -161,7 +161,7 @@ GuiBuildMenuWidget::GuiBuildMenuWidget(const Context* const context) : GuiPanelW
     for (int groupIndex = 0; groupIndex < 4; groupIndex++) {
         // Grid
         GuiStaticElement* addBuildingGrid = new GuiStaticElement(context);
-        PlainGraphic* graphicAddBuildingGrid = context->graphicsMgr->getOtherGraphic(OtherGraphic::ADD_BUILDING_GRID);
+        IPlainGraphic* graphicAddBuildingGrid = context->graphicsMgr->getOtherGraphic(OtherGraphic::ADD_BUILDING_GRID);
         addBuildingGrid->setCoords(775, 450, graphicAddBuildingGrid->getWidth(), graphicAddBuildingGrid->getHeight());
         addBuildingGrid->setGraphic(graphicAddBuildingGrid);
         addBuildingGrid->setVisible(false);
@@ -178,7 +178,7 @@ GuiBuildMenuWidget::GuiBuildMenuWidget(const Context* const context) : GuiPanelW
                 }
 
                 GuiButton* addBuildingButton = new GuiButton(context);
-                PlainGraphic* graphicAddBuildingButton =
+                IPlainGraphic* graphicAddBuildingButton =
                     context->graphicsMgr->getOtherGraphic(buildingGroups[groupIndex].buildings[buildingIndex].graphic);
                 addBuildingButton->setCoords(
                     12 + 58 * gridX, 13 + 58 * gridY, graphicAddBuildingButton->getWidth(), graphicAddBuildingButton->getHeight());

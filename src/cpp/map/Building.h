@@ -35,7 +35,7 @@ struct ProductionSlots {
 class Building : public Structure {
 
     friend class EconomicsMgr; // EconomicsMgr soll zum Bewegen des Trägers einfach zugreifen können
-    friend class Map; // Map soll zum Rendern des Trägers einfach zugreifen können
+    friend class GuiMap; // GuiMap soll zum Rendern des Trägers einfach zugreifen können
 
 private:
     // TODO Aktuell hat jedes Gebäude bis zu einem Träger. Das muss später dynamisch nach Gebäudetyp sein.
@@ -47,7 +47,7 @@ private:
     /**
      * @brief SDL_GetTicks-Wert, wann zuletzt die Waren bei diesem Gebäude abgeholt wurden
      */
-    Uint32 lastGoodsCollections;
+    uint32_t lastGoodsCollections;
 
 public:
     /**

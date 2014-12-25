@@ -3,8 +3,9 @@
 
 #include <SDL.h>
 #include <SDL_mixer.h>
+#include "sound/ISoundMgr.h"
 
-class SoundMgr {
+class SDLSoundMgr : public ISoundMgr {
 
 private:
 	Mix_Music* backgroundMusic = nullptr;
@@ -12,18 +13,18 @@ private:
 	// TODO wird später die Sounds alle verwalten
 
 public:
-	SoundMgr();
-	~SoundMgr();
+	SDLSoundMgr();
+	~SDLSoundMgr();
 
 	/**
 	 * @brief aktiviert die Hintergrundmusik
 	 */
-	void enableMusic();
+	virtual void enableMusic();
     
     /**
 	 * @brief deaktiviert die Hintergrundmusik
 	 */
-	void disableMusic();
+	virtual void disableMusic();
 
 private:
 	/**

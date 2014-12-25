@@ -1,8 +1,8 @@
 #include <iostream>
 #include <stdexcept>
-#include "sound/SoundMgr.h"
+#include "sound/sdl/SDLSoundMgr.h"
 
-SoundMgr::SoundMgr() {
+SDLSoundMgr::SDLSoundMgr() {
 	// Library initialisieren
 	if ((Mix_Init(MIX_INIT_OGG) & MIX_INIT_OGG) != MIX_INIT_OGG) {
 		std::cerr << "Could not init SDL-mixer: " << Mix_GetError() << std::endl;
@@ -20,7 +20,7 @@ SoundMgr::SoundMgr() {
 	backgroundMusic = loadMusic("data/audio/Greensleeves.ogg");
 }
 
-SoundMgr::~SoundMgr() {
+SDLSoundMgr::~SDLSoundMgr() {
 	// Sounds wegräumen
 	Mix_FreeMusic(backgroundMusic);
 	backgroundMusic = nullptr;
@@ -32,7 +32,7 @@ SoundMgr::~SoundMgr() {
 	Mix_Quit();
 }
 
-Mix_Music* SoundMgr::loadMusic(const char* file) {
+Mix_Music* SDLSoundMgr::loadMusic(const char* file) {
 	Mix_Music* mixMusic = Mix_LoadMUS(file);
 	if (mixMusic == nullptr) {
 		std::cerr << "Could not load music '" << file << "': " << Mix_GetError() << std::endl;
@@ -43,13 +43,13 @@ Mix_Music* SoundMgr::loadMusic(const char* file) {
 	return mixMusic;
 }
 
-void SoundMgr::enableMusic() {
+void SDLSoundMgr::enableMusic() {
 	if (Mix_PlayingMusic() == 0) {
 		Mix_PlayMusic(backgroundMusic, -1);
 	}
 }
 
-void SoundMgr::disableMusic() {
+void SDLSoundMgr::disableMusic() {
 	if (Mix_PlayingMusic() != 0) {
 		Mix_HaltMusic();
 	}

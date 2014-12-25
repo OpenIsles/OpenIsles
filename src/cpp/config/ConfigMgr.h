@@ -2,7 +2,7 @@
 #define _CONFIG_MGR_H
 
 #include "game/GoodsSlot.h"
-#include "graphics/MapObjectGraphic.h"
+#include "graphics/graphic/IMapObjectGraphic.h"
 #include "map/Building.h"
 #include "utils/RectangleData.h"
 

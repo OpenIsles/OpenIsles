@@ -2,7 +2,9 @@
 #include "game/Colony.h"
 #include "game/Game.h"
 #include "game/GameIO.h"
+#include "graphics/mgr/IGraphicsMgr.h"
 #include "map/Map.h"
+#include "utils/Consts.h"
 
 
 // TODO allgemein: Fehlermanagement, wenn die Datei mal nicht so hübsch aussieht, dass alle Tags da sind
@@ -55,9 +57,6 @@ void GameIO::loadGameFromTMX(Game* game, const char* filename) {
 
     // XML-Document wegräumen
     delete xmlDocument;
-
-    // Minimap erstellen
-    game->getMap()->updateMinimapTexture();
 }
 
 void GameIO::loadPlayers(Game* game, rapidxml::xml_node<>* mapNode) {
@@ -119,8 +118,8 @@ void GameIO::loadMap(Game* game, rapidxml::xml_node<>* objectgroupIslesNode) {
             int isleWidth = atoi(objectNode->first_attribute("width", 5, true)->value());
             int isleHeight = atoi(objectNode->first_attribute("height", 6, true)->value());
 
-            int isleMapWidth = isleWidth / GraphicsMgr::TILE_HEIGHT; // tiled rechnet merkwürdigerweise auch für X in KachelHÖHE
-            int isleMapHeight = isleHeight / GraphicsMgr::TILE_HEIGHT;
+            int isleMapWidth = isleWidth / IGraphicsMgr::TILE_HEIGHT; // tiled rechnet merkwürdigerweise auch für X in KachelHÖHE
+            int isleMapHeight = isleHeight / IGraphicsMgr::TILE_HEIGHT;
 
             // Dateiname der Insel zusammenbauen
             std::string isleFilename = "data/map/isles/";
@@ -158,8 +157,8 @@ void GameIO::loadMap(Game* game, rapidxml::xml_node<>* objectgroupIslesNode) {
             int screenCenterX, screenCenterY;
             MapCoordUtils::mapToScreenCoordsCenter(mapX, mapY, screenCenterX, screenCenterY);
 
-            map->screenOffsetX = screenCenterX - (map->mapClipRect.w / 2);
-            map->screenOffsetY = screenCenterY - (map->mapClipRect.h / 2);
+            map->screenOffsetX = screenCenterX - (Consts::mapClipRect.w / 2);
+            map->screenOffsetY = screenCenterY - (Consts::mapClipRect.h / 2);
         }
     }
     map->screenZoom = 1;
@@ -206,8 +205,6 @@ void GameIO::loadColonies(Game* game, rapidxml::xml_node<>* objectgroupColoniesN
 }
 
 void GameIO::loadStructures(Game* game, rapidxml::xml_node<>* objectgroupStructuresNode) {
-    Map* map = game->getMap();
-
     for (rapidxml::xml_node<>* objectNode = objectgroupStructuresNode->first_node("object", 6, true); objectNode != nullptr;
          objectNode = objectNode->next_sibling("object", 6, true)) {
 
@@ -229,17 +226,10 @@ void GameIO::loadStructures(Game* game, rapidxml::xml_node<>* objectgroupStructu
 
         // Konkreten Struktur-Typ finden und MapObject anlegen
         StructureType structureType;
-        if (strcmp(nodeType, "structure") == 0) {
+        if (strcmp(nodeType, "structure") == 0 || strcmp(nodeType, "building") == 0) {
             if (strcmp(nodeNameValue, "street") == 0) {
                 structureType = StructureType::STREET;
-            } else {
-                throw new std::runtime_error("Illegal structure name");
-            }
-
-            map->addStructure(mapX, mapY, structureType, player);
-        }
-        else if (strcmp(nodeType, "building") == 0) {
-            if (strcmp(nodeNameValue, "chapel") == 0) {
+            } else if (strcmp(nodeNameValue, "chapel") == 0) {
                 structureType = StructureType::CHAPEL;
             } else if (strcmp(nodeNameValue, "pioneers_house1") == 0) {
                 structureType = StructureType::PIONEERS_HOUSE1;
@@ -256,10 +246,10 @@ void GameIO::loadStructures(Game* game, rapidxml::xml_node<>* objectgroupStructu
             } else if (strcmp(nodeNameValue, "weaving_mill1") == 0) {
                 structureType = StructureType::WEAVING_MILL1;
             } else {
-                throw new std::runtime_error("Illegal building name");
+                throw new std::runtime_error("Illegal structure or building name");
             }
 
-            map->addBuilding(mapX, mapY, structureType, player);
+            game->addStructure(mapX, mapY, structureType, player);
         }
     }
 }
@@ -269,8 +259,8 @@ void GameIO::getMapCoordsFromObjectNode(rapidxml::xml_node<>* objectNode, int& m
     int x = atoi(objectNode->first_attribute("x", 1, true)->value());
     int y = atoi(objectNode->first_attribute("y", 1, true)->value());
 
-    mapX = x / GraphicsMgr::TILE_HEIGHT; // tiled rechnet merkwürdigerweise auch für X in KachelHÖHE
-    mapY = y / GraphicsMgr::TILE_HEIGHT;
+    mapX = x / IGraphicsMgr::TILE_HEIGHT; // tiled rechnet merkwürdigerweise auch für X in KachelHÖHE
+    mapY = y / IGraphicsMgr::TILE_HEIGHT;
 }
 
 const char* GameIO::getPropertyValueFromPropertiesNode(rapidxml::xml_node<>* propertiesNode, const char* propertyName) {

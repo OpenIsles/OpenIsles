@@ -3,6 +3,7 @@
 
 #include <map>
 #include <vector>
+#include "map/Structure.h"
 #include "Context.h"
 
 class Building;
@@ -13,7 +14,9 @@ class MapObject;
 class Player;
 
 /**
- * @brief Klasse, die den Zustand des Spiels beinhaltet
+ * @brief Klasse, die den Zustand des Spiels beinhaltet und die zentrale Anlaufstelle ist, um Änderungen an diesem
+ * durchzuführen. Sie benachrichtigt die anderen Klassen (z.B. GUI-Elemente oder die Map), um die nötigen Änderungen
+ * an den Datenstrukturen durchzuführen.
  */
 class Game : public ContextAware {
 
@@ -128,6 +131,15 @@ public:
     }
 
     /**
+     * @brief Fügt eine neue Struktur der Karte hinzu.
+     * @param mapX X-Map-Koordinate des Objekts
+     * @param mapY Y-Map-Koordinate des Objekts
+     * @param structureType Typ der Struktur
+     * @param player Spieler, dem die Struktur gehören soll
+     */
+    void addStructure(int mapX, int mapY, StructureType structureType, Player* player);
+
+    /**
      * @brief Ändert die Einwohner innerhalb eines Gebäudes. Positive Werte fügen Bewohner hinzu, negative nehmen
      * welche weg.
      *
@@ -139,6 +151,19 @@ public:
      */
     void addInhabitantsToBuilding(Building* building, char amount);
 
+    /**
+     * @brief Schaltet das aktuell gewählte MapObject um.
+     * Diese Methode sagt dem GuiMgr Bescheid, damit das Panel rechts angepasst wird.
+     *
+     * @param selectedMapObject Das neue MapObject, was gewählt sein soll oder `nullptr`, um abzuwählen
+     */
+    void setSelectedMapObject(MapObject* selectedMapObject);
+
+    /**
+     * @brief Lädt einen Spielstand von einer tiled-TMX-Datei
+     * @param filename Dateiname mit den zu ladenden Spielstand-Daten
+     */
+    void loadGameFromTMX(char const* filename);
 };
 
 #endif

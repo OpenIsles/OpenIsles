@@ -1,14 +1,14 @@
-#ifndef _PLAIN_GRAPHIC_H
-#define _PLAIN_GRAPHIC_H
+#ifndef _SDL_PLAIN_GRAPHIC_H
+#define _SDL_PLAIN_GRAPHIC_H
 
-#include <SDL.h>
-#include <SDL_image.h>
-#include "graphics/Graphic.h"
+#include "graphics/graphic/IPlainGraphic.h"
+#include "graphics/graphic/sdl/SDLGraphic.h"
+#include "graphics/renderer/IRenderer.h"
 
 /**
  * @brief Einfache Grafik
  */
-class PlainGraphic : public Graphic {
+class SDLPlainGraphic : public SDLGraphic, public virtual IPlainGraphic {
 
 public:
     /**
@@ -16,19 +16,19 @@ public:
      * @param renderer (Dependency)
      * @param filename Dateiname der zu ladenden Grafik
      */
-    PlainGraphic(SDL_Renderer* const renderer, const char* filename);
+    SDLPlainGraphic(IRenderer* const renderer, const char* filename);
 
     /**
      * @brief Destruktor. Entlädt die Grafik und gibt Speicher frei.
      */
-    virtual ~PlainGraphic();
+    virtual ~SDLPlainGraphic();
 
     /**
      * @brief Zeichnet die Grafik
      * @param x x-Koordinate, wo hingezeichnet werden soll
      * @param y y-Koordinate, wo hingezeichnet werden soll
      */
-    void drawAt(int x, int y);
+    virtual void drawAt(int x, int y);
 
     /**
      * @brief Zeichnet die Grafik skaliert
@@ -36,7 +36,7 @@ public:
      * @param y y-Koordinate, wo hingezeichnet werden soll
      * @param scale Skalierungsfaktor
      */
-    void drawScaledAt(int x, int y, double scale);
+    virtual void drawScaledAt(int x, int y, double scale);
 };
 
 #endif

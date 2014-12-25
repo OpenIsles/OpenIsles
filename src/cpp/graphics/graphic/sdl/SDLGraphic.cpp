@@ -1,10 +1,11 @@
 #include <stdexcept>
 #include <iostream>
-#include "graphics/Graphic.h"
+#include "graphics/graphic/sdl/SDLGraphic.h"
+#include "graphics/renderer/sdl/SDLRenderer.h"
 #include "utils/StringFormat.h"
 
 
-Graphic::Graphic(SDL_Renderer* const renderer, const char* filename) : renderer(renderer), filename(filename) {
+SDLGraphic::SDLGraphic(IRenderer* const renderer, const char* filename) : renderer(renderer), filename(filename) {
 	SDL_Surface* surface = IMG_Load(filename);
 	if (surface == nullptr) {
 		std::cerr << "Could not load graphic '" << filename << "': " << IMG_GetError() << std::endl;
@@ -13,7 +14,8 @@ Graphic::Graphic(SDL_Renderer* const renderer, const char* filename) : renderer(
 	this->width = surface->w;
 	this->height = surface->h;
 
-	SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
+	SDL_Renderer* sdlRealRenderer = (dynamic_cast<SDLRenderer*>(renderer))->getRealRenderer();
+	SDL_Texture* texture = SDL_CreateTextureFromSurface(sdlRealRenderer, surface);
 	if (texture == nullptr) {
 		std::cerr << "Could not create texture for graphic '" << filename << "': " << SDL_GetError() << std::endl;
 		throw new std::runtime_error("Could not create texture");
@@ -26,7 +28,7 @@ Graphic::Graphic(SDL_Renderer* const renderer, const char* filename) : renderer(
 			<< toString(height) << ")" << std::endl;
 }
 
-Graphic::~Graphic() {
+SDLGraphic::~SDLGraphic() {
 	SDL_FreeSurface(surface);
 	SDL_DestroyTexture(texture);
 
@@ -36,26 +38,26 @@ Graphic::~Graphic() {
 	texture = nullptr;
 }
 
-void Graphic::getPixel(int x, int y, Uint8* r, Uint8* g, Uint8* b, Uint8* a) {
+void SDLGraphic::getPixel(int x, int y, uint8_t* r, uint8_t* g, uint8_t* b, uint8_t* a) {
 	// Pixel finden
 	SDL_PixelFormat* pixelFormat = surface->format;
 	int bytesPerPixel = pixelFormat->BytesPerPixel;
-	void* ptrToPixel = (void*) ((Uint8*) surface->pixels + y * surface->pitch + x * bytesPerPixel);
+	void* ptrToPixel = (void*) ((unsigned char*) surface->pixels + y * surface->pitch + x * bytesPerPixel);
 
 	// Entsprechend Pixel-Format den Farbwert auslesen
-	Uint32 pixelValue;
-	Uint8 p0, p1, p2;
+	uint32_t pixelValue;
+	uint8_t p0, p1, p2;
 	switch (bytesPerPixel) {
 		case 1:
-			pixelValue = *(Uint8*) ptrToPixel;
+			pixelValue = *(uint8_t*) ptrToPixel;
 			break;
 		case 2:
-			pixelValue = *(Uint16*) ptrToPixel;
+			pixelValue = *(uint16_t*) ptrToPixel;
 			break;
 		case 3:
-			p0 = ((Uint8*) ptrToPixel)[0];
-			p1 = ((Uint8*) ptrToPixel)[1];
-			p2 = ((Uint8*) ptrToPixel)[2];
+			p0 = ((unsigned char*) ptrToPixel)[0];
+			p1 = ((unsigned char*) ptrToPixel)[1];
+			p2 = ((unsigned char*) ptrToPixel)[2];
 			if (SDL_BYTEORDER == SDL_BIG_ENDIAN) {
 				pixelValue = p0 << 16 | p1 << 8 | p2;
 			} else {
@@ -63,7 +65,7 @@ void Graphic::getPixel(int x, int y, Uint8* r, Uint8* g, Uint8* b, Uint8* a) {
 			}
 			break;
 		case 4:
-			pixelValue = *(Uint32*) ptrToPixel;
+			pixelValue = *(uint32_t*) ptrToPixel;
 			break;
         default:
             throw new std::runtime_error("Illegal bytesPerPixel");

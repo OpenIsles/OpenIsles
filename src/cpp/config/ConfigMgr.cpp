@@ -167,9 +167,6 @@ void ConfigMgr::loadBuildingConfig() {
 void ConfigMgr::loadTilesConfig() {
     // TODO Fehlermanagement, wenn die XML-Datei mal nicht so hübsch aussieht, dass alle Tags da sind
 
-    // nearest pixel sampling für die Kacheln, damit die fließend ineinander übergehen
-    SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "0");
-
     mapTileConfigs = new MapTileConfig*[128];
     memset(mapTileConfigs, 0, 128 * sizeof(MapTileConfig*));
 

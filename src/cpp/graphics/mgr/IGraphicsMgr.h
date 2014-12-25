@@ -1,13 +1,12 @@
-#ifndef _GRAPHICS_MGR_H
-#define _GRAPHICS_MGR_H
+#ifndef _I_GRAPHICS_MGR_H
+#define _I_GRAPHICS_MGR_H
 
-#include <SDL.h>
-#include <SDL_image.h>
 #include "game/Player.h"
-#include "graphics/Animation.h"
-#include "graphics/Graphic.h"
-#include "graphics/MapObjectGraphic.h"
-#include "graphics/PlainGraphic.h"
+#include "graphics/graphic/IAnimation.h"
+#include "graphics/graphic/IGraphic.h"
+#include "graphics/graphic/IMapObjectGraphic.h"
+#include "graphics/graphic/IPlainGraphic.h"
+#include "graphics/renderer/IRenderer.h"
 #include "rapidxml/rapidxml.hpp"
 #include "rapidxml/rapidxml_utils.hpp"
 
@@ -68,7 +67,7 @@ enum OtherGraphic {
     // Optionen-Panel
     MUSIC,
     MUSIC_PRESSED,
-            
+
     MAX_GRAPHIC // Marker, wie viele Grafiken es gibt
 } OtherGraphic;
 
@@ -89,149 +88,87 @@ enum AnimationType {
 /**
  * @brief Manager, der alle Grafiken verwaltet
  */
-class GraphicsMgr {
+class IGraphicsMgr {
 
 public:
     /**
      * @brief Breite einer Kachel in Pixel
      */
-	static const int TILE_WIDTH = 64;
+    static const int TILE_WIDTH = 64;
 
     /**
      * @brief Höhe einer Kachel in Pixel
      */
-	static const int TILE_HEIGHT = 32;
+    static const int TILE_HEIGHT = 32;
 
     /**
      * @brief Halbe Breite einer Kachel in Pixel
      */
-	static const int TILE_WIDTH_HALF = TILE_WIDTH / 2;
+    static const int TILE_WIDTH_HALF = TILE_WIDTH / 2;
 
     /**
      * @brief Halbe Höhe einer Kachel in Pixel
      */
-	static const int TILE_HEIGHT_HALF = TILE_HEIGHT / 2;
+    static const int TILE_HEIGHT_HALF = TILE_HEIGHT / 2;
 
     /**
      * @brief Höhe der Elevation in Pixel. Entspricht dem e in doc/map-coords.xcf
      */
     static const int ELEVATION_HEIGHT = 32;
 
-private:
-    // Dependencies
-    SDL_Renderer* const renderer;
-    const ConfigMgr* const configMgr;
-
-	/**
-	 * @brief Array von Zeigern auf die Tile-Grafiken
-	 */
-    MapObjectGraphic** tiles;
-
-	/**
-	 * @brief Array von Zeigern auf die Struktur-Grafiken
-	 */
-	MapObjectGraphic** structures;
-    
-    /**
-	 * @brief Array von Zeigern auf die Gütergrafiken (Symbole)
-	 */
-    PlainGraphic** goodsIcons;
-
-    /**
-     * @brief Array von Zeigern auf die Gütergrafiken (Marketplatz-Symbole)
-     */
-    PlainGraphic** goodsMarketplaceIcons;
-    
-    /**
-     * @brief Array von Zeigern auf andere Grafiken
-     */
-    PlainGraphic** otherGraphics;
-
-    /**
-     * @brief Array von Zeigern auf Animationen
-     */
-    Animation** animations;
-
 public:
-    /**
-     * @brief Lädt alle Grafiken für das Spiel
-     * @param renderer (Dependency)
-     * @param configMgr (Dependency)
-     */
-	GraphicsMgr(SDL_Renderer* const renderer, const ConfigMgr* const configMgr);
-
     /**
      * @brief Entlädt die Grafiken und gibt den Speicher wieder frei
      */
-	~GraphicsMgr();
+    virtual ~IGraphicsMgr() {}
 
-	/**
-	 * @brief Liefert eine Tile-Grafik
-	 * @param tileIndex Index ins Array #tiles dessen Eintrag zurückgeliefert werden soll
+    /**
+     * @brief Liefert eine Tile-Grafik
+     * @param tileIndex Index ins Array #tiles dessen Eintrag zurückgeliefert werden soll
      * @return MapObjectGraphic
-	 */
-    MapObjectGraphic* const getGraphicForTile(int tileIndex) const {
-		return tiles[tileIndex];
-	}
+     */
+    virtual IMapObjectGraphic* const getGraphicForTile(int tileIndex) const = 0;
 
-	/**
-	 * @brief Liefert eine Object-Grafik
-	 * @param index Index ins Array #objects dessen Eintrag zurückgeliefert werden soll
+    /**
+     * @brief Liefert eine Object-Grafik
+     * @param index Index ins Array #objects dessen Eintrag zurückgeliefert werden soll
      * @return MapObjectGraphic
-	 */
-    MapObjectGraphic* const getGraphicForStructure(StructureType structureType) const {
-		return structures[structureType];
-	}
-    
+     */
+    virtual IMapObjectGraphic* const getGraphicForStructure(StructureType structureType) const = 0;
+
     /**
      * @brief Liefert die Grafik für ein Güter-Symbol zurück
      * @param goodsType Güter-Typ
      * @return PlainGraphic
      */
-    PlainGraphic* const getGraphicForGoodsIcon(GoodsType goodsType) const {
-        return goodsIcons[goodsType];
-    }
+    virtual IPlainGraphic* const getGraphicForGoodsIcon(GoodsType goodsType)  const = 0;
 
     /**
      * @brief Liefert die Grafik für ein Güter-Symbol (Marktplatz-Symbol) zurück
      * @param goodsType Güter-Typ
      * @return PlainGraphic
      */
-    PlainGraphic* const getGraphicForGoodsMarketplaceIcon(GoodsType goodsType) const {
-        return goodsMarketplaceIcons[goodsType];
-    }
-    
+    virtual IPlainGraphic* const getGraphicForGoodsMarketplaceIcon(GoodsType goodsType) const = 0;
+
     /**
      * @brief Liefert eine sonstige Grafik zurück
      * @param otherGraphic welche Grafikb
      * @return PlainGraphic
      */
-    PlainGraphic* const getOtherGraphic(OtherGraphic otherGraphic) const {
-        return otherGraphics[otherGraphic];
-    }
+    virtual IPlainGraphic* const getOtherGraphic(OtherGraphic otherGraphic) const = 0;
 
     /**
      * @brief Liefert eine Animation zurück
      * @param animationType welche Animation
      * @return Animation
      */
-    Animation* const getAnimation(AnimationType animationType) const {
-        return animations[animationType];
-    }
+    virtual IAnimation* const getAnimation(AnimationType animationType) const = 0;
 
     /**
      * @brief Liefert den Renderer zurück.
-     * @return SDL-Renderer
+     * @return Renderer
      */
-    SDL_Renderer* const getRenderer() const {
-        return renderer;
-    }
-
-private:
-	/**
-	 * @brief Lädt die Tile-Grafiken
-	 */
-	void loadTiles();
+    virtual IRenderer* const getRenderer() const = 0;
 
 };
 

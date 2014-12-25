@@ -1,19 +1,14 @@
-#ifndef _ANIMATION_H
-#define _ANIMATION_H
+#ifndef _SDL_ANIMATION_H
+#define _SDL_ANIMATION_H
 
-#include "graphics/MapObjectGraphic.h"
+#include "graphics/graphic/IAnimation.h"
+#include "graphics/graphic/sdl/SDLMapObjectGraphic.h"
 
 /**
  * @brief Erweiterte Form der Map-Grafik: Die Animation enthält in einer Grafik mehrere Frames.
  * Alle Frames müssen gleich groß sein und horizontal in der Grafik aneinander gereiht sein.
  */
-class Animation : public MapObjectGraphic {
-
-public:
-    /**
-     * @brief Standard-FPS, die wir für alle Animationen benutzen sollten
-     */
-    static constexpr double DEFAULT_FPS = 24.0;
+class SDLAnimation : public SDLMapObjectGraphic, public virtual IAnimation {
 
 private:
     /**
@@ -42,16 +37,16 @@ public:
      * @param framesCount Anzahl der Frames, die sich in dieser Datei befinden
      * @param fps FPS = Geschwindigkeit, wie viele Frames pro Sekunde abgespielt werden sollen
      */
-    Animation(SDL_Renderer* const renderer, const char* filename, unsigned char mapWidth, unsigned char mapHeight,
+    SDLAnimation(IRenderer* const renderer, const char* filename, unsigned char mapWidth, unsigned char mapHeight,
               unsigned int framesCount, double fps);
 
-    ~Animation() {}
+    virtual ~SDLAnimation() {}
 
 
     /**
-    * @brief Liefert die Breite eines Frames zurück
-    * @return Breite des Frames
-    */
+     * @brief Liefert die Breite eines Frames zurück
+     * @return Breite des Frames
+     */
     virtual int getWidth() const override {
         return frameWidth;
     }
@@ -59,14 +54,14 @@ public:
     /**
      * @return Anzahl der Frames in der Animation
      */
-    unsigned int getFramesCount() const {
+    virtual unsigned int getFramesCount() const {
         return framesCount;
     }
 
     /**
      * @return FPS
      */
-    double getFps() const {
+    virtual double getFps() const {
         return fps;
     }
 
@@ -77,7 +72,7 @@ public:
      * @param scale Skalierungsfaktor
      * @param frame Index, welches Frame gezeichnet werden soll (0 bis framesCount-1)
      */
-    void drawFrameScaledAt(int x, int y, double scale, unsigned int frame);
+    virtual void drawFrameScaledAt(int x, int y, double scale, unsigned int frame);
 
 };
 
