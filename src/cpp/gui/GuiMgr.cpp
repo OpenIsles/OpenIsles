@@ -135,10 +135,13 @@ void GuiMgr::initGui() {
 
     panelState.selectedPanelButton = PanelButton::INFO;
 
-    // Initial ist für den Gebäudebau der Förster ausgewählt
+    // Initial ist für den Gebäudebau der Förster ausgewählt...
     panelState.selectedBuildingGroup = BuildingGroup::FARM;
     panelState.addingStructure = StructureType::FORESTERS;
     panelState.buildingMenuOpen = false;
+
+    // ...und wir zeigen das Spielerstatus-Widget
+    panelState.activeGuiPanelWidget = (GuiPanelWidget*) findElement(GUI_ID_PLAYER_STATUS_PANEL_WIDGET);
 
     updateGuiFromPanelState();
 }
