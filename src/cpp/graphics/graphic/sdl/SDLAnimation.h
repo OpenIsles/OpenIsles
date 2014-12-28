@@ -8,7 +8,7 @@
  * @brief Erweiterte Form der Map-Grafik: Die Animation enthält in einer Grafik mehrere Frames.
  * Alle Frames müssen gleich groß sein und horizontal in der Grafik aneinander gereiht sein.
  */
-class SDLAnimation : public SDLMapObjectGraphic, public virtual IAnimation {
+class SDLAnimation : public virtual SDLMapObjectGraphic, public virtual IAnimation {
 
 private:
     /**

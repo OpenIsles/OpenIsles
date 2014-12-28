@@ -8,7 +8,11 @@
 SDLAnimation::SDLAnimation(IRenderer* const renderer, const char* filename,
                      unsigned char mapWidth, unsigned char mapHeight,
                      unsigned int framesCount, double fps) :
-    SDLMapObjectGraphic(renderer, filename, mapWidth, mapHeight), framesCount(framesCount), fps(fps)
+    SDLGraphic(renderer, filename),
+    SDLPlainGraphic(renderer, filename),
+    AbstractMapObjectGraphic(mapWidth, mapHeight),
+    SDLMapObjectGraphic(renderer, filename, mapWidth, mapHeight),
+    framesCount(framesCount), fps(fps)
 {
 
     // Prüfen, ob die Grafik ordentlich ist. Die Breite muss exakt ein Vielfaches der Framesanzahl sein

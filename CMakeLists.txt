@@ -14,6 +14,7 @@ set(COMMON_SOURCE_FILES
     src/cpp/game/Game.cpp
     src/cpp/game/GameIO.cpp
     src/cpp/game/Player.cpp
+    src/cpp/graphics/mgr/AbstractGraphicsMgr.cpp
     src/cpp/map/Building.cpp
     src/cpp/map/Isle.cpp
     src/cpp/map/Map.cpp
@@ -50,7 +51,7 @@ set(SOUND_SOURCE_FILES
     src/cpp/sound/sdl/SDLSoundMgr.cpp
 )
 set(TEST_FILES
-    test/test.cpp
+    test/cpp/GameTest.cpp
 )
 
 

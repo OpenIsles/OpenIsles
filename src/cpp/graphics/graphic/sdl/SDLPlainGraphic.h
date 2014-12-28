@@ -8,7 +8,7 @@
 /**
  * @brief Einfache Grafik
  */
-class SDLPlainGraphic : public SDLGraphic, public virtual IPlainGraphic {
+class SDLPlainGraphic : public virtual SDLGraphic, public virtual IPlainGraphic {
 
 public:
     /**

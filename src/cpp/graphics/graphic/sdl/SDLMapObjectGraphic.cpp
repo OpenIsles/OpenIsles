@@ -8,7 +8,9 @@
 
 SDLMapObjectGraphic::SDLMapObjectGraphic(
     IRenderer* const renderer, const char* filename, unsigned char mapWidth, unsigned char mapHeight) :
-    SDLPlainGraphic(renderer, filename), mapWidth(mapWidth), mapHeight(mapHeight)
+    SDLGraphic(renderer, filename),
+    SDLPlainGraphic(renderer, filename),
+    AbstractMapObjectGraphic(mapWidth, mapHeight)
 {
     createMaskedTexture();
 }

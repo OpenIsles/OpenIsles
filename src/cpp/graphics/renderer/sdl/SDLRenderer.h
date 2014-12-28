@@ -10,8 +10,7 @@
 #include "utils/Rect.h"
 
 /**
- * @brief Interface für den Renderer, der alles übernimmt, was mit Zeichnen zu tun hat.
- * Damit wird es uns möglich, die Anwendung auch ohne SDL für die Tests zu kompilieren.
+ * @brief SDL-Renderer, der die SDL nutzt, um alle Grafikoperationen durchzuführen
  */
 class SDLRenderer : public IRenderer {
 
@@ -48,6 +47,7 @@ public:
     virtual void setDrawBlendMode(int blendMode);
     virtual void drawLine(int x1, int y1, int x2, int y2);
     virtual void fillRect(const Rect& rect);
+    virtual void setHintRenderScaleQuality(const char* scaleQuality);
     virtual void startFrame();
     virtual void endFrame();
 

@@ -1,4 +1,4 @@
-#include "SDLRenderer.h"
+#include "graphics/renderer/sdl/SDLRenderer.h"
 
 // Fenster-Größe
 static const int WINDOW_WIDTH = 1024;
@@ -104,6 +104,10 @@ void SDLRenderer::drawLine(int x1, int y1, int x2, int y2) {
 void SDLRenderer::fillRect(const Rect& rect) {
    SDL_Rect sdlRect = { rect.x, rect.y, rect.w, rect.h };
    SDL_RenderFillRect(renderer, &sdlRect);
+}
+
+void SDLRenderer::setHintRenderScaleQuality(const char* scaleQuality) {
+   SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, scaleQuality);
 }
 
 void SDLRenderer::startFrame() {

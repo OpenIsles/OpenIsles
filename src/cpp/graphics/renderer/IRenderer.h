@@ -66,6 +66,14 @@ public:
     virtual void fillRect(const Rect& rect) = 0;
 
     /**
+     * @brief Kontrolliert, wie sich neu angelegte Texturen verwalten, wenn sie skaliert werden.
+     * Siehe SDL_HINT_RENDER_SCALE_QUALITY
+     *
+     * @param scaleQuality "0"/"nearest", "1"/"linear", "2"/"best"
+     */
+    virtual void setHintRenderScaleQuality(const char* scaleQuality) = 0;
+
+    /**
      * @brief Bereitet das Zeichnen eines neuen Frames vor: Der Renderer erhält als Ziel den Backbuffer,
      * und löscht den Hintergrund.
      */

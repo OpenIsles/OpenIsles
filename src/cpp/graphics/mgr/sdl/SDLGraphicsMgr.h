@@ -1,11 +1,10 @@
 #ifndef _SDL_GRAPHICS_MGR_H
 #define _SDL_GRAPHICS_MGR_H
 
-#include "game/Player.h"
 #include "graphics/graphic/sdl/SDLAnimation.h"
-#include "graphics/graphic/sdl/SDLGraphic.h"
 #include "graphics/graphic/sdl/SDLMapObjectGraphic.h"
 #include "graphics/graphic/sdl/SDLPlainGraphic.h"
+#include "graphics/mgr/AbstractGraphicsMgr.h"
 #include "graphics/mgr/IGraphicsMgr.h"
 #include "graphics/renderer/IRenderer.h"
 #include "rapidxml/rapidxml.hpp"
@@ -14,70 +13,9 @@
 
 
 /**
- * @brief Manager, der alle Grafiken verwaltet
+ * @brief Grafik-Manager für SDL-Grafiken
  */
-class SDLGraphicsMgr : public IGraphicsMgr {
-
-public:
-    /**
-     * @brief Breite einer Kachel in Pixel
-     */
-	static const int TILE_WIDTH = 64;
-
-    /**
-     * @brief Höhe einer Kachel in Pixel
-     */
-	static const int TILE_HEIGHT = 32;
-
-    /**
-     * @brief Halbe Breite einer Kachel in Pixel
-     */
-	static const int TILE_WIDTH_HALF = TILE_WIDTH / 2;
-
-    /**
-     * @brief Halbe Höhe einer Kachel in Pixel
-     */
-	static const int TILE_HEIGHT_HALF = TILE_HEIGHT / 2;
-
-    /**
-     * @brief Höhe der Elevation in Pixel. Entspricht dem e in doc/map-coords.xcf
-     */
-    static const int ELEVATION_HEIGHT = 32;
-
-private:
-    // Dependencies
-    IRenderer* const renderer;
-    const ConfigMgr* const configMgr;
-
-	/**
-	 * @brief Array von Zeigern auf die Tile-Grafiken
-	 */
-    SDLMapObjectGraphic** tiles;
-
-	/**
-	 * @brief Array von Zeigern auf die Struktur-Grafiken
-	 */
-	SDLMapObjectGraphic** structures;
-    
-    /**
-	 * @brief Array von Zeigern auf die Gütergrafiken (Symbole)
-	 */
-    SDLPlainGraphic** goodsIcons;
-
-    /**
-     * @brief Array von Zeigern auf die Gütergrafiken (Marketplatz-Symbole)
-     */
-    SDLPlainGraphic** goodsMarketplaceIcons;
-    
-    /**
-     * @brief Array von Zeigern auf andere Grafiken
-     */
-    SDLPlainGraphic** otherGraphics;
-
-    /**
-     * @brief Array von Zeigern auf Animationen
-     */
-    SDLAnimation** animations;
+class SDLGraphicsMgr : public AbstractGraphicsMgr {
 
 public:
     /**
@@ -86,41 +24,24 @@ public:
      * @param configMgr (Dependency)
      */
     SDLGraphicsMgr(IRenderer* const renderer, const ConfigMgr* const configMgr);
-    ~SDLGraphicsMgr();
-
-    IMapObjectGraphic* const getGraphicForTile(int tileIndex) const {
-		return tiles[tileIndex];
-	}
-
-    IMapObjectGraphic* const getGraphicForStructure(StructureType structureType) const {
-		return structures[structureType];
-	}
-    
-    IPlainGraphic* const getGraphicForGoodsIcon(GoodsType goodsType) const {
-        return goodsIcons[goodsType];
-    }
-
-    IPlainGraphic* const getGraphicForGoodsMarketplaceIcon(GoodsType goodsType) const {
-        return goodsMarketplaceIcons[goodsType];
-    }
-    
-    IPlainGraphic* const getOtherGraphic(OtherGraphic otherGraphic) const {
-        return otherGraphics[otherGraphic];
-    }
-
-    IAnimation* const getAnimation(AnimationType animationType) const {
-        return animations[animationType];
-    }
-
-    IRenderer* const getRenderer() const {
-        return renderer;
-    }
+    virtual ~SDLGraphicsMgr() {}
 
 private:
-	/**
-	 * @brief Lädt die Tile-Grafiken
-	 */
-	void loadTiles();
+	virtual IPlainGraphic* loadPlainGraphic(const char* filename) {
+        return new SDLPlainGraphic(renderer, filename);
+    }
+
+    virtual IMapObjectGraphic* loadMapObjectGraphic(
+        const char* filename, unsigned char mapWidth, unsigned char mapHeight) {
+
+        return new SDLMapObjectGraphic(renderer, filename, mapWidth, mapHeight);
+    }
+
+    virtual IAnimation* loadAnimation(const char* filename, unsigned char mapWidth, unsigned char mapHeight,
+                                      unsigned int framesCount, double fps) {
+
+        return new SDLAnimation(renderer, filename, mapWidth, mapHeight, framesCount, fps);
+    }
 
 };
 

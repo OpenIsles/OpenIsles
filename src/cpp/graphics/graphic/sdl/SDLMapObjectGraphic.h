@@ -2,56 +2,18 @@
 #define _SDL_MAP_OBJECT_GRAPHIC_H
 
 #include <SDL.h>
-#include "graphics/graphic/IMapObjectGraphic.h"
 #include "graphics/graphic/sdl/SDLPlainGraphic.h"
+#include "graphics/graphic/AbstractMapObjectGraphic.h"
 #include "graphics/renderer/IRenderer.h"
 #include "utils/Rect.h"
 
 /**
-* @brief Grafik eines MapObjects. Die Grafik hat eine fixe Größe in Map-Koordinaten zugeordnet, sodass sie in das
-* Kachelsystem der Map gezeichnet werden kann
-*/
-class SDLMapObjectGraphic : public SDLPlainGraphic, public virtual IMapObjectGraphic {
-
-public:
-    /**
-     * @brief zeichnet das Objekt maskiert, d.h. gelbem Overlay für Gebäudeplatzierung
-     * @sa #drawAt()
-     */
-    static const int DRAWING_FLAG_MASKED   = (1 << 0);
-
-    /**
-     * @brief zeichnet das Objekt rot eingefärbt
-     * Info: Rot und abgedunkelt schließen sich gegenseitig aus.
-     * @sa #drawAt()
-     */
-    static const int DRAWING_FLAG_RED      = (1 << 1);
-
-    /**
-     * @brief zeichnet das Objekt blinkend, d.h. entweder wird die Grafik gezeichnet oder nicht
-     * @sa #drawAt()
-     */
-    static const int DRAWING_FLAG_BLINK    = (1 << 2);
-
-    /**
-     * @brief zeichnet das Objekt abgedunkelt
-     * Info: Rot und abgedunkelt schließen sich gegenseitig aus.
-     * @sa #drawAt()
-     */
-    static const int DRAWING_FLAG_DARKENED = (1 << 3);
-
+ * @brief Grafik eines MapObjects. Die Grafik hat eine fixe Größe in Map-Koordinaten zugeordnet, sodass sie in das
+ * Kachelsystem der Map gezeichnet werden kann
+ */
+class SDLMapObjectGraphic : public virtual SDLPlainGraphic, public virtual AbstractMapObjectGraphic {
 
 private:
-    /**
-     * @brief Breite (X-Richtung) der Grafik in Map-Koordinaten
-     */
-    unsigned char mapWidth;
-
-    /**
-     * @brief Höhe (Y-Richtung) der Grafik in Map-Koordinaten
-     */
-    unsigned char mapHeight;
-
     /**
      * @brief SDL-Texture der maskierten Grafik zurück. Diese wird verwendet, wenn ein neues Gebäude
      * positioniert wird.
@@ -73,23 +35,6 @@ public:
      * @brief Destruktor. Entlädt die Grafik und gibt Speicher frei.
      */
     virtual ~SDLMapObjectGraphic();
-
-    /**
-     * @brief Liefert die Breite der Grafik in Map-Koordinaten zurück
-     * @return Breite der Grafik in Map-Koordinaten
-     */
-    virtual unsigned char getMapWidth() const {
-        return mapWidth;
-    }
-
-    /**
-     * @brief Liefert die Höhe der Grafik in Map-Koordinaten zurück
-     * @return Breite der Höhe in Map-Koordinaten
-     */
-    virtual unsigned char getMapHeight() const {
-        return mapHeight;
-    }
-
 
     /**
      * @brief Zeichnet die Grafik mit bestimmten Drawing-Flags. Quell- und Zielbereich können beliebig gewählt werden.

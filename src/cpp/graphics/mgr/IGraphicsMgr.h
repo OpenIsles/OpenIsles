@@ -123,6 +123,13 @@ public:
     virtual ~IGraphicsMgr() {}
 
     /**
+     * @brief Lädt alle Grafiken für das Spiel.
+     * Info: Das Laden der Grafiken kann nicht im Konstruktur gemacht werden, weil wir hierzu virtuelle Methoden
+     * aufrufen müssen und das im Konstruktor nicht funktioniert.
+     */
+    virtual void loadGraphics() = 0;
+
+    /**
      * @brief Liefert eine Tile-Grafik
      * @param tileIndex Index ins Array #tiles dessen Eintrag zurückgeliefert werden soll
      * @return MapObjectGraphic

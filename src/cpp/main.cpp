@@ -93,6 +93,7 @@ int main(int argc, char** argv) {
 
 	IGraphicsMgr* sdlGraphicsMgr = new SDLGraphicsMgr(sdlRenderer, configMgr);
     context.graphicsMgr = sdlGraphicsMgr;
+    sdlGraphicsMgr->loadGraphics();
 
     IFontMgr* sdlFontMgr = new SDLFontMgr();
     context.fontMgr = sdlFontMgr;
