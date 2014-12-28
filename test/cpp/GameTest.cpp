@@ -5,8 +5,8 @@ TEST_F(GameTest, SetUp) {
     Map* map = game->getMap();
 
     ASSERT_TRUE(map != nullptr);
-    ASSERT_EQ(map->getWidth(), 150);
-    ASSERT_EQ(map->getHeight(), 150);
+    ASSERT_EQ(150, map->getWidth());
+    ASSERT_EQ(150, map->getHeight());
     ASSERT_FALSE(map->getMapObjects().empty());
 
     // Kachel, wo keine Insel ist
@@ -23,14 +23,14 @@ TEST_F(GameTest, SetUp) {
     mapObjectOffice1->getMapCoords(mapX, mapY, mapWidth, mapHeight);
 
     ASSERT_TRUE(mapObjectOffice1 != nullptr);
-    ASSERT_EQ(mapX, 28);
-    ASSERT_EQ(mapY, 18);
-    ASSERT_EQ(mapWidth, 3);
-    ASSERT_EQ(mapHeight, 2);
-    ASSERT_EQ(((Building*) mapObjectOffice1)->getStructureType(), StructureType::OFFICE1);
+    ASSERT_EQ(28, mapX);
+    ASSERT_EQ(18, mapY);
+    ASSERT_EQ(3, mapWidth);
+    ASSERT_EQ(2, mapHeight);
+    ASSERT_EQ(StructureType::OFFICE1, ((Building*) mapObjectOffice1)->getStructureType());
 
     Player* playerOffice1 = mapObjectOffice1->getPlayer();
     ASSERT_EQ(mapTileOnOffice1->player, playerOffice1);
-    ASSERT_EQ(playerOffice1->getColor(), PlayerColor::RED);
-    ASSERT_STREQ(playerOffice1->getName(), "Spieler 1");
+    ASSERT_EQ(PlayerColor::RED, playerOffice1->getColor());
+    ASSERT_STREQ("Spieler 1", playerOffice1->getName());
 }
