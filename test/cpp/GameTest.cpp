@@ -32,5 +32,5 @@ TEST_F(GameTest, SetUp) {
     Player* playerOffice1 = mapObjectOffice1->getPlayer();
     ASSERT_EQ(mapTileOnOffice1->player, playerOffice1);
     ASSERT_EQ(PlayerColor::RED, playerOffice1->getColor());
-    ASSERT_STREQ("Spieler 1", playerOffice1->getName());
+    ASSERT_EQ("Spieler 1", playerOffice1->getName());
 }

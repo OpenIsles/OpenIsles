@@ -69,7 +69,7 @@ void GameIO::loadPlayers(Game* game, rapidxml::xml_node<>* mapNode) {
 
         // Spielerfarbe
         std::string playerColorAttrName = playerAttrPrefix + "color";
-        const char* playerColorAttrValue = getPropertyValueFromPropertiesNode(propertiesNode, playerColorAttrName.data());
+        const char* playerColorAttrValue = getPropertyValueFromPropertiesNode(propertiesNode, playerColorAttrName.c_str());
         PlayerColor playerColor;
 
         if (strcmp(playerColorAttrValue, "red") == 0) {
@@ -86,10 +86,10 @@ void GameIO::loadPlayers(Game* game, rapidxml::xml_node<>* mapNode) {
 
         // Spielername
         std::string playerNameAttrName = playerAttrPrefix + "name";
-        std::string playerName = getPropertyValueFromPropertiesNode(propertiesNode, playerNameAttrName.data());
+        std::string playerName = getPropertyValueFromPropertiesNode(propertiesNode, playerNameAttrName.c_str());
 
         // Spieler anlegen
-        Player* player = new Player(playerColor, playerName.data());
+        Player* player = new Player(playerColor, playerName);
         game->addPlayer(player);
 
         if (i == currentPlayerNr) {
@@ -127,7 +127,7 @@ void GameIO::loadMap(Game* game, rapidxml::xml_node<>* objectgroupIslesNode) {
             isleFilename.append(".tmx");
 
             // Insel laden
-            Isle* isle = new Isle(isleFilename.data());
+            Isle* isle = new Isle(isleFilename.c_str());
 
             // Prüfen, ob die Insel wirklich die Größe hat, wie die Karte sie haben will.
             if (isle->getWidth() != isleMapWidth || isle->getHeight() != isleMapHeight) {

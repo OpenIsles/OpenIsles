@@ -19,7 +19,7 @@ void SDLFontMgr::renderText(IRenderer* renderer, std::string string, int x, int 
     
     TTF_Font* ttfFont = getFont(fontName, fontSize);
     SDL_Color sdlColor = { color->r, color->g, color->b, color->a };
-    SDL_Surface* surfaceText = TTF_RenderUTF8_Solid(ttfFont, string.data(), sdlColor);
+    SDL_Surface* surfaceText = TTF_RenderUTF8_Solid(ttfFont, string.c_str(), sdlColor);
     
     Rect rectDestination;
     rectDestination.w = surfaceText->w;
@@ -58,7 +58,7 @@ void SDLFontMgr::renderText(IRenderer* renderer, std::string string, int x, int 
             rectDestination.x + 1, rectDestination.y + 1, rectDestination.w, rectDestination.h);
 
         SDL_Color sdlShadowColor = { shadowColor->r, shadowColor->g, shadowColor->b, shadowColor->a };
-        SDL_Surface* surfaceTextShadow = TTF_RenderUTF8_Solid(ttfFont, string.data(), sdlShadowColor);
+        SDL_Surface* surfaceTextShadow = TTF_RenderUTF8_Solid(ttfFont, string.c_str(), sdlShadowColor);
         SDL_Texture* textureTextShadow = SDL_CreateTextureFromSurface(sdlRealRenderer, surfaceTextShadow);
         SDL_FreeSurface(surfaceTextShadow);
 
@@ -88,7 +88,7 @@ TTF_Font* SDLFontMgr::getFont(std::string fontName, int fontSize) {
     
     // Noch nicht geladen
     std::string fontPath = "data/font/" + fontName;
-    TTF_Font* ttfFont = TTF_OpenFont(fontPath.data(), fontSize);
+    TTF_Font* ttfFont = TTF_OpenFont(fontPath.c_str(), fontSize);
     ttfFonts[mapKey] = ttfFont;
     return ttfFont;
 }

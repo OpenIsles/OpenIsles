@@ -1,6 +1,7 @@
 #ifndef _PLAYER_H
 #define _PLAYER_H
 
+#include <cstring>
 #include <stdexcept>
 
 /**
@@ -44,7 +45,7 @@ private:
     /**
      * @brief Name des Spielers
      */
-    const char* name;
+    const std::string name;
 
 public:
     
@@ -53,14 +54,14 @@ public:
      * @param color Spielerfarbe
      * @param name Name des Spielers
      */
-    Player(PlayerColor color, const char* name);
+    Player(PlayerColor color, const std::string& name);
     ~Player();
     
     PlayerColor getColor() const {
         return color;
     }
 
-    const char* getName() const {
+    const std::string& getName() const {
         return name;
     }
 
