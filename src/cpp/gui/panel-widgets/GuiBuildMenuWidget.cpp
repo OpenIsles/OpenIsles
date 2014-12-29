@@ -89,7 +89,7 @@ GuiBuildMenuWidget::GuiBuildMenuWidget(const Context* const context) : GuiPanelW
                 {
                     StructureType::FORESTERS,
                     "Förster",
-                    OtherGraphic::ADD_BUILDING_DUMMY
+                    OtherGraphic::ADD_BUILDING_FORESTERS
                 },
                 { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
                 { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY }

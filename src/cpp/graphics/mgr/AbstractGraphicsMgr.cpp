@@ -119,6 +119,7 @@ void AbstractGraphicsMgr::loadGraphics() {
     otherGraphics[OtherGraphic::ADD_BUILDING_TOOLSMITHS] = loadPlainGraphic("data/img/gui/add-building/toolsmiths.png");
     otherGraphics[OtherGraphic::ADD_BUILDING_HOUSE] = loadPlainGraphic("data/img/gui/add-building/house.png");
     otherGraphics[OtherGraphic::ADD_BUILDING_STONEMASON] = loadPlainGraphic("data/img/gui/add-building/stonemason.png");
+    otherGraphics[OtherGraphic::ADD_BUILDING_FORESTERS] = loadPlainGraphic("data/img/gui/add-building/foresters.png");
     otherGraphics[OtherGraphic::ADD_BUILDING_DUMMY] = loadPlainGraphic("data/img/gui/add-building/dummy.png");
     otherGraphics[OtherGraphic::ADD_BUILDING_GROUP_CRAFTSMAN] = loadPlainGraphic("data/img/gui/button-add-building-craftsman.png");
     otherGraphics[OtherGraphic::ADD_BUILDING_GROUP_CRAFTSMAN_PRESSED] = loadPlainGraphic("data/img/gui/button-add-building-craftsman-pressed.png");
