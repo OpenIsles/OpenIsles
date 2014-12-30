@@ -162,6 +162,19 @@ void ConfigMgr::loadBuildingConfig() {
     };
     buildingConfigs[StructureType::TOOLSMITHS]->productionRate = 2.5;
     buildingConfigs[StructureType::TOOLSMITHS]->inhabitants = 3;
+
+    buildingConfigs[StructureType::HUNTERS_HUT] = new BuildingConfig();
+    buildingConfigs[StructureType::HUNTERS_HUT]->name = "Jagdhütte";
+    buildingConfigs[StructureType::HUNTERS_HUT]->catchmentArea = new RectangleData<char>(17, 17);
+    memcpy(buildingConfigs[StructureType::HUNTERS_HUT]->catchmentArea->data, "0000001111100000000001111111110000000111111111110000011111111111110001111111111111110011111111111111101111111111111111111111111111111111111111111111111111111111111111111111111111111111111011111111111111100111111111111111000111111111111100000111111111110000000111111111000000000011111000000", 289);
+    buildingConfigs[StructureType::HUNTERS_HUT]->buildingCosts = { 50, 2, 2, 0 };
+    buildingConfigs[StructureType::HUNTERS_HUT]->buildingProduction = {
+        GoodsSlot(GoodsType::FOOD, 3),
+        GoodsSlot(),
+        GoodsSlot()
+    };
+    buildingConfigs[StructureType::HUNTERS_HUT]->productionRate = 2;
+    buildingConfigs[StructureType::HUNTERS_HUT]->inhabitants = 1;
 }
 
 void ConfigMgr::loadTilesConfig() {

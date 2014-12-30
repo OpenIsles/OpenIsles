@@ -42,6 +42,7 @@ enum OtherGraphic {
     ADD_BUILDING_HOUSE,
     ADD_BUILDING_STONEMASON,
     ADD_BUILDING_FORESTERS,
+    ADD_BUILDING_HUNTERS_HUT,
     ADD_BUILDING_DUMMY,
 
     // Grafiken für die Gruppen vom "Gebäude bauen"-Menü

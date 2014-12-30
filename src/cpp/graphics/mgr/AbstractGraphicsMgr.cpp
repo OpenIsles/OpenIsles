@@ -67,6 +67,7 @@ void AbstractGraphicsMgr::loadGraphics() {
     structures[StructureType::CATTLE_FARM] = loadMapObjectGraphic("data/img/objects/cattle-farm.png", 2, 2);
     structures[StructureType::BUTCHERS] = loadMapObjectGraphic("data/img/objects/butchers.png", 2, 2);
     structures[StructureType::TOOLSMITHS] = loadMapObjectGraphic("data/img/objects/toolsmiths.png", 2, 2);
+    structures[StructureType::HUNTERS_HUT] = loadMapObjectGraphic("data/img/objects/hunters-hut.png", 1, 1);
 
     structures[StructureType::STREET] = loadMapObjectGraphic("data/img/objects/street-straight90.png", 1, 1); // damit was drinsteht. Fürs Malen werden die nachfolgenden Grafiken verwendet
 	structures[StructureType::STREET_STRAIGHT_0] = loadMapObjectGraphic("data/img/objects/street-straight0.png", 1, 1);
@@ -120,6 +121,7 @@ void AbstractGraphicsMgr::loadGraphics() {
     otherGraphics[OtherGraphic::ADD_BUILDING_HOUSE] = loadPlainGraphic("data/img/gui/add-building/house.png");
     otherGraphics[OtherGraphic::ADD_BUILDING_STONEMASON] = loadPlainGraphic("data/img/gui/add-building/stonemason.png");
     otherGraphics[OtherGraphic::ADD_BUILDING_FORESTERS] = loadPlainGraphic("data/img/gui/add-building/foresters.png");
+    otherGraphics[OtherGraphic::ADD_BUILDING_HUNTERS_HUT] = loadPlainGraphic("data/img/gui/add-building/hunters-hut.png");
     otherGraphics[OtherGraphic::ADD_BUILDING_DUMMY] = loadPlainGraphic("data/img/gui/add-building/dummy.png");
     otherGraphics[OtherGraphic::ADD_BUILDING_GROUP_CRAFTSMAN] = loadPlainGraphic("data/img/gui/button-add-building-craftsman.png");
     otherGraphics[OtherGraphic::ADD_BUILDING_GROUP_CRAFTSMAN_PRESSED] = loadPlainGraphic("data/img/gui/button-add-building-craftsman-pressed.png");

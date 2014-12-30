@@ -85,7 +85,11 @@ GuiBuildMenuWidget::GuiBuildMenuWidget(const Context* const context) : GuiPanelW
                     "Rinderfarm",
                     OtherGraphic::ADD_BUILDING_CATTLE_FARM
                 },
-                { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
+                {
+                    StructureType::HUNTERS_HUT,
+                    "Jagdhütte",
+                    OtherGraphic::ADD_BUILDING_HUNTERS_HUT
+                },
                 {
                     StructureType::FORESTERS,
                     "Förster",
