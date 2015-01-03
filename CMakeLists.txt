@@ -41,10 +41,7 @@ set(GUI_SOURCE_FILES
 set(GRAPHICS_SOURCE_FILES
     src/cpp/graphics/mgr/sdl/SDLFontMgr.cpp
     src/cpp/graphics/mgr/sdl/SDLGraphicsMgr.cpp
-    src/cpp/graphics/graphic/sdl/SDLAnimation.cpp
     src/cpp/graphics/graphic/sdl/SDLGraphic.cpp
-    src/cpp/graphics/graphic/sdl/SDLMapObjectGraphic.cpp
-    src/cpp/graphics/graphic/sdl/SDLPlainGraphic.cpp
     src/cpp/graphics/renderer/sdl/SDLRenderer.cpp
 )
 set(SOUND_SOURCE_FILES

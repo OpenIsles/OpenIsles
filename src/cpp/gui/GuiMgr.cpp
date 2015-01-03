@@ -1,7 +1,8 @@
+#include <string>
 #include "config/ConfigMgr.h"
 #include "game/Colony.h"
 #include "game/Game.h"
-#include "graphics/graphic/sdl/SDLPlainGraphic.h"
+#include "graphics/graphic/sdl/SDLGraphic.h"
 #include "graphics/mgr/IFontMgr.h"
 #include "gui/components/GuiAddBuildingWidget.h"
 #include "gui/components/GuiButton.h"
@@ -62,7 +63,7 @@ void GuiMgr::initGui() {
     registerElement(GUI_ID_MAP, guiMap);
 
     // Panel
-    IPlainGraphic* graphic = new SDLPlainGraphic(renderer, "data/img/gui/panel.png");
+    IGraphic* graphic = new SDLGraphic(renderer, "data/img/gui/panel.png");
     GuiStaticElement* panel = new GuiStaticElement(context);
     panel->setCoords(768, 0, graphic->getWidth(), graphic->getHeight());
     panel->setGraphic(graphic);
@@ -74,7 +75,7 @@ void GuiMgr::initGui() {
     panel->addChildElement(guiMinimap);
 
     // Statusleiste
-    graphic = new SDLPlainGraphic(renderer, "data/img/gui/statusbar.png");
+    graphic = new SDLGraphic(renderer, "data/img/gui/statusbar.png");
     GuiStaticElement* statusBar = new GuiStaticElement(context);
     statusBar->setCoords(0, 734, graphic->getWidth(), graphic->getHeight());
     statusBar->setGraphic(graphic);
@@ -117,8 +118,8 @@ void GuiMgr::initGui() {
     for (int i = 0; i < 4; i++) {
         // Button
         GuiPushButton* panelSwitchPushButton = new GuiPushButton(context);
-        panelSwitchPushButton->setGraphic(new SDLPlainGraphic(renderer, tabGraphics[i]->graphicFilename));
-        panelSwitchPushButton->setGraphicPressed(new SDLPlainGraphic(renderer, tabGraphics[i]->graphicPressedFilename));
+        panelSwitchPushButton->setGraphic(new SDLGraphic(renderer, tabGraphics[i]->graphicFilename));
+        panelSwitchPushButton->setGraphicPressed(new SDLGraphic(renderer, tabGraphics[i]->graphicPressedFilename));
         panelSwitchPushButton->setCoords(22 + i*55, 235, 48, 64);
         panelSwitchPushButton->setOnClickFunction([this, i]() {
             panelState.selectedPanelButton = tabGraphics[i]->panelButtonToActive;
@@ -449,7 +450,7 @@ void GuiMgr::renderResourcesBar() {
         context->configMgr->getBuildingConfig(panelState.addingStructure)->getBuildingCosts() : nullptr;
 
     // Münzenguthaben
-    context->graphicsMgr->getOtherGraphic(OtherGraphic::COINS)->drawAt(15, 8);
+    context->graphicsMgr->getGraphicSet("coin")->getStatic()->getGraphic()->drawAt(15, 8);
 
     std::string outputString = toString(currentPlayer->coins);
     if (buildingCosts != nullptr) {
@@ -481,7 +482,8 @@ void GuiMgr::renderResourcesBar() {
         int x = 290;
         for (unsigned int i = 0; i < sizeof(goodsToDraw); i++, x += 110) {
             GoodsType goodsType = goodsToDraw[i];
-            context->graphicsMgr->getGraphicForGoodsIcon(goodsType)->drawAt(x, 5);
+            const std::string graphicSetName = context->graphicsMgr->getGraphicSetNameForGoodIcons(goodsType, false);
+            context->graphicsMgr->getGraphicSet(graphicSetName)->getStatic()->getGraphic()->drawAt(x, 5);
 
             int goodsInventory = (int) colony->getGoods(goodsType).inventory;
             outputString = toString(goodsInventory);
@@ -500,8 +502,9 @@ void GuiMgr::renderResourcesBar() {
     }
 
     // Einwohnerzahl (immer anzeigen)
-    IPlainGraphic* populationIconGraphic = context->graphicsMgr->getOtherGraphic((OtherGraphic)
-        (OtherGraphic::COAT_OF_ARMS_POPULATION + mapTileAtCursor->player->getColorIndex()));
+    const std::string graphicSetName =
+        context->graphicsMgr->getGraphicSetNameForCoatOfArmsPopulation(mapTileAtCursor->player->getColor());
+    const IGraphic* populationIconGraphic = context->graphicsMgr->getGraphicSet(graphicSetName)->getStatic()->getGraphic();
     populationIconGraphic->drawAt(655, 6);
 
     outputString = toString(colony->population);
@@ -510,7 +513,8 @@ void GuiMgr::renderResourcesBar() {
 }
 
 void GuiMgr::drawGoodsBox(int x, int y, GoodsType goodsType, double inventory, double capacity) {
-    context->graphicsMgr->getGraphicForGoodsMarketplaceIcon(goodsType)->drawAt(x, y);
+    const std::string graphicSetName = context->graphicsMgr->getGraphicSetNameForGoodIcons(goodsType, true);
+    context->graphicsMgr->getGraphicSet(graphicSetName)->getStatic()->getGraphic()->drawAt(x, y);
 
     if (inventory != -1) {
         // Balken anzeigen

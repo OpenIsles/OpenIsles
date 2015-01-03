@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<graphics-config>
+
+    <!-- Gruppe zum Strukturieren der XML-Datei; keine Bedeutung für die Anwendung -->
+    <group name="Kachel mit 4 Ansichten">
+        <graphic-set name="tile-isle-n">
+            <view view="north">
+                <!-- Wiederverwendbarkeit derselben Grafik -->
+                <graphic image-file="tiles.png" x="0" y="0" w="64" h="64" />
+            </view>
+            <view view="west">
+                <graphic image-file="tiles.png" x="64" y="0" w="64" h="64" />
+            </view>
+            <view view="south">
+                <graphic image-file="tiles.png" x="128" y="0" w="64" h="64" />
+            </view>
+            <view view="east">
+                <graphic image-file="tiles.png" x="192" y="0" w="64" h="64" />
+            </view>
+        </graphic-set>
+        <graphic-set name="tile-isle-s">
+            <view view="north">
+                <graphic image-file="tiles.png" x="128" y="0" w="64" h="64" />
+            </view>
+            <view view="west">
+                <graphic image-file="tiles.png" x="192" y="0" w="64" h="64" />
+            </view>
+            <view view="south">
+                <graphic image-file="tiles.png" x="0" y="0" w="64" h="64" />
+            </view>
+            <view view="east">
+                <graphic image-file="tiles.png" x="64" y="0" w="64" h="64" />
+            </view>
+        </graphic-set>
+    </group>
+
+    <group name="Kachel mit 4 Ansichten und vielen Zuständen">
+        <graphic-set name="corn-field">
+            <state name="empty">
+                <view view="north">
+                    <graphic image-file="corn-field.png" x="0" y="0" w="64" h="64" />
+                </view>
+                <view view="west">
+                    <graphic image-file="corn-field.png" x="0" y="64" w="64" h="64" />
+                </view>
+                <view view="south">
+                    <graphic image-file="corn-field.png" x="0" y="128" w="64" h="64" />
+                </view>
+                <view view="east">
+                    <graphic image-file="corn-field.png" x="0" y="192" w="64" h="64" />
+                </view>
+            </state>
+
+            <state name="growing-1">
+                <view view="north">
+                    <graphic image-file="corn-field.png" x="64" y="0" w="64" h="64" />
+                </view>
+                <view view="west">
+                    <graphic image-file="corn-field.png" x="64" y="64" w="64" h="64" />
+                </view>
+                <view view="south">
+                    <graphic image-file="corn-field.png" x="64" y="128" w="64" h="64" />
+                </view>
+                <view view="east">
+                    <graphic image-file="corn-field.png" x="64" y="192" w="64" h="64" />
+                </view>
+            </state>
+
+            <state name="growing-2">
+                <view view="north">
+                    <graphic image-file="corn-field.png" x="128" y="0" w="64" h="64" />
+                </view>
+                <view view="west">
+                    <graphic image-file="corn-field.png" x="128" y="64" w="64" h="64" />
+                </view>
+                <view view="south">
+                    <graphic image-file="corn-field.png" x="128" y="128" w="64" h="64" />
+                </view>
+                <view view="east">
+                    <graphic image-file="corn-field.png" x="128" y="192" w="64" h="64" />
+                </view>
+            </state>
+
+            <!-- ... -->
+
+            <!-- TODO state kreuz (fixe Anzahl) view sollte man vereinfachen in einem Tag -->
+        </graphic-set>
+    </group>
+
+    <group name="GUI-Button mit 2 Zuständen">
+        <graphic-set name="gui-button">
+            <state name="default">
+                <graphic image-file="button.png" x="0" y="0" w="120" h="32" />
+            </state>
+            <state name="pressed">
+                <graphic image-file="button.png" x="120" y="0" w="120" h="32" />
+            </state>
+        </graphic-set>
+    </group>
+
+    <group name="Träger, Zustände, Ansichten und Animationen">
+        <graphic-set name="carrier">
+            <state name="without-goods">
+                <view view="north">
+                    <animation image-file="carrier.png" x="0" y="0" w="64" h="64" frames="10" />
+                </view>
+                <view view="north-west">
+                    <animation image-file="carrier.png" x="0" y="64" w="64" h="64" frames="10" />
+                </view>
+                <!-- ... -->
+            </state>
+            <state name="with-goods">
+                <view view="north">
+                    <animation image-file="carrier.png" x="0" y="512" w="64" h="64" frames="10" />
+                </view>
+                <view view="north-west">
+                    <animation image-file="carrier.png" x="0" y="576" w="64" h="64" frames="10" />
+                </view>
+                <!-- ... -->
+            </state>
+        </graphic-set>
+    </group>
+
+    <group name="Statisches Bild">
+        <graphic-set name="coin">
+            <graphic image-file="coin.png" x="0" y="0" w="24" h="24" />
+        </graphic-set>
+    </group>
+
+    <group name="Simple Animation">
+        <graphic-set name="fire">
+            <animation image-file="fire.png" x="0" y="0" w="32" h="64" frames="22" />
+        </graphic-set>
+    </group>
+
+    <group name="Animation in mehreren Ansichten">
+        <graphic-set name="pioneer-in-the-streets">
+            <view view="north">
+                <animation image-file="pioneer-in-the-streets.png" x="0" y="0" w="32" h="64" frames="17" />
+            </view>
+            <view view="north-west">
+                <animation image-file="pioneer-in-the-streets.png" x="0" y="0" w="32" h="64" frames="17" />
+            </view>
+            <!-- ... -->
+        </graphic-set>
+    </group>
+
+    <group name="Gebäude; Grafik und Animation gemischt">
+        <graphic-set name="toolsmith">
+            <state name="idle">
+                <view view="north">
+                    <graphic image-file="toolsmith.png" x="0" y="0" w="128" h="128" />
+                </view>
+                <view view="west">
+                    <graphic image-file="toolsmith.png" x="0" y="128" w="128" h="128" />
+                </view>
+                <!-- ... -->
+            </state>
+
+            <state name="working">
+                <view view="north">
+                    <animation image-file="toolsmith.png" x="128" y="0" w="128" h="128" frames="14" />
+                </view>
+                <view view="west">
+                    <animation image-file="toolsmith.png" x="128" y="128" w="128" h="128" frames="14" />
+                </view>
+                <!-- ... -->
+            </state>
+        </graphic-set>
+    </group>
+
+</graphics-config>

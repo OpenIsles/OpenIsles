@@ -12,152 +12,152 @@ GuiBuildMenuWidget::GuiBuildMenuWidget(const Context* const context) : GuiPanelW
     static struct {
         BuildingGroup buildingGroup;
         const char* name;
-        OtherGraphic graphic;
-        OtherGraphic graphicPressed;
+        const std::string graphicSetName;
+        const std::string graphicSetPressedName; // TODO Zustände nutzen
 
         struct {
             StructureType structureType;
             const char* name;
-            OtherGraphic graphic;
+            const std::string graphicSetName;
         } buildings[16];
 
     } buildingGroups[4] = {
         {
             BuildingGroup::CRAFTSMAN,
             "Handwerksbetriebe",
-            OtherGraphic::ADD_BUILDING_GROUP_CRAFTSMAN,
-            OtherGraphic::ADD_BUILDING_GROUP_CRAFTSMAN_PRESSED, {
-            { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
-            { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
-            { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
-            { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
-            {
-                StructureType::STONEMASON,
-                "Steinmetz",
-                OtherGraphic::ADD_BUILDING_STONEMASON
-            },
-            { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
-            { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
-            {
-                StructureType::TOOLSMITHS,
-                "Werkzeugschmiede",
-                OtherGraphic::ADD_BUILDING_TOOLSMITHS
-            },
-            { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
-            { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
-            { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
-            { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
-            {
-                StructureType::WEAVING_MILL1,
-                "Webstube",
-                OtherGraphic::ADD_BUILDING_WEAVING_MILL1
-            },
-            {
-                StructureType::BUTCHERS,
-                "Fleischerei",
-                OtherGraphic::ADD_BUILDING_BUTCHERS
-            },
-            { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
-            { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY }
-        }
+            "add-building-group/craftsman",
+            "add-building-group/craftsman-pressed", {
+                { StructureType::NO_STRUCTURE, nullptr, "add-building-button/dummy" },
+                { StructureType::NO_STRUCTURE, nullptr, "add-building-button/dummy" },
+                { StructureType::NO_STRUCTURE, nullptr, "add-building-button/dummy" },
+                { StructureType::NO_STRUCTURE, nullptr, "add-building-button/dummy" },
+                {
+                    StructureType::STONEMASON,
+                    "Steinmetz",
+                    "add-building-button/stonemason"
+                },
+                { StructureType::NO_STRUCTURE, nullptr, "add-building-button/dummy" },
+                { StructureType::NO_STRUCTURE, nullptr, "add-building-button/dummy" },
+                {
+                    StructureType::TOOLSMITHS,
+                    "Werkzeugschmiede",
+                    "add-building-button/toolsmiths"
+                },
+                { StructureType::NO_STRUCTURE, nullptr, "add-building-button/dummy" },
+                { StructureType::NO_STRUCTURE, nullptr, "add-building-button/dummy" },
+                { StructureType::NO_STRUCTURE, nullptr, "add-building-button/dummy" },
+                { StructureType::NO_STRUCTURE, nullptr, "add-building-button/dummy" },
+                {
+                    StructureType::WEAVING_MILL1,
+                    "Webstube",
+                    "add-building-button/weaving-mill1"
+                },
+                {
+                    StructureType::BUTCHERS,
+                    "Fleischerei",
+                    "add-building-button/butchers"
+                },
+                { StructureType::NO_STRUCTURE, nullptr, "add-building-button/dummy" },
+                { StructureType::NO_STRUCTURE, nullptr, "add-building-button/dummy" }
+            }
         }, {
             BuildingGroup::FARM,
             "Farmen & Plantagen",
-            OtherGraphic::ADD_BUILDING_GROUP_FARM,
-            OtherGraphic::ADD_BUILDING_GROUP_FARM_PRESSED, {
-                { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
-                { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
-                { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
-                { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
-                { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
-                { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
-                { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
-                { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
-                { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
-                { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
+            "add-building-group/farm",
+            "add-building-group/farm-pressed", {
+                { StructureType::NO_STRUCTURE, nullptr, "add-building-button/dummy" },
+                { StructureType::NO_STRUCTURE, nullptr, "add-building-button/dummy" },
+                { StructureType::NO_STRUCTURE, nullptr, "add-building-button/dummy" },
+                { StructureType::NO_STRUCTURE, nullptr, "add-building-button/dummy" },
+                { StructureType::NO_STRUCTURE, nullptr, "add-building-button/dummy" },
+                { StructureType::NO_STRUCTURE, nullptr, "add-building-button/dummy" },
+                { StructureType::NO_STRUCTURE, nullptr, "add-building-button/dummy" },
+                { StructureType::NO_STRUCTURE, nullptr, "add-building-button/dummy" },
+                { StructureType::NO_STRUCTURE, nullptr, "add-building-button/dummy" },
+                { StructureType::NO_STRUCTURE, nullptr, "add-building-button/dummy" },
                 {
                     StructureType::SHEEP_FARM,
                     "Schaffarm",
-                    OtherGraphic::ADD_BUILDING_SHEEP_FARM
+                    "add-building-button/sheep-farm"
                 },
                 {
                     StructureType::CATTLE_FARM,
                     "Rinderfarm",
-                    OtherGraphic::ADD_BUILDING_CATTLE_FARM
+                    "add-building-button/cattle-farm"
                 },
                 {
                     StructureType::HUNTERS_HUT,
                     "Jagdhütte",
-                    OtherGraphic::ADD_BUILDING_HUNTERS_HUT
+                    "add-building-button/hunters-hut"
                 },
                 {
                     StructureType::FORESTERS,
                     "Förster",
-                    OtherGraphic::ADD_BUILDING_FORESTERS
+                    "add-building-button/foresters"
                 },
-                { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
-                { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY }
+                { StructureType::NO_STRUCTURE, nullptr, "add-building-button/dummy" },
+                { StructureType::NO_STRUCTURE, nullptr, "add-building-button/dummy" }
             }
         }, {
             BuildingGroup::PORT,
             "Hafenanlagen",
-            OtherGraphic::ADD_BUILDING_GROUP_PORT,
-            OtherGraphic::ADD_BUILDING_GROUP_PORT_PRESSED, {
-                { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
-                { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
-                { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
-                { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
-                { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
-                { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
-                { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
-                { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
-                { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
-                { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
-                { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
-                { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
+            "add-building-group/port",
+            "add-building-group/port-pressed", {
+                { StructureType::NO_STRUCTURE, nullptr, "add-building-button/dummy" },
+                { StructureType::NO_STRUCTURE, nullptr, "add-building-button/dummy" },
+                { StructureType::NO_STRUCTURE, nullptr, "add-building-button/dummy" },
+                { StructureType::NO_STRUCTURE, nullptr, "add-building-button/dummy" },
+                { StructureType::NO_STRUCTURE, nullptr, "add-building-button/dummy" },
+                { StructureType::NO_STRUCTURE, nullptr, "add-building-button/dummy" },
+                { StructureType::NO_STRUCTURE, nullptr, "add-building-button/dummy" },
+                { StructureType::NO_STRUCTURE, nullptr, "add-building-button/dummy" },
+                { StructureType::NO_STRUCTURE, nullptr, "add-building-button/dummy" },
+                { StructureType::NO_STRUCTURE, nullptr, "add-building-button/dummy" },
+                { StructureType::NO_STRUCTURE, nullptr, "add-building-button/dummy" },
+                { StructureType::NO_STRUCTURE, nullptr, "add-building-button/dummy" },
                 {
                     StructureType::OFFICE1,
                     "Kontor I",
-                    OtherGraphic::ADD_BUILDING_OFFICE1
+                    "add-building-button/office1"
                 },
-                { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
-                { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
-                { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY }
+                { StructureType::NO_STRUCTURE, nullptr, "add-building-button/dummy" },
+                { StructureType::NO_STRUCTURE, nullptr, "add-building-button/dummy" },
+                { StructureType::NO_STRUCTURE, nullptr, "add-building-button/dummy" }
             }
         }, {
             BuildingGroup::PUBLIC,
             "Öffentliche Gebäude",
-            OtherGraphic::ADD_BUILDING_GROUP_PUBLIC,
-            OtherGraphic::ADD_BUILDING_GROUP_PUBLIC_PRESSED, {
-                { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
-                { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
-                { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
-                { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
-                { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
-                { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
-                { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
-                { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
-                { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
-                { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
-                { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY },
+            "add-building-group/public",
+            "add-building-group/public-pressed", {
+                { StructureType::NO_STRUCTURE, nullptr, "add-building-button/dummy" },
+                { StructureType::NO_STRUCTURE, nullptr, "add-building-button/dummy" },
+                { StructureType::NO_STRUCTURE, nullptr, "add-building-button/dummy" },
+                { StructureType::NO_STRUCTURE, nullptr, "add-building-button/dummy" },
+                { StructureType::NO_STRUCTURE, nullptr, "add-building-button/dummy" },
+                { StructureType::NO_STRUCTURE, nullptr, "add-building-button/dummy" },
+                { StructureType::NO_STRUCTURE, nullptr, "add-building-button/dummy" },
+                { StructureType::NO_STRUCTURE, nullptr, "add-building-button/dummy" },
+                { StructureType::NO_STRUCTURE, nullptr, "add-building-button/dummy" },
+                { StructureType::NO_STRUCTURE, nullptr, "add-building-button/dummy" },
+                { StructureType::NO_STRUCTURE, nullptr, "add-building-button/dummy" },
                 {
                     StructureType::STREET,
                     "Plasterstraße",
-                    OtherGraphic::ADD_BUILDING_STREET
+                    "add-building-button/street"
                 }, {
                     StructureType::PIONEERS_HOUSE1,
                     "Haus",
-                    OtherGraphic::ADD_BUILDING_HOUSE
+                    "add-building-button/house"
                 }, {
                     StructureType::MARKETPLACE,
                     "Marktplatz",
-                    OtherGraphic::ADD_BUILDING_MARKETPLACE
+                    "add-building-button/marketplace"
                 }, {
                     StructureType::CHAPEL,
                     "Kapelle",
-                    OtherGraphic::ADD_BUILDING_CHAPEL
+                    "add-building-button/chapel"
                 },
-                { StructureType::NO_STRUCTURE, nullptr, OtherGraphic::ADD_BUILDING_DUMMY }
+                { StructureType::NO_STRUCTURE, nullptr, "add-building-button/dummy" }
             }
         }
     };
@@ -165,7 +165,7 @@ GuiBuildMenuWidget::GuiBuildMenuWidget(const Context* const context) : GuiPanelW
     for (int groupIndex = 0; groupIndex < 4; groupIndex++) {
         // Grid
         GuiStaticElement* addBuildingGrid = new GuiStaticElement(context);
-        IPlainGraphic* graphicAddBuildingGrid = context->graphicsMgr->getOtherGraphic(OtherGraphic::ADD_BUILDING_GRID);
+        const IGraphic* graphicAddBuildingGrid = context->graphicsMgr->getGraphicSet("add-building-grid")->getStatic()->getGraphic();
         addBuildingGrid->setCoords(775, 450, graphicAddBuildingGrid->getWidth(), graphicAddBuildingGrid->getHeight());
         addBuildingGrid->setGraphic(graphicAddBuildingGrid);
         addBuildingGrid->setVisible(false);
@@ -182,8 +182,8 @@ GuiBuildMenuWidget::GuiBuildMenuWidget(const Context* const context) : GuiPanelW
                 }
 
                 GuiButton* addBuildingButton = new GuiButton(context);
-                IPlainGraphic* graphicAddBuildingButton =
-                    context->graphicsMgr->getOtherGraphic(buildingGroups[groupIndex].buildings[buildingIndex].graphic);
+                const IGraphic* graphicAddBuildingButton = context->graphicsMgr
+                    ->getGraphicSet(buildingGroups[groupIndex].buildings[buildingIndex].graphicSetName)->getStatic()->getGraphic();
                 addBuildingButton->setCoords(
                     12 + 58 * gridX, 13 + 58 * gridY, graphicAddBuildingButton->getWidth(), graphicAddBuildingButton->getHeight());
                 addBuildingButton->setGraphic(graphicAddBuildingButton);
@@ -200,8 +200,10 @@ GuiBuildMenuWidget::GuiBuildMenuWidget(const Context* const context) : GuiPanelW
 
         // Button für die Gruppe
         GuiPushButton* addBuildingPushButton = new GuiPushButton(context);
-        addBuildingPushButton->setGraphic(context->graphicsMgr->getOtherGraphic(buildingGroups[groupIndex].graphic));
-        addBuildingPushButton->setGraphicPressed(context->graphicsMgr->getOtherGraphic(buildingGroups[groupIndex].graphicPressed));
+        addBuildingPushButton->setGraphic(
+            context->graphicsMgr->getGraphicSet(buildingGroups[groupIndex].graphicSetName)->getStatic()->getGraphic());
+        addBuildingPushButton->setGraphicPressed(
+            context->graphicsMgr->getGraphicSet(buildingGroups[groupIndex].graphicSetPressedName)->getStatic()->getGraphic());
         addBuildingPushButton->setCoords(12 + groupIndex * 55, 378, 52, 64);
         addBuildingPushButton->setOnClickFunction([ this, context, groupIndex ]() {
             // Wenn man die Gruppe nochmal klickt, die bereits ausgewählt ist und das ausgewählte Gebäude nicht

@@ -30,7 +30,7 @@ protected:
 
     /**
      * @brief Flags, die angeben, wie das Objekt gezeichnet wird.
-     * Eine Kombination aus MapObjectGraphic::DRAWING_FLAG_-Konstanten wird erwartet.
+     * Eine Kombination aus IGraphic::DRAWING_FLAG_-Konstanten wird erwartet.
      */
     int drawingFlags = 0;
 

@@ -1,5 +1,5 @@
 #include <SDL.h>
-#include "graphics/graphic/IPlainGraphic.h"
+#include "graphics/graphic/IGraphic.h"
 #include "gui/GuiMgr.h"
 #include "gui/components/GuiPushButton.h"
 
@@ -14,7 +14,7 @@ void GuiPushButton::renderElement(IRenderer* renderer) {
     int windowX, windowY;
     getWindowCoords(windowX, windowY);
 
-    IPlainGraphic* graphicToUse = (pressed) ? graphicPressed : (active ? graphicPressed : graphic);
+    const IGraphic* graphicToUse = (pressed) ? graphicPressed : (active ? graphicPressed : graphic);
     graphicToUse->drawAt(windowX, windowY);
 }
 

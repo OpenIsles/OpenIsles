@@ -50,10 +50,10 @@ void GuiSelectedBuildingWidget::renderElement(IRenderer* renderer) {
 
         context->guiMgr->drawGoodsBox(windowX + 42, productionY,
             productionSlots->input.goodsType, productionSlots->input.inventory, -1);
-        context->graphicsMgr->getOtherGraphic(OtherGraphic::PRODUCTION_PLUS)->drawAt(windowX + 88, productionY);
+        context->graphicsMgr->getGraphicSet("production-plus")->getStatic()->getGraphic()->drawAt(windowX + 88, productionY);
         context->guiMgr->drawGoodsBox(windowX + 103, productionY,
             productionSlots->input2.goodsType, productionSlots->input2.inventory, -1);
-        context->graphicsMgr->getOtherGraphic(OtherGraphic::PRODUCTION_ARROW)->drawAt(windowX + 149, productionY);
+        context->graphicsMgr->getGraphicSet("production-arrow")->getStatic()->getGraphic()->drawAt(windowX + 149, productionY);
         context->guiMgr->drawGoodsBox(windowX + 163, productionY,
             productionSlots->output.goodsType, productionSlots->output.inventory, -1);
     }
@@ -62,7 +62,7 @@ void GuiSelectedBuildingWidget::renderElement(IRenderer* renderer) {
 
         context->guiMgr->drawGoodsBox(windowX + 73, productionY,
             productionSlots->input.goodsType, productionSlots->input.inventory, -1);
-        context->graphicsMgr->getOtherGraphic(OtherGraphic::PRODUCTION_ARROW)->drawAt(windowX + 119, productionY);
+        context->graphicsMgr->getGraphicSet("production-arrow")->getStatic()->getGraphic()->drawAt(windowX + 119, productionY);
         context->guiMgr->drawGoodsBox(windowX + 133, productionY,
             productionSlots->output.goodsType, productionSlots->output.inventory, -1);
     }

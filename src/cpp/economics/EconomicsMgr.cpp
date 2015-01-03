@@ -106,7 +106,7 @@ void EconomicsMgr::updateCarrier(Building* building) {
             Carrier* carrier = new Carrier(result.building, result.route, result.goodsSlot.goodsType, true);
             carrier->setMapCoords(firstHopOnRoute.mapX, firstHopOnRoute.mapY);
             carrier->setAnimation(
-                context->graphicsMgr->getAnimation(isStorageBuilding ? CART_WITHOUT_CARGO : CARRIER));
+                context->graphicsMgr->getGraphicSet(isStorageBuilding ? "cart-without-cargo" : "carrier")->getStatic());
 
             building->carrier = carrier;
 
@@ -124,7 +124,7 @@ void EconomicsMgr::updateCarrier(Building* building) {
         double oneSecondTicks = (double) 1000 / context->game->getSpeed();
 
         Carrier* carrier = building->carrier;
-        IAnimation* animation = carrier->getAnimation();
+        const Animation* animation = carrier->getAnimation();
 
         // Animieren
         carrier->animationFrame += (double) ticksPastSinceLastUpdate / oneSecondTicks * animation->getFps();
@@ -232,7 +232,7 @@ void EconomicsMgr::updateCarrier(Building* building) {
                             building, returnRoute, goodsSlotToTakeFrom->goodsType, false);
                         returnCarrier->setMapCoords(firstHopOnReturnRoute.mapX, firstHopOnReturnRoute.mapY);
                         returnCarrier->setAnimation(
-                            context->graphicsMgr->getAnimation(isStorageBuilding ? CART_WITH_CARGO : CARRIER));
+                            context->graphicsMgr->getGraphicSet(isStorageBuilding ? "cart-with-cargo" : "carrier")->getStatic());
                         returnCarrier->carriedGoods.inventory = goodsWeCollect;
 
                         building->carrier = returnCarrier;

@@ -1,13 +1,11 @@
 #ifndef _GUI_BUTTON_H
 #define _GUI_BUTTON_H
 
+#include <SDL.h>
 #include <functional>
 #include "Context.h"
+#include "graphics/graphic/IGraphic.h"
 #include "gui/components/GuiStaticElement.h"
-
-class SDLGraphic;
-class SDL_Renderer;
-
 
 /**
  * Grafischer Button, den man einfach nur drücken kann
@@ -18,7 +16,7 @@ protected:
     /**
      * @brief Grafik, wenn der Button grade runtergedrückt ist
      */
-    IPlainGraphic* graphicPressed;
+    const IGraphic* graphicPressed;
     
     /**
      * @brief gibt an, ob der Button grade im Zustand "runtergedrückt" steht
@@ -34,7 +32,7 @@ public:
 	GuiButton(const Context* const context);
 	virtual ~GuiButton();
 
-    IPlainGraphic* getGraphicPressed() const {
+    const IGraphic* getGraphicPressed() const {
         return graphicPressed;
     }
 
@@ -42,7 +40,7 @@ public:
      * Setzt die Grafik für das Element, wenn der Button gedrückt ist. Der Destruktur räumt die Grafik am Ende weg.
      * @param graphic frisch geladene Grafik, die verwendet werden soll
      */
-    void setGraphicPressed(IPlainGraphic* graphicPressed) {
+    void setGraphicPressed(const IGraphic* graphicPressed) {
         this->graphicPressed = graphicPressed;
     }
     

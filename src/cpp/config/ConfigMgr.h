@@ -2,8 +2,9 @@
 #define _CONFIG_MGR_H
 
 #include "game/GoodsSlot.h"
-#include "graphics/graphic/IMapObjectGraphic.h"
 #include "map/Building.h"
+#include "rapidxml/rapidxml.hpp"
+#include "rapidxml/rapidxml_utils.hpp"
 #include "utils/RectangleData.h"
 
 

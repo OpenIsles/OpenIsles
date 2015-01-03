@@ -5,24 +5,94 @@
 #include "graphics/renderer/IRenderer.h"
 
 /**
- * @brief Interface für die Basisklasse für alle Grafiken. Kann nix außer die Grafik zu laden und entladen
+ * @brief Interface für eine Einzelgrafik
  */
 class IGraphic {
+
+public:
+    /**
+     * @brief zeichnet das Objekt maskiert, d.h. gelbem Overlay für Gebäudeplatzierung
+     * @sa #draw()
+     */
+    static const int DRAWING_FLAG_MASKED   = (1 << 0);
+
+    /**
+     * @brief zeichnet das Objekt rot eingefärbt
+     * Info: Rot und abgedunkelt schließen sich gegenseitig aus.
+     * @sa #draw()
+     */
+    static const int DRAWING_FLAG_RED      = (1 << 1);
+
+    /**
+     * @brief zeichnet das Objekt blinkend, d.h. entweder wird die Grafik gezeichnet oder nicht
+     * @sa #draw()
+     */
+    static const int DRAWING_FLAG_BLINK    = (1 << 2);
+
+    /**
+     * @brief zeichnet das Objekt abgedunkelt
+     * Info: Rot und abgedunkelt schließen sich gegenseitig aus.
+     * @sa #draw()
+     */
+    static const int DRAWING_FLAG_DARKENED = (1 << 3);
+
+protected:
+    /**
+	 * @brief Breite der Grafik
+	 */
+	int width;
+
+	/**
+	 * @brief Höhe der Grafik
+	 */
+	int height;
+
+	/**
+     * @brief Breite (X-Richtung) der Grafik in Map-Koordinaten
+	 * Dieser Wert ist 0, wenn die Grafik nicht auf der Karte dargestellt werden kann.
+     */
+    unsigned char mapWidth;
+
+    /**
+     * @brief Höhe (Y-Richtung) der Grafik in Map-Koordinaten
+	 * Dieser Wert ist 0, wenn die Grafik nicht auf der Karte dargestellt werden kann.
+     */
+    unsigned char mapHeight;
 
 public:
     virtual ~IGraphic() {}
 
     /**
      * @brief Liefert die Breite der Grafik zurück
-     * @return Breite der Grafik
+     * @return Breite der Grafik in Pixel
      */
-    virtual int getWidth() const = 0;
+    int getWidth() const {
+        return width;
+    }
 
     /**
      * @brief Liefert die Höhe der Grafik zurück
-     * @return Höhe der Grafik
+     * @return Höhe der Grafik in Pixel
      */
-    virtual int getHeight() const = 0;
+    int getHeight() const {
+        return height;
+    }
+
+    /**
+     * @brief Liefert die Breite der Grafik in Map-Koordinaten zurück.
+     * @return Breite in Map-Koordinaten oder 0, wenn die Grafik nicht im Map-Koordinatensystem positioniert werden kann.
+     */
+	unsigned char getMapWidth() const {
+        return mapWidth;
+    }
+
+	/**
+     * @brief Liefert die Höhe der Grafik in Map-Koordinaten zurück.
+     * @return Höhe in Map-Koordinaten oder 0, wenn die Grafik nicht im Map-Koordinatensystem positioniert werden kann.
+     */
+	unsigned char getMapHeight() const {
+        return mapHeight;
+    }
 
     /**
      * @brief Liest die Farbwerte eines bestimmten Pixels aus und setzt sie in die r-, g-, b- und a-Parameter.
@@ -33,7 +103,31 @@ public:
      * @param b wird auf den Blau-Wert des Pixels gesetzt (OUT)
      * @param a wird auf den Alpha-Wert des Pixels gesetzt (OUT) 0 = voll transparent, 255 = absolut undurchsichtig
      */
-    virtual void getPixel(int x, int y, uint8_t* r, uint8_t* g, uint8_t* b, uint8_t* a) = 0;
+    virtual void getPixel(int x, int y, uint8_t* r, uint8_t* g, uint8_t* b, uint8_t* a) const = 0;
+
+    /**
+     * @brief Zeichnet die Grafik
+     * @param x x-Koordinate, wo hingezeichnet werden soll
+     * @param y y-Koordinate, wo hingezeichnet werden soll
+     */
+    virtual void drawAt(int x, int y) const = 0;
+
+    /**
+     * @brief Zeichnet die Grafik skaliert
+     * @param x x-Koordinate, wo hingezeichnet werden soll
+     * @param y y-Koordinate, wo hingezeichnet werden soll
+     * @param scale Skalierungsfaktor
+     */
+    virtual void drawScaledAt(int x, int y, double scale) const = 0;
+
+     /**
+     * @brief Zeichnet die Grafik mit bestimmten Drawing-Flags. Quell- und Zielbereich können beliebig gewählt werden.
+     * @param rectSource Quell-Rechteck der Zeichenoperation oder nullptr, wenn die komplette Grafik verwendet werden soll
+     * @param rectDestination Ziel-Rechteck der Zeichenoperation oder nullptr, wenn ganzflächig gemalt werden soll
+     * @param drawingFlags Bitmaske aus DRAWING_FLAG_*-Konstanten, die angeben, wie die Grafik gezeichnet werden soll
+     * @param sdlTicks aktuelle Ticks aus `Context`, um den Blinke-Zustand zu kennen
+     */
+    virtual void draw(Rect* rectSource, Rect* rectDestination, int drawingFlags, uint32_t sdlTicks) const = 0;
 
 };
 

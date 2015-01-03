@@ -8,8 +8,8 @@
 
 GuiOptionsMenuWidget::GuiOptionsMenuWidget(const Context* const context) : GuiPanelWidget(context) {
     GuiPushButton* musicPushButton = new GuiPushButton(context);
-    musicPushButton->setGraphic(context->graphicsMgr->getOtherGraphic(OtherGraphic::MUSIC));
-    musicPushButton->setGraphicPressed(context->graphicsMgr->getOtherGraphic(OtherGraphic::MUSIC_PRESSED));
+    musicPushButton->setGraphic(context->graphicsMgr->getGraphicSet("button-music")->getStatic()->getGraphic());
+    musicPushButton->setGraphicPressed(context->graphicsMgr->getGraphicSet("button-music-pressed")->getStatic()->getGraphic());
     musicPushButton->setCoords(7, 378, 64, 64);
     musicPushButton->setOnClickFunction([this, context]() {
         bool musicEnabled = ((GuiPushButton*) context->guiMgr->findElement(GUI_ID_MUSIC_PUSH_BUTTON))->isActive();

@@ -3,6 +3,7 @@
 
 #include "economics/UpdateableObject.h"
 #include "game/GoodsSlot.h"
+#include "graphics/graphic/Animation.h"
 #include "map/MapObject.h"
 #include "pathfinding/AStar.h"
 
@@ -60,7 +61,7 @@ private:
     /**
      * @brief verwendete Animation für den Träger
      */
-    IAnimation* animation;
+    const Animation* animation;
 
     /**
      * @brief aktueller Frame der Animation, die grade abgespielt wird. Dieser Wert ist ein double, da fortlaufend
@@ -79,19 +80,18 @@ public:
      */
     Carrier(Building* owningBuilding, Route* route, GoodsType goodsType, bool onOutboundTrip);
 
-
-    IAnimation* getAnimation() const {
-        return animation;
-    }
-
-    void setAnimation(IAnimation* animation) {
-        this->animation = animation;
-    }
-
     /**
      * @brief Destruktor. Räumt die Route mit weg.
      */
     ~Carrier();
+
+    const Animation* getAnimation() const {
+        return animation;
+    }
+
+    void setAnimation(const Animation* animation) {
+        this->animation = animation;
+    }
 };
 
 #endif

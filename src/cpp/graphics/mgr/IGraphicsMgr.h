@@ -1,90 +1,15 @@
 #ifndef _I_GRAPHICS_MGR_H
 #define _I_GRAPHICS_MGR_H
 
+#include <string>
+#include "game/GoodsSlot.h"
 #include "game/Player.h"
-#include "graphics/graphic/IAnimation.h"
 #include "graphics/graphic/IGraphic.h"
-#include "graphics/graphic/IMapObjectGraphic.h"
-#include "graphics/graphic/IPlainGraphic.h"
+#include "graphics/graphic/GraphicSet.h"
 #include "graphics/renderer/IRenderer.h"
-#include "rapidxml/rapidxml.hpp"
-#include "rapidxml/rapidxml_utils.hpp"
-
-enum GoodsType : char;
-enum StructureType : unsigned char;
+#include "map/StructureType.h"
 
 class ConfigMgr;
-
-typedef
-enum OtherGraphic {
-    // Münzensymbol
-    COINS,
-
-    // Hintergrund des Panels
-    PANEL,
-
-    // Hintergrund der Statusbar
-    STATUSBAR,
-
-    // Gebäude bauen - Grid mit den Symbolen
-    ADD_BUILDING_GRID,
-
-    // Grafiken fürs "Gebäude bauen"-Menü
-    ADD_BUILDING_CHAPEL,
-    ADD_BUILDING_MARKETPLACE,
-    ADD_BUILDING_OFFICE1,
-    ADD_BUILDING_STREET,
-    ADD_BUILDING_SHEEP_FARM,
-    ADD_BUILDING_WEAVING_MILL1,
-    ADD_BUILDING_CATTLE_FARM,
-    ADD_BUILDING_BUTCHERS,
-    ADD_BUILDING_TOOLSMITHS,
-    ADD_BUILDING_HOUSE,
-    ADD_BUILDING_STONEMASON,
-    ADD_BUILDING_FORESTERS,
-    ADD_BUILDING_HUNTERS_HUT,
-    ADD_BUILDING_DUMMY,
-
-    // Grafiken für die Gruppen vom "Gebäude bauen"-Menü
-    ADD_BUILDING_GROUP_CRAFTSMAN,
-    ADD_BUILDING_GROUP_CRAFTSMAN_PRESSED,
-    ADD_BUILDING_GROUP_FARM,
-    ADD_BUILDING_GROUP_FARM_PRESSED,
-    ADD_BUILDING_GROUP_PORT,
-    ADD_BUILDING_GROUP_PORT_PRESSED,
-    ADD_BUILDING_GROUP_PUBLIC,
-    ADD_BUILDING_GROUP_PUBLIC_PRESSED,
-
-    // Plus-Zeichen und Pfeil für Produktion eines Gebäudes
-    PRODUCTION_ARROW,
-    PRODUCTION_PLUS,
-
-    // Wappen
-    COAT_OF_ARMS_POPULATION,
-    COAT_OF_ARMS_POPULATION_RED = COAT_OF_ARMS_POPULATION + PLAYER_RED,
-    COAT_OF_ARMS_POPULATION_BLUE = COAT_OF_ARMS_POPULATION + PLAYER_BLUE,
-    COAT_OF_ARMS_POPULATION_YELLOW = COAT_OF_ARMS_POPULATION + PLAYER_YELLOW,
-    COAT_OF_ARMS_POPULATION_WHITE = COAT_OF_ARMS_POPULATION + PLAYER_WHITE,
-
-    // Optionen-Panel
-    MUSIC,
-    MUSIC_PRESSED,
-
-    MAX_GRAPHIC // Marker, wie viele Grafiken es gibt
-} OtherGraphic;
-
-
-typedef
-enum AnimationType {
-    // Typ, der Waren hin- und herträgt
-    CARRIER,
-
-    // Marktkarren
-    CART_WITHOUT_CARGO,
-    CART_WITH_CARGO,
-
-    MAX_ANIMATION // Marker, wie viele Animationen es gibt
-} AnimationType;
 
 
 /**
@@ -131,47 +56,78 @@ public:
      */
     virtual void loadGraphics() = 0;
 
-    /**
-     * @brief Liefert eine Tile-Grafik
-     * @param tileIndex Index ins Array #tiles dessen Eintrag zurückgeliefert werden soll
-     * @return MapObjectGraphic
-     */
-    virtual IMapObjectGraphic* const getGraphicForTile(int tileIndex) const = 0;
+    virtual const GraphicSet* getGraphicSet(std::string graphicName) const = 0;
 
-    /**
-     * @brief Liefert eine Object-Grafik
-     * @param index Index ins Array #objects dessen Eintrag zurückgeliefert werden soll
-     * @return MapObjectGraphic
-     */
-    virtual IMapObjectGraphic* const getGraphicForStructure(StructureType structureType) const = 0;
+    std::string getGraphicSetNameForStructure(StructureType structureType) const {
+        // TODO Das muss irgendwie hübscher werden. In Zukunft muss alles mit den String-Keys laufen
+        std::string graphicSetNameSuffix;
 
-    /**
-     * @brief Liefert die Grafik für ein Güter-Symbol zurück
-     * @param goodsType Güter-Typ
-     * @return PlainGraphic
-     */
-    virtual IPlainGraphic* const getGraphicForGoodsIcon(GoodsType goodsType)  const = 0;
+        if (structureType == StructureType::CHAPEL) { graphicSetNameSuffix = "chapel"; }
+        else if (structureType == StructureType::PIONEERS_HOUSE1) { graphicSetNameSuffix = "pioneers-house1"; }
+        else if (structureType == StructureType::PIONEERS_HOUSE2) { graphicSetNameSuffix = "pioneers-house2"; }
+        else if (structureType == StructureType::PIONEERS_HOUSE3) { graphicSetNameSuffix = "pioneers-house3"; }
+        else if (structureType == StructureType::PIONEERS_HOUSE4) { graphicSetNameSuffix = "pioneers-house4"; }
+        else if (structureType == StructureType::PIONEERS_HOUSE5) { graphicSetNameSuffix = "pioneers-house5"; }
+        else if (structureType == StructureType::STONEMASON) { graphicSetNameSuffix = "stonemason"; }
+        else if (structureType == StructureType::OFFICE1) { graphicSetNameSuffix = "office1"; }
+        else if (structureType == StructureType::MARKETPLACE) { graphicSetNameSuffix = "marketplace"; }
+        else if (structureType == StructureType::FORESTERS) { graphicSetNameSuffix = "foresters"; }
+        else if (structureType == StructureType::SHEEP_FARM) { graphicSetNameSuffix = "sheep-farm"; }
+        else if (structureType == StructureType::WEAVING_MILL1) { graphicSetNameSuffix = "weaving-mill1"; }
+        else if (structureType == StructureType::CATTLE_FARM) { graphicSetNameSuffix = "cattle-farm"; }
+        else if (structureType == StructureType::BUTCHERS) { graphicSetNameSuffix = "butchers"; }
+        else if (structureType == StructureType::TOOLSMITHS) { graphicSetNameSuffix = "toolsmiths"; }
+        else if (structureType == StructureType::HUNTERS_HUT) { graphicSetNameSuffix = "hunters-hut"; }
 
-    /**
-     * @brief Liefert die Grafik für ein Güter-Symbol (Marktplatz-Symbol) zurück
-     * @param goodsType Güter-Typ
-     * @return PlainGraphic
-     */
-    virtual IPlainGraphic* const getGraphicForGoodsMarketplaceIcon(GoodsType goodsType) const = 0;
+        else if (structureType == StructureType::STREET) { graphicSetNameSuffix = "street"; } // damit was drinsteht. Fürs Malen werden die nachfolgenden Grafiken verwendet
+        else if (structureType == StructureType::STREET_STRAIGHT_0) { graphicSetNameSuffix = "street-straight0"; }
+        else if (structureType == StructureType::STREET_STRAIGHT_90) { graphicSetNameSuffix = "street-straight90"; }
+        else if (structureType == StructureType::STREET_CURVE_0) { graphicSetNameSuffix = "street-curve0"; }
+        else if (structureType == StructureType::STREET_CURVE_90) { graphicSetNameSuffix = "street-curve90"; }
+        else if (structureType == StructureType::STREET_CURVE_180) { graphicSetNameSuffix = "street-curve180"; }
+        else if (structureType == StructureType::STREET_CURVE_270) { graphicSetNameSuffix = "street-curve270"; }
+        else if (structureType == StructureType::STREET_TEE_0) { graphicSetNameSuffix = "street-tee0"; }
+        else if (structureType == StructureType::STREET_TEE_90) { graphicSetNameSuffix = "street-tee90"; }
+        else if (structureType == StructureType::STREET_TEE_180) { graphicSetNameSuffix = "street-tee180"; }
+        else if (structureType == StructureType::STREET_TEE_270) { graphicSetNameSuffix = "street-tee270"; }
+        else if (structureType == StructureType::STREET_CROSS) { graphicSetNameSuffix = "street-cross"; }
 
-    /**
-     * @brief Liefert eine sonstige Grafik zurück
-     * @param otherGraphic welche Grafikb
-     * @return PlainGraphic
-     */
-    virtual IPlainGraphic* const getOtherGraphic(OtherGraphic otherGraphic) const = 0;
+        return "structures/" + graphicSetNameSuffix;
+    }
 
-    /**
-     * @brief Liefert eine Animation zurück
-     * @param animationType welche Animation
-     * @return Animation
-     */
-    virtual IAnimation* const getAnimation(AnimationType animationType) const = 0;
+    std::string getGraphicSetNameForTile(int tileIndex) const {
+        // TODO Das muss irgendwie hübscher werden. In Zukunft muss alles mit den String-Keys laufen
+        return "tiles/" + std::to_string(tileIndex);
+    }
+
+    std::string getGraphicSetNameForGoodIcons(GoodsType goodsType, bool marketplaceIcon) const {
+        std::string graphicSetNamePrefix = (marketplaceIcon) ? "goods-marketplace-icons" : "goods-icons";
+
+        // TODO Das muss irgendwie hübscher werden. In Zukunft muss alles mit den String-Keys laufen
+        std::string graphicSetNameSuffix;
+
+        if (goodsType == GoodsType::WOOL) { graphicSetNameSuffix = "wool"; }
+        else if (goodsType == GoodsType::CATTLE) { graphicSetNameSuffix = "cattle"; }
+        else if (goodsType == GoodsType::FOOD) { graphicSetNameSuffix = "food"; }
+        else if (goodsType == GoodsType::CLOTH) { graphicSetNameSuffix = "cloth"; }
+        else if (goodsType == GoodsType::TOOLS) { graphicSetNameSuffix = "tools"; }
+        else if (goodsType == GoodsType::WOOD) { graphicSetNameSuffix = "wood"; }
+        else if (goodsType == GoodsType::BRICKS) { graphicSetNameSuffix = "bricks"; }
+
+        return graphicSetNamePrefix + "/" + graphicSetNameSuffix;
+    }
+
+    std::string getGraphicSetNameForCoatOfArmsPopulation(PlayerColor playerColor) const {
+        std::string graphicSetNameSuffix;
+
+        // TODO Das muss irgendwie hübscher werden. In Zukunft muss alles mit den String-Keys laufen
+        if (playerColor == PlayerColor::RED) { graphicSetNameSuffix = "red"; }
+        else if (playerColor == PlayerColor::BLUE) { graphicSetNameSuffix = "blue"; }
+        else if (playerColor == PlayerColor::YELLOW) { graphicSetNameSuffix = "yellow"; }
+        else if (playerColor == PlayerColor::WHITE) { graphicSetNameSuffix = "white"; }
+
+        return "coat-of-arms/population/" + graphicSetNameSuffix;
+    }
 
     /**
      * @brief Liefert den Renderer zurück.

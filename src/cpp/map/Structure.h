@@ -3,51 +3,7 @@
 
 #include "economics/UpdateableObject.h"
 #include "map/MapObject.h"
-
-/**
- * Enum zur Unterscheidung der verschiedenen Strukturen
- */
-typedef
-enum StructureType : unsigned char {
-    // keine Struktur
-    NO_STRUCTURE = 0,
-    
-    // Strukturen
-    STREET = 1,               // wird als MapObject verwendet
-    STREET_STRAIGHT_0,        // werden nur zum Zeichnen verwendet und können nicht direkt platziert werden
-    STREET_STRAIGHT_90,       //  "
-    STREET_CURVE_0,           //  "
-    STREET_CURVE_90,          //  "
-    STREET_CURVE_180,         //  "
-    STREET_CURVE_270,         //  "
-    STREET_TEE_0,             //  "
-    STREET_TEE_90,            //  "
-    STREET_TEE_180,           //  "
-    STREET_TEE_270,           //  "
-    STREET_CROSS,             //  "
-    
-    // Gebäude
-    START_BUILDINGS = 101, // Marker, um zu unterscheiden, ob Structure oder Building angelegt werden
-            
-    CHAPEL = 101,
-    PIONEERS_HOUSE1,
-    PIONEERS_HOUSE2,
-    PIONEERS_HOUSE3,
-    PIONEERS_HOUSE4,
-    PIONEERS_HOUSE5,
-    STONEMASON,
-    OFFICE1,
-    MARKETPLACE,
-    FORESTERS,
-    SHEEP_FARM,
-    WEAVING_MILL1,
-    CATTLE_FARM,
-    BUTCHERS,
-    TOOLSMITHS,
-    HUNTERS_HUT,
-            
-    MAX_STRUCTURE // Marker, wie viel Platz wir im Array brauchen
-} StructureType;
+#include "map/StructureType.h"
 
 /**
  * Enum für die Gebäude-Gruppen, d.h. wie sie im Baumenü angeordnet werden

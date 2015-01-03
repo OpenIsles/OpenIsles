@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <string>
 #include "game/Game.h"
 #include "graphics/mgr/IGraphicsMgr.h"
 #include "map/Building.h"
@@ -108,7 +109,7 @@ void MapCoordUtils::screenToMapCoords(int screenX, int screenY, int& mapX, int& 
 }
 
 void MapCoordUtils::screenToDrawCoords(
-	Map* map, int screenX, int screenY, int elevation, IMapObjectGraphic* graphic, Rect* rect) {
+	Map* map, int screenX, int screenY, int elevation, const IGraphic* graphic, Rect* rect) {
 
     rect->x = screenX - (
         graphic->getWidth() - (graphic->getMapWidth() + 1) * IGraphicsMgr::TILE_WIDTH_HALF);
@@ -132,7 +133,7 @@ void MapCoordUtils::screenToDrawCoords(
 }
 
 void MapCoordUtils::mapToDrawCoords(
-	Map* map, int mapX, int mapY, int elevation, IMapObjectGraphic* graphic, Rect* rect) {
+	Map* map, int mapX, int mapY, int elevation, const IGraphic* graphic, Rect* rect) {
 
     int screenX, screenY;
     mapToScreenCoords(mapX, mapY, screenX, screenY);
@@ -141,7 +142,7 @@ void MapCoordUtils::mapToDrawCoords(
 }
 
 void MapCoordUtils::mapToDrawCoords(
-	Map* map, double mapX, double mapY, int elevation, IMapObjectGraphic* graphic, Rect* rect) {
+	Map* map, double mapX, double mapY, int elevation, const IGraphic* graphic, Rect* rect) {
 
     int screenX, screenY;
     mapToScreenCoords(mapX, mapY, screenX, screenY);
@@ -153,7 +154,10 @@ void MapCoordUtils::getDrawCoordsForBuilding(Map* map, IGraphicsMgr* graphicsMgr
     int mapX, mapY;
     building->getMapCoords(mapX, mapY);
 
-    IMapObjectGraphic* graphic = graphicsMgr->getGraphicForStructure(building->getStructureType());
+	const std::string graphicSetName = graphicsMgr->getGraphicSetNameForStructure(building->getStructureType());
+	const GraphicSet* graphicsSet = graphicsMgr->getGraphicSet(graphicSetName);
+    const IGraphic* graphic = graphicsSet->getStatic()->getGraphic();
+
     const int elevation = 1; // TODO für Gebäude wie Anlegestelle, Fischerhütte etc. muss auf 0 gesetzt werden
 
     mapToDrawCoords(map, mapX, mapY, elevation, graphic, rect);

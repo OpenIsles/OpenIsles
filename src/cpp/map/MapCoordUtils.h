@@ -1,10 +1,9 @@
-#include "graphics/graphic/IMapObjectGraphic.h"
+#include "graphics/graphic/IGraphic.h"
 
 #ifndef _MAP_COORD_UTILS_H
 #define _MAP_COORD_UTILS_H
 
 class Building;
-class IMapObjectGraphic;
 class Map;
 class Rect;
 
@@ -102,12 +101,12 @@ public:
      * @param rect Rechteck mit den Draw-Koordinaten, wo die Grafik hingezeichnet werden muss (Ausgabe)
      */
     static void mapToDrawCoords(
-        Map* map, int mapX, int mapY, int elevation, IMapObjectGraphic* graphic, Rect* rect);
+        Map* map, int mapX, int mapY, int elevation, const IGraphic* graphic, Rect* rect);
 
     /**
      * @brief Berechnet ausgehend von Map-Koordinaten und einer Grafik das SDL-Rechteck, an welche Stelle
      * die Grafik gesetzt werden muss.
-     * Diese Methode ist von der Funktion analog mapToDrawCoords(int, int, int, IMapObjectGraphic*, Rect*),
+     * Diese Methode ist von der Funktion analog mapToDrawCoords(int, int, int, IGraphic*, Rect*),
      * rechnet aber mit double-Eingabewerten.
      *
      * @param map (Dependency)
@@ -118,7 +117,7 @@ public:
      * @param rect Rechteck mit den Draw-Koordinaten, wo die Grafik hingezeichnet werden muss (Ausgabe)
      */
     static void mapToDrawCoords(
-        Map* map, double mapX, double mapY, int elevation, IMapObjectGraphic* graphic, Rect* rect);
+        Map* map, double mapX, double mapY, int elevation, const IGraphic* graphic, Rect* rect);
 
     /**
      * @brief Berechnet für ein bestimmtes Gebäude das SDL-Rechteck, an welche Stelle die Grafik gesetzt werden muss.
@@ -156,7 +155,7 @@ private:
      * @param rect Rechteck mit den Draw-Koordinaten, wo die Grafik hingezeichnet werden muss (Ausgabe)
      */
     static void screenToDrawCoords(
-        Map* map, int screenX, int screenY, int elevation, IMapObjectGraphic* graphic, Rect* rect);
+        Map* map, int screenX, int screenY, int elevation, const IGraphic* graphic, Rect* rect);
 
 };
 

@@ -1,15 +1,10 @@
 #ifndef _SDL_GRAPHICS_MGR_H
 #define _SDL_GRAPHICS_MGR_H
 
-#include "graphics/graphic/sdl/SDLAnimation.h"
-#include "graphics/graphic/sdl/SDLMapObjectGraphic.h"
-#include "graphics/graphic/sdl/SDLPlainGraphic.h"
+#include "graphics/graphic/sdl/SDLGraphic.h"
 #include "graphics/mgr/AbstractGraphicsMgr.h"
 #include "graphics/mgr/IGraphicsMgr.h"
 #include "graphics/renderer/IRenderer.h"
-#include "rapidxml/rapidxml.hpp"
-#include "rapidxml/rapidxml_utils.hpp"
-
 
 
 /**
@@ -27,20 +22,18 @@ public:
     virtual ~SDLGraphicsMgr() {}
 
 private:
-	virtual IPlainGraphic* loadPlainGraphic(const char* filename) {
-        return new SDLPlainGraphic(renderer, filename);
+	virtual IGraphic* loadGraphic(const char* filename) {
+        return new SDLGraphic(renderer, filename);
     }
 
-    virtual IMapObjectGraphic* loadMapObjectGraphic(
-        const char* filename, unsigned char mapWidth, unsigned char mapHeight) {
-
-        return new SDLMapObjectGraphic(renderer, filename, mapWidth, mapHeight);
+    virtual IGraphic* loadGraphic(const char* filename, unsigned char mapWidth, unsigned char mapHeight) {
+        return new SDLGraphic(renderer, filename, mapWidth, mapHeight);
     }
 
-    virtual IAnimation* loadAnimation(const char* filename, unsigned char mapWidth, unsigned char mapHeight,
-                                      unsigned int framesCount, double fps) {
+    virtual IGraphic* loadGraphic(
+        const IGraphic& srcGraphic, const Rect& srcRect, unsigned char mapWidth, unsigned char mapHeight) {
 
-        return new SDLAnimation(renderer, filename, mapWidth, mapHeight, framesCount, fps);
+        return new SDLGraphic(renderer, dynamic_cast<const SDLGraphic&>(srcGraphic), srcRect, mapWidth, mapHeight);
     }
 
 };

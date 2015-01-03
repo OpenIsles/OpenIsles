@@ -1,12 +1,12 @@
 #ifndef _ABSTRACT_GRAPHICS_MGR_H
 #define _ABSTRACT_GRAPHICS_MGR_H
 
+#include <string>
+#include <unordered_map>
 #include "config/ConfigMgr.h"
 #include "game/Player.h"
-#include "graphics/graphic/IAnimation.h"
 #include "graphics/graphic/IGraphic.h"
-#include "graphics/graphic/IMapObjectGraphic.h"
-#include "graphics/graphic/IPlainGraphic.h"
+#include "graphics/graphic/GraphicSet.h"
 #include "graphics/mgr/IGraphicsMgr.h"
 #include "graphics/renderer/IRenderer.h"
 #include "rapidxml/rapidxml.hpp"
@@ -25,35 +25,7 @@ protected:
     IRenderer* const renderer;
     const ConfigMgr* const configMgr;
 
-	/**
-	 * @brief Array von Zeigern auf die Tile-Grafiken
-	 */
-    IMapObjectGraphic** tiles;
-
-	/**
-	 * @brief Array von Zeigern auf die Struktur-Grafiken
-	 */
-	IMapObjectGraphic** structures;
-
-    /**
-	 * @brief Array von Zeigern auf die Gütergrafiken (Symbole)
-	 */
-    IPlainGraphic** goodsIcons;
-
-    /**
-     * @brief Array von Zeigern auf die Gütergrafiken (Marketplatz-Symbole)
-     */
-    IPlainGraphic** goodsMarketplaceIcons;
-
-    /**
-     * @brief Array von Zeigern auf andere Grafiken
-     */
-    IPlainGraphic** otherGraphics;
-
-    /**
-     * @brief Array von Zeigern auf Animationen
-     */
-    IAnimation** animations;
+    std::unordered_map<std::string, const GraphicSet*> graphicSets;
 
 public:
     /**
@@ -69,31 +41,16 @@ public:
      */
     virtual ~AbstractGraphicsMgr();
 
-    virtual void loadGraphics();
+    void loadGraphics();
 
 
-    IMapObjectGraphic* const getGraphicForTile(int tileIndex) const {
-		return tiles[tileIndex];
-	}
-
-    IMapObjectGraphic* const getGraphicForStructure(StructureType structureType) const {
-		return structures[structureType];
-	}
-
-    IPlainGraphic* const getGraphicForGoodsIcon(GoodsType goodsType) const {
-        return goodsIcons[goodsType];
-    }
-
-    IPlainGraphic* const getGraphicForGoodsMarketplaceIcon(GoodsType goodsType) const {
-        return goodsMarketplaceIcons[goodsType];
-    }
-
-    IPlainGraphic* const getOtherGraphic(OtherGraphic otherGraphic) const {
-        return otherGraphics[otherGraphic];
-    }
-
-    IAnimation* const getAnimation(AnimationType animationType) const {
-        return animations[animationType];
+    /**
+     * @brief Liefert ein bestimmtes Grafik-Set zurück.
+     * @param graphicName Nach des Grafik-Sets
+     * @return Grafik-Set
+     */
+    const GraphicSet* getGraphicSet(std::string graphicSetName) const {
+        return graphicSets.at(graphicSetName);
     }
 
     IRenderer* const getRenderer() const {
@@ -101,37 +58,39 @@ public:
     }
 
 protected:
+    virtual void loadStaticGraphicSet(const std::string&, const char* graphicFilename);
+    virtual void loadStaticGraphicSet(const std::string&, const char* graphicFilename, unsigned char mapWidth, unsigned char mapHeight);
+    virtual void loadStaticAnimationGraphicSet(
+        const std::string& graphicSetName, const char* graphicFilename,
+        unsigned char mapWidth, unsigned char mapHeight, unsigned int countFrames);
+
+    /**
+     * @brief Lädt eine Grafik.
+     * Implementierungen wählen die entsprechende Grafik-Implementierung.
+     *
+     * @param filename Dateiname der zu ladenden Grafik
+     * @param mapWidth Breite der Grafik in Map-Koordinaten
+     * @param mapHeight Höhe der Grafik in Map-Koordinaten
+     */
+    virtual IGraphic* loadGraphic(const char* filename, unsigned char mapWidth, unsigned char mapHeight) = 0;
+
+    /**
+     * @brief Erzeugt eine Grafik aus einem Ausschnitt einer anderen Gragfik.
+     * Implementierungen wählen die entsprechende Grafik-Implementierung.
+     *
+     * @param srcGraphic Quellgrafik
+     * @param srcRect Rechteck innerhalb der Quellgrafik, die den Bereich markiert, welcher die neue Grafik auszeichnet
+	 * @param mapWidth Breite der Grafik in Map-Koordinaten
+	 * @param mapHeight Höhe der Grafik in Map-Koordinaten
+     */
+    virtual IGraphic* loadGraphic(
+        const IGraphic& srcGraphic, const Rect& srcRect, unsigned char mapWidth, unsigned char mapHeight) = 0;
+
+private:
     /**
 	 * @brief Lädt die Tile-Grafiken
-	 */
+     */
 	void loadTiles();
-
-
-    /**
-     * @brief Lädt eine einfache Grafik. Implementierungen wählen die entsprechende Grafik-Implementierung.
-     * @param filename Dateiname der zu ladenden Grafik
-     */
-    virtual IPlainGraphic* loadPlainGraphic(const char* filename) = 0;
-
-    /**
-     * @brief Lädt eine Grafik für ein MapObject. Implementierungen wählen die entsprechende Grafik-Implementierung.
-     * @param filename Dateiname der zu ladenden Grafik
-     * @param mapWidth Breite in mapCoords
-     * @param mapHeight Höhe in mapCoords
-     */
-    virtual IMapObjectGraphic* loadMapObjectGraphic(
-        const char* filename, unsigned char mapWidth, unsigned char mapHeight) = 0;
-
-    /**
-     * @brief Lädt eine Grafik für eine Animation. Implementierungen wählen die entsprechende Grafik-Implementierung.
-     * @param filename Dateiname der zu ladenden Animationsgrafik
-     * @param mapWidth Breite in mapCoords
-     * @param mapHeight Höhe in mapCoords
-     * @param framesCount Anzahl der Frames, die sich in dieser Datei befinden
-     * @param fps FPS = Geschwindigkeit, wie viele Frames pro Sekunde abgespielt werden sollen
-     */
-    virtual IAnimation* loadAnimation(const char* filename, unsigned char mapWidth, unsigned char mapHeight,
-                                      unsigned int framesCount, double fps) = 0;
 
 };
 

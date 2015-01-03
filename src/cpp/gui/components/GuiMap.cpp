@@ -1,7 +1,9 @@
 #include <SDL.h>
+#include <string>
 #include "config/ConfigMgr.h"
 #include "game/Colony.h"
 #include "game/Game.h"
+#include "graphics/graphic/IGraphic.h"
 #include "graphics/renderer/sdl/SDLRenderer.h"
 #include "gui/GuiMgr.h"
 #include "gui/components/GuiMap.h"
@@ -70,7 +72,10 @@ void GuiMap::renderElement(IRenderer* renderer) {
     // Kacheln rendern
     for (int mapY = mapYStart; mapY <= mapYEnd; mapY++) {
         for (int mapX = mapXStart; mapX <= mapXEnd; mapX++) {
-            IMapObjectGraphic* tileGraphic = context->graphicsMgr->getGraphicForTile(map->getMapTileAt(mapX, mapY)->tileIndex);
+            int tileIndex = map->getMapTileAt(mapX, mapY)->tileIndex;
+            const std::string graphicSetName = context->graphicsMgr->getGraphicSetNameForTile(tileIndex);
+            const GraphicSet* tileGraphicsSet = context->graphicsMgr->getGraphicSet(graphicSetName);
+            const IGraphic* tileGraphic = tileGraphicsSet->getStatic()->getGraphic();
 
             Rect rectDestination;
             MapCoordUtils::mapToDrawCoords(map, mapX, mapY, 0, tileGraphic, &rectDestination);
@@ -90,7 +95,7 @@ void GuiMap::renderElement(IRenderer* renderer) {
                     (selectedBuilding != nullptr && selectedBuilding->isInsideCatchmentArea(context->configMgr, mapX, mapY));
 
                 if (!insideCatchmentArea) {
-                    drawingFlags |= IMapObjectGraphic::DRAWING_FLAG_DARKENED;
+                    drawingFlags |= IGraphic::DRAWING_FLAG_DARKENED;
                 }
             }
             tileGraphic->draw(nullptr, &rectDestination, drawingFlags, context->sdlTicks);
@@ -109,14 +114,16 @@ void GuiMap::renderElement(IRenderer* renderer) {
         // Auf dem Ozean malen wir gar nix.
         // Is was im Weg, malen wir auch nicht. // TODO wir müssen eine flache Kachel malen, sonst sieht man ja gar nix
         if (!(allowedToPlaceStructure & (PLACING_STRUCTURE_OUTSIDE_OF_ISLE | PLACING_STRUCTURE_SOMETHING_IN_THE_WAY))) {
-            IMapObjectGraphic* graphic = context->graphicsMgr->getGraphicForStructure(structureType);
+            const std::string graphicSetName = context->graphicsMgr->getGraphicSetNameForStructure(structureType);
+            const GraphicSet* graphicSet = context->graphicsMgr->getGraphicSet(graphicSetName);
+            const IGraphic* graphic = graphicSet->getStatic()->getGraphic();
 
-            int drawingFlags = IMapObjectGraphic::DRAWING_FLAG_MASKED;
+            int drawingFlags = IGraphic::DRAWING_FLAG_MASKED;
             if (allowedToPlaceStructure & PLACING_STRUCTURE_ROOM_NOT_UNLOCK) {
-                drawingFlags |= IMapObjectGraphic::DRAWING_FLAG_RED;
+                drawingFlags |= IGraphic::DRAWING_FLAG_RED;
             }
             if (allowedToPlaceStructure & PLACING_STRUCTURE_NO_RESOURCES) {
-                drawingFlags |= IMapObjectGraphic::DRAWING_FLAG_BLINK;
+                drawingFlags |= IGraphic::DRAWING_FLAG_BLINK;
             }
 
             // Zu zeichnendes Gebäude erstellen
@@ -173,7 +180,9 @@ void GuiMap::renderElement(IRenderer* renderer) {
                 structureType = getConcreteStreetStructureType(mapX, mapY, structureType);
             }
 
-            IMapObjectGraphic* mapObjectGraphic = context->graphicsMgr->getGraphicForStructure(structureType);
+            const std::string graphicSetName = context->graphicsMgr->getGraphicSetNameForStructure(structureType);
+            const GraphicSet* mapObjectGraphicSet = context->graphicsMgr->getGraphicSet(graphicSetName);
+            const IGraphic* mapObjectGraphic = mapObjectGraphicSet->getStatic()->getGraphic();
 
             int xInMapObject =
                 ((moMapHeight - 1) - tileOffsetYInMapObject + tileOffsetXInMapObject) * IGraphicsMgr::TILE_WIDTH_HALF;
@@ -201,7 +210,7 @@ void GuiMap::renderElement(IRenderer* renderer) {
                     (selectedBuilding != nullptr && selectedBuilding->isInsideCatchmentArea(context->configMgr, structure));
 
                 if (!insideCatchmentArea) {
-                    drawingFlags |= IMapObjectGraphic::DRAWING_FLAG_DARKENED;
+                    drawingFlags |= IGraphic::DRAWING_FLAG_DARKENED;
                 }
             }
             mapObjectGraphic->draw(&rectSource, &rectDestination, drawingFlags, context->sdlTicks);
@@ -234,16 +243,16 @@ void GuiMap::renderElement(IRenderer* renderer) {
         int mapX, mapY;
         carrier->getMapCoords(mapX, mapY);
 
-        IAnimation* animation = carrier->getAnimation();
+        const Animation* animation = carrier->getAnimation();
+        const IGraphic* animationCurrentFrame = animation->getFrame((unsigned int) carrier->animationFrame);
 
         Rect rect;
         double mapXExact = (double) mapX + carrier->mapXFraction;
         double mapYExact = (double) mapY + carrier->mapYFraction;
 
-        MapCoordUtils::mapToDrawCoords(map, mapXExact, mapYExact, 1, animation, &rect);
+        MapCoordUtils::mapToDrawCoords(map, mapXExact, mapYExact, 1, animationCurrentFrame, &rect);
 
-        animation->drawFrameScaledAt(
-            rect.x, rect.y, (double) 1 / (double) screenZoom, (unsigned int) carrier->animationFrame);
+        animationCurrentFrame->drawScaledAt(rect.x, rect.y, (double) 1 / (double) screenZoom);
     }
 
     // structureBeingAdded gesetzt?
@@ -373,8 +382,10 @@ void GuiMap::onClickInMap(int mouseX, int mouseY) {
         uint8_t r, g, b, a;
         int x = (mouseX - rect.x) * screenZoom;
         int y = (mouseY - rect.y) * screenZoom;
-        IMapObjectGraphic* graphic = context->graphicsMgr->getGraphicForStructure(building->getStructureType());
-        graphic->getPixel(x, y, &r, &g, &b, &a);
+
+        const std::string graphicSetName = context->graphicsMgr->getGraphicSetNameForStructure(building->getStructureType());
+        const GraphicSet* graphicSet = context->graphicsMgr->getGraphicSet(graphicSetName);
+        graphicSet->getStatic()->getGraphic()->getPixel(x, y, &r, &g, &b, &a);
 
         // Checken, ob Pixel un-transparent genug ist, um es als Treffer zu nehmen
         if (a > 127) {
@@ -445,7 +456,9 @@ unsigned char GuiMap::isAllowedToPlaceStructure(int mapX, int mapY, StructureTyp
     }
 
     // Checken, ob alles frei is, um das Gebäude zu setzen
-    IMapObjectGraphic* graphic = context->graphicsMgr->getGraphicForStructure(structureType);
+    const std::string graphicSetName = context->graphicsMgr->getGraphicSetNameForStructure(structureType);
+    const GraphicSet* graphicSet = context->graphicsMgr->getGraphicSet(graphicSetName);
+    const IGraphic* graphic = graphicSet->getStatic()->getGraphic();
     for (int y = mapY; y < mapY + graphic->getMapHeight(); y++) {
         for (int x = mapX; x < mapX + graphic->getMapWidth(); x++) {
             MapTile* mapTile = context->game->getMap()->getMapTileAt(x, y);

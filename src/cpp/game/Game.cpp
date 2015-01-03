@@ -1,3 +1,4 @@
+#include <cstring>
 #include "config/ConfigMgr.h"
 #include "economics/EconomicsMgr.h"
 #include "game/Colony.h"
@@ -56,7 +57,9 @@ Colony* Game::getColony(const MapObject* mapObject) {
 }
 
 void Game::addStructure(int mapX, int mapY, StructureType structureType, Player* player) {
-    IMapObjectGraphic* graphic = context->graphicsMgr->getGraphicForStructure(structureType);
+    const std::string graphicSetName = context->graphicsMgr->getGraphicSetNameForStructure(structureType);
+    const GraphicSet* graphicSet = context->graphicsMgr->getGraphicSet(graphicSetName);
+    const IGraphic* graphic = graphicSet->getStatic()->getGraphic();
 
     // Objekt anlegen
     Structure* structure = (structureType >= START_BUILDINGS) ? new Building() : new Structure();

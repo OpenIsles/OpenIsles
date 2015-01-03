@@ -2,9 +2,7 @@
 #define _NOSDL_GRAPHICS_MGR_H
 
 #include "graphics/mgr/AbstractGraphicsMgr.h"
-#include "graphics/graphic/nosdl/NoSDLAnimation.h"
-#include "graphics/graphic/nosdl/NoSDLMapObjectGraphic.h"
-#include "graphics/graphic/nosdl/NoSDLPlainGraphic.h"
+#include "graphics/graphic/nosdl/NoSDLGraphic.h"
 
 
 /**
@@ -24,20 +22,18 @@ public:
     virtual ~NoSDLGraphicsMgr() {}
 
 private:
-	virtual IPlainGraphic* loadPlainGraphic(const char* filename) {
-        return new NoSDLPlainGraphic(renderer, filename);
+	virtual IGraphic* loadGraphic(const char* filename) {
+        return new NoSDLGraphic(renderer, filename, 0, 0);
     }
 
-    virtual IMapObjectGraphic* loadMapObjectGraphic(
-        const char* filename, unsigned char mapWidth, unsigned char mapHeight) {
-
-        return new NoSDLMapObjectGraphic(renderer, filename, mapWidth, mapHeight);
+    virtual IGraphic* loadGraphic(const char* filename, unsigned char mapWidth, unsigned char mapHeight) {
+        return new NoSDLGraphic(renderer, filename, mapWidth, mapHeight);
     }
 
-    virtual IAnimation* loadAnimation(const char* filename, unsigned char mapWidth, unsigned char mapHeight,
-                                      unsigned int framesCount, double fps) {
+    virtual IGraphic* loadGraphic(
+        const IGraphic& srcGraphic, const Rect& srcRect, unsigned char mapWidth, unsigned char mapHeight) {
 
-        return new NoSDLAnimation(renderer, filename, mapWidth, mapHeight, framesCount, fps);
+        return new NoSDLGraphic(renderer, srcGraphic, srcRect, mapWidth, mapHeight);
     }
 
 };
