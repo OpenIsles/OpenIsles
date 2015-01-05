@@ -33,9 +33,13 @@ void Map::initNewMap(int newWidth, int newHeight) {
     height = newHeight;
     
     // mapTiles neu anlegen und mit Ozean initialisieren
+    const int oceanTileIndex = 14; // TODO in die Config bringen. Aktuell is aber noch unklar, ob wir mehrere isOcean-Kacheln haben werden
+    std::string oceanTileGraphicSetName = context->graphicsMgr->getGraphicSetNameForTile(oceanTileIndex);
+    const IGraphic* oceanTileGraphic = context->graphicsMgr->getGraphicSet(oceanTileGraphicSetName)->getStatic()->getGraphic();
+
     mapTiles = new RectangleData<MapTile*>(newWidth, newHeight);
     for(int i = 0; i < mapTiles->width * mapTiles->height; i++) {
-        mapTiles->data[i] = new MapTile();
+        mapTiles->data[i] = new MapTile(oceanTileIndex, oceanTileGraphic);
     }
 
     // Sonstiges Zeugs auf Anfangswerte stellen

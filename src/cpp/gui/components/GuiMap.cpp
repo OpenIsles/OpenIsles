@@ -72,10 +72,7 @@ void GuiMap::renderElement(IRenderer* renderer) {
     // Kacheln rendern
     for (int mapY = mapYStart; mapY <= mapYEnd; mapY++) {
         for (int mapX = mapXStart; mapX <= mapXEnd; mapX++) {
-            int tileIndex = map->getMapTileAt(mapX, mapY)->tileIndex;
-            const std::string graphicSetName = context->graphicsMgr->getGraphicSetNameForTile(tileIndex);
-            const GraphicSet* tileGraphicsSet = context->graphicsMgr->getGraphicSet(graphicSetName);
-            const IGraphic* tileGraphic = tileGraphicsSet->getStatic()->getGraphic();
+            const IGraphic* tileGraphic = map->getMapTileAt(mapX, mapY)->getTileGraphic();
 
             Rect rectDestination;
             MapCoordUtils::mapToDrawCoords(map, mapX, mapY, 0, tileGraphic, &rectDestination);
@@ -468,7 +465,7 @@ unsigned char GuiMap::isAllowedToPlaceStructure(int mapX, int mapY, StructureTyp
                 return result;
             }
 
-            const MapTileConfig* mapTileConfig = context->configMgr->getMapTileConfig(mapTile->tileIndex);
+            const MapTileConfig* mapTileConfig = context->configMgr->getMapTileConfig(mapTile->getTileIndex());
 
             if (mapTile->player == nullptr ||                     // Gebiet nicht erschlossen, ..,
                 mapTile->player != context->game->getCurrentPlayer() ||    // ... nicht unseres...

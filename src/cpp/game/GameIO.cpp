@@ -2,14 +2,13 @@
 #include "game/Colony.h"
 #include "game/Game.h"
 #include "game/GameIO.h"
-#include "graphics/mgr/IGraphicsMgr.h"
 #include "map/Map.h"
 #include "utils/Consts.h"
 
 
 // TODO allgemein: Fehlermanagement, wenn die Datei mal nicht so hübsch aussieht, dass alle Tags da sind
 
-void GameIO::loadGameFromTMX(Game* game, const char* filename) {
+void GameIO::loadGameFromTMX(Game* game, const IGraphicsMgr* graphicsMgr, const char* filename) {
     // TODO aktuell kann diese Methode nur mit einem frischen Game-Objekt aufgerufen werden. Nochmal laden = vorher saubermachen
 
     // Datei öffnen
@@ -47,7 +46,7 @@ void GameIO::loadGameFromTMX(Game* game, const char* filename) {
     loadPlayers(game, mapNode);
 
     // Karte und Inseln laden
-    loadMap(game, objectgroupIslesNode);
+    loadMap(game, graphicsMgr, objectgroupIslesNode);
 
     // Siedlungen laden
     loadColonies(game, objectgroupColoniesNode);
@@ -98,7 +97,7 @@ void GameIO::loadPlayers(Game* game, rapidxml::xml_node<>* mapNode) {
     }
 }
 
-void GameIO::loadMap(Game* game, rapidxml::xml_node<>* objectgroupIslesNode) {
+void GameIO::loadMap(Game* game, const IGraphicsMgr* graphicsMgr, rapidxml::xml_node<>* objectgroupIslesNode) {
     Map* map = game->getMap();
 
     // Inseln einlesen
@@ -146,7 +145,12 @@ void GameIO::loadMap(Game* game, rapidxml::xml_node<>* objectgroupIslesNode) {
             for (int my = mapY, isleY = 0; my < mapY + isleMapHeight; my++, isleY++) {
                 for (int mx = mapX, isleX = 0; mx < mapX + isleMapWidth; mx++, isleX++) {
                     MapTile* mapTile = map->mapTiles->getData(mx, my, nullptr);
-                    mapTile->tileIndex = isle->getTileAt(isleX, isleY);
+
+                    unsigned char tileIndex = isle->getTileAt(isleX, isleY);
+                    std::string tileGraphicSetName = graphicsMgr->getGraphicSetNameForTile(tileIndex);
+                    const IGraphic* tileGraphic = graphicsMgr->getGraphicSet(tileGraphicSetName)->getStatic()->getGraphic();
+
+                    mapTile->setTile(tileIndex, tileGraphic);
                     mapTile->isle = isle;
                 }
             }

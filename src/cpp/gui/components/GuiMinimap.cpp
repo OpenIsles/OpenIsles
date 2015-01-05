@@ -110,7 +110,7 @@ void GuiMinimap::updateMinimapTexture() {
 
             MapTile* mapTile = map->getMapTileAt(mapX, mapY);
 
-            const MapTileConfig* mapTileConfig = context->configMgr->getMapTileConfig(mapTile->tileIndex);
+            const MapTileConfig* mapTileConfig = context->configMgr->getMapTileConfig(mapTile->getTileIndex());
             Player* player = mapTile->player;
 
             *(pixelPtr++) =

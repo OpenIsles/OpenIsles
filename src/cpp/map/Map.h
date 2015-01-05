@@ -19,11 +19,18 @@
  */
 struct MapTile {
 
+private:
     /**
      * @brief Index der Gelände-Kachel
      */
     unsigned char tileIndex;
 
+	/**
+	 * @brief Grafik, die für diese Kachel gezeichnet werden muss
+	 */
+	const IGraphic* tileGraphic;
+
+public:
     /**
      * @brief Zeiger auf die Insel (durch Map.isles verwaltet), die sich an dieser Stelle befindet
      * oder nullptr, wenn dort Ozean ist.
@@ -43,14 +50,25 @@ struct MapTile {
     MapObject* mapObject;
 
     
-    MapTile() {
-        // TODO in die Config bringen. Aktuell is aber noch unklar, ob wir mehrere isOcean-Kacheln haben werden
-        tileIndex = 14; // Ozean
+    MapTile(unsigned char tileIndex, const IGraphic* tileGraphic) {
+		setTile(tileIndex, tileGraphic);
         isle = nullptr;
         player = nullptr;
         mapObject = nullptr;
     }
 
+	void setTile(unsigned char tileIndex, const IGraphic* tileGraphic) {
+		this->tileIndex = tileIndex;
+		this->tileGraphic = tileGraphic;
+	}
+
+	const IGraphic* getTileGraphic() const {
+		return tileGraphic;
+	}
+
+	unsigned char getTileIndex() const {
+		return tileIndex;
+	}
 };
 
 
