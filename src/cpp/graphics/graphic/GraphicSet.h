@@ -6,6 +6,8 @@
 #include "graphics/graphic/Animation.h"
 #include "graphics/graphic/IGraphic.h"
 
+typedef const std::string GraphicSetKeyState;
+typedef const std::string GraphicSetKeyView;
 
 /**
  * @brief Map-Key für GraphicSet bestehend aus Zustand und Ansicht
@@ -18,21 +20,21 @@ struct GraphicSetKey {
      *
      * Ist kein Zustand zugeordnet, ist ein Leerstring gesetzt.
      */
-    const std::string state;
+    GraphicSetKeyState state;
 
     /**
      * @brief Ansicht. Wird benutzt, um z.&nbsp;B. ein Gebäude von mehreren Seiten (Nord, Ost, Süd, West) zu zeigen.
      *
      * Ist keine Ansicht zugeordnet, ist ein Leerstring gesetzt.
      */
-    const std::string view;
+    GraphicSetKeyView view;
 
     /**
      * @brief Erzeugt einen Key aus Zustand und Ansicht.
      * @param state Zustand (Leerstring, wenn nicht zutreffend)
      * @param view Ansicht (Leerstring, wenn nicht zutreffend)
      */
-    GraphicSetKey(std::string& state, std::string& view) : state(state), view(view) {
+    GraphicSetKey(GraphicSetKeyState& state, GraphicSetKeyView& view) : state(state), view(view) {
     }
 
 };
@@ -48,7 +50,7 @@ struct GraphicSetKeyHasher {
      */
     std::size_t operator() (const GraphicSetKey& key) const {
         std::hash<std::string> strHash;
-        return strHash(key.state) ^ strHash(key.view);
+        return (3 * strHash(key.state)) ^ (5 * strHash(key.view));
     }
 };
 
@@ -115,7 +117,7 @@ public:
      * @param state Zustand
      * @param animation Animation
      */
-    void addByState(std::string state, Animation* animation) {
+    void addByState(GraphicSetKeyState& state, Animation* animation) {
         addByStateAndView(state, "", animation);
     }
 
@@ -124,7 +126,7 @@ public:
      * @param view Ansicht
      * @param animation Animation
      */
-    void addByView(std::string view, Animation* animation) {
+    void addByView(GraphicSetKeyView& view, Animation* animation) {
         addByStateAndView("", view, animation);
     }
 
@@ -134,7 +136,7 @@ public:
      * @param view Ansicht (Leerstring, wenn nicht zutreffend)
      * @param animation Animation
      */
-    void addByStateAndView(std::string state, std::string view, Animation* animation) {
+    void addByStateAndView(GraphicSetKeyState& state, GraphicSetKeyView& view, Animation* animation) {
         (*this)[GraphicSetKey(state, view)] = animation;
     }
 
@@ -151,7 +153,7 @@ public:
      * @param state Zustand
      * @return Animation
      */
-    const Animation* getByState(std::string state) const {
+    const Animation* getByState(GraphicSetKeyState& state) const {
         return getByStateAndView(state, "");
     }
 
@@ -160,7 +162,7 @@ public:
      * @param view Ansicht
      * @return Animation
      */
-    const Animation* getByView(std::string view) const {
+    const Animation* getByView(GraphicSetKeyView& view) const {
         return getByStateAndView("", view);
     }
 
@@ -170,7 +172,7 @@ public:
      * @param view Ansicht (Leerstring, wenn nicht zutreffend)
      * @return Animation
      */
-    const Animation* getByStateAndView(std::string state, std::string view) const {
+    const Animation* getByStateAndView(GraphicSetKeyState& state, GraphicSetKeyView& view) const {
         return this->at(GraphicSetKey(state, view));
     }
 
