@@ -8,6 +8,8 @@
 #include <map>
 #include "Context.h"
 #include "game/GoodsSlot.h"
+#include "map/Directions.h"
+#include "map/StructureType.h"
 #include "graphics/renderer/IRenderer.h"
 
 class GuiBase;
@@ -19,7 +21,6 @@ class MapObject;
 class SDL_Renderer;
 
 enum BuildingGroup : unsigned char;
-enum StructureType : unsigned char;
 
 
 /**
@@ -74,6 +75,11 @@ struct PanelState {
      * @brief zuletzt/aktuell gewählte Struktur im Baumenü
      */
     StructureType addingStructure;
+
+    /**
+     * @brief zuletzt/aktuell gewählte Ausrichtung der Struktur im Baumenü
+     */
+    FourDirectionsView addingStructureView;
 
     /**
      * @brief Flag, was angibt, ob das Popup-Menü mit den einzelnen Gebäuden aufgeklappt ist

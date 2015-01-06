@@ -16,6 +16,7 @@ set(COMMON_SOURCE_FILES
     src/cpp/game/Player.cpp
     src/cpp/graphics/mgr/AbstractGraphicsMgr.cpp
     src/cpp/map/Building.cpp
+    src/cpp/map/Directions.cpp
     src/cpp/map/Isle.cpp
     src/cpp/map/Map.cpp
     src/cpp/map/MapCoordUtils.cpp
@@ -50,6 +51,7 @@ set(SOUND_SOURCE_FILES
 set(TEST_FILES
     test/cpp/GameTest.cpp
     test/cpp/graphics/GraphicSetTest.cpp
+    test/cpp/map/DirectionsTest.cpp
 )
 
 

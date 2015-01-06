@@ -324,6 +324,13 @@ void GuiMgr::onEvent(SDL_Event& event) {
             updateGuiFromPanelState();
         }
 
+        // Drehen des Gebäudes, was wir bauen wollen
+        else if (event.key.keysym.scancode == SDL_SCANCODE_PERIOD) {
+            panelState.addingStructureView++;
+        } else if (event.key.keysym.scancode == SDL_SCANCODE_COMMA) {
+            panelState.addingStructureView--;
+        }
+
 #ifdef DEBUG
         // Debug-Zwecke
         if (event.key.keysym.scancode == SDL_SCANCODE_8) {

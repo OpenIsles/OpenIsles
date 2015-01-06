@@ -176,9 +176,15 @@ void AbstractGraphicsMgr::loadStreets() {
     Rect tileRect(0, 0, TILE_WIDTH, TILE_HEIGHT);
     for (int i = 0; i < streetTilesCount; i++, tileRect.x += TILE_WIDTH) {
         IGraphic* sdlFrameGraphic = loadGraphic(*streetsGraphic, tileRect, 1, 1);
+        IGraphic* sdlFrameGraphic2 = loadGraphic(*streetsGraphic, tileRect, 1, 1); // TODO passende Grafik nehmen
+        IGraphic* sdlFrameGraphic3 = loadGraphic(*streetsGraphic, tileRect, 1, 1); // TODO passende Grafik nehmen
+        IGraphic* sdlFrameGraphic4 = loadGraphic(*streetsGraphic, tileRect, 1, 1); // TODO passende Grafik nehmen
 
         GraphicSet* graphicSet = new GraphicSet();
         graphicSet->addByView("south", new Animation(sdlFrameGraphic));
+        graphicSet->addByView("east", new Animation(sdlFrameGraphic2)); // TODO passende Grafik nehmen
+        graphicSet->addByView("north", new Animation(sdlFrameGraphic3)); // TODO passende Grafik nehmen
+        graphicSet->addByView("west", new Animation(sdlFrameGraphic4)); // TODO passende Grafik nehmen
 
         graphicSets[streetGraphicSetNames[i]] = graphicSet;
     }
