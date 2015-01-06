@@ -6,6 +6,7 @@ TILESET_WIDTH := 4
 
 CREATE_TARGET_DIRECTORY = mkdir -p $(@D)
 
+MONTAGE := montage -background transparent
 
 .PHONY: all clean render-tiles build-gui clean-gui render-cart render-coat-of-arms render-blender clean-blender
 
@@ -27,7 +28,7 @@ render-tiles: $(SRC_DIRECTORY)/blender/tiles/tiles.blend
 	cd $(SRC_DIRECTORY)/blender/tiles; blender -b $(notdir $<) -P render.py
 	cp $(SRC_DIRECTORY)/blender/tiles/render/* $(DATA_DIRECTORY)/img/tiles
 
-	montage -background transparent $(TILES) -tile 8x5 -geometry 64x64+0+0 $(SRC_DIRECTORY)/blender/tiles/render/tileset.png
+	$(MONTAGE) $(TILES) -tile 8x5 -geometry 64x64+0+0 $(SRC_DIRECTORY)/blender/tiles/render/tileset.png
 
 ########################################################################################################################
 # GUI                                                                                                                  #
@@ -66,7 +67,14 @@ define RENDER_BUILDING
 $(DATA_DIRECTORY)/img/objects/$(1).png: $(SRC_DIRECTORY)/blender/buildings/$(1)/$(1).blend
 	$$(CREATE_TARGET_DIRECTORY)
 	cd $(SRC_DIRECTORY)/blender/buildings/$(1); blender -b $$(notdir $$<) -P ../render-building.py
-	cp $(SRC_DIRECTORY)/blender/buildings/$(1)/render/angle0.png $$@
+
+	# geometry muss angegeben werden, sonst greift der Default von 120x120
+	$(MONTAGE) \
+	    $(SRC_DIRECTORY)/blender/buildings/$(1)/render/angle0.png \
+	    $(SRC_DIRECTORY)/blender/buildings/$(1)/render/angle90.png \
+	    $(SRC_DIRECTORY)/blender/buildings/$(1)/render/angle180.png \
+	    $(SRC_DIRECTORY)/blender/buildings/$(1)/render/angle270.png \
+	    -geometry +0+0 -tile 4x1 $$@
 endef
 
 $(foreach BUILDING,$(BUILDINGS),$(eval $(call RENDER_BUILDING,$(BUILDING))))
@@ -75,10 +83,24 @@ $(foreach BUILDING,$(BUILDINGS),$(eval $(call RENDER_BUILDING,$(BUILDING))))
 # Straßen                                                                                                              #
 ########################################################################################################################
 
-render-streets: $(SRC_DIRECTORY)/blender/streets/streets.blend
+$(DATA_DIRECTORY)/img/objects/streets.png: $(SRC_DIRECTORY)/blender/streets/streets.blend
 	mkdir -p $(DATA_DIRECTORY)/img/objects
 	cd $(SRC_DIRECTORY)/blender/streets; blender -b $(notdir $<) -P render-streets.py
-	cp $(SRC_DIRECTORY)/blender/streets/render/* $(DATA_DIRECTORY)/img/objects
+
+	# geometry muss angegeben werden, sonst greift der Default von 120x120
+	$(MONTAGE) \
+	    $(SRC_DIRECTORY)/blender/streets/render/street-straight0.png \
+	    $(SRC_DIRECTORY)/blender/streets/render/street-straight90.png \
+	    $(SRC_DIRECTORY)/blender/streets/render/street-curve0.png \
+	    $(SRC_DIRECTORY)/blender/streets/render/street-curve90.png \
+	    $(SRC_DIRECTORY)/blender/streets/render/street-curve180.png \
+	    $(SRC_DIRECTORY)/blender/streets/render/street-curve270.png \
+	    $(SRC_DIRECTORY)/blender/streets/render/street-tee0.png \
+	    $(SRC_DIRECTORY)/blender/streets/render/street-tee90.png \
+	    $(SRC_DIRECTORY)/blender/streets/render/street-tee180.png \
+	    $(SRC_DIRECTORY)/blender/streets/render/street-tee270.png \
+	    $(SRC_DIRECTORY)/blender/streets/render/street-cross.png \
+	    -geometry +0+0 -tile x1 $@
 
 ########################################################################################################################
 # Gütersymbole                                                                                                         #
@@ -116,7 +138,7 @@ $(DATA_DIRECTORY)/img/objects/$(1).png: $(SRC_DIRECTORY)/blender/animations/$(1)
 	cd $(SRC_DIRECTORY)/blender/animations/$(1); blender -b $$(notdir $$<) -P ../render-animation.py
 
 	# geometry muss angegeben werden, sonst greift der Default von 120x120
-	montage -background transparent $(SRC_DIRECTORY)/blender/animations/$(1)/render/angle0/* -geometry +0+0 -tile x1 $$@
+	$(MONTAGE) $(SRC_DIRECTORY)/blender/animations/$(1)/render/angle0/* -geometry +0+0 -tile x1 $$@
 endef
 
 $(foreach ANIMATION,$(ANIMATIONS),$(eval $(call RENDER_ANIMATION,$(ANIMATION))))
@@ -130,8 +152,8 @@ render-cart: $(SRC_DIRECTORY)/blender/animations/cart/cart.blend
 	cd $(SRC_DIRECTORY)/blender/animations/cart; blender -b $(notdir $<) -P render-cart.py
 
 	# geometry muss angegeben werden, sonst greift der Default von 120x120
-	montage -background transparent $(SRC_DIRECTORY)/blender/animations/cart/render/without_cargo/angle0/* -geometry +0+0 -tile x1 $(DATA_DIRECTORY)/img/objects/cart-without-cargo.png
-	montage -background transparent $(SRC_DIRECTORY)/blender/animations/cart/render/with_cargo/angle0/* -geometry +0+0 -tile x1 $(DATA_DIRECTORY)/img/objects/cart-with-cargo.png
+	$(MONTAGE) $(SRC_DIRECTORY)/blender/animations/cart/render/without_cargo/angle0/* -geometry +0+0 -tile x1 $(DATA_DIRECTORY)/img/objects/cart-without-cargo.png
+	$(MONTAGE) $(SRC_DIRECTORY)/blender/animations/cart/render/with_cargo/angle0/* -geometry +0+0 -tile x1 $(DATA_DIRECTORY)/img/objects/cart-with-cargo.png
 
 ########################################################################################################################
 # Banner                                                                                                               #
@@ -182,7 +204,7 @@ render-blender: \
 		$(DATA_DIRECTORY)/img/objects/$(ANIMATION).png \
 	) \
 	render-tiles \
-	render-streets \
+	$(DATA_DIRECTORY)/img/objects/streets.png \
 	render-cart \
 	render-coat-of-arms \
 	$(DATA_DIRECTORY)/img/coin.png \
@@ -198,7 +220,7 @@ clean-blender:
 	rm -rf $(DATA_DIRECTORY)/img/tiles
 	rm -rf $(SRC_DIRECTORY)/blender/tiles/render
 	rm -rf $(SRC_DIRECTORY)/blender/streets/render
-	rm -rf $(DATA_DIRECTORY)/img/objects/street*.png
+	rm -rf $(DATA_DIRECTORY)/img/objects/streets.png
 	rm -rf $(DATA_DIRECTORY)/img/objects/cart-without-cargo.png
 	rm -rf $(DATA_DIRECTORY)/img/objects/cart-with-cargo.png
 	rm -rf $(DATA_DIRECTORY)/img/gui/coat-of-arms

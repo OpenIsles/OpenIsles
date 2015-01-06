@@ -20,35 +20,24 @@ void AbstractGraphicsMgr::loadGraphics() {
     // anisotropic filtering für die Gebäude aktivieren, damit beim Skalieren das Mask-Overlay ordentlich is
     renderer->setHintRenderScaleQuality("2");
 
-	loadStaticGraphicSet("structures/chapel", "data/img/objects/chapel.png", 2, 1);
-	loadStaticGraphicSet("structures/pioneers-house1", "data/img/objects/pioneers-house1.png", 2, 2);
-    loadStaticGraphicSet("structures/pioneers-house2", "data/img/objects/pioneers-house2.png", 2, 2);
-    loadStaticGraphicSet("structures/pioneers-house3", "data/img/objects/pioneers-house3.png", 2, 2);
-    loadStaticGraphicSet("structures/pioneers-house4", "data/img/objects/pioneers-house4.png", 2, 2);
-    loadStaticGraphicSet("structures/pioneers-house5", "data/img/objects/pioneers-house5.png", 2, 2);
-	loadStaticGraphicSet("structures/stonemason", "data/img/objects/stonemason.png", 2, 2);
-    loadStaticGraphicSet("structures/office1", "data/img/objects/office1.png", 3, 2);
-    loadStaticGraphicSet("structures/marketplace", "data/img/objects/marketplace.png", 4, 3);
-    loadStaticGraphicSet("structures/foresters", "data/img/objects/foresters.png", 2, 2);
-    loadStaticGraphicSet("structures/sheep-farm", "data/img/objects/sheep-farm.png", 2, 2);
-    loadStaticGraphicSet("structures/weaving-mill1", "data/img/objects/weaving-mill1.png", 2, 2);
-    loadStaticGraphicSet("structures/cattle-farm", "data/img/objects/cattle-farm.png", 2, 2);
-    loadStaticGraphicSet("structures/butchers", "data/img/objects/butchers.png", 2, 2);
-    loadStaticGraphicSet("structures/toolsmiths", "data/img/objects/toolsmiths.png", 2, 2);
-    loadStaticGraphicSet("structures/hunters-hut", "data/img/objects/hunters-hut.png", 1, 1);
+	loadStaticGraphicSetWith4Views("structures/chapel", "data/img/objects/chapel.png", 2, 1);
+	loadStaticGraphicSetWith4Views("structures/pioneers-house1", "data/img/objects/pioneers-house1.png", 2, 2);
+    loadStaticGraphicSetWith4Views("structures/pioneers-house2", "data/img/objects/pioneers-house2.png", 2, 2);
+    loadStaticGraphicSetWith4Views("structures/pioneers-house3", "data/img/objects/pioneers-house3.png", 2, 2);
+    loadStaticGraphicSetWith4Views("structures/pioneers-house4", "data/img/objects/pioneers-house4.png", 2, 2);
+    loadStaticGraphicSetWith4Views("structures/pioneers-house5", "data/img/objects/pioneers-house5.png", 2, 2);
+	loadStaticGraphicSetWith4Views("structures/stonemason", "data/img/objects/stonemason.png", 2, 2);
+    loadStaticGraphicSetWith4Views("structures/office1", "data/img/objects/office1.png", 3, 2);
+    loadStaticGraphicSetWith4Views("structures/marketplace", "data/img/objects/marketplace.png", 4, 3);
+    loadStaticGraphicSetWith4Views("structures/foresters", "data/img/objects/foresters.png", 2, 2);
+    loadStaticGraphicSetWith4Views("structures/sheep-farm", "data/img/objects/sheep-farm.png", 2, 2);
+    loadStaticGraphicSetWith4Views("structures/weaving-mill1", "data/img/objects/weaving-mill1.png", 2, 2);
+    loadStaticGraphicSetWith4Views("structures/cattle-farm", "data/img/objects/cattle-farm.png", 2, 2);
+    loadStaticGraphicSetWith4Views("structures/butchers", "data/img/objects/butchers.png", 2, 2);
+    loadStaticGraphicSetWith4Views("structures/toolsmiths", "data/img/objects/toolsmiths.png", 2, 2);
+    loadStaticGraphicSetWith4Views("structures/hunters-hut", "data/img/objects/hunters-hut.png", 1, 1);
 
-    loadStaticGraphicSet("structures/street", "data/img/objects/street-straight90.png", 1, 1); // damit was drinsteht. Fürs Malen werden die nachfolgenden Grafiken verwendet
-	loadStaticGraphicSet("structures/street-straight0", "data/img/objects/street-straight0.png", 1, 1);
-	loadStaticGraphicSet("structures/street-straight90", "data/img/objects/street-straight90.png", 1, 1);
-	loadStaticGraphicSet("structures/street-curve0", "data/img/objects/street-curve0.png", 1, 1);
-	loadStaticGraphicSet("structures/street-curve90", "data/img/objects/street-curve90.png", 1, 1);
-	loadStaticGraphicSet("structures/street-curve180", "data/img/objects/street-curve180.png", 1, 1);
-	loadStaticGraphicSet("structures/street-curve270", "data/img/objects/street-curve270.png", 1, 1);
-    loadStaticGraphicSet("structures/street-tee0", "data/img/objects/street-tee0.png", 1, 1);
-    loadStaticGraphicSet("structures/street-tee90", "data/img/objects/street-tee90.png", 1, 1);
-    loadStaticGraphicSet("structures/street-tee180", "data/img/objects/street-tee180.png", 1, 1);
-    loadStaticGraphicSet("structures/street-tee270", "data/img/objects/street-tee270.png", 1, 1);
-    loadStaticGraphicSet("structures/street-cross", "data/img/objects/street-cross.png", 1, 1);
+    loadStreets();
 
     loadStaticGraphicSet("goods-icons/tools", "data/img/goods/icon/tools.png");
     loadStaticGraphicSet("goods-icons/wood", "data/img/goods/icon/wood.png");
@@ -132,11 +121,8 @@ void AbstractGraphicsMgr::loadStaticGraphicSet(
 
     IGraphic* sdlGraphic = loadGraphic(graphicFilename, mapWidth, mapHeight);
 
-    Animation* animation = new Animation(1);
-    animation->addFrame(0, sdlGraphic);
-
     GraphicSet* graphicSet = new GraphicSet();
-    graphicSet->addStatic(animation);
+    graphicSet->addStatic(new Animation(sdlGraphic));
 
     graphicSets[graphicSetName] = graphicSet;
 }
@@ -168,4 +154,63 @@ void AbstractGraphicsMgr::loadStaticAnimationGraphicSet(
     graphicSet->addStatic(animation);
 
     graphicSets[graphicSetName] = graphicSet;
+}
+
+void AbstractGraphicsMgr::loadStreets() {
+    IGraphic* streetsGraphic = loadGraphic("data/img/objects/streets.png");
+
+    const unsigned char streetTilesCount = 11;
+    const char** streetGraphicSetNames = new const char*[streetTilesCount] {
+        "structures/street-straight0",
+        "structures/street-straight90",
+        "structures/street-curve0",
+        "structures/street-curve90",
+        "structures/street-curve180",
+        "structures/street-curve270",
+        "structures/street-tee0",
+        "structures/street-tee90",
+        "structures/street-tee180",
+        "structures/street-tee270",
+        "structures/street-cross"
+    };
+    Rect tileRect(0, 0, TILE_WIDTH, TILE_HEIGHT);
+    for (int i = 0; i < streetTilesCount; i++, tileRect.x += TILE_WIDTH) {
+        IGraphic* sdlFrameGraphic = loadGraphic(*streetsGraphic, tileRect, 1, 1);
+
+        GraphicSet* graphicSet = new GraphicSet();
+        graphicSet->addByView("south", new Animation(sdlFrameGraphic));
+
+        graphicSets[streetGraphicSetNames[i]] = graphicSet;
+    }
+
+    delete streetsGraphic;
+}
+
+void AbstractGraphicsMgr::loadStaticGraphicSetWith4Views(
+    const std::string& graphicSetName, const char* graphicFilename, unsigned char mapWidth, unsigned char mapHeight) {
+
+    IGraphic* graphic = loadGraphic(graphicFilename);
+    int tileWidth = graphic->getWidth() / 4;
+
+    GraphicSet* graphicSet = new GraphicSet();
+    IGraphic* tileGraphic;
+
+    Rect tileRect(0, 0, tileWidth, graphic->getHeight());
+    tileGraphic = loadGraphic(*graphic, tileRect, mapWidth, mapHeight);
+    graphicSet->addByView("south", new Animation(tileGraphic));
+
+    tileRect.x += tileWidth;
+    tileGraphic = loadGraphic(*graphic, tileRect, mapWidth, mapHeight);
+    graphicSet->addByView("east", new Animation(tileGraphic));
+
+    tileRect.x += tileWidth;
+    tileGraphic = loadGraphic(*graphic, tileRect, mapWidth, mapHeight);
+    graphicSet->addByView("north", new Animation(tileGraphic));
+
+    tileRect.x += tileWidth;
+    tileGraphic = loadGraphic(*graphic, tileRect, mapWidth, mapHeight);
+    graphicSet->addByView("west", new Animation(tileGraphic));
+
+    graphicSets[graphicSetName] = graphicSet;
+    delete graphic;
 }

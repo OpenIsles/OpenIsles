@@ -113,7 +113,7 @@ void GuiMap::renderElement(IRenderer* renderer) {
         if (!(allowedToPlaceStructure & (PLACING_STRUCTURE_OUTSIDE_OF_ISLE | PLACING_STRUCTURE_SOMETHING_IN_THE_WAY))) {
             const std::string graphicSetName = context->graphicsMgr->getGraphicSetNameForStructure(structureType);
             const GraphicSet* graphicSet = context->graphicsMgr->getGraphicSet(graphicSetName);
-            const IGraphic* graphic = graphicSet->getStatic()->getGraphic();
+            const IGraphic* graphic = graphicSet->getByView("south")->getGraphic(); // TODO richtige View nehmen
 
             int drawingFlags = IGraphic::DRAWING_FLAG_MASKED;
             if (allowedToPlaceStructure & PLACING_STRUCTURE_ROOM_NOT_UNLOCK) {
@@ -179,7 +179,7 @@ void GuiMap::renderElement(IRenderer* renderer) {
 
             const std::string graphicSetName = context->graphicsMgr->getGraphicSetNameForStructure(structureType);
             const GraphicSet* mapObjectGraphicSet = context->graphicsMgr->getGraphicSet(graphicSetName);
-            const IGraphic* mapObjectGraphic = mapObjectGraphicSet->getStatic()->getGraphic();
+            const IGraphic* mapObjectGraphic = mapObjectGraphicSet->getByView("south")->getGraphic(); // TODO richtige View nehmen
 
             int xInMapObject =
                 ((moMapHeight - 1) - tileOffsetYInMapObject + tileOffsetXInMapObject) * IGraphicsMgr::TILE_WIDTH_HALF;
@@ -382,7 +382,7 @@ void GuiMap::onClickInMap(int mouseX, int mouseY) {
 
         const std::string graphicSetName = context->graphicsMgr->getGraphicSetNameForStructure(building->getStructureType());
         const GraphicSet* graphicSet = context->graphicsMgr->getGraphicSet(graphicSetName);
-        graphicSet->getStatic()->getGraphic()->getPixel(x, y, &r, &g, &b, &a);
+        graphicSet->getByView("south")->getGraphic()->getPixel(x, y, &r, &g, &b, &a); // TODO richtige View nehmen
 
         // Checken, ob Pixel un-transparent genug ist, um es als Treffer zu nehmen
         if (a > 127) {
@@ -455,7 +455,7 @@ unsigned char GuiMap::isAllowedToPlaceStructure(int mapX, int mapY, StructureTyp
     // Checken, ob alles frei is, um das Gebäude zu setzen
     const std::string graphicSetName = context->graphicsMgr->getGraphicSetNameForStructure(structureType);
     const GraphicSet* graphicSet = context->graphicsMgr->getGraphicSet(graphicSetName);
-    const IGraphic* graphic = graphicSet->getStatic()->getGraphic();
+    const IGraphic* graphic = graphicSet->getByView("south")->getGraphic(); // TODO richtige View nehmen
     for (int y = mapY; y < mapY + graphic->getMapHeight(); y++) {
         for (int x = mapX; x < mapX + graphic->getMapWidth(); x++) {
             MapTile* mapTile = context->game->getMap()->getMapTileAt(x, y);

@@ -156,7 +156,7 @@ void MapCoordUtils::getDrawCoordsForBuilding(Map* map, IGraphicsMgr* graphicsMgr
 
 	const std::string graphicSetName = graphicsMgr->getGraphicSetNameForStructure(building->getStructureType());
 	const GraphicSet* graphicsSet = graphicsMgr->getGraphicSet(graphicSetName);
-    const IGraphic* graphic = graphicsSet->getStatic()->getGraphic();
+    const IGraphic* graphic = graphicsSet->getByView("south")->getGraphic(); // TODO richtige View nehmen
 
     const int elevation = 1; // TODO für Gebäude wie Anlegestelle, Fischerhütte etc. muss auf 0 gesetzt werden
 

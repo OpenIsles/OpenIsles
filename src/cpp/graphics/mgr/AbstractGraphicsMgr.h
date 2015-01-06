@@ -65,6 +65,14 @@ protected:
         unsigned char mapWidth, unsigned char mapHeight, unsigned int countFrames);
 
     /**
+     * @brief Lädt eine Grafik ohne Größen-Entsprechung in Kachel-Koordinaten
+     * Implementierungen wählen die entsprechende Grafik-Implementierung.
+     *
+     * @param filename Dateiname der zu ladenden Grafik
+     */
+    virtual IGraphic* loadGraphic(const char* filename) = 0;
+
+    /**
      * @brief Lädt eine Grafik.
      * Implementierungen wählen die entsprechende Grafik-Implementierung.
      *
@@ -92,6 +100,21 @@ private:
      */
 	void loadTiles();
 
+    /**
+     * @brief Lädt die Grafiken für die Straßen
+     */
+    void loadStreets();
+
+    /**
+     * @brief Lädt eine Grafik, die horizontal-gekachelt 4 Ansichten ("south", "east", "north" und "west") enthält.
+     *
+     * @param graphicSetName GrafikSet-Name
+     * @param graphicFilename Quellgrafik
+	 * @param mapWidth Breite der Grafik in Map-Koordinaten
+	 * @param mapHeight Höhe der Grafik in Map-Koordinaten
+     */
+    void loadStaticGraphicSetWith4Views(
+        const std::string& graphicSetName, const char* graphicFilename, unsigned char mapWidth, unsigned char mapHeight);
 };
 
 #endif

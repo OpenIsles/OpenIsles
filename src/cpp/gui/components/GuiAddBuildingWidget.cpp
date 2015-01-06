@@ -36,7 +36,7 @@ void GuiAddBuildingWidget::renderElement(IRenderer* renderer) {
     // Gebäude-Grafik
     const std::string buildingGraphicsSetName = context->graphicsMgr->getGraphicSetNameForStructure(structureType);
     const GraphicSet* buildingGraphicsSet = context->graphicsMgr->getGraphicSet(buildingGraphicsSetName);
-    const IGraphic* buildingGraphic = buildingGraphicsSet->getStatic()->getGraphic();
+    const IGraphic* buildingGraphic = buildingGraphicsSet->getByView("south")->getGraphic(); // TODO richtige View nehmen
 
     double scale; // ggf. verkleinert zeichnen, wenn das Gebäude zu groß is
     if (buildingGraphic-> getWidth() <= 160) {

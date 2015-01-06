@@ -53,7 +53,7 @@ SDLGraphic::SDLGraphic(IRenderer* const renderer, const SDLGraphic& srcGraphic, 
 
 	// Textur anlegen und Ausschnitt kopieren
 	SDL_Surface* srcSurface = srcGraphic.surface;
-	SDL_Surface* surface = SDL_CreateRGBSurface(srcSurface->flags, srcRect.w, srcRect.h,
+	SDL_Surface* surface = SDL_CreateRGBSurface(0, srcRect.w, srcRect.h,
 		srcSurface->format->BitsPerPixel, srcSurface->format->Rmask,
 		srcSurface->format->Gmask, srcSurface->format->Bmask, srcSurface->format->Amask);
 
@@ -62,10 +62,14 @@ SDLGraphic::SDLGraphic(IRenderer* const renderer, const SDLGraphic& srcGraphic, 
 		throw new std::runtime_error("Could not create surface");
 	}
 
-	SDL_Rect sdlSrcRect = { srcRect.x, srcRect.y, srcRect.w, srcRect.h };
-	if (SDL_BlitSurface(srcSurface, &sdlSrcRect, surface, nullptr) != 0) {
-		std::cerr << "Could not copy surface data: " << IMG_GetError() << std::endl;
-		throw new std::runtime_error("Could not copy surface data");
+	// SDL_BlitSurface kopiert nicht 1:1, sondern verändert die Grafik an den Übergang-Rändern zur Transparenz
+	// Wir kopieren deshalb den Surface-Speicher Zeile für Zeile, dass die Grafik wirklich identisch ist
+	int sourceBPP = (srcSurface->format->BitsPerPixel / 8); // hier sollte immer 4 rauskommen!
+	for (int dy = 0, sy = srcRect.y; dy < srcRect.h; dy++, sy++) {
+		void* destPtrLine = (void*) ((unsigned char*) surface->pixels + dy * surface->pitch);
+		void* srcPtrLine = (void*) ((unsigned char*) srcSurface->pixels + sy * srcSurface->pitch + srcRect.x * sourceBPP);
+
+		memcpy(destPtrLine, srcPtrLine, (size_t) sourceBPP * srcRect.w);
 	}
 
 	this->surface = surface;

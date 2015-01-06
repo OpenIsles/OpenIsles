@@ -59,7 +59,7 @@ Colony* Game::getColony(const MapObject* mapObject) {
 void Game::addStructure(int mapX, int mapY, StructureType structureType, Player* player) {
     const std::string graphicSetName = context->graphicsMgr->getGraphicSetNameForStructure(structureType);
     const GraphicSet* graphicSet = context->graphicsMgr->getGraphicSet(graphicSetName);
-    const IGraphic* graphic = graphicSet->getStatic()->getGraphic();
+    const IGraphic* graphic = graphicSet->getByView("south")->getGraphic(); // Alle Ansichten haben gleichgroße Grafiken
 
     // Objekt anlegen
     Structure* structure = (structureType >= START_BUILDINGS) ? new Building() : new Structure();

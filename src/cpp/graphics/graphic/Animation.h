@@ -34,6 +34,14 @@ public:
     }
 
     /**
+     * @brief Legt eine neue Animation mit nur einem Frame an.
+     * @param graphic Einzelgrafik
+     */
+    Animation(const IGraphic* graphic) : Animation(1) {
+        addFrame(0, graphic);
+    }
+
+    /**
      * @brief Destruktur. Entlädt alle Grafiken.
      */
     ~Animation() {
