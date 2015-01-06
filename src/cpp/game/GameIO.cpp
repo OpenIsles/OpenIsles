@@ -253,7 +253,9 @@ void GameIO::loadStructures(Game* game, rapidxml::xml_node<>* objectgroupStructu
                 throw new std::runtime_error("Illegal structure or building name");
             }
 
-            game->addStructure(mapX, mapY, structureType, player);
+            // TODO Ansicht in die TMX legen und dort wieder rauslesen
+            FourDirectionsView view;
+            game->addStructure(mapX, mapY, structureType, view, player);
         }
     }
 }

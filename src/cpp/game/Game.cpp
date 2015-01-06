@@ -56,16 +56,18 @@ Colony* Game::getColony(const MapObject* mapObject) {
     return getColony(mapTile->player, mapTile->isle);
 }
 
-void Game::addStructure(int mapX, int mapY, StructureType structureType, Player* player) {
+void Game::addStructure(int mapX, int mapY, StructureType structureType, const FourDirectionsView& view, Player* player) {
+    const std::string& viewName = view.getViewName();
     const std::string graphicSetName = context->graphicsMgr->getGraphicSetNameForStructure(structureType);
     const GraphicSet* graphicSet = context->graphicsMgr->getGraphicSet(graphicSetName);
-    const IGraphic* graphic = graphicSet->getByView("south")->getGraphic(); // Alle Ansichten haben gleichgroße Grafiken
+    const IGraphic* graphic = graphicSet->getByView(viewName)->getGraphic();
 
     // Objekt anlegen
     Structure* structure = (structureType >= START_BUILDINGS) ? new Building() : new Structure();
     structure->setMapCoords(mapX, mapY, graphic->getMapWidth(), graphic->getMapHeight());
     structure->setStructureType(structureType);
     structure->setPlayer(player);
+    structure->setView(view);
 
     // Building? Defaults für Produktionsdaten setzen
     Building* building = dynamic_cast<Building*>(structure);

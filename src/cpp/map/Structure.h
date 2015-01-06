@@ -2,6 +2,7 @@
 #define _STRUCTURE_H
 
 #include "economics/UpdateableObject.h"
+#include "map/Directions.h"
 #include "map/MapObject.h"
 #include "map/StructureType.h"
 
@@ -37,6 +38,11 @@ protected:
 	 */
 	StructureType structureType;
 
+    /**
+     * @brief Ausrichtung des Objekts
+     */
+    FourDirectionsView view;
+
 public:
     StructureType getStructureType() const {
         return structureType;
@@ -46,6 +52,13 @@ public:
         this->structureType = structureType;
     }
 
+    const FourDirectionsView& getView() const {
+        return view;
+    }
+
+    void setView(const FourDirectionsView& view) {
+        this->view = view;
+    }
 };
 
 #endif

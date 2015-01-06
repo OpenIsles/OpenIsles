@@ -3,6 +3,7 @@
 
 #include <map>
 #include <vector>
+#include "map/Directions.h"
 #include "map/Structure.h"
 #include "Context.h"
 
@@ -135,9 +136,10 @@ public:
      * @param mapX X-Map-Koordinate des Objekts
      * @param mapY Y-Map-Koordinate des Objekts
      * @param structureType Typ der Struktur
+     * @param view Ansicht, mit der das Gebäude positioniert werden soll
      * @param player Spieler, dem die Struktur gehören soll
      */
-    void addStructure(int mapX, int mapY, StructureType structureType, Player* player);
+    void addStructure(int mapX, int mapY, StructureType structureType, const FourDirectionsView& view, Player* player);
 
     /**
      * @brief Ändert die Einwohner innerhalb eines Gebäudes. Positive Werte fügen Bewohner hinzu, negative nehmen

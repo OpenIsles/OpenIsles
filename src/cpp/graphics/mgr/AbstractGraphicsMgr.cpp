@@ -206,7 +206,7 @@ void AbstractGraphicsMgr::loadStaticGraphicSetWith4Views(
     graphicSet->addByView("south", new Animation(tileGraphic));
 
     tileRect.x += tileWidth;
-    tileGraphic = loadGraphic(*graphic, tileRect, mapWidth, mapHeight);
+    tileGraphic = loadGraphic(*graphic, tileRect, mapHeight, mapWidth);
     graphicSet->addByView("east", new Animation(tileGraphic));
 
     tileRect.x += tileWidth;
@@ -214,7 +214,7 @@ void AbstractGraphicsMgr::loadStaticGraphicSetWith4Views(
     graphicSet->addByView("north", new Animation(tileGraphic));
 
     tileRect.x += tileWidth;
-    tileGraphic = loadGraphic(*graphic, tileRect, mapWidth, mapHeight);
+    tileGraphic = loadGraphic(*graphic, tileRect, mapHeight, mapWidth);
     graphicSet->addByView("west", new Animation(tileGraphic));
 
     graphicSets[graphicSetName] = graphicSet;

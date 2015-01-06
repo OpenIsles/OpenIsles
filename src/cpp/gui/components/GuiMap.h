@@ -4,6 +4,7 @@
 #include <SDL_render.h>
 #include "Context.h"
 #include "gui/components/GuiBase.h"
+#include "map/Directions.h"
 #include "map/Structure.h"
 #include "utils/RectangleData.h"
 
@@ -108,10 +109,12 @@ private:
      * @param mapX Map-X-Koordinate, wo die Struktur gesetzt werden soll
      * @param mapY Map-Y-Koordinate, wo die Struktur gesetzt werden soll
      * @param structureType Typ der zu setzenden Struktur
+     * @param view Ausrichtung der Struktur
      * @sa PLACING_STRUCTURE-Konstanten
      * @return Bitmaske, die angibt, ob das Gebäude gesetzt werden darf.
      */
-    unsigned char isAllowedToPlaceStructure(int mapX, int mapY, StructureType structureType);
+    unsigned char isAllowedToPlaceStructure(
+        int mapX, int mapY, StructureType structureType, const FourDirectionsView& view);
 
     /**
      * @brief Berechnet welcher konkrete StructureType für eine Straßenkachel verwendet werden muss. Als Eingabeparameter
