@@ -123,7 +123,7 @@ void Game::setSelectedMapObject(MapObject* selectedMapObject) {
 }
 
 void Game::loadGameFromTMX(const char* filename) {
-    GameIO::loadGameFromTMX(this, context->graphicsMgr, filename);
+    GameIO::loadGameFromTMX(this, context->configMgr, context->graphicsMgr, filename);
 
 #ifndef NO_SDL
     context->guiMgr->onNewGame();

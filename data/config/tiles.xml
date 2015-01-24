@@ -1,47 +1,71 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <tiles-config>
     <tiles>
-        <tile tile-index="1" graphic-file="data/img/tiles/grass.png" walkable-and-buildable="true" />
-        
-        <tile tile-index="2" graphic-file="data/img/tiles/isle-se.png" />
-        <tile tile-index="3" graphic-file="data/img/tiles/isle-s.png" />
-        <tile tile-index="4" graphic-file="data/img/tiles/isle-sw.png" />
-        <tile tile-index="5" graphic-file="data/img/tiles/isle-w.png" />
-        <tile tile-index="6" graphic-file="data/img/tiles/isle-nw.png" />
-        <tile tile-index="7" graphic-file="data/img/tiles/isle-n.png" />
-        <tile tile-index="8" graphic-file="data/img/tiles/isle-ne.png" />
-        <tile tile-index="9" graphic-file="data/img/tiles/isle-e.png" />
-
-        <tile tile-index="10" graphic-file="data/img/tiles/grass-se.png" />
-        <tile tile-index="11" graphic-file="data/img/tiles/grass-sw.png" />
-        <tile tile-index="12" graphic-file="data/img/tiles/grass-nw.png" />
-        <tile tile-index="13" graphic-file="data/img/tiles/grass-ne.png" />
-
-        <tile tile-index="14" graphic-file="data/img/tiles/water.png" ocean="true" />
-
-        <tile tile-index="15" graphic-file="data/img/tiles/beach-se.png" ocean="true" />
-        <tile tile-index="16" graphic-file="data/img/tiles/beach-s1.png" ocean="true" />
-        <tile tile-index="17" graphic-file="data/img/tiles/beach-s2.png" ocean="true" />
-        <tile tile-index="18" graphic-file="data/img/tiles/beach-s3.png" ocean="true" />
-        <tile tile-index="19" graphic-file="data/img/tiles/beach-sw.png" ocean="true" />
-        <tile tile-index="20" graphic-file="data/img/tiles/beach-w1.png" ocean="true" />
-        <tile tile-index="21" graphic-file="data/img/tiles/beach-w2.png" ocean="true" />
-        <tile tile-index="22" graphic-file="data/img/tiles/beach-w3.png" ocean="true" />
-        <tile tile-index="23" graphic-file="data/img/tiles/beach-nw.png" ocean="true" />
-        <tile tile-index="24" graphic-file="data/img/tiles/beach-n1.png" ocean="true" />
-        <tile tile-index="25" graphic-file="data/img/tiles/beach-n2.png" ocean="true" />
-        <tile tile-index="26" graphic-file="data/img/tiles/beach-n3.png" ocean="true" />
-        <tile tile-index="27" graphic-file="data/img/tiles/beach-ne.png" ocean="true" />
-        <tile tile-index="28" graphic-file="data/img/tiles/beach-e1.png" ocean="true" />
-        <tile tile-index="29" graphic-file="data/img/tiles/beach-e2.png" ocean="true" />
-        <tile tile-index="30" graphic-file="data/img/tiles/beach-e3.png" ocean="true" />
-
-        <tile tile-index="31" graphic-file="data/img/tiles/beach.png" />
-
-        <tile tile-index="32" graphic-file="data/img/tiles/water-se.png" />
-        <tile tile-index="33" graphic-file="data/img/tiles/water-sw.png" />
-        <tile tile-index="34" graphic-file="data/img/tiles/water-nw.png" />
-        <tile tile-index="35" graphic-file="data/img/tiles/water-ne.png" />
+        <tile name="grass" walkable-and-buildable="true">
+            <tmx-tile tmx-tile-index="1" view="south" x="0" y="0" />
+            <tmx-tile tmx-tile-index="2" view="east" x="64" y="0" />
+            <tmx-tile tmx-tile-index="3" view="north" x="128" y="0" />
+            <tmx-tile tmx-tile-index="4" view="west" x="192" y="0" />
+        </tile>
+        <tile name="isle-edge">
+            <tmx-tile tmx-tile-index="5" view="south" x="256" y="0" />
+            <tmx-tile tmx-tile-index="6" view="east" x="320" y="0" />
+            <tmx-tile tmx-tile-index="7" view="north" x="384" y="0" />
+            <tmx-tile tmx-tile-index="8" view="west" x="448" y="0" />
+        </tile>
+        <tile name="isle-corner">
+            <tmx-tile tmx-tile-index="9" view="south" x="512" y="0" />
+            <tmx-tile tmx-tile-index="10" view="east" x="576" y="0" />
+            <tmx-tile tmx-tile-index="11" view="north" x="640" y="0" />
+            <tmx-tile tmx-tile-index="12" view="west" x="704" y="0" />
+        </tile>
+        <tile name="grass-corner">
+            <tmx-tile tmx-tile-index="13" view="south" x="0" y="64" />
+            <tmx-tile tmx-tile-index="14" view="east" x="64" y="64" />
+            <tmx-tile tmx-tile-index="15" view="north" x="128" y="64" />
+            <tmx-tile tmx-tile-index="16" view="west" x="192" y="64" />
+        </tile>
+        <tile name="water" ocean="true">
+            <tmx-tile tmx-tile-index="17" view="south" x="256" y="64" />
+            <tmx-tile tmx-tile-index="18" view="east" x="320" y="64" />
+            <tmx-tile tmx-tile-index="19" view="north" x="384" y="64" />
+            <tmx-tile tmx-tile-index="20" view="west" x="448" y="64" />
+        </tile>
+        <tile name="beach-corner" ocean="true">
+            <tmx-tile tmx-tile-index="21" view="south" x="512" y="64" />
+            <tmx-tile tmx-tile-index="22" view="east" x="576" y="64" />
+            <tmx-tile tmx-tile-index="23" view="north" x="640" y="64" />
+            <tmx-tile tmx-tile-index="24" view="west" x="704" y="64" />
+        </tile>
+        <tile name="beach-edge1" ocean="true">
+            <tmx-tile tmx-tile-index="25" view="south" x="0" y="128" />
+            <tmx-tile tmx-tile-index="26" view="east" x="64" y="128" />
+            <tmx-tile tmx-tile-index="27" view="north" x="128" y="128" />
+            <tmx-tile tmx-tile-index="28" view="west" x="192" y="128" />
+        </tile>
+        <tile name="beach-edge2" ocean="true">
+            <tmx-tile tmx-tile-index="29" view="south" x="256" y="128" />
+            <tmx-tile tmx-tile-index="30" view="east" x="320" y="128" />
+            <tmx-tile tmx-tile-index="31" view="north" x="384" y="128" />
+            <tmx-tile tmx-tile-index="32" view="west" x="448" y="128" />
+        </tile>
+        <tile name="beach-edge3" ocean="true">
+            <tmx-tile tmx-tile-index="33" view="south" x="512" y="128" />
+            <tmx-tile tmx-tile-index="34" view="east" x="576" y="128" />
+            <tmx-tile tmx-tile-index="35" view="north" x="640" y="128" />
+            <tmx-tile tmx-tile-index="36" view="west" x="704" y="128" />
+        </tile>
+        <tile name="beach">
+            <tmx-tile tmx-tile-index="37" view="south" x="0" y="192" />
+            <tmx-tile tmx-tile-index="38" view="east" x="64" y="192" />
+            <tmx-tile tmx-tile-index="39" view="north" x="128" y="192" />
+            <tmx-tile tmx-tile-index="40" view="west" x="192" y="192" />
+        </tile>
+        <tile name="water-corner">
+            <tmx-tile tmx-tile-index="41" view="south" x="256" y="192" />
+            <tmx-tile tmx-tile-index="42" view="east" x="320" y="192" />
+            <tmx-tile tmx-tile-index="43" view="north" x="384" y="192" />
+            <tmx-tile tmx-tile-index="44" view="west" x="448" y="192" />
+        </tile>
     </tiles>
-    
 </tiles-config>

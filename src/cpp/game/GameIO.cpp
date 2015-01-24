@@ -1,3 +1,4 @@
+#include <array>
 #include <string>
 #include "game/Colony.h"
 #include "game/Game.h"
@@ -8,7 +9,9 @@
 
 // TODO allgemein: Fehlermanagement, wenn die Datei mal nicht so hübsch aussieht, dass alle Tags da sind
 
-void GameIO::loadGameFromTMX(Game* game, const IGraphicsMgr* graphicsMgr, const char* filename) {
+void GameIO::loadGameFromTMX(
+    Game* game, const ConfigMgr* configMgr, const IGraphicsMgr* graphicsMgr, const char* filename) {
+
     // TODO aktuell kann diese Methode nur mit einem frischen Game-Objekt aufgerufen werden. Nochmal laden = vorher saubermachen
 
     // Datei öffnen
@@ -46,7 +49,7 @@ void GameIO::loadGameFromTMX(Game* game, const IGraphicsMgr* graphicsMgr, const 
     loadPlayers(game, mapNode);
 
     // Karte und Inseln laden
-    loadMap(game, graphicsMgr, objectgroupIslesNode);
+    loadMap(game, configMgr, graphicsMgr, objectgroupIslesNode);
 
     // Siedlungen laden
     loadColonies(game, objectgroupColoniesNode);
@@ -97,7 +100,9 @@ void GameIO::loadPlayers(Game* game, rapidxml::xml_node<>* mapNode) {
     }
 }
 
-void GameIO::loadMap(Game* game, const IGraphicsMgr* graphicsMgr, rapidxml::xml_node<>* objectgroupIslesNode) {
+void GameIO::loadMap(
+    Game* game, const ConfigMgr* configMgr, const IGraphicsMgr* graphicsMgr, rapidxml::xml_node<>* objectgroupIslesNode) {
+
     Map* map = game->getMap();
 
     // Inseln einlesen
@@ -147,10 +152,19 @@ void GameIO::loadMap(Game* game, const IGraphicsMgr* graphicsMgr, rapidxml::xml_
                     MapTile* mapTile = map->mapTiles->getData(mx, my, nullptr);
 
                     unsigned char tileIndex = isle->getTileAt(isleX, isleY);
-                    std::string tileGraphicSetName = graphicsMgr->getGraphicSetNameForTile(tileIndex);
-                    const IGraphic* tileGraphic = graphicsMgr->getGraphicSet(tileGraphicSetName)->getStatic()->getGraphic();
+                    const MapTileConfig* mapTileConfig = configMgr->getMapTileConfigByTiledId(tileIndex);
+                    unsigned char viewOffset = configMgr->getViewOffsetByTiledId(tileIndex);
+                    std::string tileGraphicSetName = "tiles/" + mapTileConfig->tileName;
+                    const GraphicSet* tileGraphicSet = graphicsMgr->getGraphicSet(tileGraphicSetName);
 
-                    mapTile->setTile(tileIndex, tileGraphic);
+                    std::array<const Animation*, 4> tileAnimations = {
+                        tileGraphicSet->getByView((FourDirectionsView("south") + viewOffset).getViewName()),
+                        tileGraphicSet->getByView((FourDirectionsView("east") + viewOffset).getViewName()),
+                        tileGraphicSet->getByView((FourDirectionsView("north") + viewOffset).getViewName()),
+                        tileGraphicSet->getByView((FourDirectionsView("west") + viewOffset).getViewName())
+                    };
+
+                    mapTile->setTile(mapTileConfig, tileAnimations);
                     mapTile->isle = isle;
                 }
             }

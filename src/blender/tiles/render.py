@@ -10,6 +10,7 @@ bpy.data.scenes["Scene"].render.resolution_percentage = 100
 bpy.data.scenes["Scene"].render.resolution_x = 64
 bpy.data.scenes["Scene"].render.resolution_y = 64
 bpy.data.cameras["Camera"].ortho_scale = 1.414213562
+bpy.data.materials["ShouldNeverBeVisible"].use_transparency = True
 
 for tile_object in bpy.data.objects:
     if not tile_object.name.startswith('tile-'):
@@ -18,15 +19,19 @@ for tile_object in bpy.data.objects:
     tile_name = tile_object.name.replace('tile-', '')
     print ('Rendering %s...' % tile_name)
     
-    bpy.data.objects["Kamera"].location.x = 10 + tile_object.location.y
-    bpy.data.objects["Kamera"].location.y = 10 - tile_object.location.x
+    # Kachel ins Kamera-Sichtfeld schieben
+    tile_object.location.y = 0
+    tile_object.location.x = 0
 
     showTile(tile_object)
 
-    # Kachel leicht vergrößern, damit es die Ränder nicht halbtransparent sind 
+    # Kachel leicht vergrößern, damit die Ränder nicht halbtransparent sind 
     # und die Kacheln somit nicht zusammenpassen
     tile_object.scale.x = 1.1;
     tile_object.scale.y = 1.1;
 
-    bpy.context.scene.render.filepath = "render/%s.png" % tile_name
-    bpy.ops.render.render(write_still = True)
+    for angle in range(0, 360, 90):
+        bpy.data.objects["Setup"].rotation_euler.z = angle / 180 * math.pi
+
+        bpy.context.scene.render.filepath = "render/%s-angle%u.png" % (tile_name, angle)
+        bpy.ops.render.render(write_still = True)

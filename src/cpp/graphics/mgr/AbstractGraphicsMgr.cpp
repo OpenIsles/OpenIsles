@@ -101,15 +101,31 @@ void AbstractGraphicsMgr::loadTiles() {
     // nearest pixel sampling für die Kacheln, damit die fließend ineinander übergehen
     renderer->setHintRenderScaleQuality("0");
 
-    for (unsigned char tileIndex = 0; tileIndex < 128; tileIndex++) {
-        const MapTileConfig* mapTileConfig = configMgr->getMapTileConfig(tileIndex);
-        if (mapTileConfig == nullptr) {
-            continue;
+    IGraphic* sdlFullGraphic = loadGraphic("data/img/tileset.png");
+
+    for (auto mapEntry : configMgr->getMapTileConfigs()) {
+        const MapTileConfig& mapTileConfig = mapEntry.second;
+
+        GraphicSet* graphicSet = new GraphicSet();
+
+        Rect tileRect(0, 0, TILE_WIDTH, TILE_HEIGHT + ELEVATION_HEIGHT);
+        for (const FourDirectionsView& fourDirectionsView : FourDirectionsView::ALL_VIEWS) {
+            const std::pair<int, int>& xyOffsetInTileset =
+                mapTileConfig.mapTileViewsOffsetXYInTileset.at(fourDirectionsView);
+
+            tileRect.x = xyOffsetInTileset.first;
+            tileRect.y = xyOffsetInTileset.second;
+            IGraphic* sdlTileGraphic = loadGraphic(*sdlFullGraphic, tileRect, 1, 1);
+
+            const std::string& viewName = fourDirectionsView.getViewName();
+            graphicSet->addByView(viewName, new Animation(sdlTileGraphic));
         }
 
-        std::string graphicName = getGraphicSetNameForTile(tileIndex);
-        loadStaticGraphicSet(graphicName, mapTileConfig->graphicsFile, 1, 1);
+        std::string graphicSetName = "tiles/" + mapTileConfig.tileName;
+        graphicSets[graphicSetName] = graphicSet;
     }
+
+    delete sdlFullGraphic;
 }
 
 void AbstractGraphicsMgr::loadStaticGraphicSet(const std::string& graphicSetName, const char* graphicFilename) {
@@ -154,6 +170,8 @@ void AbstractGraphicsMgr::loadStaticAnimationGraphicSet(
     graphicSet->addStatic(animation);
 
     graphicSets[graphicSetName] = graphicSet;
+
+    delete sdlFullGraphic;
 }
 
 void AbstractGraphicsMgr::loadStreets() {

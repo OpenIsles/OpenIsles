@@ -31,15 +31,24 @@ void Map::initNewMap(int newWidth, int newHeight) {
     // Neue Größe setzen
     width = newWidth;
     height = newHeight;
-    
+
     // mapTiles neu anlegen und mit Ozean initialisieren
-    const int oceanTileIndex = 14; // TODO in die Config bringen. Aktuell is aber noch unklar, ob wir mehrere isOcean-Kacheln haben werden
-    std::string oceanTileGraphicSetName = context->graphicsMgr->getGraphicSetNameForTile(oceanTileIndex);
-    const IGraphic* oceanTileGraphic = context->graphicsMgr->getGraphicSet(oceanTileGraphicSetName)->getStatic()->getGraphic();
+    // TODO in die Config bringen. Aktuell is aber noch unklar, ob wir mehrere isOcean-Kacheln haben werden. oceanTileIndex und oceanTileGraphicSetName hängen über tiles.xml zusammen
+    // hübscher machen
+    const MapTileConfig* oceanMapTileConfig = context->configMgr->getMapTileConfigOcean();
+    std::string oceanTileGraphicSetName = "tiles/water";
+    const GraphicSet* oceanTileGraphicSet = context->graphicsMgr->getGraphicSet(oceanTileGraphicSetName);
+
+    std::array<const Animation*, 4> tileAnimationsOcean = {
+        oceanTileGraphicSet->getByView("south"),
+        oceanTileGraphicSet->getByView("east"),
+        oceanTileGraphicSet->getByView("north"),
+        oceanTileGraphicSet->getByView("west")
+    };
 
     mapTiles = new RectangleData<MapTile*>(newWidth, newHeight);
     for(int i = 0; i < mapTiles->width * mapTiles->height; i++) {
-        mapTiles->data[i] = new MapTile(oceanTileIndex, oceanTileGraphic);
+        mapTiles->data[i] = new MapTile(oceanMapTileConfig, tileAnimationsOcean);
     }
 
     // Sonstiges Zeugs auf Anfangswerte stellen

@@ -8,7 +8,7 @@ CREATE_TARGET_DIRECTORY = mkdir -p $(@D)
 
 MONTAGE := montage -background transparent
 
-.PHONY: all clean render-tiles build-gui clean-gui render-cart render-coat-of-arms render-blender clean-blender
+.PHONY: all clean build-gui clean-gui render-cart render-coat-of-arms render-blender clean-blender
 
 all: build-gui render-blender
 
@@ -19,16 +19,12 @@ clean: clean-gui clean-blender
 # Gelände-Kacheln                                                                                                      #
 ########################################################################################################################
 
-TILES = `php $(SRC_DIRECTORY)/php/get-tile-for-makefile.php`
-
-render-tiles: $(SRC_DIRECTORY)/blender/tiles/tiles.blend
-	rm -f $(SRC_DIRECTORY)/blender/tiles/render/tileset.png
-
+$(DATA_DIRECTORY)/img/tileset.png: $(SRC_DIRECTORY)/blender/tiles/tiles.blend
 	mkdir -p $(DATA_DIRECTORY)/img/tiles
 	cd $(SRC_DIRECTORY)/blender/tiles; blender -b $(notdir $<) -P render.py
-	cp $(SRC_DIRECTORY)/blender/tiles/render/* $(DATA_DIRECTORY)/img/tiles
+	php $(SRC_DIRECTORY)/blender/tiles/generate-tileset.php
 
-	$(MONTAGE) $(TILES) -tile 8x5 -geometry 64x64+0+0 $(SRC_DIRECTORY)/blender/tiles/render/tileset.png
+	cp $(SRC_DIRECTORY)/blender/tiles/render/tileset.png $(DATA_DIRECTORY)/img/tileset.png
 
 ########################################################################################################################
 # GUI                                                                                                                  #
@@ -203,7 +199,7 @@ render-blender: \
 	$(foreach ANIMATION,$(ANIMATIONS), \
 		$(DATA_DIRECTORY)/img/objects/$(ANIMATION).png \
 	) \
-	render-tiles \
+	$(DATA_DIRECTORY)/img/tileset.png \
 	$(DATA_DIRECTORY)/img/objects/streets.png \
 	render-cart \
 	render-coat-of-arms \
@@ -217,7 +213,7 @@ clean-blender:
 	rm -f $(foreach ANIMATION,$(ANIMATIONS), $(DATA_DIRECTORY)/img/objects/$(ANIMATION).png)
 	rm -rf $(foreach ANIMATION,$(ANIMATIONS), $(SRC_DIRECTORY)/blender/animations/$(ANIMATION)/render)
 	rm -rf $(SRC_DIRECTORY)/blender/animations/cart/render
-	rm -rf $(DATA_DIRECTORY)/img/tiles
+	rm -rf $(DATA_DIRECTORY)/img/tileset.png
 	rm -rf $(SRC_DIRECTORY)/blender/tiles/render
 	rm -rf $(SRC_DIRECTORY)/blender/streets/render
 	rm -rf $(DATA_DIRECTORY)/img/objects/streets.png

@@ -2,10 +2,13 @@
 #define _MAP_H
 
 #include <algorithm>
+#include <array>
 #include <iostream>
 #include <list>
 #include <string.h>
 #include "Context.h"
+#include "config/ConfigMgr.h"
+#include "graphics/graphic/Animation.h"
 #include "graphics/renderer/IRenderer.h"
 #include "gui/GuiMgr.h"
 #include "map/Building.h"
@@ -21,14 +24,15 @@ struct MapTile {
 
 private:
     /**
-     * @brief Index der Gelände-Kachel
+     * @brief Konfigurationsobjekt für diese Gelände-Kachel
      */
-    unsigned char tileIndex;
+    const MapTileConfig* mapTileConfig;
 
 	/**
-	 * @brief Grafik, die für diese Kachel gezeichnet werden muss
+	 * @brief Animationen, die pro Ansicht für die Kachel gezeichnet werden muss.
+     * Der Index entspricht dem ViewIndex in FourDirectionsView.
 	 */
-	const IGraphic* tileGraphic;
+    std::array<const Animation*, 4> tileAnimations;
 
 public:
     /**
@@ -50,24 +54,24 @@ public:
     MapObject* mapObject;
 
     
-    MapTile(unsigned char tileIndex, const IGraphic* tileGraphic) {
-		setTile(tileIndex, tileGraphic);
+    MapTile(const MapTileConfig* mapTileConfig, std::array<const Animation*, 4> tileAnimations) {
+		setTile(mapTileConfig, tileAnimations);
         isle = nullptr;
         player = nullptr;
         mapObject = nullptr;
     }
 
-	void setTile(unsigned char tileIndex, const IGraphic* tileGraphic) {
-		this->tileIndex = tileIndex;
-		this->tileGraphic = tileGraphic;
+	void setTile(const MapTileConfig* mapTileConfig, std::array<const Animation*, 4> tileAnimations) {
+        this->mapTileConfig = mapTileConfig;
+        this->tileAnimations = tileAnimations;
 	}
 
-	const IGraphic* getTileGraphic() const {
-		return tileGraphic;
+	const MapTileConfig* getMapTileConfig() const {
+		return mapTileConfig;
 	}
 
-	unsigned char getTileIndex() const {
-		return tileIndex;
+	const Animation* getTileAnimationForView(int viewIndex) const {
+		return tileAnimations[viewIndex];
 	}
 };
 

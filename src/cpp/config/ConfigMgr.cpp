@@ -16,13 +16,6 @@ ConfigMgr::~ConfigMgr() {
         }
     }
     delete[] buildingConfigs;
-
-    for(int i = 0; i < 128; i++) {
-        if (mapTileConfigs[i] != nullptr) {
-            delete mapTileConfigs[i];
-        }
-    }
-    delete[] mapTileConfigs;
 }
 
 void ConfigMgr::loadBuildingConfig() {
@@ -180,35 +173,51 @@ void ConfigMgr::loadBuildingConfig() {
 void ConfigMgr::loadTilesConfig() {
     // TODO Fehlermanagement, wenn die XML-Datei mal nicht so hübsch aussieht, dass alle Tags da sind
 
-    mapTileConfigs = new MapTileConfig*[128];
-    memset(mapTileConfigs, 0, 128 * sizeof(MapTileConfig*));
-
     // Datei öffnen
     rapidxml::file<> xmlFile("data/config/tiles.xml");
 
     rapidxml::xml_document<>* xmlDocument = new rapidxml::xml_document<>();
     xmlDocument->parse<0>(xmlFile.data());
 
-    // Tiles auslesen
     rapidxml::xml_node<>* tilesConfigNode = xmlDocument->first_node("tiles-config", 12, true);
     rapidxml::xml_node<>* tilesNode = tilesConfigNode->first_node("tiles", 5, true);
+
+    // Tiles auslesen
     for (rapidxml::xml_node<>* tileNode = tilesNode->first_node("tile", 4, true); tileNode != nullptr;
          tileNode = tileNode->next_sibling("tile", 4, true)) {
 
-        int tileIndex = atoi(tileNode->first_attribute("tile-index", 10, true)->value());
-        const char* tileGraphicFile = tileNode->first_attribute("graphic-file", 12, true)->value();
+        const char* tileName = tileNode->first_attribute("name", 4, true)->value();
         bool tileIsOcean = xmlAttributeToBool(tileNode->first_attribute("ocean", 5, true), false);
         bool tileIsWalkableAndBuildable =
             xmlAttributeToBool(tileNode->first_attribute("walkable-and-buildable", 22, true), false);
 
-        // Dateiname abkopieren. Strings aus der XML werden ungültig, wenn wir mit der Datei fertig sind
-        char* tileGraphicFileCopy = new char[strlen(tileGraphicFile) + 1];
-        strcpy(tileGraphicFileCopy, tileGraphicFile);
+        MapTileConfig& mapTileConfig = mapTileConfigs[tileName];
+        mapTileConfig.tileName = std::string(tileName);
+        mapTileConfig.isOcean = tileIsOcean;
+        mapTileConfig.isWalkableAndBuildable = tileIsWalkableAndBuildable;
 
-        mapTileConfigs[tileIndex] = new MapTileConfig();
-        mapTileConfigs[tileIndex]->graphicsFile = tileGraphicFileCopy;
-        mapTileConfigs[tileIndex]->isOcean = tileIsOcean;
-        mapTileConfigs[tileIndex]->isWalkableAndBuildable = tileIsWalkableAndBuildable;
+        for (rapidxml::xml_node<>* tmxTileNode = tileNode->first_node("tmx-tile", 8, true); tmxTileNode != nullptr;
+             tmxTileNode = tmxTileNode->next_sibling("tmx-tile", 8, true)) {
+
+            int tmxTileIndex = atoi(tmxTileNode->first_attribute("tmx-tile-index", 14, true)->value());
+            const char* tileViewName = tmxTileNode->first_attribute("view", 4, true)->value();
+            int xOffsetInTileset = atoi(tmxTileNode->first_attribute("x", 1, true)->value());
+            int yOffsetInTileset = atoi(tmxTileNode->first_attribute("y", 1, true)->value());
+
+            FourDirectionsView tileView(tileViewName);
+            mapTileConfig.mapTileViewsOffsetXYInTileset[tileView] =
+                std::make_pair(xOffsetInTileset, yOffsetInTileset);
+
+            // Zuordnung zu Tiled-Kachel-ID und View-Offset merken
+            tiledIdToMapTileConfig[tmxTileIndex] = &mapTileConfig;
+            tiledIdToViewOffset[tmxTileIndex] = tileView.getViewIndex();
+        }
+
+        // Den Ozean separat merken
+        // TODO hübscher erkennen
+        if (std::strcmp(tileName, "water") == 0) {
+            mapTileConfigOcean = &mapTileConfig;
+        }
     }
 }
 

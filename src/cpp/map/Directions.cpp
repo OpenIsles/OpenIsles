@@ -6,3 +6,10 @@ const std::string FourDirectionsView::viewNames[] = {
     "north",
     "west"
 };
+
+const FourDirectionsView FourDirectionsView::ALL_VIEWS[] = {
+    FourDirectionsView("south"),
+    FourDirectionsView("east"),
+    FourDirectionsView("north"),
+    FourDirectionsView("west")
+};

@@ -72,7 +72,9 @@ void GuiMap::renderElement(IRenderer* renderer) {
     // Kacheln rendern
     for (int mapY = mapYStart; mapY <= mapYEnd; mapY++) {
         for (int mapX = mapXStart; mapX <= mapXEnd; mapX++) {
-            const IGraphic* tileGraphic = map->getMapTileAt(mapX, mapY)->getTileGraphic();
+            const MapTile* mapTile = map->getMapTileAt(mapX, mapY);
+            const Animation* tileAnimation = mapTile->getTileAnimationForView(0); // TODO später Drehung der View
+            const IGraphic* tileGraphic = tileAnimation->getGraphic();
 
             Rect rectDestination;
             MapCoordUtils::mapToDrawCoords(map, mapX, mapY, 0, tileGraphic, &rectDestination);
@@ -180,7 +182,7 @@ void GuiMap::renderElement(IRenderer* renderer) {
                 structureType = getConcreteStreetStructureType(mapX, mapY, structureType);
             }
 
-            const std::string& viewName = structure->getView().getViewName();
+            const std::string& viewName = structure->getView().getViewName();  // TODO view+rotation
             const std::string graphicSetName = context->graphicsMgr->getGraphicSetNameForStructure(structureType);
             const GraphicSet* mapObjectGraphicSet = context->graphicsMgr->getGraphicSet(graphicSetName);
             const IGraphic* mapObjectGraphic = mapObjectGraphicSet->getByView(viewName)->getGraphic();
@@ -474,7 +476,7 @@ unsigned char GuiMap::isAllowedToPlaceStructure(
                 return result;
             }
 
-            const MapTileConfig* mapTileConfig = context->configMgr->getMapTileConfig(mapTile->getTileIndex());
+            const MapTileConfig* mapTileConfig = mapTile->getMapTileConfig();
 
             if (mapTile->player == nullptr ||                     // Gebiet nicht erschlossen, ..,
                 mapTile->player != context->game->getCurrentPlayer() ||    // ... nicht unseres...
