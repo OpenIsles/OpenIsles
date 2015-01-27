@@ -42,13 +42,13 @@ private:
     bool onOutboundTrip;
 
     /**
-     * @brief X-Map-Koordinate-Offset, der auf den normalen mapX-Wert addiert wird
+     * @brief X-Map-Koordinate-Offset, der auf den normalen mapCoords.x-Wert addiert wird
      * Der Offset bewegt sich im Bereich 0.0 bis <1.0.
      */
     double mapXFraction;
 
     /**
-    * @brief Y-Map-Koordinate-Offset, der auf den normalen mapY-Wert addiert wird
+    * @brief Y-Map-Koordinate-Offset, der auf den normalen mapCoords.y-Wert addiert wird
     * Der Offset bewegt sich im Bereich 0.0 bis <1.0.
     */
     double mapYFraction;

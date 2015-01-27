@@ -51,6 +51,7 @@ set(SOUND_SOURCE_FILES
 set(TEST_FILES
     test/cpp/GameTest.cpp
     test/cpp/graphics/GraphicSetTest.cpp
+    test/cpp/map/coords/MapCoordsTest.cpp
     test/cpp/map/DirectionsTest.cpp
 )
 

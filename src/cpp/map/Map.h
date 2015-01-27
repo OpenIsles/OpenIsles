@@ -151,19 +151,17 @@ public:
 
     /**
      * @brief Liefert das MapTile (Infos zu einer Kachel) an einer bestimmten Stelle zurück
-     * @param mapX Map-X-Koordiante
-     * @param mapY Map-Y-Koordiante
+     * @param mapCoords Map-Koordianten
      * @return Zeiger auf MapTile oder nullptr, wenn die Koordinaten außerhalb der Karte sind
      */
-	MapTile* getMapTileAt(int mapX, int mapY) const;
+	MapTile* getMapTileAt(const MapCoords& mapCoords) const;
 
 	/**
 	 * @brief Liefert das Map-Objekt zurück, die sich an den angegebenen Koordinaten befindet.
-	 * @param mapX Map-X-Koordiante
-	 * @param mapY Map-Y-Koordiante
+	 * @param mapCoords Map-Koordianten
 	 * @return Zeiger auf das Map-Objekt oder nullptr, wenn dort kein Map-Objekt ist
 	 */
-	MapObject* getMapObjectAt(int mapX, int mapY) const;
+	MapObject* getMapObjectAt(const MapCoords& mapCoords) const;
 
 	const std::list<MapObject*>& getMapObjects() const {
 		return mapObjects;
@@ -234,20 +232,18 @@ public:
 
 	/**
 	 * @brief Ermittelt, ob an einer bestimmten Stelle ein Weg liegt.
-	 * @param mapX Map-X-Koordinate
-	 * @param mapY Map-Y-Koordinate
+	 * @param mapCoords Map-Koordianten
 	 * @return true, wenn ein Weg (Feldweg oder Pflasterstraße) da ist; sonst false.
 	 */
-	bool isStreetAt(int mapX, int mapY);
+	bool isStreetAt(const MapCoords& mapCoords);
 
 private:
     /**
      * @brief Prüft die Map-Koordinaten auf ihre Gültigkeit, ob sie außerhalb der Karte liegen.
-     * @param mapX Map-X-Koordiante
-     * @param mapY Map-Y-Koordiante
+     * @param mapCoords Map-Koordianten
      * @return true, wenn die Koordinaten gültig sind; false, wenn sie außerhalb der Karte liegen.
      */
-    bool checkMapCoords(int mapX, int mapY) const;
+    bool checkMapCoords(const MapCoords& mapCoords) const;
     
     /**
 	 * @brief Initialisiert alles, wenn die Karte sich ändert.

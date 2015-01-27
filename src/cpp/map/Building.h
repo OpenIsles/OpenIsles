@@ -76,21 +76,20 @@ public:
     /**
      * @brief Testet, ob eine bestimmte Kachel innerhalb des Einzugsgebiets des Gebäudes liegt
      * @param configMgr Dependency
-     * @param mapX X-Map-Koordinate, die getestet wird
-     * @param mapY Y-Map-Koordinate, die getestet wird
-     * @return true, wenn die Kachel innerhalb des Einzugsgebiets liegt; sonst false
+     * @param mapCoords Map-Koordinaten, die getestet wird
+     * @return `true`, wenn die Kachel innerhalb des Einzugsgebiets liegt; sonst `false`
      */
-    bool isInsideCatchmentArea(ConfigMgr* configMgr, int mapX, int mapY) const;
+    bool isInsideCatchmentArea(const ConfigMgr* configMgr, const MapCoords& mapCoords) const;
     
     /**
      * @brief Testet, ob ein bestimmtes Map-Objekt innerhalb des Einzugsgebiets des Gebäudes liegt. Dies ist immer dann
      * der Fall, wenn mindestens eine Kachel des Mapobjekts im Einzuggebiet liegt.
      *
      * @param configMgr Dependency
-     * @param mapObject Map-Objekt, was getestet wird
-     * @return true, wenn das Map-Objekt innerhalb des Einzugsgebiets liegt; sonst false
+     * @param otherMapObject Map-Objekt, was getestet wird
+     * @return `true`, wenn das Map-Objekt innerhalb des Einzugsgebiets liegt; sonst `false`
      */
-    bool isInsideCatchmentArea(ConfigMgr* configMgr, MapObject* mapObject) const;
+    bool isInsideCatchmentArea(const ConfigMgr* configMgr, const MapObject& otherMapObject) const;
 
     /**
      * @brief Prüft, ob das Gebäude ein Lagergebäude (Kontor oder Marketplatz), von welchem ALLE Waren abgeholt und

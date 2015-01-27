@@ -17,12 +17,15 @@ void MapCoordUtils::mapToScreenCoords(double mapX, double mapY, int& screenX, in
     screenY = (int) ((mapX + mapY) * IGraphicsMgr::TILE_HEIGHT_HALF);
 }
 
-void MapCoordUtils::mapToScreenCoordsCenter(int mapX, int mapY, int& screenX, int& screenY) {
-	screenX = (mapX - mapY) * IGraphicsMgr::TILE_WIDTH_HALF + IGraphicsMgr::TILE_WIDTH_HALF;
-	screenY = (mapX + mapY) * IGraphicsMgr::TILE_HEIGHT_HALF + IGraphicsMgr::TILE_HEIGHT_HALF;
+void MapCoordUtils::mapToScreenCoordsCenter(const MapCoords& mapCoords, int& screenX, int& screenY) {
+    // TODO mapCoords.toScreenCoordsCenter()
+	screenX = (mapCoords.x() - mapCoords.y()) * IGraphicsMgr::TILE_WIDTH_HALF + IGraphicsMgr::TILE_WIDTH_HALF;
+	screenY = (mapCoords.x() + mapCoords.y()) * IGraphicsMgr::TILE_HEIGHT_HALF + IGraphicsMgr::TILE_HEIGHT_HALF;
+
+    // TODO ScreenCoords abschaffen
 }
 
-void MapCoordUtils::screenToMapCoords(int screenX, int screenY, int& mapX, int& mapY) {
+MapCoords MapCoordUtils::screenToMapCoords(int screenX, int screenY) {
 	/*
 	 * Screen-Koordinaten erst in ein (TILE_WIDTH x TILE_HEIGHT)-Koordinatensystem runterrechnen
 	 * Dann gibts 8 Fälle und wir haben es. Ohne unperformante Matrizen und Projektionen :-)
@@ -61,6 +64,7 @@ void MapCoordUtils::screenToMapCoords(int screenX, int screenY, int& mapX, int& 
 	int preliminaryMapY = yInt - xInt;
 
 	// Jetzt die 8 Fälle durchgehen und ggf. noch plus-minus 1 auf x oder y
+    int mapX, mapY;
 	if (xDiff < 0.5) {
 		if (yDiff < 0.5) {
 			if (xDiff < 0.5 - yDiff) {
@@ -106,6 +110,8 @@ void MapCoordUtils::screenToMapCoords(int screenX, int screenY, int& mapX, int& 
 			}
 		}
 	}
+
+    return MapCoords(mapX, mapY);
 }
 
 void MapCoordUtils::screenToDrawCoords(
@@ -151,8 +157,7 @@ void MapCoordUtils::mapToDrawCoords(
 }
 
 void MapCoordUtils::getDrawCoordsForBuilding(Map* map, IGraphicsMgr* graphicsMgr, Building* building, Rect* rect) {
-    int mapX, mapY;
-    building->getMapCoords(mapX, mapY);
+    const MapCoords& mapCoords = building->getMapCoords();
 
 	const std::string& viewName = building->getView().getViewName();
 	const std::string graphicSetName = graphicsMgr->getGraphicSetNameForStructure(building->getStructureType());
@@ -161,12 +166,11 @@ void MapCoordUtils::getDrawCoordsForBuilding(Map* map, IGraphicsMgr* graphicsMgr
 
     const int elevation = 1; // TODO für Gebäude wie Anlegestelle, Fischerhütte etc. muss auf 0 gesetzt werden
 
-    mapToDrawCoords(map, mapX, mapY, elevation, graphic, rect);
+    // TODO mapCoords.toDrawCoords()
+    mapToDrawCoords(map, mapCoords.x(), mapCoords.y(), elevation, graphic, rect);
 }
 
-void MapCoordUtils::getMapCoordsUnderMouse(
-	Map* map, int mouseCurrentX, int mouseCurrentY, int& mouseCurrentMapX, int& mouseCurrentMapY) {
-
+MapCoords MapCoordUtils::getMapCoordsUnderMouse(Map* map, int mouseCurrentX, int mouseCurrentY) {
     int screenZoom = map->getScreenZoom();
 
     int mouseScreenX = (mouseCurrentX * screenZoom) + map->getScreenOffsetX();
@@ -175,7 +179,5 @@ void MapCoordUtils::getMapCoordsUnderMouse(
     // Wir machen es wie Anno 1602: Für die Position, wo der Mauszeiger steht, wird immer die elevatete Position
     // genommen, selbst, wenn wir uns auf dem Wasser befinden.
     const int elevation = 1;
-    MapCoordUtils::screenToMapCoords(
-        mouseScreenX, mouseScreenY + elevation * IGraphicsMgr::ELEVATION_HEIGHT / screenZoom,
-        mouseCurrentMapX, mouseCurrentMapY);
+    return screenToMapCoords(mouseScreenX, mouseScreenY + elevation * IGraphicsMgr::ELEVATION_HEIGHT / screenZoom);
 }

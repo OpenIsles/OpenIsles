@@ -58,20 +58,20 @@ void Map::initNewMap(int newWidth, int newHeight) {
 	screenOffsetY = 0;
 }
 
-bool Map::checkMapCoords(int mapX, int mapY) const {
-    return (!(mapX < 0 || mapY < 0 || mapX >= width || mapY >= height));
+bool Map::checkMapCoords(const MapCoords& mapCoords) const {
+    return (!(mapCoords.x() < 0 || mapCoords.y() < 0 || mapCoords.x() >= width || mapCoords.y() >= height));
 }
 
-MapTile* Map::getMapTileAt(int mapX, int mapY) const {
-    if (!checkMapCoords(mapX, mapY)) {
+MapTile* Map::getMapTileAt(const MapCoords& mapCoords) const {
+    if (!checkMapCoords(mapCoords)) {
         return nullptr;
     }
     
-    return mapTiles->getData(mapX, mapY, nullptr);
+    return mapTiles->getData(mapCoords.x(), mapCoords.y(), nullptr);
 }
 
-MapObject* Map::getMapObjectAt(int mapX, int mapY) const {
-    MapTile* mapTile = getMapTileAt(mapX, mapY);
+MapObject* Map::getMapObjectAt(const MapCoords& mapCoords) const {
+    MapTile* mapTile = getMapTileAt(mapCoords);
     if (mapTile == nullptr) {
         return nullptr;
     }
@@ -96,28 +96,28 @@ void Map::addMapObject(MapObject* mapObject) {
     mapObject->getMapCoords(mapX, mapY, mapWidth, mapHeight);
 
     // Fläche auf den MapTiles als belegt markieren
+    // TODO hübschen Iterator für MapCoords schreiben, den wir dann auch für die 4 unterschiedlichen for-Schleifen zum Rendern der Map aus unterschiedlichen Views brauchen
     for (int my = mapY; my < mapY + mapHeight; my++) {
         for (int mx = mapX; mx < mapX + mapWidth; mx++) {
-            getMapTileAt(mx, my)->mapObject = mapObject;
+            getMapTileAt(MapCoords(mx, my))->mapObject = mapObject;
         }
     }
 }
 
 void Map::addOfficeCatchmentAreaToMap(const Building& building) {
-    int buildingMapX, buildingMapY;
-    building.getMapCoords(buildingMapX, buildingMapY);
+    const MapCoords& mapCoords = building.getMapCoords();
     
     const BuildingConfig* buildingConfig = context->configMgr->getBuildingConfig(building.getStructureType());
     RectangleData<char>* catchmentArea = buildingConfig->getCatchmentArea();
     
     // TODO Sehr hässlich, aber tuts erstmal sicher, ohne Gefahr.
-    for (int mapY = buildingMapY - catchmentArea->height/2 - 1;
-             mapY <= buildingMapY + catchmentArea->height/2 + 1; mapY++) {
+    for (int mapY = mapCoords.y() - catchmentArea->height/2 - 1;
+             mapY <= mapCoords.y() + catchmentArea->height/2 + 1; mapY++) {
         
-        for (int mapX = buildingMapX - catchmentArea->width/2 - 1;
-                 mapX <= buildingMapX + catchmentArea->width/2 + 1; mapX++) {
+        for (int mapX = mapCoords.x() - catchmentArea->width/2 - 1;
+                 mapX <= mapCoords.x() + catchmentArea->width/2 + 1; mapX++) {
             
-            if (!building.isInsideCatchmentArea(context->configMgr, mapX, mapY)) {
+            if (!building.isInsideCatchmentArea(context->configMgr, MapCoords(mapX, mapY))) {
                 continue;
             }
             
@@ -158,8 +158,8 @@ void Map::clearMap() {
     isles.clear();
 }
 
-bool Map::isStreetAt(int mapX, int mapY) {
-    MapObject* mapObject = getMapObjectAt(mapX, mapY);
+bool Map::isStreetAt(const MapCoords& mapCoords) {
+    MapObject* mapObject = getMapObjectAt(mapCoords);
     if (mapObject == nullptr) {
         return false;
     }

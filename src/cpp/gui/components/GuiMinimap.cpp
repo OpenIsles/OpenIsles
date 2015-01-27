@@ -5,6 +5,7 @@
 #include "graphics/renderer/sdl/SDLRenderer.h"
 #include "gui/GuiMgr.h"
 #include "gui/components/GuiMinimap.h"
+#include "map/coords/MapCoords.h"
 #include "map/Map.h"
 #include "utils/Consts.h"
 
@@ -41,33 +42,27 @@ void GuiMinimap::renderElement(IRenderer* renderer) {
     SDL_RenderCopy(sdlRealRenderer, minimapTexture, nullptr, &sdlMinimapClipRect);
 
     // Aktuellen Ausschnitt bestimmen
-    // TODO Duplicate-Code refactorn, (x/y)-Tuple für MapCoords einführen, Rect (top, left, right, bottom) von Punkten einführen
-    int mapXTopLeft, mapYTopLeft, mapXTopRight, mapYTopRight;
-    int mapXBottomLeft, mapYBottomLeft, mapXBottomRight, mapYBottomRight;
+    // TODO Duplicate-Code refactorn, Rect (top, left, right, bottom) von Punkten einführen
 
-    MapCoordUtils::screenToMapCoords(
-        screenOffsetX, screenOffsetY,
-        mapXTopLeft, mapYTopLeft);
-    MapCoordUtils::screenToMapCoords(
-        (Consts::mapClipRect.w * screenZoom) + screenOffsetX, screenOffsetY,
-        mapXTopRight, mapYTopRight);
-    MapCoordUtils::screenToMapCoords(
-        screenOffsetX, (Consts::mapClipRect.h * screenZoom) + screenOffsetY,
-        mapXBottomLeft, mapYBottomLeft);
-    MapCoordUtils::screenToMapCoords(
-        (Consts::mapClipRect.w * screenZoom) + screenOffsetX, (Consts::mapClipRect.h * screenZoom) + screenOffsetY,
-        mapXBottomRight, mapYBottomRight);
+    MapCoords mapCoordsTopLeft =
+        MapCoordUtils::screenToMapCoords(screenOffsetX, screenOffsetY);
+    MapCoords mapCoordsTopRight =
+        MapCoordUtils::screenToMapCoords((Consts::mapClipRect.w * screenZoom) + screenOffsetX, screenOffsetY);
+    MapCoords mapCoordsBottomLeft = MapCoordUtils::screenToMapCoords(
+        screenOffsetX, (Consts::mapClipRect.h * screenZoom) + screenOffsetY);
+    MapCoords mapCoordsBottomRight = MapCoordUtils::screenToMapCoords(
+        (Consts::mapClipRect.w * screenZoom) + screenOffsetX, (Consts::mapClipRect.h * screenZoom) + screenOffsetY);
 
     float scaleFactor = (float) map->getWidth() / (float) width;
     SDL_Point points[5] = {
-        { windowX + (int) ((float) mapXTopLeft / scaleFactor),
-            windowY + (int) ((float) mapYTopLeft / scaleFactor) },
-        { windowX + (int) ((float) mapXTopRight / scaleFactor),
-            windowY + (int) ((float) mapYTopRight / scaleFactor) },
-        { windowX + (int) ((float) mapXBottomRight / scaleFactor),
-            windowY + (int) ((float) mapYBottomRight / scaleFactor) },
-        { windowX + (int) ((float) mapXBottomLeft / scaleFactor),
-            windowY + (int) ((float) mapYBottomLeft / scaleFactor) }
+        { windowX + (int) ((float) mapCoordsTopLeft.x() / scaleFactor),
+            windowY + (int) ((float) mapCoordsTopLeft.y() / scaleFactor) },
+        { windowX + (int) ((float) mapCoordsTopRight.x() / scaleFactor),
+            windowY + (int) ((float) mapCoordsTopRight.y() / scaleFactor) },
+        { windowX + (int) ((float) mapCoordsBottomRight.x() / scaleFactor),
+            windowY + (int) ((float) mapCoordsBottomRight.y() / scaleFactor) },
+        { windowX + (int) ((float) mapCoordsBottomLeft.x() / scaleFactor),
+            windowY + (int) ((float) mapCoordsBottomLeft.y() / scaleFactor) }
     };
     points[4] = points[0];
     renderer->setDrawColor(Color(192, 128, 0, 255));
@@ -108,7 +103,7 @@ void GuiMinimap::updateMinimapTexture() {
             int mapX = (int) ((float) xx * scaleFactor);
             int mapY = (int) ((float) yy * scaleFactor);
 
-            MapTile* mapTile = map->getMapTileAt(mapX, mapY);
+            MapTile* mapTile = map->getMapTileAt(MapCoords(mapX, mapY));
 
             const MapTileConfig* mapTileConfig = mapTile->getMapTileConfig();
             Player* player = mapTile->player;

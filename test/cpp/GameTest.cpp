@@ -1,4 +1,5 @@
 #include "GameTest.h"
+#include "map/coords/MapCoords.h"
 
 TEST_F(GameTest, SetUp) {
     // Checken, ob die Karte und die Objekte ordentlich geladen sind
@@ -10,12 +11,12 @@ TEST_F(GameTest, SetUp) {
     ASSERT_FALSE(map->getMapObjects().empty());
 
     // Kachel, wo keine Insel ist
-    MapTile* mapTileAtSea = map->getMapTileAt(92, 8);
+    MapTile* mapTileAtSea = map->getMapTileAt(MapCoords(92, 8));
 
     ASSERT_TRUE(mapTileAtSea->isle == nullptr);
 
     // Kachel, wo sich ein Kontor I befinden sollte
-    MapTile* mapTileOnOffice1 = map->getMapTileAt(29, 19);
+    MapTile* mapTileOnOffice1 = map->getMapTileAt(MapCoords(29, 19));
     ASSERT_TRUE(mapTileOnOffice1->isle != nullptr);
 
     MapObject* mapObjectOffice1 = mapTileOnOffice1->mapObject;

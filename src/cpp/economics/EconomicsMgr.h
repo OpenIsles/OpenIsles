@@ -53,10 +53,9 @@ struct FindBuildingToGetGoodsFromResult {
      * @return Ausgabestream, sodass das Chaining funktioniert
      */
     friend std::ostream& operator<< (std::ostream& outputStream, FindBuildingToGetGoodsFromResult const& result) {
-        int mapX, mapY;
-        result.building->getMapCoords(mapX, mapY);
+        const MapCoords& mapCoords = result.building->getMapCoords();
 
-        return outputStream << "{ building = (" << mapX << ", " << mapY << "), routeLen = " <<
+        return outputStream << "{ building = (" << mapCoords.x() << ", " << mapCoords.y() << "), routeLen = " <<
             result.route->size() << ", goods = ( goodsType = " << result.goodsSlot.goodsType <<
             ", inventory = " << result.goodsSlot.inventory << " of " << result.goodsSlot.capacity <<
             ", ratio = " << (result.goodsSlot.inventory / result.goodsSlot.capacity) <<

@@ -5,6 +5,7 @@
 #include "economics/EconomicsMgr.h"
 #include "game/Colony.h"
 #include "game/Game.h"
+#include "map/coords/MapCoords.h"
 #include "map/Map.h"
 
 
@@ -101,10 +102,10 @@ void EconomicsMgr::updateCarrier(Building* building) {
         FindBuildingToGetGoodsFromResult result = findBuildingToGetGoodsFrom(building);
         if (result.building != nullptr) {
             // Träger anlegen und zuweisen
-            MapCoordinate firstHopOnRoute = result.route->front();
+            const MapCoords& firstHopOnRoute = result.route->front();
 
             Carrier* carrier = new Carrier(result.building, result.route, result.goodsSlot.goodsType, true);
-            carrier->setMapCoords(firstHopOnRoute.mapX, firstHopOnRoute.mapY);
+            carrier->setMapCoords(firstHopOnRoute);
             carrier->setAnimation(
                 context->graphicsMgr->getGraphicSet(isStorageBuilding ? "cart-without-cargo" : "carrier")->getStatic());
 
@@ -135,9 +136,9 @@ void EconomicsMgr::updateCarrier(Building* building) {
         // Bewegen
         double speed = 0.75; // erstmal fix, die Animation muss man eh nochmal anpassen, weil das Männchen mehr schwebt, als läuft
 
-        MapCoordinate nextHopOnRoute = *carrier->nextHopInRoute;
-        double stepX = speed * (nextHopOnRoute.mapX - carrier->mapX);
-        double stepY = speed * (nextHopOnRoute.mapY - carrier->mapY);
+        const MapCoords& nextHopOnRoute = *carrier->nextHopInRoute;
+        double stepX = speed * (nextHopOnRoute.x() - carrier->mapCoords.x());
+        double stepY = speed * (nextHopOnRoute.y() - carrier->mapCoords.y());
 
         // TODO Wir machen einen minimalen Fehler, dass wir bei Erreichen der nächsten Kachel, wieder auf 0 setzen
         // und nicht versuchen, den "Rest" der vergangenen Zeit anzuwenden und ein Stückchen weiterzulaufen.
@@ -146,22 +147,23 @@ void EconomicsMgr::updateCarrier(Building* building) {
         carrier->mapYFraction += (double) ticksPastSinceLastUpdate / oneSecondTicks * stepY;
         bool hopReached = false;
 
+        MapCoords& carrierMapCoords = carrier->getMapCoords();
         if (carrier->mapXFraction <= -1) {
             carrier->mapXFraction = 0;
-            carrier->mapX--;
+            carrierMapCoords.subX(1);
             hopReached = true;
         } else if (carrier->mapXFraction >= 1) {
             carrier->mapXFraction = 0;
-            carrier->mapX++;
+            carrierMapCoords.addX(1);
             hopReached = true;
         }
         if (carrier->mapYFraction <= -1) {
             carrier->mapYFraction = 0;
-            carrier->mapY--;
+            carrierMapCoords.subY(1);
             hopReached = true;
         } else if (carrier->mapYFraction >= 1) {
             carrier->mapYFraction = 0;
-            carrier->mapY++;
+            carrierMapCoords.addY(1);
             hopReached = true;
         }
 
@@ -171,7 +173,7 @@ void EconomicsMgr::updateCarrier(Building* building) {
 
             // Route fertig?
             if (carrier->nextHopInRoute == carrier->route->cend()) {
-                MapTile* mapTile = context->game->getMap()->getMapTileAt(carrier->mapX, carrier->mapY);
+                MapTile* mapTile = context->game->getMap()->getMapTileAt(carrierMapCoords);
                 Building* targetBuilding = dynamic_cast<Building*>(mapTile->mapObject);
 
                 // targetBuilding == nullptr -> Nutzer hat die Map inzwischen geändert und das Zielgebäude abgerissen
@@ -226,11 +228,11 @@ void EconomicsMgr::updateCarrier(Building* building) {
                     // Es kann sein, dass es keine Rückroute gibt, wenn der Nutzer inzwischen die Map verändert hat.
                     // In diesem Fall hat er Pech gehabt, die Waren verschwinden mit dem Träger
                     if (returnRoute != nullptr) {
-                        MapCoordinate firstHopOnReturnRoute = returnRoute->front();
+                        const MapCoords& firstHopOnReturnRoute = returnRoute->front();
 
                         Carrier* returnCarrier = new Carrier(
                             building, returnRoute, goodsSlotToTakeFrom->goodsType, false);
-                        returnCarrier->setMapCoords(firstHopOnReturnRoute.mapX, firstHopOnReturnRoute.mapY);
+                        returnCarrier->setMapCoords(firstHopOnReturnRoute);
                         returnCarrier->setAnimation(
                             context->graphicsMgr->getGraphicSet(isStorageBuilding ? "cart-with-cargo" : "carrier")->getStatic());
                         returnCarrier->carriedGoods.inventory = goodsWeCollect;
@@ -339,7 +341,7 @@ FindBuildingToGetGoodsFromResult EconomicsMgr::findBuildingToGetGoodsFrom(Buildi
             mapY += y - (catchmentArea->height - mapHeight) / 2;
 
             // Gebäude da?
-            MapTile* mapTile = map->getMapTileAt(mapX, mapY);
+            MapTile* mapTile = map->getMapTileAt(MapCoords(mapX, mapY));
             if (mapTile == nullptr) {
                 continue;
             }
@@ -407,15 +409,10 @@ FindBuildingToGetGoodsFromResult EconomicsMgr::findBuildingToGetGoodsFrom(Buildi
             }
 
             // Checken, ob eine Route dahin existiert
-            int mapXSource, mapYSource;
-            building->getMapCoords(mapXSource, mapYSource);
-            MapCoordinate mapCoordinateSource = MapCoordinate(mapXSource, mapYSource);
+            const MapCoords& mapCoordsSource = building->getMapCoords();
+            const MapCoords& mapCoordsDestination = buildingThere->getMapCoords();
 
-            int mapXDestination, mapYDestination;
-            buildingThere->getMapCoords(mapXDestination, mapYDestination);
-            MapCoordinate mapCoordinateDestination = MapCoordinate(mapXDestination, mapYDestination);
-
-            AStar* aStar = new AStar(context, mapCoordinateSource, mapCoordinateDestination, building, isStorageBuilding);
+            AStar* aStar = new AStar(context, mapCoordsSource, mapCoordsDestination, building, isStorageBuilding);
             aStar->cutRouteInsideBuildings();
             Route* route = aStar->getRoute();
             delete aStar;
@@ -514,10 +511,9 @@ FindBuildingToGetGoodsFromResult EconomicsMgr::findBuildingToGetGoodsFrom(Buildi
     FindBuildingToGetGoodsFromResult bestResult = potentialResults.front();
 
 #ifdef DEBUG_ECONOMICS
-    int mapX, mapY;
-    building->getMapCoords(mapX, mapY);
+    const MapCoords& mapCoords = building->getMapCoords();
 
-    std::cout << "potentialResults for (" << mapX << ", " << mapY << "):" << std::endl;
+    std::cout << "potentialResults for (" << mapCoords.x() << ", " << mapCoords.y() << "):" << std::endl;
 
     int i = 1;
     for (auto iter = potentialResults.cbegin(); iter != potentialResults.cend(); iter++, i++) {

@@ -7,6 +7,7 @@
 #include "graphics/renderer/sdl/SDLRenderer.h"
 #include "gui/GuiMgr.h"
 #include "gui/components/GuiMap.h"
+#include "map/coords/MapCoords.h"
 #include "map/Map.h"
 #include "utils/Consts.h"
 #include "utils/StringFormat.h"
@@ -42,27 +43,21 @@ void GuiMap::renderElement(IRenderer* renderer) {
      * und End-Map-Koordinaten zu ermitteln. Damit gehen wir zwar immer noch über mehr Kacheln, als auf dem Bildschirm
      * sind, aber besser als nix :-)
      */
-    // TODO Duplicate-Code refactorn, (x/y)-Tuple für MapCoords einführen, Rect (top, left, right, bottom) von Punkten einführen
-    int mapXTopLeft, mapYTopLeft, mapXTopRight, mapYTopRight;
-    int mapXBottomLeft, mapYBottomLeft, mapXBottomRight, mapYBottomRight;
+    // TODO Duplicate-Code refactorn, Rect (top, left, right, bottom) von Punkten einführen
 
-    MapCoordUtils::screenToMapCoords(
-        screenOffsetX, screenOffsetY,
-        mapXTopLeft, mapYTopLeft);
-    MapCoordUtils::screenToMapCoords(
-        (Consts::mapClipRect.w * screenZoom) + screenOffsetX, screenOffsetY,
-        mapXTopRight, mapYTopRight);
-    MapCoordUtils::screenToMapCoords(
-        screenOffsetX, (Consts::mapClipRect.h * screenZoom) + screenOffsetY,
-        mapXBottomLeft, mapYBottomLeft);
-    MapCoordUtils::screenToMapCoords(
-        (Consts::mapClipRect.w * screenZoom) + screenOffsetX, (Consts::mapClipRect.h * screenZoom) + screenOffsetY,
-        mapXBottomRight, mapYBottomRight);
+    MapCoords mapCoordsTopLeft =
+        MapCoordUtils::screenToMapCoords(screenOffsetX, screenOffsetY);
+    MapCoords mapCoordsTopRight =
+        MapCoordUtils::screenToMapCoords((Consts::mapClipRect.w * screenZoom) + screenOffsetX, screenOffsetY);
+    MapCoords mapCoordsBottomLeft = MapCoordUtils::screenToMapCoords(
+        screenOffsetX, (Consts::mapClipRect.h * screenZoom) + screenOffsetY);
+    MapCoords mapCoordsBottomRight = MapCoordUtils::screenToMapCoords(
+        (Consts::mapClipRect.w * screenZoom) + screenOffsetX, (Consts::mapClipRect.h * screenZoom) + screenOffsetY);
 
-    int mapXStart = std::max(mapXTopLeft, 0);
-    int mapYStart = std::max(mapYTopRight, 0);
-    int mapXEnd = std::min(mapXBottomRight + 1, (int) (map->getWidth() - 1)); // am Ende jeweils +1 rechnen, um der Elevation
-    int mapYEnd = std::min(mapYBottomLeft + 1, (int) (map->getHeight() - 1)); // entgegen zu wirken. Ohne das würde unten was fehlen.
+    int mapXStart = std::max(mapCoordsTopLeft.x(), 0);
+    int mapYStart = std::max(mapCoordsTopRight.y(), 0);
+    int mapXEnd = std::min(mapCoordsBottomRight.x() + 1, (int) (map->getWidth() - 1)); // am Ende jeweils +1 rechnen, um der Elevation
+    int mapYEnd = std::min(mapCoordsBottomLeft.y() + 1, (int) (map->getHeight() - 1)); // entgegen zu wirken. Ohne das würde unten was fehlen.
 
     // Nur die Kartenfläche vollmalen
     Rect sdlMapClipRect(Consts::mapClipRect);
@@ -72,7 +67,8 @@ void GuiMap::renderElement(IRenderer* renderer) {
     // Kacheln rendern
     for (int mapY = mapYStart; mapY <= mapYEnd; mapY++) {
         for (int mapX = mapXStart; mapX <= mapXEnd; mapX++) {
-            const MapTile* mapTile = map->getMapTileAt(mapX, mapY);
+            MapCoords mapCoords = MapCoords(mapX, mapY);
+            const MapTile* mapTile = map->getMapTileAt(mapCoords);
             const Animation* tileAnimation = mapTile->getTileAnimationForView(0); // TODO später Drehung der View
             const IGraphic* tileGraphic = tileAnimation->getGraphic();
 
@@ -91,7 +87,7 @@ void GuiMap::renderElement(IRenderer* renderer) {
             int drawingFlags = 0;
             if (selectedMapObject != nullptr) {
                 bool insideCatchmentArea =
-                    (selectedBuilding != nullptr && selectedBuilding->isInsideCatchmentArea(context->configMgr, mapX, mapY));
+                    (selectedBuilding != nullptr && selectedBuilding->isInsideCatchmentArea(context->configMgr, mapCoords));
 
                 if (!insideCatchmentArea) {
                     drawingFlags |= IGraphic::DRAWING_FLAG_DARKENED;
@@ -104,12 +100,11 @@ void GuiMap::renderElement(IRenderer* renderer) {
     // Postionieren wir grade ein neues Gebäude?
     Structure* structureBeingAdded = nullptr;
     if (context->guiMgr->getPanelState().selectedPanelButton == PanelButton::ADD_BUILDING) {
-        int mapX, mapY;
-        MapCoordUtils::getMapCoordsUnderMouse(map, context->mouseCurrentX, context->mouseCurrentY, mapX, mapY);
+        MapCoords mapCoords = MapCoordUtils::getMapCoordsUnderMouse(map, context->mouseCurrentX, context->mouseCurrentY);
 
         StructureType structureType = context->guiMgr->getPanelState().addingStructure;
         const FourDirectionsView& view = context->guiMgr->getPanelState().addingStructureView;
-        unsigned char allowedToPlaceStructure = isAllowedToPlaceStructure(mapX, mapY, structureType, view);
+        unsigned char allowedToPlaceStructure = isAllowedToPlaceStructure(mapCoords, structureType, view);
 
         // Auf dem Ozean malen wir gar nix.
         // Is was im Weg, malen wir auch nicht. // TODO wir müssen eine flache Kachel malen, sonst sieht man ja gar nix
@@ -130,7 +125,7 @@ void GuiMap::renderElement(IRenderer* renderer) {
             // Zu zeichnendes Gebäude erstellen
             structureBeingAdded = new Structure();
             structureBeingAdded->setStructureType(structureType);
-            structureBeingAdded->setMapCoords(mapX, mapY, graphic->getMapWidth(), graphic->getMapHeight());
+            structureBeingAdded->setMapCoords(mapCoords, graphic->getMapWidth(), graphic->getMapHeight());
             structureBeingAdded->setDrawingFlags(drawingFlags);
             structureBeingAdded->setView(context->guiMgr->getPanelState().addingStructureView);
         }
@@ -143,7 +138,8 @@ void GuiMap::renderElement(IRenderer* renderer) {
     // TODO Start und End noch ein wenig weiter ausweiten?
     for (int mapY = mapYStart; mapY <= mapYEnd; mapY++) {
         for (int mapX = mapXStart; mapX <= mapXEnd; mapX++) {
-            MapObject* mapObject = map->getMapObjectAt(mapX, mapY);
+            MapCoords mapCoords = MapCoords(mapX, mapY);
+            MapObject* mapObject = map->getMapObjectAt(mapCoords);
             if (mapObject == nullptr) {
                 // Positionieren wir hier ein neues Gebäude?
                 if (structureBeingAdded != nullptr) {
@@ -179,7 +175,7 @@ void GuiMap::renderElement(IRenderer* renderer) {
 
             // Sonderfall: Straße
             if (structureType == StructureType::STREET) {
-                structureType = getConcreteStreetStructureType(mapX, mapY, structureType);
+                structureType = getConcreteStreetStructureType(mapCoords, structureType);
             }
 
             const std::string& viewName = structure->getView().getViewName();  // TODO view+rotation
@@ -210,7 +206,7 @@ void GuiMap::renderElement(IRenderer* renderer) {
 
             if (selectedMapObject != nullptr) {
                 bool insideCatchmentArea =
-                    (selectedBuilding != nullptr && selectedBuilding->isInsideCatchmentArea(context->configMgr, structure));
+                    (selectedBuilding != nullptr && selectedBuilding->isInsideCatchmentArea(context->configMgr, *structure));
 
                 if (!insideCatchmentArea) {
                     drawingFlags |= IGraphic::DRAWING_FLAG_DARKENED;
@@ -243,15 +239,14 @@ void GuiMap::renderElement(IRenderer* renderer) {
             continue;
         }
 
-        int mapX, mapY;
-        carrier->getMapCoords(mapX, mapY);
-
+        // TODO XYCoords + <template> + double = :-)
+        const MapCoords& mapCoords = carrier->getMapCoords();
         const Animation* animation = carrier->getAnimation();
         const IGraphic* animationCurrentFrame = animation->getFrame((unsigned int) carrier->animationFrame);
 
         Rect rect;
-        double mapXExact = (double) mapX + carrier->mapXFraction;
-        double mapYExact = (double) mapY + carrier->mapYFraction;
+        double mapXExact = (double) mapCoords.x() + carrier->mapXFraction;
+        double mapYExact = (double) mapCoords.y() + carrier->mapYFraction;
 
         MapCoordUtils::mapToDrawCoords(map, mapXExact, mapYExact, 1, animationCurrentFrame, &rect);
 
@@ -282,10 +277,10 @@ void GuiMap::renderElement(IRenderer* renderer) {
 
         int i = 1;
         for (auto iter = routeToDraw->cbegin(); iter != routeToDraw->cend(); iter++) {
-            MapCoordinate mapCoordinate = *iter;
+            const MapCoords& mapCoords = *iter;
 
             int screenX, screenY;
-            MapCoordUtils::mapToScreenCoordsCenter(mapCoordinate.mapX, mapCoordinate.mapY, screenX, screenY);
+            MapCoordUtils::mapToScreenCoordsCenter(mapCoords, screenX, screenY);
 
             screenX -= screenOffsetX;
             screenY -= screenOffsetY;
@@ -341,10 +336,9 @@ void GuiMap::onClickInMap(int mouseX, int mouseY) {
 
     // Grade beim Platzieren eines neuen Gebäudes?
     if (context->guiMgr->getPanelState().selectedPanelButton == PanelButton::ADD_BUILDING) {
-        int mapX, mapY;
-        MapCoordUtils::getMapCoordsUnderMouse(map, context->mouseCurrentX, context->mouseCurrentY, mapX, mapY);
+        MapCoords mapCoords = MapCoordUtils::getMapCoordsUnderMouse(map, context->mouseCurrentX, context->mouseCurrentY);
 
-        onClickInMapWhileAddingStructure(mapX, mapY);
+        onClickInMapWhileAddingStructure(mapCoords);
         return;
     }
 
@@ -402,10 +396,10 @@ void GuiMap::onClickInMap(int mouseX, int mouseY) {
     context->game->setSelectedMapObject(nullptr);
 }
 
-void GuiMap::onClickInMapWhileAddingStructure(int mapX, int mapY) {
+void GuiMap::onClickInMapWhileAddingStructure(const MapCoords& mapCoords) {
     const FourDirectionsView& view = context->guiMgr->getPanelState().addingStructureView;
     StructureType structureType = context->guiMgr->getPanelState().addingStructure;
-    if (isAllowedToPlaceStructure(mapX, mapY, structureType, view) != PLACING_STRUCTURE_ALLOWED) {
+    if (isAllowedToPlaceStructure(mapCoords, structureType, view) != PLACING_STRUCTURE_ALLOWED) {
         // Dürfen wir hier/jetzt nicht setzen, ignorieren wir den Klick
         return;
     }
@@ -423,20 +417,21 @@ void GuiMap::onClickInMapWhileAddingStructure(int mapX, int mapY) {
         structureType = (StructureType) randomPioneerHouse(randomEngine);
     }
 
-    context->game->addStructure(mapX, mapY, structureType, view, currentPlayer);
+    context->game->addStructure(mapCoords, structureType, view, currentPlayer);
 
 
     // Resourcen bezahlen
-    Colony* colony = context->game->getColony(currentPlayer, context->game->getMap()->getMapTileAt(mapX, mapY)->isle);
+    Colony* colony = context->game->getColony(
+        currentPlayer, context->game->getMap()->getMapTileAt(mapCoords)->isle);
     const BuildingCosts* buildingCosts = context->configMgr->getBuildingConfig(structureType)->getBuildingCosts();
     currentPlayer->coins -= buildingCosts->coins;
     colony->subtractBuildingCosts(buildingCosts);
 }
 
 unsigned char GuiMap::isAllowedToPlaceStructure(
-    int mapX, int mapY, StructureType structureType, const FourDirectionsView& view) {
+    const MapCoords& mapCoords, StructureType structureType, const FourDirectionsView& view) const {
 
-    MapTile* mapTile = context->game->getMap()->getMapTileAt(mapX, mapY);
+    MapTile* mapTile = context->game->getMap()->getMapTileAt(mapCoords);
     if (mapTile == nullptr) {
         return PLACING_STRUCTURE_OUTSIDE_OF_ISLE;
     }
@@ -467,9 +462,9 @@ unsigned char GuiMap::isAllowedToPlaceStructure(
     const std::string graphicSetName = context->graphicsMgr->getGraphicSetNameForStructure(structureType);
     const GraphicSet* graphicSet = context->graphicsMgr->getGraphicSet(graphicSetName);
     const IGraphic* graphic = graphicSet->getByView(viewName)->getGraphic();
-    for (int y = mapY; y < mapY + graphic->getMapHeight(); y++) {
-        for (int x = mapX; x < mapX + graphic->getMapWidth(); x++) {
-            MapTile* mapTile = context->game->getMap()->getMapTileAt(x, y);
+    for (int y = mapCoords.y(); y < mapCoords.y() + graphic->getMapHeight(); y++) {
+        for (int x = mapCoords.x(); x < mapCoords.x() + graphic->getMapWidth(); x++) {
+            MapTile* mapTile = context->game->getMap()->getMapTileAt(MapCoords(x, y));
 
             if (mapTile->mapObject != nullptr) {                  // Da steht was im Weg
                 result |= PLACING_STRUCTURE_SOMETHING_IN_THE_WAY;
@@ -555,7 +550,9 @@ void GuiMap::drawCatchmentArea(IRenderer* const renderer, Structure* structure) 
     }
 }
 
-StructureType GuiMap::getConcreteStreetStructureType(int mapX, int mapY, StructureType abstractStreetStructureType) {
+StructureType GuiMap::getConcreteStreetStructureType(
+    const MapCoords& mapCoords, StructureType abstractStreetStructureType) const {
+
     if (abstractStreetStructureType == StructureType::STREET) {
         static const StructureType structureTypeMap[16] = {
             STREET_STRAIGHT_90, // oder STREET_STRAIGHT_0, is in diesem Fall egal. TODO Sollte später mit der Drehfunktion genauer untersucht werden
@@ -577,10 +574,10 @@ StructureType GuiMap::getConcreteStreetStructureType(int mapX, int mapY, Structu
         };
 
         Map* map = context->game->getMap();
-        char isStreetAbove = map->isStreetAt(mapX, mapY - 1) ? 1 : 0; // Bit 0
-        char isStreetRight = map->isStreetAt(mapX + 1, mapY) ? 1 : 0; // Bit 1
-        char isStreetLeft = map->isStreetAt(mapX - 1, mapY) ? 1 : 0;  // Bit 2
-        char isStreetBelow = map->isStreetAt(mapX, mapY + 1) ? 1 : 0; // Bit 3
+        char isStreetAbove = map->isStreetAt(MapCoords(mapCoords.x(), mapCoords.y() - 1)) ? 1 : 0; // Bit 0
+        char isStreetRight = map->isStreetAt(MapCoords(mapCoords.x() + 1, mapCoords.y())) ? 1 : 0; // Bit 1
+        char isStreetLeft = map->isStreetAt(MapCoords(mapCoords.x() - 1, mapCoords.y())) ? 1 : 0;  // Bit 2
+        char isStreetBelow = map->isStreetAt(MapCoords(mapCoords.x(), mapCoords.y() + 1)) ? 1 : 0; // Bit 3
 
         int index = (isStreetBelow << 3) | (isStreetLeft << 2) | (isStreetRight << 1) | isStreetAbove;
 

@@ -111,8 +111,7 @@ void GameIO::loadMap(
 
         const char* nodeType = objectNode->first_attribute("type", 4, true)->value();
 
-        int mapX, mapY;
-        getMapCoordsFromObjectNode(objectNode, mapX, mapY);
+        MapCoords mapCoords = getMapCoordsFromObjectNode(objectNode);
 
         // Insel
         if (strcmp(nodeType, "isle") == 0) {
@@ -144,11 +143,11 @@ void GameIO::loadMap(
             }
 
             // Insel zur Karte hinzufügen
-            isle->setMapCoords(mapX, mapY, isleMapWidth, isleMapHeight);
+            isle->setMapCoords(mapCoords, isleMapWidth, isleMapHeight);
             map->isles.push_back(isle);
 
-            for (int my = mapY, isleY = 0; my < mapY + isleMapHeight; my++, isleY++) {
-                for (int mx = mapX, isleX = 0; mx < mapX + isleMapWidth; mx++, isleX++) {
+            for (int my = mapCoords.y(), isleY = 0; my < mapCoords.y() + isleMapHeight; my++, isleY++) {
+                for (int mx = mapCoords.x(), isleX = 0; mx < mapCoords.x() + isleMapWidth; mx++, isleX++) {
                     MapTile* mapTile = map->mapTiles->getData(mx, my, nullptr);
 
                     unsigned char tileIndex = isle->getTileAt(isleX, isleY);
@@ -173,7 +172,7 @@ void GameIO::loadMap(
             // Startpunkt: Diesen Punkt wollen wir auf den Bildschirm zentrieren
         else if (strcmp(nodeType, "startpoint") == 0) {
             int screenCenterX, screenCenterY;
-            MapCoordUtils::mapToScreenCoordsCenter(mapX, mapY, screenCenterX, screenCenterY);
+            MapCoordUtils::mapToScreenCoordsCenter(mapCoords, screenCenterX, screenCenterY);
 
             map->screenOffsetX = screenCenterX - (Consts::mapClipRect.w / 2);
             map->screenOffsetY = screenCenterY - (Consts::mapClipRect.h / 2);
@@ -193,13 +192,12 @@ void GameIO::loadColonies(Game* game, rapidxml::xml_node<>* objectgroupColoniesN
             continue;
         }
 
-        int mapX, mapY;
-        getMapCoordsFromObjectNode(objectNode, mapX, mapY);
+        MapCoords mapCoords = getMapCoordsFromObjectNode(objectNode);
 
         rapidxml::xml_node<>* propertiesNode = objectNode->first_node("properties", 10, true);
         int playerNr = atoi(getPropertyValueFromPropertiesNode(propertiesNode, "player"));
         Player* player = game->getPlayer(playerNr - 1);
-        MapTile* mapTile = map->mapTiles->getData(mapX, mapY, nullptr);
+        MapTile* mapTile = map->mapTiles->getData(mapCoords.x(), mapCoords.y(), nullptr);
 
         // Siedlung anlegen
         Colony* colony = game->foundNewColony(player, mapTile->isle);
@@ -235,8 +233,7 @@ void GameIO::loadStructures(Game* game, rapidxml::xml_node<>* objectgroupStructu
         // Allgemeine Daten einlesen
         const char* nodeNameValue = objectNode->first_attribute("name", 4, true)->value();
 
-        int mapX, mapY;
-        getMapCoordsFromObjectNode(objectNode, mapX, mapY);
+        MapCoords mapCoords = getMapCoordsFromObjectNode(objectNode);
 
         rapidxml::xml_node<>* propertiesNode = objectNode->first_node("properties", 10, true);
         int playerNr = atoi(getPropertyValueFromPropertiesNode(propertiesNode, "player"));
@@ -269,18 +266,20 @@ void GameIO::loadStructures(Game* game, rapidxml::xml_node<>* objectgroupStructu
 
             // TODO Ansicht in die TMX legen und dort wieder rauslesen
             FourDirectionsView view;
-            game->addStructure(mapX, mapY, structureType, view, player);
+            game->addStructure(mapCoords, structureType, view, player);
         }
     }
 }
 
 
-void GameIO::getMapCoordsFromObjectNode(rapidxml::xml_node<>* objectNode, int& mapX, int& mapY) {
+MapCoords GameIO::getMapCoordsFromObjectNode(rapidxml::xml_node<>* objectNode) {
     int x = atoi(objectNode->first_attribute("x", 1, true)->value());
     int y = atoi(objectNode->first_attribute("y", 1, true)->value());
 
-    mapX = x / IGraphicsMgr::TILE_HEIGHT; // tiled rechnet merkwürdigerweise auch für X in KachelHÖHE
-    mapY = y / IGraphicsMgr::TILE_HEIGHT;
+    int mapX = x / IGraphicsMgr::TILE_HEIGHT; // tiled rechnet merkwürdigerweise auch für X in KachelHÖHE
+    int mapY = y / IGraphicsMgr::TILE_HEIGHT;
+
+    return MapCoords(mapX, mapY);
 }
 
 const char* GameIO::getPropertyValueFromPropertiesNode(rapidxml::xml_node<>* propertiesNode, const char* propertyName) {

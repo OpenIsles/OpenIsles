@@ -57,11 +57,10 @@ private:
 
     /**
      * @brief Helper, um aus einem <object>-Knoten die Map-Koordinaten zu ermitteln
-     * @param objectNode <object>-Knoten aus einer XML-Datei (IN)
-     * @param mapX X-Map-Koordinate (OUT)
-     * @param mapY Y-Map-Koordinate (OUT)
+     * @param objectNode <object>-Knoten aus einer XML-Datei
+     * @return Map-Koordinate
      */
-    static void getMapCoordsFromObjectNode(rapidxml::xml_node<>* objectNode, int& mapX, int& mapY);
+    static MapCoords getMapCoordsFromObjectNode(rapidxml::xml_node<>* objectNode);
 
     /**
      * @brief Helper, um aus einem Knoten eine bestimmten Property-Wert auszulesen. Es werden die <property>-Knoten

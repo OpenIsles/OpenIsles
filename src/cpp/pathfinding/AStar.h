@@ -2,57 +2,15 @@
 #define _A_STAR_H
 
 #include <list>
+#include "map/coords/MapCoords.h"
 #include "Context.h"
 
 class Building;
 
 /**
- * @brief Datenstruktur, die eine mapX- und mapY-Koordinate enthält
- */
-typedef
-struct MapCoordinate {
-
-    /**
-     * @brief Map-X-Koordinate
-     */
-    int mapX;
-
-    /**
-     * @brief Map-Y-Koordinate
-     */
-    int mapY;
-
-
-    /**
-     * @brief leerer Konstruktur, der eine ungültige Map-Koordinate (-1, -1) darstellt
-     */
-    MapCoordinate() : mapX(-1), mapY(-1) {
-    }
-
-    /**
-     * @brief Konstruktur, der direkt mapX/mapY-Koordinaten bekommt
-     * @param mapX X-Map-Koordiante
-     * @param mapY Y-Map-Koordiante
-     */
-    MapCoordinate(int mapX, int mapY) : mapX(mapX), mapY(mapY) {
-    }
-
-    /**
-     * @brief Gleichheitsoperator
-     * @param otherOp anderer Operand
-     * @return true, wenn dieses Objekt und der andere Operand in beiden Koordinaten übereinstimmen
-     */
-    inline bool operator== (const MapCoordinate& otherOp) const {
-        return ((mapX == otherOp.mapX) && (mapY == otherOp.mapY));
-    }
-
-} MapCoordinate;
-
-
-/**
  * @brief Datenstruktur, die eine Route speichert, die der A*-Algorithmus berechnet hat
  */
-typedef std::list<MapCoordinate> Route;
+typedef std::list<MapCoords> Route;
 
 
 /**
@@ -65,12 +23,12 @@ public:
     /**
      * @brief (nur zu Debugzwecken einkompiliert) Startkoordinate für die Visualisierung der berechneten Route
      */
-    static MapCoordinate debugAStar_source;
+    static MapCoords debugAStar_source;
 
     /**
      * @brief (nur zu Debugzwecken einkompiliert) Zielkoordinate für die Visualisierung der berechneten Route
      */
-    static MapCoordinate debugAStar_destination;
+    static MapCoords debugAStar_destination;
 
     /**
      * @brief (nur zu Debugzwecken einkompiliert) Wenn gesetzt, wird die Route auf den Einzugsbereichs dieses Gebäudes
@@ -108,7 +66,7 @@ public:
      *                                   verwendet, so dürfen für die Route beliebige Felder benutzt werden.
      * @param useStreetOnly `true`, um nur Straßen für die Route zu verwenden, `false` erlaubt auch über Gras zu laufen
      */
-    AStar(const Context* const context, MapCoordinate source, MapCoordinate destination,
+    AStar(const Context* const context, const MapCoords& source, const MapCoords& destination,
           Building* buildingToUseCatchmentArea, bool useStreetOnly);
 
     /**
@@ -152,7 +110,7 @@ public:
 private:
     /**
      * @brief Prüft, ob eine Kachel betreten werden darf, d.h. als Knoten für den A*-Algorithmus betrachtet wird.
-     * @param mapCoordinate zu überprüfende Map-Koordinate (IN)
+     * @param mapCoords zu überprüfende Map-Koordinate (IN)
      * @param sourceBuilding Zeiger auf das Gebäude, das im Startpunkt der Route liegt
      *                       oder nullptr, wenn kein Gebäude an dieser Stelle ist (IN)
      * @param destinationBuilding Zeiger auf das Gebäude, das im Zielpunkt der Route liegt
@@ -165,9 +123,9 @@ private:
      *                                          Zielgebäude (wenn gesetzt) befindet. (OUT)
      * @return true wenn die Kachel betreten werden darf, sonst false
      */
-    bool isTileWalkable(MapCoordinate mapCoordinate, Building* sourceBuilding,
+    bool isTileWalkable(const MapCoords& mapCoords, Building* sourceBuilding,
                         Building* destinationBuilding, Building* buildingToUseCatchmentArea,
-                        bool useStreetOnly, bool& insideSourceOrDestinationBuilding);
+                        bool useStreetOnly, bool& insideSourceOrDestinationBuilding) const;
 
 };
 

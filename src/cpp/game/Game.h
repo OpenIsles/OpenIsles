@@ -3,6 +3,7 @@
 
 #include <map>
 #include <vector>
+#include "map/coords/MapCoords.h"
 #include "map/Directions.h"
 #include "map/Structure.h"
 #include "Context.h"
@@ -91,7 +92,7 @@ public:
     
     /**
      * Gründet eine neue Siedlung
-     * 
+     *
      * @param player Spieler, der die Siedlung gründet
      * @param isle Insel, auf der die Siedlung gegründet wird
      * @return Zeiger auf die neu angelegte Siedlung
@@ -100,7 +101,7 @@ public:
     
     /**
      * Liefert die Siedlung eines Spielers auf einer Insel zurück
-     * 
+     *
      * @param player Spieler
      * @param isle Insel
      * @return Colony oder nullptr, wenn keine Siedlung da ist
@@ -133,13 +134,13 @@ public:
 
     /**
      * @brief Fügt eine neue Struktur der Karte hinzu.
-     * @param mapX X-Map-Koordinate des Objekts
-     * @param mapY Y-Map-Koordinate des Objekts
+     * @param mapCoords Map-Koordinaten des Objekts
      * @param structureType Typ der Struktur
      * @param view Ansicht, mit der das Gebäude positioniert werden soll
      * @param player Spieler, dem die Struktur gehören soll
      */
-    void addStructure(int mapX, int mapY, StructureType structureType, const FourDirectionsView& view, Player* player);
+    void addStructure(
+        const MapCoords& mapCoords, StructureType structureType, const FourDirectionsView& view, Player* player);
 
     /**
      * @brief Ändert die Einwohner innerhalb eines Gebäudes. Positive Werte fügen Bewohner hinzu, negative nehmen

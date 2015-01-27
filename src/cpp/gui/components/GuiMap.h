@@ -98,36 +98,34 @@ private:
     /**
      * @brief interner Klickhandler, wenn in die Karte geklickt wurde, während wir im "Gebäude positionieren"-Modus
      * sind.
-     * @param mapX X-Map-Koordinate, wo geklickt wurde
-     * @param mapY Y-Map-Koordinate, wo geklickt wurde
+     * @param mapCoords Map-Koordinate, wo geklickt wurde
      */
-    void onClickInMapWhileAddingStructure(int mapX, int mapY);
+    void onClickInMapWhileAddingStructure(const MapCoords& mapCoords);
 
     /**
      * Prüft, ob eine bestimmte Struktur an eine bestimmte Position gesetzt werden darf.
      *
-     * @param mapX Map-X-Koordinate, wo die Struktur gesetzt werden soll
-     * @param mapY Map-Y-Koordinate, wo die Struktur gesetzt werden soll
+     * @param mapCoords Map-Koordinate, wo die Struktur gesetzt werden soll
      * @param structureType Typ der zu setzenden Struktur
      * @param view Ausrichtung der Struktur
      * @sa PLACING_STRUCTURE-Konstanten
      * @return Bitmaske, die angibt, ob das Gebäude gesetzt werden darf.
      */
     unsigned char isAllowedToPlaceStructure(
-        int mapX, int mapY, StructureType structureType, const FourDirectionsView& view);
+        const MapCoords& mapCoords, StructureType structureType, const FourDirectionsView& view) const;
 
     /**
      * @brief Berechnet welcher konkrete StructureType für eine Straßenkachel verwendet werden muss. Als Eingabeparameter
      * abstractStreetStructureType wird festgelegt, ob Pflasterstraße oder Feldweg und an welchen Map-Koordinaten die
      * Grafik gesetzt werden soll. Diese Methode bestimmt ausgehend von umliegenden Wegen, ob Gerade, Kurve, T-Stück
      * oder Kreuzung verwendet werden muss und gibt diesen StructureType zurück.
-     * @param mapX Map-X-Koordinate, für die berechnet werden soll
-     * @param mapY Map-Y-Koordinate, für die berechnet werden soll
+     * @param mapCoords Map-Koordinaten, für die berechnet werden soll
      * @param abstractStreetStructureType spezifiziert, welcher Typ von Weg gewünscht wird
      * @return konkreter StructureType, der an dieser Stelle verwendet werden muss
      * TODO Feldweg
      */
-    StructureType getConcreteStreetStructureType(int mapX, int mapY, StructureType abstractStreetStructureType);
+    StructureType getConcreteStreetStructureType(
+        const MapCoords& mapCoords, StructureType abstractStreetStructureType) const;
 
 };
 

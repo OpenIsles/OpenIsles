@@ -11,6 +11,7 @@
 #include "graphics/mgr/sdl/SDLGraphicsMgr.h"
 #include "graphics/renderer/sdl/SDLRenderer.h"
 #include "gui/GuiMgr.h"
+#include "map/coords/MapCoords.h"
 #include "map/Map.h"
 #include "sound/sdl/SDLSoundMgr.h"
 #include "utils/Color.h"
@@ -151,9 +152,8 @@ int main(int argc, char** argv) {
         screenX = (context.mouseCurrentX * screenZoom) + screenOffsetX;
         screenY = (context.mouseCurrentY * screenZoom) + screenOffsetY;
 
-        int mouseCurrentMapX, mouseCurrentMapY;
-        MapCoordUtils::getMapCoordsUnderMouse(
-            map, context.mouseCurrentX, context.mouseCurrentY, mouseCurrentMapX, mouseCurrentMapY);
+        MapCoords mouseCurrentMapCoords =
+            MapCoordUtils::getMapCoordsUnderMouse(map, context.mouseCurrentX, context.mouseCurrentY);
 
 		// Debug-Infos vorbereiten, damit wir sie später einfach nur ausgeben können
 		debugOutput[0] = "FPS: average = " + toString(fpsCounter->getFpsAvg()) +
@@ -165,7 +165,7 @@ int main(int argc, char** argv) {
 
         debugOutput[2] = "mouse = (" + 
                 toString(context.mouseCurrentX) + ", " + toString(context.mouseCurrentY) + "), mapElevated = (" +
-                toString(mouseCurrentMapX) + ", " + toString(mouseCurrentMapY) + "), screen = (" +
+                toString(mouseCurrentMapCoords.x()) + ", " + toString(mouseCurrentMapCoords.y()) + "), screen = (" +
                 toString(screenX) + ", " + toString(screenY) + ")";
     
         if (map->getSelectedMapObject() != nullptr) {
@@ -182,19 +182,19 @@ int main(int argc, char** argv) {
 #ifdef DEBUG_A_STAR
         std::string buildingToUseCatchmentAreaString;
         if (AStar::debugAStar_buildingToUseCatchmentArea != nullptr) {
-            int mapX, mapY;
-            AStar::debugAStar_buildingToUseCatchmentArea->getMapCoords(mapX, mapY);
+            const MapCoords& mapCoords =
+                AStar::debugAStar_buildingToUseCatchmentArea->getMapCoords();
 
-            buildingToUseCatchmentAreaString = "(" + toString(mapX) + ", " + toString(mapY) + ")";
+            buildingToUseCatchmentAreaString = "(" + toString(mapCoords.x()) + ", " + toString(mapCoords.y()) + ")";
         } else {
             buildingToUseCatchmentAreaString = "nullptr";
         }
 
         debugOutput[4] = "debugAStar: source = (" +
-            toString(AStar::debugAStar_source.mapX) + ", " +
-            toString(AStar::debugAStar_source.mapY) + "), destination = (" +
-            toString(AStar::debugAStar_destination.mapX) + ", " +
-            toString(AStar::debugAStar_destination.mapY) + "), catchmentAreaBuilding = " +
+            toString(AStar::debugAStar_source.x()) + ", " +
+            toString(AStar::debugAStar_source.y()) + "), destination = (" +
+            toString(AStar::debugAStar_destination.x()) + ", " +
+            toString(AStar::debugAStar_destination.y()) + "), catchmentAreaBuilding = " +
             buildingToUseCatchmentAreaString + ", useStreetOnly = " +
             (AStar::debugAStar_useStreetOnly ? "true" : "false");
 #endif // DEBUG_A_STAR

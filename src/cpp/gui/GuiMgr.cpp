@@ -23,6 +23,7 @@ static Color colorWhite = Color(255, 255, 255, 255);
 static Color colorBlack = Color(0, 0, 0, 255);
 
 #ifdef DEBUG_A_STAR
+#include "map/coords/MapCoords.h"
 #include "pathfinding/AStar.h"
 #endif
 
@@ -345,19 +346,18 @@ void GuiMgr::onEvent(SDL_Event& event) {
 #ifdef DEBUG_A_STAR
         bool needToRecalculate = false;
 
-        int mouseCurrentMapX, mouseCurrentMapY;
-        MapCoordUtils::getMapCoordsUnderMouse(
-            map, context->mouseCurrentX, context->mouseCurrentY, mouseCurrentMapX, mouseCurrentMapY);
+        MapCoords mouseCurrentMapCoords =
+            MapCoordUtils::getMapCoordsUnderMouse(map, context->mouseCurrentX, context->mouseCurrentY);
 
         // A*-Start- und Endkoordinaten festlegen
         if (event.key.keysym.scancode == SDL_SCANCODE_A) {
-            AStar::debugAStar_source = MapCoordinate(mouseCurrentMapX, mouseCurrentMapY);
+            AStar::debugAStar_source = mouseCurrentMapCoords;
             needToRecalculate = true;
         } else if (event.key.keysym.scancode == SDL_SCANCODE_S) {
-            AStar::debugAStar_destination = MapCoordinate(mouseCurrentMapX, mouseCurrentMapY);
+            AStar::debugAStar_destination = mouseCurrentMapCoords;
             needToRecalculate = true;
         } else if (event.key.keysym.scancode == SDL_SCANCODE_D) {
-            MapTile* mapTile = game->getMap()->getMapTileAt(mouseCurrentMapX, mouseCurrentMapY);
+            MapTile* mapTile = game->getMap()->getMapTileAt(mouseCurrentMapCoords);
             AStar::debugAStar_buildingToUseCatchmentArea = dynamic_cast<Building*>(mapTile->mapObject);
             needToRecalculate = true;
         } else if (event.key.keysym.scancode == SDL_SCANCODE_F) {
@@ -366,8 +366,8 @@ void GuiMgr::onEvent(SDL_Event& event) {
         }
 
         if (needToRecalculate) {
-            if (AStar::debugAStar_source.mapX > 0 && AStar::debugAStar_source.mapY > 0 &&
-                AStar::debugAStar_destination.mapX > 0 && AStar::debugAStar_destination.mapY > 0) {
+            if (AStar::debugAStar_source.x() > 0 && AStar::debugAStar_source.y() > 0 &&
+                AStar::debugAStar_destination.x() > 0 && AStar::debugAStar_destination.y() > 0) {
 
                 if (AStar::debugAStar_route != nullptr) {
                     delete AStar::debugAStar_route;
@@ -469,11 +469,10 @@ void GuiMgr::renderResourcesBar() {
         &colorWhite, &colorBlack, "DroidSans-Bold.ttf", 18, RENDERTEXT_HALIGN_LEFT);
 
     // Siedlung, wo der Cursor grade is
-    int mouseCurrentMapX, mouseCurrentMapY;
-    MapCoordUtils::getMapCoordsUnderMouse(
-        context->game->getMap(), context->mouseCurrentX, context->mouseCurrentY, mouseCurrentMapX, mouseCurrentMapY);
+    MapCoords mouseCurrentMapCoords =
+        MapCoordUtils::getMapCoordsUnderMouse(context->game->getMap(), context->mouseCurrentX, context->mouseCurrentY);
 
-    MapTile* mapTileAtCursor = context->game->getMap()->getMapTileAt(mouseCurrentMapX, mouseCurrentMapY);
+    MapTile* mapTileAtCursor = context->game->getMap()->getMapTileAt(mouseCurrentMapCoords);
     if (mapTileAtCursor == nullptr) {
         return;
     }

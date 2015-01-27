@@ -1,4 +1,5 @@
 #include "graphics/graphic/IGraphic.h"
+#include "map/coords/MapCoords.h"
 
 #ifndef _MAP_COORD_UTILS_H
 #define _MAP_COORD_UTILS_H
@@ -6,43 +7,6 @@
 class Building;
 class Map;
 class Rect;
-
-/**
- * @page coordsystem Koordinatensysteme
- *
- * Die Karte stellt sich wiefolgt dar:
- * <pre>
- *                 y=0
- *             --/  (0,0)   x=0
- *       y <--/      ---        \--
- *                --/   \--        \--> x
- *             --/         \--
- *          --/               \--(w-1,0)
- *    (0,h-1)  --\         /--
- *                --\   /--
- *                   ---
- *                (w-1,h-1)
- * </pre>
- *
- * Koordinatensysteme:
- * - Obenstehend sind die Kachel- oder Map-Koordinaten (mapCoords) dargestellt.
- * - Bildschirm-Koordinaten (screenCoords) sind durch ein Pixel-Koordinatensystem definiert. Hierbei wird die
- *   Kachel mit mapCoords (0, 0) auf screenCoords (0, 0) gelegt.
- * - Die Bildschirm-Koordinate einer Kachel bestimmt die Position des Pixels links-oben am Kachelrechteck.
- * - Beim Zoomen ändert sich nicht die Zuordnung von map- zu screenCoords. Beim Zeichnen wird verkleinert, d.h.
- *   mehr Inhalt dargestellt. Auf Zoomstufe Verkleinerung 4x z.B. liegt neben dem Pixel das screenCoords (0, 0)
- *   darstellt, die screenCoords (4, 0).
- * - Screen-Koordinaten sind immer auf den Boden bezogen. Kommt Elevation ins Spiel, müssen die y-Screen-Koordinate
- *   entsprechend angepasst werden.
- * - Wenn von Zeichen-Koordinaten (drawCoords) gesprochen wird, sind das Pixel-Koordinaten für ein bestimmtes
- *   Objekt, um es mit dem aktuellen Scrolling-Offset (Map::screenOffsetX und Map::screenOffsetY) und der
- *   aktuellen Zoom-Stufe (Map::screenZoom) zu zeichnen (= die obere linke Ecke). drawCoords berücksichtigen die
- *   Elevation. Derartige Koordinaten sind immer "fix und fertig", damit wir sofort zeichnen können.
- * - Fenster-Koordinaten sind Pixel-Koordinaten innerhalb des Anwendungsfensters. Sie entsprechen Zeichen-Koordinaten,
- *   nur ein anderer Begriff, der benutzt wird, wenn es nicht ums Zeichnen von etwas geht.
- *
- * Siehe hierzu auch @a doc/map-coords.xcf .
- */
 
 /**
  * @brief Klasse mit statischen Helperklassen
@@ -73,21 +37,19 @@ public:
 
     /**
 	 * @brief Rechnet Map- in Screen-Koordinaten um. Die Screen-Koordinaten sind in der Mitte der Kachel.
-	 * @param mapX Map-X-Koordinate (Eingabe)
-	 * @param mapY Map-Y-Koordinate (Eingabe)
+	 * @param mapCoords Map-Koordinaten (Eingabe)
 	 * @param screenX Screen-X-Koordinate (Ausgabe)
 	 * @param screenY Screen-Y-Koordinate (Ausgabe)
 	 */
-	static void mapToScreenCoordsCenter(int screenX, int screenY, int& mapX, int& mapY);
+	static void mapToScreenCoordsCenter(const MapCoords& mapCoords, int& screenX, int& screenY);
 
     /**
 	 * @brief Rechnet Screen- in Map-Koordinaten um.
-	 * @param screenX Screen-X-Koordinate (Eingabe)
-	 * @param screenY Screen-Y-Koordinate (Eingabe)
-	 * @param mapX Map-X-Koordinate (Ausgabe)
-	 * @param mapY Map-Y-Koordinate (Ausgabe)
+	 * @param screenX Screen-X-Koordinate
+	 * @param screenY Screen-Y-Koordinate
+	 * @return Map-Koordinaten
 	 */
-	static void screenToMapCoords(int screenX, int screenY, int& mapX, int& mapY);
+	static MapCoords screenToMapCoords(int screenX, int screenY);
 
     /**
      * @brief Berechnet ausgehend von Map-Koordinaten und einer Grafik das SDL-Rechteck, an welche Stelle
@@ -133,13 +95,11 @@ public:
      * Es wird immer die elevatete Position genommen, selbst, wenn der Mauszeiger auf dem Wasser steht.
      *
      * @param map (Dependency)
-     * @param mouseCurrentX X-Koordinate des Mauszeigers (Eingabe)
-     * @param mouseCurrentY Y-Koordinate des Mauszeigers (Eingabe)
-     * @param mouseCurrentMapX Map-X-Koordinate (Ausgabe)
-     * @param mouseCurrentMapY Map-Y-Koordinate (Ausgabe)
+     * @param mouseCurrentX X-Koordinate des Mauszeigers
+     * @param mouseCurrentY Y-Koordinate des Mauszeigers
+     * @return Map-Koordinaten
      */
-    static void getMapCoordsUnderMouse(
-        Map* map, int mouseCurrentX, int mouseCurrentY, int& mouseCurrentMapX, int& mouseCurrentMapY);
+    static MapCoords getMapCoordsUnderMouse(Map* map, int mouseCurrentX, int mouseCurrentY);
 
 private:
     /**

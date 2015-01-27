@@ -3,6 +3,7 @@
 
 #include "game/Player.h"
 #include "graphics/mgr/IGraphicsMgr.h"
+#include "map/coords/MapCoords.h"
 #include "map/MapCoordUtils.h"
 
 /**
@@ -16,7 +17,7 @@ protected:
 	/**
 	 * @brief Map-Koordinaten des Objekts
 	 */
-	int mapX, mapY;
+	MapCoords mapCoords;
 
 	/**
 	 * @brief Größe des Objekts in Map-Koordinaten
@@ -38,26 +39,27 @@ public:
 	virtual ~MapObject() {
 	}
 
-    void setMapCoords(int mapX, int mapY) {
-        this->mapX = mapX;
-        this->mapY = mapY;
+    void setMapCoords(const MapCoords& mapCoords) {
+        this->mapCoords = mapCoords;
     }
 
-	void setMapCoords(int mapX, int mapY, int mapWidth, int mapHeight) {
-		this->mapX = mapX;
-		this->mapY = mapY;
+	void setMapCoords(const MapCoords& mapCoords, int mapWidth, int mapHeight) {
+		this->mapCoords = mapCoords;
 		this->mapWidth = mapWidth;
 		this->mapHeight = mapHeight;
 	}
 
-	void getMapCoords(int& mapX, int& mapY) const {
-		mapX = this->mapX;
-		mapY = this->mapY;
+    MapCoords& getMapCoords() {
+		return mapCoords;
+	}
+
+	const MapCoords& getMapCoords() const {
+		return mapCoords;
 	}
 
 	void getMapCoords(int& mapX, int& mapY, int& mapWidth, int& mapHeight) const {
-		mapX = this->mapX;
-		mapY = this->mapY;
+		mapX = mapCoords.x();
+		mapY = mapCoords.y();
 		mapWidth = this->mapWidth;
 		mapHeight = this->mapHeight;
 	}
