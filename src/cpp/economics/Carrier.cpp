@@ -9,8 +9,6 @@ Carrier::Carrier(Building* owningBuilding, Route* route, GoodsType goodsType, bo
     carriedGoods.goodsType = goodsType;
 
     // Animation initialisieren
-    mapXFraction = 0;
-    mapYFraction = 0;
     animationFrame = 0;
 
     // Route initialisieren

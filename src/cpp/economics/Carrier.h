@@ -1,6 +1,7 @@
 #ifndef _CARRIER_H
 #define _CARRIER_H
 
+#include <gtest/gtest.h>
 #include "economics/UpdateableObject.h"
 #include "game/GoodsSlot.h"
 #include "graphics/graphic/Animation.h"
@@ -12,8 +13,9 @@ class Building;
 /**
  * @brief Träger, das sind Map-Objekte, die Waren von A nach B transportieren
  */
-class Carrier : public MapObject, public UpdateableObject {
+class Carrier : public MapObjectMoving, public UpdateableObject {
 
+    FRIEND_TEST(EconomicsMgrTest, updateCarrier);
     friend class EconomicsMgr; // EconomicsMgr soll zum Aktualisieren des Trägers einfach zugreifen können
     friend class GuiMap; // GuiMap soll zum Rendern des Trägers einfach zugreifen können
 
@@ -40,18 +42,6 @@ private:
      * - `false` = Rückweg, d.h. Waren am Ziel ausladen und den Träger zerstören
      */
     bool onOutboundTrip;
-
-    /**
-     * @brief X-Map-Koordinate-Offset, der auf den normalen mapCoords.x-Wert addiert wird
-     * Der Offset bewegt sich im Bereich 0.0 bis <1.0.
-     */
-    double mapXFraction;
-
-    /**
-    * @brief Y-Map-Koordinate-Offset, der auf den normalen mapCoords.y-Wert addiert wird
-    * Der Offset bewegt sich im Bereich 0.0 bis <1.0.
-    */
-    double mapYFraction;
 
     /**
      * @brief Iterator in @ref route, der auf die nächste Kachel zeigt, zu der der Träger laufen muss.

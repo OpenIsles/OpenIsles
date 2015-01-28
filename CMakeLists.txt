@@ -50,6 +50,7 @@ set(SOUND_SOURCE_FILES
 )
 set(TEST_FILES
     test/cpp/GameTest.cpp
+    test/cpp/economics/EconomicsMgrTest.cpp
     test/cpp/graphics/GraphicSetTest.cpp
     test/cpp/map/coords/MapCoordsTest.cpp
     test/cpp/map/DirectionsTest.cpp
@@ -136,6 +137,12 @@ add_executable(OpenIsles-Tests
     ${TEST_FILES}
 )
 
+target_include_directories(OpenIsles-Tests PUBLIC ${CMAKE_SOURCE_DIR}/test/cpp)
+
+# data-Verzeichnis für Tests erweitern
+file(COPY ${CMAKE_SOURCE_DIR}/test/data DESTINATION ${CMAKE_BINARY_DIR})
+
+# Google Test
 find_package(GTest REQUIRED)
 target_include_directories(OpenIsles-Tests PUBLIC ${GTEST_INCLUDE_DIRS})
 target_compile_definitions(OpenIsles-Tests PUBLIC "-DNO_SDL")

@@ -48,13 +48,13 @@ Colony* Game::getColony(Player* player, Isle* isle) {
     return iter->second;
 }
 
-Colony* Game::getColony(const MapObject* mapObject) {
+Colony* Game::getColony(const MapObjectFixed* mapObject) {
     MapTile* mapTile = map->getMapTileAt(mapObject->getMapCoords());
 
     return getColony(mapTile->player, mapTile->isle);
 }
 
-void Game::addStructure(
+Structure* Game::addStructure(
     const MapCoords& mapCoords, StructureType structureType, const FourDirectionsView& view, Player* player) {
 
     const std::string& viewName = view.getViewName();
@@ -64,7 +64,9 @@ void Game::addStructure(
 
     // Objekt anlegen
     Structure* structure = (structureType >= START_BUILDINGS) ? new Building() : new Structure();
-    structure->setMapCoords(mapCoords, graphic->getMapWidth(), graphic->getMapHeight());
+    structure->setMapCoords(mapCoords);
+    structure->setMapWidth(graphic->getMapWidth());
+    structure->setMapHeight(graphic->getMapHeight());
     structure->setStructureType(structureType);
     structure->setPlayer(player);
     structure->setView(view);
@@ -101,6 +103,8 @@ void Game::addStructure(
             context->game->addInhabitantsToBuilding(building, buildingConfig->inhabitants);
         }
     }
+
+    return structure;
 }
 
 void Game::addInhabitantsToBuilding(Building* building, char amount) {

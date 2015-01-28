@@ -1,5 +1,6 @@
 #include <algorithm>
 #include <cassert>
+#include <cmath>
 #include <set>
 #include "config/ConfigMgr.h"
 #include "economics/EconomicsMgr.h"
@@ -100,80 +101,70 @@ void EconomicsMgr::updateCarrier(Building* building) {
     // Ist der Träger zu Hause? Gucken, wo was zu holen is und Abholung einleiten
     if (building->carrier == nullptr) {
         FindBuildingToGetGoodsFromResult result = findBuildingToGetGoodsFrom(building);
-        if (result.building != nullptr) {
-            // Träger anlegen und zuweisen
-            const MapCoords& firstHopOnRoute = result.route->front();
-
-            Carrier* carrier = new Carrier(result.building, result.route, result.goodsSlot.goodsType, true);
-            carrier->setMapCoords(firstHopOnRoute);
-            carrier->setAnimation(
-                context->graphicsMgr->getGraphicSet(isStorageBuilding ? "cart-without-cargo" : "carrier")->getStatic());
-
-            building->carrier = carrier;
-
-            // Slot markieren, dass nicht ein zweiter Träger hinläuft.
-            // Zu einem Lagergebäude dürfen natürlich mehrere hinlaufen und sich bedienen.
-            if (!result.building->isStorageBuilding()) {
-                result.building->productionSlots.output.markedForPickup = true;
-            }
+        if (result.building == nullptr) {
+            return; // nix zu tun
         }
+
+        // Träger anlegen und zuweisen
+        const MapCoords& firstHopOnRoute = result.route->front();
+
+        Carrier* carrier = new Carrier(result.building, result.route, result.goodsSlot.goodsType, true);
+        carrier->setMapCoords((DoubleMapCoords) firstHopOnRoute);
+        carrier->setAnimation(
+            context->graphicsMgr->getGraphicSet(isStorageBuilding ? "cart-without-cargo" : "carrier")->getStatic());
+
+        building->carrier = carrier;
+
+        // Slot markieren, dass nicht ein zweiter Träger hinläuft.
+        // Zu einem Lagergebäude dürfen natürlich mehrere hinlaufen und sich bedienen.
+        if (!result.building->isStorageBuilding()) {
+            result.building->productionSlots.output.markedForPickup = true;
+        }
+
+        return; // Erst beim nächsten Update bewegen wir den Träger
     }
 
     // Träger unterwegs? fortbewegen
-    else if (building->carrier != nullptr) {
-        unsigned int ticksPastSinceLastUpdate = context->sdlTicks - building->getLastUpdateTime();
-        double oneSecondTicks = (double) 1000 / context->game->getSpeed();
+    unsigned int ticksPastSinceLastUpdate = context->sdlTicks - building->getLastUpdateTime();
+    double oneSecondTicks = (double) 1000 / context->game->getSpeed();
 
-        Carrier* carrier = building->carrier;
-        const Animation* animation = carrier->getAnimation();
+    Carrier* carrier = building->carrier;
+    const Animation* animation = carrier->getAnimation();
 
-        // Animieren
-        carrier->animationFrame += (double) ticksPastSinceLastUpdate / oneSecondTicks * animation->getFps();
-        while (carrier->animationFrame >= animation->getFramesCount()) {
-            carrier->animationFrame -= animation->getFramesCount();
-        }
+    // Animieren
+    carrier->animationFrame += (double) ticksPastSinceLastUpdate / oneSecondTicks * animation->getFps();
+    while (carrier->animationFrame >= animation->getFramesCount()) {
+        carrier->animationFrame -= animation->getFramesCount();
+    }
 
-        // Bewegen
-        double speed = 0.75; // erstmal fix, die Animation muss man eh nochmal anpassen, weil das Männchen mehr schwebt, als läuft
+    // Bewegen
+    const double speed = 0.75; // Kacheln pro Sekunde (auf 1x Spielgeschwindigkeit), erstmal fix, die Animation muss man eh nochmal anpassen, weil das Männchen mehr schwebt, als läuft
+
+    unsigned int ticksToProcess = ticksPastSinceLastUpdate;
+    do {
+        /* Wir gehen kachelweise vor. Erst ausrechnen, wie viele Ticks notwendig sind, um den nächsten Hop fertig zu
+         * machen. Dann gehen wir soweit wir kommen. Bestcase wir schaffen den Hop, dann loopen wir zum nächsten.
+         * Ansonsten rücken wir eben nur ein kleines Stückchen weiter.
+         */
 
         const MapCoords& nextHopOnRoute = *carrier->nextHopInRoute;
-        double stepX = speed * (nextHopOnRoute.x() - carrier->mapCoords.x());
-        double stepY = speed * (nextHopOnRoute.y() - carrier->mapCoords.y());
+        DoubleMapCoords& carrierMapCoords = carrier->getMapCoords();
 
-        // TODO Wir machen einen minimalen Fehler, dass wir bei Erreichen der nächsten Kachel, wieder auf 0 setzen
-        // und nicht versuchen, den "Rest" der vergangenen Zeit anzuwenden und ein Stückchen weiterzulaufen.
+        double mapDeltaXToNextHop = (nextHopOnRoute.x() - carrierMapCoords.x());
+        double mapDeltaYToNextHop = (nextHopOnRoute.y() - carrierMapCoords.y());
 
-        carrier->mapXFraction += (double) ticksPastSinceLastUpdate / oneSecondTicks * stepX;
-        carrier->mapYFraction += (double) ticksPastSinceLastUpdate / oneSecondTicks * stepY;
-        bool hopReached = false;
+        //  Halbe Ticks gibts nicht! Wir müssen hier runden.
+        unsigned int ticksToNextHop = (unsigned int)
+            (std::max(std::abs(mapDeltaXToNextHop), std::abs(mapDeltaYToNextHop)) * oneSecondTicks / speed);
 
-        MapCoords& carrierMapCoords = carrier->getMapCoords();
-        if (carrier->mapXFraction <= -1) {
-            carrier->mapXFraction = 0;
-            carrierMapCoords.subX(1);
-            hopReached = true;
-        } else if (carrier->mapXFraction >= 1) {
-            carrier->mapXFraction = 0;
-            carrierMapCoords.addX(1);
-            hopReached = true;
-        }
-        if (carrier->mapYFraction <= -1) {
-            carrier->mapYFraction = 0;
-            carrierMapCoords.subY(1);
-            hopReached = true;
-        } else if (carrier->mapYFraction >= 1) {
-            carrier->mapYFraction = 0;
-            carrierMapCoords.addY(1);
-            hopReached = true;
-        }
-
-        // Wir haben den nächsten Schritt in der Route erreicht
-        if (hopReached) {
+        // Hop geschafft?
+        if (ticksToNextHop <= ticksToProcess) {
+            carrierMapCoords.setMapCoords(nextHopOnRoute);
             carrier->nextHopInRoute++;
 
             // Route fertig?
             if (carrier->nextHopInRoute == carrier->route->cend()) {
-                MapTile* mapTile = context->game->getMap()->getMapTileAt(carrierMapCoords);
+                MapTile* mapTile = context->game->getMap()->getMapTileAt(carrier->route->back());
                 Building* targetBuilding = dynamic_cast<Building*>(mapTile->mapObject);
 
                 // targetBuilding == nullptr -> Nutzer hat die Map inzwischen geändert und das Zielgebäude abgerissen
@@ -232,7 +223,7 @@ void EconomicsMgr::updateCarrier(Building* building) {
 
                         Carrier* returnCarrier = new Carrier(
                             building, returnRoute, goodsSlotToTakeFrom->goodsType, false);
-                        returnCarrier->setMapCoords(firstHopOnReturnRoute);
+                        returnCarrier->setMapCoords((DoubleMapCoords) firstHopOnReturnRoute);
                         returnCarrier->setAnimation(
                             context->graphicsMgr->getGraphicSet(isStorageBuilding ? "cart-with-cargo" : "carrier")->getStatic());
                         returnCarrier->carriedGoods.inventory = goodsWeCollect;
@@ -254,9 +245,24 @@ void EconomicsMgr::updateCarrier(Building* building) {
                     delete carrier;
                     building->carrier = nullptr;
                 }
+
+                break; // Loop verlassen. Rückweg erst im nächsten Update, wir sind hier fertig.
             }
+
+            ticksToProcess -= ticksToNextHop;
         }
-    }
+        // Hop nicht ganz geschafft,
+        else {
+            // Anteil der Reststrecke in der Kachel ausrechnen, die wir schaffen
+            double fractionOfRestToNextHop = (double) ticksToProcess / (double) ticksToNextHop;
+
+            carrierMapCoords.addX(mapDeltaXToNextHop * fractionOfRestToNextHop);
+            carrierMapCoords.addY(mapDeltaYToNextHop * fractionOfRestToNextHop);
+
+            break; // ticksToProcess auf 0 setzen -> können wir gleich die Schleife brechen :-)
+        }
+
+    } while(ticksToProcess > 0);
 }
 
 GoodsSlot* EconomicsMgr::findGoodsSlotToUnloadTo(Building* building, Carrier* carrier) {
@@ -334,11 +340,12 @@ FindBuildingToGetGoodsFromResult EconomicsMgr::findBuildingToGetGoodsFrom(Buildi
     Map* map = context->game->getMap();
     for (int y = 0; y < catchmentArea->height; y++) {
         for (int x = 0; x < catchmentArea->width; x++) {
-            int mapX, mapY, mapWidth, mapHeight;
-            building->getMapCoords(mapX, mapY, mapWidth, mapHeight);
+            int mapWidth = building->getMapWidth();
+            int mapHeight = building->getMapHeight();
 
-            mapX += x - (catchmentArea->width - mapWidth) / 2;
-            mapY += y - (catchmentArea->height - mapHeight) / 2;
+            const MapCoords& mapCoords = building->getMapCoords();
+            int mapX = mapCoords.x() + (x - (catchmentArea->width - mapWidth) / 2);
+            int mapY = mapCoords.y() + (y - (catchmentArea->height - mapHeight) / 2);
 
             // Gebäude da?
             MapTile* mapTile = map->getMapTileAt(MapCoords(mapX, mapY));

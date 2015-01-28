@@ -19,15 +19,12 @@ TEST_F(GameTest, SetUp) {
     MapTile* mapTileOnOffice1 = map->getMapTileAt(MapCoords(29, 19));
     ASSERT_TRUE(mapTileOnOffice1->isle != nullptr);
 
-    MapObject* mapObjectOffice1 = mapTileOnOffice1->mapObject;
-    int mapX, mapY, mapWidth, mapHeight;
-    mapObjectOffice1->getMapCoords(mapX, mapY, mapWidth, mapHeight);
+    MapObjectFixed* mapObjectOffice1 = mapTileOnOffice1->mapObject;
 
     ASSERT_TRUE(mapObjectOffice1 != nullptr);
-    ASSERT_EQ(28, mapX);
-    ASSERT_EQ(18, mapY);
-    ASSERT_EQ(3, mapWidth);
-    ASSERT_EQ(2, mapHeight);
+    ASSERT_TRUE(mapObjectOffice1->getMapCoords() == MapCoords(28, 18));
+    ASSERT_EQ(3, mapObjectOffice1->getMapWidth());
+    ASSERT_EQ(2, mapObjectOffice1->getMapHeight());
     ASSERT_EQ(StructureType::OFFICE1, ((Building*) mapObjectOffice1)->getStructureType());
 
     Player* playerOffice1 = mapObjectOffice1->getPlayer();

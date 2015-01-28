@@ -4,6 +4,7 @@
 #include <gtest/gtest.h>
 #include "Context.h"
 #include "config/ConfigMgr.h"
+#include "economics/EconomicsMgr.h"
 #include "game/Game.h"
 #include "graphics/mgr/nosdl/NoSDLFontMgr.h"
 #include "graphics/mgr/nosdl/NoSDLGraphicsMgr.h"
@@ -20,6 +21,7 @@ class GameTest : public testing::Test {
 protected:
     Context context;
 
+    EconomicsMgr* economicsMgr;
     ConfigMgr* configMgr;
     IRenderer* noSdlRenderer;
     IGraphicsMgr* noSdlGraphicsMgr;
@@ -43,12 +45,18 @@ protected:
         game = new Game(&context);
         context.game = game;
 
-        game->loadGameFromTMX("data/map/empty-map.tmx");
+        economicsMgr = new EconomicsMgr(&context);
+        context.economicsMgr = economicsMgr;
+
+        context.sdlTicks = 0;
+
+        game->loadGameFromTMX("data/map/test-map.tmx");
     }
 
     virtual void TearDown() {
         delete game;
 
+        delete economicsMgr;
         delete noSdlFontMgr;
         delete noSdlGraphicsMgr;
         delete configMgr;

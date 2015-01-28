@@ -11,18 +11,16 @@
  */
 class MapObject {
 
-    friend class EconomicsMgr; // EconomicsMgr soll zum Aktualisieren des Trägers einfach zugreifen können
-
 protected:
 	/**
-	 * @brief Map-Koordinaten des Objekts
+	 * @brief Breite des Objekts in Map-Koordinaten
 	 */
-	MapCoords mapCoords;
+	int mapWidth;
 
-	/**
-	 * @brief Größe des Objekts in Map-Koordinaten
+    /**
+	 * @brief Höhe des Objekts in Map-Koordinaten
 	 */
-	int mapWidth, mapHeight;
+    int mapHeight;
     
     /**
      * @brief Spieler, dem das Objekt gehört, oder nullptr für spielerlose Objekte
@@ -39,30 +37,21 @@ public:
 	virtual ~MapObject() {
 	}
 
-    void setMapCoords(const MapCoords& mapCoords) {
-        this->mapCoords = mapCoords;
+    int getMapWidth() const {
+        return mapWidth;
     }
 
-	void setMapCoords(const MapCoords& mapCoords, int mapWidth, int mapHeight) {
-		this->mapCoords = mapCoords;
-		this->mapWidth = mapWidth;
-		this->mapHeight = mapHeight;
-	}
+    void setMapWidth(int mapWidth) {
+        MapObject::mapWidth = mapWidth;
+    }
 
-    MapCoords& getMapCoords() {
-		return mapCoords;
-	}
+    int getMapHeight() const {
+        return mapHeight;
+    }
 
-	const MapCoords& getMapCoords() const {
-		return mapCoords;
-	}
-
-	void getMapCoords(int& mapX, int& mapY, int& mapWidth, int& mapHeight) const {
-		mapX = mapCoords.x();
-		mapY = mapCoords.y();
-		mapWidth = this->mapWidth;
-		mapHeight = this->mapHeight;
-	}
+    void setMapHeight(int mapHeight) {
+        MapObject::mapHeight = mapHeight;
+    }
 
     Player* getPlayer() const {
         return player;
@@ -79,6 +68,66 @@ public:
     void setDrawingFlags(int drawingFlags) {
         this->drawingFlags = drawingFlags;
     }
+};
+
+
+/**
+ * @brief Basisklasse für alles, was sich fix auf der Karte befinden kann. Fixe Objekte haben immer ganzzahlige
+ * Map-Koordinaten
+ */
+class MapObjectFixed : public MapObject {
+
+protected:
+	/**
+	 * @brief Map-Koordinaten des Objekts
+	 */
+	MapCoords mapCoords;
+
+public:
+	virtual ~MapObjectFixed() {
+	}
+
+    void setMapCoords(const MapCoords& mapCoords) {
+        this->mapCoords = mapCoords;
+    }
+
+    MapCoords& getMapCoords() {
+		return mapCoords;
+	}
+
+	const MapCoords& getMapCoords() const {
+		return mapCoords;
+	}
+};
+
+
+/**
+ * @brief Basisklasse für alles, was sich auf der Karte bewegen kann. Bewegliche Objekte haben immer
+ * Gleitkomma-Map-Koordinaten, da sie sich fließend von Kachel zu Kachel bewegen.
+ */
+class MapObjectMoving : public MapObject {
+
+protected:
+	/**
+	 * @brief Map-Koordinaten des Objekts
+	 */
+	DoubleMapCoords mapCoords;
+
+public:
+	virtual ~MapObjectMoving() {
+	}
+
+    void setMapCoords(const DoubleMapCoords& mapCoords) {
+        this->mapCoords = mapCoords;
+    }
+
+    DoubleMapCoords& getMapCoords() {
+		return mapCoords;
+	}
+
+	const DoubleMapCoords& getMapCoords() const {
+		return mapCoords;
+	}
 };
 
 #endif

@@ -9,7 +9,7 @@
 /**
  * Stellt eine Insel dar. Sie wird als Teil in einer Karte (Map) eingesetzt.
  */
-class Isle : public MapObject {
+class Isle : public MapObjectFixed {
 
 private:
     /**

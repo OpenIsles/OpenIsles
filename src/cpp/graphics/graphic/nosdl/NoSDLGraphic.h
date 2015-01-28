@@ -11,6 +11,8 @@ class NoSDLGraphic : public virtual IGraphic {
 
 public:
     NoSDLGraphic(IRenderer* const renderer, const char* filename, unsigned char mapWidth, unsigned char mapHeight) {
+        this->width = 0;
+        this->height = 0;
 		this->mapWidth = mapWidth;
 		this->mapHeight = mapHeight;
 	}
@@ -19,6 +21,8 @@ public:
 		IRenderer* const renderer, const IGraphic& srcGraphic, const Rect& srcRect,
 		unsigned char mapWidth, unsigned char mapHeight) {
 
+        this->width = 0;
+        this->height = 0;
 		this->mapWidth = mapWidth;
 		this->mapHeight = mapHeight;
 	}

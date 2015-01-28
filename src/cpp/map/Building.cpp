@@ -24,12 +24,13 @@ bool Building::isInsideCatchmentArea(const ConfigMgr* configMgr, const MapCoords
     return (catchmentArea->data[y * catchmentArea->width + x] == '1');
 }
 
-bool Building::isInsideCatchmentArea(const ConfigMgr* configMgr, const MapObject& otherMapObject) const {
-    int otherMapObjectX, otherMapObjectY, otherMapObjectWidth, otherMapObjectHeight;
-    otherMapObject.getMapCoords(otherMapObjectX, otherMapObjectY, otherMapObjectWidth, otherMapObjectHeight);
+bool Building::isInsideCatchmentArea(const ConfigMgr* configMgr, const MapObjectFixed& otherMapObject) const {
+    const MapCoords& otherMapObjectCoords = otherMapObject.getMapCoords();
+    int otherMapObjectWidth = otherMapObject.getMapWidth();
+    int otherMapObjectHeight = otherMapObject.getMapHeight();
 
-    for (int mapY = otherMapObjectY; mapY < otherMapObjectY + otherMapObjectHeight; mapY++) {
-        for (int mapX = otherMapObjectX; mapX < otherMapObjectX + otherMapObjectWidth; mapX++) {
+    for (int mapY = otherMapObjectCoords.y(); mapY < otherMapObjectCoords.y() + otherMapObjectHeight; mapY++) {
+        for (int mapX = otherMapObjectCoords.x(); mapX < otherMapObjectCoords.x() + otherMapObjectWidth; mapX++) {
             if (isInsideCatchmentArea(configMgr, MapCoords(mapX, mapY))) {
                 return true;
             }

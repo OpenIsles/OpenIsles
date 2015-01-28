@@ -1,6 +1,7 @@
 #ifndef _BUILDING_H
 #define _BUILDING_H
 
+#include <gtest/gtest.h>
 #include "economics/Carrier.h"
 #include "game/GoodsSlot.h"
 #include "map/Structure.h"
@@ -34,6 +35,7 @@ struct ProductionSlots {
  */
 class Building : public Structure {
 
+    FRIEND_TEST(EconomicsMgrTest, updateCarrier);
     friend class EconomicsMgr; // EconomicsMgr soll zum Bewegen des Trägers einfach zugreifen können
     friend class GuiMap; // GuiMap soll zum Rendern des Trägers einfach zugreifen können
 
@@ -89,7 +91,7 @@ public:
      * @param otherMapObject Map-Objekt, was getestet wird
      * @return `true`, wenn das Map-Objekt innerhalb des Einzugsgebiets liegt; sonst `false`
      */
-    bool isInsideCatchmentArea(const ConfigMgr* configMgr, const MapObject& otherMapObject) const;
+    bool isInsideCatchmentArea(const ConfigMgr* configMgr, const MapObjectFixed& otherMapObject) const;
 
     /**
      * @brief Prüft, ob das Gebäude ein Lagergebäude (Kontor oder Marketplatz), von welchem ALLE Waren abgeholt und

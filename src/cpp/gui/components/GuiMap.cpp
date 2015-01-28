@@ -125,7 +125,9 @@ void GuiMap::renderElement(IRenderer* renderer) {
             // Zu zeichnendes Gebäude erstellen
             structureBeingAdded = new Structure();
             structureBeingAdded->setStructureType(structureType);
-            structureBeingAdded->setMapCoords(mapCoords, graphic->getMapWidth(), graphic->getMapHeight());
+            structureBeingAdded->setMapCoords(mapCoords);
+            structureBeingAdded->setMapWidth(graphic->getMapWidth());
+            structureBeingAdded->setMapHeight(graphic->getMapHeight());
             structureBeingAdded->setDrawingFlags(drawingFlags);
             structureBeingAdded->setView(context->guiMgr->getPanelState().addingStructureView);
         }
@@ -139,13 +141,17 @@ void GuiMap::renderElement(IRenderer* renderer) {
     for (int mapY = mapYStart; mapY <= mapYEnd; mapY++) {
         for (int mapX = mapXStart; mapX <= mapXEnd; mapX++) {
             MapCoords mapCoords = MapCoords(mapX, mapY);
-            MapObject* mapObject = map->getMapObjectAt(mapCoords);
+            MapObjectFixed* mapObject = map->getMapObjectAt(mapCoords);
             if (mapObject == nullptr) {
                 // Positionieren wir hier ein neues Gebäude?
                 if (structureBeingAdded != nullptr) {
-                    int mx, my, mw, mh;
-                    structureBeingAdded->getMapCoords(mx, my, mw, mh);
-                    if (mapX >= mx && mapY >= my && mapX < mx + mw && mapY < my + mh) {
+                    const MapCoords& mcoords = structureBeingAdded->getMapCoords();
+                    int mw = structureBeingAdded->getMapWidth();
+                    int mh = structureBeingAdded->getMapHeight();
+
+                    if (mapX >= mcoords.x() && mapY >= mcoords.y() &&
+                        mapX < mcoords.x() + mw && mapY < mcoords.y() + mh) {
+
                         mapObject = structureBeingAdded;
                     }
                 }
@@ -162,11 +168,12 @@ void GuiMap::renderElement(IRenderer* renderer) {
             // @see docs/drawing-order-x-tiles.xcf für Variablen
 
             // Ausrechnen, welchen Schnibbel der Grafik wir anzeigen müssen
-            int moMapX, moMapY, moMapWidth, moMapHeight;
-            mapObject->getMapCoords(moMapX, moMapY, moMapWidth, moMapHeight);
+            const MapCoords& moMapCoords = mapObject->getMapCoords();
+            int moMapWidth = mapObject->getMapWidth();
+            int moMapHeight = mapObject->getMapHeight();
 
-            int tileOffsetXInMapObject = mapX - moMapX; // (0 ... moMapWidth-1)
-            int tileOffsetYInMapObject = mapY - moMapY; // (0 ... moMapHeight-1)
+            int tileOffsetXInMapObject = mapX - moMapCoords.x(); // (0 ... moMapWidth-1)
+            int tileOffsetYInMapObject = mapY - moMapCoords.y(); // (0 ... moMapHeight-1)
 
             Structure* structure = dynamic_cast<Structure*>(mapObject); // TODO nullptr sollte nicht passieren; später checken, wenn wir Bäume und sowas haben
             int drawingFlags = structure->getDrawingFlags();
@@ -216,7 +223,8 @@ void GuiMap::renderElement(IRenderer* renderer) {
 
             // In mapObjectAlreadyDrawnThere die Kacheln-Spalte als erledigt markieren
             do {
-                mapObjectAlreadyDrawnThere->setData(moMapX + tileOffsetXInMapObject, moMapY + tileOffsetYInMapObject, 1);
+                mapObjectAlreadyDrawnThere->setData(
+                    moMapCoords.x() + tileOffsetXInMapObject, moMapCoords.y() + tileOffsetYInMapObject, 1);
 
                 tileOffsetXInMapObject++;
                 tileOffsetYInMapObject++;
@@ -239,16 +247,12 @@ void GuiMap::renderElement(IRenderer* renderer) {
             continue;
         }
 
-        // TODO XYCoords + <template> + double = :-)
-        const MapCoords& mapCoords = carrier->getMapCoords();
+        const DoubleMapCoords& mapCoords = carrier->getMapCoords();
         const Animation* animation = carrier->getAnimation();
         const IGraphic* animationCurrentFrame = animation->getFrame((unsigned int) carrier->animationFrame);
 
         Rect rect;
-        double mapXExact = (double) mapCoords.x() + carrier->mapXFraction;
-        double mapYExact = (double) mapCoords.y() + carrier->mapYFraction;
-
-        MapCoordUtils::mapToDrawCoords(map, mapXExact, mapYExact, 1, animationCurrentFrame, &rect);
+        MapCoordUtils::mapToDrawCoords(map, mapCoords.x(), mapCoords.y(), 1, animationCurrentFrame, &rect);
 
         animationCurrentFrame->drawScaledAt(rect.x, rect.y, (double) 1 / (double) screenZoom);
     }
@@ -499,11 +503,12 @@ void GuiMap::drawCatchmentArea(IRenderer* const renderer, Structure* structure) 
     if (catchmentArea != nullptr) {
         for (int y = 0; y < catchmentArea->height; y++) {
             for (int x = 0; x < catchmentArea->width; x++) {
-                int mapX, mapY, mapWidth, mapHeight;
-                structure->getMapCoords(mapX, mapY, mapWidth, mapHeight);
+                const MapCoords& mapCoords = structure->getMapCoords();
+                int mapWidth = structure->getMapWidth();
+                int mapHeight = structure->getMapHeight();
 
-                mapX += x - (catchmentArea->width - mapWidth) / 2;
-                mapY += y - (catchmentArea->height - mapHeight) / 2;
+                int mapX = mapCoords.x() + (x - (catchmentArea->width - mapWidth) / 2);
+                int mapY = mapCoords.y() + (y - (catchmentArea->height - mapHeight) / 2);
 
                 int screenX, screenY;
                 MapCoordUtils::mapToScreenCoords(mapX, mapY, screenX, screenY);

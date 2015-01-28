@@ -47,13 +47,13 @@
  * sondern nur ein Delta, was zum Rechnen benutzt wird. Wir definieren die Arithmetik so, dass nur Rechnen mit
  * Deltas erlaubt ist. Zwei MapCoords zu addieren macht keinen Sinn.
  */
-class MapCoordsDelta : public XYCoords {
+class MapCoordsDelta : public XYCoords<int> {
 
 public:
     /**
      * @brief Default-Konstruktor, der ein Null-Delta anlegt
      */
-    MapCoordsDelta() : XYCoords(0, 0) {
+    MapCoordsDelta() : XYCoords<int>(0, 0) {
     }
 
     /**
@@ -61,7 +61,7 @@ public:
      * @param x X-Map-Koordinaten-Delta
      * @param y Y-Map-Koordinaten-Delta
      */
-    MapCoordsDelta(int x, int y) : XYCoords(x, y) {
+    MapCoordsDelta(int x, int y) : XYCoords<int>(x, y) {
     }
 
     /**
@@ -75,16 +75,17 @@ public:
 };
 
 
+
 /**
- * @brief Map-Koordinaten. Siehe @ref coordsystems.
+ * @brief Gleitkomma-Map-Koordinaten. Siehe @ref coordsystems.
  */
-class MapCoords : public XYCoords {
+class DoubleMapCoords : public XYCoords<double> {
 
 public:
     /**
      * @brief Default-Konstruktor, der eine (0, 0)-Koordinate anlegt
      */
-    MapCoords() : XYCoords(0, 0) {
+    DoubleMapCoords() : XYCoords<double>(0.0, 0.0) {
     }
 
     /**
@@ -92,39 +93,58 @@ public:
      * @param x X-Map-Koordinate
      * @param y Y-Map-Koordinate
      */
-    MapCoords(int x, int y) : XYCoords(x, y) {
+    DoubleMapCoords(double x, double y) : XYCoords<double>(x, y) {
     }
 
     /**
-     * @brief Addiert einen Offset auf die X-Koordinate
-     * @param offset zu addierender Offset
+     * @brief Ändert die Koordinaten.
+     * @param mapCoords neue Koordinaten
      */
-    void addX(int offset) {
-        _x += offset;
+    void setMapCoords(const DoubleMapCoords& mapCoords) {
+        _x = mapCoords._x;
+        _y = mapCoords._y;
     }
 
     /**
-     * @brief Subtrahiert einen Offset von der X-Koordinate
-     * @param offset zu subtrahierender Offset
+     * @brief Gleichheitsoperator
+     * @param mapCoords anderer Operand
+     * @return `true`, wenn diese Koordinaten gleich sind, sonst `false`
      */
-    void subX(int offset) {
-        _x -= offset;
+    inline bool operator== (const DoubleMapCoords& mapCoords) const {
+        return ((this->_x == mapCoords._x) && (this->_y == mapCoords._y));
     }
 
     /**
-     * @brief Addiert einen Offset auf die Y-Koordinate
-     * @param offset zu addierender Offset
+     * @brief Ungleichheitsoperator
+     * @param mapCoords anderer Operand
+     * @return `true`, wenn diese Koordinaten ungleich sind, sonst `false`
      */
-    void addY(int offset) {
-        _y += offset;
+    inline bool operator!= (const DoubleMapCoords& mapCoords) const {
+        return (!(*this == mapCoords));
+    }
+
+};
+
+
+
+/**
+ * @brief Ganzzahl-Map-Koordinaten. Siehe @ref coordsystems.
+ */
+class MapCoords : public XYCoords<int> {
+
+public:
+    /**
+     * @brief Default-Konstruktor, der eine (0, 0)-Koordinate anlegt
+     */
+    MapCoords() : XYCoords<int>(0, 0) {
     }
 
     /**
-     * @brief Subtrahiert einen Offset von der Y-Koordinate
-     * @param offset zu subtrahierender Offset
+     * @brief Konstruktor
+     * @param x X-Map-Koordinate
+     * @param y Y-Map-Koordinate
      */
-    void subY(int offset) {
-        _y -= offset;
+    MapCoords(int x, int y) : XYCoords<int>(x, y) {
     }
 
     /**
@@ -152,6 +172,14 @@ public:
      */
     inline MapCoords operator+ (const MapCoordsDelta& mapCoordsDelta) const {
         return MapCoords(this->_x + mapCoordsDelta.x(), this->_y + mapCoordsDelta.y());
+    }
+
+    /**
+     * @brief Cast-Operator. Erlaubt das Umwandeln von int-Koordinaten in double-Koordinaten
+     * @return Koordinaten als DoubleMapCoords
+     */
+    inline operator DoubleMapCoords() const {
+        return DoubleMapCoords((double) _x, (double) _y);
     }
 
 };

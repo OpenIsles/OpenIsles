@@ -143,7 +143,9 @@ void GameIO::loadMap(
             }
 
             // Insel zur Karte hinzufügen
-            isle->setMapCoords(mapCoords, isleMapWidth, isleMapHeight);
+            isle->setMapCoords(mapCoords);
+            isle->setMapWidth(isleMapWidth);
+            isle->setMapHeight(isleMapHeight);
             map->isles.push_back(isle);
 
             for (int my = mapCoords.y(), isleY = 0; my < mapCoords.y() + isleMapHeight; my++, isleY++) {

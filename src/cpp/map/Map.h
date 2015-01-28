@@ -51,7 +51,9 @@ public:
      * @brief Zeiger auf ein MapObject (durch Map.mapObjects verwaltet), das sich auf dieser Kachel befindet
      * oder nullptr, wenns nix da is
      */
-    MapObject* mapObject;
+    MapObjectFixed* mapObject;
+    // TODO aktuell haben wir eh nur fixe Dinger auf der Karte. Die Träger loopen wir aktuell böse durch alles durch, d.h. die sind eh noch nicht an der Kachel.
+    // TODO Wir brauchen dann wohl eine Art Liste von beweglichen Dingern, da auch mal mehrere Träger, oder n Träger und n Schaf auf derselben Kachel sein können.
 
     
     MapTile(const MapTileConfig* mapTileConfig, std::array<const Animation*, 4> tileAnimations) {
@@ -161,7 +163,7 @@ public:
 	 * @param mapCoords Map-Koordianten
 	 * @return Zeiger auf das Map-Objekt oder nullptr, wenn dort kein Map-Objekt ist
 	 */
-	MapObject* getMapObjectAt(const MapCoords& mapCoords) const;
+	MapObjectFixed* getMapObjectAt(const MapCoords& mapCoords) const;
 
 	const std::list<MapObject*>& getMapObjects() const {
 		return mapObjects;
@@ -217,7 +219,7 @@ public:
 	 * @brief Fügt ein neues Map-Objekt der Karte hinzu
 	 * @param mapObject Map-Objekt
 	 */
-	void addMapObject(MapObject* mapObject);
+	void addMapObject(MapObjectFixed* mapObject);
     
     /**
      * @brief Aktualisiert die internen Strukturen der Karte (mapTiles) beim Neuerrichten eines Kontors

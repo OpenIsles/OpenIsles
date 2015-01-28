@@ -2,6 +2,7 @@
 #define _STRUCTURE_H
 
 #include "economics/UpdateableObject.h"
+#include "map/coords/MapCoords.h"
 #include "map/Directions.h"
 #include "map/MapObject.h"
 #include "map/StructureType.h"
@@ -30,7 +31,7 @@ enum BuildingGroup : unsigned char {
 /**
  * @brief MapObject, das eine Struktur darstellt. Strukturen sind Wege und Felder, also Sachen nicht klickbar sind.
  */
-class Structure : public MapObject, public UpdateableObject {
+class Structure : public MapObjectFixed, public UpdateableObject {
 
 protected:
 	/**

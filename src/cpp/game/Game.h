@@ -114,7 +114,7 @@ public:
      * @param mapObject MapObject
      * @return Colony oder nullptr, wenn keine Siedlung da ist
      */
-    Colony* getColony(const MapObject* mapObject);
+    Colony* getColony(const MapObjectFixed* mapObject);
 
     /**
      * @brief Liefert die Spielgeschwindigkeit zurück.
@@ -138,8 +138,9 @@ public:
      * @param structureType Typ der Struktur
      * @param view Ansicht, mit der das Gebäude positioniert werden soll
      * @param player Spieler, dem die Struktur gehören soll
+     * @return Zeiger auf die neu angelegte Struktur
      */
-    void addStructure(
+    Structure* addStructure(
         const MapCoords& mapCoords, StructureType structureType, const FourDirectionsView& view, Player* player);
 
     /**

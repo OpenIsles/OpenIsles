@@ -30,6 +30,14 @@ TEST(MapCoords, AddSubXY) {
 }
 
 
+TEST(MapCoords, SetMapCoords) {
+    DoubleMapCoords doubleCoords = DoubleMapCoords(1.5, 2.3);
+    doubleCoords.setMapCoords(DoubleMapCoords(-2.4, 7.8));
+
+    ASSERT_TRUE(doubleCoords == DoubleMapCoords(-2.4, 7.8));
+}
+
+
 TEST(MapCoords, Equals) {
     MapCoords a(1, 2);
     MapCoords b(2, 1);
@@ -75,6 +83,18 @@ TEST(MapCoords, Addition) {
 }
 
 
+TEST(MapCoords, Cast) {
+    MapCoords intCoords(1, 2);
+    DoubleMapCoords doubleCoords = intCoords;
+
+    ASSERT_TRUE(doubleCoords == DoubleMapCoords(1.0, 2.0));
+
+    /* Die folgende Zeile sollte Compile Error generieren:
+     *   MapCoords intCoords2 = doubleCoords;
+     */
+}
+
+
 TEST(MapCoords, LessThan) {
     using std::operator<;
 
@@ -93,4 +113,20 @@ TEST(MapCoords, LessThan) {
     ASSERT_FALSE(c < c);
     ASSERT_FALSE(c < d);
     ASSERT_FALSE(e < d);
+}
+
+
+TEST(MapCoords, Template) {
+    MapCoords intCoords(1.1, 2.2);
+    DoubleMapCoords doubleCoords(1.1, 2.2);
+
+    ASSERT_EQ(1, intCoords.x());
+    ASSERT_EQ(2, intCoords.y());
+    ASSERT_EQ(1.1, doubleCoords.x());
+    ASSERT_EQ(2.2, doubleCoords.y());
+
+    /* Die folgenden Ausdrücke sollten Compile Errors generieren:
+     *   intCoords == doubleCoords
+     *   intCoords + doubleCoords
+     */
 }

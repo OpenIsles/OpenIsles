@@ -70,7 +70,7 @@ MapTile* Map::getMapTileAt(const MapCoords& mapCoords) const {
     return mapTiles->getData(mapCoords.x(), mapCoords.y(), nullptr);
 }
 
-MapObject* Map::getMapObjectAt(const MapCoords& mapCoords) const {
+MapObjectFixed* Map::getMapObjectAt(const MapCoords& mapCoords) const {
     MapTile* mapTile = getMapTileAt(mapCoords);
     if (mapTile == nullptr) {
         return nullptr;
@@ -88,17 +88,18 @@ void Map::scroll(int screenOffsetX, int screenOffsetY) {
 	this->screenOffsetY += screenOffsetY;
 }
 
-void Map::addMapObject(MapObject* mapObject) {
+void Map::addMapObject(MapObjectFixed* mapObject) {
     // Objekt in die Liste einreihen
     mapObjects.push_front(mapObject);
 
-    int mapX, mapY, mapWidth, mapHeight;
-    mapObject->getMapCoords(mapX, mapY, mapWidth, mapHeight);
+    const MapCoords& mapCoords = mapObject->getMapCoords();
+    int mapWidth = mapObject->getMapWidth();
+    int mapHeight = mapObject->getMapHeight();
 
     // Fläche auf den MapTiles als belegt markieren
     // TODO hübschen Iterator für MapCoords schreiben, den wir dann auch für die 4 unterschiedlichen for-Schleifen zum Rendern der Map aus unterschiedlichen Views brauchen
-    for (int my = mapY; my < mapY + mapHeight; my++) {
-        for (int mx = mapX; mx < mapX + mapWidth; mx++) {
+    for (int my = mapCoords.y(); my < mapCoords.y() + mapHeight; my++) {
+        for (int mx = mapCoords.x(); mx < mapCoords.x() + mapWidth; mx++) {
             getMapTileAt(MapCoords(mx, my))->mapObject = mapObject;
         }
     }

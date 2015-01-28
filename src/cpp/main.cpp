@@ -167,14 +167,33 @@ int main(int argc, char** argv) {
                 toString(context.mouseCurrentX) + ", " + toString(context.mouseCurrentY) + "), mapElevated = (" +
                 toString(mouseCurrentMapCoords.x()) + ", " + toString(mouseCurrentMapCoords.y()) + "), screen = (" +
                 toString(screenX) + ", " + toString(screenY) + ")";
-    
-        if (map->getSelectedMapObject() != nullptr) {
-            int mapX, mapY, mapWidth, mapHeight;
-            map->getSelectedMapObject()->getMapCoords(mapX, mapY, mapWidth, mapHeight);
-            
-            debugOutput[3] = "selectedMapObject on mapCoords (" + 
-                    toString(mapX) + ", " + toString(mapY) + "), size = (" +
+
+        const MapObject* selectedMapObject = map->getSelectedMapObject();
+        if (selectedMapObject != nullptr) {
+            int mapWidth = selectedMapObject->getMapWidth();
+            int mapHeight = selectedMapObject->getMapHeight();
+
+            const MapObjectFixed* smoFixed = dynamic_cast<const MapObjectFixed*>(selectedMapObject);
+            if (smoFixed != nullptr) {
+                const MapCoords& mapCoords = smoFixed->getMapCoords();
+                debugOutput[3] = "selectedMapObject(Fixed) on mapCoords (" +
+                    toString(mapCoords.x()) + ", " + toString(mapCoords.y()) + "), size = (" +
                     toString(mapWidth) + ", " + toString(mapHeight) + ")";
+            }
+            else {
+                const MapObjectMoving* smoMoving = dynamic_cast<const MapObjectMoving*>(selectedMapObject);
+                if (smoMoving != nullptr) {
+                    const DoubleMapCoords& mapCoords = smoMoving->getMapCoords();
+                    debugOutput[3] = "selectedMapObject(Moving) on mapCoords (" +
+                        toString(mapCoords.x()) + ", " + toString(mapCoords.y()) + "), size = (" +
+                        toString(mapWidth) + ", " + toString(mapHeight) + ")";
+                }
+                else {
+                    debugOutput[3] = "selectedMapObject(UNKNOWN!?) size = (" +
+                        toString(mapWidth) + ", " + toString(mapHeight) + ")";
+                }
+            }
+
         } else {
             debugOutput[3] = "";
         }
