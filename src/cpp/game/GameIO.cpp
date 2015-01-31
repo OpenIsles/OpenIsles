@@ -175,9 +175,10 @@ void GameIO::loadMap(
             // Startpunkt: Diesen Punkt wollen wir auf den Bildschirm zentrieren
         else if (strcmp(nodeType, "startpoint") == 0) {
             ScreenCoords screenCoordsCenter = MapCoordUtils::mapToScreenCoordsCenter(mapCoords);
+            screenCoordsCenter.subX(Consts::mapClipRect.w / 2);
+            screenCoordsCenter.subY(Consts::mapClipRect.h / 2);
 
-            map->screenOffsetX = screenCoordsCenter.x() - (Consts::mapClipRect.w / 2);
-            map->screenOffsetY = screenCoordsCenter.y() - (Consts::mapClipRect.h / 2);
+            map->setScreenCoordsOffset(screenCoordsCenter);
         }
     }
     map->screenZoom = 1;

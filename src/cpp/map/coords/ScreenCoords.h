@@ -26,6 +26,25 @@ public:
      */
     ScreenCoords(int x, int y) : XYCoords<int>(x, y) {
     }
+
+    /**
+     * @brief Ändert die Koordinaten.
+     * @param x neue X-Screen-Koordinate
+     * @param y neue Y-Screen-Koordinate
+     */
+    void setTo(int x, int y) {
+        _x = x;
+        _y = y;
+    }
+
+    /**
+     * @brief Operator zum Abziehen einer anderen Screen-Koordinaten
+     * @param subtrahend Subtrahend
+     */
+    inline void operator-= (const ScreenCoords& subtrahend) {
+        _x -= subtrahend._x;
+        _y -= subtrahend._y;
+    }
 };
 
 #endif

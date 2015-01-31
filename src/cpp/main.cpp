@@ -12,6 +12,7 @@
 #include "graphics/renderer/sdl/SDLRenderer.h"
 #include "gui/GuiMgr.h"
 #include "map/coords/MapCoords.h"
+#include "map/coords/ScreenCoords.h"
 #include "map/Map.h"
 #include "sound/sdl/SDLSoundMgr.h"
 #include "utils/Color.h"
@@ -144,23 +145,22 @@ int main(int argc, char** argv) {
         SDL_GetMouseState(&context.mouseCurrentX, &context.mouseCurrentY);
 
 #ifdef DEBUG
-        int screenOffsetX = map->getScreenOffsetX();
-        int screenOffsetY = map->getScreenOffsetY();
+        const ScreenCoords& screenCoordsOffset = map->getScreenCoordsOffset();
         int screenZoom = map->getScreenZoom();
 
         int screenX, screenY;
-        screenX = (context.mouseCurrentX * screenZoom) + screenOffsetX;
-        screenY = (context.mouseCurrentY * screenZoom) + screenOffsetY;
+        screenX = (context.mouseCurrentX * screenZoom) + screenCoordsOffset.x();
+        screenY = (context.mouseCurrentY * screenZoom) + screenCoordsOffset.y();
 
         MapCoords mouseCurrentMapCoords =
-            MapCoordUtils::getMapCoordsUnderMouse(map, context.mouseCurrentX, context.mouseCurrentY);
+            MapCoordUtils::getMapCoordsUnderMouse(*map, context.mouseCurrentX, context.mouseCurrentY);
 
 		// Debug-Infos vorbereiten, damit wir sie später einfach nur ausgeben können
 		debugOutput[0] = "FPS: average = " + toString(fpsCounter->getFpsAvg()) +
                 ", current = " + toString(fpsCounter->getFpsCurrent());
         
         debugOutput[1] = "Screen: offset = (" +
-                toString(screenOffsetX) + ", " + toString(screenOffsetY) + "), zoom = " +
+                toString(screenCoordsOffset.x()) + ", " + toString(screenCoordsOffset.y()) + "), zoom = " +
                 toString(screenZoom);
 
         debugOutput[2] = "mouse = (" + 

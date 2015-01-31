@@ -54,8 +54,7 @@ void Map::initNewMap(int newWidth, int newHeight) {
     // Sonstiges Zeugs auf Anfangswerte stellen
 	selectedMapObject = nullptr;
 
-	screenOffsetX = 0;
-	screenOffsetY = 0;
+	screenCoordsOffset.setTo(0, 0);
 }
 
 bool Map::checkMapCoords(const MapCoords& mapCoords) const {
@@ -84,8 +83,8 @@ void Map::setSelectedMapObject(MapObject* selectedMapObject) {
 }
 
 void Map::scroll(int screenOffsetX, int screenOffsetY) {
-	this->screenOffsetX += screenOffsetX;
-	this->screenOffsetY += screenOffsetY;
+    screenCoordsOffset.addX(screenOffsetX);
+    screenCoordsOffset.addY(screenOffsetY);
 }
 
 void Map::addMapObject(MapObjectFixed* mapObject) {

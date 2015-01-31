@@ -34,8 +34,7 @@ void GuiMap::renderElement(IRenderer* renderer) {
     const MapObject* selectedMapObject = map->getSelectedMapObject();
     const Building* selectedBuilding = dynamic_cast<const Building*>(selectedMapObject);
 
-    int screenOffsetX = map->getScreenOffsetX();
-    int screenOffsetY = map->getScreenOffsetY();
+    const ScreenCoords& screenCoordsOffset = map->getScreenCoordsOffset();
     int screenZoom = map->getScreenZoom();
 
     /*
@@ -46,14 +45,15 @@ void GuiMap::renderElement(IRenderer* renderer) {
      */
     // TODO Duplicate-Code refactorn, Rect (top, left, right, bottom) von Punkten einführen
 
-    MapCoords mapCoordsTopLeft = MapCoordUtils::screenToMapCoords(ScreenCoords(
-        screenOffsetX, screenOffsetY));
+    MapCoords mapCoordsTopLeft = MapCoordUtils::screenToMapCoords(screenCoordsOffset);
     MapCoords mapCoordsTopRight = MapCoordUtils::screenToMapCoords(ScreenCoords(
-        (Consts::mapClipRect.w * screenZoom) + screenOffsetX, screenOffsetY));
+        (Consts::mapClipRect.w * screenZoom) + screenCoordsOffset.x(), screenCoordsOffset.y()));
     MapCoords mapCoordsBottomLeft = MapCoordUtils::screenToMapCoords(ScreenCoords(
-        screenOffsetX, (Consts::mapClipRect.h * screenZoom) + screenOffsetY));
+        screenCoordsOffset.x(), (Consts::mapClipRect.h * screenZoom) + screenCoordsOffset.y()));
     MapCoords mapCoordsBottomRight = MapCoordUtils::screenToMapCoords(ScreenCoords(
-        (Consts::mapClipRect.w * screenZoom) + screenOffsetX, (Consts::mapClipRect.h * screenZoom) + screenOffsetY));
+        (Consts::mapClipRect.w * screenZoom) + screenCoordsOffset.x(),
+        (Consts::mapClipRect.h * screenZoom) + screenCoordsOffset.y()
+    ));
 
     int mapXStart = std::max(mapCoordsTopLeft.x(), 0);
     int mapYStart = std::max(mapCoordsTopRight.y(), 0);
@@ -100,7 +100,7 @@ void GuiMap::renderElement(IRenderer* renderer) {
     // Postionieren wir grade ein neues Gebäude?
     Structure* structureBeingAdded = nullptr;
     if (context->guiMgr->getPanelState().selectedPanelButton == PanelButton::ADD_BUILDING) {
-        MapCoords mapCoords = MapCoordUtils::getMapCoordsUnderMouse(map, context->mouseCurrentX, context->mouseCurrentY);
+        MapCoords mapCoords = MapCoordUtils::getMapCoordsUnderMouse(*map, context->mouseCurrentX, context->mouseCurrentY);
 
         StructureType structureType = context->guiMgr->getPanelState().addingStructure;
         const FourDirectionsView& view = context->guiMgr->getPanelState().addingStructureView;
@@ -201,8 +201,8 @@ void GuiMap::renderElement(IRenderer* renderer) {
             ScreenCoords screenCoords = MapCoordUtils::mapToScreenCoords(mapCoords);
             Rect rectDestination(screenCoords.x(), screenCoords.y(), rectSource.w / screenZoom, rectSource.h / screenZoom);
 
-            rectDestination.x -= screenOffsetX;
-            rectDestination.y -= screenOffsetY;
+            rectDestination.x -= screenCoordsOffset.x();
+            rectDestination.y -= screenCoordsOffset.y();
 
             rectDestination.y -= yInMapObject;
 
@@ -284,9 +284,7 @@ void GuiMap::renderElement(IRenderer* renderer) {
             const MapCoords& mapCoords = *iter;
 
             ScreenCoords screenCoords = MapCoordUtils::mapToScreenCoordsCenter(mapCoords);
-
-            screenCoords.subX(screenOffsetX);
-            screenCoords.subY(screenOffsetY);
+            screenCoords -= screenCoordsOffset;
 
             screenCoords.subY(IGraphicsMgr::ELEVATION_HEIGHT);
 
@@ -339,7 +337,7 @@ void GuiMap::onClickInMap(int mouseX, int mouseY) {
 
     // Grade beim Platzieren eines neuen Gebäudes?
     if (context->guiMgr->getPanelState().selectedPanelButton == PanelButton::ADD_BUILDING) {
-        MapCoords mapCoords = MapCoordUtils::getMapCoordsUnderMouse(map, context->mouseCurrentX, context->mouseCurrentY);
+        MapCoords mapCoords = MapCoordUtils::getMapCoordsUnderMouse(*map, context->mouseCurrentX, context->mouseCurrentY);
 
         onClickInMapWhileAddingStructure(mapCoords);
         return;
@@ -490,8 +488,7 @@ unsigned char GuiMap::isAllowedToPlaceStructure(
 
 void GuiMap::drawCatchmentArea(IRenderer* const renderer, Structure* structure) {
     Map* map = context->game->getMap();
-    int screenOffsetX = map->getScreenOffsetX();
-    int screenOffsetY = map->getScreenOffsetY();
+    const ScreenCoords& screenCoordsOffset = map->getScreenCoordsOffset();
     int screenZoom = map->getScreenZoom();
 
     renderer->setDrawColor(Color(0xc8, 0xaf, 0x37, 255));
@@ -510,8 +507,8 @@ void GuiMap::drawCatchmentArea(IRenderer* const renderer, Structure* structure) 
 
                 ScreenCoords screenCoords = MapCoordUtils::mapToScreenCoords(MapCoords(mapX, mapY));
 
-                int drawX = (screenCoords.x() - screenOffsetX) / screenZoom;
-                int drawY = (screenCoords.y() - screenOffsetY - IGraphicsMgr::ELEVATION_HEIGHT) / screenZoom;
+                int drawX = (screenCoords.x() - screenCoordsOffset.x()) / screenZoom;
+                int drawY = (screenCoords.y() - screenCoordsOffset.y() - IGraphicsMgr::ELEVATION_HEIGHT) / screenZoom;
 
                 // An der Kachel jede der 4 Seiten untersuchen, ob wir eine Linie malen müssen.
                 // TODO die String-'1'er ersetzen durch echte 1en.

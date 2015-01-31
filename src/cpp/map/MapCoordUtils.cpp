@@ -135,11 +135,12 @@ Rect MapCoordUtils::getDrawCoordsForBuilding(const Map& map, IGraphicsMgr* graph
     return mapToDrawCoords(mapCoords, map, elevation, *graphic);
 }
 
-MapCoords MapCoordUtils::getMapCoordsUnderMouse(Map* map, int mouseCurrentX, int mouseCurrentY) {
-    int screenZoom = map->getScreenZoom();
+MapCoords MapCoordUtils::getMapCoordsUnderMouse(const Map& map, int mouseCurrentX, int mouseCurrentY) {
+    int screenZoom = map.getScreenZoom();
 
-    int mouseScreenX = (mouseCurrentX * screenZoom) + map->getScreenOffsetX();
-    int mouseScreenY = (mouseCurrentY * screenZoom) + map->getScreenOffsetY();
+    const ScreenCoords& screenCoordsOffset = map.getScreenCoordsOffset();
+    int mouseScreenX = (mouseCurrentX * screenZoom) + screenCoordsOffset.x();
+    int mouseScreenY = (mouseCurrentY * screenZoom) + screenCoordsOffset.y();
 
     // Wir machen es wie Anno 1602: Für die Position, wo der Mauszeiger steht, wird immer die elevatete Position
     // genommen, selbst, wenn wir uns auf dem Wasser befinden.
@@ -161,8 +162,9 @@ Rect MapCoordUtils::screenToDrawCoords(const ScreenCoords& screenCoords, const M
     drawCoordsRect.y -= elevation * IGraphicsMgr::ELEVATION_HEIGHT;
 
     // Scrolling-Offset anwenden
-    drawCoordsRect.x -= map.getScreenOffsetX();
-    drawCoordsRect.y -= map.getScreenOffsetY();
+    const ScreenCoords& screenCoordsOffset = map.getScreenCoordsOffset();
+    drawCoordsRect.x -= screenCoordsOffset.x();
+    drawCoordsRect.y -= screenCoordsOffset.y();
 
     int screenZoom = map.getScreenZoom();
     drawCoordsRect.x /= screenZoom;

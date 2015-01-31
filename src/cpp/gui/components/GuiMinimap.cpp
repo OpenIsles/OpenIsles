@@ -25,8 +25,7 @@ GuiMinimap::~GuiMinimap() {
 
 void GuiMinimap::renderElement(IRenderer* renderer) {
     Map* map = context->game->getMap();
-    int screenOffsetX = map->getScreenOffsetX();
-    int screenOffsetY = map->getScreenOffsetY();
+    const ScreenCoords& screenCoordsOffset = map->getScreenCoordsOffset();
     int screenZoom = map->getScreenZoom();
 
     int windowX, windowY;
@@ -45,14 +44,15 @@ void GuiMinimap::renderElement(IRenderer* renderer) {
     // Aktuellen Ausschnitt bestimmen
     // TODO Duplicate-Code refactorn, Rect (top, left, right, bottom) von Punkten einführen
 
-    MapCoords mapCoordsTopLeft = MapCoordUtils::screenToMapCoords(ScreenCoords(
-        screenOffsetX, screenOffsetY));
+    MapCoords mapCoordsTopLeft = MapCoordUtils::screenToMapCoords(screenCoordsOffset);
     MapCoords mapCoordsTopRight = MapCoordUtils::screenToMapCoords(ScreenCoords(
-        (Consts::mapClipRect.w * screenZoom) + screenOffsetX, screenOffsetY));
+        (Consts::mapClipRect.w * screenZoom) + screenCoordsOffset.x(), screenCoordsOffset.y()));
     MapCoords mapCoordsBottomLeft = MapCoordUtils::screenToMapCoords(ScreenCoords(
-        screenOffsetX, (Consts::mapClipRect.h * screenZoom) + screenOffsetY));
+        screenCoordsOffset.x(), (Consts::mapClipRect.h * screenZoom) + screenCoordsOffset.y()));
     MapCoords mapCoordsBottomRight = MapCoordUtils::screenToMapCoords(ScreenCoords(
-        (Consts::mapClipRect.w * screenZoom) + screenOffsetX, (Consts::mapClipRect.h * screenZoom) + screenOffsetY));
+        (Consts::mapClipRect.w * screenZoom) + screenCoordsOffset.x(),
+        (Consts::mapClipRect.h * screenZoom) + screenCoordsOffset.y()
+    ));
 
     float scaleFactor = (float) map->getWidth() / (float) width;
     SDL_Point points[5] = {
@@ -138,12 +138,12 @@ void GuiMinimap::onClickInMinimap(int mouseX, int mouseY) {
     int mapX = (int) ((float) xInMinimap  * scaleFactor);
     int mapY = (int) ((float) yInMinimap  * scaleFactor);
 
-    ScreenCoords screenCoords = MapCoordUtils::mapToScreenCoords(MapCoords(mapX, mapY));
+    ScreenCoords newScreenCoordsOffset = MapCoordUtils::mapToScreenCoords(MapCoords(mapX, mapY));
 
     // zentrieren
     int screenZoom = map->getScreenZoom();
-    screenCoords.subX((Consts::mapClipRect.w * screenZoom) / 2);
-    screenCoords.subY((Consts::mapClipRect.h * screenZoom) / 2);
+    newScreenCoordsOffset.subX((Consts::mapClipRect.w * screenZoom) / 2);
+    newScreenCoordsOffset.subY((Consts::mapClipRect.h * screenZoom) / 2);
 
-    map->setScreenOffset(screenCoords);
+    map->setScreenCoordsOffset(newScreenCoordsOffset);
 }

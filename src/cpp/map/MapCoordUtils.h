@@ -90,7 +90,7 @@ public:
      * @param mouseCurrentY Y-Koordinate des Mauszeigers
      * @return Map-Koordinaten
      */
-    static MapCoords getMapCoordsUnderMouse(Map* map, int mouseCurrentX, int mouseCurrentY);
+    static MapCoords getMapCoordsUnderMouse(const Map& map, int mouseCurrentX, int mouseCurrentY);
 
 private:
     /**

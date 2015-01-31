@@ -128,14 +128,9 @@ private:
 	MapObject* selectedMapObject = nullptr;
 
 	/**
-	 * @brief X-Offset in Screen-Koordinaten, um Scrolling zu ermöglichen
+	 * @brief Offset in Screen-Koordinaten, um Scrolling zu ermöglichen
 	 */
-	int screenOffsetX;
-
-	/**
-	 * @brief Y-Offset in Screen-Koordinaten, um Scrolling zu ermöglichen
-	 */
-	int screenOffsetY;
+	ScreenCoords screenCoordsOffset;
     
     /**
      * @brief Zoom-Level (1, 2, 4), entspricht Verkleinerungsfaktor
@@ -172,19 +167,14 @@ public:
 		return mapObjects;
 	}
 
-	int getScreenOffsetX() const {
-		return screenOffsetX;
-	}
+    const ScreenCoords& getScreenCoordsOffset() const {
+        return screenCoordsOffset;
+    }
 
-	int getScreenOffsetY() const {
-		return screenOffsetY;
-	}
+    void setScreenCoordsOffset(const ScreenCoords& screenCoordsOffset) {
+        this->screenCoordsOffset = screenCoordsOffset;
+    }
 
-	void setScreenOffset(const ScreenCoords& screenCoords) {
-		this->screenOffsetX = screenCoords.x();
-		this->screenOffsetY = screenCoords.y();
-	}
-    
     int getScreenZoom() const {
         return screenZoom;
     }
@@ -192,8 +182,8 @@ public:
     void setScreenZoom(int screenZoom) {
         // screenOffset anpassen, damit um die Bildschirmmitte gezoomt wird
         int zoomFactor = this->screenZoom - screenZoom;
-        screenOffsetX += (Consts::mapClipRect.w / 2) * zoomFactor;
-        screenOffsetY += (Consts::mapClipRect.h / 2) * zoomFactor;
+        screenCoordsOffset.addX((Consts::mapClipRect.w / 2) * zoomFactor);
+        screenCoordsOffset.addY((Consts::mapClipRect.h / 2) * zoomFactor);
         
         this->screenZoom = screenZoom;
     }

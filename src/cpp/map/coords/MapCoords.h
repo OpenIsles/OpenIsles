@@ -148,25 +148,6 @@ public:
     }
 
     /**
-     * @brief Ändert die Koordinaten.
-     * @param mapCoords neue Koordinaten
-     */
-    void setMapCoords(const MapCoords& mapCoords) {
-        _x = mapCoords._x;
-        _y = mapCoords._y;
-    }
-
-    /**
-     * @brief Ändert die Koordinaten.
-     * @param x neue X-Koordinate
-     * @param y neue Y-Koordinate
-     */
-    void setMapCoords(int x, int y) {
-        _x = x;
-        _y = y;
-    }
-
-    /**
      * @brief Gleichheitsoperator
      * @param mapCoords anderer Operand
      * @return `true`, wenn diese Koordinaten gleich sind, sonst `false`

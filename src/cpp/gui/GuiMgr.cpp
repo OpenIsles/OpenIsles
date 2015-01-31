@@ -347,7 +347,7 @@ void GuiMgr::onEvent(SDL_Event& event) {
         bool needToRecalculate = false;
 
         MapCoords mouseCurrentMapCoords =
-            MapCoordUtils::getMapCoordsUnderMouse(map, context->mouseCurrentX, context->mouseCurrentY);
+            MapCoordUtils::getMapCoordsUnderMouse(*map, context->mouseCurrentX, context->mouseCurrentY);
 
         // A*-Start- und Endkoordinaten festlegen
         if (event.key.keysym.scancode == SDL_SCANCODE_A) {
@@ -470,7 +470,7 @@ void GuiMgr::renderResourcesBar() {
 
     // Siedlung, wo der Cursor grade is
     MapCoords mouseCurrentMapCoords =
-        MapCoordUtils::getMapCoordsUnderMouse(context->game->getMap(), context->mouseCurrentX, context->mouseCurrentY);
+        MapCoordUtils::getMapCoordsUnderMouse(*context->game->getMap(), context->mouseCurrentX, context->mouseCurrentY);
 
     MapTile* mapTileAtCursor = context->game->getMap()->getMapTileAt(mouseCurrentMapCoords);
     if (mapTileAtCursor == nullptr) {
