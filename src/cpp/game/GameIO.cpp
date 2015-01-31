@@ -3,6 +3,7 @@
 #include "game/Colony.h"
 #include "game/Game.h"
 #include "game/GameIO.h"
+#include "map/coords/ScreenCoords.h"
 #include "map/Map.h"
 #include "utils/Consts.h"
 
@@ -173,11 +174,10 @@ void GameIO::loadMap(
 
             // Startpunkt: Diesen Punkt wollen wir auf den Bildschirm zentrieren
         else if (strcmp(nodeType, "startpoint") == 0) {
-            int screenCenterX, screenCenterY;
-            MapCoordUtils::mapToScreenCoordsCenter(mapCoords, screenCenterX, screenCenterY);
+            ScreenCoords screenCoordsCenter = MapCoordUtils::mapToScreenCoordsCenter(mapCoords);
 
-            map->screenOffsetX = screenCenterX - (Consts::mapClipRect.w / 2);
-            map->screenOffsetY = screenCenterY - (Consts::mapClipRect.h / 2);
+            map->screenOffsetX = screenCoordsCenter.x() - (Consts::mapClipRect.w / 2);
+            map->screenOffsetY = screenCoordsCenter.y() - (Consts::mapClipRect.h / 2);
         }
     }
     map->screenZoom = 1;

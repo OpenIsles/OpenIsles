@@ -1,31 +1,29 @@
 #include <algorithm>
 #include <string>
-#include "game/Game.h"
-#include "graphics/mgr/IGraphicsMgr.h"
 #include "map/Building.h"
 #include "map/Map.h"
-#include "utils/Rect.h"
 
 
-void MapCoordUtils::mapToScreenCoords(int mapX, int mapY, int& screenX, int& screenY) {
-	screenX = (mapX - mapY) * IGraphicsMgr::TILE_WIDTH_HALF;
-	screenY = (mapX + mapY) * IGraphicsMgr::TILE_HEIGHT_HALF;
+ScreenCoords MapCoordUtils::mapToScreenCoords(const MapCoords& mapCoords) {
+	int screenX = (mapCoords.x() - mapCoords.y()) * IGraphicsMgr::TILE_WIDTH_HALF;
+	int screenY = (mapCoords.x() + mapCoords.y()) * IGraphicsMgr::TILE_HEIGHT_HALF;
+    return ScreenCoords(screenX, screenY);
 }
 
-void MapCoordUtils::mapToScreenCoords(double mapX, double mapY, int& screenX, int& screenY) {
-    screenX = (int) ((mapX - mapY) * IGraphicsMgr::TILE_WIDTH_HALF);
-    screenY = (int) ((mapX + mapY) * IGraphicsMgr::TILE_HEIGHT_HALF);
+ScreenCoords MapCoordUtils::mapToScreenCoords(const DoubleMapCoords& mapCoords) {
+	int screenX = (int) ((mapCoords.x() - mapCoords.y()) * (double) IGraphicsMgr::TILE_WIDTH_HALF);
+	int screenY = (int) ((mapCoords.x() + mapCoords.y()) * (double) IGraphicsMgr::TILE_HEIGHT_HALF);
+    return ScreenCoords(screenX, screenY);
 }
 
-void MapCoordUtils::mapToScreenCoordsCenter(const MapCoords& mapCoords, int& screenX, int& screenY) {
-    // TODO mapCoords.toScreenCoordsCenter()
-	screenX = (mapCoords.x() - mapCoords.y()) * IGraphicsMgr::TILE_WIDTH_HALF + IGraphicsMgr::TILE_WIDTH_HALF;
-	screenY = (mapCoords.x() + mapCoords.y()) * IGraphicsMgr::TILE_HEIGHT_HALF + IGraphicsMgr::TILE_HEIGHT_HALF;
-
-    // TODO ScreenCoords abschaffen
+ScreenCoords MapCoordUtils::mapToScreenCoordsCenter(const MapCoords& mapCoords) {
+    ScreenCoords screenCoords = mapToScreenCoords(mapCoords);
+    screenCoords.addX(IGraphicsMgr::TILE_WIDTH_HALF);
+    screenCoords.addY(IGraphicsMgr::TILE_HEIGHT_HALF);
+    return screenCoords;
 }
 
-MapCoords MapCoordUtils::screenToMapCoords(int screenX, int screenY) {
+MapCoords MapCoordUtils::screenToMapCoords(const ScreenCoords& screenCoords) {
 	/*
 	 * Screen-Koordinaten erst in ein (TILE_WIDTH x TILE_HEIGHT)-Koordinatensystem runterrechnen
 	 * Dann gibts 8 Fälle und wir haben es. Ohne unperformante Matrizen und Projektionen :-)
@@ -52,8 +50,8 @@ MapCoords MapCoordUtils::screenToMapCoords(int screenX, int screenY) {
 	 *
 	 */
 
-	double xDouble = (double) screenX / (double) IGraphicsMgr::TILE_WIDTH;
-	double yDouble = (double) screenY / (double) IGraphicsMgr::TILE_HEIGHT;
+	double xDouble = (double) screenCoords.x() / (double) IGraphicsMgr::TILE_WIDTH;
+	double yDouble = (double) screenCoords.y() / (double) IGraphicsMgr::TILE_HEIGHT;
 	int xInt = (int) floor(xDouble);
 	int yInt = (int) floor(yDouble);
 	double xDiff = xDouble - (double) xInt;
@@ -114,49 +112,17 @@ MapCoords MapCoordUtils::screenToMapCoords(int screenX, int screenY) {
     return MapCoords(mapX, mapY);
 }
 
-void MapCoordUtils::screenToDrawCoords(
-	Map* map, int screenX, int screenY, int elevation, const IGraphic* graphic, Rect* rect) {
-
-    rect->x = screenX - (
-        graphic->getWidth() - (graphic->getMapWidth() + 1) * IGraphicsMgr::TILE_WIDTH_HALF);
-    rect->y = screenY - (
-        graphic->getHeight() - (graphic->getMapWidth() + graphic->getMapHeight()) * IGraphicsMgr::TILE_HEIGHT_HALF);
-
-    // Elevation
-    rect->y -= elevation * IGraphicsMgr::ELEVATION_HEIGHT;
-
-    // Scrolling-Offset anwenden
-    rect->x -= map->getScreenOffsetX();
-    rect->y -= map->getScreenOffsetY();
-
-    int screenZoom = map->getScreenZoom();
-    rect->x /= screenZoom;
-    rect->y /= screenZoom;
-
-    // Größe ist gleich der Grafikgröße
-    rect->w = graphic->getWidth() / screenZoom;
-    rect->h = graphic->getHeight() / screenZoom;
+Rect MapCoordUtils::mapToDrawCoords(const DoubleMapCoords& mapCoords, const Map& map, int elevation, const IGraphic& graphic) {
+    ScreenCoords screenCoords = mapToScreenCoords(mapCoords);
+    return screenToDrawCoords(screenCoords, map, elevation, graphic);
 }
 
-void MapCoordUtils::mapToDrawCoords(
-	Map* map, int mapX, int mapY, int elevation, const IGraphic* graphic, Rect* rect) {
-
-    int screenX, screenY;
-    mapToScreenCoords(mapX, mapY, screenX, screenY);
-
-    screenToDrawCoords(map, screenX, screenY, elevation, graphic, rect);
+Rect MapCoordUtils::mapToDrawCoords(const MapCoords& mapCoords, const Map& map, int elevation, const IGraphic& graphic) {
+    ScreenCoords screenCoords = mapToScreenCoords(mapCoords);
+    return screenToDrawCoords(screenCoords, map, elevation, graphic);
 }
 
-void MapCoordUtils::mapToDrawCoords(
-	Map* map, double mapX, double mapY, int elevation, const IGraphic* graphic, Rect* rect) {
-
-    int screenX, screenY;
-    mapToScreenCoords(mapX, mapY, screenX, screenY);
-
-    screenToDrawCoords(map, screenX, screenY, elevation, graphic, rect);
-}
-
-void MapCoordUtils::getDrawCoordsForBuilding(Map* map, IGraphicsMgr* graphicsMgr, Building* building, Rect* rect) {
+Rect MapCoordUtils::getDrawCoordsForBuilding(const Map& map, IGraphicsMgr* graphicsMgr, Building* building) {
     const MapCoords& mapCoords = building->getMapCoords();
 
 	const std::string& viewName = building->getView().getViewName();
@@ -166,8 +132,7 @@ void MapCoordUtils::getDrawCoordsForBuilding(Map* map, IGraphicsMgr* graphicsMgr
 
     const int elevation = 1; // TODO für Gebäude wie Anlegestelle, Fischerhütte etc. muss auf 0 gesetzt werden
 
-    // TODO mapCoords.toDrawCoords()
-    mapToDrawCoords(map, mapCoords.x(), mapCoords.y(), elevation, graphic, rect);
+    return mapToDrawCoords(mapCoords, map, elevation, *graphic);
 }
 
 MapCoords MapCoordUtils::getMapCoordsUnderMouse(Map* map, int mouseCurrentX, int mouseCurrentY) {
@@ -179,5 +144,33 @@ MapCoords MapCoordUtils::getMapCoordsUnderMouse(Map* map, int mouseCurrentX, int
     // Wir machen es wie Anno 1602: Für die Position, wo der Mauszeiger steht, wird immer die elevatete Position
     // genommen, selbst, wenn wir uns auf dem Wasser befinden.
     const int elevation = 1;
-    return screenToMapCoords(mouseScreenX, mouseScreenY + elevation * IGraphicsMgr::ELEVATION_HEIGHT / screenZoom);
+
+    ScreenCoords mouseScreenCoords(mouseScreenX, mouseScreenY + elevation * IGraphicsMgr::ELEVATION_HEIGHT / screenZoom);
+    return screenToMapCoords(mouseScreenCoords);
+}
+
+Rect MapCoordUtils::screenToDrawCoords(const ScreenCoords& screenCoords, const Map& map, int elevation, const IGraphic& graphic) {
+    Rect drawCoordsRect;
+
+    drawCoordsRect.x = screenCoords.x() - (
+        graphic.getWidth() - (graphic.getMapWidth() + 1) * IGraphicsMgr::TILE_WIDTH_HALF);
+    drawCoordsRect.y = screenCoords.y() - (
+        graphic.getHeight() - (graphic.getMapWidth() + graphic.getMapHeight()) * IGraphicsMgr::TILE_HEIGHT_HALF);
+
+    // Elevation
+    drawCoordsRect.y -= elevation * IGraphicsMgr::ELEVATION_HEIGHT;
+
+    // Scrolling-Offset anwenden
+    drawCoordsRect.x -= map.getScreenOffsetX();
+    drawCoordsRect.y -= map.getScreenOffsetY();
+
+    int screenZoom = map.getScreenZoom();
+    drawCoordsRect.x /= screenZoom;
+    drawCoordsRect.y /= screenZoom;
+
+    // Größe ist gleich der Grafikgröße
+    drawCoordsRect.w = graphic.getWidth() / screenZoom;
+    drawCoordsRect.h = graphic.getHeight() / screenZoom;
+
+    return drawCoordsRect;
 }

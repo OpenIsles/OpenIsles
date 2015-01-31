@@ -11,8 +11,11 @@
 #include "graphics/graphic/Animation.h"
 #include "graphics/renderer/IRenderer.h"
 #include "gui/GuiMgr.h"
+#include "map/coords/MapCoords.h"
+#include "map/coords/ScreenCoords.h"
 #include "map/Building.h"
 #include "map/Isle.h"
+#include "map/MapObject.h"
 #include "utils/Consts.h"
 #include "utils/RectangleData.h"
 
@@ -177,9 +180,9 @@ public:
 		return screenOffsetY;
 	}
 
-	void setScreenOffset(int screenOffsetX, int screenOffsetY) {
-		this->screenOffsetX = screenOffsetX;
-		this->screenOffsetY = screenOffsetY;
+	void setScreenOffset(const ScreenCoords& screenCoords) {
+		this->screenOffsetX = screenCoords.x();
+		this->screenOffsetY = screenCoords.y();
 	}
     
     int getScreenZoom() const {
