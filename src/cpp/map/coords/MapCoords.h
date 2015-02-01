@@ -148,6 +148,16 @@ public:
     }
 
     /**
+     * @brief Ändert die Koordinaten.
+     * @param x X-Map-Koordinate
+     * @param y Y-Map-Koordinate
+     */
+    void setTo(int x, int y) {
+        _x = x;
+        _y = y;
+    }
+
+    /**
      * @brief Gleichheitsoperator
      * @param mapCoords anderer Operand
      * @return `true`, wenn diese Koordinaten gleich sind, sonst `false`

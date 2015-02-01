@@ -128,9 +128,9 @@ private:
 	MapObject* selectedMapObject = nullptr;
 
 	/**
-	 * @brief Offset in Screen-Koordinaten, um Scrolling zu ermöglichen
+	 * @brief Map-Koordinaten, die sich aktuell in der Mitte befinden
 	 */
-	ScreenCoords screenCoordsOffset;
+	MapCoords mapCoordsCentered;
     
     /**
      * @brief Zoom-Level (1, 2, 4), entspricht Verkleinerungsfaktor
@@ -167,12 +167,28 @@ public:
 		return mapObjects;
 	}
 
-    const ScreenCoords& getScreenCoordsOffset() const {
-        return screenCoordsOffset;
+    const MapCoords& getMapCoordsCentered() const {
+        return mapCoordsCentered;
     }
 
-    void setScreenCoordsOffset(const ScreenCoords& screenCoordsOffset) {
-        this->screenCoordsOffset = screenCoordsOffset;
+    void setMapCoordsCentered(const MapCoords& mapCoordsCentered) {
+        this->mapCoordsCentered = mapCoordsCentered;
+    }
+
+    /**
+     * @brief Liefert die Screen-Koordinaten in der linken oberen Ecke
+     * @return Screen-Koordinaten
+     */
+    const ScreenCoords getScreenCoordsOffset() const {
+        // TODO Andere Ansicht wird später wohl andere ScreenCoords zurückliefern, je nachdem, wie wir das Koordinatensystem dann aufsetzen
+
+        ScreenCoords screenCoordsOffset = MapCoordUtils::mapToScreenCoords(mapCoordsCentered);
+
+        // screenOffset anpassen, da die mapCoords in der Bildschirmmitte sein sollen
+        screenCoordsOffset.subX((Consts::mapClipRect.w / 2) * screenZoom);
+        screenCoordsOffset.subY((Consts::mapClipRect.h / 2) * screenZoom);
+
+        return screenCoordsOffset;
     }
 
     int getScreenZoom() const {
@@ -180,11 +196,6 @@ public:
     }
 
     void setScreenZoom(int screenZoom) {
-        // screenOffset anpassen, damit um die Bildschirmmitte gezoomt wird
-        int zoomFactor = this->screenZoom - screenZoom;
-        screenCoordsOffset.addX((Consts::mapClipRect.w / 2) * zoomFactor);
-        screenCoordsOffset.addY((Consts::mapClipRect.h / 2) * zoomFactor);
-        
         this->screenZoom = screenZoom;
     }
 
@@ -201,12 +212,10 @@ public:
 
 	/**
 	 * @brief Scrollt die Karte
-	 * @param screenOffsetX X-Offset in Screen-Koordinaten, in die gescrollt werden soll.
-	 *                      Positive Werte scrollen nach rechts, negative nach links
-	 * @param screenOffsetY Y-Offset in Screen-Koordinaten, in die gescrollt werden soll.
-	 *                      Positive Werte scrollen nach unten, negative nach oben
+	 * @param mapCoordsDelta Offset in Map-Koordinaten, in die gescrollt werden soll.
+	 *                      Positive Werte scrollen nach rechts/unten, negative nach links/oben
 	 */
-	void scroll(int screenOffsetX, int screenOffsetY);
+	void scroll(const MapCoordsDelta& mapCoordsDelta);
 
 	/**
 	 * @brief Fügt ein neues Map-Objekt der Karte hinzu

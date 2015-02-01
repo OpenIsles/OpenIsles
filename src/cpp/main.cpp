@@ -145,6 +145,7 @@ int main(int argc, char** argv) {
         SDL_GetMouseState(&context.mouseCurrentX, &context.mouseCurrentY);
 
 #ifdef DEBUG
+        const MapCoords& mapCoordsCentered = map->getMapCoordsCentered();
         const ScreenCoords& screenCoordsOffset = map->getScreenCoordsOffset();
         int screenZoom = map->getScreenZoom();
 
@@ -160,7 +161,8 @@ int main(int argc, char** argv) {
                 ", current = " + toString(fpsCounter->getFpsCurrent());
         
         debugOutput[1] = "Screen: offset = (" +
-                toString(screenCoordsOffset.x()) + ", " + toString(screenCoordsOffset.y()) + "), zoom = " +
+                toString(screenCoordsOffset.x()) + ", " + toString(screenCoordsOffset.y()) + "), mapCentered = (" +
+                toString(mapCoordsCentered.x()) + ", " + toString(mapCoordsCentered.y()) + "), zoom = " +
                 toString(screenZoom);
 
         debugOutput[2] = "mouse = (" + 

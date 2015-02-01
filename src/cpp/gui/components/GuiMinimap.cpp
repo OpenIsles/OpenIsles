@@ -138,12 +138,5 @@ void GuiMinimap::onClickInMinimap(int mouseX, int mouseY) {
     int mapX = (int) ((float) xInMinimap  * scaleFactor);
     int mapY = (int) ((float) yInMinimap  * scaleFactor);
 
-    ScreenCoords newScreenCoordsOffset = MapCoordUtils::mapToScreenCoords(MapCoords(mapX, mapY));
-
-    // zentrieren
-    int screenZoom = map->getScreenZoom();
-    newScreenCoordsOffset.subX((Consts::mapClipRect.w * screenZoom) / 2);
-    newScreenCoordsOffset.subY((Consts::mapClipRect.h * screenZoom) / 2);
-
-    map->setScreenCoordsOffset(newScreenCoordsOffset);
+    map->setMapCoordsCentered(MapCoords(mapX, mapY));
 }

@@ -266,13 +266,13 @@ void GuiMgr::onEvent(SDL_Event& event) {
 
         // Scrolling der Karte
         else if (event.key.keysym.scancode == SDL_SCANCODE_UP) {
-            map->scroll(0, -16);
+            map->scroll(MapCoordsDelta(-1, -1));
         } else if (event.key.keysym.scancode == SDL_SCANCODE_DOWN) {
-            map->scroll(0, 16);
+            map->scroll(MapCoordsDelta(1, 1));
         } else if (event.key.keysym.scancode == SDL_SCANCODE_LEFT) {
-            map->scroll(-16, 0);
+            map->scroll(MapCoordsDelta(-1, 1));
         } else if (event.key.keysym.scancode == SDL_SCANCODE_RIGHT) {
-            map->scroll(16, 0);
+            map->scroll(MapCoordsDelta(1, -1));
         }
 
         // Karte zoomen
