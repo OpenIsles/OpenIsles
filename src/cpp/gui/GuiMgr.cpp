@@ -266,22 +266,50 @@ void GuiMgr::onEvent(SDL_Event& event) {
 
         // Scrolling der Karte
         else if (event.key.keysym.scancode == SDL_SCANCODE_UP) {
-            map->scroll(MapCoordsDelta(-1, -1));
+            map->scroll(-1, -1);
         } else if (event.key.keysym.scancode == SDL_SCANCODE_DOWN) {
-            map->scroll(MapCoordsDelta(1, 1));
+            map->scroll(1, 1);
         } else if (event.key.keysym.scancode == SDL_SCANCODE_LEFT) {
-            map->scroll(MapCoordsDelta(-1, 1));
+            map->scroll(-1, 1);
         } else if (event.key.keysym.scancode == SDL_SCANCODE_RIGHT) {
-            map->scroll(MapCoordsDelta(1, -1));
+            map->scroll(1, -1);
         }
 
         // Karte zoomen
         else if (event.key.keysym.scancode == SDL_SCANCODE_F2) {
-            map->setScreenZoom(4);
+            if(!(event.key.keysym.mod & KMOD_SHIFT)) {
+                map->setScreenZoom(4);
+            }
+#ifdef DEBUG
+            else {
+                map->setScreenZoom(32);
+            }
+#endif // DEBUG
         } else if (event.key.keysym.scancode == SDL_SCANCODE_F3) {
-            map->setScreenZoom(2);
+            if(!(event.key.keysym.mod & KMOD_SHIFT)) {
+                map->setScreenZoom(2);
+            }
+#ifdef DEBUG
+            else {
+                map->setScreenZoom(16);
+            }
+#endif // DEBUG
         } else if (event.key.keysym.scancode == SDL_SCANCODE_F4) {
-            map->setScreenZoom(1);
+            if(!(event.key.keysym.mod & KMOD_SHIFT)) {
+                map->setScreenZoom(1);
+            }
+#ifdef DEBUG
+            else {
+                map->setScreenZoom(8);
+            }
+#endif // DEBUG
+        }
+
+        // Karte drehen
+        else if (event.key.keysym.scancode == SDL_SCANCODE_Z) {
+            map->rotateViewCounterclockwise();
+        } else if (event.key.keysym.scancode == SDL_SCANCODE_X) {
+            map->rotateViewClockwise();
         }
 
         // Spielgeschwindigkeit

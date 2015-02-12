@@ -178,6 +178,7 @@ void GameIO::loadMap(
         }
     }
     map->screenZoom = 1;
+    map->screenView = FourDirectionsView("south");
 }
 
 void GameIO::loadColonies(Game* game, rapidxml::xml_node<>* objectgroupColoniesNode) {

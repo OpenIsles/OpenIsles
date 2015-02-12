@@ -146,29 +146,36 @@ int main(int argc, char** argv) {
 
 #ifdef DEBUG
         const MapCoords& mapCoordsCentered = map->getMapCoordsCentered();
-        const ScreenCoords& screenCoordsOffset = map->getScreenCoordsOffset();
         int screenZoom = map->getScreenZoom();
+        const FourDirectionsView& screenView = map->getScreenView();
 
-        int screenX, screenY;
-        screenX = (context.mouseCurrentX * screenZoom) + screenCoordsOffset.x();
-        screenY = (context.mouseCurrentY * screenZoom) + screenCoordsOffset.y();
-
+        ScreenCoords mouseCurrentScreenCoords =
+            MapCoordUtils::getScreenCoordsUnderMouse(*map, context.mouseCurrentX, context.mouseCurrentY);
         MapCoords mouseCurrentMapCoords =
             MapCoordUtils::getMapCoordsUnderMouse(*map, context.mouseCurrentX, context.mouseCurrentY);
 
+        MapCoords mapCoordsTopLeft, mapCoordsTopRight, mapCoordsBottomLeft, mapCoordsBottomRight;
+        MapCoordUtils::getMapCoordsInScreenEdges(
+            *map, mapCoordsTopLeft, mapCoordsTopRight, mapCoordsBottomLeft, mapCoordsBottomRight);
+
 		// Debug-Infos vorbereiten, damit wir sie später einfach nur ausgeben können
 		debugOutput[0] = "FPS: average = " + toString(fpsCounter->getFpsAvg()) +
-                ", current = " + toString(fpsCounter->getFpsCurrent());
-        
-        debugOutput[1] = "Screen: offset = (" +
-                toString(screenCoordsOffset.x()) + ", " + toString(screenCoordsOffset.y()) + "), mapCentered = (" +
-                toString(mapCoordsCentered.x()) + ", " + toString(mapCoordsCentered.y()) + "), zoom = " +
-                toString(screenZoom);
+            ", current = " + toString(fpsCounter->getFpsCurrent());
 
-        debugOutput[2] = "mouse = (" + 
-                toString(context.mouseCurrentX) + ", " + toString(context.mouseCurrentY) + "), mapElevated = (" +
-                toString(mouseCurrentMapCoords.x()) + ", " + toString(mouseCurrentMapCoords.y()) + "), screen = (" +
-                toString(screenX) + ", " + toString(screenY) + ")";
+        debugOutput[1] = "Screen: mapCentered = (" +
+            toString(mapCoordsCentered.x()) + ", " + toString(mapCoordsCentered.y()) + "), zoom = " +
+            toString(screenZoom) + ", view = " + screenView.getViewName();
+
+        debugOutput[2] = "ScreenEdges: topLeft = (" +
+            toString(mapCoordsTopLeft.x()) + ", " + toString(mapCoordsTopLeft.y()) + "), topRight = (" +
+            toString(mapCoordsTopRight.x()) + ", " + toString(mapCoordsTopRight.y()) + "), bottomLeft = (" +
+            toString(mapCoordsBottomLeft.x()) + ", " + toString(mapCoordsBottomLeft.y()) + "), bottomRight = (" +
+            toString(mapCoordsBottomRight.x()) + ", " + toString(mapCoordsBottomRight.y()) + ")";
+
+        debugOutput[3] = "mouse = (" +
+            toString(context.mouseCurrentX) + ", " + toString(context.mouseCurrentY) + "), screen = (" +
+            toString(mouseCurrentScreenCoords.x()) + ", " + toString(mouseCurrentScreenCoords.y()) + "), mapElevated = (" +
+            toString(mouseCurrentMapCoords.x()) + ", " + toString(mouseCurrentMapCoords.y()) + "), ";
 
         const MapObject* selectedMapObject = map->getSelectedMapObject();
         if (selectedMapObject != nullptr) {
@@ -178,7 +185,7 @@ int main(int argc, char** argv) {
             const MapObjectFixed* smoFixed = dynamic_cast<const MapObjectFixed*>(selectedMapObject);
             if (smoFixed != nullptr) {
                 const MapCoords& mapCoords = smoFixed->getMapCoords();
-                debugOutput[3] = "selectedMapObject(Fixed) on mapCoords (" +
+                debugOutput[4] = "selectedMapObject(Fixed) on mapCoords (" +
                     toString(mapCoords.x()) + ", " + toString(mapCoords.y()) + "), size = (" +
                     toString(mapWidth) + ", " + toString(mapHeight) + ")";
             }
@@ -186,18 +193,18 @@ int main(int argc, char** argv) {
                 const MapObjectMoving* smoMoving = dynamic_cast<const MapObjectMoving*>(selectedMapObject);
                 if (smoMoving != nullptr) {
                     const DoubleMapCoords& mapCoords = smoMoving->getMapCoords();
-                    debugOutput[3] = "selectedMapObject(Moving) on mapCoords (" +
+                    debugOutput[4] = "selectedMapObject(Moving) on mapCoords (" +
                         toString(mapCoords.x()) + ", " + toString(mapCoords.y()) + "), size = (" +
                         toString(mapWidth) + ", " + toString(mapHeight) + ")";
                 }
                 else {
-                    debugOutput[3] = "selectedMapObject(UNKNOWN!?) size = (" +
+                    debugOutput[4] = "selectedMapObject(UNKNOWN!?) size = (" +
                         toString(mapWidth) + ", " + toString(mapHeight) + ")";
                 }
             }
 
         } else {
-            debugOutput[3] = "";
+            debugOutput[4] = "";
         }
 
 #ifdef DEBUG_A_STAR
@@ -211,7 +218,7 @@ int main(int argc, char** argv) {
             buildingToUseCatchmentAreaString = "nullptr";
         }
 
-        debugOutput[4] = "debugAStar: source = (" +
+        debugOutput[5] = "debugAStar: source = (" +
             toString(AStar::debugAStar_source.x()) + ", " +
             toString(AStar::debugAStar_source.y()) + "), destination = (" +
             toString(AStar::debugAStar_destination.x()) + ", " +

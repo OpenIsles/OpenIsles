@@ -25,8 +25,6 @@ GuiMinimap::~GuiMinimap() {
 
 void GuiMinimap::renderElement(IRenderer* renderer) {
     Map* map = context->game->getMap();
-    const ScreenCoords& screenCoordsOffset = map->getScreenCoordsOffset();
-    int screenZoom = map->getScreenZoom();
 
     int windowX, windowY;
     getWindowCoords(windowX, windowY);
@@ -42,17 +40,9 @@ void GuiMinimap::renderElement(IRenderer* renderer) {
     SDL_RenderCopy(sdlRealRenderer, minimapTexture, nullptr, &sdlMinimapClipRect);
 
     // Aktuellen Ausschnitt bestimmen
-    // TODO Duplicate-Code refactorn, Rect (top, left, right, bottom) von Punkten einführen
-
-    MapCoords mapCoordsTopLeft = MapCoordUtils::screenToMapCoords(screenCoordsOffset);
-    MapCoords mapCoordsTopRight = MapCoordUtils::screenToMapCoords(ScreenCoords(
-        (Consts::mapClipRect.w * screenZoom) + screenCoordsOffset.x(), screenCoordsOffset.y()));
-    MapCoords mapCoordsBottomLeft = MapCoordUtils::screenToMapCoords(ScreenCoords(
-        screenCoordsOffset.x(), (Consts::mapClipRect.h * screenZoom) + screenCoordsOffset.y()));
-    MapCoords mapCoordsBottomRight = MapCoordUtils::screenToMapCoords(ScreenCoords(
-        (Consts::mapClipRect.w * screenZoom) + screenCoordsOffset.x(),
-        (Consts::mapClipRect.h * screenZoom) + screenCoordsOffset.y()
-    ));
+    MapCoords mapCoordsTopLeft, mapCoordsTopRight, mapCoordsBottomLeft, mapCoordsBottomRight;
+    MapCoordUtils::getMapCoordsInScreenEdges(
+        *map, mapCoordsTopLeft, mapCoordsTopRight, mapCoordsBottomLeft, mapCoordsBottomRight);
 
     float scaleFactor = (float) map->getWidth() / (float) width;
     SDL_Point points[5] = {

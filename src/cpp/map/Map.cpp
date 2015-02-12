@@ -82,8 +82,30 @@ void Map::setSelectedMapObject(MapObject* selectedMapObject) {
     this->selectedMapObject = selectedMapObject;
 }
 
-void Map::scroll(const MapCoordsDelta& mapCoordsDelta) {
-    mapCoordsCentered = mapCoordsCentered + mapCoordsDelta;
+void Map::scroll(int xDelta, int yDelta) {
+    int mapXOffset, mapYOffset;
+
+    // TODO denselben Code haben wir auch in MapCoordsUtils
+    if (screenView == "south") {
+        mapXOffset = xDelta;
+        mapYOffset = yDelta;
+    } else if (screenView == "east") {
+        mapXOffset = yDelta;
+        mapYOffset = -xDelta;
+    } else if (screenView == "north") {
+        mapXOffset = -xDelta;
+        mapYOffset = -yDelta;
+    } else if (screenView == "west") {
+        mapXOffset = -yDelta;
+        mapYOffset = xDelta;
+    }
+    else {
+        assert(false);
+        mapXOffset = mapYOffset = 0;
+    }
+
+    mapCoordsCentered.addX(mapXOffset);
+    mapCoordsCentered.addY(mapYOffset);
 }
 
 void Map::addMapObject(MapObjectFixed* mapObject) {

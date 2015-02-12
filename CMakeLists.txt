@@ -15,6 +15,8 @@ set(COMMON_SOURCE_FILES
     src/cpp/game/GameIO.cpp
     src/cpp/game/Player.cpp
     src/cpp/graphics/mgr/AbstractGraphicsMgr.cpp
+    src/cpp/map/coords/MapCoords.cpp
+    src/cpp/map/coords/ScreenCoords.cpp
     src/cpp/map/Building.cpp
     src/cpp/map/Directions.cpp
     src/cpp/map/Isle.cpp
@@ -54,6 +56,8 @@ set(TEST_FILES
     test/cpp/graphics/GraphicSetTest.cpp
     test/cpp/map/coords/MapCoordsTest.cpp
     test/cpp/map/DirectionsTest.cpp
+    test/cpp/map/MapCoordUtilsTest.cpp
+    test/cpp/utils/MapCoordsIteratorTest.cpp
 )
 
 
@@ -145,7 +149,7 @@ file(COPY ${CMAKE_SOURCE_DIR}/test/data DESTINATION ${CMAKE_BINARY_DIR})
 # Google Test
 find_package(GTest REQUIRED)
 target_include_directories(OpenIsles-Tests PUBLIC ${GTEST_INCLUDE_DIRS})
-target_compile_definitions(OpenIsles-Tests PUBLIC "-DNO_SDL")
+target_compile_definitions(OpenIsles-Tests PUBLIC "-DNO_SDL -DDEFINE_VIRTUAL_ONLY_IN_TESTS")
 target_link_libraries(OpenIsles-Tests ${GTEST_BOTH_LIBRARIES} pthread) # BOTH-Variable benutzen, damit wir uns an jeder Testdatei die main()-Methode sparen
 
 add_test(OpenIslesTests OpenIsles-Tests)

@@ -1,6 +1,7 @@
 #ifndef _MAP_COORDS_H
 #define _MAP_COORDS_H
 
+#include <iostream>
 #include "map/coords/XYCoords.h"
 
 
@@ -23,57 +24,27 @@
  *
  * Koordinatensysteme:
  * - Obenstehend sind die Kachel- oder Map-Koordinaten (MapCoords) dargestellt.
- * - Bildschirm-Koordinaten (screenCoords) sind durch ein Pixel-Koordinatensystem definiert. Hierbei wird die
- *   Kachel mit mapCoords (0, 0) auf screenCoords (0, 0) gelegt.
- * - Die Bildschirm-Koordinate einer Kachel bestimmt die Position des Pixels links-oben am Kachelrechteck.
+ * - Bildschirm-Koordinaten (screenCoords) sind durch ein Pixel-Koordinatensystem definiert. screenCoords (0, 0)
+ *   befinden sich immer in der Bildschirmmitte. Auf screenCoords (0, 0) befindet sich außerdem das oben-mittige
+ *   Pixel der Kachel Map::mapCoordsCentered,
  * - Beim Zoomen ändert sich nicht die Zuordnung von map- zu screenCoords. Beim Zeichnen wird verkleinert, d.h.
  *   mehr Inhalt dargestellt. Auf Zoomstufe Verkleinerung 4x z.B. liegt neben dem Pixel das screenCoords (0, 0)
  *   darstellt, die screenCoords (4, 0).
+ * - Screen-Koordinaten sind unabhängig von der Drehung. In der Mitte ist immer (0, 0), nach unten-rechts am
+ *   Bildschirm werden die Koordinaten beide positiver. Je nach Ansicht befindet sich dort aber nun andere
+ *   Map-Koordinaten.
  * - Screen-Koordinaten sind immer auf den Boden bezogen. Kommt Elevation ins Spiel, müssen die y-Screen-Koordinate
  *   entsprechend angepasst werden.
  * - Wenn von Zeichen-Koordinaten (drawCoords) gesprochen wird, sind das Pixel-Koordinaten für ein bestimmtes
- *   Objekt, um es mit dem aktuellen Scrolling-Offset (Map::screenOffsetX und Map::screenOffsetY) und der
+ *   Objekt, um es mit dem aktuellen Scrolling-Offset (via Map::mapCoordsCentered) und der
  *   aktuellen Zoom-Stufe (Map::screenZoom) zu zeichnen (= die obere linke Ecke). drawCoords berücksichtigen die
  *   Elevation. Derartige Koordinaten sind immer "fix und fertig", damit wir sofort zeichnen können.
  * - Fenster-Koordinaten sind Pixel-Koordinaten innerhalb des Anwendungsfensters. Sie entsprechen Zeichen-Koordinaten,
  *   nur ein anderer Begriff, der benutzt wird, wenn es nicht ums Zeichnen von etwas geht.
  *
- * Siehe hierzu auch @a doc/map-coords.xcf .
+ * TODO map-coords.xcf anpassen
+ * Vorsicht: doc/map-coords.xcf ist veraltet, dort sind die Screen-Koordinaten noch im alten Schema eingezeichnet.
  */
-
-
-/**
- * @brief Koordinatenpaar, das anzeigt, dass diese Map-Koordinaten keine echten Koordinaten auf der Karte sind,
- * sondern nur ein Delta, was zum Rechnen benutzt wird. Wir definieren die Arithmetik so, dass nur Rechnen mit
- * Deltas erlaubt ist. Zwei MapCoords zu addieren macht keinen Sinn.
- */
-class MapCoordsDelta : public XYCoords<int> {
-
-public:
-    /**
-     * @brief Default-Konstruktor, der ein Null-Delta anlegt
-     */
-    MapCoordsDelta() : XYCoords<int>(0, 0) {
-    }
-
-    /**
-     * @brief Konstruktor
-     * @param x X-Map-Koordinaten-Delta
-     * @param y Y-Map-Koordinaten-Delta
-     */
-    MapCoordsDelta(int x, int y) : XYCoords<int>(x, y) {
-    }
-
-    /**
-     * @brief Additionsoperator für zwei Deltas
-     * @param mapCoordsDelta anderer Operand
-     * @return Additionsergebnis
-     */
-    inline MapCoordsDelta operator+ (const MapCoordsDelta& mapCoordsDelta) const {
-        return MapCoordsDelta(this->_x + mapCoordsDelta._x, this->_y + mapCoordsDelta._y);
-    }
-};
-
 
 
 /**
@@ -176,15 +147,6 @@ public:
     }
 
     /**
-     * @brief Additionsoperator. Es darf nur ein Delta hinzugefügt werden
-     * @param mapCoordsDelta anderer Operand
-     * @return Additionsergebnis
-     */
-    inline MapCoords operator+ (const MapCoordsDelta& mapCoordsDelta) const {
-        return MapCoords(this->_x + mapCoordsDelta.x(), this->_y + mapCoordsDelta.y());
-    }
-
-    /**
      * @brief Cast-Operator. Erlaubt das Umwandeln von int-Koordinaten in double-Koordinaten
      * @return Koordinaten als DoubleMapCoords
      */
@@ -193,6 +155,14 @@ public:
     }
 
 };
+
+/**
+ * @brief Ausgabe-Operator, um die Map-Koordinaten auszugeben
+ * @param outputStream Ausgabestream, auf den geschrieben wird
+ * @param mapCoords Objekt, was ausgegeben werden soll
+ * @return Ausgabestream, sodass das Chaining funktioniert
+ */
+std::ostream& operator<< (std::ostream& outputStream, const MapCoords& mapCoords);
 
 
 namespace std {

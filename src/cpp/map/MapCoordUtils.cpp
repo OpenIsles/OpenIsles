@@ -1,124 +1,93 @@
 #include <algorithm>
+#include <cassert>
+#include <cmath>
 #include <string>
 #include "map/Building.h"
 #include "map/Map.h"
 
 
-ScreenCoords MapCoordUtils::mapToScreenCoords(const MapCoords& mapCoords) {
-	int screenX = (mapCoords.x() - mapCoords.y()) * IGraphicsMgr::TILE_WIDTH_HALF;
-	int screenY = (mapCoords.x() + mapCoords.y()) * IGraphicsMgr::TILE_HEIGHT_HALF;
-    return ScreenCoords(screenX, screenY);
+ScreenCoords MapCoordUtils::mapToScreenCoords(
+    const MapCoords& mapCoords, const FourDirectionsView& screenView, const Map& map) {
+
+    return mapToScreenCoords((const DoubleMapCoords&) mapCoords, screenView, map);
 }
 
-ScreenCoords MapCoordUtils::mapToScreenCoords(const DoubleMapCoords& mapCoords) {
-	int screenX = (int) ((mapCoords.x() - mapCoords.y()) * (double) IGraphicsMgr::TILE_WIDTH_HALF);
-	int screenY = (int) ((mapCoords.x() + mapCoords.y()) * (double) IGraphicsMgr::TILE_HEIGHT_HALF);
-    return ScreenCoords(screenX, screenY);
+ScreenCoords MapCoordUtils::mapToScreenCoords(
+    const DoubleMapCoords& mapCoords, const FourDirectionsView& screenView, const Map& map) {
+
+    const MapCoords& mapCoordsCentered = map.getMapCoordsCentered();
+    double mapXDiff, mapYDiff;
+
+    // Entsprechend der Ansicht die Entfernung zur Center-Kachel bestimmen
+    if (screenView == "south") {
+        mapXDiff = mapCoords.x() - mapCoordsCentered.x();
+        mapYDiff = mapCoords.y() - mapCoordsCentered.y();
+    } else if (screenView == "east") {
+        mapXDiff = -(mapCoords.y() - mapCoordsCentered.y());
+        mapYDiff = mapCoords.x() - mapCoordsCentered.x();
+    } else if (screenView == "north") {
+        mapXDiff = -(mapCoords.x() - mapCoordsCentered.x());
+        mapYDiff = -(mapCoords.y() - mapCoordsCentered.y());
+    } else if (screenView == "west") {
+        mapXDiff = mapCoords.y() - mapCoordsCentered.y();
+        mapYDiff = -(mapCoords.x() - mapCoordsCentered.x());
+    }
+    else {
+        assert(false);
+        mapXDiff = mapYDiff = 0;
+    }
+
+    double screenX = (mapXDiff - mapYDiff) * (double) IGraphicsMgr::TILE_WIDTH_HALF;
+    double screenY = (mapXDiff + mapYDiff) * (double) IGraphicsMgr::TILE_HEIGHT_HALF;
+
+    return ScreenCoords((int) screenX, (int) screenY);
 }
 
-ScreenCoords MapCoordUtils::mapToScreenCoordsCenter(const MapCoords& mapCoords) {
-    ScreenCoords screenCoords = mapToScreenCoords(mapCoords);
-    screenCoords.addX(IGraphicsMgr::TILE_WIDTH_HALF);
-    screenCoords.addY(IGraphicsMgr::TILE_HEIGHT_HALF);
-    return screenCoords;
+MapCoords MapCoordUtils::screenToMapCoords(
+    const ScreenCoords& screenCoords, const FourDirectionsView& screenView, const Map& map) {
+
+    int mapXDiffInSouthView = (int) std::floor((screenCoords.x() / (double) IGraphicsMgr::TILE_WIDTH) +
+                                               (screenCoords.y() / (double) IGraphicsMgr::TILE_HEIGHT));
+    int mapYDiffInSouthView = (int) std::floor((-screenCoords.x() / (double) IGraphicsMgr::TILE_WIDTH) +
+                                               (screenCoords.y() / (double) IGraphicsMgr::TILE_HEIGHT));
+
+    // Entsprechend der Ansicht umrechnen (= Invers-Operation zu der in mapToScreenCoords())
+    int mapXDiff, mapYDiff;
+    if (screenView == "south") {
+        mapXDiff = mapXDiffInSouthView;
+        mapYDiff = mapYDiffInSouthView;
+    } else if (screenView == "east") {
+        mapXDiff = mapYDiffInSouthView;
+        mapYDiff = -mapXDiffInSouthView;
+    } else if (screenView == "north") {
+        mapXDiff = -mapXDiffInSouthView;
+        mapYDiff = -mapYDiffInSouthView;
+    } else if (screenView == "west") {
+        mapXDiff = -mapYDiffInSouthView;
+        mapYDiff = mapXDiffInSouthView;
+    }
+    else {
+        assert(false);
+        mapXDiff = mapYDiff = 0;
+    }
+
+    const MapCoords& mapCoordsCentered = map.getMapCoordsCentered();
+    return MapCoords(mapCoordsCentered.x() + mapXDiff, mapCoordsCentered.y() + mapYDiff);
 }
 
-MapCoords MapCoordUtils::screenToMapCoords(const ScreenCoords& screenCoords) {
-	/*
-	 * Screen-Koordinaten erst in ein (TILE_WIDTH x TILE_HEIGHT)-Koordinatensystem runterrechnen
-	 * Dann gibts 8 Fälle und wir haben es. Ohne unperformante Matrizen und Projektionen :-)
-	 *
-	 * |          TILE_WIDTH           |
-	 * |   xDiff<0.5       xDiff>0.5   |
-	 * O-------------------------------O-------------
-	 * | x-1          /|\          y-1 |
-	 * |   [1]   /---- | ----\   [6]   | yDiff<0.5
-	 * |    /----  [2] | [5]  ----\    |
-	 * |---------------+---------------|  TILE_HEIGHT
-	 * |    \----  [4] | [7]  ----/    |
-	 * |   [3]   \---- | ----/   [8]   | yDiff>0.5
-	 * | y+1          \|/          x+1 |
-	 * O-------------------------------O-------------
-	 *
-	 * O = obere linke Ecke der Kacheln = Punkt, der mit mapToScreenCoords() berechnet wird.
-	 *     Entspricht genau den (TILE_WIDTH x TILE_HEIGHT)-Koordinatensystem-Punkten
-	 * [x] = 8 Fälle, siehe if-Block unten
-	 *
-	 * x/yDouble = exakte Koordinate im (TILE_WIDTH x TILE_HEIGHT)-Koordinatensystem.
-	 * x/yInt = abgerundete Koordinate im (TILE_WIDTH x TILE_HEIGHT)-Koordinatensystem, entspricht den O-Punkten im Bild
-	 * x/yDiff = Wert zwischen 0.0 und 1.0, siehe Grafik oben, mit dem die 8 Fälle identifiziert werden
-	 *
-	 */
+Rect MapCoordUtils::mapToDrawCoords(
+    const DoubleMapCoords& mapCoords, const Map& map, int elevation, const IGraphic& graphic) {
 
-	double xDouble = (double) screenCoords.x() / (double) IGraphicsMgr::TILE_WIDTH;
-	double yDouble = (double) screenCoords.y() / (double) IGraphicsMgr::TILE_HEIGHT;
-	int xInt = (int) floor(xDouble);
-	int yInt = (int) floor(yDouble);
-	double xDiff = xDouble - (double) xInt;
-	double yDiff = yDouble - (double) yInt;
+    ScreenCoords screenCoords = mapToScreenCoords(mapCoords, map.getScreenView(), map);
 
-	// preliminaryMap-Koordinate = Map-Koordinate der Kachel, die ggf. noch in 4 von 8 Fällen angepasst werden muss
-	int preliminaryMapX = xInt + yInt;
-	int preliminaryMapY = yInt - xInt;
-
-	// Jetzt die 8 Fälle durchgehen und ggf. noch plus-minus 1 auf x oder y
-    int mapX, mapY;
-	if (xDiff < 0.5) {
-		if (yDiff < 0.5) {
-			if (xDiff < 0.5 - yDiff) {
-				// Fall 1
-				mapX = preliminaryMapX - 1;
-				mapY = preliminaryMapY;
-			} else {
-				// Fall 2
-				mapX = preliminaryMapX;
-				mapY = preliminaryMapY;
-			}
-		} else {
-			if (xDiff < yDiff - 0.5) {
-				// Fall 3
-				mapX = preliminaryMapX;
-				mapY = preliminaryMapY + 1;
-			} else {
-				// Fall 4
-				mapX = preliminaryMapX;
-				mapY = preliminaryMapY;
-			}
-		}
-	} else {
-		if (yDiff < 0.5) {
-			if (xDiff - 0.5 < yDiff) {
-				// Fall 5
-				mapX = preliminaryMapX;
-				mapY = preliminaryMapY;
-			} else {
-				// Fall 6
-				mapX = preliminaryMapX;
-				mapY = preliminaryMapY - 1;
-			}
-		} else {
-			if (xDiff - 0.5 < 1 - yDiff) {
-				// Fall 7
-				mapX = preliminaryMapX;
-				mapY = preliminaryMapY;
-			} else {
-				// Fall 8
-				mapX = preliminaryMapX + 1;
-				mapY = preliminaryMapY;
-			}
-		}
-	}
-
-    return MapCoords(mapX, mapY);
-}
-
-Rect MapCoordUtils::mapToDrawCoords(const DoubleMapCoords& mapCoords, const Map& map, int elevation, const IGraphic& graphic) {
-    ScreenCoords screenCoords = mapToScreenCoords(mapCoords);
     return screenToDrawCoords(screenCoords, map, elevation, graphic);
 }
 
-Rect MapCoordUtils::mapToDrawCoords(const MapCoords& mapCoords, const Map& map, int elevation, const IGraphic& graphic) {
-    ScreenCoords screenCoords = mapToScreenCoords(mapCoords);
+Rect MapCoordUtils::mapToDrawCoords(
+    const MapCoords& mapCoords, const Map& map, int elevation, const IGraphic& graphic) {
+
+    ScreenCoords screenCoords = mapToScreenCoords(mapCoords, map.getScreenView(), map);
+
     return screenToDrawCoords(screenCoords, map, elevation, graphic);
 }
 
@@ -135,40 +104,98 @@ Rect MapCoordUtils::getDrawCoordsForBuilding(const Map& map, IGraphicsMgr* graph
     return mapToDrawCoords(mapCoords, map, elevation, *graphic);
 }
 
-MapCoords MapCoordUtils::getMapCoordsUnderMouse(const Map& map, int mouseCurrentX, int mouseCurrentY) {
+ScreenCoords MapCoordUtils::getScreenCoordsUnderMouse(const Map& map, int mouseCurrentX, int mouseCurrentY) {
     int screenZoom = map.getScreenZoom();
+    int screenX = (mouseCurrentX - Consts::mapClipRect.w / 2) * screenZoom;
+    int screenY = (mouseCurrentY - Consts::mapClipRect.h / 2) * screenZoom;
 
-    const ScreenCoords& screenCoordsOffset = map.getScreenCoordsOffset();
-    int mouseScreenX = (mouseCurrentX * screenZoom) + screenCoordsOffset.x();
-    int mouseScreenY = (mouseCurrentY * screenZoom) + screenCoordsOffset.y();
+    return ScreenCoords(screenX, screenY);
+}
+
+MapCoords MapCoordUtils::getMapCoordsUnderMouse(const Map& map, int mouseCurrentX, int mouseCurrentY) {
+    ScreenCoords mouseScreenCoords = getScreenCoordsUnderMouse(map, mouseCurrentX, mouseCurrentY);
 
     // Wir machen es wie Anno 1602: Für die Position, wo der Mauszeiger steht, wird immer die elevatete Position
     // genommen, selbst, wenn wir uns auf dem Wasser befinden.
     const int elevation = 1;
 
-    ScreenCoords mouseScreenCoords(mouseScreenX, mouseScreenY + elevation * IGraphicsMgr::ELEVATION_HEIGHT / screenZoom);
-    return screenToMapCoords(mouseScreenCoords);
+    int screenZoom = map.getScreenZoom();
+    mouseScreenCoords.addY(elevation * IGraphicsMgr::ELEVATION_HEIGHT / screenZoom);
+
+    return screenToMapCoords(mouseScreenCoords, map.getScreenView(), map);
+}
+
+void MapCoordUtils::getMapCoordsInScreenEdges(const Map& map,
+    MapCoords& mapCoordsTopLeft, MapCoords& mapCoordsTopRight,
+    MapCoords& mapCoordsBottomLeft, MapCoords& mapCoordsBottomRight) {
+
+    const MapCoords& mapCoordsCentered = map.getMapCoordsCentered();
+    int screenHalfWidth = (Consts::mapClipRect.h / 2) * map.getScreenZoom();
+    int screenHalfHeight = (Consts::mapClipRect.w / 2) * map.getScreenZoom();
+
+
+    int mapXDistance = (int) ((screenHalfWidth / (double) IGraphicsMgr::TILE_WIDTH) +
+                              (screenHalfHeight / (double) IGraphicsMgr::TILE_HEIGHT));
+    int mapYDistance = (int) ((-screenHalfWidth / (double) IGraphicsMgr::TILE_WIDTH) +
+                              (screenHalfHeight / (double) IGraphicsMgr::TILE_HEIGHT));
+
+    // TODO ggf. was draufrechnen, weil wir abrunden?
+
+    // Ecken-Koordinaten bestimmen
+    MapCoords mcTopLeft = MapCoords(mapCoordsCentered.x() - mapXDistance, mapCoordsCentered.y() - mapYDistance);
+    MapCoords mcTopRight = MapCoords(mapCoordsCentered.x() + mapYDistance, mapCoordsCentered.y() - mapXDistance);
+    MapCoords mcBottomLeft = MapCoords(mapCoordsCentered.x() - mapYDistance, mapCoordsCentered.y() + mapXDistance);
+    MapCoords mcBottomRight = MapCoords(mapCoordsCentered.x() + mapXDistance, mapCoordsCentered.y() + mapYDistance);
+
+    // Und je Ansicht der richtigen Ecke zuordnen
+    const FourDirectionsView& screenView = map.getScreenView();
+    if (screenView == "south") {
+        mapCoordsTopLeft = mcTopLeft;
+        mapCoordsTopRight = mcTopRight;
+        mapCoordsBottomLeft = mcBottomLeft;
+        mapCoordsBottomRight = mcBottomRight;
+    } else if (screenView == "east") {
+        mapCoordsTopLeft = mcBottomLeft;
+        mapCoordsTopRight = mcTopLeft;
+        mapCoordsBottomLeft = mcBottomRight;
+        mapCoordsBottomRight = mcTopRight;
+    } else if (screenView == "north") {
+        mapCoordsTopLeft = mcBottomRight;
+        mapCoordsTopRight = mcBottomLeft;
+        mapCoordsBottomLeft = mcTopRight;
+        mapCoordsBottomRight = mcTopLeft;
+    } else if (screenView == "west") {
+        mapCoordsTopLeft = mcTopRight;
+        mapCoordsTopRight = mcBottomRight;
+        mapCoordsBottomLeft = mcTopLeft;
+        mapCoordsBottomRight = mcBottomLeft;
+    }
+    else {
+        assert(false);
+    }
 }
 
 Rect MapCoordUtils::screenToDrawCoords(const ScreenCoords& screenCoords, const Map& map, int elevation, const IGraphic& graphic) {
     Rect drawCoordsRect;
 
-    drawCoordsRect.x = screenCoords.x() - (
-        graphic.getWidth() - (graphic.getMapWidth() + 1) * IGraphicsMgr::TILE_WIDTH_HALF);
-    drawCoordsRect.y = screenCoords.y() - (
-        graphic.getHeight() - (graphic.getMapWidth() + graphic.getMapHeight()) * IGraphicsMgr::TILE_HEIGHT_HALF);
+    drawCoordsRect.x = screenCoords.x();
+    drawCoordsRect.y = screenCoords.y();
+
+    // Grafik entsprechend ihrer Größe in Map-Koordinaten ausrichten.
+    drawCoordsRect.x -= graphic.getWidth() - graphic.getMapWidth() * IGraphicsMgr::TILE_WIDTH_HALF;
+    drawCoordsRect.y -= graphic.getHeight() - (graphic.getMapWidth() + graphic.getMapHeight()) * IGraphicsMgr::TILE_HEIGHT_HALF;
 
     // Elevation
     drawCoordsRect.y -= elevation * IGraphicsMgr::ELEVATION_HEIGHT;
 
-    // Scrolling-Offset anwenden
-    const ScreenCoords& screenCoordsOffset = map.getScreenCoordsOffset();
-    drawCoordsRect.x -= screenCoordsOffset.x();
-    drawCoordsRect.y -= screenCoordsOffset.y();
-
+    // Zoom anwenden
     int screenZoom = map.getScreenZoom();
     drawCoordsRect.x /= screenZoom;
     drawCoordsRect.y /= screenZoom;
+
+    // Zum Schluss in die Bildschirmmitte bringen
+    drawCoordsRect.x += Consts::mapClipRect.w / 2;
+    drawCoordsRect.y += Consts::mapClipRect.h / 2;
 
     // Größe ist gleich der Grafikgröße
     drawCoordsRect.w = graphic.getWidth() / screenZoom;

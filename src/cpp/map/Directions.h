@@ -100,12 +100,19 @@ public:
      * @brief "Inkrementiert" die Ansicht. Effektiv wird das Objekt unter der Ansicht um x*90° im Uhrzeigersinn gedreht.
      * (Wir rotieren gegen den Uhrzeigersinn.)
      */
-    FourDirectionsView operator+(int x) {
+    FourDirectionsView operator+(int x) const {
         unsigned char newViewIndex = (this->viewIndex + x) % MAX_VIEW;
 
         FourDirectionsView view;
         view.viewIndex = newViewIndex;
         return view;
+    }
+
+    /**
+     * @brief Vergleichsoperator, der mit dem Namen der Ansicht als String vergleich
+     */
+    bool operator==(std::string viewName) const {
+        return (getViewName() == viewName);
     }
 
     /**
@@ -125,6 +132,11 @@ public:
     }
 
 };
+
+/**
+ * @brief "Addiert" zwei Ansichten.
+ */
+FourDirectionsView operator+ (const FourDirectionsView& view1, const FourDirectionsView& view2);
 
 
 namespace std {

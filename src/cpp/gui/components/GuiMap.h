@@ -8,6 +8,10 @@
 #include "map/Structure.h"
 #include "utils/RectangleData.h"
 
+#ifdef DEBUG
+#include "graphics/graphic/sdl/SDLGraphic.h"
+#endif
+
 
 // Konstanten für isAllowedToPlaceStructure()
 
@@ -53,6 +57,13 @@ private:
      * @sa renderMap()
      */
     RectangleData<char>* mapObjectAlreadyDrawnThere = nullptr;
+
+#ifdef DEBUG
+    /**
+     * @brief Hilfsgrafik mit Gitternetz-Linien-Overlay
+     */
+    SDLGraphic* debugGridOverlayGraphic;
+#endif
 
 public:
     /**

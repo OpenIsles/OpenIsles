@@ -58,31 +58,6 @@ TEST(MapCoords, Equals) {
 }
 
 
-TEST(MapCoords, Addition) {
-    MapCoords coord1(1, 2);
-    MapCoords coord2(4, 7);
-    MapCoordsDelta delta1(5, 9);
-    MapCoordsDelta delta2(-2, 0);
-
-    ASSERT_TRUE(coord1 + delta1 == MapCoords(6, 11));
-    ASSERT_TRUE(coord2 + delta1 == MapCoords(9, 16));
-
-    MapCoords x = coord1 + delta2;
-    ASSERT_TRUE(x == MapCoords(-1, 2));
-
-    MapCoordsDelta deltaSum = delta1 + delta2;
-    ASSERT_EQ(3, deltaSum.x());
-    ASSERT_EQ(9, deltaSum.y());
-
-    ASSERT_TRUE(MapCoords(3, 5) + MapCoordsDelta(2, 1) == MapCoords(5, 6));
-
-    /* Die folgenden Ausdrücke sollten Compile Errors generieren:
-     *   coord1 + coord2;
-     *   delta1 + coord1;
-     */
-}
-
-
 TEST(MapCoords, Cast) {
     MapCoords intCoords(1, 2);
     DoubleMapCoords doubleCoords = intCoords;

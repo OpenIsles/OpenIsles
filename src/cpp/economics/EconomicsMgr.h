@@ -47,7 +47,7 @@ struct FindBuildingToGetGoodsFromResult {
 
 #ifdef DEBUG_ECONOMICS
     /**
-     * @brief (nur zu Debugzwecken einkompiliert) Ausgabe-Operator, um dieses Hilfsstruktur auszugeben
+     * @brief (nur zu Debugzwecken einkompiliert) Ausgabe-Operator, um diese Hilfsstruktur auszugeben
      * @param outputStream Ausgabestream, auf den geschrieben wird
      * @param result Objekt, was ausgegeben werden soll
      * @return Ausgabestream, sodass das Chaining funktioniert

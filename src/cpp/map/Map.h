@@ -7,6 +7,7 @@
 #include <list>
 #include <string.h>
 #include "Context.h"
+#include "defines.h"
 #include "config/ConfigMgr.h"
 #include "graphics/graphic/Animation.h"
 #include "graphics/renderer/IRenderer.h"
@@ -96,11 +97,13 @@ class Map : public ContextAware {
 private:
 	/**
 	 * @brief Breite der Karte in Kacheln
+     * TODO Aktuell gehen wir davon aus, das immer gilt: width == height
 	 */
 	int width;
 
 	/**
 	 * @brief Höhe der Karte in Kacheln
+     * TODO Aktuell gehen wir davon aus, das immer gilt: width == height
 	 */
 	int height;
     
@@ -137,15 +140,24 @@ private:
      */
     int screenZoom;
 
+    /**
+     * @brief Richtung aus der die Karte betrachtet wird
+     */
+    FourDirectionsView screenView;
+
 public:
 	Map(const Context* const context);
-	~Map();
 
-	int getHeight() const {
+	VIRTUAL_ONLY_IN_TESTS
+    ~Map();
+
+    VIRTUAL_ONLY_IN_TESTS
+    int getHeight() const {
 		return height;
 	}
 
-	int getWidth() const {
+    VIRTUAL_ONLY_IN_TESTS
+    int getWidth() const {
 		return width;
 	}
 
@@ -175,22 +187,6 @@ public:
         this->mapCoordsCentered = mapCoordsCentered;
     }
 
-    /**
-     * @brief Liefert die Screen-Koordinaten in der linken oberen Ecke
-     * @return Screen-Koordinaten
-     */
-    const ScreenCoords getScreenCoordsOffset() const {
-        // TODO Andere Ansicht wird später wohl andere ScreenCoords zurückliefern, je nachdem, wie wir das Koordinatensystem dann aufsetzen
-
-        ScreenCoords screenCoordsOffset = MapCoordUtils::mapToScreenCoords(mapCoordsCentered);
-
-        // screenOffset anpassen, da die mapCoords in der Bildschirmmitte sein sollen
-        screenCoordsOffset.subX((Consts::mapClipRect.w / 2) * screenZoom);
-        screenCoordsOffset.subY((Consts::mapClipRect.h / 2) * screenZoom);
-
-        return screenCoordsOffset;
-    }
-
     int getScreenZoom() const {
         return screenZoom;
     }
@@ -199,7 +195,23 @@ public:
         this->screenZoom = screenZoom;
     }
 
-	const MapObject* getSelectedMapObject() const {
+    const FourDirectionsView& getScreenView() const {
+        return screenView;
+    }
+
+    void setScreenView(const FourDirectionsView& screenView) {
+        this->screenView = screenView;
+    }
+
+    void rotateViewClockwise() {
+        this->screenView++;
+    }
+
+    void rotateViewCounterclockwise() {
+        this->screenView--;
+    }
+
+    const MapObject* getSelectedMapObject() const {
 		return selectedMapObject;
 	}
 
@@ -211,11 +223,19 @@ public:
 	void setSelectedMapObject(MapObject* selectedMapObject);
 
 	/**
-	 * @brief Scrollt die Karte
-	 * @param mapCoordsDelta Offset in Map-Koordinaten, in die gescrollt werden soll.
-	 *                      Positive Werte scrollen nach rechts/unten, negative nach links/oben
+	 * @brief Scrollt die Karte.
+     *
+     * Die Koordinaten werden in Südansicht angegeben. Befindet sich die Karte in
+     * einer anderen Ansicht, werden sie entsprechend konveriert.
+     * D.h. Ein Scrollen um (1, 0) in Südansicht scrollt die Karte nach rechts,
+     * während in Nordansicht die Karte nach links scrollt.
+     *
+	 * @param xDelta X-Offset in Map-Koordinaten, in die gescrollt werden soll.
+	 *               Positive Werte scrollen nach rechts, negative nach links.
+     * @param yDelta Y-Offset in Map-Koordinaten, in die gescrollt werden soll.
+	 *               Positive Werte scrollen nach unten, negative nach oben.
 	 */
-	void scroll(const MapCoordsDelta& mapCoordsDelta);
+	void scroll(int xDelta, int yDelta);
 
 	/**
 	 * @brief Fügt ein neues Map-Objekt der Karte hinzu

@@ -126,3 +126,23 @@ TEST(FourDirectionsViewTest, Addition) {
     view = view + 4828;
     ASSERT_EQ(2, view.getViewIndex());
 }
+
+
+TEST(FourDirectionsViewTest, Equals) {
+    FourDirectionsView viewS("south");
+    FourDirectionsView viewE("east");
+    FourDirectionsView viewN("north");
+    FourDirectionsView viewW("west");
+
+    ASSERT_TRUE(viewS == "south");
+    ASSERT_TRUE(viewE == "east");
+    ASSERT_TRUE(viewN == "north");
+    ASSERT_TRUE(viewW == "west");
+
+    ASSERT_FALSE(viewS == "east");
+    ASSERT_FALSE(viewS == "north");
+    ASSERT_FALSE(viewS == "west");
+
+    ASSERT_FALSE(viewS == "fooooooo");
+    ASSERT_FALSE(viewS == "");
+}

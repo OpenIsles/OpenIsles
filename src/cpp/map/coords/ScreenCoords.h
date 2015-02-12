@@ -1,6 +1,7 @@
 #ifndef _SCREEN_COORDS_H
 #define _SCREEN_COORDS_H
 
+#include <iostream>
 #include "map/coords/XYCoords.h"
 
 
@@ -38,6 +39,15 @@ public:
     }
 
     /**
+     * @brief Gleichheitsoperator
+     * @param screenCoords anderer Operand
+     * @return `true`, wenn diese Koordinaten gleich sind, sonst `false`
+     */
+    inline bool operator== (const ScreenCoords& screenCoords) const {
+        return ((this->_x == screenCoords._x) && (this->_y == screenCoords._y));
+    }
+
+    /**
      * @brief Operator zum Abziehen einer anderen Screen-Koordinaten
      * @param subtrahend Subtrahend
      */
@@ -46,5 +56,14 @@ public:
         _y -= subtrahend._y;
     }
 };
+
+/**
+ * @brief Ausgabe-Operator, um die Screen-Koordinaten auszugeben
+ * @param outputStream Ausgabestream, auf den geschrieben wird
+ * @param screenCoords Objekt, was ausgegeben werden soll
+ * @return Ausgabestream, sodass das Chaining funktioniert
+ */
+std::ostream& operator<< (std::ostream& outputStream, const ScreenCoords& screenCoords);
+
 
 #endif

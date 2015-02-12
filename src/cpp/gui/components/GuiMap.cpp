@@ -11,6 +11,7 @@
 #include "map/coords/ScreenCoords.h"
 #include "map/Map.h"
 #include "utils/Consts.h"
+#include "utils/MapCoordsIterator.h"
 #include "utils/StringFormat.h"
 
 #ifdef DEBUG_A_STAR
@@ -20,6 +21,10 @@
 
 GuiMap::GuiMap(const Context* const context) : GuiBase(context) {
     setCoords(Consts::mapClipRect.x, Consts::mapClipRect.y, Consts::mapClipRect.w, Consts::mapClipRect.h);
+
+#ifdef DEBUG
+    debugGridOverlayGraphic = new SDLGraphic(context->graphicsMgr->getRenderer(), "data/debug-grid-overlay.png");
+#endif
 }
 
 GuiMap::~GuiMap() {
@@ -27,6 +32,10 @@ GuiMap::~GuiMap() {
         delete mapObjectAlreadyDrawnThere;
         mapObjectAlreadyDrawnThere = nullptr;
     }
+
+#ifdef DEBUG
+    delete debugGridOverlayGraphic;
+#endif
 }
 
 void GuiMap::renderElement(IRenderer* renderer) {
@@ -34,7 +43,6 @@ void GuiMap::renderElement(IRenderer* renderer) {
     const MapObject* selectedMapObject = map->getSelectedMapObject();
     const Building* selectedBuilding = dynamic_cast<const Building*>(selectedMapObject);
 
-    const ScreenCoords& screenCoordsOffset = map->getScreenCoordsOffset();
     int screenZoom = map->getScreenZoom();
 
     /*
@@ -43,22 +51,45 @@ void GuiMap::renderElement(IRenderer* renderer) {
      * und End-Map-Koordinaten zu ermitteln. Damit gehen wir zwar immer noch über mehr Kacheln, als auf dem Bildschirm
      * sind, aber besser als nix :-)
      */
-    // TODO Duplicate-Code refactorn, Rect (top, left, right, bottom) von Punkten einführen
+    MapCoords mapCoordsTopLeft, mapCoordsTopRight, mapCoordsBottomLeft, mapCoordsBottomRight;
+    MapCoordUtils::getMapCoordsInScreenEdges(
+        *map, mapCoordsTopLeft, mapCoordsTopRight, mapCoordsBottomLeft, mapCoordsBottomRight);
 
-    MapCoords mapCoordsTopLeft = MapCoordUtils::screenToMapCoords(screenCoordsOffset);
-    MapCoords mapCoordsTopRight = MapCoordUtils::screenToMapCoords(ScreenCoords(
-        (Consts::mapClipRect.w * screenZoom) + screenCoordsOffset.x(), screenCoordsOffset.y()));
-    MapCoords mapCoordsBottomLeft = MapCoordUtils::screenToMapCoords(ScreenCoords(
-        screenCoordsOffset.x(), (Consts::mapClipRect.h * screenZoom) + screenCoordsOffset.y()));
-    MapCoords mapCoordsBottomRight = MapCoordUtils::screenToMapCoords(ScreenCoords(
-        (Consts::mapClipRect.w * screenZoom) + screenCoordsOffset.x(),
-        (Consts::mapClipRect.h * screenZoom) + screenCoordsOffset.y()
-    ));
 
-    int mapXStart = std::max(mapCoordsTopLeft.x(), 0);
-    int mapYStart = std::max(mapCoordsTopRight.y(), 0);
-    int mapXEnd = std::min(mapCoordsBottomRight.x() + 1, (int) (map->getWidth() - 1)); // am Ende jeweils +1 rechnen, um der Elevation
-    int mapYEnd = std::min(mapCoordsBottomLeft.y() + 1, (int) (map->getHeight() - 1)); // entgegen zu wirken. Ohne das würde unten was fehlen.
+    // orthogonales Rechteck zum MapCoord-Koordinatensystem für den MapCoordsIterator bauen:
+    /*
+     *             ----                       |------====-------
+     *         ----  ----                     |  ----  ----    |
+     *     ----        ----                   |---        ---- |
+     *       ----        ----      ---->      | ----        ---|
+     *         ----  ----                     |   ----  ----   |
+     *           ----                         ------====-------|
+     *
+     */
+    int mapXStart = std::min({
+        mapCoordsTopLeft.x(), mapCoordsTopRight.x(), mapCoordsBottomLeft.x(), mapCoordsBottomRight.x()
+    });
+    int mapYStart = std::min({
+        mapCoordsTopLeft.y(), mapCoordsTopRight.y(), mapCoordsBottomLeft.y(), mapCoordsBottomRight.y()
+    });
+    int mapXEnd = std::max({
+        mapCoordsTopLeft.x(), mapCoordsTopRight.x(), mapCoordsBottomLeft.x(), mapCoordsBottomRight.x()
+    });
+    int mapYEnd = std::max({
+        mapCoordsTopLeft.y(), mapCoordsTopRight.y(), mapCoordsBottomLeft.y(), mapCoordsBottomRight.y()
+    });
+
+    // Wir rechnen plus/minus 2, damit sicher alles drauf is (große Gebäude, Elevation).
+    // Außerdem stellen wir sicher, dass wir nicht außerhalb der Karte landen.
+    // TODO später nochmal probieren, wenn n Riesengebäude, wie z.B. ne Kathedrale drauf is
+    const int extraRadius = 2;
+    mapXStart = std::max(mapXStart - extraRadius, 0);
+    mapYStart = std::max(mapYStart - extraRadius, 0);
+    mapXEnd = std::min(mapXEnd + extraRadius, map->getWidth() - 1);
+    mapYEnd = std::min(mapYEnd + extraRadius, map->getHeight() - 1);
+
+    const FourDirectionsView& screenView = map->getScreenView();
+    MapCoordsIterator mapCoordsIterator(MapCoords(mapXStart, mapYStart), MapCoords(mapXEnd, mapYEnd), screenView);
 
     // Nur die Kartenfläche vollmalen
     Rect sdlMapClipRect(Consts::mapClipRect);
@@ -66,36 +97,44 @@ void GuiMap::renderElement(IRenderer* renderer) {
     renderer->setClipRect(&sdlMapClipRect);
 
     // Kacheln rendern
-    for (int mapY = mapYStart; mapY <= mapYEnd; mapY++) {
-        for (int mapX = mapXStart; mapX <= mapXEnd; mapX++) {
-            const MapCoords mapCoords = MapCoords(mapX, mapY);
-            const MapTile* mapTile = map->getMapTileAt(mapCoords);
-            const Animation* tileAnimation = mapTile->getTileAnimationForView(0); // TODO später Drehung der View
-            const IGraphic* tileGraphic = tileAnimation->getGraphic();
-
-            Rect rectDestination = MapCoordUtils::mapToDrawCoords(mapCoords, *map, 0, *tileGraphic);
-
-            // Clipping
-            if (rectDestination.x >= Consts::mapClipRect.x + Consts::mapClipRect.w ||
-                rectDestination.y >= Consts::mapClipRect.y + Consts::mapClipRect.h ||
-                rectDestination.x + rectDestination.w < Consts::mapClipRect.x ||
-                rectDestination.y + rectDestination.h < Consts::mapClipRect.y) {
-
-                continue;
-            }
-
-            int drawingFlags = 0;
-            if (selectedMapObject != nullptr) {
-                bool insideCatchmentArea =
-                    (selectedBuilding != nullptr && selectedBuilding->isInsideCatchmentArea(context->configMgr, mapCoords));
-
-                if (!insideCatchmentArea) {
-                    drawingFlags |= IGraphic::DRAWING_FLAG_DARKENED;
-                }
-            }
-            tileGraphic->draw(nullptr, &rectDestination, drawingFlags, context->sdlTicks);
+    mapCoordsIterator.iterate([&] (const MapCoords& mapCoords) {
+        const MapTile* mapTile = map->getMapTileAt(mapCoords);
+        if (mapTile == nullptr) {
+            return;
         }
-    }
+
+        const Animation* tileAnimation = mapTile->getTileAnimationForView(screenView.getViewIndex());
+        const IGraphic* tileGraphic = tileAnimation->getGraphic();
+
+        Rect rectDestination = MapCoordUtils::mapToDrawCoords(mapCoords, *map, 0, *tileGraphic);
+
+        // Clipping
+        if (rectDestination.x >= Consts::mapClipRect.x + Consts::mapClipRect.w ||
+            rectDestination.y >= Consts::mapClipRect.y + Consts::mapClipRect.h ||
+            rectDestination.x + rectDestination.w < Consts::mapClipRect.x ||
+            rectDestination.y + rectDestination.h < Consts::mapClipRect.y) {
+
+            return;
+        }
+
+        int drawingFlags = 0;
+        if (selectedMapObject != nullptr) {
+            bool insideCatchmentArea =
+                (selectedBuilding != nullptr && selectedBuilding->isInsideCatchmentArea(context->configMgr, mapCoords));
+
+            if (!insideCatchmentArea) {
+                drawingFlags |= IGraphic::DRAWING_FLAG_DARKENED;
+            }
+        }
+
+#ifdef DEBUG
+        // Kachel unter dem Mauszeiger rot färben
+        if(mapCoords == MapCoordUtils::getMapCoordsUnderMouse(*map, context->mouseCurrentX, context->mouseCurrentY))
+            drawingFlags |= IGraphic::DRAWING_FLAG_RED;
+#endif
+
+        tileGraphic->draw(nullptr, &rectDestination, drawingFlags, context->sdlTicks);
+    });
 
     // Postionieren wir grade ein neues Gebäude?
     Structure* structureBeingAdded = nullptr;
@@ -138,100 +177,101 @@ void GuiMap::renderElement(IRenderer* renderer) {
         mapObjectAlreadyDrawnThere->width * mapObjectAlreadyDrawnThere->height * sizeof(char));
 
     // TODO Start und End noch ein wenig weiter ausweiten?
-    for (int mapY = mapYStart; mapY <= mapYEnd; mapY++) {
-        for (int mapX = mapXStart; mapX <= mapXEnd; mapX++) {
-            const MapCoords mapCoords = MapCoords(mapX, mapY);
-            const MapObjectFixed* mapObject = map->getMapObjectAt(mapCoords);
+    mapCoordsIterator.iterate([&] (const MapCoords& mapCoords) {
+        const MapObjectFixed* mapObject = map->getMapObjectAt(mapCoords);
+        if (mapObject == nullptr) {
+            // Positionieren wir hier ein neues Gebäude?
+            if (structureBeingAdded != nullptr) {
+                const MapCoords& mcoords = structureBeingAdded->getMapCoords();
+                int mw = structureBeingAdded->getMapWidth();
+                int mh = structureBeingAdded->getMapHeight();
+
+                if (mapCoords.x() >= mcoords.x() && mapCoords.y() >= mcoords.y() &&
+                    mapCoords.x() < mcoords.x() + mw && mapCoords.y() < mcoords.y() + mh) {
+
+                    mapObject = structureBeingAdded;
+                }
+            }
+
             if (mapObject == nullptr) {
-                // Positionieren wir hier ein neues Gebäude?
-                if (structureBeingAdded != nullptr) {
-                    const MapCoords& mcoords = structureBeingAdded->getMapCoords();
-                    int mw = structureBeingAdded->getMapWidth();
-                    int mh = structureBeingAdded->getMapHeight();
-
-                    if (mapX >= mcoords.x() && mapY >= mcoords.y() &&
-                        mapX < mcoords.x() + mw && mapY < mcoords.y() + mh) {
-
-                        mapObject = structureBeingAdded;
-                    }
-                }
-
-                if (mapObject == nullptr) {
-                    continue; // nix zum Zeichen an dieser Stelle
-                }
+                return; // nix zum Zeichen an dieser Stelle
             }
-
-            if (mapObjectAlreadyDrawnThere->getData(mapX, mapY, 1) == 1) {
-                continue; // hier is schon bemalt, nix zu tun
-            }
-
-            // @see docs/drawing-order-x-tiles.xcf für Variablen
-
-            // Ausrechnen, welchen Schnibbel der Grafik wir anzeigen müssen
-            const MapCoords& moMapCoords = mapObject->getMapCoords();
-            int moMapWidth = mapObject->getMapWidth();
-            int moMapHeight = mapObject->getMapHeight();
-
-            int tileOffsetXInMapObject = mapX - moMapCoords.x(); // (0 ... moMapWidth-1)
-            int tileOffsetYInMapObject = mapY - moMapCoords.y(); // (0 ... moMapHeight-1)
-
-            const Structure* structure = dynamic_cast<const Structure*>(mapObject); // TODO nullptr sollte nicht passieren; später checken, wenn wir Bäume und sowas haben
-            int drawingFlags = structure->getDrawingFlags();
-
-            StructureType structureType = structure->getStructureType();
-
-            // Sonderfall: Straße
-            if (structureType == StructureType::STREET) {
-                structureType = getConcreteStreetStructureType(mapCoords, structureType);
-            }
-
-            const std::string& viewName = structure->getView().getViewName();  // TODO view+rotation
-            const std::string graphicSetName = context->graphicsMgr->getGraphicSetNameForStructure(structureType);
-            const GraphicSet* mapObjectGraphicSet = context->graphicsMgr->getGraphicSet(graphicSetName);
-            const IGraphic* mapObjectGraphic = mapObjectGraphicSet->getByView(viewName)->getGraphic();
-
-            int xInMapObject =
-                ((moMapHeight - 1) - tileOffsetYInMapObject + tileOffsetXInMapObject) * IGraphicsMgr::TILE_WIDTH_HALF;
-            int yInMapObject = mapObjectGraphic->getHeight() -
-                ((moMapHeight - 1) - tileOffsetYInMapObject + (moMapWidth - 1) - tileOffsetXInMapObject + 2) *
-                    IGraphicsMgr::TILE_HEIGHT_HALF;
-
-            Rect rectSource(xInMapObject, 0, IGraphicsMgr::TILE_WIDTH, mapObjectGraphic->getHeight());
-
-            ScreenCoords screenCoords = MapCoordUtils::mapToScreenCoords(mapCoords);
-            Rect rectDestination(screenCoords.x(), screenCoords.y(), rectSource.w / screenZoom, rectSource.h / screenZoom);
-
-            rectDestination.x -= screenCoordsOffset.x();
-            rectDestination.y -= screenCoordsOffset.y();
-
-            rectDestination.y -= yInMapObject;
-
-            const int elevation = 1; // TODO für Gebäude wie Anlegestelle, Fischerhütte etc. muss auf 0 gesetzt werden
-            rectDestination.y -= elevation * IGraphicsMgr::ELEVATION_HEIGHT;
-
-            rectDestination.x /= screenZoom;
-            rectDestination.y /= screenZoom;
-
-            if (selectedMapObject != nullptr) {
-                bool insideCatchmentArea =
-                    (selectedBuilding != nullptr && selectedBuilding->isInsideCatchmentArea(context->configMgr, *structure));
-
-                if (!insideCatchmentArea) {
-                    drawingFlags |= IGraphic::DRAWING_FLAG_DARKENED;
-                }
-            }
-            mapObjectGraphic->draw(&rectSource, &rectDestination, drawingFlags, context->sdlTicks);
-
-            // In mapObjectAlreadyDrawnThere die Kacheln-Spalte als erledigt markieren
-            do {
-                mapObjectAlreadyDrawnThere->setData(
-                    moMapCoords.x() + tileOffsetXInMapObject, moMapCoords.y() + tileOffsetYInMapObject, 1);
-
-                tileOffsetXInMapObject++;
-                tileOffsetYInMapObject++;
-            } while(tileOffsetXInMapObject < moMapWidth && tileOffsetYInMapObject < moMapHeight);
         }
-    }
+
+        if (mapObjectAlreadyDrawnThere->getData(mapCoords.x(), mapCoords.y(), 1) == 1) {
+            return; // hier is schon bemalt, nix zu tun
+        }
+
+        // @see docs/drawing-order-x-tiles.xcf für Variablen
+
+        // Ausrechnen, welchen Schnibbel der Grafik wir anzeigen müssen
+        const MapCoords& moMapCoords = mapObject->getMapCoords();
+        int moMapWidth = mapObject->getMapWidth();
+        int moMapHeight = mapObject->getMapHeight();
+
+        int tileOffsetXInMapObject = mapCoords.x() - moMapCoords.x(); // (0 ... moMapWidth-1)
+        int tileOffsetYInMapObject = mapCoords.y() - moMapCoords.y(); // (0 ... moMapHeight-1)
+
+        const Structure* structure = dynamic_cast<const Structure*>(mapObject); // TODO nullptr sollte nicht passieren; später checken, wenn wir Bäume und sowas haben
+        int drawingFlags = structure->getDrawingFlags();
+
+        StructureType structureType = structure->getStructureType();
+
+        // Sonderfall: Straße
+        if (structureType == StructureType::STREET) {
+            structureType = getConcreteStreetStructureType(mapCoords, structureType);
+        }
+
+        const FourDirectionsView& structureView = structure->getView();
+        const FourDirectionsView& viewToRender = structureView + screenView;
+
+        const std::string graphicSetName = context->graphicsMgr->getGraphicSetNameForStructure(structureType);
+        const GraphicSet* mapObjectGraphicSet = context->graphicsMgr->getGraphicSet(graphicSetName);
+        const IGraphic* mapObjectGraphic = mapObjectGraphicSet->getByView(viewToRender.getViewName())->getGraphic();
+
+        int xInMapObject =
+            ((moMapHeight - 1) - tileOffsetYInMapObject + tileOffsetXInMapObject) * IGraphicsMgr::TILE_WIDTH_HALF;
+        int yInMapObject = mapObjectGraphic->getHeight() -
+            ((moMapHeight - 1) - tileOffsetYInMapObject + (moMapWidth - 1) - tileOffsetXInMapObject + 2) *
+                IGraphicsMgr::TILE_HEIGHT_HALF;
+
+        Rect rectSource(xInMapObject, 0, IGraphicsMgr::TILE_WIDTH, mapObjectGraphic->getHeight());
+
+        ScreenCoords screenCoords = MapCoordUtils::mapToScreenCoords(mapCoords, screenView, *map);
+        const int elevation = 1; // TODO für Gebäude wie Anlegestelle, Fischerhütte etc. muss auf 0 gesetzt werden
+
+        int destDrawX = screenCoords.x() - IGraphicsMgr::TILE_WIDTH_HALF;
+        int destDrawY = screenCoords.y() - yInMapObject - elevation * IGraphicsMgr::ELEVATION_HEIGHT;
+
+        // Zoom anwenden
+        destDrawX /= screenZoom;
+        destDrawY /= screenZoom;
+
+        // Zum Schluss in die Bildschirmmitte bringen
+        destDrawX += Consts::mapClipRect.w / 2;
+        destDrawY += Consts::mapClipRect.h / 2;
+
+        Rect rectDestination = Rect(destDrawX, destDrawY, rectSource.w / screenZoom, rectSource.h / screenZoom);
+
+        if (selectedMapObject != nullptr) {
+            bool insideCatchmentArea =
+                (selectedBuilding != nullptr && selectedBuilding->isInsideCatchmentArea(context->configMgr, *structure));
+
+            if (!insideCatchmentArea) {
+                drawingFlags |= IGraphic::DRAWING_FLAG_DARKENED;
+            }
+        }
+        mapObjectGraphic->draw(&rectSource, &rectDestination, drawingFlags, context->sdlTicks);
+
+        // In mapObjectAlreadyDrawnThere die Kacheln-Spalte als erledigt markieren
+        do {
+            mapObjectAlreadyDrawnThere->setData(
+                moMapCoords.x() + tileOffsetXInMapObject, moMapCoords.y() + tileOffsetYInMapObject, 1);
+
+            tileOffsetXInMapObject++;
+            tileOffsetYInMapObject++;
+        } while(tileOffsetXInMapObject < moMapWidth && tileOffsetYInMapObject < moMapHeight);
+    });
 
     // Träger zeichnen
     // TODO jetzt müssen wir doch wieder alle Map-Objekte durchloopen, weil die Träger nicht auf MapTile sind. Das sollte viel hübscher gemacht werden
@@ -283,10 +323,12 @@ void GuiMap::renderElement(IRenderer* renderer) {
         for (auto iter = routeToDraw->cbegin(); iter != routeToDraw->cend(); iter++) {
             const MapCoords& mapCoords = *iter;
 
-            ScreenCoords screenCoords = MapCoordUtils::mapToScreenCoordsCenter(mapCoords);
-            screenCoords -= screenCoordsOffset;
-
+            ScreenCoords screenCoords = MapCoordUtils::mapToScreenCoords(mapCoords, screenView, *map);
+            screenCoords.addY(IGraphicsMgr::TILE_HEIGHT_HALF);
             screenCoords.subY(IGraphicsMgr::ELEVATION_HEIGHT);
+
+            screenCoords.addX(Consts::mapClipRect.w / 2);
+            screenCoords.addY(Consts::mapClipRect.h / 2);
 
             // Verbindungslinie zuerst
             if (lastPointX != -1) {
@@ -306,6 +348,17 @@ void GuiMap::renderElement(IRenderer* renderer) {
                 "DroidSans.ttf", 9, RENDERTEXT_HALIGN_CENTER | RENDERTEXT_VALIGN_MIDDLE);
         }
     }
+#endif
+
+#ifdef DEBUG
+    // Grid zeichnen, an dem wir uns orientieren können
+    debugGridOverlayGraphic->drawAt(0, 0);
+
+    // Zusätzlich die Mitte markieren. Die sollte sich genau im ScreenCoords(0, 0)-Punkt decken
+    int x = Consts::mapClipRect.w / 2;
+    int y = Consts::mapClipRect.h / 2;
+    renderer->drawLine(x-10, y, x+10, y);
+    renderer->drawLine(x, y-10, x, y+10);
 #endif
 
     // Clipping wieder zurücksetzen, bevor der nächste mit Malen drankommt
@@ -488,8 +541,8 @@ unsigned char GuiMap::isAllowedToPlaceStructure(
 
 void GuiMap::drawCatchmentArea(IRenderer* const renderer, Structure* structure) {
     Map* map = context->game->getMap();
-    const ScreenCoords& screenCoordsOffset = map->getScreenCoordsOffset();
     int screenZoom = map->getScreenZoom();
+    const FourDirectionsView& screenView = map->getScreenView();
 
     renderer->setDrawColor(Color(0xc8, 0xaf, 0x37, 255));
 
@@ -505,10 +558,13 @@ void GuiMap::drawCatchmentArea(IRenderer* const renderer, Structure* structure) 
                 int mapX = mapCoords.x() + (x - (catchmentArea->width - mapWidth) / 2);
                 int mapY = mapCoords.y() + (y - (catchmentArea->height - mapHeight) / 2);
 
-                ScreenCoords screenCoords = MapCoordUtils::mapToScreenCoords(MapCoords(mapX, mapY));
+                ScreenCoords screenCoords = MapCoordUtils::mapToScreenCoords(MapCoords(mapX, mapY), screenView, *map);
 
-                int drawX = (screenCoords.x() - screenCoordsOffset.x()) / screenZoom;
-                int drawY = (screenCoords.y() - screenCoordsOffset.y() - IGraphicsMgr::ELEVATION_HEIGHT) / screenZoom;
+                int drawX = screenCoords.x() / screenZoom;
+                int drawY = (screenCoords.y() - IGraphicsMgr::ELEVATION_HEIGHT) / screenZoom;
+
+                drawX += Consts::mapClipRect.w / 2;
+                drawY += Consts::mapClipRect.h / 2;
 
                 // An der Kachel jede der 4 Seiten untersuchen, ob wir eine Linie malen müssen.
                 // TODO die String-'1'er ersetzen durch echte 1en.
@@ -516,32 +572,36 @@ void GuiMap::drawCatchmentArea(IRenderer* const renderer, Structure* structure) 
                 // Oben rechts
                 if (catchmentArea->getData(x, y - 1, '0') == '0' && catchmentArea->getData(x, y, '0') == '1') {
                     renderer->drawLine(
-                        drawX + IGraphicsMgr::TILE_WIDTH_HALF / screenZoom, drawY,
-                        drawX + IGraphicsMgr::TILE_WIDTH / screenZoom,
+                        drawX,
+                        drawY,
+                        drawX + IGraphicsMgr::TILE_WIDTH_HALF / screenZoom,
                         drawY + IGraphicsMgr::TILE_HEIGHT_HALF / screenZoom);
                 }
 
                 // Oben links
                 if (catchmentArea->getData(x - 1, y, '0') == '0' && catchmentArea->getData(x, y, '0') == '1') {
                     renderer->drawLine(
-                        drawX, drawY + IGraphicsMgr::TILE_HEIGHT_HALF / screenZoom,
-                        drawX + IGraphicsMgr::TILE_WIDTH_HALF / screenZoom, drawY);
+                        drawX - IGraphicsMgr::TILE_WIDTH_HALF / screenZoom,
+                        drawY + IGraphicsMgr::TILE_HEIGHT_HALF / screenZoom,
+                        drawX,
+                        drawY);
                 }
 
                 // Unten rechts
                 if (catchmentArea->getData(x, y, '0') == '1' && catchmentArea->getData(x + 1, y, '0') == '0') {
                     renderer->drawLine(
-                        drawX + IGraphicsMgr::TILE_WIDTH_HALF / screenZoom,
+                        drawX,
                         drawY + IGraphicsMgr::TILE_HEIGHT / screenZoom,
-                        drawX + IGraphicsMgr::TILE_WIDTH / screenZoom,
+                        drawX + IGraphicsMgr::TILE_WIDTH_HALF / screenZoom,
                         drawY + IGraphicsMgr::TILE_HEIGHT_HALF / screenZoom);
                 }
 
                 // Unten links
                 if (catchmentArea->getData(x, y, '0') == '1' && catchmentArea->getData(x, y + 1, '0') == '0') {
                     renderer->drawLine(
-                        drawX, drawY + IGraphicsMgr::TILE_HEIGHT_HALF / screenZoom,
-                        drawX + IGraphicsMgr::TILE_WIDTH_HALF / screenZoom,
+                        drawX - IGraphicsMgr::TILE_WIDTH_HALF / screenZoom,
+                        drawY + IGraphicsMgr::TILE_HEIGHT_HALF / screenZoom,
+                        drawX,
                         drawY + IGraphicsMgr::TILE_HEIGHT / screenZoom);
                 }
             }
