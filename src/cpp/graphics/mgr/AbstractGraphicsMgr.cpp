@@ -177,34 +177,32 @@ void AbstractGraphicsMgr::loadStaticAnimationGraphicSet(
 void AbstractGraphicsMgr::loadStreets() {
     IGraphic* streetsGraphic = loadGraphic("data/img/objects/streets.png");
 
-    const unsigned char streetTilesCount = 11;
-    const char** streetGraphicSetNames = new const char*[streetTilesCount] {
-        "structures/street-straight0",
-        "structures/street-straight90",
-        "structures/street-curve0",
-        "structures/street-curve90",
-        "structures/street-curve180",
-        "structures/street-curve270",
-        "structures/street-tee0",
-        "structures/street-tee90",
-        "structures/street-tee180",
-        "structures/street-tee270",
-        "structures/street-cross"
+    static struct {
+        const char* graphicSetName;
+        int tileOffsetPerView[4];
+    } streetTiles[11]{
+        { "structures/street-straight0", { 0, 1, 0, 1 } },
+        { "structures/street-straight90", { 1, 0, 1, 0 } },
+        { "structures/street-curve0", { 2, 3, 4, 5 } },
+        { "structures/street-curve90", { 3, 4, 5, 2 } },
+        { "structures/street-curve180", { 4, 5, 2, 3 } },
+        { "structures/street-curve270", { 5, 2, 3, 4 } },
+        { "structures/street-tee0", { 6, 7, 8, 9 } },
+        { "structures/street-tee90", { 7, 8, 9, 6 } },
+        { "structures/street-tee180", { 8, 9, 6, 7 }} ,
+        { "structures/street-tee270", { 9, 6, 7, 8 } },
+        { "structures/street-cross", { 10, 10, 10, 10 } }
     };
+
     Rect tileRect(0, 0, TILE_WIDTH, TILE_HEIGHT);
-    for (int i = 0; i < streetTilesCount; i++, tileRect.x += TILE_WIDTH) {
-        IGraphic* sdlFrameGraphic = loadGraphic(*streetsGraphic, tileRect, 1, 1);
-        IGraphic* sdlFrameGraphic2 = loadGraphic(*streetsGraphic, tileRect, 1, 1); // TODO passende Grafik nehmen
-        IGraphic* sdlFrameGraphic3 = loadGraphic(*streetsGraphic, tileRect, 1, 1); // TODO passende Grafik nehmen
-        IGraphic* sdlFrameGraphic4 = loadGraphic(*streetsGraphic, tileRect, 1, 1); // TODO passende Grafik nehmen
-
+    for (int i = 0; i < 11; i++) {
         GraphicSet* graphicSet = new GraphicSet();
-        graphicSet->addByView("south", new Animation(sdlFrameGraphic));
-        graphicSet->addByView("east", new Animation(sdlFrameGraphic2)); // TODO passende Grafik nehmen
-        graphicSet->addByView("north", new Animation(sdlFrameGraphic3)); // TODO passende Grafik nehmen
-        graphicSet->addByView("west", new Animation(sdlFrameGraphic4)); // TODO passende Grafik nehmen
-
-        graphicSets[streetGraphicSetNames[i]] = graphicSet;
+        for (FourDirectionsView view : FourDirectionsView::ALL_VIEWS) {
+            tileRect.x = TILE_WIDTH * streetTiles[i].tileOffsetPerView[view.getViewIndex()];
+            IGraphic* sdlFrameGraphic = loadGraphic(*streetsGraphic, tileRect, 1, 1);
+            graphicSet->addByView(view.getViewName(), new Animation(sdlFrameGraphic));
+        }
+        graphicSets[streetTiles[i].graphicSetName] = graphicSet;
     }
 
     delete streetsGraphic;
