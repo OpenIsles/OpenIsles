@@ -229,11 +229,56 @@ void GuiMap::renderElement(IRenderer* renderer) {
         const GraphicSet* mapObjectGraphicSet = context->graphicsMgr->getGraphicSet(graphicSetName);
         const IGraphic* mapObjectGraphic = mapObjectGraphicSet->getByView(viewToRender.getViewName())->getGraphic();
 
-        int xInMapObject =
-            ((moMapHeight - 1) - tileOffsetYInMapObject + tileOffsetXInMapObject) * IGraphicsMgr::TILE_WIDTH_HALF;
-        int yInMapObject = mapObjectGraphic->getHeight() -
-            ((moMapHeight - 1) - tileOffsetYInMapObject + (moMapWidth - 1) - tileOffsetXInMapObject + 2) *
-                IGraphicsMgr::TILE_HEIGHT_HALF;
+        /* Tricky part: Die Berechnung von xInMapObject und yInMapObject in allen Ansichten.
+         *
+         * Um die Berechnung zu vereinfachen, führen wir yInMapObjectFromBottom ein. Das ist yInMapObject von
+         * unten gerechnet. Die Berücksichtigung der Grafikhöhe ist in allen Fällen nämlich gleich.
+         *
+         *
+         * Um die Formeln unten zu verstehen, der Reihe nach folgende Überlegungen durchführen:
+         *
+         * 1. Welchen Wert hat xInMapObject/yInMapObjectFromBottom, wenn die Grafik nur 1x1 groß ist?
+         *    -> Es kommen Summanden mit Abhängigkeit zu moMapWidth/moMapHeight in den Term.
+         * 2. Angenommen die Grafik ist 2x1 (also belegt 2 Kacheln in mapX-Richtung), wie ändert sich xInMapObject/yInMapObjectFromBottom?
+         *    -> Es kommen Summanden mit Abhängigkeit zu moMapWidth/moMapHeight in den Term.
+         * 3. Angenommen die Grafik ist 1x2 (also belegt 2 Kacheln in mapY-Richtung), wie ändert sich xInMapObject/yInMapObjectFromBottom?
+         *    -> Es kommen Summanden mit Abhängigkeit zu moMapWidth/moMapHeight in den Term.
+         *
+         * Jetzt, unabhängig von der Größe überlegen:
+         *
+         * 4. Angenommen, ich gehe eine Kachel in mapX-Richtung, wie ändert sich xInMapObject/yInMapObjectFromBottom?
+         *    -> Es kommen Summanden mit Abhängigkeit zu tileOffsetXInMapObject/tileOffsetYInMapObject in den Term.
+         * 5. Angenommen, ich gehe eine Kachel in mapY-Richtung, wie ändert sich xInMapObject/yInMapObjectFromBottom?
+         *    -> Es kommen Summanden mit Abhängigkeit zu tileOffsetXInMapObject/tileOffsetYInMapObject in den Term.
+         *
+         * Fertig :-)
+         */
+        int xInMapObject, yInMapObject, yInMapObjectFromBottom;
+        if (screenView == "south") {
+            xInMapObject =  IGraphicsMgr::TILE_WIDTH_HALF *
+                ((moMapHeight - 1) - tileOffsetYInMapObject + tileOffsetXInMapObject);
+            yInMapObjectFromBottom =  IGraphicsMgr::TILE_HEIGHT_HALF *
+                ((moMapHeight - 1) - tileOffsetYInMapObject + (moMapWidth - 1) - tileOffsetXInMapObject);
+        } else if (screenView == "east") {
+            xInMapObject =  IGraphicsMgr::TILE_WIDTH_HALF *
+                ((moMapWidth - 1) + (moMapHeight - 1) - tileOffsetXInMapObject - tileOffsetYInMapObject);
+            yInMapObjectFromBottom =  IGraphicsMgr::TILE_HEIGHT_HALF *
+                ((moMapWidth - 1) - tileOffsetXInMapObject + tileOffsetYInMapObject);
+        } else if (screenView == "north") {
+            xInMapObject =  IGraphicsMgr::TILE_WIDTH_HALF *
+                ((moMapWidth - 1) + tileOffsetYInMapObject - tileOffsetXInMapObject);
+            yInMapObjectFromBottom =  IGraphicsMgr::TILE_HEIGHT_HALF *
+                (tileOffsetYInMapObject + tileOffsetXInMapObject);
+        } else if (screenView == "west") {
+            xInMapObject =  IGraphicsMgr::TILE_WIDTH_HALF *
+                (tileOffsetXInMapObject + tileOffsetYInMapObject);
+            yInMapObjectFromBottom =  IGraphicsMgr::TILE_HEIGHT_HALF *
+                ((moMapHeight - 1) + tileOffsetXInMapObject - tileOffsetYInMapObject);
+        } else {
+            assert(false);
+            xInMapObject = yInMapObjectFromBottom = 0;
+        }
+        yInMapObject = mapObjectGraphic->getHeight() - yInMapObjectFromBottom - IGraphicsMgr::TILE_HEIGHT;
 
         Rect rectSource(xInMapObject, 0, IGraphicsMgr::TILE_WIDTH, mapObjectGraphic->getHeight());
 
@@ -268,9 +313,24 @@ void GuiMap::renderElement(IRenderer* renderer) {
             mapObjectAlreadyDrawnThere->setData(
                 moMapCoords.x() + tileOffsetXInMapObject, moMapCoords.y() + tileOffsetYInMapObject, 1);
 
-            tileOffsetXInMapObject++;
-            tileOffsetYInMapObject++;
-        } while(tileOffsetXInMapObject < moMapWidth && tileOffsetYInMapObject < moMapHeight);
+            if (screenView == "south") {
+                tileOffsetXInMapObject++;
+                tileOffsetYInMapObject++;
+            } else if (screenView == "east") {
+                tileOffsetXInMapObject++;
+                tileOffsetYInMapObject--;
+            } else if (screenView == "north") {
+                tileOffsetXInMapObject--;
+                tileOffsetYInMapObject--;
+            } else if (screenView == "west") {
+                tileOffsetXInMapObject--;
+                tileOffsetYInMapObject++;
+            } else {
+                assert(false);
+            }
+        } while(
+            tileOffsetXInMapObject < moMapWidth && tileOffsetYInMapObject < moMapHeight &&
+            tileOffsetXInMapObject >= 0 && tileOffsetYInMapObject >= 0);
     });
 
     // Träger zeichnen
