@@ -152,6 +152,9 @@ void GameIO::loadMap(
             for (int my = mapCoords.y(), isleY = 0; my < mapCoords.y() + isleMapHeight; my++, isleY++) {
                 for (int mx = mapCoords.x(), isleX = 0; mx < mapCoords.x() + isleMapWidth; mx++, isleX++) {
                     MapTile* mapTile = map->mapTiles->getData(mx, my, nullptr);
+                    if (mapTile == nullptr) {
+                        continue; // TODO Warnung ausgeben, dass die Map nicht ok is. Wir haben eine Insel, die außerhalb der Karte liegt
+                    }
 
                     unsigned char tileIndex = isle->getTileAt(isleX, isleY);
                     const MapTileConfig* mapTileConfig = configMgr->getMapTileConfigByTiledId(tileIndex);
