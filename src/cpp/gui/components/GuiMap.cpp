@@ -421,6 +421,22 @@ void GuiMap::renderElement(IRenderer* renderer) {
     renderer->drawLine(x, y-10, x, y+10);
 #endif
 
+#ifdef DEBUG
+    // getDrawCoordsForBuilding()-Rechteck einzeichnen
+    for (auto iter = mapObjects.crbegin(); iter != mapObjects.crend(); iter++) {
+        MapObject* mapObject = *iter;
+
+        Building* building = dynamic_cast<Building*>(mapObject);
+        if (building != nullptr) {
+            Rect rect = MapCoordUtils::getDrawCoordsForBuilding(*map, context->graphicsMgr, building);
+            context->graphicsMgr->getRenderer()->drawLine(rect.x, rect.y, rect.x, rect.y+rect.h);
+            context->graphicsMgr->getRenderer()->drawLine(rect.x, rect.y, rect.x+rect.w, rect.y);
+            context->graphicsMgr->getRenderer()->drawLine(rect.x+rect.w, rect.y, rect.x+rect.w, rect.y+rect.h);
+            context->graphicsMgr->getRenderer()->drawLine(rect.x, rect.y+rect.h, rect.x+rect.w, rect.y+rect.h);
+        }
+    }
+#endif
+
     // Clipping wieder zurücksetzen, bevor der nächste mit Malen drankommt
     renderer->setClipRect(nullptr);
 
@@ -493,10 +509,13 @@ void GuiMap::onClickInMap(int mouseX, int mouseY) {
         int x = (mouseX - rect.x) * screenZoom;
         int y = (mouseY - rect.y) * screenZoom;
 
-        const std::string& viewName = building->getView().getViewName();
+        const FourDirectionsView& screenView = map->getScreenView();
+        const FourDirectionsView& structureView = building->getView();
+        const FourDirectionsView& viewToRender = structureView + screenView;
+
         const std::string graphicSetName = context->graphicsMgr->getGraphicSetNameForStructure(building->getStructureType());
         const GraphicSet* graphicSet = context->graphicsMgr->getGraphicSet(graphicSetName);
-        graphicSet->getByView(viewName)->getGraphic()->getPixel(x, y, &r, &g, &b, &a);
+        graphicSet->getByView(viewToRender.getViewName())->getGraphic()->getPixel(x, y, &r, &g, &b, &a);
 
         // Checken, ob Pixel un-transparent genug ist, um es als Treffer zu nehmen
         if (a > 127) {

@@ -91,13 +91,15 @@ Rect MapCoordUtils::mapToDrawCoords(
     return screenToDrawCoords(screenCoords, map, elevation, graphic);
 }
 
-Rect MapCoordUtils::getDrawCoordsForBuilding(const Map& map, IGraphicsMgr* graphicsMgr, Building* building) {
+Rect MapCoordUtils::getDrawCoordsForBuilding(const Map& map, IGraphicsMgr* graphicsMgr, const Building* building) {
     const MapCoords& mapCoords = building->getMapCoords();
 
-	const std::string& viewName = building->getView().getViewName();
+    const FourDirectionsView& structureView = building->getView();
+    const FourDirectionsView& viewToRender = structureView + map.getScreenView();
+
 	const std::string graphicSetName = graphicsMgr->getGraphicSetNameForStructure(building->getStructureType());
 	const GraphicSet* graphicsSet = graphicsMgr->getGraphicSet(graphicSetName);
-    const IGraphic* graphic = graphicsSet->getByView(viewName)->getGraphic();
+    const IGraphic* graphic = graphicsSet->getByView(viewToRender.getViewName())->getGraphic();
 
     const int elevation = 1; // TODO für Gebäude wie Anlegestelle, Fischerhütte etc. muss auf 0 gesetzt werden
 
@@ -182,8 +184,22 @@ Rect MapCoordUtils::screenToDrawCoords(const ScreenCoords& screenCoords, const M
     drawCoordsRect.y = screenCoords.y();
 
     // Grafik entsprechend ihrer Größe in Map-Koordinaten ausrichten.
-    drawCoordsRect.x -= graphic.getWidth() - graphic.getMapWidth() * IGraphicsMgr::TILE_WIDTH_HALF;
-    drawCoordsRect.y -= graphic.getHeight() - (graphic.getMapWidth() + graphic.getMapHeight()) * IGraphicsMgr::TILE_HEIGHT_HALF;
+    const FourDirectionsView& screenView = map.getScreenView();
+    if (screenView == "south") {
+        drawCoordsRect.x -= graphic.getWidth() - graphic.getMapWidth() * IGraphicsMgr::TILE_WIDTH_HALF;
+        drawCoordsRect.y -= graphic.getHeight() - (graphic.getMapWidth() + graphic.getMapHeight()) * IGraphicsMgr::TILE_HEIGHT_HALF;
+    } else if (screenView == "east") {
+        drawCoordsRect.x -= graphic.getWidth() - IGraphicsMgr::TILE_WIDTH_HALF;
+        drawCoordsRect.y -= graphic.getHeight() - (graphic.getMapHeight() + 1) * IGraphicsMgr::TILE_HEIGHT_HALF;
+    } else if (screenView == "north") {
+        drawCoordsRect.x -= graphic.getWidth() - graphic.getMapHeight() * IGraphicsMgr::TILE_WIDTH_HALF;
+        drawCoordsRect.y -= graphic.getHeight() - IGraphicsMgr::TILE_HEIGHT;
+    } else if (screenView == "west") {
+        drawCoordsRect.x -= IGraphicsMgr::TILE_WIDTH_HALF;
+        drawCoordsRect.y -= graphic.getHeight() - (graphic.getMapWidth() + 1) * IGraphicsMgr::TILE_HEIGHT_HALF;
+    } else {
+        assert(false);
+    }
 
     // Elevation
     drawCoordsRect.y -= elevation * IGraphicsMgr::ELEVATION_HEIGHT;

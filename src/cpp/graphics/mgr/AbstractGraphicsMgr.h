@@ -3,6 +3,7 @@
 
 #include <string>
 #include <unordered_map>
+#include "defines.h"
 #include "config/ConfigMgr.h"
 #include "game/Player.h"
 #include "graphics/graphic/IGraphic.h"
@@ -49,6 +50,7 @@ public:
      * @param graphicName Nach des Grafik-Sets
      * @return Grafik-Set
      */
+    VIRTUAL_ONLY_IN_TESTS
     const GraphicSet* getGraphicSet(std::string graphicSetName) const {
         return graphicSets.at(graphicSetName);
     }

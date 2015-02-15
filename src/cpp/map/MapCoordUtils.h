@@ -81,7 +81,7 @@ public:
      * @param building Gebäude
      * @return Rechteck mit den Draw-Koordinaten, wo die Grafik hingezeichnet werden muss
      */
-    static Rect getDrawCoordsForBuilding(const Map& map, IGraphicsMgr* graphicsMgr, Building* building);
+    static Rect getDrawCoordsForBuilding(const Map& map, IGraphicsMgr* graphicsMgr, const Building* building);
 
     /**
      * @brief Ermittelt für die aktuelle Position des Mauszeigers, welche Screen-Koordinate dort liegt.

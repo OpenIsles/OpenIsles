@@ -2,6 +2,7 @@
 #define _I_GRAPHICS_MGR_H
 
 #include <string>
+#include "defines.h"
 #include "game/GoodsSlot.h"
 #include "game/Player.h"
 #include "graphics/graphic/IGraphic.h"
@@ -58,6 +59,7 @@ public:
 
     virtual const GraphicSet* getGraphicSet(std::string graphicName) const = 0;
 
+    VIRTUAL_ONLY_IN_TESTS
     std::string getGraphicSetNameForStructure(StructureType structureType) const {
         // TODO Das muss irgendwie hübscher werden. In Zukunft muss alles mit den String-Keys laufen
         std::string graphicSetNameSuffix;
@@ -93,11 +95,6 @@ public:
         else if (structureType == StructureType::STREET_CROSS) { graphicSetNameSuffix = "street-cross"; }
 
         return "structures/" + graphicSetNameSuffix;
-    }
-
-    std::string getGraphicSetNameForTile(int tileIndex) const {
-        // TODO Das muss irgendwie hübscher werden. In Zukunft muss alles mit den String-Keys laufen
-        return "tiles/" + std::to_string(tileIndex);
     }
 
     std::string getGraphicSetNameForGoodIcons(GoodsType goodsType, bool marketplaceIcon) const {
