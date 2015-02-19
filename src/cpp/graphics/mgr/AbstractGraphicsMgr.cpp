@@ -36,6 +36,7 @@ void AbstractGraphicsMgr::loadGraphics() {
     loadStaticGraphicSetWith4Views("structures/butchers", "data/img/objects/butchers.png", 2, 2);
     loadStaticGraphicSetWith4Views("structures/toolsmiths", "data/img/objects/toolsmiths.png", 2, 2);
     loadStaticGraphicSetWith4Views("structures/hunters-hut", "data/img/objects/hunters-hut.png", 1, 1);
+    loadStaticGraphicSetWith4Views("structures/cathedral", "data/img/objects/cathedral.png", 6, 4);
 
     loadStreets();
 
@@ -70,6 +71,7 @@ void AbstractGraphicsMgr::loadGraphics() {
     loadStaticGraphicSet("add-building-button/stonemason", "data/img/gui/add-building/stonemason.png");
     loadStaticGraphicSet("add-building-button/foresters", "data/img/gui/add-building/foresters.png");
     loadStaticGraphicSet("add-building-button/hunters-hut", "data/img/gui/add-building/hunters-hut.png");
+    loadStaticGraphicSet("add-building-button/cathedral", "data/img/gui/add-building/cathedral.png");
     loadStaticGraphicSet("add-building-button/dummy", "data/img/gui/add-building/dummy.png");
 
     loadStaticGraphicSet("add-building-group/craftsman", "data/img/gui/button-add-building-craftsman.png");

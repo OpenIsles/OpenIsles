@@ -42,6 +42,7 @@ enum StructureType : unsigned char {
     BUTCHERS,
     TOOLSMITHS,
     HUNTERS_HUT,
+    CATHEDRAL,
 
     MAX_STRUCTURE // Marker, wie viel Platz wir im Array brauchen
 } StructureType;
