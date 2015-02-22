@@ -138,7 +138,11 @@ GuiBuildMenuWidget::GuiBuildMenuWidget(const Context* const context) : GuiPanelW
                     "Kathedrale",
                     "add-building-button/cathedral"
                 },
-                { StructureType::NO_STRUCTURE, nullptr, "add-building-button/dummy" },
+                {
+                    StructureType::TAVERN,
+                    "Wirtshaus",
+                    "add-building-button/tavern"
+                },
                 { StructureType::NO_STRUCTURE, nullptr, "add-building-button/dummy" },
                 { StructureType::NO_STRUCTURE, nullptr, "add-building-button/dummy" },
                 { StructureType::NO_STRUCTURE, nullptr, "add-building-button/dummy" },

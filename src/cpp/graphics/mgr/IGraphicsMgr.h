@@ -81,6 +81,7 @@ public:
         else if (structureType == StructureType::TOOLSMITHS) { graphicSetNameSuffix = "toolsmiths"; }
         else if (structureType == StructureType::HUNTERS_HUT) { graphicSetNameSuffix = "hunters-hut"; }
         else if (structureType == StructureType::CATHEDRAL) { graphicSetNameSuffix = "cathedral"; }
+        else if (structureType == StructureType::TAVERN) { graphicSetNameSuffix = "tavern"; }
 
         else if (structureType == StructureType::STREET) { graphicSetNameSuffix = "street-straight0"; } // wird für "allgemeine" Straße benutzt, z.B. wenn im Baumenü ausgewählt
         else if (structureType == StructureType::STREET_STRAIGHT_0) { graphicSetNameSuffix = "street-straight0"; }
