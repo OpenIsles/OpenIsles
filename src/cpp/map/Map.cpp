@@ -130,13 +130,11 @@ void Map::addOfficeCatchmentAreaToMap(const Building& building) {
     
     const BuildingConfig* buildingConfig = context->configMgr->getBuildingConfig(building.getStructureType());
     RectangleData<char>* catchmentArea = buildingConfig->getCatchmentArea();
+    int catchmentAreaRadius = std::max(catchmentArea->width, catchmentArea->height); // TODO sehr optimierungsbedürftig, dafür funktionierts erstmal in allen Ansichten
     
     // TODO Sehr hässlich, aber tuts erstmal sicher, ohne Gefahr.
-    for (int mapY = mapCoords.y() - catchmentArea->height/2 - 1;
-             mapY <= mapCoords.y() + catchmentArea->height/2 + 1; mapY++) {
-        
-        for (int mapX = mapCoords.x() - catchmentArea->width/2 - 1;
-                 mapX <= mapCoords.x() + catchmentArea->width/2 + 1; mapX++) {
+    for (int mapY = mapCoords.y() - catchmentAreaRadius; mapY <= mapCoords.y() + catchmentAreaRadius; mapY++) {
+        for (int mapX = mapCoords.x() - catchmentAreaRadius; mapX <= mapCoords.x() + catchmentAreaRadius; mapX++) {
             
             if (!building.isInsideCatchmentArea(context->configMgr, MapCoords(mapX, mapY))) {
                 continue;

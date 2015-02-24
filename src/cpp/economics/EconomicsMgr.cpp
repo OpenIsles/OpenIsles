@@ -338,14 +338,11 @@ FindBuildingToGetGoodsFromResult EconomicsMgr::findBuildingToGetGoodsFrom(Buildi
                                          // Da wir kachelweise arbeiten, erhalten wir dasselbe Gebäude mehrfach.
 
     Map* map = context->game->getMap();
-    for (int y = 0; y < catchmentArea->height; y++) {
-        for (int x = 0; x < catchmentArea->width; x++) {
-            int mapWidth = building->getMapWidth();
-            int mapHeight = building->getMapHeight();
+    const MapCoords& mapCoords = building->getMapCoords();
+    int catchmentAreaRadius = std::max(catchmentArea->width, catchmentArea->height); // TODO sehr optimierungsbedürftig, dafür funktionierts erstmal in allen Ansichten
 
-            const MapCoords& mapCoords = building->getMapCoords();
-            int mapX = mapCoords.x() + (x - (catchmentArea->width - mapWidth) / 2);
-            int mapY = mapCoords.y() + (y - (catchmentArea->height - mapHeight) / 2);
+    for (int mapY = mapCoords.y() - catchmentAreaRadius; mapY <= mapCoords.y() + catchmentAreaRadius; mapY++) {
+        for (int mapX = mapCoords.x() - catchmentAreaRadius; mapX <= mapCoords.x() + catchmentAreaRadius; mapX++) {
 
             // Gebäude da?
             MapTile* mapTile = map->getMapTileAt(MapCoords(mapX, mapY));
@@ -518,8 +515,6 @@ FindBuildingToGetGoodsFromResult EconomicsMgr::findBuildingToGetGoodsFrom(Buildi
     FindBuildingToGetGoodsFromResult bestResult = potentialResults.front();
 
 #ifdef DEBUG_ECONOMICS
-    const MapCoords& mapCoords = building->getMapCoords();
-
     std::cout << "potentialResults for (" << mapCoords.x() << ", " << mapCoords.y() << "):" << std::endl;
 
     int i = 1;

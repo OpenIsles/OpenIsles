@@ -55,6 +55,7 @@ set(TEST_FILES
     test/cpp/economics/EconomicsMgrTest.cpp
     test/cpp/graphics/GraphicSetTest.cpp
     test/cpp/map/coords/MapCoordsTest.cpp
+    test/cpp/map/BuildingTest.cpp
     test/cpp/map/DirectionsTest.cpp
     test/cpp/map/MapCoordUtilsTest.cpp
     test/cpp/utils/MapCoordsIteratorTest.cpp

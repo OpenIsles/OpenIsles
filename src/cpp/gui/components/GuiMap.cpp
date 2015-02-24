@@ -162,7 +162,7 @@ void GuiMap::renderElement(IRenderer* renderer) {
             }
 
             // Zu zeichnendes Gebäude erstellen
-            structureBeingAdded = new Structure();
+            structureBeingAdded = (structureType >= START_BUILDINGS) ? new Building() : new Structure();
             structureBeingAdded->setStructureType(structureType);
             structureBeingAdded->setMapCoords(mapCoords);
             structureBeingAdded->setMapWidth(graphic->getMapWidth());
@@ -359,8 +359,12 @@ void GuiMap::renderElement(IRenderer* renderer) {
 
     // structureBeingAdded gesetzt?
     if (structureBeingAdded != nullptr) {
-        // Einzugsbereich jetzt malen, damit er oben drauf is
-        drawCatchmentArea(renderer, structureBeingAdded);
+        Building* buildingBeingAdded = dynamic_cast<Building*>(structureBeingAdded);
+        if (buildingBeingAdded != nullptr) {
+            // Einzugsbereich jetzt malen, damit er oben drauf is
+            drawCatchmentArea(renderer, buildingBeingAdded);
+        }
+
         delete structureBeingAdded;
     }
 
@@ -618,70 +622,65 @@ unsigned char GuiMap::isAllowedToPlaceStructure(
     return result;
 }
 
-void GuiMap::drawCatchmentArea(IRenderer* const renderer, Structure* structure) {
+void GuiMap::drawCatchmentArea(IRenderer* const renderer, const Building* building) {
     Map* map = context->game->getMap();
     int screenZoom = map->getScreenZoom();
     const FourDirectionsView& screenView = map->getScreenView();
 
     renderer->setDrawColor(Color(0xc8, 0xaf, 0x37, 255));
 
-    const BuildingConfig* buildingConfig = context->configMgr->getBuildingConfig(structure->getStructureType());
+    const BuildingConfig* buildingConfig = context->configMgr->getBuildingConfig(building->getStructureType());
     const RectangleData<char>* catchmentArea = buildingConfig->getCatchmentArea();
+
     if (catchmentArea != nullptr) {
-        for (int y = 0; y < catchmentArea->height; y++) {
-            for (int x = 0; x < catchmentArea->width; x++) {
-                const MapCoords& mapCoords = structure->getMapCoords();
-                int mapWidth = structure->getMapWidth();
-                int mapHeight = structure->getMapHeight();
+        const MapCoords& mapCoords = building->getMapCoords();
+        int catchmentAreaRadius = std::max(catchmentArea->width, catchmentArea->height); // TODO sehr optimierungsbedürftig, dafür funktionierts erstmal in allen Ansichten
 
-                int mapX = mapCoords.x() + (x - (catchmentArea->width - mapWidth) / 2);
-                int mapY = mapCoords.y() + (y - (catchmentArea->height - mapHeight) / 2);
+        for (int mapY = mapCoords.y() - catchmentAreaRadius; mapY <= mapCoords.y() + catchmentAreaRadius; mapY++) {
+            for (int mapX = mapCoords.x() - catchmentAreaRadius; mapX <= mapCoords.x() + catchmentAreaRadius; mapX++) {
+                MapCoords mapCoordsHere(mapX, mapY);
+                MapCoords mapCoordsEast(mapX + 1, mapY);
+                MapCoords mapCoordsSouth(mapX, mapY + 1);
 
-                ScreenCoords screenCoords = MapCoordUtils::mapToScreenCoords(MapCoords(mapX, mapY), screenView, *map);
+                bool mapCoordsHereInSideCatchmentArea =
+                    building->isInsideCatchmentArea(context->configMgr, mapCoordsHere);
+                bool mapCoordsEastInSideCatchmentArea =
+                    building->isInsideCatchmentArea(context->configMgr, mapCoordsEast);
+                bool mapCoordsSouthInSideCatchmentArea =
+                    building->isInsideCatchmentArea(context->configMgr, mapCoordsSouth);
 
-                int drawX = screenCoords.x() / screenZoom;
-                int drawY = (screenCoords.y() - IGraphicsMgr::ELEVATION_HEIGHT) / screenZoom;
+                auto drawLineBetweenMapCoords = [&](const MapCoords& mapCoords1, const MapCoords& mapCoords2) {
+                    ScreenCoords screenCoords1 = MapCoordUtils::mapToScreenCoords(mapCoords1, screenView, *map);
+                    ScreenCoords screenCoords2 = MapCoordUtils::mapToScreenCoords(mapCoords2, screenView, *map);
 
-                drawX += Consts::mapClipRect.w / 2;
-                drawY += Consts::mapClipRect.h / 2;
+                    int drawX1 = screenCoords1.x() / screenZoom;
+                    int drawY1 = (screenCoords1.y() - IGraphicsMgr::ELEVATION_HEIGHT) / screenZoom;
+                    drawX1 += Consts::mapClipRect.w / 2;
+                    drawY1 += Consts::mapClipRect.h / 2;
 
-                // An der Kachel jede der 4 Seiten untersuchen, ob wir eine Linie malen müssen.
-                // TODO die String-'1'er ersetzen durch echte 1en.
+                    int drawX2 = screenCoords2.x() / screenZoom;
+                    int drawY2 = (screenCoords2.y() - IGraphicsMgr::ELEVATION_HEIGHT) / screenZoom;
+                    drawX2 += Consts::mapClipRect.w / 2;
+                    drawY2 += Consts::mapClipRect.h / 2;
 
-                // Oben rechts
-                if (catchmentArea->getData(x, y - 1, '0') == '0' && catchmentArea->getData(x, y, '0') == '1') {
-                    renderer->drawLine(
-                        drawX,
-                        drawY,
-                        drawX + IGraphicsMgr::TILE_WIDTH_HALF / screenZoom,
-                        drawY + IGraphicsMgr::TILE_HEIGHT_HALF / screenZoom);
+                    renderer->drawLine(drawX1, drawY1, drawX2, drawY2);
+                };
+
+                bool drawYLine =
+                    ((mapCoordsHereInSideCatchmentArea && !mapCoordsEastInSideCatchmentArea) ||
+                    (!mapCoordsHereInSideCatchmentArea && mapCoordsEastInSideCatchmentArea));
+                bool drawXLine =
+                    ((mapCoordsHereInSideCatchmentArea && !mapCoordsSouthInSideCatchmentArea) ||
+                    (!mapCoordsHereInSideCatchmentArea && mapCoordsSouthInSideCatchmentArea));
+
+                // Übergang West -> Ost (mapX-Richtung)
+                if (drawYLine) {
+                    drawLineBetweenMapCoords(mapCoordsEast, MapCoords(mapX + 1, mapY + 1));
                 }
 
-                // Oben links
-                if (catchmentArea->getData(x - 1, y, '0') == '0' && catchmentArea->getData(x, y, '0') == '1') {
-                    renderer->drawLine(
-                        drawX - IGraphicsMgr::TILE_WIDTH_HALF / screenZoom,
-                        drawY + IGraphicsMgr::TILE_HEIGHT_HALF / screenZoom,
-                        drawX,
-                        drawY);
-                }
-
-                // Unten rechts
-                if (catchmentArea->getData(x, y, '0') == '1' && catchmentArea->getData(x + 1, y, '0') == '0') {
-                    renderer->drawLine(
-                        drawX,
-                        drawY + IGraphicsMgr::TILE_HEIGHT / screenZoom,
-                        drawX + IGraphicsMgr::TILE_WIDTH_HALF / screenZoom,
-                        drawY + IGraphicsMgr::TILE_HEIGHT_HALF / screenZoom);
-                }
-
-                // Unten links
-                if (catchmentArea->getData(x, y, '0') == '1' && catchmentArea->getData(x, y + 1, '0') == '0') {
-                    renderer->drawLine(
-                        drawX - IGraphicsMgr::TILE_WIDTH_HALF / screenZoom,
-                        drawY + IGraphicsMgr::TILE_HEIGHT_HALF / screenZoom,
-                        drawX,
-                        drawY + IGraphicsMgr::TILE_HEIGHT / screenZoom);
+                // Übergang Nord -> Süd (mapY-Richtung)
+                if (drawXLine) {
+                    drawLineBetweenMapCoords(mapCoordsSouth, MapCoords(mapX + 1, mapY + 1));
                 }
             }
         }

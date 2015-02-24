@@ -93,11 +93,11 @@ public:
 
 private:
     /**
-     * @brief Zeichnet den Einzugsbereich eines Gebäudes. Hilfsmethode von renderMap().
+     * @brief Zeichnet den Einzugsbereich eines Gebäudes.
      * @param renderer (Dependency)
-     * @param structure Struktur
+     * @param building Gebäude
      */
-    void drawCatchmentArea(IRenderer* const renderer, Structure* structure);
+    void drawCatchmentArea(IRenderer* const renderer, const Building* building);
 
     /**
      * @brief interner Klickhandler, wenn in die Karte geklickt wurde.

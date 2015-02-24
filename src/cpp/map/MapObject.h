@@ -13,12 +13,20 @@ class MapObject {
 
 protected:
 	/**
-	 * @brief Breite des Objekts in Map-Koordinaten
+	 * @brief Breite des Objekts in Map-Koordinaten.
+     *
+     * Info: Dies entspricht immer der Breite in der Ausrichtung des Gebäudes. Z.B. hat ein 3x2-Gebäude, was
+     * auf Ost/West-Ansicht gedreht wurde, hat eine mapWidth von 2. Auf Süd/Nord-Ansicht hat es eine mapWidth von 3.
+     * Dies ist analog der zugehörigen Grafik.
 	 */
 	int mapWidth;
 
     /**
 	 * @brief Höhe des Objekts in Map-Koordinaten
+     *
+     * Info: Dies entspricht immer der Höhe in der Ausrichtung des Gebäudes. Z.B. hat ein 3x2-Gebäude, was
+     * auf Ost/West-Ansicht gedreht wurde, hat eine mapHeight von 3. Auf Süd/Nord-Ansicht hat es eine mapHeight von 2.
+     * Dies ist analog der zugehörigen Grafik.
 	 */
     int mapHeight;
     
@@ -42,7 +50,7 @@ public:
     }
 
     void setMapWidth(int mapWidth) {
-        MapObject::mapWidth = mapWidth;
+        this->mapWidth = mapWidth;
     }
 
     int getMapHeight() const {
@@ -50,7 +58,7 @@ public:
     }
 
     void setMapHeight(int mapHeight) {
-        MapObject::mapHeight = mapHeight;
+        this->mapHeight = mapHeight;
     }
 
     Player* getPlayer() const {

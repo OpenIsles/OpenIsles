@@ -2,6 +2,7 @@
 #define _CONFIG_MGR_H
 
 #include <unordered_map>
+#include "defines.h"
 #include "game/GoodsSlot.h"
 #include "map/Building.h"
 #include "map/Directions.h"
@@ -258,6 +259,7 @@ public:
     /**
      * Gibt den belegten Speicher der Konfigurationen wieder frei
      */
+    VIRTUAL_ONLY_IN_TESTS
     ~ConfigMgr();
     
     /**
@@ -265,6 +267,7 @@ public:
      * @param structureType Typ des Gebäudes
      * @return Konfiguration
      */
+    VIRTUAL_ONLY_IN_TESTS
     const BuildingConfig* getBuildingConfig(StructureType structureType) const {
         return buildingConfigs[structureType];
     }

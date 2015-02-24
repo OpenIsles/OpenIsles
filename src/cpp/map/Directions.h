@@ -109,7 +109,7 @@ public:
     }
 
     /**
-     * @brief Vergleichsoperator, der mit dem Namen der Ansicht als String vergleich
+     * @brief Vergleichsoperator, der mit dem Namen der Ansicht als String vergleicht
      */
     bool operator==(std::string viewName) const {
         return (getViewName() == viewName);

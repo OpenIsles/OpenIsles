@@ -13,13 +13,13 @@
 class MapCoordUtilsTestMap : public Map {
 
 public:
-    MapCoordUtilsTestMap(Context const* const context) : Map(context) {
+    MapCoordUtilsTestMap(const Context* const context) : Map(context) {
     }
 
-    int getWidth() const {
+    int getWidth() const override {
         return 10;
     }
-    int getHeight() const {
+    int getHeight() const override {
         return 10;
     }
 
