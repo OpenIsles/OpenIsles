@@ -62,7 +62,7 @@ public:
 protected:
     virtual void loadStaticGraphicSet(const std::string&, const char* graphicFilename);
     virtual void loadStaticGraphicSet(const std::string&, const char* graphicFilename, unsigned char mapWidth, unsigned char mapHeight);
-    virtual void loadStaticAnimationGraphicSet(
+    virtual void loadStaticAnimationGraphicSetWith8Views(
         const std::string& graphicSetName, const char* graphicFilename,
         unsigned char mapWidth, unsigned char mapHeight, unsigned int countFrames);
 

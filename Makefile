@@ -134,7 +134,16 @@ $(DATA_DIRECTORY)/img/objects/$(1).png: $(SRC_DIRECTORY)/blender/animations/$(1)
 	cd $(SRC_DIRECTORY)/blender/animations/$(1); blender -b $$(notdir $$<) -P ../render-animation.py
 
 	# geometry muss angegeben werden, sonst greift der Default von 120x120
-	$(MONTAGE) $(SRC_DIRECTORY)/blender/animations/$(1)/render/angle0/* -geometry +0+0 -tile x1 $$@
+	$(MONTAGE) \
+        $(SRC_DIRECTORY)/blender/animations/$(1)/render/angle0/* \
+        $(SRC_DIRECTORY)/blender/animations/$(1)/render/angle45/* \
+        $(SRC_DIRECTORY)/blender/animations/$(1)/render/angle90/* \
+        $(SRC_DIRECTORY)/blender/animations/$(1)/render/angle135/* \
+        $(SRC_DIRECTORY)/blender/animations/$(1)/render/angle180/* \
+        $(SRC_DIRECTORY)/blender/animations/$(1)/render/angle225/* \
+        $(SRC_DIRECTORY)/blender/animations/$(1)/render/angle270/* \
+        $(SRC_DIRECTORY)/blender/animations/$(1)/render/angle315/* \
+        -geometry +0+0 -tile x8 $$@
 endef
 
 $(foreach ANIMATION,$(ANIMATIONS),$(eval $(call RENDER_ANIMATION,$(ANIMATION))))
@@ -148,8 +157,26 @@ render-cart: $(SRC_DIRECTORY)/blender/animations/cart/cart.blend
 	cd $(SRC_DIRECTORY)/blender/animations/cart; blender -b $(notdir $<) -P render-cart.py
 
 	# geometry muss angegeben werden, sonst greift der Default von 120x120
-	$(MONTAGE) $(SRC_DIRECTORY)/blender/animations/cart/render/without_cargo/angle0/* -geometry +0+0 -tile x1 $(DATA_DIRECTORY)/img/objects/cart-without-cargo.png
-	$(MONTAGE) $(SRC_DIRECTORY)/blender/animations/cart/render/with_cargo/angle0/* -geometry +0+0 -tile x1 $(DATA_DIRECTORY)/img/objects/cart-with-cargo.png
+	$(MONTAGE) \
+	    $(SRC_DIRECTORY)/blender/animations/cart/render/without_cargo/angle0/* \
+	    $(SRC_DIRECTORY)/blender/animations/cart/render/without_cargo/angle45/* \
+	    $(SRC_DIRECTORY)/blender/animations/cart/render/without_cargo/angle90/* \
+	    $(SRC_DIRECTORY)/blender/animations/cart/render/without_cargo/angle135/* \
+	    $(SRC_DIRECTORY)/blender/animations/cart/render/without_cargo/angle180/* \
+	    $(SRC_DIRECTORY)/blender/animations/cart/render/without_cargo/angle225/* \
+	    $(SRC_DIRECTORY)/blender/animations/cart/render/without_cargo/angle270/* \
+	    $(SRC_DIRECTORY)/blender/animations/cart/render/without_cargo/angle315/* \
+	    -geometry +0+0 -tile x8 $(DATA_DIRECTORY)/img/objects/cart-without-cargo.png
+	$(MONTAGE) \
+	    $(SRC_DIRECTORY)/blender/animations/cart/render/with_cargo/angle0/* \
+	    $(SRC_DIRECTORY)/blender/animations/cart/render/with_cargo/angle45/* \
+	    $(SRC_DIRECTORY)/blender/animations/cart/render/with_cargo/angle90/* \
+	    $(SRC_DIRECTORY)/blender/animations/cart/render/with_cargo/angle135/* \
+	    $(SRC_DIRECTORY)/blender/animations/cart/render/with_cargo/angle180/* \
+	    $(SRC_DIRECTORY)/blender/animations/cart/render/with_cargo/angle225/* \
+	    $(SRC_DIRECTORY)/blender/animations/cart/render/with_cargo/angle270/* \
+	    $(SRC_DIRECTORY)/blender/animations/cart/render/with_cargo/angle315/* \
+	    -geometry +0+0 -tile x8 $(DATA_DIRECTORY)/img/objects/cart-with-cargo.png
 
 ########################################################################################################################
 # Banner                                                                                                               #

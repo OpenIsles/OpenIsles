@@ -96,9 +96,9 @@ void AbstractGraphicsMgr::loadGraphics() {
     loadStaticGraphicSet("button-music", "data/img/gui/button-music.png");
     loadStaticGraphicSet("button-music-pressed", "data/img/gui/button-music-pressed.png");
 
-    loadStaticAnimationGraphicSet("carrier", "data/img/objects/carrier.png", 1, 1, 31);
-    loadStaticAnimationGraphicSet("cart-without-cargo", "data/img/objects/cart-without-cargo.png", 1, 1, 32);
-    loadStaticAnimationGraphicSet("cart-with-cargo", "data/img/objects/cart-with-cargo.png", 1, 1, 32);
+    loadStaticAnimationGraphicSetWith8Views("carrier", "data/img/objects/carrier.png", 1, 1, 31);
+    loadStaticAnimationGraphicSetWith8Views("cart-without-cargo", "data/img/objects/cart-without-cargo.png", 1, 1, 32);
+    loadStaticAnimationGraphicSetWith8Views("cart-with-cargo", "data/img/objects/cart-with-cargo.png", 1, 1, 32);
 }
 
 void AbstractGraphicsMgr::loadTiles() {
@@ -147,7 +147,7 @@ void AbstractGraphicsMgr::loadStaticGraphicSet(
     graphicSets[graphicSetName] = graphicSet;
 }
 
-void AbstractGraphicsMgr::loadStaticAnimationGraphicSet(
+void AbstractGraphicsMgr::loadStaticAnimationGraphicSetWith8Views(
     const std::string& graphicSetName, const char* graphicFilename, unsigned char mapWidth, unsigned char mapHeight,
     unsigned int countFrames) {
 
@@ -160,18 +160,32 @@ void AbstractGraphicsMgr::loadStaticAnimationGraphicSet(
     }
     int frameWidth = fullGraphicWidth / countFrames;
 
-
-    Animation* animation = new Animation(countFrames);
-    Rect frameRect(0, 0, frameWidth, sdlFullGraphic->getHeight());
-    for (int x = 0, frameIndex = 0; x < fullGraphicWidth; x += frameWidth, frameIndex++) {
-        frameRect.x = x;
-
-        IGraphic* sdlFrameGraphic = loadGraphic(*sdlFullGraphic, frameRect, mapWidth, mapHeight);
-        animation->addFrame(frameIndex, sdlFrameGraphic);
+    int fullGraphicHeight = sdlFullGraphic->getHeight();
+    if (fullGraphicHeight % 8 != 0) {
+        std::cerr << "Could not divide the views equally: '" << graphicFilename << "': " << std::endl;
+        throw new std::runtime_error("Could not divide the views equally");
     }
+    int frameHeight = fullGraphicHeight / 8;
 
     GraphicSet* graphicSet = new GraphicSet();
-    graphicSet->addStatic(animation);
+    Rect frameRect(0, 0, frameWidth, frameHeight);
+
+    for (EightDirectionsView view : EightDirectionsView::ALL_VIEWS) {
+        Animation* animation = new Animation(countFrames);
+        for (int x = 0, frameIndex = 0; x < fullGraphicWidth; x += frameWidth, frameIndex++) {
+            frameRect.x = x;
+
+            IGraphic* sdlFrameGraphic = loadGraphic(
+                *sdlFullGraphic, frameRect,
+                (view.getViewIndex() % 2) ? mapHeight : mapWidth,
+                (view.getViewIndex() % 2) ? mapWidth : mapHeight
+            );
+            animation->addFrame(frameIndex, sdlFrameGraphic);
+        }
+
+        graphicSet->addByView(view.getViewName(), animation);
+        frameRect.y += frameHeight;
+    }
 
     graphicSets[graphicSetName] = graphicSet;
 
@@ -219,23 +233,18 @@ void AbstractGraphicsMgr::loadStaticGraphicSetWith4Views(
     int tileWidth = graphic->getWidth() / 4;
 
     GraphicSet* graphicSet = new GraphicSet();
-    IGraphic* tileGraphic;
-
     Rect tileRect(0, 0, tileWidth, graphic->getHeight());
-    tileGraphic = loadGraphic(*graphic, tileRect, mapWidth, mapHeight);
-    graphicSet->addByView("south", new Animation(tileGraphic));
 
-    tileRect.x += tileWidth;
-    tileGraphic = loadGraphic(*graphic, tileRect, mapHeight, mapWidth);
-    graphicSet->addByView("east", new Animation(tileGraphic));
+    for (FourDirectionsView view : FourDirectionsView::ALL_VIEWS) {
+        IGraphic* tileGraphic = loadGraphic(
+            *graphic, tileRect,
+            (view.getViewIndex() % 2) ? mapHeight : mapWidth,
+            (view.getViewIndex() % 2) ? mapWidth : mapHeight
+        );
+        graphicSet->addByView(view.getViewName(), new Animation(tileGraphic));
 
-    tileRect.x += tileWidth;
-    tileGraphic = loadGraphic(*graphic, tileRect, mapWidth, mapHeight);
-    graphicSet->addByView("north", new Animation(tileGraphic));
-
-    tileRect.x += tileWidth;
-    tileGraphic = loadGraphic(*graphic, tileRect, mapHeight, mapWidth);
-    graphicSet->addByView("west", new Animation(tileGraphic));
+        tileRect.x += tileWidth;
+    }
 
     graphicSets[graphicSetName] = graphicSet;
     delete graphic;

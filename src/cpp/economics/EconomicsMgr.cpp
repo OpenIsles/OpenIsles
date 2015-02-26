@@ -110,8 +110,8 @@ void EconomicsMgr::updateCarrier(Building* building) {
 
         Carrier* carrier = new Carrier(result.building, result.route, result.goodsSlot.goodsType, true);
         carrier->setMapCoords((DoubleMapCoords) firstHopOnRoute);
-        carrier->setAnimation(
-            context->graphicsMgr->getGraphicSet(isStorageBuilding ? "cart-without-cargo" : "carrier")->getStatic());
+        carrier->setAnimations(
+            *context->graphicsMgr->getGraphicSet(isStorageBuilding ? "cart-without-cargo" : "carrier"));
 
         building->carrier = carrier;
 
@@ -129,7 +129,7 @@ void EconomicsMgr::updateCarrier(Building* building) {
     double oneSecondTicks = (double) 1000 / context->game->getSpeed();
 
     Carrier* carrier = building->carrier;
-    const Animation* animation = carrier->getAnimation();
+    const Animation* animation = carrier->getAnimations()[0]; // TODO wir brauchen nur fps und framesCount. Das sollte in allen Richtungen gleich sein.
 
     // Animieren
     carrier->animationFrame += (double) ticksPastSinceLastUpdate / oneSecondTicks * animation->getFps();
@@ -224,8 +224,8 @@ void EconomicsMgr::updateCarrier(Building* building) {
                         Carrier* returnCarrier = new Carrier(
                             building, returnRoute, goodsSlotToTakeFrom->goodsType, false);
                         returnCarrier->setMapCoords((DoubleMapCoords) firstHopOnReturnRoute);
-                        returnCarrier->setAnimation(
-                            context->graphicsMgr->getGraphicSet(isStorageBuilding ? "cart-with-cargo" : "carrier")->getStatic());
+                        returnCarrier->setAnimations(
+                            *context->graphicsMgr->getGraphicSet(isStorageBuilding ? "cart-with-cargo" : "carrier"));
                         returnCarrier->carriedGoods.inventory = goodsWeCollect;
 
                         building->carrier = returnCarrier;

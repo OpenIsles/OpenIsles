@@ -1,6 +1,7 @@
 #ifndef _ANIMATION_H
 #define _ANIMATION_H
 
+#include <array>
 #include <stdexcept>
 #include <vector>
 #include "graphics/graphic/IGraphic.h"
@@ -108,5 +109,11 @@ public:
         return 25.0;
     }
 };
+
+/**
+ * @brief Abkürzung, um eine Animation aus 8 verschiedenen Richtungen zu definieren.
+ * Array-Index ist hierbei EightDirectionsView::getViewIndex()
+ */
+using EightDirectionsAnimation = std::array<const Animation*, 8>;
 
 #endif

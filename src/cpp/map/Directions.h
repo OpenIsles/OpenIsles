@@ -4,6 +4,7 @@
 #include <stdexcept>
 #include <string>
 
+
 /**
  * @brief Repräsentiert eine mögliche von 4 Ansichten (Süd, Ost, Nord, West). Damit können wir abstrakt die Ansicht
  * benennen und haben Array-Index (0-3) oder GraphicSetKeyView an einer Stelle.
@@ -14,7 +15,8 @@
  * - NORTH = 2
  * - WEST = 3
  */
-class FourDirectionsView {
+template <unsigned int N>
+class NDirectionsView {
 
 public:
     /**
@@ -25,18 +27,18 @@ public:
     /**
      * @brief Maximaler view-Index (exklusive)
      */
-    static const int MAX_VIEW = 4;
+    static const int MAX_VIEW = N;
 
     /**
      * @brief Enthält alle 4 Ansichten im Array zur Verwendung in foreach-Loops
      */
-    static const FourDirectionsView ALL_VIEWS[MAX_VIEW];
+    static const NDirectionsView<N> ALL_VIEWS[N];
 
 private:
     /**
      * @brief Namen der Views
      */
-    static const std::string viewNames[];
+    static const std::string viewNames[N];
 
 private:
     /**
@@ -49,7 +51,7 @@ public:
     /**
      * @brief Konstruktor. Stellt die Ansicht auf "Süd" ein.
      */
-    FourDirectionsView() {
+    NDirectionsView() {
         viewIndex = MIN_VIEW;
     }
 
@@ -57,7 +59,7 @@ public:
      * @brief Konstruktor, der das Objekt eine bestimmte Ansicht einstellt.
      * @param viewName "north", "east", "south" oder "west"
      */
-    FourDirectionsView(const char* viewName) {
+    NDirectionsView(const char* viewName) {
         for (int i = MIN_VIEW; i < MAX_VIEW; i++) {
             if (viewNames[i] == viewName) {
                 viewIndex = (char) i;
@@ -72,8 +74,8 @@ public:
      * @brief "Inkrementiert" die Ansicht. Effektiv wird das Objekt unter der Ansicht um 90° im Uhrzeigersinn gedreht.
      * (Wir rotieren gegen den Uhrzeigersinn.)
      */
-    FourDirectionsView operator++(int) {
-        FourDirectionsView view = *this;
+    NDirectionsView operator++(int) {
+        NDirectionsView view = *this;
 
         if (++viewIndex == MAX_VIEW) {
             viewIndex = MIN_VIEW;
@@ -86,8 +88,8 @@ public:
      * @brief "Dekrementiert" die Ansicht. Effektiv wird das Objekt unter der Ansicht um 90° gegen Uhrzeigersinn gedreht.
      * (Wir rotieren im Uhrzeigersinn.)
      */
-    FourDirectionsView operator--(int) {
-        FourDirectionsView view = *this;
+    NDirectionsView operator--(int) {
+        NDirectionsView view = *this;
 
         if (--viewIndex == MIN_VIEW - 1) {
             viewIndex = MAX_VIEW - 1;
@@ -100,10 +102,10 @@ public:
      * @brief "Inkrementiert" die Ansicht. Effektiv wird das Objekt unter der Ansicht um x*90° im Uhrzeigersinn gedreht.
      * (Wir rotieren gegen den Uhrzeigersinn.)
      */
-    FourDirectionsView operator+(int x) const {
+    NDirectionsView operator+(int x) const {
         unsigned char newViewIndex = (this->viewIndex + x) % MAX_VIEW;
 
-        FourDirectionsView view;
+        NDirectionsView view;
         view.viewIndex = newViewIndex;
         return view;
     }
@@ -136,7 +138,12 @@ public:
 /**
  * @brief "Addiert" zwei Ansichten.
  */
-FourDirectionsView operator+ (const FourDirectionsView& view1, const FourDirectionsView& view2);
+template <unsigned int N>
+NDirectionsView<N> operator+ (const NDirectionsView<N>& view1, const NDirectionsView<N>& view2) {
+    unsigned char newViewIndex = (view1.getViewIndex() + view2.getViewIndex()) % NDirectionsView<N>::MAX_VIEW;
+
+    return NDirectionsView<N>::ALL_VIEWS[newViewIndex];
+}
 
 
 namespace std {
@@ -144,11 +151,11 @@ namespace std {
     /**
      * @brief std-Template-Spezialisierung, um Hash-Funktion für FourDirectionsView zu haben
      */
-    template<>
-    class hash<FourDirectionsView> {
+    template <unsigned int N>
+    class hash<NDirectionsView<N>> {
 
     public:
-        size_t operator()(const FourDirectionsView& a) const {
+        size_t operator()(const NDirectionsView<N>& a) const {
             return (size_t) a.getViewIndex();
         }
     };
@@ -156,16 +163,19 @@ namespace std {
     /**
      * @brief std-Template-Spezialisierung, um Gleichheits-Relation für FourDirectionsView zu haben
      */
-    template<>
-    class equal_to<FourDirectionsView> {
+    template <unsigned int N>
+    class equal_to<NDirectionsView<N>> {
 
     public:
-        bool operator()(const FourDirectionsView& a, const FourDirectionsView& b) const {
+        bool operator()(const NDirectionsView<N>& a, const NDirectionsView<N>& b) const {
             return (a.getViewIndex() == b.getViewIndex());
         }
     };
 
 }
+
+using FourDirectionsView = NDirectionsView<4>;
+using EightDirectionsView = NDirectionsView<8>;
 
 
 #endif

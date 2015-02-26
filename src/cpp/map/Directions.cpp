@@ -1,5 +1,6 @@
 #include "map/Directions.h"
 
+template<>
 const std::string FourDirectionsView::viewNames[] = {
     "south",
     "east",
@@ -7,6 +8,7 @@ const std::string FourDirectionsView::viewNames[] = {
     "west"
 };
 
+template<>
 const FourDirectionsView FourDirectionsView::ALL_VIEWS[] = {
     FourDirectionsView("south"),
     FourDirectionsView("east"),
@@ -14,12 +16,26 @@ const FourDirectionsView FourDirectionsView::ALL_VIEWS[] = {
     FourDirectionsView("west")
 };
 
+template<>
+const std::string EightDirectionsView::viewNames[] = {
+    "south",
+    "southeast",
+    "east",
+    "northeast",
+    "north",
+    "northwest",
+    "west",
+    "southwest"
+};
 
-/**
- * @brief "Addiert" zwei Ansichten.
- */
-FourDirectionsView operator+ (const FourDirectionsView& view1, const FourDirectionsView& view2) {
-    unsigned char newViewIndex = (view1.getViewIndex() + view2.getViewIndex()) % FourDirectionsView::MAX_VIEW;
-
-    return FourDirectionsView::ALL_VIEWS[newViewIndex];
-}
+template<>
+const EightDirectionsView EightDirectionsView::ALL_VIEWS[] = {
+    EightDirectionsView("south"),
+    EightDirectionsView("southeast"),
+    EightDirectionsView("east"),
+    EightDirectionsView("northeast"),
+    EightDirectionsView("north"),
+    EightDirectionsView("northwest"),
+    EightDirectionsView("west"),
+    EightDirectionsView("southwest")
+};

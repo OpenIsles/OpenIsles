@@ -5,6 +5,7 @@
 #include "economics/UpdateableObject.h"
 #include "game/GoodsSlot.h"
 #include "graphics/graphic/Animation.h"
+#include "graphics/graphic/GraphicSet.h"
 #include "map/MapObject.h"
 #include "pathfinding/AStar.h"
 
@@ -49,9 +50,9 @@ private:
     Route::const_iterator nextHopInRoute;
 
     /**
-     * @brief verwendete Animation für den Träger
+     * @brief verwendete Animationen für den Träger
      */
-    const Animation* animation;
+    EightDirectionsAnimation animations;
 
     /**
      * @brief aktueller Frame der Animation, die grade abgespielt wird. Dieser Wert ist ein double, da fortlaufend
@@ -75,12 +76,14 @@ public:
      */
     ~Carrier();
 
-    const Animation* getAnimation() const {
-        return animation;
+    const EightDirectionsAnimation& getAnimations() const {
+        return animations;
     }
 
-    void setAnimation(const Animation* animation) {
-        this->animation = animation;
+    void setAnimations(const GraphicSet& graphicSet) {
+        for (EightDirectionsView view : EightDirectionsView::ALL_VIEWS) {
+            animations[view.getViewIndex()] = graphicSet.getByView(view.getViewName());
+        }
     }
 };
 
