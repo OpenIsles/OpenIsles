@@ -8,7 +8,7 @@
 #include "utils/Consts.h"
 
 
-// TODO allgemein: Fehlermanagement, wenn die Datei mal nicht so hübsch aussieht, dass alle Tags da sind
+// TODO allgemein: Fehlermanagement, wenn die Datei mal nicht so hübsch aussieht, dass alle Tags da sind / oder die Datei gar nicht da ist
 
 void GameIO::loadGameFromTMX(
     Game* game, const ConfigMgr* configMgr, const IGraphicsMgr* graphicsMgr, const char* filename) {

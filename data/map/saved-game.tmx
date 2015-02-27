@@ -88,16 +88,6 @@
   </object>
  </objectgroup>
  <objectgroup name="structures" width="300" height="300">
-  <object name="chapel" type="building" x="1664" y="1248" width="64" height="32">
-   <properties>
-    <property name="player" value="1"/>
-   </properties>
-  </object>
-  <object name="pioneers_house1" type="building" x="1632" y="1120" width="64" height="64">
-   <properties>
-    <property name="player" value="1"/>
-   </properties>
-  </object>
   <object name="office1" type="building" x="1440" y="768" width="96" height="64">
    <properties>
     <property name="player" value="1"/>
@@ -121,6 +111,16 @@
   <object name="office1" type="building" x="4224" y="3008" width="96" height="64">
    <properties>
     <property name="player" value="4"/>
+   </properties>
+  </object>
+  <object name="chapel" type="building" x="1664" y="1248" width="64" height="32">
+   <properties>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object name="pioneers_house1" type="building" x="1632" y="1120" width="64" height="64">
+   <properties>
+    <property name="player" value="1"/>
    </properties>
   </object>
   <object name="street" type="structure" x="1536" y="960" width="32" height="32">

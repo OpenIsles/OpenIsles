@@ -1,7 +1,9 @@
 #ifdef WINDOWS
 #define SDL_MAIN_HANDLED
 #endif
+#include <cstdlib>
 #include <iostream>
+#include <unistd.h>
 #include "Context.h"
 #include "config/ConfigMgr.h"
 #include "economics/EconomicsMgr.h"
@@ -27,7 +29,7 @@ static Color colorWhite = Color(255, 255, 255, 255);
 
 
 /*********************************************************************************************************************
- * globale Variablen                                                                                                 *
+ * lokale Variablen                                                                                                  *
  *********************************************************************************************************************/
 
 #ifdef DEBUG
@@ -37,11 +39,41 @@ static Color colorWhite = Color(255, 255, 255, 255);
 static std::string debugOutput[7];
 #endif
 
+/**
+ * @brief hält die Befehlszeilen-Parameter
+ */
+static struct {
+
+    /**
+     * @brief wenn ungleich 0, gibt an, wie viele Frames das Spiel laufen soll, bis es automatisch beendet wird.
+     * Dies ist zum Messen der Ausführungsgeschwindigkeit, um immer dieselben Bedingungen und gleiche Laufzeit
+     * zu haben.
+     */
+    int benchmarkFrames = 0;
+
+    /**
+     * @brief Dateiname der Map, die geladen werden soll
+     */
+    char* mapFileToLoad = nullptr;
+
+} cmdlineParams;
+
+
 /*********************************************************************************************************************
  * Prototypen                                                                                                        *
  *********************************************************************************************************************/
 
 int main(int argc, char** argv);
+
+/**
+ * @brief Analysiert die Befehlszeilen-Parameter und füllt cmdlineParams entsprechend.
+ * @param argc Anzahl der Parameter
+ * @param argc Zeiger auf Parameter-Array
+ * @return `true`, wenn alles ok war.
+ *         `false` wenn die Befehlszeile fehlerhaft war. In diesem Fall sollte der Aufrufer das Programm sofort beenden.
+ */
+bool parseCmdlineParams(int argc, char** argv);
+
 void drawFrame(const Context& context, IRenderer* renderer);
 
 /*********************************************************************************************************************
@@ -79,7 +111,39 @@ void drawFrame(const Context& context, IRenderer* renderer) {
 #endif
 }
 
+bool parseCmdlineParams(int argc, char** argv) {
+    int opt;
+    while ((opt = getopt(argc, argv, "b:m:")) != -1) {
+        switch (opt) {
+            case 'b':
+                cmdlineParams.benchmarkFrames = atoi(optarg);
+                break;
+
+            case 'm':
+                cmdlineParams.mapFileToLoad = optarg;
+                break;
+
+            default:
+                std::cerr << "Aufruf: " << argv[0] << " -m mapFileToLoad [-b benchmarkFrames]" << std::endl;
+                return false;
+        }
+    }
+
+    if (cmdlineParams.mapFileToLoad == nullptr) {
+        std::cerr << "Fehler: Es wurde keine Map-Datei angegeben." << std::endl;
+        return false;
+    }
+
+    return true;
+}
+
 int main(int argc, char** argv) {
+    // Befehlszeilen-Analyse /////////////////////////////////////////////////////////////////////////////////////////
+
+    if (!parseCmdlineParams(argc, argv)) {
+        return EXIT_FAILURE;
+    }
+
 	// Library-Initialisierung ///////////////////////////////////////////////////////////////////////////////////////
     IRenderer* sdlRenderer = new SDLRenderer();
 
@@ -112,10 +176,11 @@ int main(int argc, char** argv) {
     Game* game = new Game(&context);
     context.game = game;
 
-    game->loadGameFromTMX("data/map/empty-map.tmx");
+    game->loadGameFromTMX(cmdlineParams.mapFileToLoad);
 
 	// Mainloop //////////////////////////////////////////////////////////////////////////////////////////////////////
 
+    int benchmarkFramesToGo = cmdlineParams.benchmarkFrames;
     Map* map = game->getMap();
 	while (!guiMgr->hasToQuitGame()) {
 		fpsCounter->startFrame();
@@ -233,6 +298,13 @@ int main(int argc, char** argv) {
         sdlRenderer->endFrame();
 
 		fpsCounter->endFrame();
+
+        // Benchmarking: nur x Frames, dann wird automatisch beendet
+        if (benchmarkFramesToGo > 0) {
+            if (--benchmarkFramesToGo == 0) {
+                break;
+            }
+        }
 	}
 
 	// Game-Deinitialisierung ////////////////////////////////////////////////////////////////////////////////////////
