@@ -348,33 +348,11 @@ void GuiMap::renderElement(IRenderer* renderer) {
             continue;
         }
 
-        // Feststellen, in welche Richtung der Träger läuft, um die richtige View der Animation zu verwenden
-        // TODO sehr optimierungsbedürftig
-        const MapCoords& nextHopOnRoute = *carrier->nextHopInRoute;
+        // Übersetzung von "Laufrichtung" + "aktuelle Ansicht" in korrekte Animation
+        unsigned char animViewIndex =
+            (10 - carrier->getCurrentMovingDirection().getViewIndex() + 2 * screenView.getViewIndex()) % 8;
+
         const DoubleMapCoords& mapCoords = carrier->getMapCoords();
-        const double diffX = nextHopOnRoute.x() - mapCoords.x();
-        const double diffY = nextHopOnRoute.y() - mapCoords.y();
-
-        EightDirectionsView animView;
-        if (diffX > 0 && diffY == 0) {
-            animView = "south";
-        } else if (diffX > 0 && diffY > 0) {
-            animView = "southeast";
-        } else if (diffX == 0 && diffY > 0) {
-            animView = "east";
-        } else if (diffX < 0 && diffY > 0) {
-            animView = "northeast";
-        } else if (diffX < 0 && diffY == 0) {
-            animView = "north";
-        } else if (diffX < 0 && diffY < 0) {
-            animView = "northwest";
-        } else if (diffX == 0 && diffY < 0) {
-            animView = "west";
-        } else if (diffX > 0 && diffY < 0) {
-            animView = "southwest";
-        }
-        unsigned char animViewIndex = (animView.getViewIndex() + 2 * screenView.getViewIndex()) % 8;
-
         const Animation* animation = carrier->getAnimations()[animViewIndex];
         const IGraphic* animationCurrentFrame = animation->getFrame((unsigned int) carrier->animationFrame);
 

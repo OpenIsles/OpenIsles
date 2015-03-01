@@ -110,6 +110,7 @@ void EconomicsMgr::updateCarrier(Building* building) {
 
         Carrier* carrier = new Carrier(result.building, result.route, result.goodsSlot.goodsType, true);
         carrier->setMapCoords((DoubleMapCoords) firstHopOnRoute);
+        carrier->updateCurrentMovingDirection();
         carrier->setAnimations(
             *context->graphicsMgr->getGraphicSet(isStorageBuilding ? "cart-without-cargo" : "carrier"));
 
@@ -161,6 +162,7 @@ void EconomicsMgr::updateCarrier(Building* building) {
         if (ticksToNextHop <= ticksToProcess) {
             carrierMapCoords.setMapCoords(nextHopOnRoute);
             carrier->nextHopInRoute++;
+            carrier->updateCurrentMovingDirection();
 
             // Route fertig?
             if (carrier->nextHopInRoute == carrier->route->cend()) {
@@ -224,6 +226,7 @@ void EconomicsMgr::updateCarrier(Building* building) {
                         Carrier* returnCarrier = new Carrier(
                             building, returnRoute, goodsSlotToTakeFrom->goodsType, false);
                         returnCarrier->setMapCoords((DoubleMapCoords) firstHopOnReturnRoute);
+                        returnCarrier->updateCurrentMovingDirection();
                         returnCarrier->setAnimations(
                             *context->graphicsMgr->getGraphicSet(isStorageBuilding ? "cart-with-cargo" : "carrier"));
                         returnCarrier->carriedGoods.inventory = goodsWeCollect;

@@ -55,6 +55,12 @@ private:
     EightDirectionsAnimation animations;
 
     /**
+     * @brief aktuelle Richtung, in die der Träger auf der Karte läuft. Wir wollen nicht bei jedem Frame das
+     * ausrechnen müssen, drum ist hier immer der aktuelle Wert.
+     */
+    EightDirectionsView currentMovingDirection;
+
+    /**
      * @brief aktueller Frame der Animation, die grade abgespielt wird. Dieser Wert ist ein double, da fortlaufend
      * aktualisiert wird. Für das Rendering muss diese Zahl zur Ganzzahl umgewandelt werden.
      * TODO ggf. macht es mehr Sinn, noch ein Bindeglied (erweitert UpdateableObject) zwischen Animation und der Anwenderklasse zu setzen, die diese Info enthält
@@ -85,6 +91,16 @@ public:
             animations[view.getViewIndex()] = graphicSet.getByView(view.getViewName());
         }
     }
+
+    const EightDirectionsView& getCurrentMovingDirection() const {
+        return currentMovingDirection;
+    }
+
+    /**
+     * @brief Aktualisiert currentMovingDirection. Diese Methode muss immer dann aufgerufen werden, wenn der Träger
+     * auf seiner Route die Richtung ändert.
+     */
+    void updateCurrentMovingDirection();
 };
 
 #endif
