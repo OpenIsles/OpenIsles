@@ -121,8 +121,7 @@ void AbstractGraphicsMgr::loadTiles() {
             tileRect.y = xyOffsetInTileset.second;
             IGraphic* sdlTileGraphic = loadGraphic(*sdlFullGraphic, tileRect, 1, 1);
 
-            const std::string& viewName = fourDirectionsView.getViewName();
-            graphicSet->addByView(viewName, new Animation(sdlTileGraphic));
+            graphicSet->addByView(fourDirectionsView, new Animation(sdlTileGraphic));
         }
 
         std::string graphicSetName = "tiles/" + mapTileConfig.tileName;
@@ -156,14 +155,14 @@ void AbstractGraphicsMgr::loadStaticAnimationGraphicSetWith8Views(
     int fullGraphicWidth = sdlFullGraphic->getWidth();
     if (fullGraphicWidth % countFrames != 0) {
         std::cerr << "Could not divide the frames equally: '" << graphicFilename << "': " << std::endl;
-        throw new std::runtime_error("Could not divide the frames equally");
+        throw std::runtime_error("Could not divide the frames equally");
     }
     int frameWidth = fullGraphicWidth / countFrames;
 
     int fullGraphicHeight = sdlFullGraphic->getHeight();
     if (fullGraphicHeight % 8 != 0) {
         std::cerr << "Could not divide the views equally: '" << graphicFilename << "': " << std::endl;
-        throw new std::runtime_error("Could not divide the views equally");
+        throw std::runtime_error("Could not divide the views equally");
     }
     int frameHeight = fullGraphicHeight / 8;
 
@@ -183,7 +182,7 @@ void AbstractGraphicsMgr::loadStaticAnimationGraphicSetWith8Views(
             animation->addFrame(frameIndex, sdlFrameGraphic);
         }
 
-        graphicSet->addByView(view.getViewName(), animation);
+        graphicSet->addByView(view, animation);
         frameRect.y += frameHeight;
     }
 
@@ -215,10 +214,10 @@ void AbstractGraphicsMgr::loadStreets() {
     Rect tileRect(0, 0, TILE_WIDTH, TILE_HEIGHT);
     for (int i = 0; i < 11; i++) {
         GraphicSet* graphicSet = new GraphicSet();
-        for (FourDirectionsView view : FourDirectionsView::ALL_VIEWS) {
-            tileRect.x = TILE_WIDTH * streetTiles[i].tileOffsetPerView[view.getViewIndex()];
+        for (const FourDirectionsView& view : FourDirectionsView::ALL_VIEWS) {
+            tileRect.x = TILE_WIDTH * streetTiles[i].tileOffsetPerView[(unsigned char) view.getViewIndex()];
             IGraphic* sdlFrameGraphic = loadGraphic(*streetsGraphic, tileRect, 1, 1);
-            graphicSet->addByView(view.getViewName(), new Animation(sdlFrameGraphic));
+            graphicSet->addByView((const EightDirectionsView&) view, new Animation(sdlFrameGraphic));
         }
         graphicSets[streetTiles[i].graphicSetName] = graphicSet;
     }
@@ -235,13 +234,13 @@ void AbstractGraphicsMgr::loadStaticGraphicSetWith4Views(
     GraphicSet* graphicSet = new GraphicSet();
     Rect tileRect(0, 0, tileWidth, graphic->getHeight());
 
-    for (FourDirectionsView view : FourDirectionsView::ALL_VIEWS) {
+    for (const FourDirectionsView& view : FourDirectionsView::ALL_VIEWS) {
         IGraphic* tileGraphic = loadGraphic(
             *graphic, tileRect,
             (view.getViewIndex() % 2) ? mapHeight : mapWidth,
             (view.getViewIndex() % 2) ? mapWidth : mapHeight
         );
-        graphicSet->addByView(view.getViewName(), new Animation(tileGraphic));
+        graphicSet->addByView((const EightDirectionsView&) view, new Animation(tileGraphic));
 
         tileRect.x += tileWidth;
     }

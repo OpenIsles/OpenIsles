@@ -41,13 +41,13 @@ public:
      * @param function Callback-Funktion, die pro Durchlauf mit den Map-Koordinaten aufgerufen wird.
      */
     void iterate(std::function<void(const MapCoords&)> function) {
-        if (screenView == "south") {
+        if (screenView == FourDirectionsView::SOUTH) {
             iterateInSouthView(function);
-        } else if (screenView == "east") {
+        } else if (screenView == FourDirectionsView::EAST) {
             iterateInEastView(function);
-        } else if (screenView == "north") {
+        } else if (screenView == FourDirectionsView::NORTH) {
             iterateInNorthView(function);
-        } else if (screenView == "west") {
+        } else if (screenView == FourDirectionsView::WEST) {
             iterateInWestView(function);
         }
     }

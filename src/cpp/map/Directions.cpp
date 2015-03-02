@@ -1,41 +1,34 @@
 #include "map/Directions.h"
 
-template<>
-const std::string FourDirectionsView::viewNames[] = {
-    "south",
-    "east",
-    "north",
-    "west"
-};
+constexpr char FourDirectionsView::SOUTH;
+constexpr char FourDirectionsView::EAST;
+constexpr char FourDirectionsView::NORTH;
+constexpr char FourDirectionsView::WEST;
 
-template<>
 const FourDirectionsView FourDirectionsView::ALL_VIEWS[] = {
-    FourDirectionsView("south"),
-    FourDirectionsView("east"),
-    FourDirectionsView("north"),
-    FourDirectionsView("west")
+    FourDirectionsView(SOUTH),
+    FourDirectionsView(EAST),
+    FourDirectionsView(NORTH),
+    FourDirectionsView(WEST)
 };
 
-template<>
-const std::string EightDirectionsView::viewNames[] = {
-    "south",
-    "southeast",
-    "east",
-    "northeast",
-    "north",
-    "northwest",
-    "west",
-    "southwest"
-};
 
-template<>
+constexpr char EightDirectionsView::SOUTH;
+constexpr char EightDirectionsView::SOUTHEAST;
+constexpr char EightDirectionsView::EAST;
+constexpr char EightDirectionsView::NORTHEAST;
+constexpr char EightDirectionsView::NORTH;
+constexpr char EightDirectionsView::NORTHWEST;
+constexpr char EightDirectionsView::WEST;
+constexpr char EightDirectionsView::SOUTHWEST;
+
 const EightDirectionsView EightDirectionsView::ALL_VIEWS[] = {
-    EightDirectionsView("south"),
-    EightDirectionsView("southeast"),
-    EightDirectionsView("east"),
-    EightDirectionsView("northeast"),
-    EightDirectionsView("north"),
-    EightDirectionsView("northwest"),
-    EightDirectionsView("west"),
-    EightDirectionsView("southwest")
+    EightDirectionsView(SOUTH),
+    EightDirectionsView(SOUTHEAST),
+    EightDirectionsView(EAST),
+    EightDirectionsView(NORTHEAST),
+    EightDirectionsView(NORTH),
+    EightDirectionsView(NORTHWEST),
+    EightDirectionsView(WEST),
+    EightDirectionsView(SOUTHWEST)
 };

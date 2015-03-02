@@ -229,7 +229,7 @@ int main(int argc, char** argv) {
 
         debugOutput[1] = "Screen: mapCentered = (" +
             toString(mapCoordsCentered.x()) + ", " + toString(mapCoordsCentered.y()) + "), zoom = " +
-            toString(screenZoom) + ", view = " + screenView.getViewName();
+            toString(screenZoom) + ", view = " + toString(screenView.getViewIndex());
 
         debugOutput[2] = "ScreenEdges: topLeft = (" +
             toString(mapCoordsTopLeft.x()) + ", " + toString(mapCoordsTopLeft.y()) + "), topRight = (" +

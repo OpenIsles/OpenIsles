@@ -4,11 +4,11 @@
 class GraphicSetTest : public testing::Test {
 
 protected:
-    GraphicSetKey keyEmpty = GraphicSetKey("", "");
-    GraphicSetKey keyFooBar = GraphicSetKey("foo", "bar");
-    GraphicSetKey keyFooBar2 = GraphicSetKey("foo", "bar");
-    GraphicSetKey keyBarFoo = GraphicSetKey("bar", "foo");
-    GraphicSetKey keyUppercase = GraphicSetKey("BAR", "FOO");
+    GraphicSetKey keyEmpty = GraphicSetKey("", EightDirectionsView(EightDirectionsView::INVALID));
+    GraphicSetKey keyFooNorth = GraphicSetKey("foo", EightDirectionsView(EightDirectionsView::NORTH));
+    GraphicSetKey keyFooNorth2 = GraphicSetKey("foo", EightDirectionsView(EightDirectionsView::NORTH));
+    GraphicSetKey keyBarFoo = GraphicSetKey("bar", EightDirectionsView(EightDirectionsView::EAST));
+    GraphicSetKey keyUppercase = GraphicSetKey("BAR", EightDirectionsView(EightDirectionsView::EAST));
 };
 
 
@@ -16,8 +16,8 @@ TEST_F(GraphicSetTest, GraphicSetKeyHasher) {
     GraphicSetKeyHasher graphicSetKeyHasher;
 
     std::size_t hashEmpty = graphicSetKeyHasher(keyEmpty);
-    std::size_t hashFooBar = graphicSetKeyHasher(keyFooBar);
-    std::size_t hashFooBar2 = graphicSetKeyHasher(keyFooBar2);
+    std::size_t hashFooBar = graphicSetKeyHasher(keyFooNorth);
+    std::size_t hashFooBar2 = graphicSetKeyHasher(keyFooNorth2);
     std::size_t hashBarFoo = graphicSetKeyHasher(keyBarFoo);
     std::size_t hashUppercase = graphicSetKeyHasher(keyUppercase);
 
@@ -35,13 +35,13 @@ TEST_F(GraphicSetTest, GraphicSetKeyEqualer) {
     GraphicSetKeyEqualer graphicSetKeyEqualer;
 
     ASSERT_TRUE(graphicSetKeyEqualer(keyEmpty, keyEmpty));
-    ASSERT_TRUE(graphicSetKeyEqualer(keyFooBar, keyFooBar));
+    ASSERT_TRUE(graphicSetKeyEqualer(keyFooNorth, keyFooNorth));
     ASSERT_TRUE(graphicSetKeyEqualer(keyBarFoo, keyBarFoo));
     ASSERT_TRUE(graphicSetKeyEqualer(keyUppercase, keyUppercase));
 
-    ASSERT_FALSE(graphicSetKeyEqualer(keyFooBar, keyEmpty));
-    ASSERT_FALSE(graphicSetKeyEqualer(keyBarFoo, keyFooBar));
+    ASSERT_FALSE(graphicSetKeyEqualer(keyFooNorth, keyEmpty));
+    ASSERT_FALSE(graphicSetKeyEqualer(keyBarFoo, keyFooNorth));
     ASSERT_FALSE(graphicSetKeyEqualer(keyBarFoo, keyUppercase));
 
-    ASSERT_TRUE(graphicSetKeyEqualer(keyFooBar, keyFooBar2));
+    ASSERT_TRUE(graphicSetKeyEqualer(keyFooNorth, keyFooNorth2));
 }

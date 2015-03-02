@@ -34,10 +34,10 @@ void GuiAddBuildingWidget::renderElement(IRenderer* renderer) {
         &colorLightBrown, &colorBlack, "DroidSans-Bold.ttf", 15, RENDERTEXT_HALIGN_CENTER);
 
     // Gebäude-Grafik
-    const std::string viewName = context->guiMgr->getPanelState().addingStructureView.getViewName();
+    const FourDirectionsView& view = context->guiMgr->getPanelState().addingStructureView;
     const std::string buildingGraphicsSetName = context->graphicsMgr->getGraphicSetNameForStructure(structureType);
     const GraphicSet* buildingGraphicsSet = context->graphicsMgr->getGraphicSet(buildingGraphicsSetName);
-    const IGraphic* buildingGraphic = buildingGraphicsSet->getByView(viewName)->getGraphic();
+    const IGraphic* buildingGraphic = buildingGraphicsSet->getByView(view)->getGraphic();
 
     double scale; // ggf. verkleinert zeichnen, wenn das Gebäude zu groß is
     if (buildingGraphic-> getWidth() <= 160) {

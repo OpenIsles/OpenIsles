@@ -27,21 +27,21 @@ void Carrier::updateCurrentMovingDirection() {
 
     EightDirectionsView movingDirection;
     if (diffX > 0 && diffY == 0) {
-        movingDirection = "east";
+        movingDirection = EightDirectionsView(EightDirectionsView::EAST);
     } else if (diffX > 0 && diffY > 0) {
-        movingDirection = "southeast";
+        movingDirection = EightDirectionsView(EightDirectionsView::SOUTHEAST);
     } else if (diffX == 0 && diffY > 0) {
-        movingDirection = "south";
+        movingDirection = EightDirectionsView(EightDirectionsView::SOUTH);
     } else if (diffX < 0 && diffY > 0) {
-        movingDirection = "southwest";
+        movingDirection = EightDirectionsView(EightDirectionsView::SOUTHWEST);
     } else if (diffX < 0 && diffY == 0) {
-        movingDirection = "west";
+        movingDirection = EightDirectionsView(EightDirectionsView::WEST);
     } else if (diffX < 0 && diffY < 0) {
-        movingDirection = "northwest";
+        movingDirection = EightDirectionsView(EightDirectionsView::NORTHWEST);
     } else if (diffX == 0 && diffY < 0) {
-        movingDirection = "north";
+        movingDirection = EightDirectionsView(EightDirectionsView::NORTH);
     } else if (diffX > 0 && diffY < 0) {
-        movingDirection = "northeast";
+        movingDirection = EightDirectionsView(EightDirectionsView::NORTHEAST);
     }
 
     currentMovingDirection = movingDirection;

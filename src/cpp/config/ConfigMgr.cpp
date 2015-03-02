@@ -252,6 +252,6 @@ bool ConfigMgr::xmlAttributeToBool(rapidxml::xml_attribute<>* attribute, bool de
     }
     else {
         std::cerr << "Illegal bool value '" << value << "'." << std::endl;
-        throw new std::runtime_error("Illegal bool value");
+        throw std::runtime_error("Illegal bool value");
     }
 }

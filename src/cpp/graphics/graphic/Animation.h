@@ -73,7 +73,7 @@ public:
      */
     const IGraphic* getGraphic() const {
         if (framesCount != 1) {
-            throw new std::runtime_error("Animation does not have only frame");
+            throw std::runtime_error("Animation does not have only frame");
         }
 
         return front();
@@ -87,7 +87,7 @@ public:
      */
     const IGraphic* getFrame(unsigned int frameIndex) const {
         if (frameIndex >= framesCount) {
-            throw new std::runtime_error("Animation does not have this many frames");
+            throw std::runtime_error("Animation does not have this many frames");
         }
 
         return at(frameIndex);

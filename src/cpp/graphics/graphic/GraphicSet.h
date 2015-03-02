@@ -5,9 +5,10 @@
 #include <unordered_map>
 #include "graphics/graphic/Animation.h"
 #include "graphics/graphic/IGraphic.h"
+#include "map/Directions.h"
 
-typedef const std::string GraphicSetKeyState;
-typedef const std::string GraphicSetKeyView;
+using GraphicSetKeyState = const std::string;
+using GraphicSetKeyView = const EightDirectionsView;
 
 /**
  * @brief Map-Key für GraphicSet bestehend aus Zustand und Ansicht
@@ -50,7 +51,7 @@ struct GraphicSetKeyHasher {
      */
     std::size_t operator() (const GraphicSetKey& key) const {
         std::hash<std::string> strHash;
-        return (3 * strHash(key.state)) ^ (5 * strHash(key.view));
+        return (3 * strHash(key.state)) ^ (5 * key.view.getViewIndex());
     }
 };
 
@@ -109,7 +110,7 @@ public:
      * @param animation Animation
      */
     void addStatic(Animation* animation) {
-        addByStateAndView("", "", animation);
+        addByStateAndView("", EightDirectionsView(), animation);
     }
 
     /**
@@ -118,7 +119,7 @@ public:
      * @param animation Animation
      */
     void addByState(GraphicSetKeyState& state, Animation* animation) {
-        addByStateAndView(state, "", animation);
+        addByStateAndView(state, EightDirectionsView(), animation);
     }
 
     /**
@@ -145,7 +146,7 @@ public:
      * @return Animation
      */
     const Animation* getStatic() const {
-        return getByStateAndView("", "");
+        return getByStateAndView("", EightDirectionsView());
     }
 
     /**
@@ -154,7 +155,7 @@ public:
      * @return Animation
      */
     const Animation* getByState(GraphicSetKeyState& state) const {
-        return getByStateAndView(state, "");
+        return getByStateAndView(state, EightDirectionsView());
     }
 
     /**

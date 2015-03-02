@@ -87,8 +87,8 @@ public:
     }
 
     void setAnimations(const GraphicSet& graphicSet) {
-        for (EightDirectionsView view : EightDirectionsView::ALL_VIEWS) {
-            animations[view.getViewIndex()] = graphicSet.getByView(view.getViewName());
+        for (const EightDirectionsView& view : EightDirectionsView::ALL_VIEWS) {
+            animations[view.getViewIndex()] = graphicSet.getByView(view);
         }
     }
 

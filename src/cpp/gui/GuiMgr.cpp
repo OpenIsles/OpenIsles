@@ -140,6 +140,7 @@ void GuiMgr::initGui() {
     // Initial ist für den Gebäudebau der Förster ausgewählt...
     panelState.selectedBuildingGroup = BuildingGroup::FARM;
     panelState.addingStructure = StructureType::FORESTERS;
+    panelState.addingStructureView = FourDirectionsView(FourDirectionsView::SOUTH);
     panelState.buildingMenuOpen = false;
 
     // ...und wir zeigen das Spielerstatus-Widget
@@ -184,7 +185,7 @@ void GuiMgr::initPanelWidgets() {
 
 void GuiMgr::registerElement(int identifier, GuiBase* guiElement) {
     if (identifierMap.count(identifier) > 0) {
-        throw new std::runtime_error("Identifier already registered");
+        throw std::runtime_error("Identifier already registered");
     }
     
     identifierMap[identifier] = guiElement;
@@ -195,7 +196,7 @@ GuiBase* GuiMgr::findElement(int identifier) {
     auto iter = identifierMap.find(identifier);
     
     if (iter == identifierMap.end()) {
-        throw new std::runtime_error("Identifier not registered");
+        throw std::runtime_error("Identifier not registered");
     }
     
     return iter->second;

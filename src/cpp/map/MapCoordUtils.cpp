@@ -4,6 +4,7 @@
 #include <string>
 #include "map/Building.h"
 #include "map/Map.h"
+#include "map/MapCoordUtils.h"
 
 
 ScreenCoords MapCoordUtils::mapToScreenCoords(
@@ -19,16 +20,16 @@ ScreenCoords MapCoordUtils::mapToScreenCoords(
     double mapXDiff, mapYDiff;
 
     // Entsprechend der Ansicht die Entfernung zur Center-Kachel bestimmen
-    if (screenView == "south") {
+    if (screenView == FourDirectionsView::SOUTH) {
         mapXDiff = mapCoords.x() - mapCoordsCentered.x();
         mapYDiff = mapCoords.y() - mapCoordsCentered.y();
-    } else if (screenView == "east") {
+    } else if (screenView == FourDirectionsView::EAST) {
         mapXDiff = -(mapCoords.y() - mapCoordsCentered.y());
         mapYDiff = mapCoords.x() - mapCoordsCentered.x();
-    } else if (screenView == "north") {
+    } else if (screenView == FourDirectionsView::NORTH) {
         mapXDiff = -(mapCoords.x() - mapCoordsCentered.x());
         mapYDiff = -(mapCoords.y() - mapCoordsCentered.y());
-    } else if (screenView == "west") {
+    } else if (screenView == FourDirectionsView::WEST) {
         mapXDiff = mapCoords.y() - mapCoordsCentered.y();
         mapYDiff = -(mapCoords.x() - mapCoordsCentered.x());
     }
@@ -53,16 +54,16 @@ MapCoords MapCoordUtils::screenToMapCoords(
 
     // Entsprechend der Ansicht umrechnen (= Invers-Operation zu der in mapToScreenCoords())
     int mapXDiff, mapYDiff;
-    if (screenView == "south") {
+    if (screenView == FourDirectionsView::SOUTH) {
         mapXDiff = mapXDiffInSouthView;
         mapYDiff = mapYDiffInSouthView;
-    } else if (screenView == "east") {
+    } else if (screenView == FourDirectionsView::EAST) {
         mapXDiff = mapYDiffInSouthView;
         mapYDiff = -mapXDiffInSouthView;
-    } else if (screenView == "north") {
+    } else if (screenView == FourDirectionsView::NORTH) {
         mapXDiff = -mapXDiffInSouthView;
         mapYDiff = -mapYDiffInSouthView;
-    } else if (screenView == "west") {
+    } else if (screenView == FourDirectionsView::WEST) {
         mapXDiff = -mapYDiffInSouthView;
         mapYDiff = mapXDiffInSouthView;
     }
@@ -99,7 +100,7 @@ Rect MapCoordUtils::getDrawCoordsForBuilding(const Map& map, IGraphicsMgr* graph
 
 	const std::string graphicSetName = graphicsMgr->getGraphicSetNameForStructure(building->getStructureType());
 	const GraphicSet* graphicsSet = graphicsMgr->getGraphicSet(graphicSetName);
-    const IGraphic* graphic = graphicsSet->getByView(viewToRender.getViewName())->getGraphic();
+    const IGraphic* graphic = graphicsSet->getByView((const EightDirectionsView&) viewToRender)->getGraphic();
 
     const int elevation = 1; // TODO für Gebäude wie Anlegestelle, Fischerhütte etc. muss auf 0 gesetzt werden
 
@@ -151,22 +152,22 @@ void MapCoordUtils::getMapCoordsInScreenEdges(const Map& map,
 
     // Und je Ansicht der richtigen Ecke zuordnen
     const FourDirectionsView& screenView = map.getScreenView();
-    if (screenView == "south") {
+    if (screenView == FourDirectionsView::SOUTH) {
         mapCoordsTopLeft = mcTopLeft;
         mapCoordsTopRight = mcTopRight;
         mapCoordsBottomLeft = mcBottomLeft;
         mapCoordsBottomRight = mcBottomRight;
-    } else if (screenView == "east") {
+    } else if (screenView == FourDirectionsView::EAST) {
         mapCoordsTopLeft = mcBottomLeft;
         mapCoordsTopRight = mcTopLeft;
         mapCoordsBottomLeft = mcBottomRight;
         mapCoordsBottomRight = mcTopRight;
-    } else if (screenView == "north") {
+    } else if (screenView == FourDirectionsView::NORTH) {
         mapCoordsTopLeft = mcBottomRight;
         mapCoordsTopRight = mcBottomLeft;
         mapCoordsBottomLeft = mcTopRight;
         mapCoordsBottomRight = mcTopLeft;
-    } else if (screenView == "west") {
+    } else if (screenView == FourDirectionsView::WEST) {
         mapCoordsTopLeft = mcTopRight;
         mapCoordsTopRight = mcBottomRight;
         mapCoordsBottomLeft = mcTopLeft;
@@ -185,16 +186,16 @@ Rect MapCoordUtils::screenToDrawCoords(const ScreenCoords& screenCoords, const M
 
     // Grafik entsprechend ihrer Größe in Map-Koordinaten ausrichten.
     const FourDirectionsView& screenView = map.getScreenView();
-    if (screenView == "south") {
+    if (screenView == FourDirectionsView::SOUTH) {
         drawCoordsRect.x -= graphic.getWidth() - graphic.getMapWidth() * IGraphicsMgr::TILE_WIDTH_HALF;
         drawCoordsRect.y -= graphic.getHeight() - (graphic.getMapWidth() + graphic.getMapHeight()) * IGraphicsMgr::TILE_HEIGHT_HALF;
-    } else if (screenView == "east") {
+    } else if (screenView == FourDirectionsView::EAST) {
         drawCoordsRect.x -= graphic.getWidth() - IGraphicsMgr::TILE_WIDTH_HALF;
         drawCoordsRect.y -= graphic.getHeight() - (graphic.getMapHeight() + 1) * IGraphicsMgr::TILE_HEIGHT_HALF;
-    } else if (screenView == "north") {
+    } else if (screenView == FourDirectionsView::NORTH) {
         drawCoordsRect.x -= graphic.getWidth() - graphic.getMapHeight() * IGraphicsMgr::TILE_WIDTH_HALF;
         drawCoordsRect.y -= graphic.getHeight() - IGraphicsMgr::TILE_HEIGHT;
-    } else if (screenView == "west") {
+    } else if (screenView == FourDirectionsView::WEST) {
         drawCoordsRect.x -= IGraphicsMgr::TILE_WIDTH_HALF;
         drawCoordsRect.y -= graphic.getHeight() - (graphic.getMapWidth() + 1) * IGraphicsMgr::TILE_HEIGHT_HALF;
     } else {

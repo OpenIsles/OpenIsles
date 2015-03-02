@@ -80,7 +80,7 @@ public:
             return PLAYER_WHITE;
         }
 
-        throw new std::runtime_error("Illegal player color");
+        throw std::runtime_error("Illegal player color");
     }
 };
 

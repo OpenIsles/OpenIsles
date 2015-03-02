@@ -17,7 +17,7 @@ SDLGraphic::SDLGraphic(IRenderer* const renderer, const char* filename, unsigned
 	SDL_Surface* surface = IMG_Load(filename);
 	if (surface == nullptr) {
 		std::cerr << "Could not load graphic '" << filename << "': " << IMG_GetError() << std::endl;
-		throw new std::runtime_error("Could not load graphic");
+		throw std::runtime_error("Could not load graphic");
 	}
 	this->width = surface->w;
 	this->height = surface->h;
@@ -45,7 +45,7 @@ SDLGraphic::SDLGraphic(IRenderer* const renderer, const SDLGraphic& srcGraphic, 
 		srcRect.y + srcRect.h > srcGraphic.height) {
 
 		std::cerr << "Illegal srcRect" << std::endl;
-		throw new std::runtime_error("Illegal srcRect");
+		throw std::runtime_error("Illegal srcRect");
 	}
 
 	this->width = srcRect.w;
@@ -59,7 +59,7 @@ SDLGraphic::SDLGraphic(IRenderer* const renderer, const SDLGraphic& srcGraphic, 
 
 	if (surface == nullptr) {
 		std::cerr << "Could not create surface: " << IMG_GetError() << std::endl;
-		throw new std::runtime_error("Could not create surface");
+		throw std::runtime_error("Could not create surface");
 	}
 
 	// SDL_BlitSurface kopiert nicht 1:1, sondern verändert die Grafik an den Übergang-Rändern zur Transparenz
@@ -85,7 +85,7 @@ void SDLGraphic::createTextures() {
 	SDL_Texture* texture = SDL_CreateTextureFromSurface(sdlRealRenderer, surface);
 	if (texture == nullptr) {
 		std::cerr << "Could not create texture" << SDL_GetError() << std::endl;
-		throw new std::runtime_error("Could not create texture");
+		throw std::runtime_error("Could not create texture");
 	}
 
 	this->texture = texture;
@@ -172,7 +172,7 @@ void SDLGraphic::getPixel(int x, int y, uint8_t* r, uint8_t* g, uint8_t* b, uint
 			pixelValue = *(uint32_t*) ptrToPixel;
 			break;
         default:
-            throw new std::runtime_error("Illegal bytesPerPixel");
+            throw std::runtime_error("Illegal bytesPerPixel");
 	}
 
 	// Farbwerte ermitteln

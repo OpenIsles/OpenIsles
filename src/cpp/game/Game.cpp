@@ -57,10 +57,9 @@ Colony* Game::getColony(const MapObjectFixed* mapObject) {
 Structure* Game::addStructure(
     const MapCoords& mapCoords, StructureType structureType, const FourDirectionsView& view, Player* player) {
 
-    const std::string& viewName = view.getViewName();
     const std::string graphicSetName = context->graphicsMgr->getGraphicSetNameForStructure(structureType);
     const GraphicSet* graphicSet = context->graphicsMgr->getGraphicSet(graphicSetName);
-    const IGraphic* graphic = graphicSet->getByView(viewName)->getGraphic();
+    const IGraphic* graphic = graphicSet->getByView((const EightDirectionsView&) view)->getGraphic();
 
     // Objekt anlegen
     Structure* structure = (structureType >= START_BUILDINGS) ? new Building() : new Structure();
@@ -109,7 +108,7 @@ Structure* Game::addStructure(
 
 void Game::addInhabitantsToBuilding(Building* building, char amount) {
     if ((int) building->inhabitants + amount < 0) {
-        throw new std::runtime_error("Cannot have negative inhabitants");
+        throw std::runtime_error("Cannot have negative inhabitants");
     }
 
     building->inhabitants += amount;

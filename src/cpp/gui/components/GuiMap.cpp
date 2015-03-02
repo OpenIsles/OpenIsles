@@ -148,10 +148,9 @@ void GuiMap::renderElement(IRenderer* renderer) {
         // Auf dem Ozean malen wir gar nix.
         // Is was im Weg, malen wir auch nicht. // TODO wir müssen eine flache Kachel malen, sonst sieht man ja gar nix
         if (!(allowedToPlaceStructure & (PLACING_STRUCTURE_OUTSIDE_OF_ISLE | PLACING_STRUCTURE_SOMETHING_IN_THE_WAY))) {
-            const std::string& viewName = view.getViewName();
             const std::string graphicSetName = context->graphicsMgr->getGraphicSetNameForStructure(structureType);
             const GraphicSet* graphicSet = context->graphicsMgr->getGraphicSet(graphicSetName);
-            const IGraphic* graphic = graphicSet->getByView(viewName)->getGraphic();
+            const IGraphic* graphic = graphicSet->getByView(view)->getGraphic();
 
             int drawingFlags = IGraphic::DRAWING_FLAG_MASKED;
             if (allowedToPlaceStructure & PLACING_STRUCTURE_ROOM_NOT_UNLOCK) {
@@ -227,7 +226,7 @@ void GuiMap::renderElement(IRenderer* renderer) {
 
         const std::string graphicSetName = context->graphicsMgr->getGraphicSetNameForStructure(structureType);
         const GraphicSet* mapObjectGraphicSet = context->graphicsMgr->getGraphicSet(graphicSetName);
-        const IGraphic* mapObjectGraphic = mapObjectGraphicSet->getByView(viewToRender.getViewName())->getGraphic();
+        const IGraphic* mapObjectGraphic = mapObjectGraphicSet->getByView(viewToRender)->getGraphic();
 
         /* Tricky part: Die Berechnung von xInMapObject und yInMapObject in allen Ansichten.
          *
@@ -254,22 +253,22 @@ void GuiMap::renderElement(IRenderer* renderer) {
          * Fertig :-)
          */
         int xInMapObject, yInMapObject, yInMapObjectFromBottom;
-        if (screenView == "south") {
+        if (screenView == FourDirectionsView::SOUTH) {
             xInMapObject =  IGraphicsMgr::TILE_WIDTH_HALF *
                 ((moMapHeight - 1) - tileOffsetYInMapObject + tileOffsetXInMapObject);
             yInMapObjectFromBottom =  IGraphicsMgr::TILE_HEIGHT_HALF *
                 ((moMapHeight - 1) - tileOffsetYInMapObject + (moMapWidth - 1) - tileOffsetXInMapObject);
-        } else if (screenView == "east") {
+        } else if (screenView == FourDirectionsView::EAST) {
             xInMapObject =  IGraphicsMgr::TILE_WIDTH_HALF *
                 ((moMapWidth - 1) + (moMapHeight - 1) - tileOffsetXInMapObject - tileOffsetYInMapObject);
             yInMapObjectFromBottom =  IGraphicsMgr::TILE_HEIGHT_HALF *
                 ((moMapWidth - 1) - tileOffsetXInMapObject + tileOffsetYInMapObject);
-        } else if (screenView == "north") {
+        } else if (screenView == FourDirectionsView::NORTH) {
             xInMapObject =  IGraphicsMgr::TILE_WIDTH_HALF *
                 ((moMapWidth - 1) + tileOffsetYInMapObject - tileOffsetXInMapObject);
             yInMapObjectFromBottom =  IGraphicsMgr::TILE_HEIGHT_HALF *
                 (tileOffsetYInMapObject + tileOffsetXInMapObject);
-        } else if (screenView == "west") {
+        } else if (screenView == FourDirectionsView::WEST) {
             xInMapObject =  IGraphicsMgr::TILE_WIDTH_HALF *
                 (tileOffsetXInMapObject + tileOffsetYInMapObject);
             yInMapObjectFromBottom =  IGraphicsMgr::TILE_HEIGHT_HALF *
@@ -313,16 +312,16 @@ void GuiMap::renderElement(IRenderer* renderer) {
             mapObjectAlreadyDrawnThere->setData(
                 moMapCoords.x() + tileOffsetXInMapObject, moMapCoords.y() + tileOffsetYInMapObject, 1);
 
-            if (screenView == "south") {
+            if (screenView == FourDirectionsView::SOUTH) {
                 tileOffsetXInMapObject++;
                 tileOffsetYInMapObject++;
-            } else if (screenView == "east") {
+            } else if (screenView == FourDirectionsView::EAST) {
                 tileOffsetXInMapObject++;
                 tileOffsetYInMapObject--;
-            } else if (screenView == "north") {
+            } else if (screenView == FourDirectionsView::NORTH) {
                 tileOffsetXInMapObject--;
                 tileOffsetYInMapObject--;
-            } else if (screenView == "west") {
+            } else if (screenView == FourDirectionsView::WEST) {
                 tileOffsetXInMapObject--;
                 tileOffsetYInMapObject++;
             } else {
@@ -523,7 +522,7 @@ void GuiMap::onClickInMap(int mouseX, int mouseY) {
 
         const std::string graphicSetName = context->graphicsMgr->getGraphicSetNameForStructure(building->getStructureType());
         const GraphicSet* graphicSet = context->graphicsMgr->getGraphicSet(graphicSetName);
-        graphicSet->getByView(viewToRender.getViewName())->getGraphic()->getPixel(x, y, &r, &g, &b, &a);
+        graphicSet->getByView(viewToRender)->getGraphic()->getPixel(x, y, &r, &g, &b, &a);
 
         // Checken, ob Pixel un-transparent genug ist, um es als Treffer zu nehmen
         if (a > 127) {
@@ -598,10 +597,9 @@ unsigned char GuiMap::isAllowedToPlaceStructure(
     }
 
     // Checken, ob alles frei is, um das Gebäude zu setzen
-    const std::string& viewName = context->guiMgr->getPanelState().addingStructureView.getViewName();
     const std::string graphicSetName = context->graphicsMgr->getGraphicSetNameForStructure(structureType);
     const GraphicSet* graphicSet = context->graphicsMgr->getGraphicSet(graphicSetName);
-    const IGraphic* graphic = graphicSet->getByView(viewName)->getGraphic();
+    const IGraphic* graphic = graphicSet->getByView(view)->getGraphic();
     for (int y = mapCoords.y(); y < mapCoords.y() + graphic->getMapHeight(); y++) {
         for (int x = mapCoords.x(); x < mapCoords.x() + graphic->getMapWidth(); x++) {
             MapTile* mapTile = context->game->getMap()->getMapTileAt(MapCoords(x, y));
@@ -726,7 +724,7 @@ StructureType GuiMap::getConcreteStreetStructureType(
     }
 
     // TODO Feldweg
-    throw new std::runtime_error("Illegal abstractStreetStructureType " + toString(abstractStreetStructureType));
+    throw std::runtime_error("Illegal abstractStreetStructureType " + toString(abstractStreetStructureType));
 }
 
 void GuiMap::onNewGame() {

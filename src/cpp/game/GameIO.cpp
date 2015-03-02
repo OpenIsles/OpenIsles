@@ -84,7 +84,7 @@ void GameIO::loadPlayers(Game* game, rapidxml::xml_node<>* mapNode) {
         } else if (strcmp(playerColorAttrValue, "white") == 0) {
             playerColor = PlayerColor::WHITE;
         } else {
-            throw new std::runtime_error("Illegal player color");
+            throw std::runtime_error("Illegal player color");
         }
 
         // Spielername
@@ -140,7 +140,7 @@ void GameIO::loadMap(
                     ") does not match size on map (" <<
                     toString(isleMapWidth) << "x" << toString(isleMapHeight) << ")";
 
-                throw new std::runtime_error("Isle does not match size on map");
+                throw std::runtime_error("Isle does not match size on map");
             }
 
             // Insel zur Karte hinzufügen
@@ -163,10 +163,14 @@ void GameIO::loadMap(
                     const GraphicSet* tileGraphicSet = graphicsMgr->getGraphicSet(tileGraphicSetName);
 
                     std::array<const Animation*, 4> tileAnimations = {
-                        tileGraphicSet->getByView((FourDirectionsView("south") + viewOffset).getViewName()),
-                        tileGraphicSet->getByView((FourDirectionsView("east") + viewOffset).getViewName()),
-                        tileGraphicSet->getByView((FourDirectionsView("north") + viewOffset).getViewName()),
-                        tileGraphicSet->getByView((FourDirectionsView("west") + viewOffset).getViewName())
+                        tileGraphicSet->getByView(
+                            (EightDirectionsView) FourDirectionsView(FourDirectionsView::SOUTH + viewOffset)),
+                        tileGraphicSet->getByView(
+                            (EightDirectionsView) FourDirectionsView(FourDirectionsView::EAST + viewOffset)),
+                        tileGraphicSet->getByView(
+                            (EightDirectionsView) FourDirectionsView(FourDirectionsView::NORTH + viewOffset)),
+                        tileGraphicSet->getByView(
+                            (EightDirectionsView) FourDirectionsView(FourDirectionsView::WEST + viewOffset))
                     };
 
                     mapTile->setTile(mapTileConfig, tileAnimations);
@@ -264,11 +268,11 @@ void GameIO::loadStructures(Game* game, rapidxml::xml_node<>* objectgroupStructu
             } else if (strcmp(nodeNameValue, "weaving_mill1") == 0) {
                 structureType = StructureType::WEAVING_MILL1;
             } else {
-                throw new std::runtime_error("Illegal structure or building name");
+                throw std::runtime_error("Illegal structure or building name");
             }
 
             // TODO Ansicht in die TMX legen und dort wieder rauslesen
-            FourDirectionsView view;
+            FourDirectionsView view(FourDirectionsView::SOUTH);
             game->addStructure(mapCoords, structureType, view, player);
         }
     }

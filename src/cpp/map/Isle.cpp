@@ -22,7 +22,7 @@ Isle::Isle(const char* filename) {
 
 	const char* dataEncoding = dataNode->first_attribute("encoding", 8, true)->value();
 	if (strcmp(dataEncoding, "csv") != 0)
-		throw new std::runtime_error("Data is not csv encoded");
+		throw std::runtime_error("Data is not csv encoded");
     
 	char* csvData = dataNode->value();
 	char* csvDataPtr = csvData;

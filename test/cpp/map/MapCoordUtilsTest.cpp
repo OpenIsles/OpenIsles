@@ -143,10 +143,10 @@ TEST_F(MapCoordUtilsTest, getDrawCoordsForBuilding) {
     IGraphic* graphic4 = new NoSDLGraphic(nullptr, "unsere Grafik", 224, 160, 3, 4);
 
     GraphicSet graphicSet;
-    graphicSet.addByView("south", new Animation(graphic1));
-    graphicSet.addByView("east", new Animation(graphic2));
-    graphicSet.addByView("north", new Animation(graphic3));
-    graphicSet.addByView("west", new Animation(graphic4));
+    graphicSet.addByView(EightDirectionsView(EightDirectionsView::SOUTH), new Animation(graphic1));
+    graphicSet.addByView(EightDirectionsView(EightDirectionsView::EAST), new Animation(graphic2));
+    graphicSet.addByView(EightDirectionsView(EightDirectionsView::NORTH), new Animation(graphic3));
+    graphicSet.addByView(EightDirectionsView(EightDirectionsView::WEST), new Animation(graphic4));
 
     MapCoordUtilsTestGraphicsMgr graphicsMgr(&graphicSet);
 
@@ -154,32 +154,32 @@ TEST_F(MapCoordUtilsTest, getDrawCoordsForBuilding) {
     building.setMapCoords(MapCoords(6, 6));
     building.setMapWidth(4);
     building.setMapHeight(3);
-    building.setView("south");
+    building.setView(FourDirectionsView(FourDirectionsView::SOUTH));
 
     // Testdurchführung
 
-    map->setScreenView("south");
+    map->setScreenView(FourDirectionsView(FourDirectionsView::SOUTH));
     Rect actual = MapCoordUtils::getDrawCoordsForBuilding(*map, &graphicsMgr, &building);
     ASSERT_EQ(288, actual.x);
     ASSERT_EQ(319, actual.y);
     ASSERT_EQ(224, actual.w);
     ASSERT_EQ(160, actual.h);
 
-    map->setScreenView("east");
+    map->setScreenView(FourDirectionsView(FourDirectionsView::EAST));
     actual = MapCoordUtils::getDrawCoordsForBuilding(*map, &graphicsMgr, &building);
     ASSERT_EQ(128, actual.x);
     ASSERT_EQ(255, actual.y);
     ASSERT_EQ(224, actual.w);
     ASSERT_EQ(160, actual.h);
 
-    map->setScreenView("north");
+    map->setScreenView(FourDirectionsView(FourDirectionsView::NORTH));
     actual = MapCoordUtils::getDrawCoordsForBuilding(*map, &graphicsMgr, &building);
     ASSERT_EQ(256, actual.x);
     ASSERT_EQ(175, actual.y);
     ASSERT_EQ(224, actual.w);
     ASSERT_EQ(160, actual.h);
 
-    map->setScreenView("west");
+    map->setScreenView(FourDirectionsView(FourDirectionsView::WEST));
     actual = MapCoordUtils::getDrawCoordsForBuilding(*map, &graphicsMgr, &building);
     ASSERT_EQ(416, actual.x);
     ASSERT_EQ(239, actual.y);

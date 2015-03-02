@@ -22,7 +22,7 @@ void Map::initNewMap(int newWidth, int newHeight) {
     // TODO Wir gehen erstmal davon aus, dass die Karten immer quadratisch sind.
     // Damit spar ich mir erstmal Hirnschmalz mit der Minimap und anderem Zeug, was noch kommen wird.
     if (newWidth != newHeight) {
-        throw new std::runtime_error("Map has to be quadratically for now ;-p");
+        throw std::runtime_error("Map has to be quadratically for now ;-p");
     }
     
 	// Karte erst leerräumen
@@ -40,10 +40,10 @@ void Map::initNewMap(int newWidth, int newHeight) {
     const GraphicSet* oceanTileGraphicSet = context->graphicsMgr->getGraphicSet(oceanTileGraphicSetName);
 
     std::array<const Animation*, 4> tileAnimationsOcean = {
-        oceanTileGraphicSet->getByView("south"),
-        oceanTileGraphicSet->getByView("east"),
-        oceanTileGraphicSet->getByView("north"),
-        oceanTileGraphicSet->getByView("west")
+        oceanTileGraphicSet->getByView(EightDirectionsView(EightDirectionsView::SOUTH)),
+        oceanTileGraphicSet->getByView(EightDirectionsView(EightDirectionsView::EAST)),
+        oceanTileGraphicSet->getByView(EightDirectionsView(EightDirectionsView::NORTH)),
+        oceanTileGraphicSet->getByView(EightDirectionsView(EightDirectionsView::WEST))
     };
 
     mapTiles = new RectangleData<MapTile*>(newWidth, newHeight);
@@ -55,6 +55,7 @@ void Map::initNewMap(int newWidth, int newHeight) {
 	selectedMapObject = nullptr;
 
 	mapCoordsCentered.setTo(0, 0);
+    screenView = FourDirectionsView(FourDirectionsView::SOUTH);
 }
 
 bool Map::checkMapCoords(const MapCoords& mapCoords) const {
@@ -86,16 +87,16 @@ void Map::scroll(int xDelta, int yDelta) {
     int mapXOffset, mapYOffset;
 
     // TODO denselben Code haben wir auch in MapCoordsUtils
-    if (screenView == "south") {
+    if (screenView == FourDirectionsView::SOUTH) {
         mapXOffset = xDelta;
         mapYOffset = yDelta;
-    } else if (screenView == "east") {
+    } else if (screenView == FourDirectionsView::EAST) {
         mapXOffset = yDelta;
         mapYOffset = -xDelta;
-    } else if (screenView == "north") {
+    } else if (screenView == FourDirectionsView::NORTH) {
         mapXOffset = -xDelta;
         mapYOffset = -yDelta;
-    } else if (screenView == "west") {
+    } else if (screenView == FourDirectionsView::WEST) {
         mapXOffset = -yDelta;
         mapYOffset = xDelta;
     }

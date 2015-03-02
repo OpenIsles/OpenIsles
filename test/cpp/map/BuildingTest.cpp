@@ -43,6 +43,7 @@ TEST(BuildingTest, isInsideCatchmentArea_Normal) {
     building.setMapWidth(1);
     building.setMapHeight(1);
     building.setMapCoords(MapCoords(23, 12));
+    building.setView(FourDirectionsView(FourDirectionsView::SOUTH));
 
     RectangleData<char>* catchmentArea = new RectangleData<char>(5, 5);
     memcpy(catchmentArea->data, "0010001110111110111000100", 25);
@@ -83,6 +84,7 @@ TEST(BuildingTest, isInsideCatchmentArea_AsymmetricLargeBuilding) {
     building.setMapWidth(4);
     building.setMapHeight(3);
     building.setMapCoords(MapCoords(11, 33));
+    building.setView(FourDirectionsView(FourDirectionsView::SOUTH));
 
     RectangleData<char>* catchmentArea = new RectangleData<char>(8, 7);
     memcpy(catchmentArea->data, "00111100011111101111111111111111111111110111111000111100", 56);
@@ -132,6 +134,7 @@ TEST(BuildingTest, isInsideCatchmentArea_AsymmetricLargeBuilding) {
 TEST(BuildingTest, isInsideCatchmentArea_Views) {
     Building building;
     building.setMapCoords(MapCoords(88, 42));
+    building.setView(FourDirectionsView(FourDirectionsView::SOUTH));
 
     RectangleData<char>* catchmentArea = new RectangleData<char>(9, 4);
     memcpy(catchmentArea->data, "000000000011111111011111111000000111", 36);
@@ -139,7 +142,7 @@ TEST(BuildingTest, isInsideCatchmentArea_Views) {
 
     building.setMapWidth(3);
     building.setMapHeight(2);
-    building.setView("south");
+    building.setView(FourDirectionsView(FourDirectionsView::SOUTH));
     ASSERT_TRUE(building.isInsideCatchmentArea(configMgr, MapCoords(88, 42))); // Mitte
 
     ASSERT_FALSE(building.isInsideCatchmentArea(configMgr, MapCoords(85, 41))); // Ecken des Quer-Rechtecks
@@ -154,7 +157,7 @@ TEST(BuildingTest, isInsideCatchmentArea_Views) {
 
     building.setMapWidth(2);
     building.setMapHeight(3);
-    building.setView("east");
+    building.setView(FourDirectionsView(FourDirectionsView::EAST));
     ASSERT_TRUE(building.isInsideCatchmentArea(configMgr, MapCoords(88, 42))); // Mitte
 
     ASSERT_FALSE(building.isInsideCatchmentArea(configMgr, MapCoords(85, 41))); // Ecken des Quer-Rechtecks
@@ -169,7 +172,7 @@ TEST(BuildingTest, isInsideCatchmentArea_Views) {
 
     building.setMapWidth(3);
     building.setMapHeight(2);
-    building.setView("north");
+    building.setView(FourDirectionsView(FourDirectionsView::NORTH));
     ASSERT_TRUE(building.isInsideCatchmentArea(configMgr, MapCoords(88, 42))); // Mitte
 
     ASSERT_TRUE(building.isInsideCatchmentArea(configMgr, MapCoords(85, 41))); // Ecken des Quer-Rechtecks
@@ -184,7 +187,7 @@ TEST(BuildingTest, isInsideCatchmentArea_Views) {
 
     building.setMapWidth(2);
     building.setMapHeight(3);
-    building.setView("west");
+    building.setView(FourDirectionsView(FourDirectionsView::WEST));
     ASSERT_TRUE(building.isInsideCatchmentArea(configMgr, MapCoords(88, 42))); // Mitte
 
     ASSERT_FALSE(building.isInsideCatchmentArea(configMgr, MapCoords(85, 41))); // Ecken des Quer-Rechtecks
