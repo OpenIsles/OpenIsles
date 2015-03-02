@@ -1,12 +1,12 @@
+#ifndef _MAP_COORD_UTILS_H
+#define _MAP_COORD_UTILS_H
+
 #include "graphics/graphic/IGraphic.h"
 #include "graphics/mgr/IGraphicsMgr.h"
 #include "map/Directions.h"
 #include "map/coords/MapCoords.h"
 #include "map/coords/ScreenCoords.h"
 #include "utils/Rect.h"
-
-#ifndef _MAP_COORD_UTILS_H
-#define _MAP_COORD_UTILS_H
 
 class Building;
 class Map;
