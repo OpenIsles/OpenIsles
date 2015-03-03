@@ -58,7 +58,7 @@ private:
      * @brief aktuelle Richtung, in die der Träger auf der Karte läuft. Wir wollen nicht bei jedem Frame das
      * ausrechnen müssen, drum ist hier immer der aktuelle Wert.
      */
-    EightDirectionsView currentMovingDirection;
+    EighthDirection currentMovingDirection;
 
     /**
      * @brief aktueller Frame der Animation, die grade abgespielt wird. Dieser Wert ist ein double, da fortlaufend
@@ -87,12 +87,12 @@ public:
     }
 
     void setAnimations(const GraphicSet& graphicSet) {
-        for (const EightDirectionsView& view : EightDirectionsView::ALL_VIEWS) {
-            animations[view.getViewIndex()] = graphicSet.getByView(view);
+        forEachEighthDirection(view) {
+            animations[view] = graphicSet.getByView(view);
         }
     }
 
-    const EightDirectionsView& getCurrentMovingDirection() const {
+    const EighthDirection& getCurrentMovingDirection() const {
         return currentMovingDirection;
     }
 

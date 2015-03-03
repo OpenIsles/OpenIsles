@@ -212,7 +212,7 @@ int main(int argc, char** argv) {
 #ifdef DEBUG
         const MapCoords& mapCoordsCentered = map->getMapCoordsCentered();
         int screenZoom = map->getScreenZoom();
-        const FourDirectionsView& screenView = map->getScreenView();
+        const FourthDirection& screenView = map->getScreenView();
 
         ScreenCoords mouseCurrentScreenCoords =
             MapCoordUtils::getScreenCoordsUnderMouse(*map, context.mouseCurrentX, context.mouseCurrentY);
@@ -229,7 +229,7 @@ int main(int argc, char** argv) {
 
         debugOutput[1] = "Screen: mapCentered = (" +
             toString(mapCoordsCentered.x()) + ", " + toString(mapCoordsCentered.y()) + "), zoom = " +
-            toString(screenZoom) + ", view = " + toString(screenView.getViewIndex());
+            toString(screenZoom) + ", view = " + toString(screenView);
 
         debugOutput[2] = "ScreenEdges: topLeft = (" +
             toString(mapCoordsTopLeft.x()) + ", " + toString(mapCoordsTopLeft.y()) + "), topRight = (" +

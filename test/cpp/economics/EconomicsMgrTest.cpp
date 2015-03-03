@@ -12,7 +12,7 @@ protected:
     virtual void SetUp() {
         GameTest::SetUp();
 
-        FourDirectionsView southView = FourDirectionsView("south");
+        FourthDirection southView = Direction::SOUTH;
         Player* player = game->getPlayer(0);
 
         office1 = dynamic_cast<Building*>(game->getMap()->getMapObjectAt(MapCoords(28, 18)));
@@ -74,7 +74,7 @@ TEST_F(EconomicsMgrTest, updateCarrier) {
     ASSERT_EQ(GoodsType::CATTLE, office1->carrier->carriedGoods.goodsType);
     ASSERT_EQ(0, office1->carrier->carriedGoods.inventory);
     ASSERT_TRUE(office1->carrier->getMapCoords() == DoubleMapCoords(28, 19));
-    ASSERT_TRUE(office1->carrier->getCurrentMovingDirection() == EightDirectionsView::SOUTH);
+    ASSERT_TRUE(office1->carrier->getCurrentMovingDirection() == Direction::SOUTH);
 
     ASSERT_TRUE(cattleFarm->productionSlots.output.markedForPickup);
 
@@ -86,7 +86,7 @@ TEST_F(EconomicsMgrTest, updateCarrier) {
     ASSERT_EQ(1001, office1->getLastUpdateTime());
     ASSERT_NEAR(28, office1->carrier->getMapCoords().x(), allowedCoordsError);
     ASSERT_NEAR(19.75, office1->carrier->getMapCoords().y(), allowedCoordsError);
-    ASSERT_TRUE(office1->carrier->getCurrentMovingDirection() == EightDirectionsView::SOUTH);
+    ASSERT_TRUE(office1->carrier->getCurrentMovingDirection() == Direction::SOUTH);
 
     // "Step 2": Test, wenn eine Kachel geradlinig übersprungen wird
     context.sdlTicks += 2500; // Träger sollte sich (2500 * 0,75 =) 1,875 Kacheln fortbewegt haben
@@ -95,7 +95,7 @@ TEST_F(EconomicsMgrTest, updateCarrier) {
     ASSERT_EQ(3501, office1->getLastUpdateTime());
     ASSERT_NEAR(28, office1->carrier->getMapCoords().x(), allowedCoordsError);
     ASSERT_NEAR(21.625, office1->carrier->getMapCoords().y(), allowedCoordsError);
-    ASSERT_TRUE(office1->carrier->getCurrentMovingDirection() == EightDirectionsView::SOUTH);
+    ASSERT_TRUE(office1->carrier->getCurrentMovingDirection() == Direction::SOUTH);
 
     // "Step 3": Test, wenn mehrere Kacheln, auch über Ecken hinweg, übersprungen werden
     context.sdlTicks += 8000; // Träger sollte sich (8000 * 0,75 =) 6 Kacheln fortbewegt haben
@@ -104,7 +104,7 @@ TEST_F(EconomicsMgrTest, updateCarrier) {
     ASSERT_EQ(11501, office1->getLastUpdateTime());
     ASSERT_NEAR(26, office1->carrier->getMapCoords().x(), allowedCoordsError);
     ASSERT_NEAR(25.625, office1->carrier->getMapCoords().y(), allowedCoordsError);
-    ASSERT_TRUE(office1->carrier->getCurrentMovingDirection() == EightDirectionsView::SOUTH);
+    ASSERT_TRUE(office1->carrier->getCurrentMovingDirection() == Direction::SOUTH);
 
     // Am Gebäude ankommen, sollte den Rücktransport triggern
     context.sdlTicks += 2000; // Träger sollte sich (2000 * 0,75 =) 1,5 Kacheln fortbewegt haben. Ziel wurde bereits nach 1,375 Kacheln erreicht.
@@ -117,7 +117,7 @@ TEST_F(EconomicsMgrTest, updateCarrier) {
     ASSERT_EQ(GoodsType::CATTLE, office1->carrier->carriedGoods.goodsType);
     ASSERT_EQ(4, office1->carrier->carriedGoods.inventory); // Rinderfarm kann nur 4 Tonnen halten
     ASSERT_TRUE(office1->carrier->getMapCoords() == DoubleMapCoords(26, 27));
-    ASSERT_TRUE(office1->carrier->getCurrentMovingDirection() == EightDirectionsView::NORTH);
+    ASSERT_TRUE(office1->carrier->getCurrentMovingDirection() == Direction::NORTH);
 
     ASSERT_EQ(0, cattleFarm->productionSlots.output.inventory);
     ASSERT_FALSE(cattleFarm->productionSlots.output.markedForPickup);

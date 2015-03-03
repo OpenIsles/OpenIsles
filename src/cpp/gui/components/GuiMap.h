@@ -4,7 +4,7 @@
 #include <SDL_render.h>
 #include "Context.h"
 #include "gui/components/GuiBase.h"
-#include "map/Directions.h"
+#include "map/Direction.h"
 #include "map/Structure.h"
 #include "utils/RectangleData.h"
 
@@ -123,7 +123,7 @@ private:
      * @return Bitmaske, die angibt, ob das Gebäude gesetzt werden darf.
      */
     unsigned char isAllowedToPlaceStructure(
-        const MapCoords& mapCoords, StructureType structureType, const FourDirectionsView& view) const;
+        const MapCoords& mapCoords, StructureType structureType, const FourthDirection& view) const;
 
     /**
      * @brief Berechnet welcher konkrete StructureType für eine Straßenkachel verwendet werden muss. Als Eingabeparameter

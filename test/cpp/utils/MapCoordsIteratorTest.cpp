@@ -5,7 +5,7 @@
 
 TEST(MapCoordsIteratorTest, IterateSouth) {
     std::list<MapCoords> mapCoordsFromIterator;
-    MapCoordsIterator mapCoordsIterator(MapCoords(5, 2), MapCoords(7, 4), FourDirectionsView("south"));
+    MapCoordsIterator mapCoordsIterator(MapCoords(5, 2), MapCoords(7, 4), Direction::SOUTH);
     mapCoordsIterator.iterate([&mapCoordsFromIterator] (const MapCoords& mapCoords) {
         mapCoordsFromIterator.push_back(mapCoords);
     });
@@ -35,7 +35,7 @@ TEST(MapCoordsIteratorTest, IterateSouth) {
 
 TEST(MapCoordsIteratorTest, IterateWest) {
     std::list<MapCoords> mapCoordsFromIterator;
-    MapCoordsIterator mapCoordsIterator(MapCoords(2, 1), MapCoords(5, 3), FourDirectionsView("west"));
+    MapCoordsIterator mapCoordsIterator(MapCoords(2, 1), MapCoords(5, 3), Direction::WEST);
     mapCoordsIterator.iterate([&mapCoordsFromIterator] (const MapCoords& mapCoords) {
         mapCoordsFromIterator.push_back(mapCoords);
     });
@@ -71,7 +71,7 @@ TEST(MapCoordsIteratorTest, IterateWest) {
 
 TEST(MapCoordsIteratorTest, IterateNorth) {
     std::list<MapCoords> mapCoordsFromIterator;
-    MapCoordsIterator mapCoordsIterator(MapCoords(1, 1), MapCoords(3, 3), FourDirectionsView("north"));
+    MapCoordsIterator mapCoordsIterator(MapCoords(1, 1), MapCoords(3, 3), Direction::NORTH);
     mapCoordsIterator.iterate([&mapCoordsFromIterator] (const MapCoords& mapCoords) {
         mapCoordsFromIterator.push_back(mapCoords);
     });
@@ -101,7 +101,7 @@ TEST(MapCoordsIteratorTest, IterateNorth) {
 
 TEST(MapCoordsIteratorTest, IterateEast) {
     std::list<MapCoords> mapCoordsFromIterator;
-    MapCoordsIterator mapCoordsIterator(MapCoords(85, -9), MapCoords(83, -10), FourDirectionsView("east"));
+    MapCoordsIterator mapCoordsIterator(MapCoords(85, -9), MapCoords(83, -10), Direction::EAST);
     mapCoordsIterator.iterate([&mapCoordsFromIterator] (const MapCoords& mapCoords) {
         mapCoordsFromIterator.push_back(mapCoords);
     });

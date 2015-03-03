@@ -8,7 +8,7 @@
 #include <map>
 #include "Context.h"
 #include "game/GoodsSlot.h"
-#include "map/Directions.h"
+#include "map/Direction.h"
 #include "map/StructureType.h"
 #include "graphics/renderer/IRenderer.h"
 
@@ -79,7 +79,7 @@ struct PanelState {
     /**
      * @brief zuletzt/aktuell gewählte Ausrichtung der Struktur im Baumenü
      */
-    FourDirectionsView addingStructureView;
+    FourthDirection addingStructureView;
 
     /**
      * @brief Flag, was angibt, ob das Popup-Menü mit den einzelnen Gebäuden aufgeklappt ist

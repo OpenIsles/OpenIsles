@@ -4,7 +4,7 @@
 #include <map>
 #include <vector>
 #include "map/coords/MapCoords.h"
-#include "map/Directions.h"
+#include "map/Direction.h"
 #include "map/Structure.h"
 #include "Context.h"
 
@@ -141,7 +141,7 @@ public:
      * @return Zeiger auf die neu angelegte Struktur
      */
     Structure* addStructure(
-        const MapCoords& mapCoords, StructureType structureType, const FourDirectionsView& view, Player* player);
+        const MapCoords& mapCoords, StructureType structureType, const FourthDirection& view, Player* player);
 
     /**
      * @brief Ändert die Einwohner innerhalb eines Gebäudes. Positive Werte fügen Bewohner hinzu, negative nehmen

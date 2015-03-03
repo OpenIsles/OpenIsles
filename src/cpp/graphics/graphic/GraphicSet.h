@@ -5,10 +5,10 @@
 #include <unordered_map>
 #include "graphics/graphic/Animation.h"
 #include "graphics/graphic/IGraphic.h"
-#include "map/Directions.h"
+#include "map/Direction.h"
 
 using GraphicSetKeyState = const std::string;
-using GraphicSetKeyView = const EightDirectionsView;
+using GraphicSetKeyView = const EighthDirection;
 
 /**
  * @brief Map-Key für GraphicSet bestehend aus Zustand und Ansicht
@@ -25,15 +25,13 @@ struct GraphicSetKey {
 
     /**
      * @brief Ansicht. Wird benutzt, um z.&nbsp;B. ein Gebäude von mehreren Seiten (Nord, Ost, Süd, West) zu zeigen.
-     *
-     * Ist keine Ansicht zugeordnet, ist ein Leerstring gesetzt.
      */
     GraphicSetKeyView view;
 
     /**
      * @brief Erzeugt einen Key aus Zustand und Ansicht.
      * @param state Zustand (Leerstring, wenn nicht zutreffend)
-     * @param view Ansicht (Leerstring, wenn nicht zutreffend)
+     * @param view Ansicht
      */
     GraphicSetKey(GraphicSetKeyState& state, GraphicSetKeyView& view) : state(state), view(view) {
     }
@@ -51,7 +49,7 @@ struct GraphicSetKeyHasher {
      */
     std::size_t operator() (const GraphicSetKey& key) const {
         std::hash<std::string> strHash;
-        return (3 * strHash(key.state)) ^ (5 * key.view.getViewIndex());
+        return (3 * strHash(key.state)) ^ (5 * key.view);
     }
 };
 
@@ -110,7 +108,7 @@ public:
      * @param animation Animation
      */
     void addStatic(Animation* animation) {
-        addByStateAndView("", EightDirectionsView(), animation);
+        addByStateAndView("", Direction::NONE, animation);
     }
 
     /**
@@ -119,7 +117,7 @@ public:
      * @param animation Animation
      */
     void addByState(GraphicSetKeyState& state, Animation* animation) {
-        addByStateAndView(state, EightDirectionsView(), animation);
+        addByStateAndView(state, Direction::NONE, animation);
     }
 
     /**
@@ -134,7 +132,7 @@ public:
     /**
      * @brief Fügt eine Animation mit einem bestimmten Zustand und einer bestimmten Ansicht hinzu
      * @param state Zustand (Leerstring, wenn nicht zutreffend)
-     * @param view Ansicht (Leerstring, wenn nicht zutreffend)
+     * @param view Ansicht
      * @param animation Animation
      */
     void addByStateAndView(GraphicSetKeyState& state, GraphicSetKeyView& view, Animation* animation) {
@@ -146,7 +144,7 @@ public:
      * @return Animation
      */
     const Animation* getStatic() const {
-        return getByStateAndView("", EightDirectionsView());
+        return getByStateAndView("", Direction::NONE);
     }
 
     /**
@@ -155,7 +153,7 @@ public:
      * @return Animation
      */
     const Animation* getByState(GraphicSetKeyState& state) const {
-        return getByStateAndView(state, EightDirectionsView());
+        return getByStateAndView(state, Direction::NONE);
     }
 
     /**
@@ -170,7 +168,7 @@ public:
     /**
      * @brief Liefert eine Animation mit einem bestimmten Zustand und einer bestimmten Ansicht zurück
      * @param state Zustand (Leerstring, wenn nicht zutreffend)
-     * @param view Ansicht (Leerstring, wenn nicht zutreffend)
+     * @param view Ansicht
      * @return Animation
      */
     const Animation* getByStateAndView(GraphicSetKeyState& state, GraphicSetKeyView& view) const {

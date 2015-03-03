@@ -55,11 +55,11 @@ Colony* Game::getColony(const MapObjectFixed* mapObject) {
 }
 
 Structure* Game::addStructure(
-    const MapCoords& mapCoords, StructureType structureType, const FourDirectionsView& view, Player* player) {
+    const MapCoords& mapCoords, StructureType structureType, const FourthDirection& view, Player* player) {
 
     const std::string graphicSetName = context->graphicsMgr->getGraphicSetNameForStructure(structureType);
     const GraphicSet* graphicSet = context->graphicsMgr->getGraphicSet(graphicSetName);
-    const IGraphic* graphic = graphicSet->getByView((const EightDirectionsView&) view)->getGraphic();
+    const IGraphic* graphic = graphicSet->getByView(view)->getGraphic();
 
     // Objekt anlegen
     Structure* structure = (structureType >= START_BUILDINGS) ? new Building() : new Structure();

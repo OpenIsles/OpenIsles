@@ -3,7 +3,7 @@
 
 #include <functional>
 #include "map/coords/MapCoords.h"
-#include "map/Directions.h"
+#include "map/Direction.h"
 
 /**
  * @brief Iterator, der es uns ermöglicht, ein Rechteck von Map-Kacheln je Ansicht in der richtigen Reihenfolge
@@ -14,7 +14,7 @@ class MapCoordsIterator {
 private:
     int mapXMin, mapYMin;
     int mapXMax, mapYMax;
-    const FourDirectionsView screenView;
+    const FourthDirection screenView;
 
 public:
     /**
@@ -27,7 +27,7 @@ public:
      */
     MapCoordsIterator(
         const MapCoords& mapCoords1, const MapCoords& mapCoords2,
-        const FourDirectionsView& screenView) : screenView(screenView) {
+        const FourthDirection& screenView) : screenView(screenView) {
 
         mapXMin = std::min(mapCoords1.x(), mapCoords2.x());
         mapYMin = std::min(mapCoords1.y(), mapCoords2.y());
@@ -41,13 +41,13 @@ public:
      * @param function Callback-Funktion, die pro Durchlauf mit den Map-Koordinaten aufgerufen wird.
      */
     void iterate(std::function<void(const MapCoords&)> function) {
-        if (screenView == FourDirectionsView::SOUTH) {
+        if (screenView == Direction::SOUTH) {
             iterateInSouthView(function);
-        } else if (screenView == FourDirectionsView::EAST) {
+        } else if (screenView == Direction::EAST) {
             iterateInEastView(function);
-        } else if (screenView == FourDirectionsView::NORTH) {
+        } else if (screenView == Direction::NORTH) {
             iterateInNorthView(function);
-        } else if (screenView == FourDirectionsView::WEST) {
+        } else if (screenView == Direction::WEST) {
             iterateInWestView(function);
         }
     }

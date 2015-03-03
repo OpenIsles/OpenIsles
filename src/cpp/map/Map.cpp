@@ -40,10 +40,10 @@ void Map::initNewMap(int newWidth, int newHeight) {
     const GraphicSet* oceanTileGraphicSet = context->graphicsMgr->getGraphicSet(oceanTileGraphicSetName);
 
     std::array<const Animation*, 4> tileAnimationsOcean = {
-        oceanTileGraphicSet->getByView(EightDirectionsView(EightDirectionsView::SOUTH)),
-        oceanTileGraphicSet->getByView(EightDirectionsView(EightDirectionsView::EAST)),
-        oceanTileGraphicSet->getByView(EightDirectionsView(EightDirectionsView::NORTH)),
-        oceanTileGraphicSet->getByView(EightDirectionsView(EightDirectionsView::WEST))
+        oceanTileGraphicSet->getByView(Direction::SOUTH),
+        oceanTileGraphicSet->getByView(Direction::EAST),
+        oceanTileGraphicSet->getByView(Direction::NORTH),
+        oceanTileGraphicSet->getByView(Direction::WEST)
     };
 
     mapTiles = new RectangleData<MapTile*>(newWidth, newHeight);
@@ -55,7 +55,7 @@ void Map::initNewMap(int newWidth, int newHeight) {
 	selectedMapObject = nullptr;
 
 	mapCoordsCentered.setTo(0, 0);
-    screenView = FourDirectionsView(FourDirectionsView::SOUTH);
+    screenView = Direction::SOUTH;
 }
 
 bool Map::checkMapCoords(const MapCoords& mapCoords) const {
@@ -87,16 +87,16 @@ void Map::scroll(int xDelta, int yDelta) {
     int mapXOffset, mapYOffset;
 
     // TODO denselben Code haben wir auch in MapCoordsUtils
-    if (screenView == FourDirectionsView::SOUTH) {
+    if (screenView == Direction::SOUTH) {
         mapXOffset = xDelta;
         mapYOffset = yDelta;
-    } else if (screenView == FourDirectionsView::EAST) {
+    } else if (screenView == Direction::EAST) {
         mapXOffset = yDelta;
         mapYOffset = -xDelta;
-    } else if (screenView == FourDirectionsView::NORTH) {
+    } else if (screenView == Direction::NORTH) {
         mapXOffset = -xDelta;
         mapYOffset = -yDelta;
-    } else if (screenView == FourDirectionsView::WEST) {
+    } else if (screenView == Direction::WEST) {
         mapXOffset = -yDelta;
         mapYOffset = xDelta;
     }

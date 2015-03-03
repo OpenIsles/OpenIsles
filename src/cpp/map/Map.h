@@ -34,7 +34,7 @@ private:
 
 	/**
 	 * @brief Animationen, die pro Ansicht für die Kachel gezeichnet werden muss.
-     * Der Index entspricht dem ViewIndex in FourDirectionsView.
+     * Der Index entspricht EighthDirection/2.
 	 */
     std::array<const Animation*, 4> tileAnimations;
 
@@ -77,7 +77,7 @@ public:
 	}
 
 	const Animation* getTileAnimationForView(int viewIndex) const {
-		return tileAnimations[viewIndex];
+		return tileAnimations[viewIndex / 2];
 	}
 };
 
@@ -143,7 +143,7 @@ private:
     /**
      * @brief Richtung aus der die Karte betrachtet wird
      */
-    FourDirectionsView screenView;
+    FourthDirection screenView;
 
 public:
 	Map(const Context* const context);
@@ -195,20 +195,20 @@ public:
         this->screenZoom = screenZoom;
     }
 
-    const FourDirectionsView& getScreenView() const {
+    const FourthDirection& getScreenView() const {
         return screenView;
     }
 
-    void setScreenView(const FourDirectionsView& screenView) {
+    void setScreenView(const FourthDirection& screenView) {
         this->screenView = screenView;
     }
 
     void rotateViewClockwise() {
-        this->screenView++;
+        Direction::rotate90DegreesClockwise(this->screenView);
     }
 
     void rotateViewCounterclockwise() {
-        this->screenView--;
+        Direction::rotate90DegreesCounterclockwise(this->screenView);
     }
 
     const MapObject* getSelectedMapObject() const {

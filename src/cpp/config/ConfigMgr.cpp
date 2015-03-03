@@ -220,13 +220,13 @@ void ConfigMgr::loadTilesConfig() {
             int xOffsetInTileset = atoi(tmxTileNode->first_attribute("x", 1, true)->value());
             int yOffsetInTileset = atoi(tmxTileNode->first_attribute("y", 1, true)->value());
 
-            FourDirectionsView tileView(tileViewName);
+            FourthDirection tileView = Direction::fromString(tileViewName);
             mapTileConfig.mapTileViewsOffsetXYInTileset[tileView] =
                 std::make_pair(xOffsetInTileset, yOffsetInTileset);
 
             // Zuordnung zu Tiled-Kachel-ID und View-Offset merken
             tiledIdToMapTileConfig[tmxTileIndex] = &mapTileConfig;
-            tiledIdToViewOffset[tmxTileIndex] = tileView.getViewIndex();
+            tiledIdToViewOffset[tmxTileIndex] = tileView / 2;
         }
 
         // Den Ozean separat merken

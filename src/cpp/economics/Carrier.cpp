@@ -25,24 +25,21 @@ void Carrier::updateCurrentMovingDirection() {
     const double diffX = nextHopOnRoute.x() - mapCoords.x();
     const double diffY = nextHopOnRoute.y() - mapCoords.y();
 
-    EightDirectionsView movingDirection;
     if (diffX > 0 && diffY == 0) {
-        movingDirection = EightDirectionsView(EightDirectionsView::EAST);
+        currentMovingDirection = Direction::EAST;
     } else if (diffX > 0 && diffY > 0) {
-        movingDirection = EightDirectionsView(EightDirectionsView::SOUTHEAST);
+        currentMovingDirection = Direction::SOUTHEAST;
     } else if (diffX == 0 && diffY > 0) {
-        movingDirection = EightDirectionsView(EightDirectionsView::SOUTH);
+        currentMovingDirection = Direction::SOUTH;
     } else if (diffX < 0 && diffY > 0) {
-        movingDirection = EightDirectionsView(EightDirectionsView::SOUTHWEST);
+        currentMovingDirection = Direction::SOUTHWEST;
     } else if (diffX < 0 && diffY == 0) {
-        movingDirection = EightDirectionsView(EightDirectionsView::WEST);
+        currentMovingDirection = Direction::WEST;
     } else if (diffX < 0 && diffY < 0) {
-        movingDirection = EightDirectionsView(EightDirectionsView::NORTHWEST);
+        currentMovingDirection = Direction::NORTHWEST;
     } else if (diffX == 0 && diffY < 0) {
-        movingDirection = EightDirectionsView(EightDirectionsView::NORTH);
+        currentMovingDirection = Direction::NORTH;
     } else if (diffX > 0 && diffY < 0) {
-        movingDirection = EightDirectionsView(EightDirectionsView::NORTHEAST);
+        currentMovingDirection = Direction::NORTHEAST;
     }
-
-    currentMovingDirection = movingDirection;
 }

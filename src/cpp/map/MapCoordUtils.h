@@ -3,7 +3,7 @@
 
 #include "graphics/graphic/IGraphic.h"
 #include "graphics/mgr/IGraphicsMgr.h"
-#include "map/Directions.h"
+#include "map/Direction.h"
 #include "map/coords/MapCoords.h"
 #include "map/coords/ScreenCoords.h"
 #include "utils/Rect.h"
@@ -25,7 +25,7 @@ public:
 	 * @return Screen-Koordinaten
 	 */
     static ScreenCoords mapToScreenCoords(
-        const MapCoords& mapCoords, const FourDirectionsView& screenView, const Map& map);
+        const MapCoords& mapCoords, const FourthDirection& screenView, const Map& map);
 
     /**
 	 * @brief Rechnet Map- in Screen-Koordinaten um. Die Screen-Koordinaten sind die der oberen linken Ecke der Kachel.
@@ -35,7 +35,7 @@ public:
 	 * @return Screen-Koordinaten
 	 */
     static ScreenCoords mapToScreenCoords(
-        const DoubleMapCoords& mapCoords, const FourDirectionsView& screenView, const Map& map);
+        const DoubleMapCoords& mapCoords, const FourthDirection& screenView, const Map& map);
 
     /**
 	 * @brief Rechnet Screen- in Map-Koordinaten um.
@@ -45,7 +45,7 @@ public:
 	 * @return Map-Koordinaten
 	 */
     static MapCoords screenToMapCoords(
-        const ScreenCoords& screenCoords, const FourDirectionsView& screenView, const Map& map);
+        const ScreenCoords& screenCoords, const FourthDirection& screenView, const Map& map);
 
     /**
      * @brief Berechnet ausgehend von Map-Koordinaten und einer Grafik das SDL-Rechteck, an welche Stelle

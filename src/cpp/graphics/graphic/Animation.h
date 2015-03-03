@@ -112,7 +112,7 @@ public:
 
 /**
  * @brief Abkürzung, um eine Animation aus 8 verschiedenen Richtungen zu definieren.
- * Array-Index ist hierbei EightDirectionsView::getViewIndex()
+ * Array-Index ist hierbei EighthDirection
  */
 using EightDirectionsAnimation = std::array<const Animation*, 8>;
 

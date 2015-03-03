@@ -5,7 +5,7 @@
 #include "defines.h"
 #include "game/GoodsSlot.h"
 #include "map/Building.h"
-#include "map/Directions.h"
+#include "map/Direction.h"
 #include "rapidxml/rapidxml.hpp"
 #include "rapidxml/rapidxml_utils.hpp"
 #include "utils/RectangleData.h"
@@ -200,7 +200,7 @@ struct MapTileConfig {
      * @brief Map, die für jede der 4 Ansichten die Pixeloffsets im Tileset angibt, wo die Grafik für diese View zu
      * finden ist. Das Paar enthalt X-Koordinate als ersten Member, Y-Koordinate als zweiten.
      */
-    std::unordered_map<FourDirectionsView, std::pair<int, int>> mapTileViewsOffsetXYInTileset;
+    std::unordered_map<FourthDirection, std::pair<int, int>> mapTileViewsOffsetXYInTileset;
 
     /**
      * @brief Flag, ob diese Kachel grundsätzlich für das Drauflaufen (Routing-Algorithmus) und

@@ -13,22 +13,22 @@ bool Building::isInsideCatchmentArea(const ConfigMgr* configMgr, const MapCoords
 
     // Koordinaten innerhalb von buildingConfig.catchmentArea.data ermitteln
     int x, y;
-    if (view == FourDirectionsView::SOUTH) {
+    if (view == Direction::SOUTH) {
         x = (mapCoords.x() - this->mapCoords.x()) + ((catchmentArea->width - this->mapWidth) / 2);
         y = (mapCoords.y() - this->mapCoords.y()) + ((catchmentArea->height - this->mapHeight) / 2);
         return (catchmentArea->getData(x, y, '0') == '1'); // TODO String-'1' durch echte 1 ersetzen, wenn wir das über die Config einlesen
 
-    } else if (view == FourDirectionsView::EAST ) {
+    } else if (view == Direction::EAST ) {
         x = (mapCoords.x() - this->mapCoords.x()) + ((catchmentArea->height - this->mapWidth) / 2);
         y = (mapCoords.y() - this->mapCoords.y()) + ((catchmentArea->width - this->mapHeight) / 2);
         return (catchmentArea->getData(y, (catchmentArea->height - 1) - x, '0') == '1'); // TODO String-'1' durch echte 1 ersetzen, wenn wir das über die Config einlesen
 
-    } else if (view == FourDirectionsView::NORTH) {
+    } else if (view == Direction::NORTH) {
         x = (mapCoords.x() - this->mapCoords.x()) + ((catchmentArea->width - this->mapWidth) / 2);
         y = (mapCoords.y() - this->mapCoords.y()) + ((catchmentArea->height - this->mapHeight) / 2);
         return (catchmentArea->getData((catchmentArea->width - 1) - x, (catchmentArea->height - 1) - y, '0') == '1'); // TODO String-'1' durch echte 1 ersetzen, wenn wir das über die Config einlesen
 
-    } else if (view == FourDirectionsView::WEST) {
+    } else if (view == Direction::WEST) {
         x = (mapCoords.x() - this->mapCoords.x()) + ((catchmentArea->height - this->mapWidth) / 2);
         y = (mapCoords.y() - this->mapCoords.y()) + ((catchmentArea->width - this->mapHeight) / 2);
         return (catchmentArea->getData((catchmentArea->width - 1) - y, x, '0') == '1'); // TODO String-'1' durch echte 1 ersetzen, wenn wir das über die Config einlesen

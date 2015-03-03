@@ -3,7 +3,7 @@
 
 #include "economics/UpdateableObject.h"
 #include "map/coords/MapCoords.h"
-#include "map/Directions.h"
+#include "map/Direction.h"
 #include "map/MapObject.h"
 #include "map/StructureType.h"
 
@@ -42,7 +42,7 @@ protected:
     /**
      * @brief Ausrichtung des Objekts
      */
-    FourDirectionsView view;
+    FourthDirection view;
 
 public:
     StructureType getStructureType() const {
@@ -53,11 +53,11 @@ public:
         this->structureType = structureType;
     }
 
-    const FourDirectionsView& getView() const {
+    const FourthDirection& getView() const {
         return view;
     }
 
-    void setView(const FourDirectionsView& view) {
+    void setView(const FourthDirection& view) {
         this->view = view;
     }
 };

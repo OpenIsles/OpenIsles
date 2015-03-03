@@ -140,7 +140,7 @@ void GuiMgr::initGui() {
     // Initial ist für den Gebäudebau der Förster ausgewählt...
     panelState.selectedBuildingGroup = BuildingGroup::FARM;
     panelState.addingStructure = StructureType::FORESTERS;
-    panelState.addingStructureView = FourDirectionsView(FourDirectionsView::SOUTH);
+    panelState.addingStructureView = Direction::SOUTH;
     panelState.buildingMenuOpen = false;
 
     // ...und wir zeigen das Spielerstatus-Widget
@@ -356,9 +356,9 @@ void GuiMgr::onEvent(SDL_Event& event) {
 
         // Drehen des Gebäudes, was wir bauen wollen
         else if (event.key.keysym.scancode == SDL_SCANCODE_PERIOD) {
-            panelState.addingStructureView++;
+            Direction::rotate90DegreesClockwise(panelState.addingStructureView);
         } else if (event.key.keysym.scancode == SDL_SCANCODE_COMMA) {
-            panelState.addingStructureView--;
+            Direction::rotate90DegreesCounterclockwise(panelState.addingStructureView);
         }
 
 #ifdef DEBUG

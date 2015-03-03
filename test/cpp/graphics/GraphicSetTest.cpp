@@ -4,11 +4,11 @@
 class GraphicSetTest : public testing::Test {
 
 protected:
-    GraphicSetKey keyEmpty = GraphicSetKey("", EightDirectionsView(EightDirectionsView::INVALID));
-    GraphicSetKey keyFooNorth = GraphicSetKey("foo", EightDirectionsView(EightDirectionsView::NORTH));
-    GraphicSetKey keyFooNorth2 = GraphicSetKey("foo", EightDirectionsView(EightDirectionsView::NORTH));
-    GraphicSetKey keyBarFoo = GraphicSetKey("bar", EightDirectionsView(EightDirectionsView::EAST));
-    GraphicSetKey keyUppercase = GraphicSetKey("BAR", EightDirectionsView(EightDirectionsView::EAST));
+    GraphicSetKey keyEmpty = GraphicSetKey("", Direction::NONE);
+    GraphicSetKey keyFooNorth = GraphicSetKey("foo", Direction::NORTH);
+    GraphicSetKey keyFooNorth2 = GraphicSetKey("foo", Direction::NORTH);
+    GraphicSetKey keyBarFoo = GraphicSetKey("bar", Direction::EAST);
+    GraphicSetKey keyUppercase = GraphicSetKey("BAR", Direction::EAST);
 };
 
 

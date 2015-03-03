@@ -18,7 +18,7 @@ set(COMMON_SOURCE_FILES
     src/cpp/map/coords/MapCoords.cpp
     src/cpp/map/coords/ScreenCoords.cpp
     src/cpp/map/Building.cpp
-    src/cpp/map/Directions.cpp
+    src/cpp/map/Direction.cpp
     src/cpp/map/Isle.cpp
     src/cpp/map/Map.cpp
     src/cpp/map/MapCoordUtils.cpp
@@ -56,7 +56,7 @@ set(TEST_FILES
     test/cpp/graphics/GraphicSetTest.cpp
     test/cpp/map/coords/MapCoordsTest.cpp
     test/cpp/map/BuildingTest.cpp
-    test/cpp/map/DirectionsTest.cpp
+    test/cpp/map/DirectionTest.cpp
     test/cpp/map/MapCoordUtilsTest.cpp
     test/cpp/utils/MapCoordsIteratorTest.cpp
 )

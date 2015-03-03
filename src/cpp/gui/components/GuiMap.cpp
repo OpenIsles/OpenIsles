@@ -88,7 +88,7 @@ void GuiMap::renderElement(IRenderer* renderer) {
     mapXEnd = std::min(mapXEnd + extraRadius, map->getWidth() - 1);
     mapYEnd = std::min(mapYEnd + extraRadius, map->getHeight() - 1);
 
-    const FourDirectionsView& screenView = map->getScreenView();
+    const FourthDirection& screenView = map->getScreenView();
     MapCoordsIterator mapCoordsIterator(MapCoords(mapXStart, mapYStart), MapCoords(mapXEnd, mapYEnd), screenView);
 
     // Nur die Kartenfläche vollmalen
@@ -103,7 +103,7 @@ void GuiMap::renderElement(IRenderer* renderer) {
             return;
         }
 
-        const Animation* tileAnimation = mapTile->getTileAnimationForView(screenView.getViewIndex());
+        const Animation* tileAnimation = mapTile->getTileAnimationForView(screenView);
         const IGraphic* tileGraphic = tileAnimation->getGraphic();
 
         Rect rectDestination = MapCoordUtils::mapToDrawCoords(mapCoords, *map, 0, *tileGraphic);
@@ -142,7 +142,7 @@ void GuiMap::renderElement(IRenderer* renderer) {
         MapCoords mapCoords = MapCoordUtils::getMapCoordsUnderMouse(*map, context->mouseCurrentX, context->mouseCurrentY);
 
         StructureType structureType = context->guiMgr->getPanelState().addingStructure;
-        const FourDirectionsView& view = context->guiMgr->getPanelState().addingStructureView;
+        const FourthDirection& view = context->guiMgr->getPanelState().addingStructureView;
         unsigned char allowedToPlaceStructure = isAllowedToPlaceStructure(mapCoords, structureType, view);
 
         // Auf dem Ozean malen wir gar nix.
@@ -221,8 +221,8 @@ void GuiMap::renderElement(IRenderer* renderer) {
             structureType = getConcreteStreetStructureType(mapCoords, structureType);
         }
 
-        const FourDirectionsView& structureView = structure->getView();
-        const FourDirectionsView& viewToRender = structureView + screenView;
+        const FourthDirection& structureView = structure->getView();
+        const FourthDirection& viewToRender = Direction::addDirections(structureView, screenView);
 
         const std::string graphicSetName = context->graphicsMgr->getGraphicSetNameForStructure(structureType);
         const GraphicSet* mapObjectGraphicSet = context->graphicsMgr->getGraphicSet(graphicSetName);
@@ -253,22 +253,22 @@ void GuiMap::renderElement(IRenderer* renderer) {
          * Fertig :-)
          */
         int xInMapObject, yInMapObject, yInMapObjectFromBottom;
-        if (screenView == FourDirectionsView::SOUTH) {
+        if (screenView == Direction::SOUTH) {
             xInMapObject =  IGraphicsMgr::TILE_WIDTH_HALF *
                 ((moMapHeight - 1) - tileOffsetYInMapObject + tileOffsetXInMapObject);
             yInMapObjectFromBottom =  IGraphicsMgr::TILE_HEIGHT_HALF *
                 ((moMapHeight - 1) - tileOffsetYInMapObject + (moMapWidth - 1) - tileOffsetXInMapObject);
-        } else if (screenView == FourDirectionsView::EAST) {
+        } else if (screenView == Direction::EAST) {
             xInMapObject =  IGraphicsMgr::TILE_WIDTH_HALF *
                 ((moMapWidth - 1) + (moMapHeight - 1) - tileOffsetXInMapObject - tileOffsetYInMapObject);
             yInMapObjectFromBottom =  IGraphicsMgr::TILE_HEIGHT_HALF *
                 ((moMapWidth - 1) - tileOffsetXInMapObject + tileOffsetYInMapObject);
-        } else if (screenView == FourDirectionsView::NORTH) {
+        } else if (screenView == Direction::NORTH) {
             xInMapObject =  IGraphicsMgr::TILE_WIDTH_HALF *
                 ((moMapWidth - 1) + tileOffsetYInMapObject - tileOffsetXInMapObject);
             yInMapObjectFromBottom =  IGraphicsMgr::TILE_HEIGHT_HALF *
                 (tileOffsetYInMapObject + tileOffsetXInMapObject);
-        } else if (screenView == FourDirectionsView::WEST) {
+        } else if (screenView == Direction::WEST) {
             xInMapObject =  IGraphicsMgr::TILE_WIDTH_HALF *
                 (tileOffsetXInMapObject + tileOffsetYInMapObject);
             yInMapObjectFromBottom =  IGraphicsMgr::TILE_HEIGHT_HALF *
@@ -312,16 +312,16 @@ void GuiMap::renderElement(IRenderer* renderer) {
             mapObjectAlreadyDrawnThere->setData(
                 moMapCoords.x() + tileOffsetXInMapObject, moMapCoords.y() + tileOffsetYInMapObject, 1);
 
-            if (screenView == FourDirectionsView::SOUTH) {
+            if (screenView == Direction::SOUTH) {
                 tileOffsetXInMapObject++;
                 tileOffsetYInMapObject++;
-            } else if (screenView == FourDirectionsView::EAST) {
+            } else if (screenView == Direction::EAST) {
                 tileOffsetXInMapObject++;
                 tileOffsetYInMapObject--;
-            } else if (screenView == FourDirectionsView::NORTH) {
+            } else if (screenView == Direction::NORTH) {
                 tileOffsetXInMapObject--;
                 tileOffsetYInMapObject--;
-            } else if (screenView == FourDirectionsView::WEST) {
+            } else if (screenView == Direction::WEST) {
                 tileOffsetXInMapObject--;
                 tileOffsetYInMapObject++;
             } else {
@@ -348,8 +348,7 @@ void GuiMap::renderElement(IRenderer* renderer) {
         }
 
         // Übersetzung von "Laufrichtung" + "aktuelle Ansicht" in korrekte Animation
-        unsigned char animViewIndex =
-            (10 - carrier->getCurrentMovingDirection().getViewIndex() + 2 * screenView.getViewIndex()) % 8;
+        unsigned char animViewIndex = (10 - carrier->getCurrentMovingDirection() + screenView) % 8;
 
         const DoubleMapCoords& mapCoords = carrier->getMapCoords();
         const Animation* animation = carrier->getAnimations()[animViewIndex];
@@ -516,9 +515,9 @@ void GuiMap::onClickInMap(int mouseX, int mouseY) {
         int x = (mouseX - rect.x) * screenZoom;
         int y = (mouseY - rect.y) * screenZoom;
 
-        const FourDirectionsView& screenView = map->getScreenView();
-        const FourDirectionsView& structureView = building->getView();
-        const FourDirectionsView& viewToRender = structureView + screenView;
+        const FourthDirection& screenView = map->getScreenView();
+        const FourthDirection& structureView = building->getView();
+        const FourthDirection& viewToRender = Direction::addDirections(structureView, screenView);
 
         const std::string graphicSetName = context->graphicsMgr->getGraphicSetNameForStructure(building->getStructureType());
         const GraphicSet* graphicSet = context->graphicsMgr->getGraphicSet(graphicSetName);
@@ -536,7 +535,7 @@ void GuiMap::onClickInMap(int mouseX, int mouseY) {
 }
 
 void GuiMap::onClickInMapWhileAddingStructure(const MapCoords& mapCoords) {
-    const FourDirectionsView& view = context->guiMgr->getPanelState().addingStructureView;
+    const FourthDirection& view = context->guiMgr->getPanelState().addingStructureView;
     StructureType structureType = context->guiMgr->getPanelState().addingStructure;
     if (isAllowedToPlaceStructure(mapCoords, structureType, view) != PLACING_STRUCTURE_ALLOWED) {
         // Dürfen wir hier/jetzt nicht setzen, ignorieren wir den Klick
@@ -568,7 +567,7 @@ void GuiMap::onClickInMapWhileAddingStructure(const MapCoords& mapCoords) {
 }
 
 unsigned char GuiMap::isAllowedToPlaceStructure(
-    const MapCoords& mapCoords, StructureType structureType, const FourDirectionsView& view) const {
+    const MapCoords& mapCoords, StructureType structureType, const FourthDirection& view) const {
 
     MapTile* mapTile = context->game->getMap()->getMapTileAt(mapCoords);
     if (mapTile == nullptr) {
@@ -627,7 +626,7 @@ unsigned char GuiMap::isAllowedToPlaceStructure(
 void GuiMap::drawCatchmentArea(IRenderer* const renderer, const Building* building) {
     Map* map = context->game->getMap();
     int screenZoom = map->getScreenZoom();
-    const FourDirectionsView& screenView = map->getScreenView();
+    const FourthDirection& screenView = map->getScreenView();
 
     renderer->setDrawColor(Color(0xc8, 0xaf, 0x37, 255));
 

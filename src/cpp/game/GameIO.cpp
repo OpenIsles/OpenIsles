@@ -163,14 +163,10 @@ void GameIO::loadMap(
                     const GraphicSet* tileGraphicSet = graphicsMgr->getGraphicSet(tileGraphicSetName);
 
                     std::array<const Animation*, 4> tileAnimations = {
-                        tileGraphicSet->getByView(
-                            (EightDirectionsView) FourDirectionsView(FourDirectionsView::SOUTH + viewOffset)),
-                        tileGraphicSet->getByView(
-                            (EightDirectionsView) FourDirectionsView(FourDirectionsView::EAST + viewOffset)),
-                        tileGraphicSet->getByView(
-                            (EightDirectionsView) FourDirectionsView(FourDirectionsView::NORTH + viewOffset)),
-                        tileGraphicSet->getByView(
-                            (EightDirectionsView) FourDirectionsView(FourDirectionsView::WEST + viewOffset))
+                        tileGraphicSet->getByView(Direction::add90DegreeOffset(Direction::SOUTH, viewOffset)),
+                        tileGraphicSet->getByView(Direction::add90DegreeOffset(Direction::EAST, viewOffset)),
+                        tileGraphicSet->getByView(Direction::add90DegreeOffset(Direction::NORTH, viewOffset)),
+                        tileGraphicSet->getByView(Direction::add90DegreeOffset(Direction::WEST, viewOffset))
                     };
 
                     mapTile->setTile(mapTileConfig, tileAnimations);
@@ -185,7 +181,7 @@ void GameIO::loadMap(
         }
     }
     map->screenZoom = 1;
-    map->screenView = FourDirectionsView("south");
+    map->screenView = Direction::SOUTH;
 }
 
 void GameIO::loadColonies(Game* game, rapidxml::xml_node<>* objectgroupColoniesNode) {
@@ -272,7 +268,7 @@ void GameIO::loadStructures(Game* game, rapidxml::xml_node<>* objectgroupStructu
             }
 
             // TODO Ansicht in die TMX legen und dort wieder rauslesen
-            FourDirectionsView view(FourDirectionsView::SOUTH);
+            FourthDirection view = Direction::SOUTH;
             game->addStructure(mapCoords, structureType, view, player);
         }
     }
