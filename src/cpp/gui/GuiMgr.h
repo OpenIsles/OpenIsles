@@ -9,6 +9,7 @@
 #include "Context.h"
 #include "game/GoodsSlot.h"
 #include "map/Direction.h"
+#include "map/Map.h"
 #include "map/StructureType.h"
 #include "graphics/renderer/IRenderer.h"
 
@@ -238,6 +239,21 @@ private:
      * @brief rendert die Leiste mit den Resourcen, wenn notwendig
      */
     void renderResourcesBar();
+
+    /**
+     * @brief Ändert die Zoom-Stufe der Karte
+     * @param map (Denpedency)
+     * @param newScreenZoom neue Zoom-Stufe
+     */
+    void changeMapZoom(Map* map, int newScreenZoom);
+
+    /**
+     * @brief Scrollt die Karte
+     * @param map (Denpedency)
+     * @param xDelta Veränderung in X-Map-Koordinaten
+     * @param yDelta Veränderung in Y-Map-Koordinaten
+     */
+    void scrollMap(Map* map, int xDelta, int yDelta);
 };
 
 #endif

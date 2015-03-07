@@ -14,11 +14,18 @@
 class GuiMinimap : public GuiBase {
 
 private:
+    // Die folgenden Daten werden vorberechnet hier gespeichert, sodass nur gezeichnet werden müssen und keine
+    // Berechnungszeit pro Frame anfällt.
+
     /**
-     * @brief SDL-Texture mit der Minimap. Diese wird vorberechnet und hier gespeichert, sodass sie nur gezeichnet
-     * werden muss und keine Berechnungszeit anfällt.
+     * @brief SDL-Texture mit der Minimap.
      */
     SDL_Texture* minimapTexture = nullptr;
+
+    /**
+     * @brief `SDL_Point`-Linienzug, der den aktuellen Ausschnitt der Karte enthält.
+     */
+    SDL_Point pointsCurrentClipping[5];
 
 public:
     /**
@@ -39,6 +46,12 @@ public:
      * @param event SDL-Event
      */
     virtual void onEventElement(SDL_Event& event);
+
+    /**
+     * @brief Muss aufgerufen werden, wenn sich der aktuelle Ausschnitt (z,&nbsp;B. durch Scrolling oder Ändern der
+     * Zoomstufe) geändert habt. Die Komponente aktualisiert damit ihre `pointsCurrentClipping`.
+     */
+    void onMapCoordsChanged();
 
     /**
      * @brief Muss aufgerufen werden, wenn sich die Einzugsgebiete von Lagergebäuden geändert haben. Die Komponente

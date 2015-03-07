@@ -1,14 +1,10 @@
 #include <SDL.h>
 #include "config/ConfigMgr.h"
-#include "game/Colony.h"
 #include "game/Game.h"
 #include "graphics/renderer/sdl/SDLRenderer.h"
 #include "gui/GuiMgr.h"
 #include "gui/components/GuiMinimap.h"
 #include "map/coords/MapCoords.h"
-#include "map/coords/ScreenCoords.h"
-#include "map/Map.h"
-#include "utils/Consts.h"
 
 
 GuiMinimap::GuiMinimap(const Context* const context) : GuiBase(context) {
@@ -24,8 +20,6 @@ GuiMinimap::~GuiMinimap() {
 }
 
 void GuiMinimap::renderElement(IRenderer* renderer) {
-    Map* map = context->game->getMap();
-
     int windowX, windowY;
     getWindowCoords(windowX, windowY);
 
@@ -39,26 +33,10 @@ void GuiMinimap::renderElement(IRenderer* renderer) {
     SDL_Renderer* sdlRealRenderer = (dynamic_cast<SDLRenderer*>(renderer))->getRealRenderer();
     SDL_RenderCopy(sdlRealRenderer, minimapTexture, nullptr, &sdlMinimapClipRect);
 
-    // Aktuellen Ausschnitt bestimmen
-    MapCoords mapCoordsTopLeft, mapCoordsTopRight, mapCoordsBottomLeft, mapCoordsBottomRight;
-    MapCoordUtils::getMapCoordsInScreenEdges(
-        *map, mapCoordsTopLeft, mapCoordsTopRight, mapCoordsBottomLeft, mapCoordsBottomRight);
-
-    float scaleFactor = (float) map->getWidth() / (float) width;
-    SDL_Point points[5] = {
-        { windowX + (int) ((float) mapCoordsTopLeft.x() / scaleFactor),
-            windowY + (int) ((float) mapCoordsTopLeft.y() / scaleFactor) },
-        { windowX + (int) ((float) mapCoordsTopRight.x() / scaleFactor),
-            windowY + (int) ((float) mapCoordsTopRight.y() / scaleFactor) },
-        { windowX + (int) ((float) mapCoordsBottomRight.x() / scaleFactor),
-            windowY + (int) ((float) mapCoordsBottomRight.y() / scaleFactor) },
-        { windowX + (int) ((float) mapCoordsBottomLeft.x() / scaleFactor),
-            windowY + (int) ((float) mapCoordsBottomLeft.y() / scaleFactor) }
-    };
-    points[4] = points[0];
+    // Aktuellen Ausschnitt markieren
     renderer->setDrawColor(Color(192, 128, 0, 255));
     renderer->setDrawBlendMode(IRenderer::BLENDMODE_BLEND);
-    SDL_RenderDrawLines(sdlRealRenderer, points, 5);
+    SDL_RenderDrawLines(sdlRealRenderer, pointsCurrentClipping, 5);
 
     renderer->setDrawBlendMode(IRenderer::BLENDMODE_NONE);
     renderer->setClipRect(nullptr);
@@ -72,6 +50,30 @@ void GuiMinimap::onEventElement(SDL_Event& event) {
 
         onClickInMinimap(event.button.x, event.button.y);
     }
+}
+
+void GuiMinimap::onMapCoordsChanged() {
+    Map* map = context->game->getMap();
+
+    int windowX, windowY;
+    getWindowCoords(windowX, windowY);
+
+    // Aktuellen Ausschnitt bestimmen
+    MapCoords mapCoordsTopLeft, mapCoordsTopRight, mapCoordsBottomLeft, mapCoordsBottomRight;
+    MapCoordUtils::getMapCoordsInScreenEdges(
+        *map, mapCoordsTopLeft, mapCoordsTopRight, mapCoordsBottomLeft, mapCoordsBottomRight);
+
+    float scaleFactor = (float) map->getWidth() / (float) width;
+    pointsCurrentClipping[0].x = windowX + (int) ((float) mapCoordsTopLeft.x() / scaleFactor);
+    pointsCurrentClipping[0].y = windowY + (int) ((float) mapCoordsTopLeft.y() / scaleFactor);
+    pointsCurrentClipping[1].x = windowX + (int) ((float) mapCoordsTopRight.x() / scaleFactor);
+    pointsCurrentClipping[1].y = windowY + (int) ((float) mapCoordsTopRight.y() / scaleFactor);
+    pointsCurrentClipping[2].x = windowX + (int) ((float) mapCoordsBottomRight.x() / scaleFactor);
+    pointsCurrentClipping[2].y = windowY + (int) ((float) mapCoordsBottomRight.y() / scaleFactor);
+    pointsCurrentClipping[3].x = windowX + (int) ((float) mapCoordsBottomLeft.x() / scaleFactor);
+    pointsCurrentClipping[3].y = windowY + (int) ((float) mapCoordsBottomLeft.y() / scaleFactor);
+    pointsCurrentClipping[4].x = pointsCurrentClipping[0].x;
+    pointsCurrentClipping[4].y = pointsCurrentClipping[0].y;
 }
 
 void GuiMinimap::updateMinimapTexture() {
@@ -129,4 +131,5 @@ void GuiMinimap::onClickInMinimap(int mouseX, int mouseY) {
     int mapY = (int) ((float) yInMinimap  * scaleFactor);
 
     map->setMapCoordsCentered(MapCoords(mapX, mapY));
+    onMapCoordsChanged();
 }

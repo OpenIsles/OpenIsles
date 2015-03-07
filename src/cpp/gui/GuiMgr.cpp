@@ -267,41 +267,41 @@ void GuiMgr::onEvent(SDL_Event& event) {
 
         // Scrolling der Karte
         else if (event.key.keysym.scancode == SDL_SCANCODE_UP) {
-            map->scroll(-1, -1);
+            scrollMap(map, -1, -1);
         } else if (event.key.keysym.scancode == SDL_SCANCODE_DOWN) {
-            map->scroll(1, 1);
+            scrollMap(map, 1, 1);
         } else if (event.key.keysym.scancode == SDL_SCANCODE_LEFT) {
-            map->scroll(-1, 1);
+            scrollMap(map, -1, 1);
         } else if (event.key.keysym.scancode == SDL_SCANCODE_RIGHT) {
-            map->scroll(1, -1);
+            scrollMap(map, 1, -1);
         }
 
         // Karte zoomen
         else if (event.key.keysym.scancode == SDL_SCANCODE_F2) {
             if(!(event.key.keysym.mod & KMOD_SHIFT)) {
-                map->setScreenZoom(4);
+                changeMapZoom(map, 4);
             }
 #ifdef DEBUG
             else {
-                map->setScreenZoom(32);
+                changeMapZoom(map, 32);
             }
 #endif // DEBUG
         } else if (event.key.keysym.scancode == SDL_SCANCODE_F3) {
             if(!(event.key.keysym.mod & KMOD_SHIFT)) {
-                map->setScreenZoom(2);
+                changeMapZoom(map, 2);
             }
 #ifdef DEBUG
             else {
-                map->setScreenZoom(16);
+                changeMapZoom(map, 16);
             }
 #endif // DEBUG
         } else if (event.key.keysym.scancode == SDL_SCANCODE_F4) {
             if(!(event.key.keysym.mod & KMOD_SHIFT)) {
-                map->setScreenZoom(1);
+                changeMapZoom(map, 1);
             }
 #ifdef DEBUG
             else {
-                map->setScreenZoom(8);
+                changeMapZoom(map, 8);
             }
 #endif // DEBUG
         }
@@ -309,8 +309,10 @@ void GuiMgr::onEvent(SDL_Event& event) {
         // Karte drehen
         else if (event.key.keysym.scancode == SDL_SCANCODE_Z) {
             map->rotateViewCounterclockwise();
+            ((GuiMinimap*) findElement(GUI_ID_MINIMAP))->onMapCoordsChanged();
         } else if (event.key.keysym.scancode == SDL_SCANCODE_X) {
             map->rotateViewClockwise();
+            ((GuiMinimap*) findElement(GUI_ID_MINIMAP))->onMapCoordsChanged();
         }
 
         // Spielgeschwindigkeit
@@ -435,6 +437,7 @@ void GuiMgr::onSelectedMapObjectChanged(MapObject* newSelectedMapObject) {
 void GuiMgr::onNewGame() {
     ((GuiMap*) findElement(GUI_ID_MAP))->onNewGame();
     ((GuiMinimap*) findElement(GUI_ID_MINIMAP))->updateMinimapTexture();
+    ((GuiMinimap*) findElement(GUI_ID_MINIMAP))->onMapCoordsChanged();
 }
 
 void GuiMgr::onOfficeCatchmentAreaChanged() {
@@ -565,3 +568,14 @@ void GuiMgr::drawGoodsBox(int x, int y, GoodsType goodsType, double inventory, d
 #endif
     }
 }
+
+inline void GuiMgr::changeMapZoom(Map* map, int newScreenZoom) {
+    map->setScreenZoom(newScreenZoom);
+    ((GuiMinimap*) findElement(GUI_ID_MINIMAP))->onMapCoordsChanged();
+}
+
+inline void GuiMgr::scrollMap(Map* map, int xDelta, int yDelta) {
+    map->scroll(xDelta, yDelta);
+    ((GuiMinimap*) findElement(GUI_ID_MINIMAP))->onMapCoordsChanged();
+}
+
