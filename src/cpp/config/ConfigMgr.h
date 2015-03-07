@@ -49,6 +49,11 @@ struct BuildingConfig {
      * @brief Name des Gebäudes
      */
     const char* name;
+
+    /**
+     * @brief Bezeichnung in einem gespeicherten Spielstand
+     */
+    std::string nameInSavefile;
     
     /**
      * @brief Einzugsbereich des Gebäudes. Es gilt hierbei 0 = außerhalb, 1 = Einzugsbereich.
@@ -228,6 +233,12 @@ private:
     BuildingConfig** buildingConfigs;
 
     /**
+     * @brief Map, die eine Zuordnung von `nameInSavefile` auf den zugehörigen `StructureType` macht.
+     * Diese Map brauchen wir beim Laden eines Spielstands.
+     */
+    std::unordered_map<std::string, StructureType> mapBuildingNameInSavefile;
+
+    /**
      * @brief Map, die Tilenamen auf die Tile-Konfiguration abbildet
      */
     std::unordered_map<std::string, MapTileConfig> mapTileConfigs;
@@ -264,12 +275,26 @@ public:
     
     /**
      * @brief Liefert die Konfiguration eines Gebäudes zurück
-     * @param structureType Typ des Gebäudes
+     * @param structureType Typ der Struktur/Gebäude
      * @return Konfiguration
      */
     VIRTUAL_ONLY_IN_TESTS
     const BuildingConfig* getBuildingConfig(StructureType structureType) const {
         return buildingConfigs[structureType];
+    }
+
+    /**
+     * @brief Liefert den `StructureType` einer Struktur/Gebäudes ausgehend von einem `nameInSavefile` zurück.
+     * @param nameInSavefile Name der Struktur/Gebäude im Spielstand
+     * @return `StructureType`. `NO_STRUCTURE`, wenn der Name nicht gefunden wurde
+     */
+    const StructureType getStructureType(const std::string& nameInSavefile) const {
+        auto iter = mapBuildingNameInSavefile.find(nameInSavefile);
+        if (iter != mapBuildingNameInSavefile.end()) {
+            return iter->second;
+        } else {
+            return StructureType::NO_STRUCTURE;
+        }
     }
 
     /**

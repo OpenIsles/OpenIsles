@@ -187,5 +187,6 @@ bool Map::isStreetAt(const MapCoords& mapCoords) {
     Structure* structure = dynamic_cast<Structure*>(mapObject);
 
     // TODO Feldweg
-    return (structure->getStructureType() == StructureType::STREET);
+    StructureType structureType = structure->getStructureType();
+    return (structureType >= StructureType::STREET_STRAIGHT_0 && structureType <= StructureType::STREET_CROSS);
 }

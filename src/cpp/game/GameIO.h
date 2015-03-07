@@ -50,9 +50,10 @@ private:
     /**
      * @brief Lädt die Strukturen und Gebäude aus der tiled-TMX-Datei
      * @param game Spiel, in das der Spielstand geladen werden soll
+     * @param configMgr (Dependency)
      * @param objectgroupStructuresNode <objectgroup>-Knoten der "structures"-Ebene aus der tiled-Datei
      */
-    static void loadStructures(Game* game, rapidxml::xml_node<>* objectgroupStructuresNode);
+    static void loadStructures(Game* game, const ConfigMgr* configMgr, rapidxml::xml_node<>* objectgroupStructuresNode);
 
 
     /**

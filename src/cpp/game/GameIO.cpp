@@ -56,7 +56,7 @@ void GameIO::loadGameFromTMX(
     loadColonies(game, objectgroupColoniesNode);
 
     // Strukturen und Gebäude laden
-    loadStructures(game, objectgroupStructuresNode);
+    loadStructures(game, configMgr, objectgroupStructuresNode);
 
     // XML-Document wegräumen
     delete xmlDocument;
@@ -138,7 +138,7 @@ void GameIO::loadMap(
                 std::cerr << "Isle '" << isleName << "' ('" <<
                     toString(isle->getWidth()) << "x" << toString(isle->getHeight()) <<
                     ") does not match size on map (" <<
-                    toString(isleMapWidth) << "x" << toString(isleMapHeight) << ")";
+                    toString(isleMapWidth) << "x" << toString(isleMapHeight) << ")" << std::endl;
 
                 throw std::runtime_error("Isle does not match size on map");
             }
@@ -223,7 +223,7 @@ void GameIO::loadColonies(Game* game, rapidxml::xml_node<>* objectgroupColoniesN
     }
 }
 
-void GameIO::loadStructures(Game* game, rapidxml::xml_node<>* objectgroupStructuresNode) {
+void GameIO::loadStructures(Game* game, const ConfigMgr* configMgr, rapidxml::xml_node<>* objectgroupStructuresNode) {
     for (rapidxml::xml_node<>* objectNode = objectgroupStructuresNode->first_node("object", 6, true); objectNode != nullptr;
          objectNode = objectNode->next_sibling("object", 6, true)) {
 
@@ -245,25 +245,9 @@ void GameIO::loadStructures(Game* game, rapidxml::xml_node<>* objectgroupStructu
         // Konkreten Struktur-Typ finden und MapObject anlegen
         StructureType structureType;
         if (strcmp(nodeType, "structure") == 0 || strcmp(nodeType, "building") == 0) {
-            if (strcmp(nodeNameValue, "street") == 0) {
-                structureType = StructureType::STREET;
-            } else if (strcmp(nodeNameValue, "chapel") == 0) {
-                structureType = StructureType::CHAPEL;
-            } else if (strcmp(nodeNameValue, "pioneers_house1") == 0) {
-                structureType = StructureType::PIONEERS_HOUSE1;
-            } else if (strcmp(nodeNameValue, "stonemason") == 0) {
-                structureType = StructureType::STONEMASON;
-            } else if (strcmp(nodeNameValue, "office1") == 0) {
-                structureType = StructureType::OFFICE1;
-            } else if (strcmp(nodeNameValue, "marketplace") == 0) {
-                structureType = StructureType::MARKETPLACE;
-            } else if (strcmp(nodeNameValue, "foresters") == 0) {
-                structureType = StructureType::FORESTERS;
-            } else if (strcmp(nodeNameValue, "sheep_farm") == 0) {
-                structureType = StructureType::SHEEP_FARM;
-            } else if (strcmp(nodeNameValue, "weaving_mill1") == 0) {
-                structureType = StructureType::WEAVING_MILL1;
-            } else {
+            structureType = configMgr->getStructureType(nodeNameValue);
+            if (structureType == StructureType::NO_STRUCTURE) {
+                std::cerr << "Illegal structure or building name '" << nodeNameValue << "'" << std::endl;
                 throw std::runtime_error("Illegal structure or building name");
             }
 

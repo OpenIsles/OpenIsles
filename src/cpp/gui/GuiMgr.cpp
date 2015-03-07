@@ -361,17 +361,6 @@ void GuiMgr::onEvent(SDL_Event& event) {
             Direction::rotate90DegreesCounterclockwise(panelState.addingStructureView);
         }
 
-#ifdef DEBUG
-        // Debug-Zwecke
-        if (event.key.keysym.scancode == SDL_SCANCODE_8) {
-            panelState.selectedPanelButton = PanelButton::ADD_BUILDING;
-            panelState.selectedBuildingGroup = BuildingGroup::PUBLIC;
-            panelState.addingStructure = StructureType::STREET;
-            panelState.activeGuiPanelWidget = (GuiPanelWidget*) findElement(GUI_ID_BUILD_MENU_PANEL_WIDGET);
-            updateGuiFromPanelState();
-        }
-#endif // DEBUG
-
 #ifdef DEBUG_A_STAR
         bool needToRecalculate = false;
 

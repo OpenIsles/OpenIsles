@@ -127,7 +127,7 @@ void GuiMap::renderElement(IRenderer* renderer) {
             }
         }
 
-#ifdef DEBUG
+#ifdef DEBUG_GUIMAP
         // Kachel unter dem Mauszeiger rot färben
         if(mapCoords == MapCoordUtils::getMapCoordsUnderMouse(*map, context->mouseCurrentX, context->mouseCurrentY))
             drawingFlags |= IGraphic::DRAWING_FLAG_RED;
@@ -213,13 +213,7 @@ void GuiMap::renderElement(IRenderer* renderer) {
 
         const Structure* structure = dynamic_cast<const Structure*>(mapObject); // TODO nullptr sollte nicht passieren; später checken, wenn wir Bäume und sowas haben
         int drawingFlags = structure->getDrawingFlags();
-
         StructureType structureType = structure->getStructureType();
-
-        // Sonderfall: Straße
-        if (structureType == StructureType::STREET) {
-            structureType = getConcreteStreetStructureType(mapCoords, structureType);
-        }
 
         const FourthDirection& structureView = structure->getView();
         const FourthDirection& viewToRender = Direction::addDirections(structureView, screenView);
@@ -416,7 +410,7 @@ void GuiMap::renderElement(IRenderer* renderer) {
     }
 #endif
 
-#ifdef DEBUG
+#ifdef DEBUG_GUIMAP
     // Grid zeichnen, an dem wir uns orientieren können
     debugGridOverlayGraphic->drawAt(0, 0);
 
@@ -425,9 +419,7 @@ void GuiMap::renderElement(IRenderer* renderer) {
     int y = Consts::mapClipRect.h / 2;
     renderer->drawLine(x-10, y, x+10, y);
     renderer->drawLine(x, y-10, x, y+10);
-#endif
 
-#ifdef DEBUG
     // getDrawCoordsForBuilding()-Rechteck einzeichnen
     for (auto iter = mapObjects.crbegin(); iter != mapObjects.crend(); iter++) {
         MapObject* mapObject = *iter;
@@ -688,43 +680,44 @@ void GuiMap::drawCatchmentArea(IRenderer* const renderer, const Building* buildi
     }
 }
 
-StructureType GuiMap::getConcreteStreetStructureType(
-    const MapCoords& mapCoords, StructureType abstractStreetStructureType) const {
-
-    if (abstractStreetStructureType == StructureType::STREET) {
-        static const StructureType structureTypeMap[16] = {
-            STREET_STRAIGHT_90, // oder STREET_STRAIGHT_0, is in diesem Fall egal. TODO Sollte später mit der Drehfunktion genauer untersucht werden
-            STREET_STRAIGHT_90,
-            STREET_STRAIGHT_0,
-            STREET_CURVE_0,
-            STREET_STRAIGHT_0,
-            STREET_CURVE_270,
-            STREET_STRAIGHT_0,
-            STREET_TEE_90,
-            STREET_STRAIGHT_90,
-            STREET_STRAIGHT_90,
-            STREET_CURVE_90,
-            STREET_TEE_180,
-            STREET_CURVE_180,
-            STREET_TEE_0,
-            STREET_TEE_270,
-            STREET_CROSS
-        };
-
-        Map* map = context->game->getMap();
-        char isStreetAbove = map->isStreetAt(MapCoords(mapCoords.x(), mapCoords.y() - 1)) ? 1 : 0; // Bit 0
-        char isStreetRight = map->isStreetAt(MapCoords(mapCoords.x() + 1, mapCoords.y())) ? 1 : 0; // Bit 1
-        char isStreetLeft = map->isStreetAt(MapCoords(mapCoords.x() - 1, mapCoords.y())) ? 1 : 0;  // Bit 2
-        char isStreetBelow = map->isStreetAt(MapCoords(mapCoords.x(), mapCoords.y() + 1)) ? 1 : 0; // Bit 3
-
-        int index = (isStreetBelow << 3) | (isStreetLeft << 2) | (isStreetRight << 1) | isStreetAbove;
-
-        return structureTypeMap[index];
-    }
-
-    // TODO Feldweg
-    throw std::runtime_error("Illegal abstractStreetStructureType " + toString(abstractStreetStructureType));
-}
+// TODO den Code brauchen wir später sicher nochmal, wenn wir die Straßen wieder fixen
+//StructureType GuiMap::getConcreteStreetStructureType(
+//    const MapCoords& mapCoords, StructureType abstractStreetStructureType) const {
+//
+//    if (abstractStreetStructureType == StructureType::STREET) {
+//        static const StructureType structureTypeMap[16] = {
+//            STREET_STRAIGHT_90, // oder STREET_STRAIGHT_0, is in diesem Fall egal. TODO Sollte später mit der Drehfunktion genauer untersucht werden
+//            STREET_STRAIGHT_90,
+//            STREET_STRAIGHT_0,
+//            STREET_CURVE_0,
+//            STREET_STRAIGHT_0,
+//            STREET_CURVE_270,
+//            STREET_STRAIGHT_0,
+//            STREET_TEE_90,
+//            STREET_STRAIGHT_90,
+//            STREET_STRAIGHT_90,
+//            STREET_CURVE_90,
+//            STREET_TEE_180,
+//            STREET_CURVE_180,
+//            STREET_TEE_0,
+//            STREET_TEE_270,
+//            STREET_CROSS
+//        };
+//
+//        Map* map = context->game->getMap();
+//        char isStreetAbove = map->isStreetAt(MapCoords(mapCoords.x(), mapCoords.y() - 1)) ? 1 : 0; // Bit 0
+//        char isStreetRight = map->isStreetAt(MapCoords(mapCoords.x() + 1, mapCoords.y())) ? 1 : 0; // Bit 1
+//        char isStreetLeft = map->isStreetAt(MapCoords(mapCoords.x() - 1, mapCoords.y())) ? 1 : 0;  // Bit 2
+//        char isStreetBelow = map->isStreetAt(MapCoords(mapCoords.x(), mapCoords.y() + 1)) ? 1 : 0; // Bit 3
+//
+//        int index = (isStreetBelow << 3) | (isStreetLeft << 2) | (isStreetRight << 1) | isStreetAbove;
+//
+//        return structureTypeMap[index];
+//    }
+//
+//    // TODO Feldweg
+//    throw std::runtime_error("Illegal abstractStreetStructureType " + toString(abstractStreetStructureType));
+//}
 
 void GuiMap::onNewGame() {
     Map* map = context->game->getMap();
