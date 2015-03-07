@@ -58,15 +58,7 @@ void Map::initNewMap(int newWidth, int newHeight) {
     screenView = Direction::SOUTH;
 }
 
-bool Map::checkMapCoords(const MapCoords& mapCoords) const {
-    return (!(mapCoords.x() < 0 || mapCoords.y() < 0 || mapCoords.x() >= width || mapCoords.y() >= height));
-}
-
 MapTile* Map::getMapTileAt(const MapCoords& mapCoords) const {
-    if (!checkMapCoords(mapCoords)) {
-        return nullptr;
-    }
-    
     return mapTiles->getData(mapCoords.x(), mapCoords.y(), nullptr);
 }
 
