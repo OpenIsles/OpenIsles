@@ -60,11 +60,11 @@ SDLRenderer::~SDLRenderer() {
    SDL_Quit();
 }
 
-const int SDLRenderer::getWindowWidth() {
+const int SDLRenderer::getWindowWidth() const {
    return WINDOW_WIDTH;
 }
 
-const int SDLRenderer::getWindowHeight() {
+const int SDLRenderer::getWindowHeight() const {
    return WINDOW_HEIGHT;
 }
 

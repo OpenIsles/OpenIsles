@@ -39,8 +39,8 @@ public:
     SDLRenderer();
     virtual ~SDLRenderer();
 
-    virtual const int getWindowWidth();
-    virtual const int getWindowHeight();
+    virtual const int getWindowWidth() const;
+    virtual const int getWindowHeight() const;
 
     virtual void setClipRect(const Rect* const rect);
     virtual void setDrawColor(const Color& color);

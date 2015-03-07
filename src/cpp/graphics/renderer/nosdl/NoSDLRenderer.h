@@ -15,10 +15,10 @@ public:
     NoSDLRenderer() {}
     virtual ~NoSDLRenderer() {}
 
-    virtual const int getWindowWidth() {
+    virtual const int getWindowWidth() const {
         return 0;
     }
-    virtual const int getWindowHeight() {
+    virtual const int getWindowHeight() const {
         return 0;
     }
 

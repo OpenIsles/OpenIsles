@@ -24,13 +24,13 @@ public:
      * @brief Liefert die Breite des Fensters zurück.
      * @return Fensterbreite in Pixeln
      */
-    virtual const int getWindowWidth() = 0;
+    virtual const int getWindowWidth() const = 0;
 
     /**
      * @brief Liefert die Höhe des Fensters zurück.
      * @return Fensterhöhe in Pixeln
      */
-    virtual const int getWindowHeight() = 0;
+    virtual const int getWindowHeight() const = 0;
 
     /**
      * @brief Setzt das Clipping-Rechteck, in welchem der Renderer zeichnet.
