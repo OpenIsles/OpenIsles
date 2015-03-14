@@ -110,7 +110,6 @@ void Map::addMapObject(MapObjectFixed* mapObject) {
     int mapHeight = mapObject->getMapHeight();
 
     // Fläche auf den MapTiles als belegt markieren
-    // TODO hübschen Iterator für MapCoords schreiben, den wir dann auch für die 4 unterschiedlichen for-Schleifen zum Rendern der Map aus unterschiedlichen Views brauchen
     for (int my = mapCoords.y(); my < mapCoords.y() + mapHeight; my++) {
         for (int mx = mapCoords.x(); mx < mapCoords.x() + mapWidth; mx++) {
             getMapTileAt(MapCoords(mx, my))->mapObject = mapObject;

@@ -126,21 +126,28 @@ public:
             (*iter)->render(renderer);
         }
     }
-    
+
     /**
      * @brief Callback, der ein Event handelt. Das Event wird rekursiv an alle Kinder übertragen
      * @param event SDL-Event
+     * @return `true` um das Event an weitere GUI-Elemente zu reichen,
+     *         `false` um anzudeuten, dass das Event bereits verarbeitet wurde. Es wird dann nicht weiter zugestellt.
      */
-    void onEvent(SDL_Event& event) {
+    bool onEvent(SDL_Event& event) {
         if (!visible) {
-            return;
+            return true;
         }
         
-        onEventElement(event);
+        if (!onEventElement(event)) {
+            return false;
+        }
         
         for (auto iter = childElements.cbegin(); iter != childElements.cend(); iter++) {
-            (*iter)->onEvent(event);
+            if (!(*iter)->onEvent(event)) {
+                return false;
+            }
         }
+        return true;
     }
     
 	/**
@@ -151,8 +158,10 @@ public:
     /**
      * @brief Callback, der ein Event handelt
      * @param event SDL-Event
+     * @return `true` um das Event an weitere GUI-Elemente zu reichen,
+     *         `false` um anzudeuten, dass das Event bereits verarbeitet wurde. Es wird dann nicht weiter zugestellt.
      */
-    virtual void onEventElement(SDL_Event& event) = 0;
+    virtual bool onEventElement(SDL_Event& event) = 0;
     
 protected:
     /**

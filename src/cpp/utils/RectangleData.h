@@ -33,6 +33,7 @@ struct RectangleData {
      * @brief Helper-Methode, um einen bestimmten Eintrag aus dem Array zu lesen.
      * Diese Methode kann sicher benutzt werden, um mit beliebigen Koordinaten zuzugreifen. Befinden sich die
      * Koordinaten außerhalb des Rechtecks, wird ein bestimmter Wert zurückgeliefert.
+     *
      * @param x X-Koordinate im Array
      * @param y Y-Koordinate im Array
      * @param outOfArrayValue Wert, der zurückgegeben wird, wenn die Koordinate außerhalb des Rechtecks liegt.
@@ -43,6 +44,30 @@ struct RectangleData {
             return outOfArrayValue;
         }
         
+        return data[y * width + x];
+    }
+
+    /**
+     * @brief Helper-Methode, um einen bestimmten Eintrag aus dem Array zu lesen.
+     * Diese Methode führt keinen Bounds-Check durch. Der Aufrufer muss sich sicher sein, gültige Koordinaten zu haben.
+     *
+     * @param x X-Koordinate im Array
+     * @param y Y-Koordinate im Array
+     * @return Wert
+     */
+    const T& getData(int x, int y) const {
+        return data[y * width + x];
+    }
+
+    /**
+     * @brief Helper-Methode, um einen bestimmten Eintrag aus dem Array zu lesen bzw. dann in diesen schreiben zu können.
+     * Diese Methode führt keinen Bounds-Check durch. Der Aufrufer muss sich sicher sein, gültige Koordinaten zu haben.
+     *
+     * @param x X-Koordinate im Array
+     * @param y Y-Koordinate im Array
+     * @return Wert
+     */
+    T& getData(int x, int y) {
         return data[y * width + x];
     }
 

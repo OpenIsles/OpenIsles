@@ -42,14 +42,17 @@ void GuiMinimap::renderElement(IRenderer* renderer) {
     renderer->setClipRect(nullptr);
 }
 
-void GuiMinimap::onEventElement(SDL_Event& event) {
+bool GuiMinimap::onEventElement(SDL_Event& event) {
     // Maustaste in der Minimap geklickt
     if (event.type == SDL_MOUSEBUTTONUP &&
         event.button.button == SDL_BUTTON_LEFT &&
         hitTest(event.button.x, event.button.y)) {
 
         onClickInMinimap(event.button.x, event.button.y);
+        return false;
     }
+
+    return true;
 }
 
 void GuiMinimap::onMapCoordsChanged() {

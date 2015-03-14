@@ -126,6 +126,10 @@ void GuiMgr::initGui() {
             panelState.selectedPanelButton = tabGraphics[i]->panelButtonToActive;
             panelState.activeGuiPanelWidget = tabGraphics[i]->panelWidgetToActivate;
             updateGuiFromPanelState();
+
+            if (GUI_ID_PANEL_SWITCH_PUSH_BUTTON_BASE + i == GUI_ID_PANEL_SWITCH_PUSH_BUTTON_BUILD) {
+                ((GuiMap*) context->guiMgr->findElement(GUI_ID_MAP))->onStartAddingStructure();
+            }
         });
         registerElement(GUI_ID_PANEL_SWITCH_PUSH_BUTTON_BASE + i, panelSwitchPushButton);
         panel->addChildElement(panelSwitchPushButton);
@@ -223,6 +227,28 @@ void GuiMgr::render() {
 void GuiMgr::onEvent(SDL_Event& event) {
     // TODO Event besser queuen und nicht sofort abarbeiten
 
+    // Bei Linksklick die Koordinaten merken
+    if (event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_LEFT) {
+        startClickX = event.button.x;
+        startClickY = event.button.y;
+    }
+
+    // Erst alle GUI-Elemente durchgehen, dass die das Event zuerst kriegen
+    for (auto iter = identifierMap.cbegin(); iter != identifierMap.cend(); iter++) {
+		GuiBase* guiElement = iter->second;
+
+        // nur an Toplevel-Elemente schicken
+        if (guiElement->getParentElement() != nullptr) {
+            continue;
+        }
+
+        if (!guiElement->onEvent(event)) {
+            return;
+        }
+    }
+
+    // Jetzt kann der GuiMgr selber gucken, ob er das Event brauchen kann
+
     Game* game = context->game;
     Map* map = game->getMap();
     
@@ -231,34 +257,28 @@ void GuiMgr::onEvent(SDL_Event& event) {
         quitGame = true;
         return;
     }
-    
-    if (event.type == SDL_MOUSEBUTTONDOWN) {
-        // Bei Linksklick die Koordinaten merken
-        if (event.button.button == SDL_BUTTON_LEFT) {
-            startClickX = event.button.x; 
-            startClickY = event.button.y;
-        }
-        // Rechtsklick...
-        else if (event.button.button == SDL_BUTTON_RIGHT) {
-            // Platzieren wir ein Gebäude -> abbrechen
-            if (panelState.selectedPanelButton == PanelButton::ADD_BUILDING) {
-                if (panelState.buildingMenuOpen) {
-                    panelState.buildingMenuOpen = false;
-                } else {
-                    panelState.selectedPanelButton = PanelButton::INFO;
-                    panelState.activeGuiPanelWidget = (GuiPanelWidget*) findElement(GUI_ID_PLAYER_STATUS_PANEL_WIDGET);
-                }
-                updateGuiFromPanelState();
+
+    // Rechtsklick...
+    if (event.type == SDL_MOUSEBUTTONUP && event.button.button == SDL_BUTTON_RIGHT) {
+        // Platzieren wir ein Gebäude -> abbrechen
+        if (panelState.selectedPanelButton == PanelButton::ADD_BUILDING) {
+            if (panelState.buildingMenuOpen) {
+                panelState.buildingMenuOpen = false;
+            } else {
+                panelState.selectedPanelButton = PanelButton::INFO;
+                panelState.activeGuiPanelWidget = (GuiPanelWidget*) findElement(GUI_ID_PLAYER_STATUS_PANEL_WIDGET);
             }
-            // Ist ein Gebäude auf der Karte markieren -> deselektieren
-            else if(map->getSelectedMapObject() != nullptr) {
-                game->setSelectedMapObject(nullptr);
-            }
-            
-            return;
+            updateGuiFromPanelState();
+            ((GuiMap*) findElement(GUI_ID_MAP))->onCancelAddingStructure();
         }
+        // Ist ein Gebäude auf der Karte markieren -> deselektieren
+        else if(map->getSelectedMapObject() != nullptr) {
+            game->setSelectedMapObject(nullptr);
+        }
+
+        return;
     }
-    
+
     // Tastaturevents
     if (event.type == SDL_KEYDOWN) {
         if (event.key.keysym.scancode == SDL_SCANCODE_ESCAPE) {
@@ -338,6 +358,8 @@ void GuiMgr::onEvent(SDL_Event& event) {
             panelState.selectedPanelButton = PanelButton::ADD_BUILDING;
             panelState.activeGuiPanelWidget = (GuiPanelWidget*) findElement(GUI_ID_BUILD_MENU_PANEL_WIDGET);
             updateGuiFromPanelState();
+
+            ((GuiMap*) findElement(GUI_ID_MAP))->onStartAddingStructure();
         } else if (event.key.keysym.scancode == SDL_SCANCODE_K) {
             panelState.selectedPanelButton = PanelButton::MILITARY;
             panelState.activeGuiPanelWidget = (GuiPanelWidget*) findElement(GUI_ID_MILITARY_PANEL_WIDGET);
@@ -401,17 +423,6 @@ void GuiMgr::onEvent(SDL_Event& event) {
             }
         }
 #endif // DEBUG_A_STAR
-    }
-    
-    for (auto iter = identifierMap.cbegin(); iter != identifierMap.cend(); iter++) {
-		GuiBase* guiElement = iter->second;
-        
-        // nur an Toplevel-Elemente schicken
-        if (guiElement->getParentElement() != nullptr) {
-            continue;
-        }
-        
-        guiElement->onEvent(event);
     }
 }
 #endif // NO_SDL

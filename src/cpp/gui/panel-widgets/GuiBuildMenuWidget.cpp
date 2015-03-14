@@ -2,6 +2,7 @@
 #include "gui/Identifiers.h"
 #include "gui/components/GuiAddBuildingWidget.h"
 #include "gui/components/GuiButton.h"
+#include "gui/components/GuiMap.h"
 #include "gui/components/GuiPushButton.h"
 #include "gui/components/GuiStaticElement.h"
 #include "gui/panel-widgets/GuiBuildMenuWidget.h"
@@ -200,6 +201,8 @@ GuiBuildMenuWidget::GuiBuildMenuWidget(const Context* const context) : GuiPanelW
                     context->guiMgr->panelState.addingStructure = structureType;
                     context->guiMgr->panelState.buildingMenuOpen = false;
                     context->guiMgr->updateGuiFromPanelState();
+
+                    ((GuiMap*) context->guiMgr->findElement(GUI_ID_MAP))->onStartAddingStructure();
                 });
                 context->guiMgr->registerElement(GUI_ID_ADD_BUILDING_GRID_BUTTON_BASE + groupIndex * 16 + buildingIndex, addBuildingButton);
                 addBuildingGrid->addChildElement(addBuildingButton);

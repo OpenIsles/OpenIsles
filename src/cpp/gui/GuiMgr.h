@@ -143,7 +143,7 @@ public:
      */
     void initGui();
     
-    void getStartClickCoords(int& startClickX, int& startClickY) {
+    void getStartClickCoords(int& startClickX, int& startClickY) const {
         startClickX = this->startClickX;
         startClickY = this->startClickY;
     }

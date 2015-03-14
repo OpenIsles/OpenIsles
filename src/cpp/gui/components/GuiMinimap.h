@@ -44,8 +44,10 @@ public:
     /**
      * @brief Callback, der ein Event handelt
      * @param event SDL-Event
+     * @return `true` um das Event an weitere GUI-Elemente zu reichen,
+     *         `false` um anzudeuten, dass das Event bereits verarbeitet wurde. Es wird dann nicht weiter zugestellt.
      */
-    virtual void onEventElement(SDL_Event& event);
+    virtual bool onEventElement(SDL_Event& event);
 
     /**
      * @brief Muss aufgerufen werden, wenn sich der aktuelle Ausschnitt (z,&nbsp;B. durch Scrolling oder Ändern der

@@ -136,91 +136,113 @@ void GuiMap::renderElement(IRenderer* renderer) {
         tileGraphic->draw(nullptr, &rectDestination, drawingFlags, context->sdlTicks);
     });
 
-    // Postionieren wir grade ein neues Gebäude?
-    Structure* structureBeingAdded = nullptr;
-    if (context->guiMgr->getPanelState().selectedPanelButton == PanelButton::ADD_BUILDING) {
-        MapCoords mapCoords = MapCoordUtils::getMapCoordsUnderMouse(*map, context->mouseCurrentX, context->mouseCurrentY);
-
-        StructureType structureType = context->guiMgr->getPanelState().addingStructure;
-        const FourthDirection& view = context->guiMgr->getPanelState().addingStructureView;
-        unsigned char allowedToPlaceStructure = isAllowedToPlaceStructure(mapCoords, structureType, view);
-
-        // Auf dem Ozean malen wir gar nix.
-        // Is was im Weg, malen wir auch nicht. // TODO wir müssen eine flache Kachel malen, sonst sieht man ja gar nix
-        if (!(allowedToPlaceStructure & (PLACING_STRUCTURE_OUTSIDE_OF_ISLE | PLACING_STRUCTURE_SOMETHING_IN_THE_WAY))) {
-            const std::string graphicSetName = context->graphicsMgr->getGraphicSetNameForStructure(structureType);
-            const GraphicSet* graphicSet = context->graphicsMgr->getGraphicSet(graphicSetName);
-            const IGraphic* graphic = graphicSet->getByView(view)->getGraphic();
-
-            int drawingFlags = IGraphic::DRAWING_FLAG_MASKED;
-            if (allowedToPlaceStructure & PLACING_STRUCTURE_ROOM_NOT_UNLOCK) {
-                drawingFlags |= IGraphic::DRAWING_FLAG_RED;
-            }
-            if (allowedToPlaceStructure & PLACING_STRUCTURE_NO_RESOURCES) {
-                drawingFlags |= IGraphic::DRAWING_FLAG_BLINK;
-            }
-
-            // Zu zeichnendes Gebäude erstellen
-            structureBeingAdded = (structureType >= START_BUILDINGS) ? new Building() : new Structure();
-            structureBeingAdded->setStructureType(structureType);
-            structureBeingAdded->setMapCoords(mapCoords);
-            structureBeingAdded->setMapWidth(graphic->getMapWidth());
-            structureBeingAdded->setMapHeight(graphic->getMapHeight());
-            structureBeingAdded->setDrawingFlags(drawingFlags);
-            structureBeingAdded->setView(context->guiMgr->getPanelState().addingStructureView);
-        }
-    }
-
     // Objekte rendern
     memset(mapObjectAlreadyDrawnThere->data, 0,
         mapObjectAlreadyDrawnThere->width * mapObjectAlreadyDrawnThere->height * sizeof(char));
 
     // TODO Start und End noch ein wenig weiter ausweiten?
     mapCoordsIterator.iterate([&] (const MapCoords& mapCoords) {
-        const MapObjectFixed* mapObject = map->getMapObjectAt(mapCoords);
-        if (mapObject == nullptr) {
-            // Positionieren wir hier ein neues Gebäude?
-            if (structureBeingAdded != nullptr) {
-                const MapCoords& mcoords = structureBeingAdded->getMapCoords();
-                int mw = structureBeingAdded->getMapWidth();
-                int mh = structureBeingAdded->getMapHeight();
-
-                if (mapCoords.x() >= mcoords.x() && mapCoords.y() >= mcoords.y() &&
-                    mapCoords.x() < mcoords.x() + mw && mapCoords.y() < mcoords.y() + mh) {
-
-                    mapObject = structureBeingAdded;
-                }
-            }
-
-            if (mapObject == nullptr) {
-                return; // nix zum Zeichen an dieser Stelle
-            }
+        // Außerhalb der Karte?
+        if (mapCoords.x() < 0 || mapCoords.y() < 0 || mapCoords.x() >= map->getWidth() || mapCoords.y() >= map->getHeight()) {
+            return;
         }
 
+        // Hier schon bemalt?
         if (mapObjectAlreadyDrawnThere->getData(mapCoords.x(), mapCoords.y(), 1) == 1) {
-            return; // hier is schon bemalt, nix zu tun
+            return;
+        }
+
+        // Gucken, ob/welches Objekt wir hier malen müssen
+        const MapObjectFixed* mapObjectToDrawHere = nullptr;
+        bool drawPlainTile = false;
+
+        const MapTileTemporialy* mapTileTemporialy = mapTilesToDrawTemporarily->getData(mapCoords.x(), mapCoords.y());
+        if (mapTileTemporialy->mapObject != nullptr) {
+            mapObjectToDrawHere = mapTileTemporialy->mapObject;
+            // TODO updateDrawingFlags für Blinken
+        } else {
+            const MapObjectFixed* mapObject = map->getMapObjectAt(mapCoords);
+            if (mapObject != nullptr) {
+                mapObjectToDrawHere = mapObject;
+            } else {
+                if (mapObjectBeingAddedHovering != nullptr) {
+                    if (mapCoords.x() >= mapObjectBeingAddedHovering->getMapCoords().x() &&
+                        mapCoords.y() >= mapObjectBeingAddedHovering->getMapCoords().y() &&
+                        mapCoords.x() < mapObjectBeingAddedHovering->getMapCoords().x() +
+                                        mapObjectBeingAddedHovering->getMapWidth() &&
+                        mapCoords.y() < mapObjectBeingAddedHovering->getMapCoords().y() +
+                                        mapObjectBeingAddedHovering->getMapHeight()) {
+
+                        buildingToDrawCatchmentArea = dynamic_cast<Building*>(mapObjectBeingAddedHovering);
+                        mapObjectToDrawHere = mapObjectBeingAddedHovering;
+                        // TODO updateDrawingFlags für Blinken
+
+                        // Gucken, ob das Gebäude komplett Platz hat. Falls nicht, nur plainTile anzeigen
+                        for (int y = mapObjectBeingAddedHovering->getMapCoords().y();
+                             y < mapObjectBeingAddedHovering->getMapCoords().y() +
+                                 mapObjectBeingAddedHovering->getMapHeight();
+                             y++) {
+
+                            for (int x = mapObjectBeingAddedHovering->getMapCoords().x();
+                             x < mapObjectBeingAddedHovering->getMapCoords().x() +
+                                 mapObjectBeingAddedHovering->getMapWidth();
+                             x++) {
+
+                                if (map->getMapObjectAt(MapCoords(x, y)) != nullptr) {
+                                    drawPlainTile = true;
+                                    break;
+                                }
+                            }
+                        }
+
+                    } else {
+                        return; // nix zum Zeichen an dieser Stelle
+                    }
+                } else {
+                    return; // nix zum Zeichen an dieser Stelle
+                }
+            }
         }
 
         // @see docs/drawing-order-x-tiles.xcf für Variablen
 
-        // Ausrechnen, welchen Schnibbel der Grafik wir anzeigen müssen
-        const MapCoords& moMapCoords = mapObject->getMapCoords();
-        int moMapWidth = mapObject->getMapWidth();
-        int moMapHeight = mapObject->getMapHeight();
+        const MapCoords& moMapCoords = mapObjectToDrawHere->getMapCoords();
+        const Structure* structure = dynamic_cast<const Structure*>(mapObjectToDrawHere); // TODO nullptr sollte nicht passieren; später checken, wenn wir Bäume und sowas haben
 
-        int tileOffsetXInMapObject = mapCoords.x() - moMapCoords.x(); // (0 ... moMapWidth-1)
-        int tileOffsetYInMapObject = mapCoords.y() - moMapCoords.y(); // (0 ... moMapHeight-1)
+        int moMapWidth, moMapHeight;
+        int tileOffsetXInMapObject, tileOffsetYInMapObject;
+        int drawingFlags;
+        const IGraphic* graphicToDrawHere;
 
-        const Structure* structure = dynamic_cast<const Structure*>(mapObject); // TODO nullptr sollte nicht passieren; später checken, wenn wir Bäume und sowas haben
-        int drawingFlags = structure->getDrawingFlags();
-        StructureType structureType = structure->getStructureType();
+        if (drawPlainTile) {
+            // maskierte Kachel is 1x1
+            moMapWidth = 1;
+            moMapHeight = 1;
+            tileOffsetXInMapObject = 0;
+            tileOffsetYInMapObject = 0;
+            drawingFlags = IGraphic::DRAWING_FLAG_MASKED;
+            graphicToDrawHere = context->graphicsMgr->getGraphicSet("plain-tile")->getStatic()->getGraphic();
 
-        const FourthDirection& structureView = structure->getView();
-        const FourthDirection& viewToRender = Direction::addDirections(structureView, screenView);
+        } else {
 
-        const std::string graphicSetName = context->graphicsMgr->getGraphicSetNameForStructure(structureType);
-        const GraphicSet* mapObjectGraphicSet = context->graphicsMgr->getGraphicSet(graphicSetName);
-        const IGraphic* mapObjectGraphic = mapObjectGraphicSet->getByView(viewToRender)->getGraphic();
+            // Ausrechnen, welchen Schnibbel der Grafik wir anzeigen müssen
+            moMapWidth = mapObjectToDrawHere->getMapWidth();
+            moMapHeight = mapObjectToDrawHere->getMapHeight();
+
+            tileOffsetXInMapObject = mapCoords.x() - moMapCoords.x(); // (0 ... moMapWidth-1)
+            tileOffsetYInMapObject = mapCoords.y() - moMapCoords.y(); // (0 ... moMapHeight-1)
+
+            drawingFlags = structure->getDrawingFlags();
+            StructureType structureType = structure->getStructureType();
+
+            const FourthDirection& structureView = structure->getView();
+            const FourthDirection& viewToRender = Direction::addDirections(structureView, screenView);
+
+            const std::string graphicSetName = context->graphicsMgr->getGraphicSetNameForStructure(structureType);
+            const GraphicSet* mapObjectGraphicSet = context->graphicsMgr->getGraphicSet(graphicSetName);
+            graphicToDrawHere = mapObjectGraphicSet->getByView(viewToRender)->getGraphic();
+        }
+
 
         /* Tricky part: Die Berechnung von xInMapObject und yInMapObject in allen Ansichten.
          *
@@ -271,9 +293,9 @@ void GuiMap::renderElement(IRenderer* renderer) {
             assert(false);
             xInMapObject = yInMapObjectFromBottom = 0;
         }
-        yInMapObject = mapObjectGraphic->getHeight() - yInMapObjectFromBottom - IGraphicsMgr::TILE_HEIGHT;
+        yInMapObject = graphicToDrawHere->getHeight() - yInMapObjectFromBottom - IGraphicsMgr::TILE_HEIGHT;
 
-        Rect rectSource(xInMapObject, 0, IGraphicsMgr::TILE_WIDTH, mapObjectGraphic->getHeight());
+        Rect rectSource(xInMapObject, 0, IGraphicsMgr::TILE_WIDTH, graphicToDrawHere->getHeight());
 
         ScreenCoords screenCoords = MapCoordUtils::mapToScreenCoords(mapCoords, screenView, *map);
         const int elevation = 1; // TODO für Gebäude wie Anlegestelle, Fischerhütte etc. muss auf 0 gesetzt werden
@@ -299,7 +321,7 @@ void GuiMap::renderElement(IRenderer* renderer) {
                 drawingFlags |= IGraphic::DRAWING_FLAG_DARKENED;
             }
         }
-        mapObjectGraphic->draw(&rectSource, &rectDestination, drawingFlags, context->sdlTicks);
+        graphicToDrawHere->draw(&rectSource, &rectDestination, drawingFlags, context->sdlTicks);
 
         // In mapObjectAlreadyDrawnThere die Kacheln-Spalte als erledigt markieren
         do {
@@ -353,15 +375,9 @@ void GuiMap::renderElement(IRenderer* renderer) {
         animationCurrentFrame->drawScaledAt(rect.x, rect.y, (double) 1 / (double) screenZoom);
     }
 
-    // structureBeingAdded gesetzt?
-    if (structureBeingAdded != nullptr) {
-        Building* buildingBeingAdded = dynamic_cast<Building*>(structureBeingAdded);
-        if (buildingBeingAdded != nullptr) {
-            // Einzugsbereich jetzt malen, damit er oben drauf is
-            drawCatchmentArea(renderer, buildingBeingAdded);
-        }
-
-        delete structureBeingAdded;
+    // Einzugsbereich jetzt malen, damit er oben drauf is
+    if (buildingToDrawCatchmentArea != nullptr) {
+        drawCatchmentArea(renderer, buildingToDrawCatchmentArea);
     }
 
 #ifdef DEBUG_A_STAR
@@ -443,32 +459,86 @@ void GuiMap::renderElement(IRenderer* renderer) {
     // nur der Konstruktor sollte die Konstante benutzen
 }
 
-void GuiMap::onEventElement(SDL_Event& event) {
+bool GuiMap::onEventElement(SDL_Event& event) {
     int startClickX, startClickY;
     context->guiMgr->getStartClickCoords(startClickX, startClickY);
+
+    // Bauen wir grade was?
+    if (inBuildingMode) {
+        Map* map = context->game->getMap();
+        MapCoords mapCoordsUnderMouse =
+            MapCoordUtils::getMapCoordsUnderMouse(*map, context->mouseCurrentX, context->mouseCurrentY);
+
+        bool isLeftMouseButtonDown = (SDL_GetMouseState(nullptr, nullptr) & SDL_BUTTON(SDL_BUTTON_LEFT));
+
+        // Maustaste eben runtergedrückt oder schon gedrückt und bewegt?Dann müssen wir uns das Gebäude merken.
+        if (
+            (event.type == SDL_MOUSEBUTTONDOWN &&
+             event.button.button == SDL_BUTTON_LEFT &&
+             hitTest(event.button.x, event.button.y))
+                ||
+            (event.type == SDL_MOUSEMOTION && isLeftMouseButtonDown)
+           ) {
+
+            StructureType structureType = context->guiMgr->getPanelState().addingStructure;
+            const FourthDirection& view = context->guiMgr->getPanelState().addingStructureView;
+
+            unsigned char isAllowedToPlaceResult = isAllowedToPlaceStructure(mapCoordsUnderMouse, structureType, view);
+            if ((isAllowedToPlaceResult & ~PLACING_STRUCTURE_NO_RESOURCES) == PLACING_STRUCTURE_ALLOWED) {
+                addCurrentStructureToMapObjectsBeingAdded(mapCoordsUnderMouse);
+            }
+
+            return false;
+        }
+
+        // Maus bewegt, der Spieler hat die linke Maustaste aber noch nicht gedrückt? Dann nur hover-Objekt bewegen
+        if (event.type == SDL_MOUSEMOTION && !isLeftMouseButtonDown) {
+            mapObjectBeingAddedHovering->setMapCoords(mapCoordsUnderMouse);
+            return false;
+        }
+
+        // Rechtsklick während linke Maustaste gedrückt -> resettet, wir bleiben aber im Baumodus
+        if (event.type == SDL_MOUSEBUTTONUP &&
+            event.button.button == SDL_BUTTON_RIGHT &&
+            isLeftMouseButtonDown) {
+
+            clearAllTemporarily();
+            return false;
+        }
+
+        // Maustaste losgelassen? Dann jetzt fest die Gebäude setzen
+        if (event.type == SDL_MOUSEBUTTONUP &&
+            event.button.button == SDL_BUTTON_LEFT &&
+            hitTest(startClickX, startClickY)) {
+
+            finishAddingStructure();
+            return false;
+        }
+
+        return true;
+    }
 
     // Maustaste in der Karte geklickt
     if (event.type == SDL_MOUSEBUTTONUP &&
         event.button.button == SDL_BUTTON_LEFT &&
-        hitTest(event.button.x, event.button.y)) {
+        hitTest(event.button.x, event.button.y) &&
+        hitTest(startClickX, startClickY)) {
+
+        int startClickX, startClickY;
+        context->guiMgr->getStartClickCoords(startClickX, startClickY);
 
         if (abs(event.button.x - startClickX) < 3 && abs(event.button.y - startClickY) < 3) {
             onClickInMap(event.button.x, event.button.y);
         }
+        return false;
     }
+
+    return true;
 }
 
 void GuiMap::onClickInMap(int mouseX, int mouseY) {
     Map* map = context->game->getMap();
     int screenZoom = map->getScreenZoom();
-
-    // Grade beim Platzieren eines neuen Gebäudes?
-    if (context->guiMgr->getPanelState().selectedPanelButton == PanelButton::ADD_BUILDING) {
-        MapCoords mapCoords = MapCoordUtils::getMapCoordsUnderMouse(*map, context->mouseCurrentX, context->mouseCurrentY);
-
-        onClickInMapWhileAddingStructure(mapCoords);
-        return;
-    }
 
     // Gucken, ob ein Gebäude geklickt wurde.
     // Objekte dabei rückwärts iterieren. Somit kommen "oben liegende" Objekte zuerst dran.
@@ -526,36 +596,44 @@ void GuiMap::onClickInMap(int mouseX, int mouseY) {
     context->game->setSelectedMapObject(nullptr);
 }
 
-void GuiMap::onClickInMapWhileAddingStructure(const MapCoords& mapCoords) {
-    const FourthDirection& view = context->guiMgr->getPanelState().addingStructureView;
-    StructureType structureType = context->guiMgr->getPanelState().addingStructure;
-    if (isAllowedToPlaceStructure(mapCoords, structureType, view) != PLACING_STRUCTURE_ALLOWED) {
-        // Dürfen wir hier/jetzt nicht setzen, ignorieren wir den Klick
-        return;
-    }
-
-    // Gebäude platzieren und Modus verlassen
+void GuiMap::finishAddingStructure() {
     Player* currentPlayer = context->game->getCurrentPlayer();
 
-    // Sonderfall Haus: Wir wählen zufällig eins aus
-    if (structureType == StructureType::PIONEERS_HOUSE1) {
-        std::random_device randomDevice;
-        std::default_random_engine randomEngine(randomDevice());
-        std::uniform_int_distribution<int> randomPioneerHouse(
-            StructureType::PIONEERS_HOUSE1, StructureType::PIONEERS_HOUSE5);
+    // Der Reihe nach alle zu setzenden Gebäude durchgehen. Gehen die Resourcen aus, brechen wir ab.
+    bool dontAddStructure = false;
+    for (auto iter = mapObjectsBeingAdded.cbegin(); iter != mapObjectsBeingAdded.cend(); iter++) {
+        Structure* mapObject = *iter;
 
-        structureType = (StructureType) randomPioneerHouse(randomEngine);
+        if (!dontAddStructure) {
+            StructureType structureType = mapObject->getStructureType();
+            const MapCoords& mapCoords = mapObject->getMapCoords();
+
+            const FourthDirection& view = mapObject->getView();
+            unsigned char isAllowedToPlaceResult = isAllowedToPlaceStructure(mapCoords, structureType, view);
+            if ((isAllowedToPlaceResult & ~PLACING_STRUCTURE_SOMETHING_IN_THE_WAY_TEMPORARILY) != PLACING_STRUCTURE_ALLOWED) {
+                // Dürfen wir nicht mehr setzen (zwischenzeitlich was im Weg oder Resourcen ausgegangen), dann abbrechen
+                dontAddStructure = true;
+                continue;
+            }
+
+            // Ok, Gebäude nun wirklich setzen
+            context->game->addStructure(mapCoords, structureType, view, currentPlayer);
+
+            // Resourcen bezahlen
+            Colony* colony = context->game->getColony(
+                currentPlayer, context->game->getMap()->getMapTileAt(mapCoords)->isle);
+            const BuildingCosts* buildingCosts = context->configMgr->getBuildingConfig(structureType)->getBuildingCosts();
+            currentPlayer->coins -= buildingCosts->coins;
+            colony->subtractBuildingCosts(buildingCosts);
+        }
+
+        delete mapObject;
     }
+    mapObjectsBeingAdded.clear();
 
-    context->game->addStructure(mapCoords, structureType, view, currentPlayer);
-
-
-    // Resourcen bezahlen
-    Colony* colony = context->game->getColony(
-        currentPlayer, context->game->getMap()->getMapTileAt(mapCoords)->isle);
-    const BuildingCosts* buildingCosts = context->configMgr->getBuildingConfig(structureType)->getBuildingCosts();
-    currentPlayer->coins -= buildingCosts->coins;
-    colony->subtractBuildingCosts(buildingCosts);
+    // Datenstruktur bereinigen und gleich weitermachen mit Bauen
+    onCancelAddingStructure();
+    onStartAddingStructure();
 }
 
 unsigned char GuiMap::isAllowedToPlaceStructure(
@@ -593,21 +671,24 @@ unsigned char GuiMap::isAllowedToPlaceStructure(
     const IGraphic* graphic = graphicSet->getByView(view)->getGraphic();
     for (int y = mapCoords.y(); y < mapCoords.y() + graphic->getMapHeight(); y++) {
         for (int x = mapCoords.x(); x < mapCoords.x() + graphic->getMapWidth(); x++) {
+            // Steht was im Weg?
             MapTile* mapTile = context->game->getMap()->getMapTileAt(MapCoords(x, y));
-
-            if (mapTile->mapObject != nullptr) {                  // Da steht was im Weg
+            if (mapTile->mapObject != nullptr) {
                 result |= PLACING_STRUCTURE_SOMETHING_IN_THE_WAY;
-                return result;
+            }
+
+            MapTileTemporialy* mapTileTemporialy = mapTilesToDrawTemporarily->getData(x, y);
+            if (mapTileTemporialy->mapObject != nullptr) {
+                // Zwar noch nicht echt gebaut, allerdings wollen wir da was hinbauen.
+                result |= PLACING_STRUCTURE_SOMETHING_IN_THE_WAY_TEMPORARILY;
             }
 
             const MapTileConfig* mapTileConfig = mapTile->getMapTileConfig();
-
-            if (mapTile->player == nullptr ||                     // Gebiet nicht erschlossen, ..,
-                mapTile->player != context->game->getCurrentPlayer() ||    // ... nicht unseres...
-                !mapTileConfig->isWalkableAndBuildable) {         // ... oder Gelände passt nicht
+            if (mapTile->player == nullptr ||                             // Gebiet nicht erschlossen, ..,
+                mapTile->player != context->game->getCurrentPlayer() ||   // ... nicht unseres...
+                !mapTileConfig->isWalkableAndBuildable) {                 // ... oder Gelände passt nicht
 
                 result |= PLACING_STRUCTURE_ROOM_NOT_UNLOCK;
-                return result;
             }
         }
     }
@@ -724,12 +805,112 @@ void GuiMap::onNewGame() {
     int newMapWidth = map->getWidth();
     int newMapHeight = map->getHeight();
 
-    // mapObjectAlreadyDrawnThere wegräumen
+    // Alles wegräumen und neu anlegen
+    for (auto iter = mapObjectsBeingAdded.cbegin(); iter != mapObjectsBeingAdded.cend(); iter++) {
+        Structure* mapObject = *iter;
+        delete mapObject;
+    }
+    mapObjectsBeingAdded.clear();
+
     if (mapObjectAlreadyDrawnThere != nullptr) {
         delete mapObjectAlreadyDrawnThere;
         mapObjectAlreadyDrawnThere = nullptr;
     }
-
-    // mapObjectAlreadyDrawnThere neu anlegen, brauchen wir fürs Zeichnen
     mapObjectAlreadyDrawnThere = new RectangleData<char>(newMapWidth, newMapHeight);
+
+    if (mapTilesToDrawTemporarily != nullptr) {
+        delete mapTilesToDrawTemporarily;
+        mapTilesToDrawTemporarily = nullptr;
+    }
+
+    mapTilesToDrawTemporarily = new RectangleData<MapTileTemporialy*>(newMapWidth, newMapHeight);
+    for (int i = 0; i < newMapWidth * newMapHeight; i++) {
+        mapTilesToDrawTemporarily->data[i] = new MapTileTemporialy();
+    }
+
+    buildingToDrawCatchmentArea = nullptr;
+}
+
+void GuiMap::onStartAddingStructure() {
+    inBuildingMode = true;
+
+    Map* map = context->game->getMap();
+    MapCoords mapCoordsUnderMouse =
+        MapCoordUtils::getMapCoordsUnderMouse(*map, context->mouseCurrentX, context->mouseCurrentY);
+
+    StructureType structureType = context->guiMgr->getPanelState().addingStructure;
+    const FourthDirection& view = context->guiMgr->getPanelState().addingStructureView;
+
+    const std::string graphicSetName = context->graphicsMgr->getGraphicSetNameForStructure(structureType);
+    const GraphicSet* graphicSet = context->graphicsMgr->getGraphicSet(graphicSetName);
+    const IGraphic* graphic = graphicSet->getByView(view)->getGraphic();
+
+    mapObjectBeingAddedHovering = (structureType >= START_BUILDINGS) ? new Building() : new Structure();
+    mapObjectBeingAddedHovering->setStructureType(structureType);
+    mapObjectBeingAddedHovering->setMapCoords(mapCoordsUnderMouse);
+    mapObjectBeingAddedHovering->setMapWidth(graphic->getMapWidth());
+    mapObjectBeingAddedHovering->setMapHeight(graphic->getMapHeight());
+    mapObjectBeingAddedHovering->setView(context->guiMgr->getPanelState().addingStructureView);
+    mapObjectBeingAddedHovering->setDrawingFlags(IGraphic::DRAWING_FLAG_MASKED);
+}
+
+void GuiMap::onCancelAddingStructure() {
+    inBuildingMode = false;
+    clearAllTemporarily();
+}
+
+void GuiMap::clearAllTemporarily() {
+    for (auto iter = mapObjectsBeingAdded.cbegin(); iter != mapObjectsBeingAdded.cend(); iter++) {
+        Structure* mapObject = *iter;
+        delete mapObject;
+    }
+    mapObjectsBeingAdded.clear();
+
+    for (int i = 0; i < mapTilesToDrawTemporarily->width * mapTilesToDrawTemporarily->height; i++) {
+        mapTilesToDrawTemporarily->data[i]->mapObject = nullptr;
+    }
+
+    if (mapObjectBeingAddedHovering != nullptr) {
+        delete mapObjectBeingAddedHovering;
+        mapObjectBeingAddedHovering = nullptr;
+    }
+
+    buildingToDrawCatchmentArea = nullptr;
+}
+
+void GuiMap::addCurrentStructureToMapObjectsBeingAdded(const MapCoords& mapCoords) {
+    StructureType structureType = context->guiMgr->getPanelState().addingStructure;
+    const FourthDirection& view = context->guiMgr->getPanelState().addingStructureView;
+
+    const std::string graphicSetName = context->graphicsMgr->getGraphicSetNameForStructure(structureType);
+    const GraphicSet* graphicSet = context->graphicsMgr->getGraphicSet(graphicSetName);
+    const IGraphic* graphic = graphicSet->getByView(view)->getGraphic();
+
+    // Sonderfall Haus: Wir wählen zufällig ein Pionier-Haus aus
+    if (structureType == StructureType::PIONEERS_HOUSE1) {
+        std::random_device randomDevice;
+        std::default_random_engine randomEngine(randomDevice());
+        std::uniform_int_distribution<int> randomPioneerHouse(
+            StructureType::PIONEERS_HOUSE1, StructureType::PIONEERS_HOUSE5);
+
+        structureType = (StructureType) randomPioneerHouse(randomEngine);
+    }
+
+    Structure* structureBeingAdded = (structureType >= START_BUILDINGS) ? new Building() : new Structure();
+    structureBeingAdded->setStructureType(structureType);
+    structureBeingAdded->setMapCoords(mapCoords);
+    structureBeingAdded->setMapWidth(graphic->getMapWidth());
+    structureBeingAdded->setMapHeight(graphic->getMapHeight());
+    structureBeingAdded->setView(context->guiMgr->getPanelState().addingStructureView);
+    structureBeingAdded->setDrawingFlags(IGraphic::DRAWING_FLAG_MASKED);
+
+    mapObjectsBeingAdded.push_back(structureBeingAdded);
+
+    for (int my = mapCoords.y(); my < mapCoords.y() + graphic->getMapHeight(); my++) {
+        for (int mx = mapCoords.x(); mx < mapCoords.x() + graphic->getMapWidth(); mx++) {
+            mapTilesToDrawTemporarily->getData(mx, my)->mapObject = structureBeingAdded;
+        }
+    }
+
+    // TODO Info an Resourcen-Leiste, damit die Kosten für die mehreren Objekte angezeigt werden
 }

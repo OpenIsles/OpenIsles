@@ -18,12 +18,13 @@ void GuiPushButton::renderElement(IRenderer* renderer) {
     graphicToUse->drawAt(windowX, windowY);
 }
 
-void GuiPushButton::onEventElement(SDL_Event& event) {
+bool GuiPushButton::onEventElement(SDL_Event& event) {
     if (event.type == SDL_MOUSEBUTTONDOWN &&
         event.button.button == SDL_BUTTON_LEFT &&
         hitTest(event.button.x, event.button.y)) {
 
         pressed = true;
+        return false;
     }
     
     else if (event.type == SDL_MOUSEBUTTONUP &&
@@ -35,5 +36,8 @@ void GuiPushButton::onEventElement(SDL_Event& event) {
             active = !active;
             onClickFunction();
         }
+        return false;
     }
+
+    return true;
 }
