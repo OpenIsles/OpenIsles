@@ -62,7 +62,7 @@ void AbstractGraphicsMgr::loadGraphics() {
     loadStaticGraphicSet("add-building-button/chapel", "data/img/gui/add-building/chapel.png");
     loadStaticGraphicSet("add-building-button/marketplace", "data/img/gui/add-building/marketplace.png");
     loadStaticGraphicSet("add-building-button/office1", "data/img/gui/add-building/office1.png");
-    loadStaticGraphicSet("add-building-button/street", "data/img/gui/add-building/street.png");
+    loadStaticGraphicSet("add-building-button/cobbled-street", "data/img/gui/add-building/cobbled-street.png");
     loadStaticGraphicSet("add-building-button/sheep-farm", "data/img/gui/add-building/sheep-farm.png");
     loadStaticGraphicSet("add-building-button/weaving-mill1", "data/img/gui/add-building/weaving-mill1.png");
     loadStaticGraphicSet("add-building-button/cattle-farm", "data/img/gui/add-building/cattle-farm.png");
@@ -200,17 +200,17 @@ void AbstractGraphicsMgr::loadStreets() {
         const char* graphicSetName;
         int tileOffsetPerView[4];
     } streetTiles[11]{
-        { "structures/street-straight0", { 0, 1, 0, 1 } },
-        { "structures/street-straight90", { 1, 0, 1, 0 } },
-        { "structures/street-curve0", { 2, 3, 4, 5 } },
-        { "structures/street-curve90", { 3, 4, 5, 2 } },
-        { "structures/street-curve180", { 4, 5, 2, 3 } },
-        { "structures/street-curve270", { 5, 2, 3, 4 } },
-        { "structures/street-tee0", { 6, 7, 8, 9 } },
-        { "structures/street-tee90", { 7, 8, 9, 6 } },
-        { "structures/street-tee180", { 8, 9, 6, 7 }} ,
-        { "structures/street-tee270", { 9, 6, 7, 8 } },
-        { "structures/street-cross", { 10, 10, 10, 10 } }
+        { "structures/cobbled-street-straight0", { 0, 1, 0, 1 } },
+        { "structures/cobbled-street-straight90", { 1, 0, 1, 0 } },
+        { "structures/cobbled-street-curve0", { 2, 3, 4, 5 } },
+        { "structures/cobbled-street-curve90", { 3, 4, 5, 2 } },
+        { "structures/cobbled-street-curve180", { 4, 5, 2, 3 } },
+        { "structures/cobbled-street-curve270", { 5, 2, 3, 4 } },
+        { "structures/cobbled-street-tee0", { 6, 7, 8, 9 } },
+        { "structures/cobbled-street-tee90", { 7, 8, 9, 6 } },
+        { "structures/cobbled-street-tee180", { 8, 9, 6, 7 }} ,
+        { "structures/cobbled-street-tee270", { 9, 6, 7, 8 } },
+        { "structures/cobbled-street-cross", { 10, 10, 10, 10 } }
     };
 
     Rect tileRect(0, 0, TILE_WIDTH, TILE_HEIGHT);

@@ -23,7 +23,7 @@ void ConfigMgr::loadBuildingConfig() {
     buildingConfigs = new BuildingConfig*[StructureType::MAX_STRUCTURE];
     memset(buildingConfigs, 0, StructureType::MAX_STRUCTURE * sizeof(BuildingConfig*));
 
-    for (int i = StructureType::STREET_STRAIGHT_0; i <= StructureType::STREET_CROSS; i++) {
+    for (int i = StructureType::COBBLED_STREET_STRAIGHT_0; i <= StructureType::COBBLED_STREET_CROSS; i++) {
         StructureType structureType = (StructureType) i;
 
         buildingConfigs[structureType] = new BuildingConfig();
@@ -32,18 +32,18 @@ void ConfigMgr::loadBuildingConfig() {
         buildingConfigs[structureType]->buildingCosts = { 5, 0, 0, 0 };
         buildingConfigs[structureType]->buildingProduction = { GoodsSlot(), GoodsSlot(), GoodsSlot() };
     }
-    buildingConfigs[StructureType::STREET_STRAIGHT_0]->nameInSavefile = "street_straight_0";
-    buildingConfigs[StructureType::STREET_STRAIGHT_90]->nameInSavefile = "street_straight_90";
-    buildingConfigs[StructureType::STREET_CURVE_0]->nameInSavefile = "street_curve_0";
-    buildingConfigs[StructureType::STREET_CURVE_90]->nameInSavefile = "street_curve_90";
-    buildingConfigs[StructureType::STREET_CURVE_180]->nameInSavefile = "street_curve_180";
-    buildingConfigs[StructureType::STREET_CURVE_270]->nameInSavefile = "street_curve_270";
-    buildingConfigs[StructureType::STREET_TEE_0]->nameInSavefile = "street_tee_0";
-    buildingConfigs[StructureType::STREET_TEE_90]->nameInSavefile = "street_tee_90";
-    buildingConfigs[StructureType::STREET_TEE_180]->nameInSavefile = "street_tee_180";
-    buildingConfigs[StructureType::STREET_TEE_270]->nameInSavefile = "street_tee_270";
-    buildingConfigs[StructureType::STREET_CROSS]->nameInSavefile = "street_cross";
-    for (int i = StructureType::STREET_STRAIGHT_0; i <= StructureType::STREET_CROSS; i++) {
+    buildingConfigs[StructureType::COBBLED_STREET_STRAIGHT_0]->nameInSavefile = "cobbled_street_straight_0";
+    buildingConfigs[StructureType::COBBLED_STREET_STRAIGHT_90]->nameInSavefile = "cobbled_street_straight_90";
+    buildingConfigs[StructureType::COBBLED_STREET_CURVE_0]->nameInSavefile = "cobbled_street_curve_0";
+    buildingConfigs[StructureType::COBBLED_STREET_CURVE_90]->nameInSavefile = "cobbled_street_curve_90";
+    buildingConfigs[StructureType::COBBLED_STREET_CURVE_180]->nameInSavefile = "cobbled_street_curve_180";
+    buildingConfigs[StructureType::COBBLED_STREET_CURVE_270]->nameInSavefile = "cobbled_street_curve_270";
+    buildingConfigs[StructureType::COBBLED_STREET_TEE_0]->nameInSavefile = "cobbled_street_tee_0";
+    buildingConfigs[StructureType::COBBLED_STREET_TEE_90]->nameInSavefile = "cobbled_street_tee_90";
+    buildingConfigs[StructureType::COBBLED_STREET_TEE_180]->nameInSavefile = "cobbled_street_tee_180";
+    buildingConfigs[StructureType::COBBLED_STREET_TEE_270]->nameInSavefile = "cobbled_street_tee_270";
+    buildingConfigs[StructureType::COBBLED_STREET_CROSS]->nameInSavefile = "cobbled_street_cross";
+    for (int i = StructureType::COBBLED_STREET_STRAIGHT_0; i <= StructureType::COBBLED_STREET_CROSS; i++) {
         StructureType structureType = (StructureType) i;
         mapBuildingNameInSavefile[buildingConfigs[structureType]->nameInSavefile] = structureType;
     }

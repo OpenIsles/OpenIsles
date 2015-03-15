@@ -83,17 +83,17 @@ public:
         else if (structureType == StructureType::CATHEDRAL) { graphicSetNameSuffix = "cathedral"; }
         else if (structureType == StructureType::TAVERN) { graphicSetNameSuffix = "tavern"; }
 
-        else if (structureType == StructureType::STREET_STRAIGHT_0) { graphicSetNameSuffix = "street-straight0"; }
-        else if (structureType == StructureType::STREET_STRAIGHT_90) { graphicSetNameSuffix = "street-straight90"; }
-        else if (structureType == StructureType::STREET_CURVE_0) { graphicSetNameSuffix = "street-curve0"; }
-        else if (structureType == StructureType::STREET_CURVE_90) { graphicSetNameSuffix = "street-curve90"; }
-        else if (structureType == StructureType::STREET_CURVE_180) { graphicSetNameSuffix = "street-curve180"; }
-        else if (structureType == StructureType::STREET_CURVE_270) { graphicSetNameSuffix = "street-curve270"; }
-        else if (structureType == StructureType::STREET_TEE_0) { graphicSetNameSuffix = "street-tee0"; }
-        else if (structureType == StructureType::STREET_TEE_90) { graphicSetNameSuffix = "street-tee90"; }
-        else if (structureType == StructureType::STREET_TEE_180) { graphicSetNameSuffix = "street-tee180"; }
-        else if (structureType == StructureType::STREET_TEE_270) { graphicSetNameSuffix = "street-tee270"; }
-        else if (structureType == StructureType::STREET_CROSS) { graphicSetNameSuffix = "street-cross"; }
+        else if (structureType == StructureType::COBBLED_STREET_STRAIGHT_0) { graphicSetNameSuffix = "cobbled-street-straight0"; }
+        else if (structureType == StructureType::COBBLED_STREET_STRAIGHT_90) { graphicSetNameSuffix = "cobbled-street-straight90"; }
+        else if (structureType == StructureType::COBBLED_STREET_CURVE_0) { graphicSetNameSuffix = "cobbled-street-curve0"; }
+        else if (structureType == StructureType::COBBLED_STREET_CURVE_90) { graphicSetNameSuffix = "cobbled-street-curve90"; }
+        else if (structureType == StructureType::COBBLED_STREET_CURVE_180) { graphicSetNameSuffix = "cobbled-street-curve180"; }
+        else if (structureType == StructureType::COBBLED_STREET_CURVE_270) { graphicSetNameSuffix = "cobbled-street-curve270"; }
+        else if (structureType == StructureType::COBBLED_STREET_TEE_0) { graphicSetNameSuffix = "cobbled-street-tee0"; }
+        else if (structureType == StructureType::COBBLED_STREET_TEE_90) { graphicSetNameSuffix = "cobbled-street-tee90"; }
+        else if (structureType == StructureType::COBBLED_STREET_TEE_180) { graphicSetNameSuffix = "cobbled-street-tee180"; }
+        else if (structureType == StructureType::COBBLED_STREET_TEE_270) { graphicSetNameSuffix = "cobbled-street-tee270"; }
+        else if (structureType == StructureType::COBBLED_STREET_CROSS) { graphicSetNameSuffix = "cobbled-street-cross"; }
 
         return "structures/" + graphicSetNameSuffix;
     }

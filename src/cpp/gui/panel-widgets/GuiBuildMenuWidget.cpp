@@ -150,9 +150,9 @@ GuiBuildMenuWidget::GuiBuildMenuWidget(const Context* const context) : GuiPanelW
                 { StructureType::NO_STRUCTURE, nullptr, "add-building-button/dummy" },
                 { StructureType::NO_STRUCTURE, nullptr, "add-building-button/dummy" },
                 {
-                    StructureType::STREET_STRAIGHT_0, // konkreter StructureType wird erst beim Platzieren gewählt
+                    StructureType::COBBLED_STREET_STRAIGHT_0, // konkreter StructureType wird erst beim Platzieren gewählt
                     "Plasterstraße",
-                    "add-building-button/street"
+                    "add-building-button/cobbled-street"
                 }, {
                     StructureType::PIONEERS_HOUSE1,
                     "Haus",

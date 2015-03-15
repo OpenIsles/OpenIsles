@@ -18,15 +18,15 @@ protected:
         office1 = dynamic_cast<Building*>(game->getMap()->getMapObjectAt(MapCoords(28, 18)));
 
         // Rinderfarm bauen und Zick-Zack-Straße zum Kontor ziehen
-        game->addStructure(MapCoords(28, 20), StructureType::STREET_STRAIGHT_90, southView, player);
-        game->addStructure(MapCoords(28, 21), StructureType::STREET_STRAIGHT_90, southView, player);
-        game->addStructure(MapCoords(28, 22), StructureType::STREET_CURVE_270, southView, player);
-        game->addStructure(MapCoords(27, 22), StructureType::STREET_STRAIGHT_0, southView, player);
-        game->addStructure(MapCoords(26, 22), StructureType::STREET_CURVE_90, southView, player);
-        game->addStructure(MapCoords(26, 23), StructureType::STREET_STRAIGHT_90, southView, player);
-        game->addStructure(MapCoords(26, 24), StructureType::STREET_STRAIGHT_90, southView, player);
-        game->addStructure(MapCoords(26, 25), StructureType::STREET_STRAIGHT_90, southView, player);
-        game->addStructure(MapCoords(26, 26), StructureType::STREET_STRAIGHT_90, southView, player);
+        game->addStructure(MapCoords(28, 20), StructureType::COBBLED_STREET_STRAIGHT_90, southView, player);
+        game->addStructure(MapCoords(28, 21), StructureType::COBBLED_STREET_STRAIGHT_90, southView, player);
+        game->addStructure(MapCoords(28, 22), StructureType::COBBLED_STREET_CURVE_270, southView, player);
+        game->addStructure(MapCoords(27, 22), StructureType::COBBLED_STREET_STRAIGHT_0, southView, player);
+        game->addStructure(MapCoords(26, 22), StructureType::COBBLED_STREET_CURVE_90, southView, player);
+        game->addStructure(MapCoords(26, 23), StructureType::COBBLED_STREET_STRAIGHT_90, southView, player);
+        game->addStructure(MapCoords(26, 24), StructureType::COBBLED_STREET_STRAIGHT_90, southView, player);
+        game->addStructure(MapCoords(26, 25), StructureType::COBBLED_STREET_STRAIGHT_90, southView, player);
+        game->addStructure(MapCoords(26, 26), StructureType::COBBLED_STREET_STRAIGHT_90, southView, player);
         cattleFarm = dynamic_cast<Building*>(
             game->addStructure(MapCoords(26, 27), StructureType::CATTLE_FARM, southView, player));
 

@@ -67,7 +67,8 @@ public:
      */
     bool isStreet() const {
         // TODO Feldweg
-        return (structureType >= StructureType::STREET_STRAIGHT_0 && structureType <= StructureType::STREET_CROSS);
+        return (structureType >= StructureType::COBBLED_STREET_STRAIGHT_0 &&
+                structureType <= StructureType::COBBLED_STREET_CROSS);
     }
 };
 
