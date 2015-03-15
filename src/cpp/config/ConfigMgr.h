@@ -39,7 +39,15 @@ struct BuildingCosts {
      * @brief Ziegel
      */
     unsigned int bricks;
-    
+
+public:
+    BuildingCosts() : coins(0), tools(0), wood(0), bricks(0) {
+    }
+
+    BuildingCosts(unsigned int coins, unsigned int tools, unsigned int wood, unsigned int bricks)
+        : coins(coins), tools(tools), wood(wood), bricks(bricks) {
+    }
+
 } BuildingCosts;
 
 

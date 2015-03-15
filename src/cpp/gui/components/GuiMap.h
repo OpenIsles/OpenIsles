@@ -95,7 +95,8 @@ private:
      * @brief Zeiger auf ein Gebäude (selbst verwaltet), was gerade positioniert wird. Es befindet sich nicht in
      * `mapObjectsBeingAdded`, da noch unklar ist, wo der Spieler es hinsetzen will.
      *
-     * Wir haben hier immer genau dann einen Wert gesetzt, wenn `inBuildingMode == true`.
+     * Wir haben hier immer genau dann einen Wert gesetzt, wenn `inBuildingMode == true` und der Spieler noch nicht
+     * die linke Maustaste gedrückt hat.
      */
     Structure* mapObjectBeingAddedHovering = nullptr;
 
@@ -221,6 +222,12 @@ private:
      * @param mapCoords Map-Koordinaten, wo das Gebäude platziert werden soll
      */
     void addCurrentStructureToMapObjectsBeingAdded(const MapCoords& mapCoords);
+
+    /**
+     * @brief Aktualisiert die `drawingFlags` der `mapObjectsBeingAdded` und `mapObjectBeingAddedHovering`.
+     * Dies ist immer vor jedem Frame-Rendern notwendig, da sich ständig die verfügbaren Resourcen ändern.
+     */
+    void updateMapObjectsTemporarilyDrawingFlags();
 };
 
 #endif

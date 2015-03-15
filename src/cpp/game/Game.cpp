@@ -30,17 +30,17 @@ Game::~Game() {
     delete map;
 }
 
-Colony* Game::foundNewColony(Player* player, Isle* isle) {
+Colony* Game::foundNewColony(const Player* player, Isle* isle) {
     Colony* colony = new Colony();    
     
-    colonies.insert(std::pair<std::pair<Player*, Isle*>, Colony*>(
-        std::pair<Player*, Isle*>(player, isle), colony));
+    colonies.insert(std::pair<std::pair<const Player*, Isle*>, Colony*>(
+        std::pair<const Player*, Isle*>(player, isle), colony));
     
     return colony;
 }
 
-Colony* Game::getColony(Player* player, Isle* isle) {
-    auto iter = colonies.find(std::pair<Player*, Isle*>(player, isle));
+Colony* Game::getColony(const Player* player, Isle* isle) const {
+    auto iter = colonies.find(std::pair<const Player*, Isle*>(player, isle));
     if (iter == colonies.end()) {
         return nullptr;
     }
@@ -48,7 +48,7 @@ Colony* Game::getColony(Player* player, Isle* isle) {
     return iter->second;
 }
 
-Colony* Game::getColony(const MapObjectFixed* mapObject) {
+Colony* Game::getColony(const MapObjectFixed* mapObject) const {
     MapTile* mapTile = map->getMapTileAt(mapObject->getMapCoords());
 
     return getColony(mapTile->player, mapTile->isle);

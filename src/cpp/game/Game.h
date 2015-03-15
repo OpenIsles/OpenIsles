@@ -41,7 +41,7 @@ private:
     /**
      * @brief Siedlungen im Spiel. Jeder Spieler kann auf jeder Insel nur maximal eine Siedlung haben.
      */
-    std::map<std::pair<Player*, Isle*>, Colony*> colonies;
+    std::map<std::pair<const Player*, Isle*>, Colony*> colonies;
 
     /**
      * @brief Spielgeschwindigkeit in Vielfachen der Normalgeschwindigkeit
@@ -97,7 +97,7 @@ public:
      * @param isle Insel, auf der die Siedlung gegründet wird
      * @return Zeiger auf die neu angelegte Siedlung
      */
-    Colony* foundNewColony(Player* player, Isle* isle);
+    Colony* foundNewColony(const Player* player, Isle* isle);
     
     /**
      * Liefert die Siedlung eines Spielers auf einer Insel zurück
@@ -106,7 +106,7 @@ public:
      * @param isle Insel
      * @return Colony oder nullptr, wenn keine Siedlung da ist
      */
-    Colony* getColony(Player* player, Isle* isle);
+    Colony* getColony(const Player* player, Isle* isle) const;
 
     /**
      * Liefert die Siedlung zurück, in der ein bestimmtes MapObject sich befindet.
@@ -114,7 +114,7 @@ public:
      * @param mapObject MapObject
      * @return Colony oder nullptr, wenn keine Siedlung da ist
      */
-    Colony* getColony(const MapObjectFixed* mapObject);
+    Colony* getColony(const MapObjectFixed* mapObject) const;
 
     /**
      * @brief Liefert die Spielgeschwindigkeit zurück.

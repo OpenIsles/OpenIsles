@@ -159,7 +159,7 @@ void GuiMap::renderElement(IRenderer* renderer) {
         const MapTileTemporialy* mapTileTemporialy = mapTilesToDrawTemporarily->getData(mapCoords.x(), mapCoords.y());
         if (mapTileTemporialy->mapObject != nullptr) {
             mapObjectToDrawHere = mapTileTemporialy->mapObject;
-            // TODO updateDrawingFlags für Blinken
+            updateMapObjectsTemporarilyDrawingFlags();
         } else {
             const MapObjectFixed* mapObject = map->getMapObjectAt(mapCoords);
             if (mapObject != nullptr) {
@@ -175,7 +175,7 @@ void GuiMap::renderElement(IRenderer* renderer) {
 
                         buildingToDrawCatchmentArea = dynamic_cast<Building*>(mapObjectBeingAddedHovering);
                         mapObjectToDrawHere = mapObjectBeingAddedHovering;
-                        // TODO updateDrawingFlags für Blinken
+                        updateMapObjectsTemporarilyDrawingFlags();
 
                         // Gucken, ob das Gebäude komplett Platz hat. Falls nicht, nur plainTile anzeigen
                         for (int y = mapObjectBeingAddedHovering->getMapCoords().y();
@@ -471,7 +471,7 @@ bool GuiMap::onEventElement(SDL_Event& event) {
 
         bool isLeftMouseButtonDown = (SDL_GetMouseState(nullptr, nullptr) & SDL_BUTTON(SDL_BUTTON_LEFT));
 
-        // Maustaste eben runtergedrückt oder schon gedrückt und bewegt?Dann müssen wir uns das Gebäude merken.
+        // Maustaste eben runtergedrückt oder schon gedrückt und bewegt? Dann müssen wir uns das Gebäude merken.
         if (
             (event.type == SDL_MOUSEBUTTONDOWN &&
              event.button.button == SDL_BUTTON_LEFT &&
@@ -492,7 +492,7 @@ bool GuiMap::onEventElement(SDL_Event& event) {
         }
 
         // Maus bewegt, der Spieler hat die linke Maustaste aber noch nicht gedrückt? Dann nur hover-Objekt bewegen
-        if (event.type == SDL_MOUSEMOTION && !isLeftMouseButtonDown) {
+        if (event.type == SDL_MOUSEMOTION && !isLeftMouseButtonDown && mapObjectBeingAddedHovering != nullptr) {
             mapObjectBeingAddedHovering->setMapCoords(mapCoordsUnderMouse);
             return false;
         }
@@ -912,5 +912,74 @@ void GuiMap::addCurrentStructureToMapObjectsBeingAdded(const MapCoords& mapCoord
         }
     }
 
+    // Hovering beenden. Jetzt ist die linke Maustaste runtergedrückt und wir adden immer zu mapObjectsBeingAdded.
+    if (mapObjectBeingAddedHovering != nullptr) {
+        delete mapObjectBeingAddedHovering;
+        mapObjectBeingAddedHovering = nullptr;
+
+        // Einzugsbereich wird am ersten Gebäude in mapObjectsBeingAdded gezeichnet
+        Structure* firstStructureInList = mapObjectsBeingAdded.front();
+        buildingToDrawCatchmentArea = dynamic_cast<Building*>(firstStructureInList);
+    }
+
     // TODO Info an Resourcen-Leiste, damit die Kosten für die mehreren Objekte angezeigt werden
+}
+
+void GuiMap::updateMapObjectsTemporarilyDrawingFlags() {
+    // Hovering? Dann gehts nur um ein Gebäude?
+    if (mapObjectBeingAddedHovering != nullptr) {
+        const MapCoords& mapCoords = mapObjectBeingAddedHovering->getMapCoords();
+        const StructureType structureType = mapObjectBeingAddedHovering->getStructureType();
+        const FourthDirection& view = mapObjectBeingAddedHovering->getView();
+
+        if (isAllowedToPlaceStructure(mapCoords, structureType, view) & PLACING_STRUCTURE_NO_RESOURCES) {
+            mapObjectBeingAddedHovering->setDrawingFlags(
+                mapObjectBeingAddedHovering->getDrawingFlags() | IGraphic::DRAWING_FLAG_BLINK);
+        } else {
+            mapObjectBeingAddedHovering->setDrawingFlags(
+                mapObjectBeingAddedHovering->getDrawingFlags() & ~IGraphic::DRAWING_FLAG_BLINK);
+        }
+        return;
+    }
+
+    // Ansonsten gucken wir mapObjectsBeingAdded durch
+
+    const Player* currentPlayer = context->game->getCurrentPlayer();
+
+    BuildingCosts sumBuildingCostTilHere;
+    bool outOfResources = false;
+
+    // Der Reihe nach alle zu setzenden Gebäude durchgehen und gucken, wann/ob die Resourcen ausgehen
+    for (auto iter = mapObjectsBeingAdded.cbegin(); iter != mapObjectsBeingAdded.cend(); iter++) {
+        Structure* mapObject = *iter;
+
+        if (!outOfResources) {
+            StructureType structureType = mapObject->getStructureType();
+
+            const BuildingConfig* buildingConfig = context->configMgr->getBuildingConfig(structureType);
+            const BuildingCosts& buildingCosts = buildingConfig->buildingCosts;
+
+            sumBuildingCostTilHere.coins += buildingCosts.coins;
+            sumBuildingCostTilHere.tools += buildingCosts.tools;
+            sumBuildingCostTilHere.wood += buildingCosts.wood;
+            sumBuildingCostTilHere.bricks += buildingCosts.bricks;
+
+            // TODO aktuell können in mapObjectsBeingAdded Gebäude von verschiedenen Siedlungen sein. Das muss gefixed werden. Nur von einer Siedlung ist erlaubt.
+            Colony* colony = context->game->getColony(
+                currentPlayer, context->game->getMap()->getMapTileAt(mapObject->getMapCoords())->isle);
+            if (currentPlayer->coins < sumBuildingCostTilHere.coins ||
+                colony->getGoods(GoodsType::TOOLS).inventory < sumBuildingCostTilHere.tools ||
+                colony->getGoods(GoodsType::WOOD).inventory < sumBuildingCostTilHere.wood ||
+                colony->getGoods(GoodsType::BRICKS).inventory < sumBuildingCostTilHere.bricks) {
+
+                outOfResources = true;
+            }
+        }
+
+        if (outOfResources) {
+            mapObject->setDrawingFlags(mapObject->getDrawingFlags() | IGraphic::DRAWING_FLAG_BLINK);
+        } else {
+            mapObject->setDrawingFlags(mapObject->getDrawingFlags() & ~IGraphic::DRAWING_FLAG_BLINK);
+        }
+    }
 }
