@@ -60,6 +60,15 @@ public:
     void setView(const FourthDirection& view) {
         this->view = view;
     }
+
+    /**
+     * @brief Prüft, ob die Struktur ein Weg/Straße ist
+     * @return `true` wenn Weg/Straße, sonst `false`
+     */
+    bool isStreet() const {
+        // TODO Feldweg
+        return (structureType >= StructureType::STREET_STRAIGHT_0 && structureType <= StructureType::STREET_CROSS);
+    }
 };
 
 #endif

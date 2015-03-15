@@ -103,9 +103,9 @@ public:
     }
 
     /**
-    * @brief Prüft, ob das Gebäude ein Haus ist
-    * @return `true` wenn Haus, sonst `false`
-    */
+     * @brief Prüft, ob das Gebäude ein Haus ist
+     * @return `true` wenn Haus, sonst `false`
+     */
     bool isHouse() const {
         return (structureType == PIONEERS_HOUSE1 || structureType == PIONEERS_HOUSE2 ||
                 structureType == PIONEERS_HOUSE3 || structureType == PIONEERS_HOUSE4 ||
