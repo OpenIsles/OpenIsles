@@ -166,6 +166,12 @@ public:
      */
     void onCancelAddingStructure();
 
+    /**
+     * @brief Callback, wenn im Bau-Modus das zu positionierende Gebäude gedreht wird.
+     * Wir brauchen die Info, um `mapObjectBeingAddedHovering` aktuell zu halten.
+     */
+    void onRotateAddingStructure();
+
 private:
     /**
      * @brief Zeichnet den Einzugsbereich eines Gebäudes.

@@ -861,6 +861,21 @@ void GuiMap::onCancelAddingStructure() {
     clearAllTemporarily();
 }
 
+void GuiMap::onRotateAddingStructure() {
+    if (mapObjectBeingAddedHovering != nullptr) {
+        StructureType structureType = context->guiMgr->getPanelState().addingStructure;
+        const FourthDirection& view = context->guiMgr->getPanelState().addingStructureView;
+
+        const std::string graphicSetName = context->graphicsMgr->getGraphicSetNameForStructure(structureType);
+        const GraphicSet* graphicSet = context->graphicsMgr->getGraphicSet(graphicSetName);
+        const IGraphic* graphic = graphicSet->getByView(view)->getGraphic();
+
+        mapObjectBeingAddedHovering->setMapWidth(graphic->getMapWidth());
+        mapObjectBeingAddedHovering->setMapHeight(graphic->getMapHeight());
+        mapObjectBeingAddedHovering->setView(context->guiMgr->getPanelState().addingStructureView);
+    }
+}
+
 void GuiMap::clearAllTemporarily() {
     for (auto iter = mapObjectsBeingAdded.cbegin(); iter != mapObjectsBeingAdded.cend(); iter++) {
         Structure* mapObject = *iter;

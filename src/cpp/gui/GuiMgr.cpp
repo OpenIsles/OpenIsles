@@ -381,8 +381,10 @@ void GuiMgr::onEvent(SDL_Event& event) {
         // Drehen des Gebäudes, was wir bauen wollen
         else if (event.key.keysym.scancode == SDL_SCANCODE_PERIOD) {
             Direction::rotate90DegreesClockwise(panelState.addingStructureView);
+            ((GuiMap*) findElement(GUI_ID_MAP))->onRotateAddingStructure();
         } else if (event.key.keysym.scancode == SDL_SCANCODE_COMMA) {
             Direction::rotate90DegreesCounterclockwise(panelState.addingStructureView);
+            ((GuiMap*) findElement(GUI_ID_MAP))->onRotateAddingStructure();
         }
 
 #ifdef DEBUG_A_STAR
