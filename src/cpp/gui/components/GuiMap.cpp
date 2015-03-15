@@ -477,7 +477,9 @@ bool GuiMap::onEventElement(SDL_Event& event) {
              event.button.button == SDL_BUTTON_LEFT &&
              hitTest(event.button.x, event.button.y))
                 ||
-            (event.type == SDL_MOUSEMOTION && isLeftMouseButtonDown)
+            (event.type == SDL_MOUSEMOTION &&
+             isLeftMouseButtonDown &&
+             hitTest(startClickX, startClickY))
            ) {
 
             StructureType structureType = context->guiMgr->getPanelState().addingStructure;
