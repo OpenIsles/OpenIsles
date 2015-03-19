@@ -29,7 +29,7 @@ void ConfigMgr::loadBuildingConfig() {
         buildingConfigs[structureType] = new BuildingConfig();
         buildingConfigs[structureType]->name = "Pflasterstraße";
         buildingConfigs[structureType]->catchmentArea = nullptr;
-        buildingConfigs[structureType]->buildingCosts = { 5, 0, 0, 0 };
+        buildingConfigs[structureType]->buildingCosts = { 5, 0, 0, 1 };
         buildingConfigs[structureType]->buildingProduction = { GoodsSlot(), GoodsSlot(), GoodsSlot() };
     }
     buildingConfigs[StructureType::COBBLED_STREET_STRAIGHT_0]->nameInSavefile = "cobbled_street_straight_0";
@@ -44,6 +44,31 @@ void ConfigMgr::loadBuildingConfig() {
     buildingConfigs[StructureType::COBBLED_STREET_TEE_270]->nameInSavefile = "cobbled_street_tee_270";
     buildingConfigs[StructureType::COBBLED_STREET_CROSS]->nameInSavefile = "cobbled_street_cross";
     for (int i = StructureType::COBBLED_STREET_STRAIGHT_0; i <= StructureType::COBBLED_STREET_CROSS; i++) {
+        StructureType structureType = (StructureType) i;
+        mapBuildingNameInSavefile[buildingConfigs[structureType]->nameInSavefile] = structureType;
+    }
+    
+    for (int i = StructureType::FARM_ROAD_STRAIGHT_0; i <= StructureType::FARM_ROAD_CROSS; i++) {
+        StructureType structureType = (StructureType) i;
+
+        buildingConfigs[structureType] = new BuildingConfig();
+        buildingConfigs[structureType]->name = "Feldweg";
+        buildingConfigs[structureType]->catchmentArea = nullptr;
+        buildingConfigs[structureType]->buildingCosts = { 5, 0, 0, 0 };
+        buildingConfigs[structureType]->buildingProduction = { GoodsSlot(), GoodsSlot(), GoodsSlot() };
+    }
+    buildingConfigs[StructureType::FARM_ROAD_STRAIGHT_0]->nameInSavefile = "farm_road_straight_0";
+    buildingConfigs[StructureType::FARM_ROAD_STRAIGHT_90]->nameInSavefile = "farm_road_straight_90";
+    buildingConfigs[StructureType::FARM_ROAD_CURVE_0]->nameInSavefile = "farm_road_curve_0";
+    buildingConfigs[StructureType::FARM_ROAD_CURVE_90]->nameInSavefile = "farm_road_curve_90";
+    buildingConfigs[StructureType::FARM_ROAD_CURVE_180]->nameInSavefile = "farm_road_curve_180";
+    buildingConfigs[StructureType::FARM_ROAD_CURVE_270]->nameInSavefile = "farm_road_curve_270";
+    buildingConfigs[StructureType::FARM_ROAD_TEE_0]->nameInSavefile = "farm_road_tee_0";
+    buildingConfigs[StructureType::FARM_ROAD_TEE_90]->nameInSavefile = "farm_road_tee_90";
+    buildingConfigs[StructureType::FARM_ROAD_TEE_180]->nameInSavefile = "farm_road_tee_180";
+    buildingConfigs[StructureType::FARM_ROAD_TEE_270]->nameInSavefile = "farm_road_tee_270";
+    buildingConfigs[StructureType::FARM_ROAD_CROSS]->nameInSavefile = "farm_road_cross";
+    for (int i = StructureType::FARM_ROAD_STRAIGHT_0; i <= StructureType::FARM_ROAD_CROSS; i++) {
         StructureType structureType = (StructureType) i;
         mapBuildingNameInSavefile[buildingConfigs[structureType]->nameInSavefile] = structureType;
     }

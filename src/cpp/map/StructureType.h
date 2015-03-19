@@ -22,6 +22,18 @@ enum StructureType : unsigned char {
     COBBLED_STREET_TEE_270,
     COBBLED_STREET_CROSS,
 
+    FARM_ROAD_STRAIGHT_0,
+    FARM_ROAD_STRAIGHT_90,
+    FARM_ROAD_CURVE_0,
+    FARM_ROAD_CURVE_90,
+    FARM_ROAD_CURVE_180,
+    FARM_ROAD_CURVE_270,
+    FARM_ROAD_TEE_0,
+    FARM_ROAD_TEE_90,
+    FARM_ROAD_TEE_180,
+    FARM_ROAD_TEE_270,
+    FARM_ROAD_CROSS,
+
     // Gebäude
     START_BUILDINGS = 101, // Marker, um zu unterscheiden, ob Structure oder Building angelegt werden
 

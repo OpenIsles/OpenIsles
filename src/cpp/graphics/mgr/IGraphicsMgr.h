@@ -95,6 +95,18 @@ public:
         else if (structureType == StructureType::COBBLED_STREET_TEE_270) { graphicSetNameSuffix = "cobbled-street-tee270"; }
         else if (structureType == StructureType::COBBLED_STREET_CROSS) { graphicSetNameSuffix = "cobbled-street-cross"; }
 
+        else if (structureType == StructureType::FARM_ROAD_STRAIGHT_0) { graphicSetNameSuffix = "farm-road-straight0"; }
+        else if (structureType == StructureType::FARM_ROAD_STRAIGHT_90) { graphicSetNameSuffix = "farm-road-straight90"; }
+        else if (structureType == StructureType::FARM_ROAD_CURVE_0) { graphicSetNameSuffix = "farm-road-curve0"; }
+        else if (structureType == StructureType::FARM_ROAD_CURVE_90) { graphicSetNameSuffix = "farm-road-curve90"; }
+        else if (structureType == StructureType::FARM_ROAD_CURVE_180) { graphicSetNameSuffix = "farm-road-curve180"; }
+        else if (structureType == StructureType::FARM_ROAD_CURVE_270) { graphicSetNameSuffix = "farm-road-curve270"; }
+        else if (structureType == StructureType::FARM_ROAD_TEE_0) { graphicSetNameSuffix = "farm-road-tee0"; }
+        else if (structureType == StructureType::FARM_ROAD_TEE_90) { graphicSetNameSuffix = "farm-road-tee90"; }
+        else if (structureType == StructureType::FARM_ROAD_TEE_180) { graphicSetNameSuffix = "farm-road-tee180"; }
+        else if (structureType == StructureType::FARM_ROAD_TEE_270) { graphicSetNameSuffix = "farm-road-tee270"; }
+        else if (structureType == StructureType::FARM_ROAD_CROSS) { graphicSetNameSuffix = "farm-road-cross"; }
+
         return "structures/" + graphicSetNameSuffix;
     }
 

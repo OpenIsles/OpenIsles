@@ -66,9 +66,10 @@ public:
      * @return `true` wenn Weg/Straße, sonst `false`
      */
     bool isStreet() const {
-        // TODO Feldweg
-        return (structureType >= StructureType::COBBLED_STREET_STRAIGHT_0 &&
-                structureType <= StructureType::COBBLED_STREET_CROSS);
+        return ((structureType >= StructureType::FARM_ROAD_STRAIGHT_0 &&
+                 structureType <= StructureType::FARM_ROAD_CROSS) ||
+                (structureType >= StructureType::COBBLED_STREET_STRAIGHT_0 &&
+                 structureType <= StructureType::COBBLED_STREET_CROSS));
     }
 };
 

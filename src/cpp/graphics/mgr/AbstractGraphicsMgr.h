@@ -103,9 +103,10 @@ private:
 	void loadTiles();
 
     /**
-     * @brief Lädt die Grafiken für die Straßen
+     * @brief Lädt Grafiken für ein Tileset von Straßen.
+     * @param streetTileset Tilesetname
      */
-    void loadStreets();
+    void loadStreetTileset(const std::string& streetTileset);
 
     /**
      * @brief Lädt eine Grafik, die horizontal-gekachelt 4 Ansichten ("south", "east", "north" und "west") enthält.

@@ -338,7 +338,7 @@
     <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="cobbled_street_cross" type="structure" x="1952" y="1184" width="32" height="32">
+  <object name="farm_road_cross" type="structure" x="1952" y="1184" width="32" height="32">
    <properties>
     <property name="player" value="1"/>
    </properties>
@@ -348,7 +348,7 @@
     <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="cobbled_street_straight_0" type="structure" x="1920" y="1184" width="32" height="32">
+  <object name="farm_road_straight_0" type="structure" x="1920" y="1184" width="32" height="32">
    <properties>
     <property name="player" value="1"/>
    </properties>
@@ -473,47 +473,47 @@
     <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="cobbled_street_curve_180" type="structure" x="2400" y="1120" width="32" height="32">
+  <object name="farm_road_curve_180" type="structure" x="2400" y="1120" width="32" height="32">
    <properties>
     <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="cobbled_street_straight_0" type="structure" x="2112" y="1184" width="32" height="32">
+  <object name="farm_road_straight_0" type="structure" x="2112" y="1184" width="32" height="32">
    <properties>
     <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="cobbled_street_straight_0" type="structure" x="1984" y="1184" width="32" height="32">
+  <object name="farm_road_straight_0" type="structure" x="1984" y="1184" width="32" height="32">
    <properties>
     <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="cobbled_street_straight_0" type="structure" x="2016" y="1184" width="32" height="32">
+  <object name="farm_road_straight_0" type="structure" x="2016" y="1184" width="32" height="32">
    <properties>
     <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="cobbled_street_straight_0" type="structure" x="2048" y="1184" width="32" height="32">
+  <object name="farm_road_straight_0" type="structure" x="2048" y="1184" width="32" height="32">
    <properties>
     <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="cobbled_street_straight_0" type="structure" x="2080" y="1184" width="32" height="32">
+  <object name="farm_road_straight_0" type="structure" x="2080" y="1184" width="32" height="32">
    <properties>
     <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="cobbled_street_straight_90" type="structure" x="2400" y="1152" width="32" height="32">
+  <object name="farm_road_straight_90" type="structure" x="2400" y="1152" width="32" height="32">
    <properties>
     <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="cobbled_street_curve_90" type="structure" x="2304" y="1120" width="32" height="32">
+  <object name="farm_road_curve_90" type="structure" x="2304" y="1120" width="32" height="32">
    <properties>
     <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="cobbled_street_straight_0" type="structure" x="2336" y="1120" width="32" height="32">
+  <object name="farm_road_straight_0" type="structure" x="2336" y="1120" width="32" height="32">
    <properties>
     <property name="player" value="1"/>
    </properties>
@@ -523,32 +523,32 @@
     <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="cobbled_street_straight_0" type="structure" x="2368" y="1120" width="32" height="32">
+  <object name="farm_road_straight_0" type="structure" x="2368" y="1120" width="32" height="32">
    <properties>
     <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="cobbled_street_straight_0" type="structure" x="2240" y="1152" width="32" height="32">
+  <object name="farm_road_straight_0" type="structure" x="2240" y="1152" width="32" height="32">
    <properties>
     <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="cobbled_street_straight_0" type="structure" x="2272" y="1152" width="32" height="32">
+  <object name="farm_road_straight_0" type="structure" x="2272" y="1152" width="32" height="32">
    <properties>
     <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="cobbled_street_straight_0" type="structure" x="2176" y="1152" width="32" height="32">
+  <object name="farm_road_straight_0" type="structure" x="2176" y="1152" width="32" height="32">
    <properties>
     <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="cobbled_street_curve_270" type="structure" x="2304" y="1152" width="32" height="32">
+  <object name="farm_road_curve_270" type="structure" x="2304" y="1152" width="32" height="32">
    <properties>
     <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="cobbled_street_straight_0" type="structure" x="2208" y="1152" width="32" height="32">
+  <object name="farm_road_straight_0" type="structure" x="2208" y="1152" width="32" height="32">
    <properties>
     <property name="player" value="1"/>
    </properties>
@@ -788,7 +788,7 @@
     <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="cobbled_street_straight_90" type="structure" x="1952" y="1152" width="32" height="32">
+  <object name="farm_road_straight_90" type="structure" x="1952" y="1152" width="32" height="32">
    <properties>
     <property name="player" value="1"/>
    </properties>
@@ -858,32 +858,47 @@
     <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="cobbled_street_curve_90" type="structure" x="2144" y="1152" width="32" height="32">
+  <object name="farm_road_curve_90" type="structure" x="2144" y="1152" width="32" height="32">
    <properties>
     <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="cobbled_street_curve_270" type="structure" x="2144" y="1184" width="32" height="32">
+  <object name="farm_road_tee_0" type="structure" x="2144" y="1184" width="32" height="32">
    <properties>
     <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="cobbled_street_straight_90" type="structure" x="1952" y="1312" width="32" height="32">
+  <object name="farm_road_straight_90" type="structure" x="1952" y="1312" width="32" height="32">
    <properties>
     <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="cobbled_street_straight_90" type="structure" x="1952" y="1248" width="32" height="32">
+  <object name="farm_road_straight_90" type="structure" x="1952" y="1248" width="32" height="32">
    <properties>
     <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="cobbled_street_straight_90" type="structure" x="1952" y="1216" width="32" height="32">
+  <object name="farm_road_straight_90" type="structure" x="1952" y="1216" width="32" height="32">
    <properties>
     <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="cobbled_street_straight_90" type="structure" x="1952" y="1280" width="32" height="32">
+  <object name="farm_road_straight_90" type="structure" x="1952" y="1280" width="32" height="32">
+   <properties>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object name="farm_road_straight_90" type="structure" x="2144" y="1216" width="32" height="32">
+   <properties>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object name="farm_road_straight_90" type="structure" x="2144" y="1248" width="32" height="32">
+   <properties>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object name="farm_road_straight_90" type="structure" x="2144" y="1280" width="32" height="32">
    <properties>
     <property name="player" value="1"/>
    </properties>

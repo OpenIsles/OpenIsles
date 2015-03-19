@@ -39,7 +39,8 @@ void AbstractGraphicsMgr::loadGraphics() {
     loadStaticGraphicSetWith4Views("structures/cathedral", "data/img/objects/cathedral.png", 6, 4);
     loadStaticGraphicSetWith4Views("structures/tavern", "data/img/objects/tavern.png", 2, 3);
 
-    loadStreets();
+    loadStreetTileset("cobbled-street");
+    loadStreetTileset("farm-road");
 
     loadStaticGraphicSet("goods-icons/tools", "data/img/goods/icon/tools.png");
     loadStaticGraphicSet("goods-icons/wood", "data/img/goods/icon/wood.png");
@@ -63,6 +64,7 @@ void AbstractGraphicsMgr::loadGraphics() {
     loadStaticGraphicSet("add-building-button/marketplace", "data/img/gui/add-building/marketplace.png");
     loadStaticGraphicSet("add-building-button/office1", "data/img/gui/add-building/office1.png");
     loadStaticGraphicSet("add-building-button/cobbled-street", "data/img/gui/add-building/cobbled-street.png");
+    loadStaticGraphicSet("add-building-button/farm-road", "data/img/gui/add-building/farm-road.png");
     loadStaticGraphicSet("add-building-button/sheep-farm", "data/img/gui/add-building/sheep-farm.png");
     loadStaticGraphicSet("add-building-button/weaving-mill1", "data/img/gui/add-building/weaving-mill1.png");
     loadStaticGraphicSet("add-building-button/cattle-farm", "data/img/gui/add-building/cattle-farm.png");
@@ -193,24 +195,25 @@ void AbstractGraphicsMgr::loadStaticAnimationGraphicSetWith8Views(
     delete sdlFullGraphic;
 }
 
-void AbstractGraphicsMgr::loadStreets() {
-    IGraphic* streetsGraphic = loadGraphic("data/img/objects/streets.png");
+void AbstractGraphicsMgr::loadStreetTileset(const std::string& streetTileset) {
+    const std::string graphicFilename = "data/img/objects/" + streetTileset + ".png";
+    IGraphic* streetsGraphic = loadGraphic(graphicFilename.c_str());
 
     static struct {
-        const char* graphicSetName;
+        const char* angleName;
         int tileOffsetPerView[4];
     } streetTiles[11]{
-        { "structures/cobbled-street-straight0", { 0, 1, 0, 1 } },
-        { "structures/cobbled-street-straight90", { 1, 0, 1, 0 } },
-        { "structures/cobbled-street-curve0", { 2, 3, 4, 5 } },
-        { "structures/cobbled-street-curve90", { 3, 4, 5, 2 } },
-        { "structures/cobbled-street-curve180", { 4, 5, 2, 3 } },
-        { "structures/cobbled-street-curve270", { 5, 2, 3, 4 } },
-        { "structures/cobbled-street-tee0", { 6, 7, 8, 9 } },
-        { "structures/cobbled-street-tee90", { 7, 8, 9, 6 } },
-        { "structures/cobbled-street-tee180", { 8, 9, 6, 7 }} ,
-        { "structures/cobbled-street-tee270", { 9, 6, 7, 8 } },
-        { "structures/cobbled-street-cross", { 10, 10, 10, 10 } }
+        { "straight0", { 0, 1, 0, 1 } },
+        { "straight90", { 1, 0, 1, 0 } },
+        { "curve0", { 2, 3, 4, 5 } },
+        { "curve90", { 3, 4, 5, 2 } },
+        { "curve180", { 4, 5, 2, 3 } },
+        { "curve270", { 5, 2, 3, 4 } },
+        { "tee0", { 6, 7, 8, 9 } },
+        { "tee90", { 7, 8, 9, 6 } },
+        { "tee180", { 8, 9, 6, 7 }} ,
+        { "tee270", { 9, 6, 7, 8 } },
+        { "cross", { 10, 10, 10, 10 } }
     };
 
     Rect tileRect(0, 0, TILE_WIDTH, TILE_HEIGHT);
@@ -221,7 +224,9 @@ void AbstractGraphicsMgr::loadStreets() {
             IGraphic* sdlFrameGraphic = loadGraphic(*streetsGraphic, tileRect, 1, 1);
             graphicSet->addByView(view, new Animation(sdlFrameGraphic));
         }
-        graphicSets[streetTiles[i].graphicSetName] = graphicSet;
+
+        const std::string graphicSetName = "structures/" + streetTileset + "-" + streetTiles[i].angleName;
+        graphicSets[graphicSetName] = graphicSet;
     }
 
     delete streetsGraphic;

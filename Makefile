@@ -79,24 +79,30 @@ $(foreach BUILDING,$(BUILDINGS),$(eval $(call RENDER_BUILDING,$(BUILDING))))
 # Straßen                                                                                                              #
 ########################################################################################################################
 
-$(DATA_DIRECTORY)/img/objects/cobbled-street.png: $(SRC_DIRECTORY)/blender/streets/cobbled-street/cobbled-street.blend
+STREET_TILESETS := cobbled-street farm-road
+
+define RENDER_STREET_TILESET
+$(DATA_DIRECTORY)/img/objects/$(1).png: $(SRC_DIRECTORY)/blender/streets/$(1)/$(1).blend
 	mkdir -p $(DATA_DIRECTORY)/img/objects
-	cd $(SRC_DIRECTORY)/blender/streets/cobbled-street; blender -b $(notdir $<) -P render.py
+	cd $(SRC_DIRECTORY)/blender/streets/$(1); blender -b $$(notdir $$<) -P ../render-street-tileset.py
 
 	# geometry muss angegeben werden, sonst greift der Default von 120x120
 	$(MONTAGE) \
-	    $(SRC_DIRECTORY)/blender/streets/cobbled-street/render/straight0.png \
-	    $(SRC_DIRECTORY)/blender/streets/cobbled-street/render/straight90.png \
-	    $(SRC_DIRECTORY)/blender/streets/cobbled-street/render/curve0.png \
-	    $(SRC_DIRECTORY)/blender/streets/cobbled-street/render/curve90.png \
-	    $(SRC_DIRECTORY)/blender/streets/cobbled-street/render/curve180.png \
-	    $(SRC_DIRECTORY)/blender/streets/cobbled-street/render/curve270.png \
-	    $(SRC_DIRECTORY)/blender/streets/cobbled-street/render/tee0.png \
-	    $(SRC_DIRECTORY)/blender/streets/cobbled-street/render/tee90.png \
-	    $(SRC_DIRECTORY)/blender/streets/cobbled-street/render/tee180.png \
-	    $(SRC_DIRECTORY)/blender/streets/cobbled-street/render/tee270.png \
-	    $(SRC_DIRECTORY)/blender/streets/cobbled-street/render/cross.png \
-	    -geometry +0+0 -tile x1 $@
+	    $(SRC_DIRECTORY)/blender/streets/$(1)/render/straight0.png \
+	    $(SRC_DIRECTORY)/blender/streets/$(1)/render/straight90.png \
+	    $(SRC_DIRECTORY)/blender/streets/$(1)/render/curve0.png \
+	    $(SRC_DIRECTORY)/blender/streets/$(1)/render/curve90.png \
+	    $(SRC_DIRECTORY)/blender/streets/$(1)/render/curve180.png \
+	    $(SRC_DIRECTORY)/blender/streets/$(1)/render/curve270.png \
+	    $(SRC_DIRECTORY)/blender/streets/$(1)/render/tee0.png \
+	    $(SRC_DIRECTORY)/blender/streets/$(1)/render/tee90.png \
+	    $(SRC_DIRECTORY)/blender/streets/$(1)/render/tee180.png \
+	    $(SRC_DIRECTORY)/blender/streets/$(1)/render/tee270.png \
+	    $(SRC_DIRECTORY)/blender/streets/$(1)/render/cross.png \
+	    -geometry +0+0 -tile x1 $$@
+endef
+
+$(foreach STREET_TILESET,$(STREET_TILESETS),$(eval $(call RENDER_STREET_TILESET,$(STREET_TILESET))))
 
 ########################################################################################################################
 # Gütersymbole                                                                                                         #
@@ -227,7 +233,9 @@ render-blender: \
 		$(DATA_DIRECTORY)/img/objects/$(ANIMATION).png \
 	) \
 	$(DATA_DIRECTORY)/img/tileset.png \
-	$(DATA_DIRECTORY)/img/objects/cobbled-street.png \
+	$(foreach STREET_TILESET,$(STREET_TILESETS), \
+		$(DATA_DIRECTORY)/img/objects/$(STREET_TILESET).png \
+	) \
 	render-cart \
 	render-coat-of-arms \
 	$(DATA_DIRECTORY)/img/coin.png \
@@ -242,8 +250,8 @@ clean-blender:
 	rm -rf $(SRC_DIRECTORY)/blender/animations/cart/render
 	rm -rf $(DATA_DIRECTORY)/img/tileset.png
 	rm -rf $(SRC_DIRECTORY)/blender/tiles/render
-	rm -rf $(SRC_DIRECTORY)/blender/streets/cobbled-street/render
-	rm -rf $(DATA_DIRECTORY)/img/objects/cobbled-street.png
+	rm -rf $(foreach STREET_TILESET,$(STREET_TILESETS), $(SRC_DIRECTORY)/blender/streets/$(STREET_TILESET)/render)
+	rm -rf $(foreach STREET_TILESET,$(STREET_TILESETS), $(DATA_DIRECTORY)/img/objects/$(STREET_TILESET).png)
 	rm -rf $(DATA_DIRECTORY)/img/objects/cart-without-cargo.png
 	rm -rf $(DATA_DIRECTORY)/img/objects/cart-with-cargo.png
 	rm -rf $(DATA_DIRECTORY)/img/gui/coat-of-arms
