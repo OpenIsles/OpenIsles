@@ -82,6 +82,9 @@ public:
         else if (structureType == StructureType::HUNTERS_HUT) { graphicSetNameSuffix = "hunters-hut"; }
         else if (structureType == StructureType::CATHEDRAL) { graphicSetNameSuffix = "cathedral"; }
         else if (structureType == StructureType::TAVERN) { graphicSetNameSuffix = "tavern"; }
+        else if (structureType == StructureType::SQUARE1) { graphicSetNameSuffix = "square1"; }
+        else if (structureType == StructureType::SQUARE2) { graphicSetNameSuffix = "square2"; }
+        else if (structureType == StructureType::SQUARE3) { graphicSetNameSuffix = "square3"; }
 
         else if (structureType == StructureType::COBBLED_STREET_STRAIGHT_0) { graphicSetNameSuffix = "cobbled-street-straight0"; }
         else if (structureType == StructureType::COBBLED_STREET_STRAIGHT_90) { graphicSetNameSuffix = "cobbled-street-straight90"; }

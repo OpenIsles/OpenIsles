@@ -130,9 +130,21 @@ GuiBuildMenuWidget::GuiBuildMenuWidget(const Context* const context) : GuiPanelW
             "Öffentliche Gebäude",
             "add-building-group/public",
             "add-building-group/public-pressed", {
-                { StructureType::NO_STRUCTURE, nullptr, "add-building-button/dummy" },
-                { StructureType::NO_STRUCTURE, nullptr, "add-building-button/dummy" },
-                { StructureType::NO_STRUCTURE, nullptr, "add-building-button/dummy" },
+                {
+                    StructureType::SQUARE1,
+                    "Platz I",
+                    "add-building-button/square1"
+                },
+                {
+                    StructureType::SQUARE2,
+                    "Platz II",
+                    "add-building-button/square2"
+                },
+                {
+                    StructureType::SQUARE3,
+                    "Platz III",
+                    "add-building-button/square3"
+                },
                 { StructureType::NO_STRUCTURE, nullptr, "add-building-button/dummy" },
                 {
                     StructureType::CATHEDRAL,

@@ -34,6 +34,10 @@ enum StructureType : unsigned char {
     FARM_ROAD_TEE_270,
     FARM_ROAD_CROSS,
 
+    SQUARE1,
+    SQUARE2,
+    SQUARE3,
+
     // Gebäude
     START_BUILDINGS = 101, // Marker, um zu unterscheiden, ob Structure oder Building angelegt werden
 

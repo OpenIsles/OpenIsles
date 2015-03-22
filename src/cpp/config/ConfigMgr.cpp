@@ -73,6 +73,25 @@ void ConfigMgr::loadBuildingConfig() {
         mapBuildingNameInSavefile[buildingConfigs[structureType]->nameInSavefile] = structureType;
     }
 
+    for (int i = StructureType::SQUARE1; i <= StructureType::SQUARE3; i++) {
+        StructureType structureType = (StructureType) i;
+
+        buildingConfigs[structureType] = new BuildingConfig();
+        buildingConfigs[structureType]->catchmentArea = nullptr;
+        buildingConfigs[structureType]->buildingCosts = { 5, 0, 0, 1 };
+        buildingConfigs[structureType]->buildingProduction = { GoodsSlot(), GoodsSlot(), GoodsSlot() };
+    }
+    buildingConfigs[StructureType::SQUARE1]->name = "Platz I";
+    buildingConfigs[StructureType::SQUARE2]->name = "Platz II";
+    buildingConfigs[StructureType::SQUARE3]->name = "Platz III";
+    buildingConfigs[StructureType::SQUARE1]->nameInSavefile = "square1";
+    buildingConfigs[StructureType::SQUARE2]->nameInSavefile = "square2";
+    buildingConfigs[StructureType::SQUARE3]->nameInSavefile = "square3";
+    for (int i = StructureType::SQUARE1; i <= StructureType::SQUARE3; i++) {
+        StructureType structureType = (StructureType) i;
+        mapBuildingNameInSavefile[buildingConfigs[structureType]->nameInSavefile] = structureType;
+    }
+
     buildingConfigs[StructureType::CHAPEL] = new BuildingConfig();
     buildingConfigs[StructureType::CHAPEL]->name = "Kapelle";
     buildingConfigs[StructureType::CHAPEL]->nameInSavefile = "chapel";

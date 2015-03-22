@@ -62,14 +62,16 @@ public:
     }
 
     /**
-     * @brief Prüft, ob die Struktur ein Weg/Straße ist
-     * @return `true` wenn Weg/Straße, sonst `false`
+     * @brief Prüft, ob die Struktur ein Weg/Straße oder Platz ist, d.&nbsp;h. etwas, wo ein Marktkarren fahren darf.
+     * @return `true` wenn Weg/Straße oder Platz, sonst `false`
      */
     bool isStreet() const {
         return ((structureType >= StructureType::FARM_ROAD_STRAIGHT_0 &&
                  structureType <= StructureType::FARM_ROAD_CROSS) ||
                 (structureType >= StructureType::COBBLED_STREET_STRAIGHT_0 &&
-                 structureType <= StructureType::COBBLED_STREET_CROSS));
+                 structureType <= StructureType::COBBLED_STREET_CROSS) ||
+                (structureType >= StructureType::SQUARE1 &&
+                 structureType <= StructureType::SQUARE3));
     }
 };
 
