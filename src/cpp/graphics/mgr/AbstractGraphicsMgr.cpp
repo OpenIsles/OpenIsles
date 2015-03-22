@@ -98,7 +98,9 @@ void AbstractGraphicsMgr::loadGraphics() {
     loadStaticGraphicSet("button-music", "data/img/gui/button-music.png");
     loadStaticGraphicSet("button-music-pressed", "data/img/gui/button-music-pressed.png");
 
+    renderer->setHintRenderScaleQuality("0");
     loadStaticGraphicSet("plain-tile", "data/img/plain-tile.png");
+    renderer->setHintRenderScaleQuality("2");
 
     loadStaticAnimationGraphicSetWith8Views("carrier", "data/img/objects/carrier.png", 1, 1, 31);
     loadStaticAnimationGraphicSetWith8Views("cart-without-cargo", "data/img/objects/cart-without-cargo.png", 1, 1, 32);
@@ -196,6 +198,9 @@ void AbstractGraphicsMgr::loadStaticAnimationGraphicSetWith8Views(
 }
 
 void AbstractGraphicsMgr::loadStreetTileset(const std::string& streetTileset) {
+    // nearest pixel sampling für die Straßen-Kacheln, damit die auch fließend ineinander übergehen, wenn rausgezoomt is
+    renderer->setHintRenderScaleQuality("0");
+
     const std::string graphicFilename = "data/img/objects/" + streetTileset + ".png";
     IGraphic* streetsGraphic = loadGraphic(graphicFilename.c_str());
 
@@ -230,6 +235,9 @@ void AbstractGraphicsMgr::loadStreetTileset(const std::string& streetTileset) {
     }
 
     delete streetsGraphic;
+
+    // wieder zurückstellen
+    renderer->setHintRenderScaleQuality("2");
 }
 
 void AbstractGraphicsMgr::loadStaticGraphicSetWith4Views(

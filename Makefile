@@ -16,6 +16,21 @@ clean: clean-gui clean-blender
 
 
 ########################################################################################################################
+# Funktion, um transparente Ränder in Tiles zu fixen.                                                                  #
+# Da wir Blender's Anti-Aliasing wollen, sind die Ränder der Kacheln teildurchsichtig, was zu Lücken beim              #
+# Zusammensetzen führt. Deshalb stacken wir eine solche Grafik einfach 4x auf sich selber.                             #
+#                                                                                                                      #
+# Wichtig: Wir machen das nicht 8x (=log2(256)), sonst würde aus einem Alpha-Wert 1 ein 255 werden. Diese Pixel sind   #
+# aber nervig, weil sie auch noch die falsche Farbe haben. Wir nehmen nur Pixel, die schon einigermaßen sichtbar sind. #
+########################################################################################################################
+
+FIX_TILE_TRANSPARENCY = \
+   for i in `seq 1 4`; \
+   do \
+       convert $1 $1 -composite $1; \
+   done
+
+########################################################################################################################
 # Gelände-Kacheln                                                                                                      #
 ########################################################################################################################
 
@@ -23,6 +38,7 @@ $(DATA_DIRECTORY)/img/tileset.png: $(SRC_DIRECTORY)/blender/tiles/tiles.blend
 	mkdir -p $(DATA_DIRECTORY)/img/tiles
 	cd $(SRC_DIRECTORY)/blender/tiles; blender -b $(notdir $<) -P render.py
 	php $(SRC_DIRECTORY)/blender/tiles/generate-tileset.php
+	$(call FIX_TILE_TRANSPARENCY,$(SRC_DIRECTORY)/blender/tiles/render/tileset.png)
 
 	cp $(SRC_DIRECTORY)/blender/tiles/render/tileset.png $(DATA_DIRECTORY)/img/tileset.png
 
@@ -100,6 +116,8 @@ $(DATA_DIRECTORY)/img/objects/$(1).png: $(SRC_DIRECTORY)/blender/streets/$(1)/$(
 	    $(SRC_DIRECTORY)/blender/streets/$(1)/render/tee270.png \
 	    $(SRC_DIRECTORY)/blender/streets/$(1)/render/cross.png \
 	    -geometry +0+0 -tile x1 $$@
+
+	$(call FIX_TILE_TRANSPARENCY,$$@)
 endef
 
 $(foreach STREET_TILESET,$(STREET_TILESETS),$(eval $(call RENDER_STREET_TILESET,$(STREET_TILESET))))

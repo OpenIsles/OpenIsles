@@ -25,11 +25,6 @@ for tile_object in bpy.data.objects:
 
     showTile(tile_object)
 
-    # Kachel leicht vergrößern, damit die Ränder nicht halbtransparent sind 
-    # und die Kacheln somit nicht zusammenpassen
-    tile_object.scale.x = 1.1;
-    tile_object.scale.y = 1.1;
-
     for angle in range(0, 360, 90):
         bpy.data.objects["Setup"].rotation_euler.z = angle / 180 * math.pi
 
