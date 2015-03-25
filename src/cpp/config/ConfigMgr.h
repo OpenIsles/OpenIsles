@@ -51,6 +51,29 @@ public:
 } BuildingCosts;
 
 
+/**
+ * @brief gibt an, wie Strukturen platziert wird
+ */
+enum StructurePlacing {
+
+    /**
+     * @brief mehreren Struktur werden einzeln platziert
+     */
+    INDIVIDUALLY,
+
+    /**
+     * @brief mehreren Struktur werden als Rechteck platziert
+     */
+    RECTANGLE,
+
+    /**
+     * @brief mehreren Struktur werden mittels eines Pfads platziert
+     */
+    PATH
+
+};
+
+
 typedef
 struct BuildingConfig {
     /**
@@ -62,6 +85,11 @@ struct BuildingConfig {
      * @brief Bezeichnung in einem gespeicherten Spielstand
      */
     std::string nameInSavefile;
+
+    /**
+      * @brief gibt an, wie das Gebäude platziert wird
+      */
+    StructurePlacing structurePlacing;
     
     /**
      * @brief Einzugsbereich des Gebäudes. Es gilt hierbei 0 = außerhalb, 1 = Einzugsbereich.

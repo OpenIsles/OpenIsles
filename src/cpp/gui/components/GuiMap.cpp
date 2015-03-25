@@ -1,4 +1,5 @@
 #include <SDL.h>
+#include <algorithm>
 #include <string>
 #include "config/ConfigMgr.h"
 #include "game/Colony.h"
@@ -10,6 +11,7 @@
 #include "map/coords/MapCoords.h"
 #include "map/coords/ScreenCoords.h"
 #include "map/Map.h"
+#include "pathfinding/AStar.h"
 #include "utils/Consts.h"
 #include "utils/MapCoordsIterator.h"
 #include "utils/StringFormat.h"
@@ -482,12 +484,73 @@ bool GuiMap::onEventElement(SDL_Event& event) {
              hitTest(startClickX, startClickY))
            ) {
 
+            // Ok, wir müssen nun ggf. was platzieren. Es kommt nun drauf an, was wir grade platzieren
             StructureType structureType = context->guiMgr->getPanelState().addingStructure;
+            const BuildingConfig* buildingConfig = context->configMgr->getBuildingConfig(structureType);
+            StructurePlacing structurePlacing = buildingConfig->structurePlacing;
             const FourthDirection& view = context->guiMgr->getPanelState().addingStructureView;
 
-            unsigned char isAllowedToPlaceResult = isAllowedToPlaceStructure(mapCoordsUnderMouse, structureType, view);
-            if ((isAllowedToPlaceResult & ~PLACING_STRUCTURE_NO_RESOURCES) == PLACING_STRUCTURE_ALLOWED) {
-                addCurrentStructureToMapObjectsBeingAdded(mapCoordsUnderMouse);
+            if (structurePlacing == INDIVIDUALLY) {
+                // Individuell: Wir gucken, ob hier baubar ist. Falls ja, fügen wir die Stelle zur Queue hinzu
+
+                unsigned char isAllowedToPlaceResult = isAllowedToPlaceStructure(mapCoordsUnderMouse, structureType, view);
+                if ((isAllowedToPlaceResult & ~PLACING_STRUCTURE_NO_RESOURCES) == PLACING_STRUCTURE_ALLOWED) {
+                    addCurrentStructureToMapObjectsBeingAdded(mapCoordsUnderMouse);
+                }
+            }
+            else if (structurePlacing == RECTANGLE) {
+                // Rechteck: Egal, was vorher gewählt war. Wir zeichnen ein Rechteck und plazieren überall dort, wo es geht.
+                // Wichtig hierbei ist, dass diese Variante nur funktioniert, wenn structureType eine Größe von 1x1 hat.
+
+                // TODO Performace: Es wäre besser, wenn wir nur neuberechnen, wenn der Mauszeiger wirklich
+                // auf einer neuen Kachel landet und nicht bei jeder Pixelbewegung.
+
+                // TODO mapCoordsClickStart merken, damit wir während die Maustaste unten is, die Karte drehen können
+                MapCoords mapCoordsClickStart = MapCoordUtils::getMapCoordsUnderMouse(*map, startClickX, startClickY);
+
+                // Die Richtung, in der wir iterieren is wichtig. Wir bauen immer vom
+                // Startpunkt aus (falls nicht alle Resourcen da sind).
+                FourthDirection iterationDirection = (mapCoordsClickStart.x() > mapCoordsUnderMouse.x()) ?
+                    ((mapCoordsClickStart.y() > mapCoordsUnderMouse.y()) ? Direction::NORTH : Direction::WEST) :
+                    ((mapCoordsClickStart.y() > mapCoordsUnderMouse.y()) ? Direction::EAST : Direction::SOUTH);
+
+                clearAllTemporarily();
+                MapCoordsIterator mapCoordsIterator(mapCoordsClickStart, mapCoordsUnderMouse, iterationDirection);
+                mapCoordsIterator.iterate([&] (const MapCoords& mapCoords) {
+                    unsigned char isAllowedToPlaceResult = isAllowedToPlaceStructure(mapCoords, structureType, view);
+                    if ((isAllowedToPlaceResult & ~PLACING_STRUCTURE_NO_RESOURCES) == PLACING_STRUCTURE_ALLOWED) {
+                        addCurrentStructureToMapObjectsBeingAdded(mapCoords);
+                    }
+                });
+
+                // TODO Bestimmte Strukturen dürfen über andere gebaut werden. Z.B. kann ein Wegfeld ein Getreidefeld
+                // überbauen, ein Getreidefeld aber nicht einen Wegfeld.
+            }
+            else if (structurePlacing == PATH) {
+                // Pfad: Egal, was vorher gewählt war. Wir berechnen einen Pfad und plazieren überall auf dem Weg, wo es geht.
+                // Wichtig hierbei ist, dass diese Variante nur funktioniert, wenn structureType eine Größe von 1x1 hat.
+
+                // TODO Performace: Es wäre besser, wenn wir nur neuberechnen, wenn der Mauszeiger wirklich
+                // auf einer neuen Kachel landet und nicht bei jeder Pixelbewegung.
+
+                // TODO mapCoordsClickStart merken, damit wir während die Maustaste unten is, die Karte drehen können
+                MapCoords mapCoordsClickStart = MapCoordUtils::getMapCoordsUnderMouse(*map, startClickX, startClickY);
+                AStar aStar(context, mapCoordsClickStart, mapCoordsUnderMouse, nullptr, false); // TODO Wir brauchen rechte Winkel in der Route! -> wohl spezielle h() für A*
+                Route* route = aStar.getRoute();
+
+                // TODO Sonderfall: Start = End = nur eine Kachel setzen geht noch nicht
+
+                clearAllTemporarily();
+                if (route != nullptr) {
+                    std::for_each(route->cbegin(), route->cend(), [ & ](const MapCoords& mapCoords) {
+                        unsigned char isAllowedToPlaceResult = isAllowedToPlaceStructure(mapCoords, structureType, view);
+                        if ((isAllowedToPlaceResult & ~PLACING_STRUCTURE_NO_RESOURCES) == PLACING_STRUCTURE_ALLOWED) {
+                            addCurrentStructureToMapObjectsBeingAdded(mapCoords);
+                        }
+                    });
+
+                    delete route;
+                }
             }
 
             return false;
