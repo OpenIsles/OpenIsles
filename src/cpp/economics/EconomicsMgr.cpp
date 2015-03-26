@@ -210,7 +210,7 @@ void EconomicsMgr::updateCarrier(Building* building) {
                     targetBuilding->lastGoodsCollections = context->sdlTicks;
 
                     Route* route = carrier->route;
-                    AStar* aStar = new AStar(context, route->back(), route->front(), building, isStorageBuilding);
+                    AStar* aStar = new AStar(context, route->back(), route->front(), building, isStorageBuilding, false);
                     aStar->cutRouteInsideBuildings();
                     Route* returnRoute = aStar->getRoute();
                     delete aStar;
@@ -419,7 +419,7 @@ FindBuildingToGetGoodsFromResult EconomicsMgr::findBuildingToGetGoodsFrom(Buildi
             const MapCoords& mapCoordsSource = building->getMapCoords();
             const MapCoords& mapCoordsDestination = buildingThere->getMapCoords();
 
-            AStar* aStar = new AStar(context, mapCoordsSource, mapCoordsDestination, building, isStorageBuilding);
+            AStar* aStar = new AStar(context, mapCoordsSource, mapCoordsDestination, building, isStorageBuilding, false);
             aStar->cutRouteInsideBuildings();
             Route* route = aStar->getRoute();
             delete aStar;

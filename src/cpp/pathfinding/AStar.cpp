@@ -13,11 +13,12 @@ MapCoords AStar::debugAStar_destination = MapCoords(-1, -1);
 Building* AStar::debugAStar_buildingToUseCatchmentArea = nullptr;
 Route* AStar::debugAStar_route = nullptr;
 bool AStar::debugAStar_useStreetOnly = false;
+bool AStar::debugAStar_rightAnglesOnly = false;
 #endif
 
 
 AStar::AStar(const Context* const context, const MapCoords& source, const MapCoords& destination,
-             Building* buildingToUseCatchmentArea, bool useStreetOnly) : ContextAware(context) {
+             Building* buildingToUseCatchmentArea, bool useStreetOnly, bool rightAnglesOnly) : ContextAware(context) {
 
     Map* map = context->game->getMap();
 
@@ -71,6 +72,11 @@ AStar::AStar(const Context* const context, const MapCoords& source, const MapCoo
         for (int mapXOffset = -1; mapXOffset <= 1; mapXOffset++) {
             for (int mapYOffset = -1; mapYOffset <= 1; mapYOffset++) {
                 if (mapXOffset == 0 && mapYOffset == 0) {
+                    continue;
+                }
+
+                // nur rechte Winkel? Dann fallen die Diagonalfelder weg
+                if (rightAnglesOnly && (mapXOffset != 0 && mapYOffset != 0)) {
                     continue;
                 }
 

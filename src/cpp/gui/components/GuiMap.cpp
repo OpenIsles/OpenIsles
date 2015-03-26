@@ -539,7 +539,7 @@ bool GuiMap::onEventElement(SDL_Event& event) {
                     route = new Route();
                     route->push_back(mapCoordsUnderMouse);
                 } else {
-                    AStar aStar(context, mapCoordsClickStart, mapCoordsUnderMouse, nullptr, false); // TODO Wir brauchen rechte Winkel in der Route! -> wohl spezielle h() für A*
+                    AStar aStar(context, mapCoordsClickStart, mapCoordsUnderMouse, nullptr, false, true);
                     route = aStar.getRoute();
                 }
 

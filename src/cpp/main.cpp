@@ -289,7 +289,8 @@ int main(int argc, char** argv) {
             toString(AStar::debugAStar_destination.x()) + ", " +
             toString(AStar::debugAStar_destination.y()) + "), catchmentAreaBuilding = " +
             buildingToUseCatchmentAreaString + ", useStreetOnly = " +
-            (AStar::debugAStar_useStreetOnly ? "true" : "false");
+            (AStar::debugAStar_useStreetOnly ? "true" : "false") + ", rightAnglesOnly = " +
+            (AStar::debugAStar_rightAnglesOnly ? "true" : "false");
 #endif // DEBUG_A_STAR
 #endif // DEBUG
 

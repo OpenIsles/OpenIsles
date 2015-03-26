@@ -47,6 +47,11 @@ public:
      * auch über Gras laufen zu können
      */
     static bool debugAStar_useStreetOnly;
+
+    /**
+     * @brief (nur zu Debugzwecken einkompiliert) `true`, um eine Route mit ausschließlich rechten Winkeln zu finden
+     */
+    static bool debugAStar_rightAnglesOnly;
 #endif
 
 private:
@@ -65,9 +70,10 @@ public:
      *                                   werden, die sich im Einzugsbereich dieses Gebäudes befinden. Wird nullptr
      *                                   verwendet, so dürfen für die Route beliebige Felder benutzt werden.
      * @param useStreetOnly `true`, um nur Straßen für die Route zu verwenden, `false` erlaubt auch über Gras zu laufen
+     * @param rightAnglesOnly `true`, um ausschließlich rechte Winkel für die Route zu verwenden
      */
     AStar(const Context* const context, const MapCoords& source, const MapCoords& destination,
-          Building* buildingToUseCatchmentArea, bool useStreetOnly);
+          Building* buildingToUseCatchmentArea, bool useStreetOnly, bool rightAnglesOnly);
 
     /**
      * @brief Kürzt ggf. die berechnete Route, wenn an Start- und/oder Endpunkt ein Gebäude liegt und mehrere
