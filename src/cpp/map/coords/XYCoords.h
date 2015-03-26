@@ -76,6 +76,16 @@ public:
         _y -= offset;
     }
 
+    /**
+     * @brief Ändert die Koordinaten.
+     * @param x X-Koordinate
+     * @param y Y-Koordinate
+     */
+    void setTo(int x, int y) {
+        _x = x;
+        _y = y;
+    }
+
 };
 
 #endif

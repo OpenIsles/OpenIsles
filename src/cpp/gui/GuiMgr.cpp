@@ -229,8 +229,11 @@ void GuiMgr::onEvent(SDL_Event& event) {
 
     // Bei Linksklick die Koordinaten merken
     if (event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_LEFT) {
-        startClickX = event.button.x;
-        startClickY = event.button.y;
+        int x = event.button.x;
+        int y = event.button.y;
+
+        startClickWindowCoords.setTo(x, y);
+        startClickMapCoords = MapCoordUtils::getMapCoordsUnderMouse(*context->game->getMap(), x, y);
     }
 
     // Erst alle GUI-Elemente durchgehen, dass die das Event zuerst kriegen

@@ -462,8 +462,7 @@ void GuiMap::renderElement(IRenderer* renderer) {
 }
 
 bool GuiMap::onEventElement(SDL_Event& event) {
-    int startClickX, startClickY;
-    context->guiMgr->getStartClickCoords(startClickX, startClickY);
+    const WindowCoords& startClickWindowCoords = context->guiMgr->getStartClickWindowCoords();
 
     // Bauen wir grade was?
     if (inBuildingMode) {
@@ -481,7 +480,7 @@ bool GuiMap::onEventElement(SDL_Event& event) {
                 ||
             (event.type == SDL_MOUSEMOTION &&
              isLeftMouseButtonDown &&
-             hitTest(startClickX, startClickY))
+             hitTest(startClickWindowCoords.x(), startClickWindowCoords.y()))
            ) {
 
             // Ok, wir müssen nun ggf. was platzieren. Es kommt nun drauf an, was wir grade platzieren
@@ -505,8 +504,7 @@ bool GuiMap::onEventElement(SDL_Event& event) {
                 // TODO Performace: Es wäre besser, wenn wir nur neuberechnen, wenn der Mauszeiger wirklich
                 // auf einer neuen Kachel landet und nicht bei jeder Pixelbewegung.
 
-                // TODO mapCoordsClickStart merken, damit wir während die Maustaste unten is, die Karte drehen können
-                MapCoords mapCoordsClickStart = MapCoordUtils::getMapCoordsUnderMouse(*map, startClickX, startClickY);
+                const MapCoords& mapCoordsClickStart = context->guiMgr->getStartClickMapCoords();
 
                 // Die Richtung, in der wir iterieren is wichtig. Wir bauen immer vom
                 // Startpunkt aus (falls nicht alle Resourcen da sind).
@@ -533,8 +531,7 @@ bool GuiMap::onEventElement(SDL_Event& event) {
                 // TODO Performace: Es wäre besser, wenn wir nur neuberechnen, wenn der Mauszeiger wirklich
                 // auf einer neuen Kachel landet und nicht bei jeder Pixelbewegung.
 
-                // TODO mapCoordsClickStart merken, damit wir während die Maustaste unten is, die Karte drehen können
-                MapCoords mapCoordsClickStart = MapCoordUtils::getMapCoordsUnderMouse(*map, startClickX, startClickY);
+                const MapCoords& mapCoordsClickStart = context->guiMgr->getStartClickMapCoords();
 
                 // Sonderfall: Start = End, keine Route, sondern nur das eine Feld.
                 Route* route;
@@ -580,7 +577,7 @@ bool GuiMap::onEventElement(SDL_Event& event) {
         // Maustaste losgelassen? Dann jetzt fest die Gebäude setzen
         if (event.type == SDL_MOUSEBUTTONUP &&
             event.button.button == SDL_BUTTON_LEFT &&
-            hitTest(startClickX, startClickY)) {
+            hitTest(startClickWindowCoords.x(), startClickWindowCoords.y())) {
 
             finishAddingStructure();
             return false;
@@ -593,12 +590,9 @@ bool GuiMap::onEventElement(SDL_Event& event) {
     if (event.type == SDL_MOUSEBUTTONUP &&
         event.button.button == SDL_BUTTON_LEFT &&
         hitTest(event.button.x, event.button.y) &&
-        hitTest(startClickX, startClickY)) {
+        hitTest(startClickWindowCoords.x(), startClickWindowCoords.y())) {
 
-        int startClickX, startClickY;
-        context->guiMgr->getStartClickCoords(startClickX, startClickY);
-
-        if (abs(event.button.x - startClickX) < 3 && abs(event.button.y - startClickY) < 3) {
+        if (abs(event.button.x - startClickWindowCoords.x()) < 3 && abs(event.button.y - startClickWindowCoords.y()) < 3) {
             onClickInMap(event.button.x, event.button.y);
         }
         return false;

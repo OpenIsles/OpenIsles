@@ -8,6 +8,8 @@
 #include <map>
 #include "Context.h"
 #include "game/GoodsSlot.h"
+#include "map/coords/MapCoords.h"
+#include "map/coords/WindowCoords.h"
 #include "map/Direction.h"
 #include "map/Map.h"
 #include "map/StructureType.h"
@@ -112,10 +114,16 @@ private:
     IRenderer* const renderer;
 
     /**
-     * @brief Fenster-Koordinaten, an dem der letzte Click gestartet wurde.
+     * @brief Fenster-Koordinaten, an dem der letzte Left-Click gestartet wurde.
      * Gültig, bis die Maustaste losgelassen wurde.
      */
-    int startClickX, startClickY;
+    WindowCoords startClickWindowCoords;
+
+    /**
+     * @brief Map-Koordinaten, an dem der letzte Left-Click gestartet wurde.
+     * Gültig, bis die Maustaste losgelassen wurde.
+     */
+    MapCoords startClickMapCoords;
     
     /**
      * @brief Map, die alle registrierten Gui-Elemente enthält und durch ihre Identifier referenziert.
@@ -142,10 +150,25 @@ public:
      * D.h. der muss zu diesem Zeitpunkt bereits gesetzt sein.
      */
     void initGui();
-    
-    void getStartClickCoords(int& startClickX, int& startClickY) const {
-        startClickX = this->startClickX;
-        startClickY = this->startClickY;
+
+    /**
+     * @brief Liefert die Fenster-Koordinaten zurück, an denen die linke Maustaste gedrückt wurde.
+     * Diese Methode liefert nur einen gültigen Wert, wenn die linke Maustaste gerade gedrückt ist.
+     *
+     * @return Fenster-Koordinaten, an denen die linke Maustaste gedrückt wurde.
+     */
+    const WindowCoords& getStartClickWindowCoords() const {
+        return startClickWindowCoords;
+    }
+
+    /**
+     * @brief Liefert die Map-Koordinaten zurück, an denen die linke Maustaste gedrückt wurde.
+     * Diese Methode liefert nur einen gültigen Wert, wenn die linke Maustaste gerade gedrückt ist.
+     *
+     * @return Map-Koordinaten, an denen die linke Maustaste gedrückt wurde.
+     */
+    const MapCoords& getStartClickMapCoords() const {
+        return startClickMapCoords;
     }
 
 	/**
