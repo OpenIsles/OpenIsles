@@ -535,10 +535,16 @@ bool GuiMap::onEventElement(SDL_Event& event) {
 
                 // TODO mapCoordsClickStart merken, damit wir während die Maustaste unten is, die Karte drehen können
                 MapCoords mapCoordsClickStart = MapCoordUtils::getMapCoordsUnderMouse(*map, startClickX, startClickY);
-                AStar aStar(context, mapCoordsClickStart, mapCoordsUnderMouse, nullptr, false); // TODO Wir brauchen rechte Winkel in der Route! -> wohl spezielle h() für A*
-                Route* route = aStar.getRoute();
 
-                // TODO Sonderfall: Start = End = nur eine Kachel setzen geht noch nicht
+                // Sonderfall: Start = End, keine Route, sondern nur das eine Feld.
+                Route* route;
+                if (mapCoordsUnderMouse == mapCoordsClickStart) {
+                    route = new Route();
+                    route->push_back(mapCoordsUnderMouse);
+                } else {
+                    AStar aStar(context, mapCoordsClickStart, mapCoordsUnderMouse, nullptr, false); // TODO Wir brauchen rechte Winkel in der Route! -> wohl spezielle h() für A*
+                    route = aStar.getRoute();
+                }
 
                 clearAllTemporarily();
                 if (route != nullptr) {
