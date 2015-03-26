@@ -9,6 +9,7 @@
 #define GUI_ID_PANEL 2
 #define GUI_ID_MINIMAP 3
 #define GUI_ID_STATUS_BAR 4
+#define GUI_ID_RESOURCES_BAR 5
 
 #define GUI_ID_MUSIC_PUSH_BUTTON 101
 

@@ -33,6 +33,7 @@ set(GUI_SOURCE_FILES
     src/cpp/gui/components/GuiMap.cpp
     src/cpp/gui/components/GuiMinimap.cpp
     src/cpp/gui/components/GuiPushButton.cpp
+    src/cpp/gui/components/GuiResourcesBar.cpp
     src/cpp/gui/components/GuiStaticElement.cpp
     src/cpp/gui/panel-widgets/GuiSelectedBuildingWidget.cpp
     src/cpp/gui/panel-widgets/GuiBuildMenuWidget.cpp

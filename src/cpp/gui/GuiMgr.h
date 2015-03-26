@@ -259,11 +259,6 @@ private:
     void updateGuiFromPanelState();
 
     /**
-     * @brief rendert die Leiste mit den Resourcen, wenn notwendig
-     */
-    void renderResourcesBar();
-
-    /**
      * @brief Ändert die Zoom-Stufe der Karte
      * @param map (Denpedency)
      * @param newScreenZoom neue Zoom-Stufe

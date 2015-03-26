@@ -6,8 +6,10 @@
 #include "game/Game.h"
 #include "graphics/graphic/IGraphic.h"
 #include "graphics/renderer/sdl/SDLRenderer.h"
-#include "gui/GuiMgr.h"
 #include "gui/components/GuiMap.h"
+#include "gui/components/GuiResourcesBar.h"
+#include "gui/GuiMgr.h"
+#include "gui/Identifiers.h"
 #include "map/coords/MapCoords.h"
 #include "map/coords/ScreenCoords.h"
 #include "map/Map.h"
@@ -21,7 +23,9 @@
 #endif
 
 
-GuiMap::GuiMap(const Context* const context) : GuiBase(context) {
+GuiMap::GuiMap(const Context* const context, GuiResourcesBar* guiResourcesBar) :
+    GuiBase(context), guiResourcesBar(guiResourcesBar) {
+
     setCoords(Consts::mapClipRect.x, Consts::mapClipRect.y, Consts::mapClipRect.w, Consts::mapClipRect.h);
 
 #ifdef DEBUG
@@ -917,6 +921,9 @@ void GuiMap::onStartAddingStructure() {
     mapObjectBeingAddedHovering->setMapHeight(graphic->getMapHeight());
     mapObjectBeingAddedHovering->setView(context->guiMgr->getPanelState().addingStructureView);
     mapObjectBeingAddedHovering->setDrawingFlags(IGraphic::DRAWING_FLAG_MASKED);
+
+    // Baukosten in der Resourcen-Leiste nach einem Mehrfachbauen wieder auf 1x zurücksetzen
+    updateBuildingCosts(structureType);
 }
 
 void GuiMap::onCancelAddingStructure() {
@@ -993,16 +1000,17 @@ void GuiMap::addCurrentStructureToMapObjectsBeingAdded(const MapCoords& mapCoord
     }
 
     // Hovering beenden. Jetzt ist die linke Maustaste runtergedrückt und wir adden immer zu mapObjectsBeingAdded.
+    Structure* firstStructureInList = mapObjectsBeingAdded.front();
     if (mapObjectBeingAddedHovering != nullptr) {
         delete mapObjectBeingAddedHovering;
         mapObjectBeingAddedHovering = nullptr;
 
         // Einzugsbereich wird am ersten Gebäude in mapObjectsBeingAdded gezeichnet
-        Structure* firstStructureInList = mapObjectsBeingAdded.front();
         buildingToDrawCatchmentArea = dynamic_cast<Building*>(firstStructureInList);
     }
 
-    // TODO Info an Resourcen-Leiste, damit die Kosten für die mehreren Objekte angezeigt werden
+    // Baukosten in der Resourcen-Leiste aktualisieren
+    updateBuildingCosts(firstStructureInList->getStructureType());
 }
 
 void GuiMap::updateMapObjectsTemporarilyDrawingFlags() {
@@ -1024,25 +1032,23 @@ void GuiMap::updateMapObjectsTemporarilyDrawingFlags() {
 
     // Ansonsten gucken wir mapObjectsBeingAdded durch
 
+    // Wir nutzen die Tatsache aus, dass immer nur dieselben Gebäude in der Bauqueue sind.
+    Structure* firstStructureInList = mapObjectsBeingAdded.front();
+    StructureType structureType = firstStructureInList->getStructureType();
+    const BuildingConfig* buildingConfig = context->configMgr->getBuildingConfig(structureType);
+    const BuildingCosts& buildingCostsOneTime = buildingConfig->buildingCosts;
+
     const Player* currentPlayer = context->game->getCurrentPlayer();
 
-    BuildingCosts sumBuildingCostTilHere;
     bool outOfResources = false;
 
     // Der Reihe nach alle zu setzenden Gebäude durchgehen und gucken, wann/ob die Resourcen ausgehen
-    for (auto iter = mapObjectsBeingAdded.cbegin(); iter != mapObjectsBeingAdded.cend(); iter++) {
+    int structuresCount = 1;
+    for (auto iter = mapObjectsBeingAdded.cbegin(); iter != mapObjectsBeingAdded.cend(); iter++, structuresCount++) {
         Structure* mapObject = *iter;
 
         if (!outOfResources) {
-            StructureType structureType = mapObject->getStructureType();
-
-            const BuildingConfig* buildingConfig = context->configMgr->getBuildingConfig(structureType);
-            const BuildingCosts& buildingCosts = buildingConfig->buildingCosts;
-
-            sumBuildingCostTilHere.coins += buildingCosts.coins;
-            sumBuildingCostTilHere.tools += buildingCosts.tools;
-            sumBuildingCostTilHere.wood += buildingCosts.wood;
-            sumBuildingCostTilHere.bricks += buildingCosts.bricks;
+            BuildingCosts sumBuildingCostTilHere = buildingCostsOneTime * structuresCount;
 
             // TODO aktuell können in mapObjectsBeingAdded Gebäude von verschiedenen Siedlungen sein. Das muss gefixed werden. Nur von einer Siedlung ist erlaubt.
             Colony* colony = context->game->getColony(
@@ -1062,4 +1068,17 @@ void GuiMap::updateMapObjectsTemporarilyDrawingFlags() {
             mapObject->setDrawingFlags(mapObject->getDrawingFlags() & ~IGraphic::DRAWING_FLAG_BLINK);
         }
     }
+}
+
+void GuiMap::updateBuildingCosts(StructureType structureType) {
+    // Wir nutzen die Tatsache aus, dass immer nur dieselben Gebäude in der Bauqueue sind.
+    const BuildingConfig* buildingConfig = context->configMgr->getBuildingConfig(structureType);
+    const BuildingCosts& buildingCostsOneTime = buildingConfig->buildingCosts;
+
+    unsigned long structuresCount = mapObjectsBeingAdded.size();
+    if (structuresCount == 0) {
+        structuresCount = 1;
+    }
+
+    guiResourcesBar->showBuildingCosts(buildingCostsOneTime * structuresCount);
 }

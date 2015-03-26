@@ -4,6 +4,7 @@
 #include <SDL_render.h>
 #include "Context.h"
 #include "gui/components/GuiBase.h"
+#include "gui/components/GuiResourcesBar.h"
 #include "map/Direction.h"
 #include "map/Structure.h"
 #include "utils/RectangleData.h"
@@ -71,6 +72,11 @@ public:
 class GuiMap : public GuiBase {
 
 private:
+    /**
+     * @brief Referenz auf die Resourcen-Leiste
+     */
+    GuiResourcesBar* guiResourcesBar;
+
     // Datenstrukturen, die für den Baumodus gebraucht werden //////////////////////////////////////////////////////////
 
     /**
@@ -132,8 +138,9 @@ public:
     /**
      * @brief Konstruktor. Positioniert die Komponente entsprechend `Consts::mapClipRect`.
      * @param context Dependency
+     * @param guiResourcesBar Dependency
      */
-    GuiMap(const Context* const context);
+    GuiMap(const Context* const context, GuiResourcesBar* guiResourcesBar);
 
     virtual ~GuiMap();
 
@@ -234,6 +241,13 @@ private:
      * Dies ist immer vor jedem Frame-Rendern notwendig, da sich ständig die verfügbaren Resourcen ändern.
      */
     void updateMapObjectsTemporarilyDrawingFlags();
+
+    /**
+     * @brief Aktualisiert die Baukosten in der Resourcen-Leiste.
+     * @param structureType Gebäude, was wir grade bauen. Alle Aufrufer haben diese Info parat,
+     *                      also geben wir sie der Methode gleich mit.
+     */
+    void updateBuildingCosts(StructureType structureType);
 };
 
 #endif

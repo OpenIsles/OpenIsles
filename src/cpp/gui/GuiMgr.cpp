@@ -1,6 +1,5 @@
 #include <string>
 #include "config/ConfigMgr.h"
-#include "game/Colony.h"
 #include "game/Game.h"
 #include "graphics/graphic/sdl/SDLGraphic.h"
 #include "graphics/mgr/IFontMgr.h"
@@ -59,8 +58,12 @@ void GuiMgr::initGui() {
     // GUI-Elemente anlegen //////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////////
 
-    // Karte
-    GuiMap* guiMap = new GuiMap(context);
+    // Karte mit Resourcen-Leiste
+    GuiResourcesBar* guiResourcesBar = new GuiResourcesBar(context);
+    registerElement(GUI_ID_RESOURCES_BAR, guiResourcesBar);
+
+    GuiMap* guiMap = new GuiMap(context, guiResourcesBar);
+    guiMap->addChildElement(guiResourcesBar);
     registerElement(GUI_ID_MAP, guiMap);
 
     // Panel
@@ -218,9 +221,6 @@ void GuiMgr::render() {
         
         guiElement->render(renderer);
     }
-
-    // Zum Schluss die Resourcen-Leiste oben an die Karte ran
-    renderResourcesBar();
 }
 
 #ifndef NO_SDL
@@ -490,73 +490,17 @@ void GuiMgr::updateGuiFromPanelState() {
         ((GuiPushButton*) findElement(GUI_ID_ADD_BUILDING_PUSH_BUTTON_BASE + i))->setActive(active);
         findElement(GUI_ID_ADD_BUILDING_GRID_BASE + i)->setVisible(active && panelState.buildingMenuOpen);
     }
-}
 
-void GuiMgr::renderResourcesBar() {
-    Player* currentPlayer = context->game->getCurrentPlayer();
-    const BuildingCosts* buildingCosts = (panelState.selectedPanelButton == PanelButton::ADD_BUILDING) ?
-        context->configMgr->getBuildingConfig(panelState.addingStructure)->getBuildingCosts() : nullptr;
+    // Baukosten aktualisieren
+    GuiResourcesBar* guiResourcesBar = (GuiResourcesBar*) findElement(GUI_ID_RESOURCES_BAR);
+    if (panelState.selectedPanelButton == PanelButton::ADD_BUILDING) {
+        StructureType structureType = context->guiMgr->getPanelState().addingStructure;
+        const BuildingCosts& buildingCosts = context->configMgr->getBuildingConfig(structureType)->buildingCosts;
 
-    // Münzenguthaben
-    context->graphicsMgr->getGraphicSet("coin")->getStatic()->getGraphic()->drawAt(15, 8);
-
-    std::string outputString = toString(currentPlayer->coins);
-    if (buildingCosts != nullptr) {
-        outputString += " (";
-        outputString += toString(buildingCosts->coins);
-        outputString += ")";
+        guiResourcesBar->showBuildingCosts(buildingCosts);
+    } else {
+        guiResourcesBar->hideBuildingCosts();
     }
-    context->fontMgr->renderText(renderer, outputString, 42, 10,
-        &colorWhite, &colorBlack, "DroidSans-Bold.ttf", 18, RENDERTEXT_HALIGN_LEFT);
-
-    // Siedlung, wo der Cursor grade is
-    MapCoords mouseCurrentMapCoords =
-        MapCoordUtils::getMapCoordsUnderMouse(*context->game->getMap(), context->mouseCurrentX, context->mouseCurrentY);
-
-    MapTile* mapTileAtCursor = context->game->getMap()->getMapTileAt(mouseCurrentMapCoords);
-    if (mapTileAtCursor == nullptr) {
-        return;
-    }
-
-    Colony* colony = context->game->getColony(mapTileAtCursor->player, mapTileAtCursor->isle);
-    if (colony == nullptr) {
-        return;
-    }
-
-    // Waren (nur für den eigenen Spieler)
-    if (mapTileAtCursor->player == currentPlayer) {
-        GoodsType goodsToDraw[] = { GoodsType::TOOLS, GoodsType::WOOD, GoodsType::BRICKS };
-        int x = 290;
-        for (unsigned int i = 0; i < sizeof(goodsToDraw); i++, x += 110) {
-            GoodsType goodsType = goodsToDraw[i];
-            const std::string graphicSetName = context->graphicsMgr->getGraphicSetNameForGoodIcons(goodsType, false);
-            context->graphicsMgr->getGraphicSet(graphicSetName)->getStatic()->getGraphic()->drawAt(x, 5);
-
-            int goodsInventory = (int) colony->getGoods(goodsType).inventory;
-            outputString = toString(goodsInventory);
-            if (buildingCosts != nullptr) {
-                outputString += " (";
-                outputString += toString(
-                    (goodsType == GoodsType::TOOLS) ? buildingCosts->tools :
-                        (goodsType == GoodsType::WOOD) ? buildingCosts->wood :
-                            (goodsType == GoodsType::BRICKS) ? buildingCosts->bricks : 0);
-                outputString += ")";
-            }
-
-            context->fontMgr->renderText(renderer, outputString, x + 35, 10,
-                &colorWhite, &colorBlack, "DroidSans-Bold.ttf", 18, RENDERTEXT_HALIGN_LEFT);
-        }
-    }
-
-    // Einwohnerzahl (immer anzeigen)
-    const std::string graphicSetName =
-        context->graphicsMgr->getGraphicSetNameForCoatOfArmsPopulation(mapTileAtCursor->player->getColor());
-    const IGraphic* populationIconGraphic = context->graphicsMgr->getGraphicSet(graphicSetName)->getStatic()->getGraphic();
-    populationIconGraphic->drawAt(655, 6);
-
-    outputString = toString(colony->population);
-    context->fontMgr->renderText(renderer, outputString, 690, 10,
-        &colorWhite, &colorBlack, "DroidSans-Bold.ttf", 18, RENDERTEXT_HALIGN_LEFT);
 }
 
 void GuiMgr::drawGoodsBox(int x, int y, GoodsType goodsType, double inventory, double capacity) {

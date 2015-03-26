@@ -48,6 +48,15 @@ public:
         : coins(coins), tools(tools), wood(wood), bricks(bricks) {
     }
 
+    /**
+     * @brief Skalar-Multiplikations-Operator, der die Baukosten für mehrere Gebäude berechnet.
+     * @param n Multiplikator
+     * @return Baukosten für `n` Gebäude
+     */
+    BuildingCosts operator*(int n) const {
+        return BuildingCosts(coins * n, tools * n, wood * n, bricks * n);
+    }
+
 } BuildingCosts;
 
 
