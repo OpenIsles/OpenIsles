@@ -29,7 +29,7 @@
    </properties>
   </object>
  </objectgroup>
- <objectgroup name="structures" width="0" height="0">
+ <objectgroup name="mapobjects" width="0" height="0">
   <object name="marketplace" type="building" x="1152" y="1056" width="128" height="96">
    <properties>
     <property name="player" value="1"/>

@@ -1,4 +1,5 @@
 #include <array>
+#include <cstdlib>
 #include <string>
 #include "game/Colony.h"
 #include "game/Game.h"
@@ -23,14 +24,14 @@ void GameIO::loadGameFromTMX(
 
     // Kartengröße einlesen und Map anlegen
     rapidxml::xml_node<>* mapNode = xmlDocument->first_node("map", 3, true);
-    int newMapWidth = atoi(mapNode->first_attribute("width", 5, true)->value());
-    int newMapHeight = atoi(mapNode->first_attribute("height", 6, true)->value());
+    int newMapWidth = std::atoi(mapNode->first_attribute("width", 5, true)->value());
+    int newMapHeight = std::atoi(mapNode->first_attribute("height", 6, true)->value());
     game->getMap()->initNewMap(newMapWidth, newMapHeight);
 
     // Ebenen durchgehen.
     rapidxml::xml_node<>* objectgroupIslesNode = nullptr;
     rapidxml::xml_node<>* objectgroupColoniesNode = nullptr;
-    rapidxml::xml_node<>* objectgroupStructuresNode = nullptr;
+    rapidxml::xml_node<>* objectgroupMapObjectsNode = nullptr;
 
     for (rapidxml::xml_node<>* objectgroupNode = mapNode->first_node("objectgroup", 11, true); objectgroupNode != nullptr;
          objectgroupNode = objectgroupNode->next_sibling("objectgroup", 11, true)) {
@@ -41,8 +42,8 @@ void GameIO::loadGameFromTMX(
             objectgroupIslesNode = objectgroupNode;
         } else if (strcmp(layerName, "colonies") == 0) {
             objectgroupColoniesNode = objectgroupNode;
-        } else if (strcmp(layerName, "structures") == 0) {
-            objectgroupStructuresNode = objectgroupNode;
+        } else if (strcmp(layerName, "mapobjects") == 0) {
+            objectgroupMapObjectsNode = objectgroupNode;
         }
     }
 
@@ -56,7 +57,7 @@ void GameIO::loadGameFromTMX(
     loadColonies(game, objectgroupColoniesNode);
 
     // Strukturen und Gebäude laden
-    loadStructures(game, configMgr, objectgroupStructuresNode);
+    loadMapObjects(game, configMgr, objectgroupMapObjectsNode);
 
     // XML-Document wegräumen
     delete xmlDocument;
@@ -65,7 +66,7 @@ void GameIO::loadGameFromTMX(
 void GameIO::loadPlayers(Game* game, rapidxml::xml_node<>* mapNode) {
     rapidxml::xml_node<>* propertiesNode = mapNode->first_node("properties", 10, true);
 
-    int currentPlayerNr = atoi(getPropertyValueFromPropertiesNode(propertiesNode, "current_player"));
+    int currentPlayerNr = std::atoi(getPropertyValueFromPropertiesNode(propertiesNode, "current_player"));
 
     for (int i = 1; i <= 4; i++) {
         std::string playerAttrPrefix = "player" + toString(i) + "_";
@@ -119,8 +120,8 @@ void GameIO::loadMap(
             // Objekt aus der Tiled-Datei lesen
             const char* isleName = objectNode->first_attribute("name", 4, true)->value();
 
-            int isleWidth = atoi(objectNode->first_attribute("width", 5, true)->value());
-            int isleHeight = atoi(objectNode->first_attribute("height", 6, true)->value());
+            int isleWidth = std::atoi(objectNode->first_attribute("width", 5, true)->value());
+            int isleHeight = std::atoi(objectNode->first_attribute("height", 6, true)->value());
 
             int isleMapWidth = isleWidth / IGraphicsMgr::TILE_HEIGHT; // tiled rechnet merkwürdigerweise auch für X in KachelHÖHE
             int isleMapHeight = isleHeight / IGraphicsMgr::TILE_HEIGHT;
@@ -198,7 +199,7 @@ void GameIO::loadColonies(Game* game, rapidxml::xml_node<>* objectgroupColoniesN
         MapCoords mapCoords = getMapCoordsFromObjectNode(objectNode);
 
         rapidxml::xml_node<>* propertiesNode = objectNode->first_node("properties", 10, true);
-        int playerNr = atoi(getPropertyValueFromPropertiesNode(propertiesNode, "player"));
+        int playerNr = std::atoi(getPropertyValueFromPropertiesNode(propertiesNode, "player"));
         Player* player = game->getPlayer(playerNr - 1);
         MapTile* mapTile = map->mapTiles->getData(mapCoords.x(), mapCoords.y(), nullptr);
 
@@ -207,61 +208,63 @@ void GameIO::loadColonies(Game* game, rapidxml::xml_node<>* objectgroupColoniesN
 
         // Waren
         colony->getGoods(GoodsType::WOOL).inventory =
-            atoi(getPropertyValueFromPropertiesNode(propertiesNode, "goods_wool"));
+            std::atoi(getPropertyValueFromPropertiesNode(propertiesNode, "goods_wool"));
         colony->getGoods(GoodsType::CATTLE).inventory =
-            atoi(getPropertyValueFromPropertiesNode(propertiesNode, "goods_cattle"));
+            std::atoi(getPropertyValueFromPropertiesNode(propertiesNode, "goods_cattle"));
         colony->getGoods(GoodsType::FOOD).inventory =
-            atoi(getPropertyValueFromPropertiesNode(propertiesNode, "goods_food"));
+            std::atoi(getPropertyValueFromPropertiesNode(propertiesNode, "goods_food"));
         colony->getGoods(GoodsType::CLOTH).inventory =
-            atoi(getPropertyValueFromPropertiesNode(propertiesNode, "goods_cloth"));
+            std::atoi(getPropertyValueFromPropertiesNode(propertiesNode, "goods_cloth"));
         colony->getGoods(GoodsType::TOOLS).inventory =
-            atoi(getPropertyValueFromPropertiesNode(propertiesNode, "goods_tools"));
+            std::atoi(getPropertyValueFromPropertiesNode(propertiesNode, "goods_tools"));
         colony->getGoods(GoodsType::WOOD).inventory =
-            atoi(getPropertyValueFromPropertiesNode(propertiesNode, "goods_wood"));
+            std::atoi(getPropertyValueFromPropertiesNode(propertiesNode, "goods_wood"));
         colony->getGoods(GoodsType::BRICKS).inventory =
-            atoi(getPropertyValueFromPropertiesNode(propertiesNode, "goods_bricks"));
+            std::atoi(getPropertyValueFromPropertiesNode(propertiesNode, "goods_bricks"));
     }
 }
 
-void GameIO::loadStructures(Game* game, const ConfigMgr* configMgr, rapidxml::xml_node<>* objectgroupStructuresNode) {
-    for (rapidxml::xml_node<>* objectNode = objectgroupStructuresNode->first_node("object", 6, true); objectNode != nullptr;
+void GameIO::loadMapObjects(Game* game, const ConfigMgr* configMgr, rapidxml::xml_node<>* objectgroupMapObjectsNode) {
+    for (rapidxml::xml_node<>* objectNode = objectgroupMapObjectsNode->first_node("object", 6, true); objectNode != nullptr;
          objectNode = objectNode->next_sibling("object", 6, true)) {
 
-        // Gucken, ob wir den Knoten-Typ kennen
-        const char* nodeType = objectNode->first_attribute("type", 4, true)->value();
-        if (strcmp(nodeType, "structure") != 0 && strcmp(nodeType, "building") != 0) {
-            continue;
-        }
-
         // Allgemeine Daten einlesen
+        const char* nodeType = objectNode->first_attribute("type", 4, true)->value();
         const char* nodeNameValue = objectNode->first_attribute("name", 4, true)->value();
 
         MapCoords mapCoords = getMapCoordsFromObjectNode(objectNode);
-
         rapidxml::xml_node<>* propertiesNode = objectNode->first_node("properties", 10, true);
-        int playerNr = atoi(getPropertyValueFromPropertiesNode(propertiesNode, "player"));
-        Player* player = game->getPlayer(playerNr - 1);
+
+        EighthDirection view = getViewPropertyValueFromPropertiesNode(propertiesNode);
 
         // Konkreten Struktur-Typ finden und MapObject anlegen
-        StructureType structureType;
         if (strcmp(nodeType, "structure") == 0 || strcmp(nodeType, "building") == 0) {
-            structureType = configMgr->getStructureType(nodeNameValue);
+            int playerNr = std::atoi(getPropertyValueFromPropertiesNode(propertiesNode, "player"));
+            Player* player = game->getPlayer(playerNr - 1);
+
+            StructureType structureType = configMgr->getStructureType(nodeNameValue);
             if (structureType == StructureType::NO_STRUCTURE) {
                 std::cerr << "Illegal structure or building name '" << nodeNameValue << "'" << std::endl;
                 throw std::runtime_error("Illegal structure or building name");
             }
 
-            // TODO Ansicht in die TMX legen und dort wieder rauslesen
-            FourthDirection view = Direction::SOUTH;
             game->addStructure(mapCoords, structureType, view, player);
+        }
+
+        // MapObject für erntebare Landschaften anlegen
+        else if (strcmp(nodeType, "harvestable") == 0) {
+            // TODO Aus nodeNameValue weiteres Identifizierungsmerkmal lesen (verschiedene Tiles, Nord-/Südwälder zu haben, Wald/Getreide/etc.)
+
+            double age = std::atof(getPropertyValueFromPropertiesNode(propertiesNode, "age"));
+
+            game->addHarvestable(mapCoords, age, view);
         }
     }
 }
 
-
 MapCoords GameIO::getMapCoordsFromObjectNode(rapidxml::xml_node<>* objectNode) {
-    int x = atoi(objectNode->first_attribute("x", 1, true)->value());
-    int y = atoi(objectNode->first_attribute("y", 1, true)->value());
+    int x = std::atoi(objectNode->first_attribute("x", 1, true)->value());
+    int y = std::atoi(objectNode->first_attribute("y", 1, true)->value());
 
     int mapX = x / IGraphicsMgr::TILE_HEIGHT; // tiled rechnet merkwürdigerweise auch für X in KachelHÖHE
     int mapY = y / IGraphicsMgr::TILE_HEIGHT;
@@ -283,4 +286,15 @@ const char* GameIO::getPropertyValueFromPropertiesNode(rapidxml::xml_node<>* pro
     }
 
     return nullptr;
+}
+
+const EighthDirection GameIO::getViewPropertyValueFromPropertiesNode(rapidxml::xml_node<>* propertiesNode) {
+    const char* viewPropertyValue = getPropertyValueFromPropertiesNode(propertiesNode, "view");
+
+    // Nicht vorhanden? Dann Defaultwert zurückliefern
+    if (viewPropertyValue == nullptr) {
+        return Direction::SOUTH;
+    }
+
+    return Direction::fromString(viewPropertyValue);
 }

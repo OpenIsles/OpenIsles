@@ -48,13 +48,12 @@ private:
     static void loadColonies(Game* game, rapidxml::xml_node<>* objectgroupColoniesNode);
 
     /**
-     * @brief Lädt die Strukturen und Gebäude aus der tiled-TMX-Datei
+     * @brief Lädt die Map-Objekte (Strukturen, Gebäude und Wälder) aus der tiled-TMX-Datei
      * @param game Spiel, in das der Spielstand geladen werden soll
      * @param configMgr (Dependency)
-     * @param objectgroupStructuresNode <objectgroup>-Knoten der "structures"-Ebene aus der tiled-Datei
+     * @param objectgroupMapObjectsNode <objectgroup>-Knoten der "mapobjects"-Ebene aus der tiled-Datei
      */
-    static void loadStructures(Game* game, const ConfigMgr* configMgr, rapidxml::xml_node<>* objectgroupStructuresNode);
-
+    static void loadMapObjects(Game* game, const ConfigMgr* configMgr, rapidxml::xml_node<>* objectgroupMapObjectsNode);
 
     /**
      * @brief Helper, um aus einem <object>-Knoten die Map-Koordinaten zu ermitteln
@@ -66,6 +65,7 @@ private:
     /**
      * @brief Helper, um aus einem Knoten eine bestimmten Property-Wert auszulesen. Es werden die <property>-Knoten
      * innerhalb des <properties>-Knoten durchsucht und der value-Attributwert zurückgegeben.
+     *
      * @param objectNode <object>-Knoten aus einer XML-Datei
      * @param propertyName Name des Property, die ermittelt werden soll
      * @return value-Attributwert der Property oder nullptr, wenn die Property nicht existiert.
@@ -73,6 +73,15 @@ private:
      * muss sie abkopiert werden.
      */
     static const char* getPropertyValueFromPropertiesNode(rapidxml::xml_node<>* propertiesNode, const char* propertyName);
+
+    /**
+     * @brief Helper, um aus einem <properties>-Knoten die Eigenschaft "view" auszulesen und die Ansicht zurückzuliefern.
+     * Ist keine entsprechende Property vorhanden, wird die Südansicht (als Default, der wohl hauptsächlich benutzt wird)
+     * zurückgeliefert.
+     * @param propertiesNode <properties>-Knoten aus einer XML-Datei
+     * @return Ansicht
+     */
+    static const EighthDirection getViewPropertyValueFromPropertiesNode(rapidxml::xml_node<>* propertiesNode);
 
 };
 

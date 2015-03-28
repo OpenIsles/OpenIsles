@@ -54,6 +54,19 @@ Colony* Game::getColony(const MapObjectFixed* mapObject) const {
     return getColony(mapTile->player, mapTile->isle);
 }
 
+Harvestable* Game::addHarvestable(const MapCoords& mapCoords, double age, const FourthDirection& view) {
+    // Objekt anlegen
+    Harvestable* harvestable = new Harvestable();
+    harvestable->setMapCoords(mapCoords);
+    harvestable->setView(view);
+    harvestable->setAge(age);
+
+    // Objekt in die Liste aufnehmen.
+    map->addMapObject(harvestable);
+
+    return harvestable;
+}
+
 Structure* Game::addStructure(
     const MapCoords& mapCoords, StructureType structureType, const FourthDirection& view, Player* player) {
 

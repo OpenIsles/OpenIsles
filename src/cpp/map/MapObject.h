@@ -49,7 +49,7 @@ public:
         return mapWidth;
     }
 
-    void setMapWidth(int mapWidth) {
+    virtual void setMapWidth(int mapWidth) {
         this->mapWidth = mapWidth;
     }
 
@@ -57,7 +57,7 @@ public:
         return mapHeight;
     }
 
-    void setMapHeight(int mapHeight) {
+    virtual void setMapHeight(int mapHeight) {
         this->mapHeight = mapHeight;
     }
 

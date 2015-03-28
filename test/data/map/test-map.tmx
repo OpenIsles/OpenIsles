@@ -33,7 +33,7 @@
    </properties>
   </object>
  </objectgroup>
- <objectgroup name="structures" width="150" height="150">
+ <objectgroup name="mapobjects" width="150" height="150">
   <object name="office1" type="building" x="896" y="576" width="96" height="64">
    <properties>
     <property name="player" value="1"/>

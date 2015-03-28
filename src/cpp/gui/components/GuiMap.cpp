@@ -1,5 +1,6 @@
 #include <SDL.h>
 #include <algorithm>
+#include <cassert>
 #include <string>
 #include "config/ConfigMgr.h"
 #include "game/Colony.h"
@@ -213,12 +214,13 @@ void GuiMap::renderElement(IRenderer* renderer) {
         // @see docs/drawing-order-x-tiles.xcf für Variablen
 
         const MapCoords& moMapCoords = mapObjectToDrawHere->getMapCoords();
-        const Structure* structure = dynamic_cast<const Structure*>(mapObjectToDrawHere); // TODO nullptr sollte nicht passieren; später checken, wenn wir Bäume und sowas haben
+        const Structure* structure = dynamic_cast<const Structure*>(mapObjectToDrawHere);
+        const Harvestable* harvestable = dynamic_cast<const Harvestable*>(mapObjectToDrawHere);
 
         int moMapWidth, moMapHeight;
         int tileOffsetXInMapObject, tileOffsetYInMapObject;
-        int drawingFlags;
-        const IGraphic* graphicToDrawHere;
+        int drawingFlags = 0;
+        const IGraphic* graphicToDrawHere = nullptr;
 
         if (drawPlainTile) {
             // maskierte Kachel is 1x1
@@ -230,7 +232,6 @@ void GuiMap::renderElement(IRenderer* renderer) {
             graphicToDrawHere = context->graphicsMgr->getGraphicSet("plain-tile")->getStatic()->getGraphic();
 
         } else {
-
             // Ausrechnen, welchen Schnibbel der Grafik wir anzeigen müssen
             moMapWidth = mapObjectToDrawHere->getMapWidth();
             moMapHeight = mapObjectToDrawHere->getMapHeight();
@@ -238,15 +239,32 @@ void GuiMap::renderElement(IRenderer* renderer) {
             tileOffsetXInMapObject = mapCoords.x() - moMapCoords.x(); // (0 ... moMapWidth-1)
             tileOffsetYInMapObject = mapCoords.y() - moMapCoords.y(); // (0 ... moMapHeight-1)
 
-            drawingFlags = structure->getDrawingFlags();
-            StructureType structureType = structure->getStructureType();
+            if (structure != nullptr) {
+                drawingFlags = structure->getDrawingFlags();
+                StructureType structureType = structure->getStructureType();
 
-            const FourthDirection& structureView = structure->getView();
-            const FourthDirection& viewToRender = Direction::addDirections(structureView, screenView);
+                const FourthDirection& structureView = structure->getView(); // TODO als mapObjectToDrawHere->getView() vereinheitlichen
+                const FourthDirection& viewToRender = Direction::addDirections(structureView, screenView);
 
-            const std::string graphicSetName = context->graphicsMgr->getGraphicSetNameForStructure(structureType);
-            const GraphicSet* mapObjectGraphicSet = context->graphicsMgr->getGraphicSet(graphicSetName);
-            graphicToDrawHere = mapObjectGraphicSet->getByView(viewToRender)->getGraphic();
+                const std::string& graphicSetName = context->graphicsMgr->getGraphicSetNameForStructure(structureType);
+                const GraphicSet* mapObjectGraphicSet = context->graphicsMgr->getGraphicSet(graphicSetName);
+                graphicToDrawHere = mapObjectGraphicSet->getByView(viewToRender)->getGraphic();
+            }
+            else if (harvestable != nullptr) {
+                drawingFlags = 0; // TODO für Platzieren/Abreißen werden wir das wohl später doch brauchen
+
+                const FourthDirection& harvestableView = harvestable->getView(); // TODO als mapObjectToDrawHere->getView() vereinheitlichen
+                const FourthDirection& viewToRender = Direction::addDirections(harvestableView, screenView);
+
+                const std::string graphicSetName = "northern-forest1"; // TODO
+                const GraphicSet* mapObjectGraphicSet = context->graphicsMgr->getGraphicSet(graphicSetName);
+                const std::string stateToRender = "growth" + toString(int(harvestable->getAge()));
+
+                graphicToDrawHere = mapObjectGraphicSet->getByStateAndView(stateToRender, viewToRender)->getGraphic();
+            }
+            else {
+                assert(false);
+            }
         }
 
 
@@ -321,7 +339,7 @@ void GuiMap::renderElement(IRenderer* renderer) {
 
         if (selectedMapObject != nullptr) {
             bool insideCatchmentArea =
-                (selectedBuilding != nullptr && selectedBuilding->isInsideCatchmentArea(context->configMgr, *structure));
+                (selectedBuilding != nullptr && selectedBuilding->isInsideCatchmentArea(context->configMgr, *mapObjectToDrawHere));
 
             if (!insideCatchmentArea) {
                 drawingFlags |= IGraphic::DRAWING_FLAG_DARKENED;
@@ -616,7 +634,7 @@ void GuiMap::onClickInMap(int mouseX, int mouseY) {
     for (auto iter = mapObjects.crbegin(); iter != mapObjects.crend(); iter++) {
         MapObject* mapObject = *iter;
 
-        // TODO hier später weitere Typen handeln oder cleverer in Objekt-Methoden arbeiten
+        // TODO hier später weitere Typen (Schiffe) handeln oder cleverer in Objekt-Methoden arbeiten
         Building* building = dynamic_cast<Building*>(mapObject);
         if (building == nullptr) {
             // Da wir nur die Buildings durchgehen und nicht alle Structures, haben wir den positiven Nebeneffekt,

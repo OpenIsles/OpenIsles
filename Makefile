@@ -123,6 +123,28 @@ endef
 $(foreach STREET_TILESET,$(STREET_TILESETS),$(eval $(call RENDER_STREET_TILESET,$(STREET_TILESET))))
 
 ########################################################################################################################
+# Erntebare Landschaften                                                                                               #
+########################################################################################################################
+
+HARVESTABLES := northern-forest1
+
+define RENDER_HARVESTABLE
+$(DATA_DIRECTORY)/img/harvestables/$(1).png: $(SRC_DIRECTORY)/blender/harvestables/$(1)/$(1).blend
+	$$(CREATE_TARGET_DIRECTORY)
+	cd $(SRC_DIRECTORY)/blender/harvestables/$(1); blender -b $$(notdir $$<) -P ../render-harvestable.py
+
+	# geometry muss angegeben werden, sonst greift der Default von 120x120
+	$(MONTAGE) \
+        $(SRC_DIRECTORY)/blender/harvestables/$(1)/render/angle0/* \
+        $(SRC_DIRECTORY)/blender/harvestables/$(1)/render/angle90/* \
+        $(SRC_DIRECTORY)/blender/harvestables/$(1)/render/angle180/* \
+        $(SRC_DIRECTORY)/blender/harvestables/$(1)/render/angle270/* \
+        -geometry +0+0 -tile x4 $$@
+endef
+
+$(foreach HARVESTABLE,$(HARVESTABLES),$(eval $(call RENDER_HARVESTABLE,$(HARVESTABLE))))
+
+########################################################################################################################
 # Gütersymbole                                                                                                         #
 ########################################################################################################################
 
@@ -226,12 +248,12 @@ render-coat-of-arms: $(SRC_DIRECTORY)/blender/ui/coat-of-arms/coat-of-arms.blend
 ########################################################################################################################
 
 $(DATA_DIRECTORY)/img/coin.png: $(SRC_DIRECTORY)/blender/ui/coin/coin.blend
-	mkdir -p $(DATA_DIRECTORY)/img/objects
+	$(CREATE_TARGET_DIRECTORY)
 	blender -b $< -o //coin\#.png -f 1
 	mv $(SRC_DIRECTORY)/blender/ui/coin/coin1.png $@
 	
 $(DATA_DIRECTORY)/img/population-man.png: $(SRC_DIRECTORY)/blender/ui/population-man/population-man.blend
-	mkdir -p $(DATA_DIRECTORY)/img/objects
+	$(CREATE_TARGET_DIRECTORY)
 	blender -b $< -o //population-man\#.png -f 1
 	mv $(SRC_DIRECTORY)/blender/ui/population-man/population-man1.png $@
 
@@ -254,6 +276,9 @@ render-blender: \
 	$(foreach STREET_TILESET,$(STREET_TILESETS), \
 		$(DATA_DIRECTORY)/img/objects/$(STREET_TILESET).png \
 	) \
+	$(foreach HARVESTABLE,$(HARVESTABLES), \
+		$(DATA_DIRECTORY)/img/harvestables/$(HARVESTABLE).png \
+	) \
 	render-cart \
 	render-coat-of-arms \
 	$(DATA_DIRECTORY)/img/coin.png \
@@ -266,12 +291,14 @@ clean-blender:
 	rm -f $(foreach ANIMATION,$(ANIMATIONS), $(DATA_DIRECTORY)/img/objects/$(ANIMATION).png)
 	rm -rf $(foreach ANIMATION,$(ANIMATIONS), $(SRC_DIRECTORY)/blender/animations/$(ANIMATION)/render)
 	rm -rf $(SRC_DIRECTORY)/blender/animations/cart/render
-	rm -rf $(DATA_DIRECTORY)/img/tileset.png
+	rm -f $(DATA_DIRECTORY)/img/tileset.png
 	rm -rf $(SRC_DIRECTORY)/blender/tiles/render
 	rm -rf $(foreach STREET_TILESET,$(STREET_TILESETS), $(SRC_DIRECTORY)/blender/streets/$(STREET_TILESET)/render)
-	rm -rf $(foreach STREET_TILESET,$(STREET_TILESETS), $(DATA_DIRECTORY)/img/objects/$(STREET_TILESET).png)
-	rm -rf $(DATA_DIRECTORY)/img/objects/cart-without-cargo.png
-	rm -rf $(DATA_DIRECTORY)/img/objects/cart-with-cargo.png
+	rm -f $(foreach STREET_TILESET,$(STREET_TILESETS), $(DATA_DIRECTORY)/img/objects/$(STREET_TILESET).png)
+	rm -f $(foreach HARVESTABLE,$(HARVESTABLES), $(DATA_DIRECTORY)/img/harvestables/$(HARVESTABLE).png)
+	rm -rf $(foreach HARVESTABLE,$(HARVESTABLES), $(SRC_DIRECTORY)/blender/harvestables/$(HARVESTABLE)/render)
+	rm -f $(DATA_DIRECTORY)/img/objects/cart-without-cargo.png
+	rm -f $(DATA_DIRECTORY)/img/objects/cart-with-cargo.png
 	rm -rf $(DATA_DIRECTORY)/img/gui/coat-of-arms
-	rm -rf $(DATA_DIRECTORY)/img/coin.png
-	rm -rf $(DATA_DIRECTORY)/img/population-man.png
+	rm -f $(DATA_DIRECTORY)/img/coin.png
+	rm -f $(DATA_DIRECTORY)/img/population-man.png

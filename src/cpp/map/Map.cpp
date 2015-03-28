@@ -170,11 +170,11 @@ void Map::clearMap() {
 }
 
 bool Map::isStreetAt(const MapCoords& mapCoords) {
-    MapObject* mapObject = getMapObjectAt(mapCoords);
+    MapObjectFixed* mapObject = getMapObjectAt(mapCoords);
     if (mapObject == nullptr) {
         return false;
     }
 
     Structure* structure = dynamic_cast<Structure*>(mapObject);
-    return structure->isStreet();
+    return ((structure != nullptr) && structure->isStreet());
 }

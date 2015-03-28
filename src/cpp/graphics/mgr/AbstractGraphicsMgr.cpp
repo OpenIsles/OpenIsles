@@ -3,6 +3,7 @@
 #include "graphics/graphic/Animation.h"
 #include "graphics/graphic/GraphicSet.h"
 #include "graphics/mgr/AbstractGraphicsMgr.h"
+#include "utils/StringFormat.h"
 
 
 AbstractGraphicsMgr::~AbstractGraphicsMgr() {
@@ -112,6 +113,8 @@ void AbstractGraphicsMgr::loadGraphics() {
     loadStaticAnimationGraphicSetWith8Views("carrier", "data/img/objects/carrier.png", 1, 1, 31);
     loadStaticAnimationGraphicSetWith8Views("cart-without-cargo", "data/img/objects/cart-without-cargo.png", 1, 1, 32);
     loadStaticAnimationGraphicSetWith8Views("cart-with-cargo", "data/img/objects/cart-with-cargo.png", 1, 1, 32);
+
+    loadHarvestablesGraphicSet("northern-forest1", "data/img/harvestables/northern-forest1.png", 5);
 }
 
 void AbstractGraphicsMgr::loadTiles() {
@@ -265,6 +268,33 @@ void AbstractGraphicsMgr::loadStaticGraphicSetWith4Views(
         graphicSet->addByView(view, new Animation(tileGraphic));
 
         tileRect.x += tileWidth;
+    }
+
+    graphicSets[graphicSetName] = graphicSet;
+    delete graphic;
+}
+
+void AbstractGraphicsMgr::loadHarvestablesGraphicSet(
+    const std::string& graphicSetName, const char* graphicFilename, int tileStatesCount) {
+
+    IGraphic* graphic = loadGraphic(graphicFilename);
+    int tileWidth = graphic->getWidth() / tileStatesCount;
+    int tileHeight = graphic->getHeight() / 4;
+
+    GraphicSet* graphicSet = new GraphicSet();
+    Rect tileRect(0, 0, tileWidth, tileHeight);
+
+    forEachFourthDirection(view) {
+        for (int stateIndex = 0; stateIndex < tileStatesCount; stateIndex++) {
+            IGraphic* tileGraphic = loadGraphic(*graphic, tileRect, 1, 1);
+            std::string state = "growth" + toString(stateIndex);
+            graphicSet->addByStateAndView(state, view, new Animation(tileGraphic));
+
+            tileRect.x += tileWidth;
+        }
+
+        tileRect.x = 0;
+        tileRect.y += tileHeight;
     }
 
     graphicSets[graphicSetName] = graphicSet;

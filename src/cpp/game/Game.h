@@ -3,17 +3,17 @@
 
 #include <map>
 #include <vector>
+#include "game/Colony.h"
+#include "game/Player.h"
 #include "map/coords/MapCoords.h"
+#include "map/Building.h"
 #include "map/Direction.h"
+#include "map/Harvestable.h"
+#include "map/Isle.h"
+#include "map/Map.h"
+#include "map/MapObject.h"
 #include "map/Structure.h"
 #include "Context.h"
-
-class Building;
-class Colony;
-class Isle;
-class Map;
-class MapObject;
-class Player;
 
 /**
  * @brief Klasse, die den Zustand des Spiels beinhaltet und die zentrale Anlaufstelle ist, um Änderungen an diesem
@@ -131,6 +131,15 @@ public:
     void setSpeed(double speed) {
         this->speed = speed;
     }
+
+    /**
+     * @brief Fügt eine neue Landschaftkachel, die abgeerntet werden kann, der Karte hinzu.
+     * @param mapCoords Map-Koordinaten der Kachel
+     * @param age Alter der Kachel
+     * @param view Ansicht, mit der die Kachel positioniert werden soll
+     * @return Zeiger auf das neu angelegte Harvestable-Objekt
+     */
+    Harvestable* addHarvestable(const MapCoords& mapCoords, double age, const FourthDirection& view);
 
     /**
      * @brief Fügt eine neue Struktur der Karte hinzu.

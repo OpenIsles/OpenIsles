@@ -118,6 +118,17 @@ private:
      */
     void loadStaticGraphicSetWith4Views(
         const std::string& graphicSetName, const char* graphicFilename, unsigned char mapWidth, unsigned char mapHeight);
+
+    /**
+     * @brief Lädt eine Harvestable-Grafik für erntebare Landschaft. Die Grafik enthält vertikal-gekachelt
+     * 4 Ansichten ("south", "east", "north" und "west"), sowie horizonal-gekachelt `tileStatesCount` verschiedene
+     * Wachstums-Zustände.
+     *
+     * @param graphicSetName GrafikSet-Name
+     * @param graphicFilename Quellgrafik
+     * @param tileStatesCount Anzahl der Wachstum-Zustände
+     */
+    void loadHarvestablesGraphicSet(const std::string& graphicSetName, const char* graphicFilename, int tileStatesCount);
 };
 
 #endif

@@ -27,6 +27,6 @@
  </objectgroup>
  <objectgroup name="colonies" width="300" height="300">
  </objectgroup>
- <objectgroup name="structures" width="300" height="300">
+ <objectgroup name="mapobjects" width="300" height="300">
  </objectgroup>
 </map>
