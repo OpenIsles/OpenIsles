@@ -10,7 +10,16 @@ class Building;
 /**
  * @brief Datenstruktur, die eine Route speichert, die der A*-Algorithmus berechnet hat
  */
-typedef std::list<MapCoords> Route;
+class Route : public std::list<MapCoords> {
+public:
+    /**
+     * @brief Ermittelt, ob überhaupt eine Route existiert.
+     * @return `true`, wenn eine Route existiert; `false`, wenn keine Route existiert.
+     */
+    bool routeExists() const {
+        return (!empty());
+    }
+};
 
 
 /**
@@ -37,10 +46,9 @@ public:
     static Building* debugAStar_buildingToUseCatchmentArea;
 
     /**
-     * @brief (nur zu Debugzwecken einkompiliert) Route, die visualisiert werden soll oder nullptr, wenn noch keine
-     * Route vorliegt
+     * @brief (nur zu Debugzwecken einkompiliert) Route, die visualisiert werden soll
      */
-    static Route* debugAStar_route;
+    static Route debugAStar_route;
 
     /**
      * @brief (nur zu Debugzwecken einkompiliert) `true`, um die Route ausschließlich für Wege zu plannen, `false` um
@@ -56,25 +64,51 @@ public:
 
 private:
     /**
-     * @brief berechnete Route
+     * @brief Zeiger auf ein Gebäude. Wenn gesetzt, dürfen für die Route nur Kacheln benutzt werden, die sich im
+     * Einzugsbereich dieses Gebäudes befinden. Wird nullptr verwendet, so dürfen für die Route beliebige Felder benutzt
+     * werden.
      */
-    Route* route;
+    Building* buildingToUseCatchmentArea;
+
+    /**
+     * @brief `true`, um die Route zu kürzen, wenn sie innerhalb von Gebäuden verläuft. Es genügt, die Route nur zum
+     * ersten Feld des Gebäude zu führen.
+     */
+    bool cutRoute;
+
+    /**
+     * @brief `true`, um nur Straßen für die Route zu verwenden, `false` erlaubt auch über Gras zu laufen
+     */
+    bool useStreetOnly;
+
+    /**
+     * @brief `true`, um ausschließlich rechte Winkel für die Route zu verwenden
+     */
+    bool rightAnglesOnly;
 
 public:
     /**
-     * @brief Berechnet eine Route von einer Kachel der Karte zu einer anderen.
+     * @brief Konstruiert einen A*-Algorithmus mit bestimmten Parametern
      * @param context Dependency
-     * @param source Ausgangspunkt
-     * @param destination Ziel
      * @param buildingToUseCatchmentArea Zeiger auf ein Gebäude. Wenn gesetzt, dürfen für die Route nur Kacheln benutzt
      *                                   werden, die sich im Einzugsbereich dieses Gebäudes befinden. Wird nullptr
      *                                   verwendet, so dürfen für die Route beliebige Felder benutzt werden.
+     * @param cutRoute `true`, um die Route zu kürzen, wenn sie innerhalb von Gebäuden verläuft
      * @param useStreetOnly `true`, um nur Straßen für die Route zu verwenden, `false` erlaubt auch über Gras zu laufen
      * @param rightAnglesOnly `true`, um ausschließlich rechte Winkel für die Route zu verwenden
      */
-    AStar(const Context* const context, const MapCoords& source, const MapCoords& destination,
-          Building* buildingToUseCatchmentArea, bool useStreetOnly, bool rightAnglesOnly);
+    AStar(const Context* const context, Building* buildingToUseCatchmentArea,
+          bool cutRoute, bool useStreetOnly, bool rightAnglesOnly);
 
+    /**
+     * @brief Berechnet eine Route.
+     * @param source Ausgangspunkt
+     * @param destination Ziel
+     * @return berechnete Route. Die Route ist leer, wenn keine Route existiert.
+     */
+    Route getRoute(const MapCoords& source, const MapCoords& destination) const;
+
+private:
     /**
      * @brief Kürzt ggf. die berechnete Route, wenn an Start- und/oder Endpunkt ein Gebäude liegt und mehrere
      * Routenschritte innerhalb desselben Gebäudes liegen. Die Route wird so verändert, dass nur genau eine Kachel
@@ -102,18 +136,11 @@ public:
      * Diese Methode entfernt die Knoten (1) und (6) aus der Route.
      *
      * Wurde sowieso keine Route gefunden, ist diese Methode eine No-Op.
+     *
+     * @param route Route, die verkürzt werden soll
      */
-    void cutRouteInsideBuildings();
+    void cutRouteInsideBuildings(Route& route) const;
 
-    /**
-     * @brief Liefert die berechnete Route zurück.
-     * @return Zeiger auf die berechnete Route oder nullptr, wenn keine Route existiert.
-     */
-    Route* getRoute() const {
-        return route;
-    }
-
-private:
     /**
      * @brief Prüft, ob eine Kachel betreten werden darf, d.h. als Knoten für den A*-Algorithmus betrachtet wird.
      * @param mapCoords zu überprüfende Map-Koordinate (IN)

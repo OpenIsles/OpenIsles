@@ -419,16 +419,9 @@ void GuiMgr::onEvent(SDL_Event& event) {
             if (AStar::debugAStar_source.x() > 0 && AStar::debugAStar_source.y() > 0 &&
                 AStar::debugAStar_destination.x() > 0 && AStar::debugAStar_destination.y() > 0) {
 
-                if (AStar::debugAStar_route != nullptr) {
-                    delete AStar::debugAStar_route;
-                }
-
-                AStar* aStar = new AStar(context, AStar::debugAStar_source, AStar::debugAStar_destination,
-                    AStar::debugAStar_buildingToUseCatchmentArea, AStar::debugAStar_useStreetOnly,
-                    AStar::debugAStar_rightAnglesOnly);
-                aStar->cutRouteInsideBuildings();
-                AStar::debugAStar_route = aStar->getRoute();
-                delete aStar;
+                AStar aStar(context, AStar::debugAStar_buildingToUseCatchmentArea,
+                            true, AStar::debugAStar_useStreetOnly, AStar::debugAStar_rightAnglesOnly);
+                AStar::debugAStar_route = aStar.getRoute(AStar::debugAStar_source, AStar::debugAStar_destination);
             }
         }
 #endif // DEBUG_A_STAR

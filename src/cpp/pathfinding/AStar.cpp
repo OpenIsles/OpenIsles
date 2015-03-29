@@ -11,15 +11,19 @@
 MapCoords AStar::debugAStar_source = MapCoords(-1, -1);
 MapCoords AStar::debugAStar_destination = MapCoords(-1, -1);
 Building* AStar::debugAStar_buildingToUseCatchmentArea = nullptr;
-Route* AStar::debugAStar_route = nullptr;
+Route AStar::debugAStar_route;
 bool AStar::debugAStar_useStreetOnly = false;
 bool AStar::debugAStar_rightAnglesOnly = false;
 #endif
 
 
-AStar::AStar(const Context* const context, const MapCoords& source, const MapCoords& destination,
-             Building* buildingToUseCatchmentArea, bool useStreetOnly, bool rightAnglesOnly) : ContextAware(context) {
+AStar::AStar(const Context* const context, Building* buildingToUseCatchmentArea,
+             bool cutRoute, bool useStreetOnly, bool rightAnglesOnly) :
+    ContextAware(context), buildingToUseCatchmentArea(buildingToUseCatchmentArea),
+    cutRoute(cutRoute), useStreetOnly(useStreetOnly), rightAnglesOnly(rightAnglesOnly) {
+}
 
+Route AStar::getRoute(const MapCoords& source, const MapCoords& destination) const {
     Map* map = context->game->getMap();
 
     // Ermitteln, aus und in welches Gebäude wir die Route berechnen wollen. Dies ist optional, eine Route muss nicht
@@ -188,16 +192,15 @@ AStar::AStar(const Context* const context, const MapCoords& source, const MapCoo
 
     // openList ist leer, d.h. es existiert keine Route
     if (openList.empty()) {
-        route = nullptr;
-        return;
+        return Route();
     }
 
     // Ergebnisroute zusammenbauen, indem die Knoten zurückverfolgt werden. Wir bauen die Route damit von hinten her auf.
     MapCoords currentMapCoord = destination;
 
-    route = new Route();
+    Route route;
     for(;;) {
-        route->push_front(currentMapCoord);
+        route.push_front(currentMapCoord);
 
         auto iter = predecessorInPath.find(currentMapCoord);
         if (iter == predecessorInPath.end()) {
@@ -206,19 +209,22 @@ AStar::AStar(const Context* const context, const MapCoords& source, const MapCoo
 
         currentMapCoord = (*iter).second;
     }
-}
 
-void AStar::cutRouteInsideBuildings() {
-    if (route == nullptr) {
-        return;
+    // Route zum Schluss ggf. kürzen
+    if (cutRoute) {
+        cutRouteInsideBuildings(route);
     }
 
+    return route;
+}
+
+void AStar::cutRouteInsideBuildings(Route& route) const {
     Map* map = context->game->getMap();
 
     // Erst von vorne
     int hopsToDeleteFromFront = 0;
     Building* buildingAtFront = nullptr;
-    for (auto iter = route->cbegin(); iter != route->cend(); iter++) {
+    for (auto iter = route.cbegin(); iter != route.cend(); iter++) {
         MapCoords mapCoords = *iter;
         MapTile* mapTile = map->getMapTileAt(mapCoords);
         assert(mapTile != nullptr); // Route hätte nicht berechnet werden können, wenn außerhalb der Karte
@@ -242,7 +248,7 @@ void AStar::cutRouteInsideBuildings() {
     // Dann von hinten
     int hopsToDeleteFromBack = 0;
     Building* buildingAtBack = nullptr;
-    for (auto iter = route->crbegin(); iter != route->crend(); iter++) {
+    for (auto iter = route.crbegin(); iter != route.crend(); iter++) {
         MapCoords mapCoords = *iter;
         MapTile* mapTile = map->getMapTileAt(mapCoords);
         assert(mapTile != nullptr); // Route hätte nicht berechnet werden können, wenn außerhalb der Karte
@@ -268,10 +274,10 @@ void AStar::cutRouteInsideBuildings() {
 
     // Route entsprechend beschneiden
     while (hopsToDeleteFromFront-- > 0) {
-        route->pop_front();
+        route.pop_front();
     }
     while (hopsToDeleteFromBack-- > 0) {
-        route->pop_back();
+        route.pop_back();
     }
 }
 

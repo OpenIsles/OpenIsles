@@ -106,7 +106,7 @@ void EconomicsMgr::updateCarrier(Building* building) {
         }
 
         // Träger anlegen und zuweisen
-        const MapCoords& firstHopOnRoute = result.route->front();
+        const MapCoords& firstHopOnRoute = result.route.front();
 
         Carrier* carrier = new Carrier(result.building, result.route, result.goodsSlot.goodsType, true);
         carrier->setMapCoords((DoubleMapCoords) firstHopOnRoute);
@@ -165,8 +165,8 @@ void EconomicsMgr::updateCarrier(Building* building) {
             carrier->updateCurrentMovingDirection();
 
             // Route fertig?
-            if (carrier->nextHopInRoute == carrier->route->cend()) {
-                MapTile* mapTile = context->game->getMap()->getMapTileAt(carrier->route->back());
+            if (carrier->nextHopInRoute == carrier->route.cend()) {
+                MapTile* mapTile = context->game->getMap()->getMapTileAt(carrier->route.back());
                 Building* targetBuilding = dynamic_cast<Building*>(mapTile->mapObject);
 
                 // targetBuilding == nullptr -> Nutzer hat die Map inzwischen geändert und das Zielgebäude abgerissen
@@ -209,19 +209,17 @@ void EconomicsMgr::updateCarrier(Building* building) {
                     goodsSlotToTakeFrom->inventory -= goodsWeCollect;
                     targetBuilding->lastGoodsCollections = context->sdlTicks;
 
-                    Route* route = carrier->route;
-                    AStar* aStar = new AStar(context, route->back(), route->front(), building, isStorageBuilding, false);
-                    aStar->cutRouteInsideBuildings();
-                    Route* returnRoute = aStar->getRoute();
-                    delete aStar;
+                    const Route& route = carrier->route;
+                    AStar aStar(context, building, true, isStorageBuilding, false);
+                    Route returnRoute = aStar.getRoute(route.back(), route.front());
 
                     delete carrier;
                     building->carrier = nullptr;
 
                     // Es kann sein, dass es keine Rückroute gibt, wenn der Nutzer inzwischen die Map verändert hat.
                     // In diesem Fall hat er Pech gehabt, die Waren verschwinden mit dem Träger
-                    if (returnRoute != nullptr) {
-                        const MapCoords& firstHopOnReturnRoute = returnRoute->front();
+                    if (returnRoute.routeExists()) {
+                        const MapCoords& firstHopOnReturnRoute = returnRoute.front();
 
                         Carrier* returnCarrier = new Carrier(
                             building, returnRoute, goodsSlotToTakeFrom->goodsType, false);
@@ -343,6 +341,7 @@ FindBuildingToGetGoodsFromResult EconomicsMgr::findBuildingToGetGoodsFrom(Buildi
     Map* map = context->game->getMap();
     const MapCoords& mapCoords = building->getMapCoords();
     int catchmentAreaRadius = std::max(catchmentArea->width, catchmentArea->height); // TODO sehr optimierungsbedürftig, dafür funktionierts erstmal in allen Ansichten
+    AStar aStar(context, building, true, isStorageBuilding, false);
 
     for (int mapY = mapCoords.y() - catchmentAreaRadius; mapY <= mapCoords.y() + catchmentAreaRadius; mapY++) {
         for (int mapX = mapCoords.x() - catchmentAreaRadius; mapX <= mapCoords.x() + catchmentAreaRadius; mapX++) {
@@ -419,11 +418,8 @@ FindBuildingToGetGoodsFromResult EconomicsMgr::findBuildingToGetGoodsFrom(Buildi
             const MapCoords& mapCoordsSource = building->getMapCoords();
             const MapCoords& mapCoordsDestination = buildingThere->getMapCoords();
 
-            AStar* aStar = new AStar(context, mapCoordsSource, mapCoordsDestination, building, isStorageBuilding, false);
-            aStar->cutRouteInsideBuildings();
-            Route* route = aStar->getRoute();
-            delete aStar;
-            if (route == nullptr) {
+            Route route = aStar.getRoute(mapCoordsSource, mapCoordsDestination);
+            if (!route.routeExists()) {
                 continue; // gibt keinen Weg dahin
             }
 

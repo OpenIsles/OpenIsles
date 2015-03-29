@@ -40,6 +40,11 @@ GuiMap::~GuiMap() {
         mapObjectAlreadyDrawnThere = nullptr;
     }
 
+    if (mapTilesToDrawTemporarily != nullptr) {
+        delete mapTilesToDrawTemporarily;
+        mapTilesToDrawTemporarily = nullptr;
+    }
+
 #ifdef DEBUG
     delete debugGridOverlayGraphic;
 #endif
@@ -405,22 +410,24 @@ void GuiMap::renderElement(IRenderer* renderer) {
     }
 
 #ifdef DEBUG_A_STAR
-    Route* routeToDraw = AStar::debugAStar_route;
+    Route routeToDraw;
 
     // Wenn Gebäude ausgewählt -> Trägerroute anzeigen
     if (selectedBuilding != nullptr) {
-        routeToDraw = (selectedBuilding->carrier != nullptr) ? selectedBuilding->carrier->route : nullptr;
+        routeToDraw = (selectedBuilding->carrier != nullptr) ? selectedBuilding->carrier->route : Route();
+    } else {
+        routeToDraw = AStar::debugAStar_route;
     }
 
     // A*-Route zeichnen (nur bei Maximalzoom, dann sparen wir uns Berechnungen und der Code wird einfacher)
-    if (screenZoom == 1 && routeToDraw != nullptr) {
+    if (screenZoom == 1 && routeToDraw.routeExists()) {
         renderer->setDrawBlendMode(IRenderer::BLENDMODE_BLEND);
 
         int lastPointX = -1;
         int lastPointY = -1;
 
         int i = 1;
-        for (auto iter = routeToDraw->cbegin(); iter != routeToDraw->cend(); iter++) {
+        for (auto iter = routeToDraw.cbegin(); iter != routeToDraw.cend(); iter++) {
             const MapCoords& mapCoords = *iter;
 
             ScreenCoords screenCoords = MapCoordUtils::mapToScreenCoords(mapCoords, screenView, *map);
@@ -556,25 +563,22 @@ bool GuiMap::onEventElement(SDL_Event& event) {
                 const MapCoords& mapCoordsClickStart = context->guiMgr->getStartClickMapCoords();
 
                 // Sonderfall: Start = End, keine Route, sondern nur das eine Feld.
-                Route* route;
+                Route route;
                 if (mapCoordsUnderMouse == mapCoordsClickStart) {
-                    route = new Route();
-                    route->push_back(mapCoordsUnderMouse);
+                    route.push_back(mapCoordsUnderMouse);
                 } else {
-                    AStar aStar(context, mapCoordsClickStart, mapCoordsUnderMouse, nullptr, false, true);
-                    route = aStar.getRoute();
+                    AStar aStar(context, nullptr, false, false, true);
+                    route = aStar.getRoute(mapCoordsClickStart, mapCoordsUnderMouse);
                 }
 
                 clearAllTemporarily();
-                if (route != nullptr) {
-                    std::for_each(route->cbegin(), route->cend(), [ & ](const MapCoords& mapCoords) {
+                if (route.routeExists()) {
+                    std::for_each(route.cbegin(), route.cend(), [ & ](const MapCoords& mapCoords) {
                         unsigned char isAllowedToPlaceResult = isAllowedToPlaceStructure(mapCoords, structureType, view);
                         if ((isAllowedToPlaceResult & ~PLACING_STRUCTURE_NO_RESOURCES) == PLACING_STRUCTURE_ALLOWED) {
                             addCurrentStructureToMapObjectsBeingAdded(mapCoords);
                         }
                     });
-
-                    delete route;
                 }
             }
 
@@ -912,7 +916,7 @@ void GuiMap::onNewGame() {
 
     mapTilesToDrawTemporarily = new RectangleData<MapTileTemporialy*>(newMapWidth, newMapHeight);
     for (int i = 0; i < newMapWidth * newMapHeight; i++) {
-        mapTilesToDrawTemporarily->data[i] = new MapTileTemporialy();
+        mapTilesToDrawTemporarily->data[i] = new MapTileTemporialy(); // TODO MemoryLeak, valgrind: wird nicht mehr freigegeben
     }
 
     buildingToDrawCatchmentArea = nullptr;
@@ -932,7 +936,7 @@ void GuiMap::onStartAddingStructure() {
     const GraphicSet* graphicSet = context->graphicsMgr->getGraphicSet(graphicSetName);
     const IGraphic* graphic = graphicSet->getByView(view)->getGraphic();
 
-    mapObjectBeingAddedHovering = (structureType >= START_BUILDINGS) ? new Building() : new Structure();
+    mapObjectBeingAddedHovering = (structureType >= START_BUILDINGS) ? new Building() : new Structure(); // TODO MemoryLeak, valgrind: wird nicht mehr freigegeben
     mapObjectBeingAddedHovering->setStructureType(structureType);
     mapObjectBeingAddedHovering->setMapCoords(mapCoordsUnderMouse);
     mapObjectBeingAddedHovering->setMapWidth(graphic->getMapWidth());

@@ -19,9 +19,9 @@ struct FindBuildingToGetGoodsFromResult {
     Building* building;
 
     /**
-     * @brief berechnete Route zu dem Gebäude (oder `nullptr`, wenn building leer ist)
+     * @brief berechnete Route zu dem Gebäude
      */
-    Route* route;
+    Route route;
 
     /**
      * @brief GoodsSlot. Enthält die Info, welchen Warentyp wir dort holen sollen (`NO_GOODS`, wenn building leer ist),
@@ -40,7 +40,6 @@ struct FindBuildingToGetGoodsFromResult {
      */
     FindBuildingToGetGoodsFromResult() {
         building = nullptr;
-        route = nullptr;
         goodsSlot.goodsType = GoodsType::NO_GOODS;
         lastGoodsCollections = 0;
     }
@@ -56,7 +55,7 @@ struct FindBuildingToGetGoodsFromResult {
         const MapCoords& mapCoords = result.building->getMapCoords();
 
         return outputStream << "{ building = (" << mapCoords.x() << ", " << mapCoords.y() << "), routeLen = " <<
-            result.route->size() << ", goods = ( goodsType = " << result.goodsSlot.goodsType <<
+            result.route.size() << ", goods = ( goodsType = " << result.goodsSlot.goodsType <<
             ", inventory = " << result.goodsSlot.inventory << " of " << result.goodsSlot.capacity <<
             ", ratio = " << (result.goodsSlot.inventory / result.goodsSlot.capacity) <<
             " ), lastGoodsCollections = " << result.lastGoodsCollections << " }";

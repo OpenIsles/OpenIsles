@@ -344,6 +344,8 @@ void ConfigMgr::loadTilesConfig() {
             mapTileConfigOcean = &mapTileConfig;
         }
     }
+
+    delete xmlDocument;
 }
 
 bool ConfigMgr::xmlAttributeToBool(rapidxml::xml_attribute<>* attribute, bool defaultValue) {

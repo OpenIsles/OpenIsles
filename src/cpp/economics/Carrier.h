@@ -28,9 +28,8 @@ private:
 
     /**
      * @brief Route, die der Träger abzulaufen hat.
-     * Die Route wird spätestens zerstört, wenn das Träger-Objekt zerstört wird.
      */
-    Route* route;
+    Route route;
 
     /**
      * @brief Waren, die der Träger hält bzw. abholen soll
@@ -75,12 +74,9 @@ public:
      * @param goodsType Warentyp, der abzuholen bzw. zu liefern ist
      * @param onOutboundTrip `true` für Hinweg, `false` für Rückweg.
      */
-    Carrier(Building* owningBuilding, Route* route, GoodsType goodsType, bool onOutboundTrip);
+    Carrier(Building* owningBuilding, Route route, GoodsType goodsType, bool onOutboundTrip);
 
-    /**
-     * @brief Destruktor. Räumt die Route mit weg.
-     */
-    ~Carrier();
+    ~Carrier() {}
 
     const EightDirectionsAnimation& getAnimations() const {
         return animations;

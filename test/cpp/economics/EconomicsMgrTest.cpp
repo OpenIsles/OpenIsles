@@ -69,7 +69,7 @@ TEST_F(EconomicsMgrTest, updateCarrier) {
 
     ASSERT_EQ(1, office1->getLastUpdateTime());
     ASSERT_TRUE(office1->carrier != nullptr);
-    ASSERT_TRUE(office1->carrier->route->back() == MapCoords(26, 27));
+    ASSERT_TRUE(office1->carrier->route.back() == MapCoords(26, 27));
     ASSERT_TRUE(office1->carrier->onOutboundTrip);
     ASSERT_EQ(GoodsType::CATTLE, office1->carrier->carriedGoods.goodsType);
     ASSERT_EQ(0, office1->carrier->carriedGoods.inventory);
@@ -112,7 +112,7 @@ TEST_F(EconomicsMgrTest, updateCarrier) {
 
     ASSERT_EQ(13501, office1->getLastUpdateTime());
     ASSERT_TRUE(office1->carrier != nullptr);
-    ASSERT_TRUE(office1->carrier->route->back() == MapCoords(28, 19));
+    ASSERT_TRUE(office1->carrier->route.back() == MapCoords(28, 19));
     ASSERT_FALSE(office1->carrier->onOutboundTrip);
     ASSERT_EQ(GoodsType::CATTLE, office1->carrier->carriedGoods.goodsType);
     ASSERT_EQ(4, office1->carrier->carriedGoods.inventory); // Rinderfarm kann nur 4 Tonnen halten
