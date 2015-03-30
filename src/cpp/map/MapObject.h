@@ -91,6 +91,11 @@ protected:
 	 */
 	MapCoords mapCoords;
 
+    /**
+	 * @brief Objekt-Typ
+	 */
+	MapObjectType mapObjectType;
+
 public:
 	virtual ~MapObjectFixed() {
 	}
@@ -106,6 +111,14 @@ public:
 	const MapCoords& getMapCoords() const {
 		return mapCoords;
 	}
+
+    MapObjectType getMapObjectType() const {
+        return mapObjectType;
+    }
+
+    void setMapObjectType(MapObjectType mapObjectType) {
+        this->mapObjectType = mapObjectType;
+    }
 };
 
 

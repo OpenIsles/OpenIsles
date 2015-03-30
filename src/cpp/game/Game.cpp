@@ -1,3 +1,4 @@
+#include <cassert>
 #include <cstring>
 #include "config/ConfigMgr.h"
 #include "economics/EconomicsMgr.h"
@@ -54,10 +55,15 @@ Colony* Game::getColony(const MapObjectFixed* mapObject) const {
     return getColony(mapTile->player, mapTile->isle);
 }
 
-Harvestable* Game::addHarvestable(const MapCoords& mapCoords, double age, const FourthDirection& view) {
+Harvestable* Game::addHarvestable(
+    const MapCoords& mapCoords, MapObjectType mapObjectType, double age, const FourthDirection& view) {
+
+    assert(mapObjectType < MapObjectType::START_STRUCTURES); // TODO addHarvestable() und addStructure() zusammenlegen?
+
     // Objekt anlegen
     Harvestable* harvestable = new Harvestable();
     harvestable->setMapCoords(mapCoords);
+    harvestable->setMapObjectType(mapObjectType);
     harvestable->setView(view);
     harvestable->setAge(age);
 
@@ -68,18 +74,20 @@ Harvestable* Game::addHarvestable(const MapCoords& mapCoords, double age, const 
 }
 
 Structure* Game::addStructure(
-    const MapCoords& mapCoords, StructureType structureType, const FourthDirection& view, Player* player) {
+    const MapCoords& mapCoords, MapObjectType mapObjectType, const FourthDirection& view, Player* player) {
 
-    const std::string graphicSetName = context->graphicsMgr->getGraphicSetNameForStructure(structureType);
+    assert(mapObjectType >= MapObjectType::START_STRUCTURES); // TODO addHarvestable() und addStructure() zusammenlegen?
+
+    const std::string graphicSetName = context->graphicsMgr->getGraphicSetNameForMapObject(mapObjectType);
     const GraphicSet* graphicSet = context->graphicsMgr->getGraphicSet(graphicSetName);
     const IGraphic* graphic = graphicSet->getByView(view)->getGraphic();
 
     // Objekt anlegen
-    Structure* structure = (structureType >= START_BUILDINGS) ? new Building() : new Structure();
+    Structure* structure = (mapObjectType >= START_BUILDINGS) ? new Building() : new Structure();
     structure->setMapCoords(mapCoords);
     structure->setMapWidth(graphic->getMapWidth());
     structure->setMapHeight(graphic->getMapHeight());
-    structure->setStructureType(structureType);
+    structure->setMapObjectType(mapObjectType);
     structure->setPlayer(player);
     structure->setView(view);
 
@@ -87,7 +95,7 @@ Structure* Game::addStructure(
     Building* building = dynamic_cast<Building*>(structure);
     const BuildingConfig* buildingConfig = nullptr;
     if (building != nullptr) {
-        buildingConfig = context->configMgr->getBuildingConfig(structureType);
+        buildingConfig = context->configMgr->getBuildingConfig(mapObjectType);
         building->productionSlots = ProductionSlots(buildingConfig->buildingProduction);
     }
 
@@ -95,7 +103,7 @@ Structure* Game::addStructure(
     map->addMapObject(structure);
 
     // Kontor oder Marktplatz? Einzugbereich in mapTiles aktualisieren und Lagerkapazität der Kolonie erhöhen
-    if (building != nullptr && (structureType == OFFICE1 || structureType == MARKETPLACE)) {
+    if (building != nullptr && (mapObjectType == OFFICE1 || mapObjectType == MARKETPLACE)) {
         map->addOfficeCatchmentAreaToMap(*building);
 #ifndef NO_SDL
         context->guiMgr->onOfficeCatchmentAreaChanged();
@@ -103,7 +111,7 @@ Structure* Game::addStructure(
     }
 
     Colony* colony = context->game->getColony(structure); // Colony kann erst gefunden werden, wenn addOfficeCatchmentAreaToMap() aufgerufen wurde
-    if (structureType == OFFICE1 || structureType == MARKETPLACE) {
+    if (mapObjectType == OFFICE1 || mapObjectType == MARKETPLACE) {
         colony->increaseGoodsCapacity(10);
     }
 

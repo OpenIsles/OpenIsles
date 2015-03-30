@@ -12,7 +12,7 @@
 #include "map/coords/WindowCoords.h"
 #include "map/Direction.h"
 #include "map/Map.h"
-#include "map/StructureType.h"
+#include "map/MapObjectType.h"
 #include "graphics/renderer/IRenderer.h"
 
 class GuiBase;
@@ -75,14 +75,14 @@ struct PanelState {
     BuildingGroup selectedBuildingGroup;
 
     /**
-     * @brief zuletzt/aktuell gewählte Struktur im Baumenü
+     * @brief zuletzt/aktuell gewähltes Map-Objekt im Baumenü
      */
-    StructureType addingStructure;
+    MapObjectType addingMapObject;
 
     /**
-     * @brief zuletzt/aktuell gewählte Ausrichtung der Struktur im Baumenü
+     * @brief zuletzt/aktuell gewählte Ausrichtung des Map-Objekts im Baumenü
      */
-    FourthDirection addingStructureView;
+    FourthDirection addingMapObjectView;
 
     /**
      * @brief Flag, was angibt, ob das Popup-Menü mit den einzelnen Gebäuden aufgeklappt ist

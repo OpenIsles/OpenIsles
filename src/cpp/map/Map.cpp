@@ -120,7 +120,7 @@ void Map::addMapObject(MapObjectFixed* mapObject) {
 void Map::addOfficeCatchmentAreaToMap(const Building& building) {
     const MapCoords& mapCoords = building.getMapCoords();
     
-    const BuildingConfig* buildingConfig = context->configMgr->getBuildingConfig(building.getStructureType());
+    const BuildingConfig* buildingConfig = context->configMgr->getBuildingConfig(building.getMapObjectType());
     RectangleData<char>* catchmentArea = buildingConfig->getCatchmentArea();
     int catchmentAreaRadius = std::max(catchmentArea->width, catchmentArea->height); // TODO sehr optimierungsbedürftig, dafür funktionierts erstmal in allen Ansichten
     

@@ -3,7 +3,7 @@
 
 
 bool Building::isInsideCatchmentArea(const ConfigMgr* configMgr, const MapCoords& mapCoords) const {
-    const BuildingConfig* buildingConfig = configMgr->getBuildingConfig(structureType);
+    const BuildingConfig* buildingConfig = configMgr->getBuildingConfig(mapObjectType);
     const RectangleData<char>* catchmentArea = buildingConfig->getCatchmentArea();
 
     // Gebäude hat keinen Einzugsbereich?

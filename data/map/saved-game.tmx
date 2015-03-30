@@ -906,7 +906,7 @@
     <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="5120" y="3360" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="5120" y="3360" width="32" height="32">
    <properties>
     <property name="age" value="0.4"/>
    </properties>
@@ -921,7 +921,7 @@
     <property name="age" value="1.4"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="5088" y="3360" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="5088" y="3360" width="32" height="32">
    <properties>
     <property name="age" value="2.2"/>
    </properties>
@@ -941,7 +941,7 @@
     <property name="age" value="2.2"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="5056" y="3552" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="5056" y="3552" width="32" height="32">
    <properties>
     <property name="age" value="3.7"/>
    </properties>
@@ -966,7 +966,7 @@
     <property name="age" value="1.4"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="5184" y="3456" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="5184" y="3456" width="32" height="32">
    <properties>
     <property name="age" value="3.7"/>
    </properties>
@@ -976,7 +976,7 @@
     <property name="age" value="2.2"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="5152" y="3584" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="5152" y="3584" width="32" height="32">
    <properties>
     <property name="age" value="0.4"/>
    </properties>
@@ -996,7 +996,7 @@
     <property name="age" value="3.7"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="4736" y="3104" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="4736" y="3104" width="32" height="32">
    <properties>
     <property name="age" value="2.2"/>
    </properties>
@@ -1016,7 +1016,7 @@
     <property name="age" value="1.4"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="5120" y="3552" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="5120" y="3552" width="32" height="32">
    <properties>
     <property name="age" value="3.7"/>
    </properties>
@@ -1031,7 +1031,7 @@
     <property name="age" value="0.4"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="5120" y="3520" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="5120" y="3520" width="32" height="32">
    <properties>
     <property name="age" value="4"/>
    </properties>
@@ -1046,7 +1046,7 @@
     <property name="age" value="3.7"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="5216" y="3552" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="5216" y="3552" width="32" height="32">
    <properties>
     <property name="age" value="2.2"/>
    </properties>
@@ -1056,7 +1056,7 @@
     <property name="age" value="0.4"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="4832" y="3360" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="4832" y="3360" width="32" height="32">
    <properties>
     <property name="age" value="0.4"/>
     <property name="view" value="east"/>
@@ -1068,7 +1068,7 @@
     <property name="view" value="east"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="4992" y="3552" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="4992" y="3552" width="32" height="32">
    <properties>
     <property name="age" value="3.7"/>
     <property name="view" value="east"/>
@@ -1086,13 +1086,13 @@
     <property name="view" value="east"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="4992" y="3488" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="4992" y="3488" width="32" height="32">
    <properties>
     <property name="age" value="2.2"/>
     <property name="view" value="north"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="4704" y="3136" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="4704" y="3136" width="32" height="32">
    <properties>
     <property name="age" value="4"/>
     <property name="view" value="north"/>
@@ -1104,7 +1104,7 @@
     <property name="view" value="north"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="4864" y="3360" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="4864" y="3360" width="32" height="32">
    <properties>
     <property name="age" value="0.4"/>
     <property name="view" value="north"/>
@@ -1134,7 +1134,7 @@
     <property name="view" value="west"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="5120" y="3616" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="5120" y="3616" width="32" height="32">
    <properties>
     <property name="age" value="0.4"/>
     <property name="view" value="west"/>
@@ -1188,7 +1188,7 @@
     <property name="age" value="4"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="1056" y="992" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="1056" y="992" width="32" height="32">
    <properties>
     <property name="age" value="4"/>
    </properties>
@@ -1211,7 +1211,7 @@
     <property name="view" value="south"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="1216" y="1056" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="1216" y="1056" width="32" height="32">
    <properties>
     <property name="age" value="2"/>
     <property name="view" value="east"/>
@@ -1235,7 +1235,7 @@
     <property name="view" value="north"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="1120" y="1024" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="1120" y="1024" width="32" height="32">
    <properties>
     <property name="age" value="2"/>
     <property name="view" value="east"/>
@@ -1253,19 +1253,19 @@
     <property name="view" value="west"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="1152" y="992" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="1152" y="992" width="32" height="32">
    <properties>
     <property name="age" value="2"/>
     <property name="view" value="south"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="1088" y="1024" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="1088" y="1024" width="32" height="32">
    <properties>
     <property name="age" value="2"/>
     <property name="view" value="north"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="1120" y="928" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="1120" y="928" width="32" height="32">
    <properties>
     <property name="age" value="1"/>
     <property name="view" value="west"/>
@@ -1283,7 +1283,7 @@
     <property name="view" value="south"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="1120" y="992" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="1120" y="992" width="32" height="32">
    <properties>
     <property name="age" value="1"/>
     <property name="view" value="west"/>
@@ -1307,7 +1307,7 @@
     <property name="view" value="north"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="1056" y="1024" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="1056" y="1024" width="32" height="32">
    <properties>
     <property name="age" value="0"/>
     <property name="view" value="south"/>
@@ -1331,7 +1331,7 @@
     <property name="view" value="south"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="1216" y="928" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="1216" y="928" width="32" height="32">
    <properties>
     <property name="age" value="3"/>
     <property name="view" value="north"/>
@@ -1349,7 +1349,7 @@
     <property name="view" value="east"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="1184" y="1152" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="1184" y="1152" width="32" height="32">
    <properties>
     <property name="age" value="1"/>
     <property name="view" value="north"/>
@@ -1361,13 +1361,13 @@
     <property name="view" value="west"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="1216" y="1120" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="1216" y="1120" width="32" height="32">
    <properties>
     <property name="age" value="1"/>
     <property name="view" value="south"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="1216" y="1152" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="1216" y="1152" width="32" height="32">
    <properties>
     <property name="age" value="3"/>
    </properties>
@@ -1402,7 +1402,7 @@
     <property name="view" value="north"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="1280" y="1056" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="1280" y="1056" width="32" height="32">
    <properties>
     <property name="age" value="4"/>
     <property name="view" value="east"/>
@@ -1420,13 +1420,13 @@
     <property name="view" value="north"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="1088" y="1120" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="1088" y="1120" width="32" height="32">
    <properties>
     <property name="age" value="3"/>
     <property name="view" value="west"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="1248" y="1120" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="1248" y="1120" width="32" height="32">
    <properties>
     <property name="age" value="4"/>
     <property name="view" value="east"/>
@@ -1442,7 +1442,7 @@
     <property name="age" value="1.4"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="4928" y="3360" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="4928" y="3360" width="32" height="32">
    <properties>
     <property name="age" value="4"/>
    </properties>
@@ -1462,7 +1462,7 @@
     <property name="age" value="0.4"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="4384" y="3232" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="4384" y="3232" width="32" height="32">
    <properties>
     <property name="age" value="3.7"/>
    </properties>
@@ -1472,12 +1472,12 @@
     <property name="age" value="0.4"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="5088" y="3424" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="5088" y="3424" width="32" height="32">
    <properties>
     <property name="age" value="0.4"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="5024" y="3488" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="5024" y="3488" width="32" height="32">
    <properties>
     <property name="age" value="4"/>
    </properties>
@@ -1507,17 +1507,17 @@
     <property name="age" value="3.7"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="4992" y="3424" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="4992" y="3424" width="32" height="32">
    <properties>
     <property name="age" value="1.4"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="5056" y="3456" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="5056" y="3456" width="32" height="32">
    <properties>
     <property name="age" value="4"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="4928" y="3456" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="4928" y="3456" width="32" height="32">
    <properties>
     <property name="age" value="1.4"/>
    </properties>
@@ -1527,12 +1527,12 @@
     <property name="age" value="2.2"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="5056" y="3392" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="5056" y="3392" width="32" height="32">
    <properties>
     <property name="age" value="3.7"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="4896" y="3424" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="4896" y="3424" width="32" height="32">
    <properties>
     <property name="age" value="3.7"/>
    </properties>
@@ -1542,7 +1542,7 @@
     <property name="age" value="2.2"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="5024" y="3392" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="5024" y="3392" width="32" height="32">
    <properties>
     <property name="age" value="2.2"/>
    </properties>
@@ -1557,7 +1557,7 @@
     <property name="age" value="1.4"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="4512" y="3360" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="4512" y="3360" width="32" height="32">
    <properties>
     <property name="age" value="2.2"/>
    </properties>
@@ -1574,12 +1574,12 @@
     <property name="view" value="west"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="4800" y="3456" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="4800" y="3456" width="32" height="32">
    <properties>
     <property name="age" value="3.7"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="4608" y="3456" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="4608" y="3456" width="32" height="32">
    <properties>
     <property name="age" value="0.4"/>
     <property name="view" value="east"/>
@@ -1590,7 +1590,7 @@
     <property name="age" value="1.4"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="4928" y="3520" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="4928" y="3520" width="32" height="32">
    <properties>
     <property name="age" value="0.4"/>
    </properties>
@@ -1610,7 +1610,7 @@
     <property name="age" value="1.4"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="4384" y="3424" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="4384" y="3424" width="32" height="32">
    <properties>
     <property name="age" value="3.7"/>
    </properties>
@@ -1625,7 +1625,7 @@
     <property name="age" value="3.7"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="4608" y="3392" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="4608" y="3392" width="32" height="32">
    <properties>
     <property name="age" value="1.4"/>
     <property name="view" value="east"/>
@@ -1651,7 +1651,7 @@
     <property name="age" value="3.7"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="4704" y="3456" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="4704" y="3456" width="32" height="32">
    <properties>
     <property name="age" value="4"/>
    </properties>
@@ -1666,12 +1666,12 @@
     <property name="age" value="0.4"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="4960" y="3552" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="4960" y="3552" width="32" height="32">
    <properties>
     <property name="age" value="3.7"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="4704" y="3392" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="4704" y="3392" width="32" height="32">
    <properties>
     <property name="age" value="2.2"/>
     <property name="view" value="west"/>
@@ -1698,7 +1698,7 @@
     <property name="view" value="west"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="4864" y="3456" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="4864" y="3456" width="32" height="32">
    <properties>
     <property name="age" value="2.2"/>
    </properties>
@@ -1713,7 +1713,7 @@
     <property name="age" value="3.7"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="4416" y="3424" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="4416" y="3424" width="32" height="32">
    <properties>
     <property name="age" value="2.2"/>
    </properties>
@@ -1728,13 +1728,13 @@
     <property name="age" value="4"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="4672" y="3392" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="4672" y="3392" width="32" height="32">
    <properties>
     <property name="age" value="2.2"/>
     <property name="view" value="east"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="4576" y="3040" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="4576" y="3040" width="32" height="32">
    <properties>
     <property name="age" value="1.4"/>
     <property name="view" value="north"/>
@@ -1761,7 +1761,7 @@
     <property name="age" value="2.2"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="4800" y="3488" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="4800" y="3488" width="32" height="32">
    <properties>
     <property name="age" value="2.2"/>
    </properties>
@@ -1778,7 +1778,7 @@
     <property name="view" value="west"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="4768" y="3392" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="4768" y="3392" width="32" height="32">
    <properties>
     <property name="age" value="0.4"/>
    </properties>
@@ -1804,7 +1804,7 @@
     <property name="age" value="3.7"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="4672" y="3520" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="4672" y="3520" width="32" height="32">
    <properties>
     <property name="age" value="3.7"/>
    </properties>
@@ -1825,7 +1825,7 @@
     <property name="age" value="0.4"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="4736" y="3552" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="4736" y="3552" width="32" height="32">
    <properties>
     <property name="age" value="2.2"/>
    </properties>
@@ -1845,12 +1845,12 @@
     <property name="age" value="4"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="4800" y="3392" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="4800" y="3392" width="32" height="32">
    <properties>
     <property name="age" value="1.4"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="4960" y="3584" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="4960" y="3584" width="32" height="32">
    <properties>
     <property name="age" value="3.7"/>
    </properties>
@@ -1870,13 +1870,13 @@
     <property name="age" value="0.4"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="4800" y="3616" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="4800" y="3616" width="32" height="32">
    <properties>
     <property name="age" value="1.4"/>
     <property name="view" value="west"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="5152" y="3328" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="5152" y="3328" width="32" height="32">
    <properties>
     <property name="age" value="1.4"/>
    </properties>
@@ -1907,7 +1907,7 @@
     <property name="age" value="4"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="4544" y="3456" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="4544" y="3456" width="32" height="32">
    <properties>
     <property name="age" value="0.4"/>
    </properties>
@@ -1927,13 +1927,13 @@
     <property name="age" value="2.2"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="4448" y="3072" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="4448" y="3072" width="32" height="32">
    <properties>
     <property name="age" value="3.7"/>
     <property name="view" value="north"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="4416" y="3040" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="4416" y="3040" width="32" height="32">
    <properties>
     <property name="age" value="4"/>
     <property name="view" value="west"/>
@@ -1950,12 +1950,12 @@
     <property name="view" value="east"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="4736" y="3168" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="4736" y="3168" width="32" height="32">
    <properties>
     <property name="age" value="1.4"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="4704" y="3168" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="4704" y="3168" width="32" height="32">
    <properties>
     <property name="age" value="0.4"/>
    </properties>
@@ -1980,7 +1980,7 @@
     <property name="age" value="3.7"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="4640" y="3328" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="4640" y="3328" width="32" height="32">
    <properties>
     <property name="age" value="1.4"/>
    </properties>
@@ -1990,7 +1990,7 @@
     <property name="age" value="3.7"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="4512" y="3328" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="4512" y="3328" width="32" height="32">
    <properties>
     <property name="age" value="1.4"/>
     <property name="view" value="east"/>
@@ -2001,7 +2001,7 @@
     <property name="age" value="4"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="4608" y="3200" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="4608" y="3200" width="32" height="32">
    <properties>
     <property name="age" value="4"/>
    </properties>
@@ -2011,7 +2011,7 @@
     <property name="age" value="1.4"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="4800" y="3136" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="4800" y="3136" width="32" height="32">
    <properties>
     <property name="age" value="3.7"/>
    </properties>
@@ -2021,7 +2021,7 @@
     <property name="age" value="4"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="4800" y="3232" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="4800" y="3232" width="32" height="32">
    <properties>
     <property name="age" value="0.4"/>
    </properties>
@@ -2042,7 +2042,7 @@
     <property name="view" value="west"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="4736" y="3360" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="4736" y="3360" width="32" height="32">
    <properties>
     <property name="age" value="4"/>
    </properties>
@@ -2057,7 +2057,7 @@
     <property name="age" value="1.4"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="4672" y="3360" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="4672" y="3360" width="32" height="32">
    <properties>
     <property name="age" value="0.4"/>
     <property name="view" value="west"/>
@@ -2068,17 +2068,17 @@
     <property name="age" value="2.2"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="4736" y="3136" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="4736" y="3136" width="32" height="32">
    <properties>
     <property name="age" value="4"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="4512" y="3168" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="4512" y="3168" width="32" height="32">
    <properties>
     <property name="age" value="3.7"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="4672" y="3328" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="4672" y="3328" width="32" height="32">
    <properties>
     <property name="age" value="2.2"/>
    </properties>
@@ -2093,7 +2093,7 @@
     <property name="age" value="4"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="4544" y="3104" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="4544" y="3104" width="32" height="32">
    <properties>
     <property name="age" value="2.2"/>
     <property name="view" value="east"/>
@@ -2105,7 +2105,7 @@
     <property name="view" value="north"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="4864" y="3264" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="4864" y="3264" width="32" height="32">
    <properties>
     <property name="age" value="2.2"/>
    </properties>
@@ -2115,7 +2115,7 @@
     <property name="age" value="4"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="4544" y="3264" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="4544" y="3264" width="32" height="32">
    <properties>
     <property name="age" value="4"/>
     <property name="view" value="north"/>
@@ -2137,13 +2137,13 @@
     <property name="view" value="north"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="4704" y="3264" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="4704" y="3264" width="32" height="32">
    <properties>
     <property name="age" value="3.7"/>
     <property name="view" value="west"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="4544" y="3040" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="4544" y="3040" width="32" height="32">
    <properties>
     <property name="age" value="0.4"/>
    </properties>
@@ -2158,7 +2158,7 @@
     <property name="age" value="1.4"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="4544" y="3296" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="4544" y="3296" width="32" height="32">
    <properties>
     <property name="age" value="3.7"/>
     <property name="view" value="east"/>
@@ -2169,7 +2169,7 @@
     <property name="age" value="3.7"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="4448" y="3264" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="4448" y="3264" width="32" height="32">
    <properties>
     <property name="age" value="3.7"/>
    </properties>
@@ -2185,7 +2185,7 @@
     <property name="age" value="1.4"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="4704" y="3232" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="4704" y="3232" width="32" height="32">
    <properties>
     <property name="age" value="0.4"/>
    </properties>
@@ -2205,7 +2205,7 @@
     <property name="age" value="0.4"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="4768" y="3328" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="4768" y="3328" width="32" height="32">
    <properties>
     <property name="age" value="4"/>
    </properties>
@@ -2225,7 +2225,7 @@
     <property name="age" value="3.7"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="4608" y="3072" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="4608" y="3072" width="32" height="32">
    <properties>
     <property name="age" value="1.4"/>
    </properties>
@@ -2235,18 +2235,18 @@
     <property name="age" value="0.4"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="4576" y="3264" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="4576" y="3264" width="32" height="32">
    <properties>
     <property name="age" value="1.4"/>
     <property name="view" value="west"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="4640" y="3264" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="4640" y="3264" width="32" height="32">
    <properties>
     <property name="age" value="1.4"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="4576" y="3232" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="4576" y="3232" width="32" height="32">
    <properties>
     <property name="age" value="4"/>
    </properties>
@@ -2267,12 +2267,12 @@
     <property name="age" value="4"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="4800" y="3104" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="4800" y="3104" width="32" height="32">
    <properties>
     <property name="age" value="4"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="4832" y="3328" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="4832" y="3328" width="32" height="32">
    <properties>
     <property name="age" value="0.4"/>
    </properties>
@@ -2287,7 +2287,7 @@
     <property name="age" value="3.7"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="4544" y="3136" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="4544" y="3136" width="32" height="32">
    <properties>
     <property name="age" value="2.2"/>
    </properties>
@@ -2297,7 +2297,7 @@
     <property name="age" value="0.4"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="4928" y="2720" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="4928" y="2720" width="32" height="32">
    <properties>
     <property name="age" value="2.2"/>
    </properties>
@@ -2307,7 +2307,7 @@
     <property name="age" value="3.7"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="4832" y="2912" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="4832" y="2912" width="32" height="32">
    <properties>
     <property name="age" value="3.7"/>
     <property name="view" value="east"/>
@@ -2328,13 +2328,13 @@
     <property name="age" value="3.7"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="4608" y="2976" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="4608" y="2976" width="32" height="32">
    <properties>
     <property name="age" value="4"/>
     <property name="view" value="north"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="4832" y="2784" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="4832" y="2784" width="32" height="32">
    <properties>
     <property name="age" value="1.4"/>
    </properties>
@@ -2350,12 +2350,12 @@
     <property name="age" value="0.4"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="4800" y="2720" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="4800" y="2720" width="32" height="32">
    <properties>
     <property name="age" value="4"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="4800" y="2816" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="4800" y="2816" width="32" height="32">
    <properties>
     <property name="age" value="2.2"/>
    </properties>
@@ -2370,7 +2370,7 @@
     <property name="age" value="0.4"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="4608" y="2944" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="4608" y="2944" width="32" height="32">
    <properties>
     <property name="age" value="2.2"/>
     <property name="view" value="north"/>
@@ -2387,12 +2387,12 @@
     <property name="view" value="west"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="4672" y="2912" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="4672" y="2912" width="32" height="32">
    <properties>
     <property name="age" value="4"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="4896" y="2880" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="4896" y="2880" width="32" height="32">
    <properties>
     <property name="age" value="1.4"/>
    </properties>
@@ -2413,7 +2413,7 @@
     <property name="age" value="3.7"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="4704" y="2656" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="4704" y="2656" width="32" height="32">
    <properties>
     <property name="age" value="4"/>
     <property name="view" value="west"/>
@@ -2430,12 +2430,12 @@
     <property name="age" value="4"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="4864" y="2656" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="4864" y="2656" width="32" height="32">
    <properties>
     <property name="age" value="1.4"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="4672" y="2720" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="4672" y="2720" width="32" height="32">
    <properties>
     <property name="age" value="0.4"/>
     <property name="view" value="east"/>
@@ -2446,17 +2446,17 @@
     <property name="age" value="2.2"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="4768" y="2592" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="4768" y="2592" width="32" height="32">
    <properties>
     <property name="age" value="4"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="4864" y="3104" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="4864" y="3104" width="32" height="32">
    <properties>
     <property name="age" value="3.7"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="4960" y="2912" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="4960" y="2912" width="32" height="32">
    <properties>
     <property name="age" value="3.7"/>
    </properties>
@@ -2477,7 +2477,7 @@
     <property name="age" value="0.4"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="5024" y="3104" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="5024" y="3104" width="32" height="32">
    <properties>
     <property name="age" value="1.4"/>
    </properties>
@@ -2487,13 +2487,13 @@
     <property name="age" value="3.7"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="4576" y="2944" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="4576" y="2944" width="32" height="32">
    <properties>
     <property name="age" value="4"/>
     <property name="view" value="east"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="4960" y="3104" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="4960" y="3104" width="32" height="32">
    <properties>
     <property name="age" value="2.2"/>
     <property name="view" value="east"/>
@@ -2520,7 +2520,7 @@
     <property name="age" value="3.7"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="4864" y="3040" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="4864" y="3040" width="32" height="32">
    <properties>
     <property name="age" value="2.2"/>
    </properties>
@@ -2535,7 +2535,7 @@
     <property name="age" value="0.4"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="4992" y="3168" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="4992" y="3168" width="32" height="32">
    <properties>
     <property name="age" value="4"/>
    </properties>
@@ -2550,7 +2550,7 @@
     <property name="age" value="4"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="4992" y="3072" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="4992" y="3072" width="32" height="32">
    <properties>
     <property name="age" value="2.2"/>
    </properties>
@@ -2570,7 +2570,7 @@
     <property name="age" value="0.4"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="4704" y="2720" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="4704" y="2720" width="32" height="32">
    <properties>
     <property name="age" value="0.4"/>
     <property name="view" value="north"/>
@@ -2586,7 +2586,7 @@
     <property name="age" value="0.4"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="4640" y="2752" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="4640" y="2752" width="32" height="32">
    <properties>
     <property name="age" value="1.4"/>
    </properties>
@@ -2606,7 +2606,7 @@
     <property name="age" value="0.4"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="4800" y="2880" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="4800" y="2880" width="32" height="32">
    <properties>
     <property name="age" value="1.4"/>
    </properties>
@@ -2626,7 +2626,7 @@
     <property name="age" value="2.2"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="4576" y="2816" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="4576" y="2816" width="32" height="32">
    <properties>
     <property name="age" value="4"/>
    </properties>
@@ -2636,18 +2636,18 @@
     <property name="age" value="0.4"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="4800" y="2912" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="4800" y="2912" width="32" height="32">
    <properties>
     <property name="age" value="3.7"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="5120" y="3072" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="5120" y="3072" width="32" height="32">
    <properties>
     <property name="age" value="1.4"/>
     <property name="view" value="east"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="4736" y="2976" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="4736" y="2976" width="32" height="32">
    <properties>
     <property name="age" value="4"/>
    </properties>
@@ -2662,7 +2662,7 @@
     <property name="age" value="4"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="5184" y="3136" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="5184" y="3136" width="32" height="32">
    <properties>
     <property name="age" value="4"/>
    </properties>
@@ -2677,7 +2677,7 @@
     <property name="age" value="3.7"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="4672" y="2848" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="4672" y="2848" width="32" height="32">
    <properties>
     <property name="age" value="3.7"/>
    </properties>
@@ -2698,7 +2698,7 @@
     <property name="age" value="1.4"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="4704" y="2944" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="4704" y="2944" width="32" height="32">
    <properties>
     <property name="age" value="4"/>
    </properties>
@@ -2714,7 +2714,7 @@
     <property name="age" value="1.4"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="4640" y="2816" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="4640" y="2816" width="32" height="32">
    <properties>
     <property name="age" value="3.7"/>
    </properties>
@@ -2734,12 +2734,12 @@
     <property name="age" value="4"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="4928" y="2784" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="4928" y="2784" width="32" height="32">
    <properties>
     <property name="age" value="0.4"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="5024" y="2880" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="5024" y="2880" width="32" height="32">
    <properties>
     <property name="age" value="2.2"/>
    </properties>
@@ -2754,17 +2754,17 @@
     <property name="age" value="2.2"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="4832" y="3008" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="4832" y="3008" width="32" height="32">
    <properties>
     <property name="age" value="2.2"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="5056" y="3168" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="5056" y="3168" width="32" height="32">
    <properties>
     <property name="age" value="0.4"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="4992" y="2784" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="4992" y="2784" width="32" height="32">
    <properties>
     <property name="age" value="0.4"/>
    </properties>
@@ -2779,7 +2779,7 @@
     <property name="age" value="3.7"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="4864" y="2720" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="4864" y="2720" width="32" height="32">
    <properties>
     <property name="age" value="3.7"/>
    </properties>
@@ -2800,7 +2800,7 @@
     <property name="age" value="2.2"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="4768" y="2624" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="4768" y="2624" width="32" height="32">
    <properties>
     <property name="age" value="1.4"/>
     <property name="view" value="north"/>
@@ -2816,12 +2816,12 @@
     <property name="age" value="0.4"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="5024" y="2848" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="5024" y="2848" width="32" height="32">
    <properties>
     <property name="age" value="3.7"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="4672" y="3008" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="4672" y="3008" width="32" height="32">
    <properties>
     <property name="age" value="3.7"/>
    </properties>
@@ -2837,12 +2837,12 @@
     <property name="view" value="east"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="4736" y="2912" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="4736" y="2912" width="32" height="32">
    <properties>
     <property name="age" value="2.2"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="4672" y="2688" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="4672" y="2688" width="32" height="32">
    <properties>
     <property name="age" value="0.4"/>
    </properties>
@@ -2857,12 +2857,12 @@
     <property name="age" value="1.4"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="4608" y="2816" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="4608" y="2816" width="32" height="32">
    <properties>
     <property name="age" value="0.4"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="5056" y="3264" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="5056" y="3264" width="32" height="32">
    <properties>
     <property name="age" value="4"/>
    </properties>
@@ -2878,12 +2878,12 @@
     <property name="view" value="east"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="4928" y="2752" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="4928" y="2752" width="32" height="32">
    <properties>
     <property name="age" value="3.7"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="4832" y="2656" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="4832" y="2656" width="32" height="32">
    <properties>
     <property name="age" value="0.4"/>
    </properties>
@@ -2898,12 +2898,12 @@
     <property name="age" value="4"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="4736" y="3040" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="4736" y="3040" width="32" height="32">
    <properties>
     <property name="age" value="2.2"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="4768" y="2976" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="4768" y="2976" width="32" height="32">
    <properties>
     <property name="age" value="3.7"/>
    </properties>
@@ -2918,12 +2918,12 @@
     <property name="age" value="2.2"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="4576" y="2752" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="4576" y="2752" width="32" height="32">
    <properties>
     <property name="age" value="1.4"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="5088" y="3200" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="5088" y="3200" width="32" height="32">
    <properties>
     <property name="age" value="4"/>
    </properties>
@@ -2938,7 +2938,7 @@
     <property name="age" value="1.4"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="4480" y="2912" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="4480" y="2912" width="32" height="32">
    <properties>
     <property name="age" value="2.2"/>
    </properties>
@@ -2953,7 +2953,7 @@
     <property name="age" value="2.2"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="4928" y="3168" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="4928" y="3168" width="32" height="32">
    <properties>
     <property name="age" value="4"/>
     <property name="view" value="east"/>
@@ -2969,12 +2969,12 @@
     <property name="age" value="1.4"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="4896" y="2816" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="4896" y="2816" width="32" height="32">
    <properties>
     <property name="age" value="4"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="4608" y="2752" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="4608" y="2752" width="32" height="32">
    <properties>
     <property name="age" value="0.4"/>
    </properties>
@@ -2984,12 +2984,12 @@
     <property name="age" value="4"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="5248" y="3168" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="5248" y="3168" width="32" height="32">
    <properties>
     <property name="age" value="1.4"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="5248" y="3328" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="5248" y="3328" width="32" height="32">
    <properties>
     <property name="age" value="4"/>
    </properties>
@@ -3005,12 +3005,12 @@
     <property name="view" value="east"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="5280" y="3168" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="5280" y="3168" width="32" height="32">
    <properties>
     <property name="age" value="3.7"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="5312" y="3264" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="5312" y="3264" width="32" height="32">
    <properties>
     <property name="age" value="4"/>
    </properties>
@@ -3030,7 +3030,7 @@
     <property name="age" value="4"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="4832" y="2944" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="4832" y="2944" width="32" height="32">
    <properties>
     <property name="age" value="4"/>
    </properties>
@@ -3050,7 +3050,7 @@
     <property name="age" value="3.7"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="5312" y="2880" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="5312" y="2880" width="32" height="32">
    <properties>
     <property name="age" value="2.2"/>
    </properties>
@@ -3065,7 +3065,7 @@
     <property name="age" value="3.7"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="5376" y="2944" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="5376" y="2944" width="32" height="32">
    <properties>
     <property name="age" value="0.4"/>
     <property name="view" value="north"/>
@@ -3082,7 +3082,7 @@
     <property name="view" value="west"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="5312" y="2944" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="5312" y="2944" width="32" height="32">
    <properties>
     <property name="age" value="2.2"/>
    </properties>
@@ -3097,12 +3097,12 @@
     <property name="age" value="0.4"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="5120" y="2816" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="5120" y="2816" width="32" height="32">
    <properties>
     <property name="age" value="2.2"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="5184" y="2752" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="5184" y="2752" width="32" height="32">
    <properties>
     <property name="age" value="1.4"/>
    </properties>
@@ -3123,7 +3123,7 @@
     <property name="age" value="0.4"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="5152" y="2880" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="5152" y="2880" width="32" height="32">
    <properties>
     <property name="age" value="4"/>
    </properties>
@@ -3144,7 +3144,7 @@
     <property name="age" value="3.7"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="5184" y="2816" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="5184" y="2816" width="32" height="32">
    <properties>
     <property name="age" value="1.4"/>
     <property name="view" value="north"/>
@@ -3160,12 +3160,12 @@
     <property name="age" value="3.7"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="5088" y="2880" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="5088" y="2880" width="32" height="32">
    <properties>
     <property name="age" value="0.4"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="5152" y="2912" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="5152" y="2912" width="32" height="32">
    <properties>
     <property name="age" value="3.7"/>
    </properties>
@@ -3180,7 +3180,7 @@
     <property name="age" value="1.4"/>
    </properties>
   </object>
-  <object name="northern_forest1" type="harvestable" x="5280" y="3104" width="32" height="32">
+  <object name="northern_forest2" type="harvestable" x="5280" y="3104" width="32" height="32">
    <properties>
     <property name="age" value="0.4"/>
    </properties>

@@ -30,8 +30,8 @@ void EconomicsMgr::update(Structure* structure) {
 }
 
 void EconomicsMgr::updateProduction(Building* building) {
-    StructureType structureType = building->getStructureType();
-    const BuildingConfig* buildingConfig = context->configMgr->getBuildingConfig(structureType);
+    const MapObjectType& mapObjectType = building->getMapObjectType();
+    const BuildingConfig* buildingConfig = context->configMgr->getBuildingConfig(mapObjectType);
 
     // Produziert eh nix bzw. Lager schon voll? Dann nix zu tun.
     if (!buildingConfig->getBuildingProduction()->output.isUsed() ||
@@ -289,8 +289,8 @@ GoodsSlot* EconomicsMgr::findGoodsSlotToUnloadTo(Building* building, Carrier* ca
 }
 
 FindBuildingToGetGoodsFromResult EconomicsMgr::findBuildingToGetGoodsFrom(Building* building) {
-    StructureType structureType = building->getStructureType();
-    const BuildingConfig* buildingConfig = context->configMgr->getBuildingConfig(structureType);
+    const MapObjectType& mapObjectType = building->getMapObjectType();
+    const BuildingConfig* buildingConfig = context->configMgr->getBuildingConfig(mapObjectType);
     const RectangleData<char>* catchmentArea = buildingConfig->getCatchmentArea();
     if (catchmentArea == nullptr) {
         return FindBuildingToGetGoodsFromResult(); // kein Einzugsbereich
@@ -370,7 +370,7 @@ FindBuildingToGetGoodsFromResult EconomicsMgr::findBuildingToGetGoodsFrom(Buildi
             }
 
             // Gebäude, die gar nix produzieren, bringen uns nix, z.B. öffentliche Gebäude.
-            const BuildingConfig* buildingThereConfig = context->configMgr->getBuildingConfig(buildingThere->getStructureType());
+            const BuildingConfig* buildingThereConfig = context->configMgr->getBuildingConfig(buildingThere->getMapObjectType());
             if (!isStorgeBuildingThere && !buildingThereConfig->getBuildingProduction()->output.isUsed()) {
                 continue;
             }

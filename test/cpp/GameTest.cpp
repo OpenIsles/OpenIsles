@@ -25,7 +25,7 @@ TEST_F(GameTest, SetUp) {
     ASSERT_TRUE(mapObjectOffice1->getMapCoords() == MapCoords(28, 18));
     ASSERT_EQ(3, mapObjectOffice1->getMapWidth());
     ASSERT_EQ(2, mapObjectOffice1->getMapHeight());
-    ASSERT_EQ(StructureType::OFFICE1, ((Building*) mapObjectOffice1)->getStructureType());
+    ASSERT_EQ(MapObjectType::OFFICE1, ((Building*) mapObjectOffice1)->getMapObjectType());
 
     Player* playerOffice1 = mapObjectOffice1->getPlayer();
     ASSERT_EQ(mapTileOnOffice1->player, playerOffice1);

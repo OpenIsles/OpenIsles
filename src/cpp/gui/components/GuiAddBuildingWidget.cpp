@@ -26,16 +26,16 @@ void GuiAddBuildingWidget::renderElement(IRenderer* renderer) {
     int windowX, windowY;
     getWindowCoords(windowX, windowY);
 
-    StructureType structureType = context->guiMgr->getPanelState().addingStructure;
-    const BuildingConfig* buildingConfig = context->configMgr->getBuildingConfig(structureType);
+    const MapObjectType& mapObjectType = context->guiMgr->getPanelState().addingMapObject;
+    const BuildingConfig* buildingConfig = context->configMgr->getBuildingConfig(mapObjectType);
 
     // Gebäudename
     context->fontMgr->renderText(renderer, buildingConfig->getName(), windowX + width/2, windowY + 15,
         &colorLightBrown, &colorBlack, "DroidSans-Bold.ttf", 15, RENDERTEXT_HALIGN_CENTER);
 
     // Gebäude-Grafik
-    const FourthDirection& view = context->guiMgr->getPanelState().addingStructureView;
-    const std::string buildingGraphicsSetName = context->graphicsMgr->getGraphicSetNameForStructure(structureType);
+    const FourthDirection& view = context->guiMgr->getPanelState().addingMapObjectView;
+    const std::string buildingGraphicsSetName = context->graphicsMgr->getGraphicSetNameForMapObject(mapObjectType);
     const GraphicSet* buildingGraphicsSet = context->graphicsMgr->getGraphicSet(buildingGraphicsSetName);
     const IGraphic* buildingGraphic = buildingGraphicsSet->getByView(view)->getGraphic();
 

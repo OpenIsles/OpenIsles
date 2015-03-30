@@ -242,22 +242,28 @@ void GameIO::loadMapObjects(Game* game, const ConfigMgr* configMgr, rapidxml::xm
             int playerNr = std::atoi(getPropertyValueFromPropertiesNode(propertiesNode, "player"));
             Player* player = game->getPlayer(playerNr - 1);
 
-            StructureType structureType = configMgr->getStructureType(nodeNameValue);
-            if (structureType == StructureType::NO_STRUCTURE) {
+            const MapObjectType& mapObjectType = configMgr->getMapObjectType(nodeNameValue);
+            if (mapObjectType == MapObjectType::NO_MAP_OBJECT) {
                 std::cerr << "Illegal structure or building name '" << nodeNameValue << "'" << std::endl;
                 throw std::runtime_error("Illegal structure or building name");
             }
 
-            game->addStructure(mapCoords, structureType, view, player);
+            game->addStructure(mapCoords, mapObjectType, view, player);
         }
 
         // MapObject für erntebare Landschaften anlegen
         else if (strcmp(nodeType, "harvestable") == 0) {
             // TODO Aus nodeNameValue weiteres Identifizierungsmerkmal lesen (verschiedene Tiles, Nord-/Südwälder zu haben, Wald/Getreide/etc.)
+            // TODO Refactoring: duplicate code
+            const MapObjectType& mapObjectType = configMgr->getMapObjectType(nodeNameValue);
+            if (mapObjectType == MapObjectType::NO_MAP_OBJECT) {
+                std::cerr << "Illegal harvestable name '" << nodeNameValue << "'" << std::endl;
+                throw std::runtime_error("Illegal harvestable name");
+            }
 
             double age = std::atof(getPropertyValueFromPropertiesNode(propertiesNode, "age"));
 
-            game->addHarvestable(mapCoords, age, view);
+            game->addHarvestable(mapCoords, mapObjectType, age, view);
         }
     }
 }

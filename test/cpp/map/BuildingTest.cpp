@@ -2,7 +2,7 @@
 #include <gtest/gtest.h>
 #include "config/ConfigMgr.h"
 #include "map/Building.h"
-#include "map/StructureType.h"
+#include "map/MapObjectType.h"
 
 
 /**
@@ -22,7 +22,7 @@ public:
         buildingConfig.catchmentArea = catchmentArea;
     }
 
-    const BuildingConfig* getBuildingConfig(StructureType structureType) const override {
+    const BuildingConfig* getBuildingConfig(MapObjectType mapObjectType) const override {
         return &buildingConfig;
     }
 };

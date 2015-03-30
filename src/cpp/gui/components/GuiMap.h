@@ -14,7 +14,7 @@
 #endif
 
 
-// Konstanten für isAllowedToPlaceStructure()
+// Konstanten für isAllowedToPlaceMapObject()
 
 /**
  * @brief Setzen der Struktur ist erlaubt
@@ -198,26 +198,26 @@ private:
      * Prüft, ob eine bestimmte Struktur an eine bestimmte Position gesetzt werden darf.
      *
      * @param mapCoords Map-Koordinate, wo die Struktur gesetzt werden soll
-     * @param structureType Typ der zu setzenden Struktur
+     * @param mapObjectType Typ der zu setzenden Struktur
      * @param view Ausrichtung der Struktur
      * @sa PLACING_STRUCTURE-Konstanten
      * @return Bitmaske, die angibt, ob das Gebäude gesetzt werden darf.
      */
-    unsigned char isAllowedToPlaceStructure(
-        const MapCoords& mapCoords, StructureType structureType, const FourthDirection& view) const;
+    unsigned char isAllowedToPlaceMapObject(
+        const MapCoords& mapCoords, MapObjectType mapObjectType, const FourthDirection& view) const;
 
 //    /**
-//     * @brief Berechnet welcher konkrete StructureType für eine Straßenkachel verwendet werden muss. Als Eingabeparameter
-//     * abstractStreetStructureType wird festgelegt, ob Pflasterstraße oder Feldweg und an welchen Map-Koordinaten die
+//     * @brief Berechnet welcher konkrete MapObjectType für eine Straßenkachel verwendet werden muss. Als Eingabeparameter
+//     * abstractStreetMapObjectType wird festgelegt, ob Pflasterstraße oder Feldweg und an welchen Map-Koordinaten die
 //     * Grafik gesetzt werden soll. Diese Methode bestimmt ausgehend von umliegenden Wegen, ob Gerade, Kurve, T-Stück
-//     * oder Kreuzung verwendet werden muss und gibt diesen StructureType zurück.
+//     * oder Kreuzung verwendet werden muss und gibt diesen MapObjectType zurück.
 //     * @param mapCoords Map-Koordinaten, für die berechnet werden soll
-//     * @param abstractStreetStructureType spezifiziert, welcher Typ von Weg gewünscht wird
-//     * @return konkreter StructureType, der an dieser Stelle verwendet werden muss
+//     * @param abstractStreetMapObjectType spezifiziert, welcher Typ von Weg gewünscht wird
+//     * @return konkreter MapObjectType, der an dieser Stelle verwendet werden muss
 //     * TODO Feldweg
 //     */
-//    StructureType getConcreteStreetStructureType(
-//        const MapCoords& mapCoords, StructureType abstractStreetStructureType) const;
+//    MapObjectType getConcreteStreetMapObjectType(
+//        const MapCoords& mapCoords, MapObjectType abstractStreetMapObjectType) const;
 
     /**
      * @brief Entfernt alle Objekte in `mapObjectsBeingAdded` und `mapTilesToDrawTemporarily` und setzt
@@ -244,10 +244,10 @@ private:
 
     /**
      * @brief Aktualisiert die Baukosten in der Resourcen-Leiste.
-     * @param structureType Gebäude, was wir grade bauen. Alle Aufrufer haben diese Info parat,
+     * @param mapObjectType Gebäude, was wir grade bauen. Alle Aufrufer haben diese Info parat,
      *                      also geben wir sie der Methode gleich mit.
      */
-    void updateBuildingCosts(StructureType structureType);
+    void updateBuildingCosts(MapObjectType mapObjectType);
 };
 
 #endif

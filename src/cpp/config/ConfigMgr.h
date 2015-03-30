@@ -11,7 +11,7 @@
 #include "utils/RectangleData.h"
 
 
-enum StructureType : unsigned char;
+enum MapObjectType : unsigned char;
 
 
 /**
@@ -278,10 +278,10 @@ private:
     BuildingConfig** buildingConfigs;
 
     /**
-     * @brief Map, die eine Zuordnung von `nameInSavefile` auf den zugehörigen `StructureType` macht.
+     * @brief Map, die eine Zuordnung von `nameInSavefile` auf den zugehörigen `MapObjectType` macht.
      * Diese Map brauchen wir beim Laden eines Spielstands.
      */
-    std::unordered_map<std::string, StructureType> mapBuildingNameInSavefile;
+    std::unordered_map<std::string, MapObjectType> mapMapObjectNameInSavefile;
 
     /**
      * @brief Map, die Tilenamen auf die Tile-Konfiguration abbildet
@@ -319,26 +319,26 @@ public:
     ~ConfigMgr();
     
     /**
-     * @brief Liefert die Konfiguration eines Gebäudes zurück
-     * @param structureType Typ der Struktur/Gebäude
+     * @brief Liefert die Konfiguration eines Map-Objekts zurück
+     * @param mapObjectType Typ des Map-Objekts
      * @return Konfiguration
      */
     VIRTUAL_ONLY_IN_TESTS
-    const BuildingConfig* getBuildingConfig(StructureType structureType) const {
-        return buildingConfigs[structureType];
+    const BuildingConfig* getBuildingConfig(MapObjectType mapObjectType) const {
+        return buildingConfigs[mapObjectType];
     }
 
     /**
-     * @brief Liefert den `StructureType` einer Struktur/Gebäudes ausgehend von einem `nameInSavefile` zurück.
-     * @param nameInSavefile Name der Struktur/Gebäude im Spielstand
-     * @return `StructureType`. `NO_STRUCTURE`, wenn der Name nicht gefunden wurde
+     * @brief Liefert den `MapObjectType` einer Struktur/Gebäudes ausgehend von einem `nameInSavefile` zurück.
+     * @param nameInSavefile Name des Map-Objekts im Spielstand
+     * @return `MapObjectType`. `NO_MAP_OBJECT`, wenn der Name nicht gefunden wurde
      */
-    const StructureType getStructureType(const std::string& nameInSavefile) const {
-        auto iter = mapBuildingNameInSavefile.find(nameInSavefile);
-        if (iter != mapBuildingNameInSavefile.end()) {
+    const MapObjectType getMapObjectType(const std::string& nameInSavefile) const {
+        auto iter = mapMapObjectNameInSavefile.find(nameInSavefile);
+        if (iter != mapMapObjectNameInSavefile.end()) {
             return iter->second;
         } else {
-            return StructureType::NO_STRUCTURE;
+            return MapObjectType::NO_MAP_OBJECT;
         }
     }
 

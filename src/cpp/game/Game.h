@@ -135,22 +135,24 @@ public:
     /**
      * @brief Fügt eine neue Landschaftkachel, die abgeerntet werden kann, der Karte hinzu.
      * @param mapCoords Map-Koordinaten der Kachel
+     * @param mapObjectType Typ der Landschaftkachel
      * @param age Alter der Kachel
      * @param view Ansicht, mit der die Kachel positioniert werden soll
      * @return Zeiger auf das neu angelegte Harvestable-Objekt
      */
-    Harvestable* addHarvestable(const MapCoords& mapCoords, double age, const FourthDirection& view);
+    Harvestable* addHarvestable(
+        const MapCoords& mapCoords, MapObjectType mapObjectType, double age, const FourthDirection& view);
 
     /**
      * @brief Fügt eine neue Struktur der Karte hinzu.
      * @param mapCoords Map-Koordinaten des Objekts
-     * @param structureType Typ der Struktur
+     * @param mapObjectType Typ der Struktur
      * @param view Ansicht, mit der das Gebäude positioniert werden soll
      * @param player Spieler, dem die Struktur gehören soll
      * @return Zeiger auf die neu angelegte Struktur
      */
     Structure* addStructure(
-        const MapCoords& mapCoords, StructureType structureType, const FourthDirection& view, Player* player);
+        const MapCoords& mapCoords, MapObjectType mapObjectType, const FourthDirection& view, Player* player);
 
     /**
      * @brief Ändert die Einwohner innerhalb eines Gebäudes. Positive Werte fügen Bewohner hinzu, negative nehmen

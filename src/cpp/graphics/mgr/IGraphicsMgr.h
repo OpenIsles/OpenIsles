@@ -8,7 +8,7 @@
 #include "graphics/graphic/IGraphic.h"
 #include "graphics/graphic/GraphicSet.h"
 #include "graphics/renderer/IRenderer.h"
-#include "map/StructureType.h"
+#include "map/MapObjectType.h"
 
 class ConfigMgr;
 
@@ -60,57 +60,63 @@ public:
     virtual const GraphicSet* getGraphicSet(std::string graphicName) const = 0;
 
     VIRTUAL_ONLY_IN_TESTS
-    std::string getGraphicSetNameForStructure(StructureType structureType) const {
+    std::string getGraphicSetNameForMapObject(MapObjectType mapObjectType) const {
         // TODO Das muss irgendwie hübscher werden. In Zukunft muss alles mit den String-Keys laufen
+        std::string graphicSetNamePrefix;
         std::string graphicSetNameSuffix;
 
-        if (structureType == StructureType::CHAPEL) { graphicSetNameSuffix = "chapel"; }
-        else if (structureType == StructureType::PIONEERS_HOUSE1) { graphicSetNameSuffix = "pioneers-house1"; }
-        else if (structureType == StructureType::PIONEERS_HOUSE2) { graphicSetNameSuffix = "pioneers-house2"; }
-        else if (structureType == StructureType::PIONEERS_HOUSE3) { graphicSetNameSuffix = "pioneers-house3"; }
-        else if (structureType == StructureType::PIONEERS_HOUSE4) { graphicSetNameSuffix = "pioneers-house4"; }
-        else if (structureType == StructureType::PIONEERS_HOUSE5) { graphicSetNameSuffix = "pioneers-house5"; }
-        else if (structureType == StructureType::STONEMASON) { graphicSetNameSuffix = "stonemason"; }
-        else if (structureType == StructureType::OFFICE1) { graphicSetNameSuffix = "office1"; }
-        else if (structureType == StructureType::MARKETPLACE) { graphicSetNameSuffix = "marketplace"; }
-        else if (structureType == StructureType::FORESTERS) { graphicSetNameSuffix = "foresters"; }
-        else if (structureType == StructureType::SHEEP_FARM) { graphicSetNameSuffix = "sheep-farm"; }
-        else if (structureType == StructureType::WEAVING_MILL1) { graphicSetNameSuffix = "weaving-mill1"; }
-        else if (structureType == StructureType::CATTLE_FARM) { graphicSetNameSuffix = "cattle-farm"; }
-        else if (structureType == StructureType::BUTCHERS) { graphicSetNameSuffix = "butchers"; }
-        else if (structureType == StructureType::TOOLSMITHS) { graphicSetNameSuffix = "toolsmiths"; }
-        else if (structureType == StructureType::HUNTERS_HUT) { graphicSetNameSuffix = "hunters-hut"; }
-        else if (structureType == StructureType::CATHEDRAL) { graphicSetNameSuffix = "cathedral"; }
-        else if (structureType == StructureType::TAVERN) { graphicSetNameSuffix = "tavern"; }
-        else if (structureType == StructureType::SQUARE1) { graphicSetNameSuffix = "square1"; }
-        else if (structureType == StructureType::SQUARE2) { graphicSetNameSuffix = "square2"; }
-        else if (structureType == StructureType::SQUARE3) { graphicSetNameSuffix = "square3"; }
+        if (mapObjectType == MapObjectType::NORTHERN_FOREST1) { graphicSetNameSuffix = "northern-forest1"; }
+        else if (mapObjectType == MapObjectType::NORTHERN_FOREST2) { graphicSetNameSuffix = "northern-forest2"; }
 
-        else if (structureType == StructureType::COBBLED_STREET_STRAIGHT_0) { graphicSetNameSuffix = "cobbled-street-straight0"; }
-        else if (structureType == StructureType::COBBLED_STREET_STRAIGHT_90) { graphicSetNameSuffix = "cobbled-street-straight90"; }
-        else if (structureType == StructureType::COBBLED_STREET_CURVE_0) { graphicSetNameSuffix = "cobbled-street-curve0"; }
-        else if (structureType == StructureType::COBBLED_STREET_CURVE_90) { graphicSetNameSuffix = "cobbled-street-curve90"; }
-        else if (structureType == StructureType::COBBLED_STREET_CURVE_180) { graphicSetNameSuffix = "cobbled-street-curve180"; }
-        else if (structureType == StructureType::COBBLED_STREET_CURVE_270) { graphicSetNameSuffix = "cobbled-street-curve270"; }
-        else if (structureType == StructureType::COBBLED_STREET_TEE_0) { graphicSetNameSuffix = "cobbled-street-tee0"; }
-        else if (structureType == StructureType::COBBLED_STREET_TEE_90) { graphicSetNameSuffix = "cobbled-street-tee90"; }
-        else if (structureType == StructureType::COBBLED_STREET_TEE_180) { graphicSetNameSuffix = "cobbled-street-tee180"; }
-        else if (structureType == StructureType::COBBLED_STREET_TEE_270) { graphicSetNameSuffix = "cobbled-street-tee270"; }
-        else if (structureType == StructureType::COBBLED_STREET_CROSS) { graphicSetNameSuffix = "cobbled-street-cross"; }
+        else if (mapObjectType == MapObjectType::CHAPEL) { graphicSetNameSuffix = "chapel"; }
+        else if (mapObjectType == MapObjectType::PIONEERS_HOUSE1) { graphicSetNameSuffix = "pioneers-house1"; }
+        else if (mapObjectType == MapObjectType::PIONEERS_HOUSE2) { graphicSetNameSuffix = "pioneers-house2"; }
+        else if (mapObjectType == MapObjectType::PIONEERS_HOUSE3) { graphicSetNameSuffix = "pioneers-house3"; }
+        else if (mapObjectType == MapObjectType::PIONEERS_HOUSE4) { graphicSetNameSuffix = "pioneers-house4"; }
+        else if (mapObjectType == MapObjectType::PIONEERS_HOUSE5) { graphicSetNameSuffix = "pioneers-house5"; }
+        else if (mapObjectType == MapObjectType::STONEMASON) { graphicSetNameSuffix = "stonemason"; }
+        else if (mapObjectType == MapObjectType::OFFICE1) { graphicSetNameSuffix = "office1"; }
+        else if (mapObjectType == MapObjectType::MARKETPLACE) { graphicSetNameSuffix = "marketplace"; }
+        else if (mapObjectType == MapObjectType::FORESTERS) { graphicSetNameSuffix = "foresters"; }
+        else if (mapObjectType == MapObjectType::SHEEP_FARM) { graphicSetNameSuffix = "sheep-farm"; }
+        else if (mapObjectType == MapObjectType::WEAVING_MILL1) { graphicSetNameSuffix = "weaving-mill1"; }
+        else if (mapObjectType == MapObjectType::CATTLE_FARM) { graphicSetNameSuffix = "cattle-farm"; }
+        else if (mapObjectType == MapObjectType::BUTCHERS) { graphicSetNameSuffix = "butchers"; }
+        else if (mapObjectType == MapObjectType::TOOLSMITHS) { graphicSetNameSuffix = "toolsmiths"; }
+        else if (mapObjectType == MapObjectType::HUNTERS_HUT) { graphicSetNameSuffix = "hunters-hut"; }
+        else if (mapObjectType == MapObjectType::CATHEDRAL) { graphicSetNameSuffix = "cathedral"; }
+        else if (mapObjectType == MapObjectType::TAVERN) { graphicSetNameSuffix = "tavern"; }
+        else if (mapObjectType == MapObjectType::SQUARE1) { graphicSetNameSuffix = "square1"; }
+        else if (mapObjectType == MapObjectType::SQUARE2) { graphicSetNameSuffix = "square2"; }
+        else if (mapObjectType == MapObjectType::SQUARE3) { graphicSetNameSuffix = "square3"; }
 
-        else if (structureType == StructureType::FARM_ROAD_STRAIGHT_0) { graphicSetNameSuffix = "farm-road-straight0"; }
-        else if (structureType == StructureType::FARM_ROAD_STRAIGHT_90) { graphicSetNameSuffix = "farm-road-straight90"; }
-        else if (structureType == StructureType::FARM_ROAD_CURVE_0) { graphicSetNameSuffix = "farm-road-curve0"; }
-        else if (structureType == StructureType::FARM_ROAD_CURVE_90) { graphicSetNameSuffix = "farm-road-curve90"; }
-        else if (structureType == StructureType::FARM_ROAD_CURVE_180) { graphicSetNameSuffix = "farm-road-curve180"; }
-        else if (structureType == StructureType::FARM_ROAD_CURVE_270) { graphicSetNameSuffix = "farm-road-curve270"; }
-        else if (structureType == StructureType::FARM_ROAD_TEE_0) { graphicSetNameSuffix = "farm-road-tee0"; }
-        else if (structureType == StructureType::FARM_ROAD_TEE_90) { graphicSetNameSuffix = "farm-road-tee90"; }
-        else if (structureType == StructureType::FARM_ROAD_TEE_180) { graphicSetNameSuffix = "farm-road-tee180"; }
-        else if (structureType == StructureType::FARM_ROAD_TEE_270) { graphicSetNameSuffix = "farm-road-tee270"; }
-        else if (structureType == StructureType::FARM_ROAD_CROSS) { graphicSetNameSuffix = "farm-road-cross"; }
+        else if (mapObjectType == MapObjectType::COBBLED_STREET_STRAIGHT_0) { graphicSetNameSuffix = "cobbled-street-straight0"; }
+        else if (mapObjectType == MapObjectType::COBBLED_STREET_STRAIGHT_90) { graphicSetNameSuffix = "cobbled-street-straight90"; }
+        else if (mapObjectType == MapObjectType::COBBLED_STREET_CURVE_0) { graphicSetNameSuffix = "cobbled-street-curve0"; }
+        else if (mapObjectType == MapObjectType::COBBLED_STREET_CURVE_90) { graphicSetNameSuffix = "cobbled-street-curve90"; }
+        else if (mapObjectType == MapObjectType::COBBLED_STREET_CURVE_180) { graphicSetNameSuffix = "cobbled-street-curve180"; }
+        else if (mapObjectType == MapObjectType::COBBLED_STREET_CURVE_270) { graphicSetNameSuffix = "cobbled-street-curve270"; }
+        else if (mapObjectType == MapObjectType::COBBLED_STREET_TEE_0) { graphicSetNameSuffix = "cobbled-street-tee0"; }
+        else if (mapObjectType == MapObjectType::COBBLED_STREET_TEE_90) { graphicSetNameSuffix = "cobbled-street-tee90"; }
+        else if (mapObjectType == MapObjectType::COBBLED_STREET_TEE_180) { graphicSetNameSuffix = "cobbled-street-tee180"; }
+        else if (mapObjectType == MapObjectType::COBBLED_STREET_TEE_270) { graphicSetNameSuffix = "cobbled-street-tee270"; }
+        else if (mapObjectType == MapObjectType::COBBLED_STREET_CROSS) { graphicSetNameSuffix = "cobbled-street-cross"; }
 
-        return "structures/" + graphicSetNameSuffix;
+        else if (mapObjectType == MapObjectType::FARM_ROAD_STRAIGHT_0) { graphicSetNameSuffix = "farm-road-straight0"; }
+        else if (mapObjectType == MapObjectType::FARM_ROAD_STRAIGHT_90) { graphicSetNameSuffix = "farm-road-straight90"; }
+        else if (mapObjectType == MapObjectType::FARM_ROAD_CURVE_0) { graphicSetNameSuffix = "farm-road-curve0"; }
+        else if (mapObjectType == MapObjectType::FARM_ROAD_CURVE_90) { graphicSetNameSuffix = "farm-road-curve90"; }
+        else if (mapObjectType == MapObjectType::FARM_ROAD_CURVE_180) { graphicSetNameSuffix = "farm-road-curve180"; }
+        else if (mapObjectType == MapObjectType::FARM_ROAD_CURVE_270) { graphicSetNameSuffix = "farm-road-curve270"; }
+        else if (mapObjectType == MapObjectType::FARM_ROAD_TEE_0) { graphicSetNameSuffix = "farm-road-tee0"; }
+        else if (mapObjectType == MapObjectType::FARM_ROAD_TEE_90) { graphicSetNameSuffix = "farm-road-tee90"; }
+        else if (mapObjectType == MapObjectType::FARM_ROAD_TEE_180) { graphicSetNameSuffix = "farm-road-tee180"; }
+        else if (mapObjectType == MapObjectType::FARM_ROAD_TEE_270) { graphicSetNameSuffix = "farm-road-tee270"; }
+        else if (mapObjectType == MapObjectType::FARM_ROAD_CROSS) { graphicSetNameSuffix = "farm-road-cross"; }
+
+        graphicSetNamePrefix = (mapObjectType >= MapObjectType::START_STRUCTURES) ? "structures" : "harvestables";
+
+        return graphicSetNamePrefix + "/" + graphicSetNameSuffix;
     }
 
     std::string getGraphicSetNameForGoodIcons(GoodsType goodsType, bool marketplaceIcon) const {

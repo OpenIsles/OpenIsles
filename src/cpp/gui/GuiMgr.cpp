@@ -146,8 +146,8 @@ void GuiMgr::initGui() {
 
     // Initial ist für den Gebäudebau der Förster ausgewählt...
     panelState.selectedBuildingGroup = BuildingGroup::FARM;
-    panelState.addingStructure = StructureType::FORESTERS;
-    panelState.addingStructureView = Direction::SOUTH;
+    panelState.addingMapObject = MapObjectType::FORESTERS;
+    panelState.addingMapObjectView = Direction::SOUTH;
     panelState.buildingMenuOpen = false;
 
     // ...und wir zeigen das Spielerstatus-Widget
@@ -383,10 +383,10 @@ void GuiMgr::onEvent(SDL_Event& event) {
 
         // Drehen des Gebäudes, was wir bauen wollen
         else if (event.key.keysym.scancode == SDL_SCANCODE_PERIOD) {
-            Direction::rotate90DegreesClockwise(panelState.addingStructureView);
+            Direction::rotate90DegreesClockwise(panelState.addingMapObjectView);
             ((GuiMap*) findElement(GUI_ID_MAP))->onRotateAddingStructure();
         } else if (event.key.keysym.scancode == SDL_SCANCODE_COMMA) {
-            Direction::rotate90DegreesCounterclockwise(panelState.addingStructureView);
+            Direction::rotate90DegreesCounterclockwise(panelState.addingMapObjectView);
             ((GuiMap*) findElement(GUI_ID_MAP))->onRotateAddingStructure();
         }
 
@@ -487,8 +487,8 @@ void GuiMgr::updateGuiFromPanelState() {
     // Baukosten aktualisieren
     GuiResourcesBar* guiResourcesBar = (GuiResourcesBar*) findElement(GUI_ID_RESOURCES_BAR);
     if (panelState.selectedPanelButton == PanelButton::ADD_BUILDING) {
-        StructureType structureType = context->guiMgr->getPanelState().addingStructure;
-        const BuildingCosts& buildingCosts = context->configMgr->getBuildingConfig(structureType)->buildingCosts;
+        const MapObjectType& mapObjectType = context->guiMgr->getPanelState().addingMapObject;
+        const BuildingCosts& buildingCosts = context->configMgr->getBuildingConfig(mapObjectType)->buildingCosts;
 
         guiResourcesBar->showBuildingCosts(buildingCosts);
     } else {

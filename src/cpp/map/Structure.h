@@ -5,7 +5,7 @@
 #include "map/coords/MapCoords.h"
 #include "map/Direction.h"
 #include "map/MapObject.h"
-#include "map/StructureType.h"
+#include "map/MapObjectType.h"
 
 /**
  * Enum für die Gebäude-Gruppen, d.h. wie sie im Baumenü angeordnet werden
@@ -34,25 +34,12 @@ enum BuildingGroup : unsigned char {
 class Structure : public MapObjectFixed, public UpdateableObject {
 
 protected:
-	/**
-	 * @brief Objekt-Typ
-	 */
-	StructureType structureType;
-
     /**
      * @brief Ausrichtung des Objekts
      */
     FourthDirection view;
 
 public:
-    StructureType getStructureType() const {
-        return structureType;
-    }
-
-    void setStructureType(StructureType structureType) {
-        this->structureType = structureType;
-    }
-
     const FourthDirection& getView() const {
         return view;
     }
@@ -66,12 +53,12 @@ public:
      * @return `true` wenn Weg/Straße oder Platz, sonst `false`
      */
     bool isStreet() const {
-        return ((structureType >= StructureType::FARM_ROAD_STRAIGHT_0 &&
-                 structureType <= StructureType::FARM_ROAD_CROSS) ||
-                (structureType >= StructureType::COBBLED_STREET_STRAIGHT_0 &&
-                 structureType <= StructureType::COBBLED_STREET_CROSS) ||
-                (structureType >= StructureType::SQUARE1 &&
-                 structureType <= StructureType::SQUARE3));
+        return ((mapObjectType >= MapObjectType::FARM_ROAD_STRAIGHT_0 &&
+                 mapObjectType <= MapObjectType::FARM_ROAD_CROSS) ||
+                (mapObjectType >= MapObjectType::COBBLED_STREET_STRAIGHT_0 &&
+                 mapObjectType <= MapObjectType::COBBLED_STREET_CROSS) ||
+                (mapObjectType >= MapObjectType::SQUARE1 &&
+                 mapObjectType <= MapObjectType::SQUARE3));
     }
 };
 

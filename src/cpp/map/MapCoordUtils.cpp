@@ -98,7 +98,7 @@ Rect MapCoordUtils::getDrawCoordsForBuilding(const Map& map, IGraphicsMgr* graph
     const FourthDirection& structureView = building->getView();
     const FourthDirection& viewToRender = Direction::addDirections(structureView, map.getScreenView());
 
-	const std::string graphicSetName = graphicsMgr->getGraphicSetNameForStructure(building->getStructureType());
+	const std::string graphicSetName = graphicsMgr->getGraphicSetNameForMapObject(building->getMapObjectType());
 	const GraphicSet* graphicsSet = graphicsMgr->getGraphicSet(graphicSetName);
     const IGraphic* graphic = graphicsSet->getByView(viewToRender)->getGraphic();
 

@@ -17,7 +17,7 @@ GuiBuildMenuWidget::GuiBuildMenuWidget(const Context* const context) : GuiPanelW
         const std::string graphicSetPressedName; // TODO Zustände nutzen
 
         struct {
-            StructureType structureType;
+            MapObjectType mapObjectType;
             const char* name;
             const std::string graphicSetName;
         } buildings[16];
@@ -28,102 +28,102 @@ GuiBuildMenuWidget::GuiBuildMenuWidget(const Context* const context) : GuiPanelW
             "Handwerksbetriebe",
             "add-building-group/craftsman",
             "add-building-group/craftsman-pressed", {
-                { StructureType::NO_STRUCTURE, nullptr, "add-building-button/dummy" },
-                { StructureType::NO_STRUCTURE, nullptr, "add-building-button/dummy" },
-                { StructureType::NO_STRUCTURE, nullptr, "add-building-button/dummy" },
-                { StructureType::NO_STRUCTURE, nullptr, "add-building-button/dummy" },
+                { MapObjectType::NO_MAP_OBJECT, nullptr, "add-building-button/dummy" },
+                { MapObjectType::NO_MAP_OBJECT, nullptr, "add-building-button/dummy" },
+                { MapObjectType::NO_MAP_OBJECT, nullptr, "add-building-button/dummy" },
+                { MapObjectType::NO_MAP_OBJECT, nullptr, "add-building-button/dummy" },
                 {
-                    StructureType::STONEMASON,
+                    MapObjectType::STONEMASON,
                     "Steinmetz",
                     "add-building-button/stonemason"
                 },
-                { StructureType::NO_STRUCTURE, nullptr, "add-building-button/dummy" },
-                { StructureType::NO_STRUCTURE, nullptr, "add-building-button/dummy" },
+                { MapObjectType::NO_MAP_OBJECT, nullptr, "add-building-button/dummy" },
+                { MapObjectType::NO_MAP_OBJECT, nullptr, "add-building-button/dummy" },
                 {
-                    StructureType::TOOLSMITHS,
+                    MapObjectType::TOOLSMITHS,
                     "Werkzeugschmiede",
                     "add-building-button/toolsmiths"
                 },
-                { StructureType::NO_STRUCTURE, nullptr, "add-building-button/dummy" },
-                { StructureType::NO_STRUCTURE, nullptr, "add-building-button/dummy" },
-                { StructureType::NO_STRUCTURE, nullptr, "add-building-button/dummy" },
-                { StructureType::NO_STRUCTURE, nullptr, "add-building-button/dummy" },
+                { MapObjectType::NO_MAP_OBJECT, nullptr, "add-building-button/dummy" },
+                { MapObjectType::NO_MAP_OBJECT, nullptr, "add-building-button/dummy" },
+                { MapObjectType::NO_MAP_OBJECT, nullptr, "add-building-button/dummy" },
+                { MapObjectType::NO_MAP_OBJECT, nullptr, "add-building-button/dummy" },
                 {
-                    StructureType::WEAVING_MILL1,
+                    MapObjectType::WEAVING_MILL1,
                     "Webstube",
                     "add-building-button/weaving-mill1"
                 },
                 {
-                    StructureType::BUTCHERS,
+                    MapObjectType::BUTCHERS,
                     "Fleischerei",
                     "add-building-button/butchers"
                 },
-                { StructureType::NO_STRUCTURE, nullptr, "add-building-button/dummy" },
-                { StructureType::NO_STRUCTURE, nullptr, "add-building-button/dummy" }
+                { MapObjectType::NO_MAP_OBJECT, nullptr, "add-building-button/dummy" },
+                { MapObjectType::NO_MAP_OBJECT, nullptr, "add-building-button/dummy" }
             }
         }, {
             BuildingGroup::FARM,
             "Farmen & Plantagen",
             "add-building-group/farm",
             "add-building-group/farm-pressed", {
-                { StructureType::NO_STRUCTURE, nullptr, "add-building-button/dummy" },
-                { StructureType::NO_STRUCTURE, nullptr, "add-building-button/dummy" },
-                { StructureType::NO_STRUCTURE, nullptr, "add-building-button/dummy" },
-                { StructureType::NO_STRUCTURE, nullptr, "add-building-button/dummy" },
-                { StructureType::NO_STRUCTURE, nullptr, "add-building-button/dummy" },
-                { StructureType::NO_STRUCTURE, nullptr, "add-building-button/dummy" },
-                { StructureType::NO_STRUCTURE, nullptr, "add-building-button/dummy" },
-                { StructureType::NO_STRUCTURE, nullptr, "add-building-button/dummy" },
-                { StructureType::NO_STRUCTURE, nullptr, "add-building-button/dummy" },
-                { StructureType::NO_STRUCTURE, nullptr, "add-building-button/dummy" },
+                { MapObjectType::NO_MAP_OBJECT, nullptr, "add-building-button/dummy" },
+                { MapObjectType::NO_MAP_OBJECT, nullptr, "add-building-button/dummy" },
+                { MapObjectType::NO_MAP_OBJECT, nullptr, "add-building-button/dummy" },
+                { MapObjectType::NO_MAP_OBJECT, nullptr, "add-building-button/dummy" },
+                { MapObjectType::NO_MAP_OBJECT, nullptr, "add-building-button/dummy" },
+                { MapObjectType::NO_MAP_OBJECT, nullptr, "add-building-button/dummy" },
+                { MapObjectType::NO_MAP_OBJECT, nullptr, "add-building-button/dummy" },
+                { MapObjectType::NO_MAP_OBJECT, nullptr, "add-building-button/dummy" },
+                { MapObjectType::NO_MAP_OBJECT, nullptr, "add-building-button/dummy" },
+                { MapObjectType::NO_MAP_OBJECT, nullptr, "add-building-button/dummy" },
                 {
-                    StructureType::SHEEP_FARM,
+                    MapObjectType::SHEEP_FARM,
                     "Schaffarm",
                     "add-building-button/sheep-farm"
                 },
                 {
-                    StructureType::CATTLE_FARM,
+                    MapObjectType::CATTLE_FARM,
                     "Rinderfarm",
                     "add-building-button/cattle-farm"
                 },
                 {
-                    StructureType::HUNTERS_HUT,
+                    MapObjectType::HUNTERS_HUT,
                     "Jagdhütte",
                     "add-building-button/hunters-hut"
                 },
                 {
-                    StructureType::FORESTERS,
+                    MapObjectType::FORESTERS,
                     "Förster",
                     "add-building-button/foresters"
                 },
-                { StructureType::NO_STRUCTURE, nullptr, "add-building-button/dummy" },
-                { StructureType::NO_STRUCTURE, nullptr, "add-building-button/dummy" }
+                { MapObjectType::NO_MAP_OBJECT, nullptr, "add-building-button/dummy" },
+                { MapObjectType::NO_MAP_OBJECT, nullptr, "add-building-button/dummy" }
             }
         }, {
             BuildingGroup::PORT,
             "Hafenanlagen",
             "add-building-group/port",
             "add-building-group/port-pressed", {
-                { StructureType::NO_STRUCTURE, nullptr, "add-building-button/dummy" },
-                { StructureType::NO_STRUCTURE, nullptr, "add-building-button/dummy" },
-                { StructureType::NO_STRUCTURE, nullptr, "add-building-button/dummy" },
-                { StructureType::NO_STRUCTURE, nullptr, "add-building-button/dummy" },
-                { StructureType::NO_STRUCTURE, nullptr, "add-building-button/dummy" },
-                { StructureType::NO_STRUCTURE, nullptr, "add-building-button/dummy" },
-                { StructureType::NO_STRUCTURE, nullptr, "add-building-button/dummy" },
-                { StructureType::NO_STRUCTURE, nullptr, "add-building-button/dummy" },
-                { StructureType::NO_STRUCTURE, nullptr, "add-building-button/dummy" },
-                { StructureType::NO_STRUCTURE, nullptr, "add-building-button/dummy" },
-                { StructureType::NO_STRUCTURE, nullptr, "add-building-button/dummy" },
-                { StructureType::NO_STRUCTURE, nullptr, "add-building-button/dummy" },
+                { MapObjectType::NO_MAP_OBJECT, nullptr, "add-building-button/dummy" },
+                { MapObjectType::NO_MAP_OBJECT, nullptr, "add-building-button/dummy" },
+                { MapObjectType::NO_MAP_OBJECT, nullptr, "add-building-button/dummy" },
+                { MapObjectType::NO_MAP_OBJECT, nullptr, "add-building-button/dummy" },
+                { MapObjectType::NO_MAP_OBJECT, nullptr, "add-building-button/dummy" },
+                { MapObjectType::NO_MAP_OBJECT, nullptr, "add-building-button/dummy" },
+                { MapObjectType::NO_MAP_OBJECT, nullptr, "add-building-button/dummy" },
+                { MapObjectType::NO_MAP_OBJECT, nullptr, "add-building-button/dummy" },
+                { MapObjectType::NO_MAP_OBJECT, nullptr, "add-building-button/dummy" },
+                { MapObjectType::NO_MAP_OBJECT, nullptr, "add-building-button/dummy" },
+                { MapObjectType::NO_MAP_OBJECT, nullptr, "add-building-button/dummy" },
+                { MapObjectType::NO_MAP_OBJECT, nullptr, "add-building-button/dummy" },
                 {
-                    StructureType::OFFICE1,
+                    MapObjectType::OFFICE1,
                     "Kontor I",
                     "add-building-button/office1"
                 },
-                { StructureType::NO_STRUCTURE, nullptr, "add-building-button/dummy" },
-                { StructureType::NO_STRUCTURE, nullptr, "add-building-button/dummy" },
-                { StructureType::NO_STRUCTURE, nullptr, "add-building-button/dummy" }
+                { MapObjectType::NO_MAP_OBJECT, nullptr, "add-building-button/dummy" },
+                { MapObjectType::NO_MAP_OBJECT, nullptr, "add-building-button/dummy" },
+                { MapObjectType::NO_MAP_OBJECT, nullptr, "add-building-button/dummy" }
             }
         }, {
             BuildingGroup::PUBLIC,
@@ -131,58 +131,58 @@ GuiBuildMenuWidget::GuiBuildMenuWidget(const Context* const context) : GuiPanelW
             "add-building-group/public",
             "add-building-group/public-pressed", {
                 {
-                    StructureType::SQUARE1,
+                    MapObjectType::SQUARE1,
                     "Platz I",
                     "add-building-button/square1"
                 },
                 {
-                    StructureType::SQUARE2,
+                    MapObjectType::SQUARE2,
                     "Platz II",
                     "add-building-button/square2"
                 },
                 {
-                    StructureType::SQUARE3,
+                    MapObjectType::SQUARE3,
                     "Platz III",
                     "add-building-button/square3"
                 },
-                { StructureType::NO_STRUCTURE, nullptr, "add-building-button/dummy" },
+                { MapObjectType::NO_MAP_OBJECT, nullptr, "add-building-button/dummy" },
                 {
-                    StructureType::CATHEDRAL,
+                    MapObjectType::CATHEDRAL,
                     "Kathedrale",
                     "add-building-button/cathedral"
                 },
                 {
-                    StructureType::TAVERN,
+                    MapObjectType::TAVERN,
                     "Wirtshaus",
                     "add-building-button/tavern"
                 },
-                { StructureType::NO_STRUCTURE, nullptr, "add-building-button/dummy" },
-                { StructureType::NO_STRUCTURE, nullptr, "add-building-button/dummy" },
-                { StructureType::NO_STRUCTURE, nullptr, "add-building-button/dummy" },
-                { StructureType::NO_STRUCTURE, nullptr, "add-building-button/dummy" },
+                { MapObjectType::NO_MAP_OBJECT, nullptr, "add-building-button/dummy" },
+                { MapObjectType::NO_MAP_OBJECT, nullptr, "add-building-button/dummy" },
+                { MapObjectType::NO_MAP_OBJECT, nullptr, "add-building-button/dummy" },
+                { MapObjectType::NO_MAP_OBJECT, nullptr, "add-building-button/dummy" },
                 {
-                    StructureType::FARM_ROAD_STRAIGHT_0, // konkreter StructureType wird erst beim Platzieren gewählt
+                    MapObjectType::FARM_ROAD_STRAIGHT_0, // konkreter MapObjectType wird erst beim Platzieren gewählt
                     "Feldweg",
                     "add-building-button/farm-road"
                 },
                 {
-                    StructureType::COBBLED_STREET_STRAIGHT_0, // konkreter StructureType wird erst beim Platzieren gewählt
+                    MapObjectType::COBBLED_STREET_STRAIGHT_0, // konkreter MapObjectType wird erst beim Platzieren gewählt
                     "Plasterstraße",
                     "add-building-button/cobbled-street"
                 }, {
-                    StructureType::PIONEERS_HOUSE1,
+                    MapObjectType::PIONEERS_HOUSE1,
                     "Haus",
                     "add-building-button/house"
                 }, {
-                    StructureType::MARKETPLACE,
+                    MapObjectType::MARKETPLACE,
                     "Marktplatz",
                     "add-building-button/marketplace"
                 }, {
-                    StructureType::CHAPEL,
+                    MapObjectType::CHAPEL,
                     "Kapelle",
                     "add-building-button/chapel"
                 },
-                { StructureType::NO_STRUCTURE, nullptr, "add-building-button/dummy" }
+                { MapObjectType::NO_MAP_OBJECT, nullptr, "add-building-button/dummy" }
             }
         }
     };
@@ -200,9 +200,9 @@ GuiBuildMenuWidget::GuiBuildMenuWidget(const Context* const context) : GuiPanelW
         for (int gridY = 0; gridY < 4; gridY++) {
             for (int gridX = 0; gridX < 4; gridX++) {
                 int buildingIndex = gridY * 4 + gridX;
-                StructureType structureType = buildingGroups[groupIndex].buildings[buildingIndex].structureType;
+                const MapObjectType& mapObjectType = buildingGroups[groupIndex].buildings[buildingIndex].mapObjectType;
 
-                if (structureType == NO_STRUCTURE) {
+                if (mapObjectType == NO_MAP_OBJECT) {
                     continue;
                 }
 
@@ -213,8 +213,8 @@ GuiBuildMenuWidget::GuiBuildMenuWidget(const Context* const context) : GuiPanelW
                     12 + 58 * gridX, 13 + 58 * gridY, graphicAddBuildingButton->getWidth(), graphicAddBuildingButton->getHeight());
                 addBuildingButton->setGraphic(graphicAddBuildingButton);
                 addBuildingButton->setGraphicPressed(graphicAddBuildingButton);
-                addBuildingButton->setOnClickFunction([ this, context, structureType ]() {
-                    context->guiMgr->panelState.addingStructure = structureType;
+                addBuildingButton->setOnClickFunction([ this, context, mapObjectType ]() {
+                    context->guiMgr->panelState.addingMapObject = mapObjectType;
                     context->guiMgr->panelState.buildingMenuOpen = false;
                     context->guiMgr->updateGuiFromPanelState();
 
@@ -240,7 +240,7 @@ GuiBuildMenuWidget::GuiBuildMenuWidget(const Context* const context) : GuiPanelW
 
                 bool addingStructureInSelectedBuildingGroup = false;
                 for (int i = 0; i < 16; i++) {
-                    if (buildingGroups[groupIndex].buildings[i].structureType == context->guiMgr->panelState.addingStructure) {
+                    if (buildingGroups[groupIndex].buildings[i].mapObjectType == context->guiMgr->panelState.addingMapObject) {
                         addingStructureInSelectedBuildingGroup = true;
                         break;
                     }
@@ -248,7 +248,7 @@ GuiBuildMenuWidget::GuiBuildMenuWidget(const Context* const context) : GuiPanelW
 
                 if (!addingStructureInSelectedBuildingGroup) {
                     // Gebäude unten links nehmen (= Index 12 von 16)
-                    context->guiMgr->panelState.addingStructure = buildingGroups[groupIndex].buildings[12].structureType;
+                    context->guiMgr->panelState.addingMapObject = buildingGroups[groupIndex].buildings[12].mapObjectType;
                 }
             }
             else {

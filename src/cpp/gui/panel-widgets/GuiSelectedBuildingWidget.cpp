@@ -35,8 +35,8 @@ void GuiSelectedBuildingWidget::renderElement(IRenderer* renderer) {
     int windowX, windowY;
     getWindowCoords(windowX, windowY);
 
-    StructureType structureType = selectedBuilding->getStructureType();
-    const BuildingConfig* buildingConfig = context->configMgr->getBuildingConfig(structureType);
+    const MapObjectType& mapObjectType = selectedBuilding->getMapObjectType();
+    const BuildingConfig* buildingConfig = context->configMgr->getBuildingConfig(mapObjectType);
 
     // Gebäudename
     context->fontMgr->renderText(renderer, buildingConfig->getName(), windowX + width/2, windowY + 23,

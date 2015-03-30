@@ -99,7 +99,7 @@ public:
      * @return `true` wenn Lagergebäude (Kontor oder Marketplatz), sonst `false`
      */
     bool isStorageBuilding() const {
-        return (structureType == MARKETPLACE || structureType == OFFICE1);
+        return (mapObjectType == MARKETPLACE || mapObjectType == OFFICE1);
     }
 
     /**
@@ -107,9 +107,9 @@ public:
      * @return `true` wenn Haus, sonst `false`
      */
     bool isHouse() const {
-        return (structureType == PIONEERS_HOUSE1 || structureType == PIONEERS_HOUSE2 ||
-                structureType == PIONEERS_HOUSE3 || structureType == PIONEERS_HOUSE4 ||
-                structureType == PIONEERS_HOUSE5);
+        return (mapObjectType == PIONEERS_HOUSE1 || mapObjectType == PIONEERS_HOUSE2 ||
+                mapObjectType == PIONEERS_HOUSE3 || mapObjectType == PIONEERS_HOUSE4 ||
+                mapObjectType == PIONEERS_HOUSE5);
     }
 
 };
