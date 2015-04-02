@@ -99,7 +99,7 @@ public:
      * @return `true` wenn Lagergebäude (Kontor oder Marketplatz), sonst `false`
      */
     bool isStorageBuilding() const {
-        return (mapObjectType == MARKETPLACE || mapObjectType == OFFICE1);
+        return (mapObjectType == OFFICE1 || mapObjectType == OFFICE2 || mapObjectType == MARKETPLACE);
     }
 
     /**

@@ -103,7 +103,7 @@ Structure* Game::addStructure(
     map->addMapObject(structure);
 
     // Kontor oder Marktplatz? Einzugbereich in mapTiles aktualisieren und Lagerkapazität der Kolonie erhöhen
-    if (building != nullptr && (mapObjectType == OFFICE1 || mapObjectType == MARKETPLACE)) {
+    if (building != nullptr && (mapObjectType == OFFICE1 || mapObjectType == OFFICE2 || mapObjectType == MARKETPLACE)) {
         map->addOfficeCatchmentAreaToMap(*building);
 #ifndef NO_SDL
         context->guiMgr->onOfficeCatchmentAreaChanged();
@@ -111,7 +111,12 @@ Structure* Game::addStructure(
     }
 
     Colony* colony = context->game->getColony(structure); // Colony kann erst gefunden werden, wenn addOfficeCatchmentAreaToMap() aufgerufen wurde
-    if (mapObjectType == OFFICE1 || mapObjectType == MARKETPLACE) {
+    // TODO Lagerkapazitäterhöhung über Config lösen
+    if (mapObjectType == OFFICE1) {
+        colony->increaseGoodsCapacity(30);
+    } else if (mapObjectType == OFFICE2) {
+        colony->increaseGoodsCapacity(50);
+    } else if (mapObjectType == MARKETPLACE) {
         colony->increaseGoodsCapacity(10);
     }
 

@@ -121,7 +121,11 @@ GuiBuildMenuWidget::GuiBuildMenuWidget(const Context* const context) : GuiPanelW
                     "Kontor I",
                     "add-building-button/office1"
                 },
-                { MapObjectType::NO_MAP_OBJECT, nullptr, "add-building-button/dummy" },
+                {
+                    MapObjectType::OFFICE2,
+                    "Kontor II",
+                    "add-building-button/office2"
+                },
                 { MapObjectType::NO_MAP_OBJECT, nullptr, "add-building-button/dummy" },
                 { MapObjectType::NO_MAP_OBJECT, nullptr, "add-building-button/dummy" }
             }

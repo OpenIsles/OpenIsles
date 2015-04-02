@@ -29,6 +29,7 @@ void AbstractGraphicsMgr::loadGraphics() {
     loadStaticGraphicSetWith4Views("structures/pioneers-house5", "data/img/objects/pioneers-house5.png", 2, 2);
 	loadStaticGraphicSetWith4Views("structures/stonemason", "data/img/objects/stonemason.png", 2, 2);
     loadStaticGraphicSetWith4Views("structures/office1", "data/img/objects/office1.png", 3, 2);
+    loadStaticGraphicSetWith4Views("structures/office2", "data/img/objects/office2.png", 3, 2);
     loadStaticGraphicSetWith4Views("structures/marketplace", "data/img/objects/marketplace.png", 4, 3);
     loadStaticGraphicSetWith4Views("structures/foresters", "data/img/objects/foresters.png", 2, 2);
     loadStaticGraphicSetWith4Views("structures/sheep-farm", "data/img/objects/sheep-farm.png", 2, 2);
@@ -68,6 +69,7 @@ void AbstractGraphicsMgr::loadGraphics() {
     loadStaticGraphicSet("add-building-button/chapel", "data/img/gui/add-building/chapel.png");
     loadStaticGraphicSet("add-building-button/marketplace", "data/img/gui/add-building/marketplace.png");
     loadStaticGraphicSet("add-building-button/office1", "data/img/gui/add-building/office1.png");
+    loadStaticGraphicSet("add-building-button/office2", "data/img/gui/add-building/office2.png");
     loadStaticGraphicSet("add-building-button/cobbled-street", "data/img/gui/add-building/cobbled-street.png");
     loadStaticGraphicSet("add-building-button/farm-road", "data/img/gui/add-building/farm-road.png");
     loadStaticGraphicSet("add-building-button/sheep-farm", "data/img/gui/add-building/sheep-farm.png");

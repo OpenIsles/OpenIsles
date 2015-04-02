@@ -88,7 +88,7 @@
   </object>
  </objectgroup>
  <objectgroup name="mapobjects" width="300" height="300">
-  <object name="office1" type="building" x="1376" y="864" width="96" height="64">
+  <object name="office2" type="building" x="1376" y="864" width="96" height="64">
    <properties>
     <property name="player" value="1"/>
    </properties>

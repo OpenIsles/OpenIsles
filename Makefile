@@ -71,7 +71,7 @@ $(DATA_DIRECTORY)/img/gui/add-building/add-building-grid.png: $(SRC_DIRECTORY)/b
 # Gebäude                                                                                                              #
 ########################################################################################################################
 
-BUILDINGS := butchers cathedral cattle-farm chapel foresters hunters-hut marketplace office1 \
+BUILDINGS := butchers cathedral cattle-farm chapel foresters hunters-hut marketplace office1 office2 \
              pioneers-house1 pioneers-house2 pioneers-house3 pioneers-house4 pioneers-house5 \
              sheep-farm square1 square2 square3 stonemason tavern toolsmiths weaving-mill1
 
