@@ -124,6 +124,20 @@ void ConfigMgr::loadBuildingConfig() {
         mapMapObjectNameInSavefile[buildingConfigs[mapObjectType]->nameInSavefile] = mapObjectType;
     }
 
+    for (int i = 1; i <= 1 /* TODO more to come :-) */; i++) {
+        MapObjectType mapObjectType = (MapObjectType) (MapObjectType::SETTLERS_HOUSE1 + i - 1);
+
+        buildingConfigs[mapObjectType] = new BuildingConfig();
+        buildingConfigs[mapObjectType]->name = "Haus (Siedler)";
+        buildingConfigs[mapObjectType]->nameInSavefile = std::string("settlers_house") + toString(i);
+        buildingConfigs[mapObjectType]->structurePlacing = StructurePlacing::INDIVIDUALLY;
+        buildingConfigs[mapObjectType]->catchmentArea = new RectangleData<char>(14, 14);
+        memcpy(buildingConfigs[mapObjectType]->catchmentArea->data, "0000111111000000011111111000001111111111000111111111111011111111111111111111111111111111111111111111111111111111111111111111111111111111111101111111111110001111111111000001111111100000001111110000", 196);
+        buildingConfigs[mapObjectType]->buildingCosts = { 0, 1, 3, 0 };
+        buildingConfigs[mapObjectType]->buildingProduction = { GoodsSlot(), GoodsSlot(), GoodsSlot() };
+        mapMapObjectNameInSavefile[buildingConfigs[mapObjectType]->nameInSavefile] = mapObjectType;
+    }
+
     buildingConfigs[MapObjectType::STONEMASON] = new BuildingConfig();
     buildingConfigs[MapObjectType::STONEMASON]->name = "Steinbruch";
     buildingConfigs[MapObjectType::STONEMASON]->nameInSavefile = "stonemason";
