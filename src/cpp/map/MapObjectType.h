@@ -54,6 +54,7 @@ enum MapObjectType : unsigned char {
     PIONEERS_HOUSE4,
     PIONEERS_HOUSE5,
     SETTLERS_HOUSE1,
+    SETTLERS_HOUSE2,
     STONEMASON,
     OFFICE1,
     OFFICE2,

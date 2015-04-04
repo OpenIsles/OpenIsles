@@ -110,7 +110,7 @@ public:
         return (mapObjectType == PIONEERS_HOUSE1 || mapObjectType == PIONEERS_HOUSE2 ||
                 mapObjectType == PIONEERS_HOUSE3 || mapObjectType == PIONEERS_HOUSE4 ||
                 mapObjectType == PIONEERS_HOUSE5 ||
-                mapObjectType == SETTLERS_HOUSE1);
+                mapObjectType == SETTLERS_HOUSE1 || mapObjectType == SETTLERS_HOUSE2);
     }
 
 };
