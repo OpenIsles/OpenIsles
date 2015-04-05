@@ -3,6 +3,7 @@
 #endif
 #include <cstdlib>
 #include <iostream>
+#include <stdexcept>
 #include <unistd.h>
 #include "Context.h"
 #include "config/ConfigMgr.h"
@@ -18,6 +19,7 @@
 #include "map/Map.h"
 #include "sound/sdl/SDLSoundMgr.h"
 #include "utils/Color.h"
+#include "utils/Events.h"
 #include "utils/FpsCounter.h"
 #include "utils/StringFormat.h"
 
@@ -151,6 +153,12 @@ int main(int argc, char** argv) {
 
     Context context = Context();
 
+    context.userEventBase = SDL_RegisterEvents(USER_EVENT_MAXEVENT + 1);
+    if (context.userEventBase == (uint32_t) -1) {
+        std::cerr << "Could not register events" << std::endl;
+		throw std::runtime_error("Could not register events");
+    }
+
 	ISoundMgr* sdlSoundMgr = new SDLSoundMgr();
     context.soundMgr = sdlSoundMgr;
 
@@ -193,6 +201,12 @@ int main(int argc, char** argv) {
 		SDL_Event event;
 		while (SDL_PollEvent(&event)) {
             guiMgr->onEvent(event);
+
+            // Bei User-Defined-Events übernehmen wir hier das Freigeben des Speichers. Dann können auch mehrere
+            // GUI-Elemente dasselbe Event verarbeiten und streiten sich nicht, wer delete aufruft.
+            if (event.type == context.userEventBase + USER_EVENT_MOUSEMOTION_MAPCOORDS) {
+                delete static_cast<MouseMotionMapCoordsEvent*>(event.user.data1);
+            }
 		}
 
         // Wirtschaft ankurbeln ;-)

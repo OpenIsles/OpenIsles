@@ -81,7 +81,7 @@ public:
      * @param mapCoords anderer Operand
      * @return `true`, wenn diese Koordinaten gleich sind, sonst `false`
      */
-    inline bool operator== (const DoubleMapCoords& mapCoords) const {
+    inline bool operator==(const DoubleMapCoords& mapCoords) const {
         return ((this->_x == mapCoords._x) && (this->_y == mapCoords._y));
     }
 
@@ -90,7 +90,7 @@ public:
      * @param mapCoords anderer Operand
      * @return `true`, wenn diese Koordinaten ungleich sind, sonst `false`
      */
-    inline bool operator!= (const DoubleMapCoords& mapCoords) const {
+    inline bool operator!=(const DoubleMapCoords& mapCoords) const {
         return (!(*this == mapCoords));
     }
 
@@ -123,7 +123,7 @@ public:
      * @param mapCoords anderer Operand
      * @return `true`, wenn diese Koordinaten gleich sind, sonst `false`
      */
-    inline bool operator== (const MapCoords& mapCoords) const {
+    inline bool operator==(const MapCoords& mapCoords) const {
         return ((this->_x == mapCoords._x) && (this->_y == mapCoords._y));
     }
 
@@ -132,7 +132,7 @@ public:
      * @param mapCoords anderer Operand
      * @return `true`, wenn diese Koordinaten ungleich sind, sonst `false`
      */
-    inline bool operator!= (const MapCoords& mapCoords) const {
+    inline bool operator!=(const MapCoords& mapCoords) const {
         return (!(*this == mapCoords));
     }
 
@@ -163,7 +163,7 @@ namespace std {
      * @param b zweite Koordinate
      * @return `true`, wenn a "kleiner" ist als b; sonst `false`
      */
-    inline bool operator< (const MapCoords& a, const MapCoords& b) {
+    inline bool operator<(const MapCoords& a, const MapCoords& b) {
         return ((a.y() < b.y()) ||
                 ((a.y() == b.y()) && (a.x() < b.x())));
     }

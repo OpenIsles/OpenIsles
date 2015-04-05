@@ -124,6 +124,12 @@ private:
      * Gültig, bis die Maustaste losgelassen wurde.
      */
     MapCoords startClickMapCoords;
+
+    /**
+     * @brief Map-Koordinaten, an denen sich der Mauszeiger grade befindet.
+     * Wir aktualisieren diese Koordinaten bei jedem `SDL_MOUSEMOTION`-Event.
+     */
+    MapCoords mapCoordsUnderMouse;
     
     /**
      * @brief Map, die alle registrierten Gui-Elemente enthält und durch ihre Identifier referenziert.
@@ -171,7 +177,15 @@ public:
         return startClickMapCoords;
     }
 
-	/**
+    /**
+     * @brief Liefert die Map-Koordinaten zurück, an denen sich der Mauszeiger grade befindet.
+     * @return Map-Koordinaten, an denen sich der Mauszeiger grade befindet.
+     */
+    const MapCoords& getMapCoordsUnderMouse() const {
+        return mapCoordsUnderMouse;
+    }
+
+    /**
 	 * @brief Zeichnet die Benutzeroberfläche
 	 */
 	void render();

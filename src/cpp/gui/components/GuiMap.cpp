@@ -16,6 +16,7 @@
 #include "map/Map.h"
 #include "pathfinding/AStar.h"
 #include "utils/Consts.h"
+#include "utils/Events.h"
 #include "utils/MapCoordsIterator.h"
 #include "utils/StringFormat.h"
 
@@ -509,7 +510,7 @@ bool GuiMap::onEventElement(SDL_Event& event) {
              event.button.button == SDL_BUTTON_LEFT &&
              hitTest(event.button.x, event.button.y))
                 ||
-            (event.type == SDL_MOUSEMOTION &&
+            (event.type == context->userEventBase + USER_EVENT_MOUSEMOTION_MAPCOORDS &&
              isLeftMouseButtonDown &&
              hitTest(startClickWindowCoords.x(), startClickWindowCoords.y()))
            ) {
@@ -589,7 +590,9 @@ bool GuiMap::onEventElement(SDL_Event& event) {
         }
 
         // Maus bewegt, der Spieler hat die linke Maustaste aber noch nicht gedrückt? Dann nur hover-Objekt bewegen
-        if (event.type == SDL_MOUSEMOTION && !isLeftMouseButtonDown && mapObjectBeingAddedHovering != nullptr) {
+        if (event.type == context->userEventBase + USER_EVENT_MOUSEMOTION_MAPCOORDS &&
+            !isLeftMouseButtonDown && mapObjectBeingAddedHovering != nullptr) {
+
             mapObjectBeingAddedHovering->setMapCoords(mapCoordsUnderMouse);
             return false;
         }

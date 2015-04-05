@@ -65,6 +65,12 @@ struct Context {
      */
     int mouseCurrentX, mouseCurrentY;
 
+    /**
+     * @brief erste Event-ID von SDL für unsere eigenen Events. Zu verwenden mit den `USER_EVENT_*`-Konstanten
+     * (siehe `Events.h`)
+     */
+    uint32_t userEventBase;
+
 };
 
 /**

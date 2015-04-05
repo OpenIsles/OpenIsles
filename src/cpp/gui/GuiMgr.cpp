@@ -1,3 +1,4 @@
+#include <SDL.h>
 #include <string>
 #include "config/ConfigMgr.h"
 #include "game/Game.h"
@@ -16,6 +17,7 @@
 #include "gui/Identifiers.h"
 #include "map/Map.h"
 #include "utils/Color.h"
+#include "utils/Events.h"
 #include "utils/Rect.h"
 
 static Color colorWhite = Color(255, 255, 255, 255);
@@ -225,7 +227,10 @@ void GuiMgr::render() {
 
 #ifndef NO_SDL
 void GuiMgr::onEvent(SDL_Event& event) {
-    // TODO Event besser queuen und nicht sofort abarbeiten
+    Game* game = context->game;
+    Map* map = game->getMap();
+
+    // Vorbereitende Arbeiten. Das Event wird danach trotzdem an die GUI-Element gegeben.
 
     // Bei Linksklick die Koordinaten merken
     if (event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_LEFT) {
@@ -234,6 +239,28 @@ void GuiMgr::onEvent(SDL_Event& event) {
 
         startClickWindowCoords.setTo(x, y);
         startClickMapCoords = MapCoordUtils::getMapCoordsUnderMouse(*context->game->getMap(), x, y);
+    }
+
+    // Maus bewegt? MapCoords ermitteln und vergleichen, ob wie die Kachel gewechselt haben
+    else if (event.type == SDL_MOUSEMOTION) {
+        int x = event.motion.x;
+        int y = event.motion.y;
+
+        const MapCoords& newMapCoordsUnderMouse = MapCoordUtils::getMapCoordsUnderMouse(*map, x, y);
+
+        // Kachel verlassen? Dann spezielles Event verschicken.
+        if (newMapCoordsUnderMouse != mapCoordsUnderMouse) {
+            MouseMotionMapCoordsEvent* motionMapCoordsEvent = new MouseMotionMapCoordsEvent();
+            motionMapCoordsEvent->mapCoordsBefore = mapCoordsUnderMouse;
+            motionMapCoordsEvent->mapCoordsNow = newMapCoordsUnderMouse;
+
+            SDL_Event eventToPush = {}; // 0-initalisieren
+            eventToPush.type = context->userEventBase + USER_EVENT_MOUSEMOTION_MAPCOORDS;
+            eventToPush.user.data1 = motionMapCoordsEvent;
+            SDL_PushEvent(&eventToPush);
+
+            mapCoordsUnderMouse = newMapCoordsUnderMouse;
+        }
     }
 
     // Erst alle GUI-Elemente durchgehen, dass die das Event zuerst kriegen
@@ -251,9 +278,6 @@ void GuiMgr::onEvent(SDL_Event& event) {
     }
 
     // Jetzt kann der GuiMgr selber gucken, ob er das Event brauchen kann
-
-    Game* game = context->game;
-    Map* map = game->getMap();
     
     // Spiel beenden
     if (event.type == SDL_QUIT) {
