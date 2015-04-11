@@ -291,7 +291,7 @@
     <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="pioneers_house4" type="building" x="1664" y="992" width="64" height="64">
+  <object name="settlers_house4" type="building" x="1664" y="992" width="64" height="64">
    <properties>
     <property name="player" value="1"/>
    </properties>
@@ -573,9 +573,10 @@
     <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="pioneers_house4" type="building" x="1760" y="832" width="64" height="64">
+  <object name="settlers_house4" type="building" x="1760" y="832" width="64" height="64">
    <properties>
     <property name="player" value="1"/>
+    <property name="view" value="north"/>
    </properties>
   </object>
   <object name="settlers_house3" type="building" x="1760" y="768" width="64" height="64">

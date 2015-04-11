@@ -77,6 +77,7 @@ public:
         else if (mapObjectType == MapObjectType::SETTLERS_HOUSE1) { graphicSetNameSuffix = "settlers-house1"; }
         else if (mapObjectType == MapObjectType::SETTLERS_HOUSE2) { graphicSetNameSuffix = "settlers-house2"; }
         else if (mapObjectType == MapObjectType::SETTLERS_HOUSE3) { graphicSetNameSuffix = "settlers-house3"; }
+        else if (mapObjectType == MapObjectType::SETTLERS_HOUSE4) { graphicSetNameSuffix = "settlers-house4"; }
         else if (mapObjectType == MapObjectType::STONEMASON) { graphicSetNameSuffix = "stonemason"; }
         else if (mapObjectType == MapObjectType::OFFICE1) { graphicSetNameSuffix = "office1"; }
         else if (mapObjectType == MapObjectType::OFFICE2) { graphicSetNameSuffix = "office2"; }

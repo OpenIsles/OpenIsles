@@ -111,7 +111,7 @@ public:
                 mapObjectType == PIONEERS_HOUSE3 || mapObjectType == PIONEERS_HOUSE4 ||
                 mapObjectType == PIONEERS_HOUSE5 ||
                 mapObjectType == SETTLERS_HOUSE1 || mapObjectType == SETTLERS_HOUSE2 ||
-                mapObjectType == SETTLERS_HOUSE3);
+                mapObjectType == SETTLERS_HOUSE3 || mapObjectType == SETTLERS_HOUSE4);
     }
 
 };
