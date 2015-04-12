@@ -5,6 +5,7 @@
 #include "economics/Carrier.h"
 #include "game/GoodsSlot.h"
 #include "map/Structure.h"
+#include "map/UpdateableObject.h"
 
 /**
  * @brief Enthält die Slots für produzierte und zu verbrauchende Güter eines Gebäudes.
@@ -33,23 +34,11 @@ struct ProductionSlots {
 /**
  * @brief Structure, die ein Gebäude darstellt.
  */
-class Building : public Structure {
+class Building : public Structure, public UpdateableObject {
 
     FRIEND_TEST(EconomicsMgrTest, updateCarrier);
     friend class EconomicsMgr; // EconomicsMgr soll zum Bewegen des Trägers einfach zugreifen können
     friend class GuiMap; // GuiMap soll zum Rendern des Trägers einfach zugreifen können
-
-private:
-    // TODO Aktuell hat jedes Gebäude bis zu einem Träger. Das muss später dynamisch nach Gebäudetyp sein.
-    /**
-     * @brief Träger, der zum Gebäude gehört
-     */
-    Carrier* carrier;
-
-    /**
-     * @brief SDL_GetTicks-Wert, wann zuletzt die Waren bei diesem Gebäude abgeholt wurden
-     */
-    uint32_t lastGoodsCollections;
 
 public:
     /**
@@ -62,6 +51,17 @@ public:
      */
     unsigned char inhabitants;
 
+    // TODO Aktuell hat jedes Gebäude bis zu einem Träger. Das muss später dynamisch nach Gebäudetyp sein.
+    /**
+     * @brief Referenz auf den Träger (owned durch Map.mapObjects), der zum Gebäude gehört
+     */
+    Carrier* carrier;
+
+    /**
+     * @brief SDL_GetTicks-Wert, wann zuletzt die Waren bei diesem Gebäude abgeholt wurden
+     */
+    uint32_t lastGoodsCollections;
+
 public:
     Building() {
         carrier = nullptr;
@@ -70,10 +70,9 @@ public:
     }
 
     virtual ~Building() {
-        if (carrier != nullptr) {
-            delete carrier;
-        }
     }
+
+    virtual void updateObject(const Context& context) override;
     
     /**
      * @brief Testet, ob eine bestimmte Kachel innerhalb des Einzugsgebiets des Gebäudes liegt
@@ -114,6 +113,16 @@ public:
                 mapObjectType == SETTLERS_HOUSE3 || mapObjectType == SETTLERS_HOUSE4 ||
                 mapObjectType == SETTLERS_HOUSE5);
     }
+
+private:
+    /**
+     * @brief Schickt einen (TODO: (weiteren)) Träger vom Gebäude los.
+     * Wenn der (TODO: ein) Träger frei ist und ein Zielgebäude im Einzugsbereich ist, wird ein Träger losgeschickt,
+     * um passende Waren abzuholen.
+     *
+     * @param context (Dependency)
+     */
+    void sendNewCarrier(const Context& context);
 
 };
 

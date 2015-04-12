@@ -75,14 +75,6 @@ public:
     ~EconomicsMgr();
 
     /**
-     * @brief Aktualisiert eine Struktur. D.h. es werden Waren produziert, die zuständigen Männchen und Tierchen
-     * bewegt und was sonst noch alles zum "Leben" der Struktur dazugehört.
-     * @param structure Struktur, die aktualisiert werden soll
-     */
-    void update(Structure* structure);
-
-private:
-    /**
      * @brief Führt die Produktion für ein Gebäude durch. Es wird nur für jene vergangene Ticks produziert, für die
      * alle Eingabewaren da waren und auch nur solange das Ausgabewarenlager nicht voll ist.
      *
@@ -94,26 +86,6 @@ private:
      * @param building Gebäude, für welches die Produktion durchgeführt werden soll
      */
     void updateProduction(Building* building);
-
-    /**
-     * @brief Aktualisiert den (TODO: die) Träger für ein Gebäude.
-     * Der Träger wird losgeschickt, um passende Waren abzuholen bzw. wenn er schon unterwegs ist, wird er animiert,
-     * fortbewegt und am Zielort die entsprechenden Operationen durchgeführt, um die Waren umzuladen.
-     *
-     * @param building Gebäude, für welches die Träger aktualisiert werden sollen
-     */
-    void updateCarrier(Building* building);
-
-    /**
-     * @brief Sucht für ein Gebäude einen GoodsSlot, in welchen ein Träger seine Waren laden soll.
-     * Handelt es sich bei dem Gebäude um ein Lagergebäude, wird der passende Slot in der Kolonie zurückgegeben,
-     * ansonsten wird der passende Slot `input` oder `input2` vom Gebäude zurückgegeben.
-     *
-     * @param building Gebäude, das das Ziel des Trägers ist
-     * @param carrier Träger, der Waren hält und diese ausladen möchte
-     * @return GoodsSlot, in welchen die Waren ausgeladen werden sollten
-     */
-    GoodsSlot* findGoodsSlotToUnloadTo(Building* building, Carrier* carrier);
 
     /**
      * @brief Sucht für ein angegebenes Gebäude das beste Gebäude, um Waren zu beziehen.

@@ -3,12 +3,13 @@
 
 #include <cassert>
 #include "map/MapObject.h"
+#include "map/UpdateableObject.h"
 
 /**
  * @brief Map-Objekt, das eine Landschafts-Kachel darstellt, die abgeerntet werden kann, z.&nbsp;B. Wald oder Getreide.
  * Diese Kacheln sind 1x1 groß.
  */
-class Harvestable : public MapObjectFixed {
+class Harvestable : public MapObjectFixed, public UpdateableObject {
 
 private:
     // TODO Unterscheidung der verschiedenen Landschaften. Aktuell benutzen wir nur Wald und auch immer nur eine Kachel
@@ -43,6 +44,10 @@ public:
     virtual void setMapHeight(int mapHeight) override {
         // Darf nicht aufgerufen werden. Kachelgröße ist IMMER 1x1!
         assert(false);
+    }
+
+    virtual void updateObject(const Context& context) override {
+        // TODO Das Grünzeug soll wachsen
     }
 
     const FourthDirection& getView() const {

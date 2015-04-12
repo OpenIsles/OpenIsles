@@ -174,7 +174,7 @@ void GuiMap::renderElement(IRenderer* renderer) {
             mapObjectToDrawHere = mapTileTemporialy->mapObject;
             updateMapObjectsTemporarilyDrawingFlags();
         } else {
-            const MapObjectFixed* mapObject = map->getMapObjectAt(mapCoords);
+            const MapObjectFixed* mapObject = map->getMapObjectFixedAt(mapCoords);
             if (mapObject != nullptr) {
                 mapObjectToDrawHere = mapObject;
             } else {
@@ -201,7 +201,7 @@ void GuiMap::renderElement(IRenderer* renderer) {
                                  mapObjectBeingAddedHovering->getMapWidth();
                              x++) {
 
-                                if (map->getMapObjectAt(MapCoords(x, y)) != nullptr) {
+                                if (map->getMapObjectFixedAt(MapCoords(x, y)) != nullptr) {
                                     drawPlainTile = true;
                                     break;
                                 }
@@ -771,7 +771,7 @@ unsigned char GuiMap::isAllowedToPlaceMapObject(
         for (int x = mapCoords.x(); x < mapCoords.x() + graphic->getMapWidth(); x++) {
             // Steht was im Weg?
             MapTile* mapTile = context->game->getMap()->getMapTileAt(MapCoords(x, y));
-            if (mapTile->mapObject != nullptr) {
+            if (mapTile->mapObjectFixed != nullptr) {
                 result |= PLACING_STRUCTURE_SOMETHING_IN_THE_WAY;
             }
 

@@ -1,3 +1,4 @@
+#include <cassert>
 #include "config/ConfigMgr.h"
 #include "game/Colony.h"
 #include "game/Game.h"
@@ -62,13 +63,13 @@ MapTile* Map::getMapTileAt(const MapCoords& mapCoords) const {
     return mapTiles->getData(mapCoords.x(), mapCoords.y(), nullptr);
 }
 
-MapObjectFixed* Map::getMapObjectAt(const MapCoords& mapCoords) const {
+MapObjectFixed* Map::getMapObjectFixedAt(const MapCoords& mapCoords) const {
     MapTile* mapTile = getMapTileAt(mapCoords);
     if (mapTile == nullptr) {
         return nullptr;
     }
 
-    return mapTile->mapObject;
+    return mapTile->mapObjectFixed;
 }
 
 void Map::setSelectedMapObject(MapObject* selectedMapObject) {
@@ -101,20 +102,40 @@ void Map::scroll(int xDelta, int yDelta) {
     mapCoordsCentered.addY(mapYOffset);
 }
 
-void Map::addMapObject(MapObjectFixed* mapObject) {
+void Map::addMapObject(MapObject* mapObject) {
     // Objekt in die Liste einreihen
     mapObjects.push_front(mapObject);
 
-    const MapCoords& mapCoords = mapObject->getMapCoords();
-    int mapWidth = mapObject->getMapWidth();
-    int mapHeight = mapObject->getMapHeight();
+    // Unterscheidung nach fixen und beweglichen Map-Objekten
+    MapObjectFixed* mapObjectFixed = dynamic_cast<MapObjectFixed*>(mapObject);
+    if (mapObjectFixed != nullptr) {
+        const MapCoords& mapCoords = mapObjectFixed->getMapCoords();
+        int mapWidth = mapObjectFixed->getMapWidth();
+        int mapHeight = mapObjectFixed->getMapHeight();
 
-    // Fläche auf den MapTiles als belegt markieren
-    for (int my = mapCoords.y(); my < mapCoords.y() + mapHeight; my++) {
-        for (int mx = mapCoords.x(); mx < mapCoords.x() + mapWidth; mx++) {
-            getMapTileAt(MapCoords(mx, my))->mapObject = mapObject;
+        // Fläche auf den MapTiles als belegt markieren
+        for (int my = mapCoords.y(); my < mapCoords.y() + mapHeight; my++) {
+            for (int mx = mapCoords.x(); mx < mapCoords.x() + mapWidth; mx++) {
+                getMapTileAt(MapCoords(mx, my))->mapObjectFixed = mapObjectFixed;
+            }
         }
+
+        return;
     }
+
+    MapObjectMoving* mapObjectMoving = dynamic_cast<MapObjectMoving*>(mapObject);
+    if (mapObjectMoving != nullptr) {
+        // TODO Bewegliche Map-Objekte dürfen aktuell nur 1 Kachel groß sein. Später, wenn Schiffe da sind, müssen wir das erweitern.
+        assert((mapObjectMoving->getMapWidth() == 1) && (mapObjectMoving->getMapHeight() == 1));
+
+        // Fläche auf den MapTiles als belegt markieren
+        const DoubleMapCoords& mapCoords = mapObjectMoving->getMapCoords();
+        getMapTileAt(MapCoords(int(mapCoords.x()), int(mapCoords.y())))->mapObjectsMoving.push_back(mapObjectMoving);
+
+        return;
+    }
+
+    assert(false);
 }
 
 void Map::addOfficeCatchmentAreaToMap(const Building& building) {
@@ -140,6 +161,41 @@ void Map::addOfficeCatchmentAreaToMap(const Building& building) {
             mapTile->player = building.getPlayer();
         }
     }
+}
+
+void Map::deleteMapObject(MapObject* mapObject) {
+    mapObjects.remove(mapObject);
+
+    // Unterscheidung nach fixen und beweglichen Map-Objekten
+    MapObjectFixed* mapObjectFixed = dynamic_cast<MapObjectFixed*>(mapObject);
+    if (mapObjectFixed != nullptr) {
+        const MapCoords& mapCoords = mapObjectFixed->getMapCoords();
+        int mapWidth = mapObjectFixed->getMapWidth();
+        int mapHeight = mapObjectFixed->getMapHeight();
+
+        // Fläche auf den MapTiles als belegt markieren
+        for (int my = mapCoords.y(); my < mapCoords.y() + mapHeight; my++) {
+            for (int mx = mapCoords.x(); mx < mapCoords.x() + mapWidth; mx++) {
+                getMapTileAt(MapCoords(mx, my))->mapObjectFixed = nullptr;
+            }
+        }
+
+        return;
+    }
+
+    MapObjectMoving* mapObjectMoving = dynamic_cast<MapObjectMoving*>(mapObject);
+    if (mapObjectMoving != nullptr) {
+        // TODO Bewegliche Map-Objekte dürfen aktuell nur 1 Kachel groß sein. Später, wenn Schiffe da sind, müssen wir das erweitern.
+        assert((mapObjectMoving->getMapWidth() == 1) && (mapObjectMoving->getMapHeight() == 1));
+
+        // Fläche auf den MapTiles als belegt markieren
+        const DoubleMapCoords& mapCoords = mapObjectMoving->getMapCoords();
+        getMapTileAt(MapCoords(int(mapCoords.x()), int(mapCoords.y())))->mapObjectsMoving.remove(mapObjectMoving);
+
+        return;
+    }
+
+    delete mapObject;
 }
 
 void Map::clearMap() {
@@ -170,7 +226,7 @@ void Map::clearMap() {
 }
 
 bool Map::isStreetAt(const MapCoords& mapCoords) {
-    MapObjectFixed* mapObject = getMapObjectAt(mapCoords);
+    MapObjectFixed* mapObject = getMapObjectFixedAt(mapCoords);
     if (mapObject == nullptr) {
         return false;
     }

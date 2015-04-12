@@ -19,7 +19,7 @@ TEST_F(GameTest, SetUp) {
     MapTile* mapTileOnOffice1 = map->getMapTileAt(MapCoords(29, 19));
     ASSERT_TRUE(mapTileOnOffice1->isle != nullptr);
 
-    MapObjectFixed* mapObjectOffice1 = mapTileOnOffice1->mapObject;
+    MapObjectFixed* mapObjectOffice1 = mapTileOnOffice1->mapObjectFixed;
 
     ASSERT_TRUE(mapObjectOffice1 != nullptr);
     ASSERT_TRUE(mapObjectOffice1->getMapCoords() == MapCoords(28, 18));

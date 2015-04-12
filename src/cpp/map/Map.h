@@ -52,19 +52,27 @@ public:
     Player* player;
 
     /**
-     * @brief Zeiger auf ein MapObject (durch Map.mapObjects verwaltet), das sich auf dieser Kachel befindet
-     * oder nullptr, wenns nix da is
+     * @brief Zeiger auf ein MapObjectFixed (durch Map.mapObjects verwaltet), das sich auf dieser Kachel befindet
+     * oder nullptr, wenns nix da is.
+     * Es kann sich immer nur maximal ein fixes Objekt (Gebäude) auf der Kachel befinden. Träger sind in
+     * `mapObjectsMoving`.
      */
-    MapObjectFixed* mapObject;
-    // TODO aktuell haben wir eh nur fixe Dinger auf der Karte. Die Träger loopen wir aktuell böse durch alles durch, d.h. die sind eh noch nicht an der Kachel.
-    // TODO Wir brauchen dann wohl eine Art Liste von beweglichen Dingern, da auch mal mehrere Träger, oder n Träger und n Schaf auf derselben Kachel sein können.
+    MapObjectFixed* mapObjectFixed;
+
+    /**
+     * @brief Liste von Zeigern auf MapObjectMoving (durch Map.mapObjects verwaltet), die sich auf dieser Kachel
+     * befinden.
+     * Es können mehrere Objekte auf derselben Kachel sein.
+     */
+    std::list<MapObjectMoving*> mapObjectsMoving;
+    // TODO Bei Bewegung von Träger wird das noch nicht aktualisiert. Wir brauchen die Referenz dann von mehreren Kacheln aus, wenn sich ein Objekt "dazwischen" befindet.
 
     
     MapTile(const MapTileConfig* mapTileConfig, std::array<const Animation*, 4> tileAnimations) {
 		setTile(mapTileConfig, tileAnimations);
         isle = nullptr;
         player = nullptr;
-        mapObject = nullptr;
+        mapObjectFixed = nullptr;
     }
 
 	void setTile(const MapTileConfig* mapTileConfig, std::array<const Animation*, 4> tileAnimations) {
@@ -119,9 +127,6 @@ private:
 
 	/**
 	 * @brief Liste von Objekten (z.B. Häusern) auf der Karte.
-	 *
-	 * Die Objekte sind in dieser Liste immer so geordnet, dass sie in Rendering-Reihenfolge liegen:
-	 * "hinten im Bild" liegende Objekte kommen in der Liste zuerst.
 	 */
 	std::list<MapObject*> mapObjects;
 
@@ -173,7 +178,7 @@ public:
 	 * @param mapCoords Map-Koordianten
 	 * @return Zeiger auf das Map-Objekt oder nullptr, wenn dort kein Map-Objekt ist
 	 */
-	MapObjectFixed* getMapObjectAt(const MapCoords& mapCoords) const;
+	MapObjectFixed* getMapObjectFixedAt(const MapCoords& mapCoords) const;
 
 	const std::list<MapObject*>& getMapObjects() const {
 		return mapObjects;
@@ -241,7 +246,13 @@ public:
 	 * @brief Fügt ein neues Map-Objekt der Karte hinzu
 	 * @param mapObject Map-Objekt
 	 */
-	void addMapObject(MapObjectFixed* mapObject);
+	void addMapObject(MapObject* mapObject);
+
+    /**
+	 * @brief Entfernt ein Map-Objekt von der Karte
+	 * @param mapObject Map-Objekt
+	 */
+    void deleteMapObject(MapObject* mapObject);
     
     /**
      * @brief Aktualisiert die internen Strukturen der Karte (mapTiles) beim Neuerrichten eines Kontors
@@ -263,13 +274,6 @@ public:
 
 private:
     /**
-     * @brief Prüft die Map-Koordinaten auf ihre Gültigkeit, ob sie außerhalb der Karte liegen.
-     * @param mapCoords Map-Koordianten
-     * @return true, wenn die Koordinaten gültig sind; false, wenn sie außerhalb der Karte liegen.
-     */
-    bool checkMapCoords(const MapCoords& mapCoords) const;
-    
-    /**
 	 * @brief Initialisiert alles, wenn die Karte sich ändert.
 	 * Es werden alle Objekte von der Karte geräumt, der Speicher und die Map-Breite/Höhe (neu) initialisiert, 
      * sowie sonstige Zustände resettet.
@@ -277,7 +281,6 @@ private:
 	 * @param height neue Höhe der Karte
 	 */
 	void initNewMap(int newWidth, int newHeight);
-
 
 };
 

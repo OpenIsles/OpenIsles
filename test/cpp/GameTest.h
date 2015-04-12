@@ -11,6 +11,7 @@
 #include "graphics/renderer/IRenderer.h"
 #include "graphics/renderer/nosdl/NoSDLRenderer.h"
 #include "map/Map.h"
+#include "utils/Ticks.h"
 
 /**
  * @brief Basisklasse für alle Test-Fixtures.
@@ -49,6 +50,7 @@ protected:
         context.economicsMgr = economicsMgr;
 
         context.sdlTicks = 0;
+        setTicks(context.sdlTicks);
 
         game->loadGameFromTMX("data/map/test-map.tmx");
     }

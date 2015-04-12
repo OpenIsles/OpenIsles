@@ -28,8 +28,8 @@ Route AStar::getRoute(const MapCoords& source, const MapCoords& destination) con
 
     // Ermitteln, aus und in welches Gebäude wir die Route berechnen wollen. Dies ist optional, eine Route muss nicht
     // notwendigerweise ein Gebäude am Anfang/Ende haben. In diesem Fall ist der Building-Zeiger nullptr.
-    Building* sourceBuilding = dynamic_cast<Building*>(map->getMapTileAt(source)->mapObject);
-    Building* destinationBuilding = dynamic_cast<Building*>(map->getMapTileAt(destination)->mapObject);
+    Building* sourceBuilding = dynamic_cast<Building*>(map->getMapTileAt(source)->mapObjectFixed);
+    Building* destinationBuilding = dynamic_cast<Building*>(map->getMapTileAt(destination)->mapObjectFixed);
 
 
     /********************* A*-Implementierung. Siehe https://de.wikipedia.org/wiki/A*-Algorithmus *********************/
@@ -229,7 +229,7 @@ void AStar::cutRouteInsideBuildings(Route& route) const {
         MapTile* mapTile = map->getMapTileAt(mapCoords);
         assert(mapTile != nullptr); // Route hätte nicht berechnet werden können, wenn außerhalb der Karte
 
-        Building* buildingThere = dynamic_cast<Building*>(mapTile->mapObject);
+        Building* buildingThere = dynamic_cast<Building*>(mapTile->mapObjectFixed);
         if (buildingAtFront == nullptr) { // Erster Routenknoten...
             if (buildingThere == nullptr) {
                 break; // ... kein Gebäude, nix zu tun
@@ -253,7 +253,7 @@ void AStar::cutRouteInsideBuildings(Route& route) const {
         MapTile* mapTile = map->getMapTileAt(mapCoords);
         assert(mapTile != nullptr); // Route hätte nicht berechnet werden können, wenn außerhalb der Karte
 
-        Building* buildingThere = dynamic_cast<Building*>(mapTile->mapObject);
+        Building* buildingThere = dynamic_cast<Building*>(mapTile->mapObjectFixed);
         if (buildingAtBack == nullptr) { // Erster Routenknoten...
             if (buildingThere == nullptr) {
                 break; // ... kein Gebäude, nix zu tun
@@ -300,8 +300,8 @@ bool AStar::isTileWalkable(const MapCoords& mapCoords, Building* sourceBuilding,
 
     // Steht ein Gebäude im Weg?
     insideSourceOrDestinationBuilding = false;
-    if (mapTile->mapObject != nullptr) {
-        Building* building = dynamic_cast<Building*>(mapTile->mapObject);
+    if (mapTile->mapObjectFixed != nullptr) {
+        Building* building = dynamic_cast<Building*>(mapTile->mapObjectFixed);
         if (building != nullptr) {
             if (building == sourceBuilding || building == destinationBuilding) {
                 insideSourceOrDestinationBuilding = true; // in Start- oder Zielgebäude bewegen is OK

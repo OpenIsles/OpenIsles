@@ -3,23 +3,23 @@
 #ifndef NO_SDL
 #include <SDL_timer.h>
 
-/**
-* @brief Liefert die aktuelle Zeit in Form von Ticks zurück.
-* @return Ticks (= Millisekunden seit SDL-Initialisierung)
-*/
 uint32_t getTicks() {
     return SDL_GetTicks();
 }
 
 #else
-#include <ctime>
 
 /**
- * @brief Liefert die aktuelle Zeit in Form von Ticks zurück.
- * @return Ticks (= Millisekunden seit Unix-Null)
+ * @brief Zeitstempel, den wir grade als aktuell vorgaukeln
  */
+static uint32_t fakeTime = 0;
+
 uint32_t getTicks() {
-    return time(nullptr);
+    return fakeTime;
+}
+
+void setTicks(uint32_t ticks) {
+    fakeTime = ticks;
 }
 
 #endif

@@ -429,7 +429,7 @@ void GuiMgr::onEvent(SDL_Event& event) {
             needToRecalculate = true;
         } else if (event.key.keysym.scancode == SDL_SCANCODE_D) {
             MapTile* mapTile = game->getMap()->getMapTileAt(mouseCurrentMapCoords);
-            AStar::debugAStar_buildingToUseCatchmentArea = dynamic_cast<Building*>(mapTile->mapObject);
+            AStar::debugAStar_buildingToUseCatchmentArea = dynamic_cast<Building*>(mapTile->mapObjectFixed);
             needToRecalculate = true;
         } else if (event.key.keysym.scancode == SDL_SCANCODE_F) {
             AStar::debugAStar_useStreetOnly = !AStar::debugAStar_useStreetOnly;

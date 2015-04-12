@@ -15,7 +15,7 @@ protected:
         FourthDirection southView = Direction::SOUTH;
         Player* player = game->getPlayer(0);
 
-        office1 = dynamic_cast<Building*>(game->getMap()->getMapObjectAt(MapCoords(28, 18)));
+        office1 = dynamic_cast<Building*>(game->getMap()->getMapObjectFixedAt(MapCoords(28, 18)));
 
         // Rinderfarm bauen und Zick-Zack-Straße zum Kontor ziehen
         game->addStructure(MapCoords(28, 20), MapObjectType::COBBLED_STREET_STRAIGHT_90, southView, player);
@@ -65,10 +65,14 @@ TEST_F(EconomicsMgrTest, updateCarrier) {
     // "Start": Erstes Update nach 1ms aufrufen. Danach sollte nun ein Marktkarren mit Abholauftrag da sein.
     office1->setLastUpdateTime(0);
     context.sdlTicks = 1;
-    economicsMgr->update(office1);
 
-    ASSERT_EQ(1, office1->getLastUpdateTime());
+    setTicks(context.sdlTicks);
+    office1->update(context);
+
     ASSERT_TRUE(office1->carrier != nullptr);
+    ASSERT_EQ(1, office1->getLastUpdateTime());
+    ASSERT_EQ(1, office1->carrier->getLastUpdateTime());
+    ASSERT_EQ(office1->carrier->owningBuilding, office1);
     ASSERT_TRUE(office1->carrier->route.back() == MapCoords(26, 27));
     ASSERT_TRUE(office1->carrier->onOutboundTrip);
     ASSERT_EQ(GoodsType::CATTLE, office1->carrier->carriedGoods.goodsType);
@@ -81,37 +85,53 @@ TEST_F(EconomicsMgrTest, updateCarrier) {
     // "Step 1": Testet Bewegung innerhalb einer Kachel
     // Nach einer Sekunde: Der Marktkarren muss nun eine dreiviertelte Kachel (speed = 0.75, siehe EconomicsMgr) bewegt sein.
     context.sdlTicks += 1000; // Träger sollte sich (1000 * 0,75 =) 0,75 Kacheln fortbewegt haben
-    economicsMgr->update(office1);
+    setTicks(context.sdlTicks);
+
+    office1->update(context);
+    office1->carrier->update(context);
 
     ASSERT_EQ(1001, office1->getLastUpdateTime());
+    ASSERT_EQ(1001, office1->carrier->getLastUpdateTime());
     ASSERT_NEAR(28, office1->carrier->getMapCoords().x(), allowedCoordsError);
     ASSERT_NEAR(19.75, office1->carrier->getMapCoords().y(), allowedCoordsError);
     ASSERT_TRUE(office1->carrier->getCurrentMovingDirection() == Direction::SOUTH);
 
     // "Step 2": Test, wenn eine Kachel geradlinig übersprungen wird
     context.sdlTicks += 2500; // Träger sollte sich (2500 * 0,75 =) 1,875 Kacheln fortbewegt haben
-    economicsMgr->update(office1);
+    setTicks(context.sdlTicks);
+
+    office1->update(context);
+    office1->carrier->update(context);
 
     ASSERT_EQ(3501, office1->getLastUpdateTime());
+    ASSERT_EQ(3501, office1->carrier->getLastUpdateTime());
     ASSERT_NEAR(28, office1->carrier->getMapCoords().x(), allowedCoordsError);
     ASSERT_NEAR(21.625, office1->carrier->getMapCoords().y(), allowedCoordsError);
     ASSERT_TRUE(office1->carrier->getCurrentMovingDirection() == Direction::SOUTH);
 
     // "Step 3": Test, wenn mehrere Kacheln, auch über Ecken hinweg, übersprungen werden
     context.sdlTicks += 8000; // Träger sollte sich (8000 * 0,75 =) 6 Kacheln fortbewegt haben
-    economicsMgr->update(office1);
+    setTicks(context.sdlTicks);
+
+    office1->update(context);
+    office1->carrier->update(context);
 
     ASSERT_EQ(11501, office1->getLastUpdateTime());
+    ASSERT_EQ(11501, office1->carrier->getLastUpdateTime());
     ASSERT_NEAR(26, office1->carrier->getMapCoords().x(), allowedCoordsError);
     ASSERT_NEAR(25.625, office1->carrier->getMapCoords().y(), allowedCoordsError);
     ASSERT_TRUE(office1->carrier->getCurrentMovingDirection() == Direction::SOUTH);
 
     // Am Gebäude ankommen, sollte den Rücktransport triggern
     context.sdlTicks += 2000; // Träger sollte sich (2000 * 0,75 =) 1,5 Kacheln fortbewegt haben. Ziel wurde bereits nach 1,375 Kacheln erreicht.
-    economicsMgr->update(office1);
+    setTicks(context.sdlTicks);
 
-    ASSERT_EQ(13501, office1->getLastUpdateTime());
+    office1->update(context);
+    office1->carrier->update(context);
+
     ASSERT_TRUE(office1->carrier != nullptr);
+    ASSERT_EQ(13501, office1->getLastUpdateTime());
+    ASSERT_EQ(13501, office1->carrier->getLastUpdateTime());
     ASSERT_TRUE(office1->carrier->route.back() == MapCoords(28, 19));
     ASSERT_FALSE(office1->carrier->onOutboundTrip);
     ASSERT_EQ(GoodsType::CATTLE, office1->carrier->carriedGoods.goodsType);
@@ -124,7 +144,10 @@ TEST_F(EconomicsMgrTest, updateCarrier) {
 
     // Ein großer Zeitsprung und der Rücktransport sollte längst erledigt sein.
     context.sdlTicks += 20000;
-    economicsMgr->update(office1);
+    setTicks(context.sdlTicks);
+
+    office1->update(context);
+    office1->carrier->update(context);
 
     ASSERT_TRUE(office1->carrier == nullptr);
     ASSERT_EQ(9, colony->getGoods(GoodsType::CATTLE).inventory);

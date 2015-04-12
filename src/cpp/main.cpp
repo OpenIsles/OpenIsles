@@ -209,14 +209,14 @@ int main(int argc, char** argv) {
             }
 		}
 
-        // Wirtschaft ankurbeln ;-)
+        // Objekte aktualisieren
         std::list<MapObject*> mapObjects = map->getMapObjects();
         for (auto iter = mapObjects.rbegin(); iter != mapObjects.rend(); iter++) {
             MapObject* mapObject = *iter;
-            Structure* structure = dynamic_cast<Structure*>(mapObject);
+            UpdateableObject* updateableObject = dynamic_cast<UpdateableObject*>(mapObject);
 
-            if (structure != nullptr) {
-                economicsMgr->update(structure);
+            if (updateableObject != nullptr) {
+                updateableObject->update(context);
             }
         }
 

@@ -2,11 +2,12 @@
 #define _CARRIER_H
 
 #include <gtest/gtest.h>
-#include "economics/UpdateableObject.h"
+#include "Context.h"
 #include "game/GoodsSlot.h"
 #include "graphics/graphic/Animation.h"
 #include "graphics/graphic/GraphicSet.h"
 #include "map/MapObject.h"
+#include "map/UpdateableObject.h"
 #include "pathfinding/AStar.h"
 
 class Building;
@@ -78,6 +79,8 @@ public:
 
     ~Carrier() {}
 
+    virtual void updateObject(const Context& context) override;
+
     const EightDirectionsAnimation& getAnimations() const {
         return animations;
     }
@@ -97,6 +100,19 @@ public:
      * auf seiner Route die Richtung ändert.
      */
     void updateCurrentMovingDirection();
+
+private:
+    /**
+     * @brief Sucht für ein Gebäude einen GoodsSlot, in welchen ein Träger seine Waren laden soll.
+     * Handelt es sich bei dem Gebäude um ein Lagergebäude, wird der passende Slot in der Kolonie zurückgegeben,
+     * ansonsten wird der passende Slot `input` oder `input2` vom Gebäude zurückgegeben.
+     *
+     * @param context (Dependency)
+     * @param building Gebäude, das das Ziel des Trägers ist
+     * @param goodsType Warentyp, den wir ausladen wollen
+     * @return GoodsSlot, in welchen die Waren ausgeladen werden sollten
+     */
+    GoodsSlot* findGoodsSlotToUnloadTo(const Context& context, Building* building, GoodsType goodsType);
 };
 
 #endif
