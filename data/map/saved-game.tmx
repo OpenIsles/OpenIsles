@@ -356,7 +356,7 @@
     <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="pioneers_house5" type="building" x="1888" y="1056" width="64" height="64">
+  <object name="settlers_house5" type="building" x="1888" y="1056" width="64" height="64">
    <properties>
     <property name="player" value="1"/>
    </properties>

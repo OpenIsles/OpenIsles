@@ -124,7 +124,7 @@ void ConfigMgr::loadBuildingConfig() {
         mapMapObjectNameInSavefile[buildingConfigs[mapObjectType]->nameInSavefile] = mapObjectType;
     }
 
-    for (int i = 1; i <= 4 /* TODO more to come :-) */; i++) {
+    for (int i = 1; i <= 5; i++) {
         MapObjectType mapObjectType = (MapObjectType) (MapObjectType::SETTLERS_HOUSE1 + i - 1);
 
         buildingConfigs[mapObjectType] = new BuildingConfig();
