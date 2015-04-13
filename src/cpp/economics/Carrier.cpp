@@ -48,10 +48,11 @@ void Carrier::updateCurrentMovingDirection() {
     }
 }
 
-void Carrier::updateObject(const Context& context) {
+bool Carrier::updateObject(const Context& context) {
     unsigned int ticksPastSinceLastUpdate = context.sdlTicks - lastUpdateTime;
     double oneSecondTicks = (double) 1000 / context.game->getSpeed();
 
+    Map* map = context.game->getMap();
     bool deleteMe = false; // Flag, um den Träger zu löschen
 
     // Animieren
@@ -84,13 +85,13 @@ void Carrier::updateObject(const Context& context) {
 
         // Hop geschafft?
         if (ticksToNextHop <= ticksToProcess) {
-            mapCoords.setMapCoords(nextHopOnRoute);
+            map->moveMapObject(this, nextHopOnRoute);
             nextHopInRoute++;
             updateCurrentMovingDirection();
 
             // Route fertig?
             if (nextHopInRoute == route.cend()) {
-                MapTile* mapTile = context.game->getMap()->getMapTileAt(route.back());
+                MapTile* mapTile = map->getMapTileAt(route.back());
                 Building* targetBuilding = dynamic_cast<Building*>(mapTile->mapObjectFixed);
 
                 // targetBuilding == nullptr -> Nutzer hat die Map inzwischen geändert und das Zielgebäude abgerissen
@@ -155,7 +156,7 @@ void Carrier::updateObject(const Context& context) {
                         returnCarrier->setAnimations(graphicSet);
                         returnCarrier->carriedGoods.inventory = goodsWeCollect;
 
-                        context.game->getMap()->addMapObject(returnCarrier);
+                        map->addMapObject(returnCarrier);
                         owningBuilding->carrier = returnCarrier;
 
                         // Slot wieder freimachen
@@ -184,19 +185,18 @@ void Carrier::updateObject(const Context& context) {
         else {
             // Anteil der Reststrecke in der Kachel ausrechnen, die wir schaffen
             double fractionOfRestToNextHop = (double) ticksToProcess / (double) ticksToNextHop;
-
-            mapCoords.addX(mapDeltaXToNextHop * fractionOfRestToNextHop);
-            mapCoords.addY(mapDeltaYToNextHop * fractionOfRestToNextHop);
+            DoubleMapCoords newMapCoords = DoubleMapCoords(
+                mapCoords.x() + mapDeltaXToNextHop * fractionOfRestToNextHop,
+                mapCoords.y() + mapDeltaYToNextHop * fractionOfRestToNextHop
+            );
+            map->moveMapObject(this, newMapCoords);
 
             break; // ticksToProcess auf 0 setzen -> können wir gleich die Schleife brechen :-)
         }
 
     } while(ticksToProcess > 0);
 
-    // Träger entfernen? delete this am Ende machen, wenn sicher keiner mehr den this-Zeiger nutzt
-    if (deleteMe) {
-        context.game->getMap()->deleteMapObject(this); // Self-Destruct, entspricht delete this
-    }
+    return (!deleteMe);
 }
 
 GoodsSlot* Carrier::findGoodsSlotToUnloadTo(const Context& context, Building* building, GoodsType goodsType) {

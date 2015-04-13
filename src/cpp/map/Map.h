@@ -249,6 +249,15 @@ public:
 	void addMapObject(MapObject* mapObject);
 
     /**
+     * @brief Ändert die Position eines beleglichen Map-Objekts. Der Aufruf dieser Methode ist wichtig, um die MapTile-
+     * Struktur aktuell zu halten
+     *
+     * @param mapObject Map-Objekt
+     * @param newMapCoords neue Map-Koordinaten, die das Map-Objekt erhalten soll
+     */
+    void moveMapObject(MapObjectMoving* mapObject, const DoubleMapCoords newMapCoords);
+
+    /**
 	 * @brief Entfernt ein Map-Objekt von der Karte
 	 * @param mapObject Map-Objekt
 	 */

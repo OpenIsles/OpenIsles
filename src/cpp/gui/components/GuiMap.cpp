@@ -166,6 +166,7 @@ void GuiMap::renderElement(IRenderer* renderer) {
         }
 
         // Gucken, ob/welches Objekt wir hier malen müssen
+        const MapTile* mapTile = map->getMapTileAt(mapCoords);
         const MapObjectFixed* mapObjectToDrawHere = nullptr;
         bool drawPlainTile = false;
 
@@ -174,7 +175,7 @@ void GuiMap::renderElement(IRenderer* renderer) {
             mapObjectToDrawHere = mapTileTemporialy->mapObject;
             updateMapObjectsTemporarilyDrawingFlags();
         } else {
-            const MapObjectFixed* mapObject = map->getMapObjectFixedAt(mapCoords);
+            const MapObjectFixed* mapObject = mapTile->mapObjectFixed;
             if (mapObject != nullptr) {
                 mapObjectToDrawHere = mapObject;
             } else {
@@ -208,204 +209,201 @@ void GuiMap::renderElement(IRenderer* renderer) {
                             }
                         }
 
-                    } else {
-                        return; // nix zum Zeichen an dieser Stelle
                     }
-                } else {
-                    return; // nix zum Zeichen an dieser Stelle
                 }
             }
         }
 
-        // @see docs/drawing-order-x-tiles.xcf für Variablen
+        if (mapObjectToDrawHere != nullptr) {
+            // @see docs/drawing-order-x-tiles.xcf für Variablen
 
-        const MapCoords& moMapCoords = mapObjectToDrawHere->getMapCoords();
-        const Structure* structure = dynamic_cast<const Structure*>(mapObjectToDrawHere);
-        const Harvestable* harvestable = dynamic_cast<const Harvestable*>(mapObjectToDrawHere);
+            const MapCoords& moMapCoords = mapObjectToDrawHere->getMapCoords();
+            const Structure* structure = dynamic_cast<const Structure*>(mapObjectToDrawHere);
+            const Harvestable* harvestable = dynamic_cast<const Harvestable*>(mapObjectToDrawHere);
 
-        int moMapWidth, moMapHeight;
-        int tileOffsetXInMapObject, tileOffsetYInMapObject;
-        int drawingFlags = 0;
-        const IGraphic* graphicToDrawHere = nullptr;
+            int moMapWidth, moMapHeight;
+            int tileOffsetXInMapObject, tileOffsetYInMapObject;
+            int drawingFlags = 0;
+            const IGraphic* graphicToDrawHere = nullptr;
 
-        if (drawPlainTile) {
-            // maskierte Kachel is 1x1
-            moMapWidth = 1;
-            moMapHeight = 1;
-            tileOffsetXInMapObject = 0;
-            tileOffsetYInMapObject = 0;
-            drawingFlags = IGraphic::DRAWING_FLAG_MASKED;
-            graphicToDrawHere = context->graphicsMgr->getGraphicSet("plain-tile")->getStatic()->getGraphic();
+            if (drawPlainTile) {
+                // maskierte Kachel is 1x1
+                moMapWidth = 1;
+                moMapHeight = 1;
+                tileOffsetXInMapObject = 0;
+                tileOffsetYInMapObject = 0;
+                drawingFlags = IGraphic::DRAWING_FLAG_MASKED;
+                graphicToDrawHere = context->graphicsMgr->getGraphicSet("plain-tile")->getStatic()->getGraphic();
 
-        } else {
-            // Ausrechnen, welchen Schnibbel der Grafik wir anzeigen müssen
-            moMapWidth = mapObjectToDrawHere->getMapWidth();
-            moMapHeight = mapObjectToDrawHere->getMapHeight();
+            } else {
+                // Ausrechnen, welchen Schnibbel der Grafik wir anzeigen müssen
+                moMapWidth = mapObjectToDrawHere->getMapWidth();
+                moMapHeight = mapObjectToDrawHere->getMapHeight();
 
-            tileOffsetXInMapObject = mapCoords.x() - moMapCoords.x(); // (0 ... moMapWidth-1)
-            tileOffsetYInMapObject = mapCoords.y() - moMapCoords.y(); // (0 ... moMapHeight-1)
+                tileOffsetXInMapObject = mapCoords.x() - moMapCoords.x(); // (0 ... moMapWidth-1)
+                tileOffsetYInMapObject = mapCoords.y() - moMapCoords.y(); // (0 ... moMapHeight-1)
 
-            // TODO Refactoring: duplicate code
-            if (structure != nullptr) {
-                drawingFlags = structure->getDrawingFlags();
-                const MapObjectType& mapObjectType = structure->getMapObjectType();
+                // TODO Refactoring: duplicate code
+                if (structure != nullptr) {
+                    drawingFlags = structure->getDrawingFlags();
+                    const MapObjectType& mapObjectType = structure->getMapObjectType();
 
-                const FourthDirection& structureView = structure->getView(); // TODO als mapObjectToDrawHere->getView() vereinheitlichen
-                const FourthDirection& viewToRender = Direction::addDirections(structureView, screenView);
+                    const FourthDirection& structureView = structure->getView(); // TODO als mapObjectToDrawHere->getView() vereinheitlichen
+                    const FourthDirection& viewToRender = Direction::addDirections(structureView, screenView);
 
-                const std::string& graphicSetName = context->graphicsMgr->getGraphicSetNameForMapObject(mapObjectType);
-                const GraphicSet* mapObjectGraphicSet = context->graphicsMgr->getGraphicSet(graphicSetName);
-                graphicToDrawHere = mapObjectGraphicSet->getByView(viewToRender)->getGraphic();
+                    const std::string& graphicSetName = context->graphicsMgr->getGraphicSetNameForMapObject(
+                        mapObjectType);
+                    const GraphicSet* mapObjectGraphicSet = context->graphicsMgr->getGraphicSet(graphicSetName);
+                    graphicToDrawHere = mapObjectGraphicSet->getByView(viewToRender)->getGraphic();
+                }
+                else if (harvestable != nullptr) {
+                    drawingFlags = 0; // TODO für Platzieren/Abreißen werden wir das wohl später doch brauchen
+                    const MapObjectType& mapObjectType = harvestable->getMapObjectType();
+
+                    const FourthDirection& harvestableView = harvestable->getView(); // TODO als mapObjectToDrawHere->getView() vereinheitlichen
+                    const FourthDirection& viewToRender = Direction::addDirections(harvestableView, screenView);
+
+                    const std::string& graphicSetName = context->graphicsMgr->getGraphicSetNameForMapObject(
+                        mapObjectType);
+                    const GraphicSet* mapObjectGraphicSet = context->graphicsMgr->getGraphicSet(graphicSetName);
+                    const std::string stateToRender = "growth" + toString(int(harvestable->getAge()));
+
+                    graphicToDrawHere = mapObjectGraphicSet->getByStateAndView(stateToRender,
+                                                                               viewToRender)->getGraphic();
+                }
+                else {
+                    assert(false);
+                }
             }
-            else if (harvestable != nullptr) {
-                drawingFlags = 0; // TODO für Platzieren/Abreißen werden wir das wohl später doch brauchen
-                const MapObjectType& mapObjectType = harvestable->getMapObjectType();
-
-                const FourthDirection& harvestableView = harvestable->getView(); // TODO als mapObjectToDrawHere->getView() vereinheitlichen
-                const FourthDirection& viewToRender = Direction::addDirections(harvestableView, screenView);
-
-                const std::string& graphicSetName = context->graphicsMgr->getGraphicSetNameForMapObject(mapObjectType);
-                const GraphicSet* mapObjectGraphicSet = context->graphicsMgr->getGraphicSet(graphicSetName);
-                const std::string stateToRender = "growth" + toString(int(harvestable->getAge()));
-
-                graphicToDrawHere = mapObjectGraphicSet->getByStateAndView(stateToRender, viewToRender)->getGraphic();
-            }
-            else {
-                assert(false);
-            }
-        }
 
 
-        /* Tricky part: Die Berechnung von xInMapObject und yInMapObject in allen Ansichten.
-         *
-         * Um die Berechnung zu vereinfachen, führen wir yInMapObjectFromBottom ein. Das ist yInMapObject von
-         * unten gerechnet. Die Berücksichtigung der Grafikhöhe ist in allen Fällen nämlich gleich.
-         *
-         *
-         * Um die Formeln unten zu verstehen, der Reihe nach folgende Überlegungen durchführen:
-         *
-         * 1. Welchen Wert hat xInMapObject/yInMapObjectFromBottom, wenn die Grafik nur 1x1 groß ist?
-         *    -> Es kommen Summanden mit Abhängigkeit zu moMapWidth/moMapHeight in den Term.
-         * 2. Angenommen die Grafik ist 2x1 (also belegt 2 Kacheln in mapX-Richtung), wie ändert sich xInMapObject/yInMapObjectFromBottom?
-         *    -> Es kommen Summanden mit Abhängigkeit zu moMapWidth/moMapHeight in den Term.
-         * 3. Angenommen die Grafik ist 1x2 (also belegt 2 Kacheln in mapY-Richtung), wie ändert sich xInMapObject/yInMapObjectFromBottom?
-         *    -> Es kommen Summanden mit Abhängigkeit zu moMapWidth/moMapHeight in den Term.
-         *
-         * Jetzt, unabhängig von der Größe überlegen:
-         *
-         * 4. Angenommen, ich gehe eine Kachel in mapX-Richtung, wie ändert sich xInMapObject/yInMapObjectFromBottom?
-         *    -> Es kommen Summanden mit Abhängigkeit zu tileOffsetXInMapObject/tileOffsetYInMapObject in den Term.
-         * 5. Angenommen, ich gehe eine Kachel in mapY-Richtung, wie ändert sich xInMapObject/yInMapObjectFromBottom?
-         *    -> Es kommen Summanden mit Abhängigkeit zu tileOffsetXInMapObject/tileOffsetYInMapObject in den Term.
-         *
-         * Fertig :-)
-         */
-        int xInMapObject, yInMapObject, yInMapObjectFromBottom;
-        if (screenView == Direction::SOUTH) {
-            xInMapObject =  IGraphicsMgr::TILE_WIDTH_HALF *
-                ((moMapHeight - 1) - tileOffsetYInMapObject + tileOffsetXInMapObject);
-            yInMapObjectFromBottom =  IGraphicsMgr::TILE_HEIGHT_HALF *
-                ((moMapHeight - 1) - tileOffsetYInMapObject + (moMapWidth - 1) - tileOffsetXInMapObject);
-        } else if (screenView == Direction::EAST) {
-            xInMapObject =  IGraphicsMgr::TILE_WIDTH_HALF *
-                ((moMapWidth - 1) + (moMapHeight - 1) - tileOffsetXInMapObject - tileOffsetYInMapObject);
-            yInMapObjectFromBottom =  IGraphicsMgr::TILE_HEIGHT_HALF *
-                ((moMapWidth - 1) - tileOffsetXInMapObject + tileOffsetYInMapObject);
-        } else if (screenView == Direction::NORTH) {
-            xInMapObject =  IGraphicsMgr::TILE_WIDTH_HALF *
-                ((moMapWidth - 1) + tileOffsetYInMapObject - tileOffsetXInMapObject);
-            yInMapObjectFromBottom =  IGraphicsMgr::TILE_HEIGHT_HALF *
-                (tileOffsetYInMapObject + tileOffsetXInMapObject);
-        } else if (screenView == Direction::WEST) {
-            xInMapObject =  IGraphicsMgr::TILE_WIDTH_HALF *
-                (tileOffsetXInMapObject + tileOffsetYInMapObject);
-            yInMapObjectFromBottom =  IGraphicsMgr::TILE_HEIGHT_HALF *
-                ((moMapHeight - 1) + tileOffsetXInMapObject - tileOffsetYInMapObject);
-        } else {
-            assert(false);
-            xInMapObject = yInMapObjectFromBottom = 0;
-        }
-        yInMapObject = graphicToDrawHere->getHeight() - yInMapObjectFromBottom - IGraphicsMgr::TILE_HEIGHT;
-
-        Rect rectSource(xInMapObject, 0, IGraphicsMgr::TILE_WIDTH, graphicToDrawHere->getHeight());
-
-        ScreenCoords screenCoords = MapCoordUtils::mapToScreenCoords(mapCoords, screenView, *map);
-        const int elevation = 1; // TODO für Gebäude wie Anlegestelle, Fischerhütte etc. muss auf 0 gesetzt werden
-
-        int destDrawX = screenCoords.x() - IGraphicsMgr::TILE_WIDTH_HALF;
-        int destDrawY = screenCoords.y() - yInMapObject - elevation * IGraphicsMgr::ELEVATION_HEIGHT;
-
-        // Zoom anwenden
-        destDrawX /= screenZoom;
-        destDrawY /= screenZoom;
-
-        // Zum Schluss in die Bildschirmmitte bringen
-        destDrawX += Consts::mapClipRect.w / 2;
-        destDrawY += Consts::mapClipRect.h / 2;
-
-        Rect rectDestination = Rect(destDrawX, destDrawY, rectSource.w / screenZoom, rectSource.h / screenZoom);
-
-        if (selectedMapObject != nullptr) {
-            bool insideCatchmentArea =
-                (selectedBuilding != nullptr && selectedBuilding->isInsideCatchmentArea(context->configMgr, *mapObjectToDrawHere));
-
-            if (!insideCatchmentArea) {
-                drawingFlags |= IGraphic::DRAWING_FLAG_DARKENED;
-            }
-        }
-        graphicToDrawHere->draw(&rectSource, &rectDestination, drawingFlags, context->sdlTicks);
-
-        // In mapObjectAlreadyDrawnThere die Kacheln-Spalte als erledigt markieren
-        do {
-            mapObjectAlreadyDrawnThere->setData(
-                moMapCoords.x() + tileOffsetXInMapObject, moMapCoords.y() + tileOffsetYInMapObject, 1);
-
+            /* Tricky part: Die Berechnung von xInMapObject und yInMapObject in allen Ansichten.
+             *
+             * Um die Berechnung zu vereinfachen, führen wir yInMapObjectFromBottom ein. Das ist yInMapObject von
+             * unten gerechnet. Die Berücksichtigung der Grafikhöhe ist in allen Fällen nämlich gleich.
+             *
+             *
+             * Um die Formeln unten zu verstehen, der Reihe nach folgende Überlegungen durchführen:
+             *
+             * 1. Welchen Wert hat xInMapObject/yInMapObjectFromBottom, wenn die Grafik nur 1x1 groß ist?
+             *    -> Es kommen Summanden mit Abhängigkeit zu moMapWidth/moMapHeight in den Term.
+             * 2. Angenommen die Grafik ist 2x1 (also belegt 2 Kacheln in mapX-Richtung), wie ändert sich xInMapObject/yInMapObjectFromBottom?
+             *    -> Es kommen Summanden mit Abhängigkeit zu moMapWidth/moMapHeight in den Term.
+             * 3. Angenommen die Grafik ist 1x2 (also belegt 2 Kacheln in mapY-Richtung), wie ändert sich xInMapObject/yInMapObjectFromBottom?
+             *    -> Es kommen Summanden mit Abhängigkeit zu moMapWidth/moMapHeight in den Term.
+             *
+             * Jetzt, unabhängig von der Größe überlegen:
+             *
+             * 4. Angenommen, ich gehe eine Kachel in mapX-Richtung, wie ändert sich xInMapObject/yInMapObjectFromBottom?
+             *    -> Es kommen Summanden mit Abhängigkeit zu tileOffsetXInMapObject/tileOffsetYInMapObject in den Term.
+             * 5. Angenommen, ich gehe eine Kachel in mapY-Richtung, wie ändert sich xInMapObject/yInMapObjectFromBottom?
+             *    -> Es kommen Summanden mit Abhängigkeit zu tileOffsetXInMapObject/tileOffsetYInMapObject in den Term.
+             *
+             * Fertig :-)
+             */
+            int xInMapObject, yInMapObject, yInMapObjectFromBottom;
             if (screenView == Direction::SOUTH) {
-                tileOffsetXInMapObject++;
-                tileOffsetYInMapObject++;
+                xInMapObject = IGraphicsMgr::TILE_WIDTH_HALF *
+                               ((moMapHeight - 1) - tileOffsetYInMapObject + tileOffsetXInMapObject);
+                yInMapObjectFromBottom = IGraphicsMgr::TILE_HEIGHT_HALF *
+                                         ((moMapHeight - 1) - tileOffsetYInMapObject + (moMapWidth - 1) -
+                                                                                       tileOffsetXInMapObject);
             } else if (screenView == Direction::EAST) {
-                tileOffsetXInMapObject++;
-                tileOffsetYInMapObject--;
+                xInMapObject = IGraphicsMgr::TILE_WIDTH_HALF *
+                               ((moMapWidth - 1) + (moMapHeight - 1) - tileOffsetXInMapObject - tileOffsetYInMapObject);
+                yInMapObjectFromBottom = IGraphicsMgr::TILE_HEIGHT_HALF *
+                                         ((moMapWidth - 1) - tileOffsetXInMapObject + tileOffsetYInMapObject);
             } else if (screenView == Direction::NORTH) {
-                tileOffsetXInMapObject--;
-                tileOffsetYInMapObject--;
+                xInMapObject = IGraphicsMgr::TILE_WIDTH_HALF *
+                               ((moMapWidth - 1) + tileOffsetYInMapObject - tileOffsetXInMapObject);
+                yInMapObjectFromBottom = IGraphicsMgr::TILE_HEIGHT_HALF *
+                                         (tileOffsetYInMapObject + tileOffsetXInMapObject);
             } else if (screenView == Direction::WEST) {
-                tileOffsetXInMapObject--;
-                tileOffsetYInMapObject++;
+                xInMapObject = IGraphicsMgr::TILE_WIDTH_HALF *
+                               (tileOffsetXInMapObject + tileOffsetYInMapObject);
+                yInMapObjectFromBottom = IGraphicsMgr::TILE_HEIGHT_HALF *
+                                         ((moMapHeight - 1) + tileOffsetXInMapObject - tileOffsetYInMapObject);
             } else {
                 assert(false);
+                xInMapObject = yInMapObjectFromBottom = 0;
             }
-        } while(
-            tileOffsetXInMapObject < moMapWidth && tileOffsetYInMapObject < moMapHeight &&
-            tileOffsetXInMapObject >= 0 && tileOffsetYInMapObject >= 0);
+            yInMapObject = graphicToDrawHere->getHeight() - yInMapObjectFromBottom - IGraphicsMgr::TILE_HEIGHT;
+
+            Rect rectSource(xInMapObject, 0, IGraphicsMgr::TILE_WIDTH, graphicToDrawHere->getHeight());
+
+            ScreenCoords screenCoords = MapCoordUtils::mapToScreenCoords(mapCoords, screenView, *map);
+            const int elevation = 1; // TODO für Gebäude wie Anlegestelle, Fischerhütte etc. muss auf 0 gesetzt werden
+
+            int destDrawX = screenCoords.x() - IGraphicsMgr::TILE_WIDTH_HALF;
+            int destDrawY = screenCoords.y() - yInMapObject - elevation * IGraphicsMgr::ELEVATION_HEIGHT;
+
+            // Zoom anwenden
+            destDrawX /= screenZoom;
+            destDrawY /= screenZoom;
+
+            // Zum Schluss in die Bildschirmmitte bringen
+            destDrawX += Consts::mapClipRect.w / 2;
+            destDrawY += Consts::mapClipRect.h / 2;
+
+            Rect rectDestination = Rect(destDrawX, destDrawY, rectSource.w / screenZoom, rectSource.h / screenZoom);
+
+            if (selectedMapObject != nullptr) {
+                bool insideCatchmentArea =
+                    (selectedBuilding != nullptr &&
+                     selectedBuilding->isInsideCatchmentArea(context->configMgr, *mapObjectToDrawHere));
+
+                if (!insideCatchmentArea) {
+                    drawingFlags |= IGraphic::DRAWING_FLAG_DARKENED;
+                }
+            }
+            graphicToDrawHere->draw(&rectSource, &rectDestination, drawingFlags, context->sdlTicks);
+
+            // In mapObjectAlreadyDrawnThere die Kacheln-Spalte als erledigt markieren
+            do {
+                mapObjectAlreadyDrawnThere->setData(
+                    moMapCoords.x() + tileOffsetXInMapObject, moMapCoords.y() + tileOffsetYInMapObject, 1);
+
+                if (screenView == Direction::SOUTH) {
+                    tileOffsetXInMapObject++;
+                    tileOffsetYInMapObject++;
+                } else if (screenView == Direction::EAST) {
+                    tileOffsetXInMapObject++;
+                    tileOffsetYInMapObject--;
+                } else if (screenView == Direction::NORTH) {
+                    tileOffsetXInMapObject--;
+                    tileOffsetYInMapObject--;
+                } else if (screenView == Direction::WEST) {
+                    tileOffsetXInMapObject--;
+                    tileOffsetYInMapObject++;
+                } else {
+                    assert(false);
+                }
+            } while (
+                tileOffsetXInMapObject < moMapWidth && tileOffsetYInMapObject < moMapHeight &&
+                tileOffsetXInMapObject >= 0 && tileOffsetYInMapObject >= 0);
+        }
+
+        // Träger etc. zeichnen
+        for (auto iter = mapTile->mapObjectsMoving.cbegin(); iter != mapTile->mapObjectsMoving.cend(); iter++) {
+            MapObjectMoving* mapObject = *iter;
+            // TODO Aktuell machen wir nur Träger
+            Carrier* carrier = dynamic_cast<Carrier*>(mapObject);
+            if (carrier == nullptr) {
+                continue;
+            }
+
+            // Übersetzung von "Laufrichtung" + "aktuelle Ansicht" in korrekte Animation
+            unsigned char animViewIndex = (10 - carrier->getCurrentMovingDirection() + screenView) % 8;
+
+            const DoubleMapCoords& mapCoords = carrier->getMapCoords();
+            const Animation* animation = carrier->getAnimations()[animViewIndex];
+            const IGraphic* animationCurrentFrame = animation->getFrame((unsigned int) carrier->animationFrame);
+
+            Rect rect = MapCoordUtils::mapToDrawCoords(mapCoords, *map, 1, *animationCurrentFrame);
+
+            animationCurrentFrame->drawScaledAt(rect.x, rect.y, (double) 1 / (double) screenZoom);
+        }
     });
-
-    // Träger zeichnen
-    // TODO jetzt müssen wir doch wieder alle Map-Objekte durchloopen, weil die Träger nicht auf MapTile sind. Das sollte viel hübscher gemacht werden
-    const std::list<MapObject*>& mapObjects = map->getMapObjects();
-    for (auto iter = mapObjects.cbegin(); iter != mapObjects.cend(); iter++) {
-        MapObject* mapObject = *iter;
-        Building* building = dynamic_cast<Building*>(mapObject);
-        if (building == nullptr) {
-            continue;
-        }
-
-        Carrier* carrier = building->carrier;
-        if (carrier == nullptr) {
-            continue;
-        }
-
-        // Übersetzung von "Laufrichtung" + "aktuelle Ansicht" in korrekte Animation
-        unsigned char animViewIndex = (10 - carrier->getCurrentMovingDirection() + screenView) % 8;
-
-        const DoubleMapCoords& mapCoords = carrier->getMapCoords();
-        const Animation* animation = carrier->getAnimations()[animViewIndex];
-        const IGraphic* animationCurrentFrame = animation->getFrame((unsigned int) carrier->animationFrame);
-
-        Rect rect = MapCoordUtils::mapToDrawCoords(mapCoords, *map, 1, *animationCurrentFrame);
-
-        animationCurrentFrame->drawScaledAt(rect.x, rect.y, (double) 1 / (double) screenZoom);
-    }
 
     // Einzugsbereich jetzt malen, damit er oben drauf is
     if (buildingToDrawCatchmentArea != nullptr) {

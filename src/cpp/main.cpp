@@ -210,14 +210,21 @@ int main(int argc, char** argv) {
 		}
 
         // Objekte aktualisieren
+        std::list<MapObject*> mapObjectsToDelete;
         std::list<MapObject*> mapObjects = map->getMapObjects();
         for (auto iter = mapObjects.rbegin(); iter != mapObjects.rend(); iter++) {
             MapObject* mapObject = *iter;
-            UpdateableObject* updateableObject = dynamic_cast<UpdateableObject*>(mapObject);
 
-            if (updateableObject != nullptr) {
-                updateableObject->update(context);
+            bool dontDeleteMe = mapObject->update(context);
+            if (!dontDeleteMe) {
+                // Objekt zur Löschung vormerken. Wir dürfen nicht löschen, wenn wir noch iterieren
+                mapObjectsToDelete.push_back(mapObject);
             }
+        }
+
+        for (auto iter = mapObjectsToDelete.rbegin(); iter != mapObjectsToDelete.rend(); iter++) {
+            MapObject* mapObject = *iter;
+            context.game->getMap()->deleteMapObject(mapObject);
         }
 
         // Position des Mauszeigers holen

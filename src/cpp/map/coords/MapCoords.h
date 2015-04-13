@@ -154,6 +154,14 @@ public:
  */
 std::ostream& operator<< (std::ostream& outputStream, const MapCoords& mapCoords);
 
+/**
+ * @brief Ausgabe-Operator, um die Map-Koordinaten auszugeben
+ * @param outputStream Ausgabestream, auf den geschrieben wird
+ * @param mapCoords Objekt, was ausgegeben werden soll
+ * @return Ausgabestream, sodass das Chaining funktioniert
+ */
+std::ostream& operator<< (std::ostream& outputStream, const DoubleMapCoords& mapCoords);
+
 
 namespace std {
 

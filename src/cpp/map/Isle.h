@@ -24,6 +24,10 @@ public:
 	 */
 	Isle(const char* filename);
 	~Isle();
+
+    virtual bool updateObject(const Context& context) override {
+        return true;
+    }
     
     int getWidth() const {
 		return tiles->width;

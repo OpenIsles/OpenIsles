@@ -55,9 +55,10 @@ bool Building::isInsideCatchmentArea(const ConfigMgr* configMgr, const MapObject
     return false;
 }
 
-void Building::updateObject(const Context& context) {
+bool Building::updateObject(const Context& context) {
     context.economicsMgr->updateProduction(this);
     sendNewCarrier(context);
+    return true;
 }
 
 void Building::sendNewCarrier(const Context& context) {

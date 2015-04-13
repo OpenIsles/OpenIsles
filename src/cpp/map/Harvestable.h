@@ -3,13 +3,12 @@
 
 #include <cassert>
 #include "map/MapObject.h"
-#include "map/UpdateableObject.h"
 
 /**
  * @brief Map-Objekt, das eine Landschafts-Kachel darstellt, die abgeerntet werden kann, z.&nbsp;B. Wald oder Getreide.
  * Diese Kacheln sind 1x1 groß.
  */
-class Harvestable : public MapObjectFixed, public UpdateableObject {
+class Harvestable : public MapObjectFixed {
 
 private:
     // TODO Unterscheidung der verschiedenen Landschaften. Aktuell benutzen wir nur Wald und auch immer nur eine Kachel
@@ -46,8 +45,9 @@ public:
         assert(false);
     }
 
-    virtual void updateObject(const Context& context) override {
+    virtual bool updateObject(const Context& context) override {
         // TODO Das Grünzeug soll wachsen
+        return true;
     }
 
     const FourthDirection& getView() const {

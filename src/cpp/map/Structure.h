@@ -39,6 +39,10 @@ protected:
     FourthDirection view;
 
 public:
+    virtual bool updateObject(const Context& context) override {
+        return true;
+    }
+
     const FourthDirection& getView() const {
         return view;
     }

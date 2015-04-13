@@ -7,7 +7,6 @@
 #include "graphics/graphic/Animation.h"
 #include "graphics/graphic/GraphicSet.h"
 #include "map/MapObject.h"
-#include "map/UpdateableObject.h"
 #include "pathfinding/AStar.h"
 
 class Building;
@@ -15,7 +14,7 @@ class Building;
 /**
  * @brief Träger, das sind Map-Objekte, die Waren von A nach B transportieren
  */
-class Carrier : public MapObjectMoving, public UpdateableObject {
+class Carrier : public MapObjectMoving {
 
     FRIEND_TEST(EconomicsMgrTest, updateCarrier);
     friend class EconomicsMgr; // EconomicsMgr soll zum Aktualisieren des Trägers einfach zugreifen können
@@ -63,7 +62,7 @@ private:
     /**
      * @brief aktueller Frame der Animation, die grade abgespielt wird. Dieser Wert ist ein double, da fortlaufend
      * aktualisiert wird. Für das Rendering muss diese Zahl zur Ganzzahl umgewandelt werden.
-     * TODO ggf. macht es mehr Sinn, noch ein Bindeglied (erweitert UpdateableObject) zwischen Animation und der Anwenderklasse zu setzen, die diese Info enthält
+     * TODO ggf. macht es mehr Sinn, noch ein Bindeglied (erweitert MapObject) zwischen Animation und der Anwenderklasse zu setzen, die diese Info enthält
      */
     double animationFrame;
 
@@ -79,7 +78,7 @@ public:
 
     ~Carrier() {}
 
-    virtual void updateObject(const Context& context) override;
+    virtual bool updateObject(const Context& context) override;
 
     const EightDirectionsAnimation& getAnimations() const {
         return animations;

@@ -5,7 +5,6 @@
 #include "economics/Carrier.h"
 #include "game/GoodsSlot.h"
 #include "map/Structure.h"
-#include "map/UpdateableObject.h"
 
 /**
  * @brief Enthält die Slots für produzierte und zu verbrauchende Güter eines Gebäudes.
@@ -34,7 +33,7 @@ struct ProductionSlots {
 /**
  * @brief Structure, die ein Gebäude darstellt.
  */
-class Building : public Structure, public UpdateableObject {
+class Building : public Structure {
 
     FRIEND_TEST(EconomicsMgrTest, updateCarrier);
     friend class EconomicsMgr; // EconomicsMgr soll zum Bewegen des Trägers einfach zugreifen können
@@ -72,7 +71,7 @@ public:
     virtual ~Building() {
     }
 
-    virtual void updateObject(const Context& context) override;
+    virtual bool updateObject(const Context& context) override;
     
     /**
      * @brief Testet, ob eine bestimmte Kachel innerhalb des Einzugsgebiets des Gebäudes liegt
