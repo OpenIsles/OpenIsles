@@ -238,7 +238,7 @@ void GuiMgr::onEvent(SDL_Event& event) {
         int y = event.button.y;
 
         startClickWindowCoords.setTo(x, y);
-        startClickMapCoords = MapCoordUtils::getMapCoordsUnderMouse(*context->game->getMap(), x, y);
+        startClickMapCoords = MapCoordUtils::getMapCoordsUnderMouse(*map, x, y);
     }
 
     // Maus bewegt? MapCoords ermitteln und vergleichen, ob wie die Kachel gewechselt haben
@@ -417,18 +417,15 @@ void GuiMgr::onEvent(SDL_Event& event) {
 #ifdef DEBUG_A_STAR
         bool needToRecalculate = false;
 
-        MapCoords mouseCurrentMapCoords =
-            MapCoordUtils::getMapCoordsUnderMouse(*map, context->mouseCurrentX, context->mouseCurrentY);
-
         // A*-Start- und Endkoordinaten festlegen
         if (event.key.keysym.scancode == SDL_SCANCODE_A) {
-            AStar::debugAStar_source = mouseCurrentMapCoords;
+            AStar::debugAStar_source = mapCoordsUnderMouse;
             needToRecalculate = true;
         } else if (event.key.keysym.scancode == SDL_SCANCODE_S) {
-            AStar::debugAStar_destination = mouseCurrentMapCoords;
+            AStar::debugAStar_destination = mapCoordsUnderMouse;
             needToRecalculate = true;
         } else if (event.key.keysym.scancode == SDL_SCANCODE_D) {
-            MapTile* mapTile = game->getMap()->getMapTileAt(mouseCurrentMapCoords);
+            MapTile* mapTile = game->getMap()->getMapTileAt(mapCoordsUnderMouse);
             AStar::debugAStar_buildingToUseCatchmentArea = dynamic_cast<Building*>(mapTile->mapObjectFixed);
             needToRecalculate = true;
         } else if (event.key.keysym.scancode == SDL_SCANCODE_F) {

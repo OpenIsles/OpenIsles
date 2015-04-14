@@ -497,9 +497,7 @@ bool GuiMap::onEventElement(SDL_Event& event) {
 
     // Bauen wir grade was?
     if (inBuildingMode) {
-        Map* map = context->game->getMap();
-        MapCoords mapCoordsUnderMouse =
-            MapCoordUtils::getMapCoordsUnderMouse(*map, context->mouseCurrentX, context->mouseCurrentY);
+        const MapCoords& mapCoordsUnderMouse = context->guiMgr->getMapCoordsUnderMouse();
 
         bool isLeftMouseButtonDown = (SDL_GetMouseState(nullptr, nullptr) & SDL_BUTTON(SDL_BUTTON_LEFT));
 
@@ -523,8 +521,8 @@ bool GuiMap::onEventElement(SDL_Event& event) {
             if (structurePlacing == INDIVIDUALLY) {
                 // Individuell: Wir gucken, ob hier baubar ist. Falls ja, fügen wir die Stelle zur Queue hinzu
 
-                unsigned char isAllowedToPlaceResult = isAllowedToPlaceMapObject(mapCoordsUnderMouse, mapObjectType,
-                                                                                 view);
+                unsigned char isAllowedToPlaceResult =
+                    isAllowedToPlaceMapObject(mapCoordsUnderMouse, mapObjectType, view);
                 if ((isAllowedToPlaceResult & ~PLACING_STRUCTURE_NO_RESOURCES) == PLACING_STRUCTURE_ALLOWED) {
                     addCurrentStructureToMapObjectsBeingAdded(mapCoordsUnderMouse);
                 }
@@ -931,9 +929,7 @@ void GuiMap::onNewGame() {
 void GuiMap::onStartAddingStructure() {
     inBuildingMode = true;
 
-    Map* map = context->game->getMap();
-    MapCoords mapCoordsUnderMouse =
-        MapCoordUtils::getMapCoordsUnderMouse(*map, context->mouseCurrentX, context->mouseCurrentY);
+    const MapCoords& mapCoordsUnderMouse = context->guiMgr->getMapCoordsUnderMouse();
 
     const MapObjectType& mapObjectType = context->guiMgr->getPanelState().addingMapObject;
     const FourthDirection& view = context->guiMgr->getPanelState().addingMapObjectView;

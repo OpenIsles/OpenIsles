@@ -31,10 +31,9 @@ void GuiResourcesBar::renderElement(IRenderer* renderer) {
         &colorWhite, &colorBlack, "DroidSans-Bold.ttf", 18, RENDERTEXT_HALIGN_LEFT);
 
     // Siedlung, wo der Cursor grade is
-    MapCoords mouseCurrentMapCoords =
-        MapCoordUtils::getMapCoordsUnderMouse(*context->game->getMap(), context->mouseCurrentX, context->mouseCurrentY);
+    const MapCoords& mapCoordsUnderMouse = context->guiMgr->getMapCoordsUnderMouse();
 
-    MapTile* mapTileAtCursor = context->game->getMap()->getMapTileAt(mouseCurrentMapCoords);
+    MapTile* mapTileAtCursor = context->game->getMap()->getMapTileAt(mapCoordsUnderMouse);
     if (mapTileAtCursor == nullptr) {
         return;
     }
