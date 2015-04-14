@@ -14,7 +14,9 @@
  */
 class MapObject {
 
-    FRIEND_TEST(EconomicsMgrTest, updateCarrier); // Test soll die Update-Zeit via setLastUpdateTime() manipulieren dürfen.
+    // Tests sollen die Update-Zeit via setLastUpdateTime() manipulieren dürfen.
+    FRIEND_TEST(EconomicsMgrTest, updateCarrier);
+    FRIEND_TEST(HarvestableTest, growHarvestable);
 
 protected:
 	/**

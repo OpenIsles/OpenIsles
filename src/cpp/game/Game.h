@@ -133,6 +133,18 @@ public:
     }
 
     /**
+     * @brief Liefert die Anzahl Sekunden zurück, seitdem ein Map-Objekt nicht mehr aktualisiert worden ist.
+     *
+     * Die Zeitangabe ist normalisiert auf die Spielgeschwindigkeit.
+     * Beispiel: Ist eine Sekunde echte Zeit vergangen, die Spielgeschwindigkeit ist auf 4x eingestellt, liefert diese
+     * Methode "4 Sekunden" zurück.
+     *
+     * @param mapObject Map-Objekt
+     * @return normalisierte Sekundenanzahl seit dem letzten Update
+     */
+    double getSecondsSinceLastUpdate(const MapObject* mapObject) const;
+
+    /**
      * @brief Fügt eine neue Landschaftkachel, die abgeerntet werden kann, der Karte hinzu.
      * @param mapCoords Map-Koordinaten der Kachel
      * @param mapObjectType Typ der Landschaftkachel

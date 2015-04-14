@@ -19,6 +19,7 @@ set(COMMON_SOURCE_FILES
     src/cpp/map/coords/ScreenCoords.cpp
     src/cpp/map/Building.cpp
     src/cpp/map/Direction.cpp
+    src/cpp/map/Harvestable.cpp
     src/cpp/map/Isle.cpp
     src/cpp/map/Map.cpp
     src/cpp/map/MapCoordUtils.cpp
@@ -58,6 +59,7 @@ set(TEST_FILES
     test/cpp/map/coords/MapCoordsTest.cpp
     test/cpp/map/BuildingTest.cpp
     test/cpp/map/DirectionTest.cpp
+    test/cpp/map/HarvestableTest.cpp
     test/cpp/map/MapCoordUtilsTest.cpp
     test/cpp/utils/MapCoordsIteratorTest.cpp
 )

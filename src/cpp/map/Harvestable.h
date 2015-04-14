@@ -45,10 +45,7 @@ public:
         assert(false);
     }
 
-    virtual bool updateObject(const Context& context) override {
-        // TODO Das Grünzeug soll wachsen
-        return true;
-    }
+    virtual bool updateObject(const Context& context) override;
 
     const FourthDirection& getView() const {
         return view;

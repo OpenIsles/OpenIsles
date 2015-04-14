@@ -55,6 +55,13 @@ Colony* Game::getColony(const MapObjectFixed* mapObject) const {
     return getColony(mapTile->player, mapTile->isle);
 }
 
+double Game::getSecondsSinceLastUpdate(const MapObject* mapObject) const {
+    const unsigned int ticksPastSinceLastUpdate = context->sdlTicks - mapObject->getLastUpdateTime();
+    const double oneSecondTicks = (double) 1000 / context->game->getSpeed();
+
+    return (double) ticksPastSinceLastUpdate / oneSecondTicks;
+}
+
 Harvestable* Game::addHarvestable(
     const MapCoords& mapCoords, MapObjectType mapObjectType, double age, const FourthDirection& view) {
 
