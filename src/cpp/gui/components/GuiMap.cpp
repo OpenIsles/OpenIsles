@@ -469,6 +469,7 @@ void GuiMap::renderElement(IRenderer* renderer) {
     renderer->drawLine(x, y-10, x, y+10);
 
     // getDrawCoordsForBuilding()-Rechteck einzeichnen
+    const std::list<MapObject*>& mapObjects = map->getMapObjects();
     for (auto iter = mapObjects.crbegin(); iter != mapObjects.crend(); iter++) {
         MapObject* mapObject = *iter;
 
