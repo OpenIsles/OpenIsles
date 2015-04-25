@@ -7,6 +7,7 @@ TILESET_WIDTH := 4
 CREATE_TARGET_DIRECTORY = mkdir -p $(@D)
 
 MONTAGE := montage -background transparent
+BLENDER := /opt/blender-2.74/blender
 
 .PHONY: all clean build-gui clean-gui render-cart render-coat-of-arms render-blender clean-blender
 
@@ -36,7 +37,7 @@ FIX_TILE_TRANSPARENCY = \
 
 $(DATA_DIRECTORY)/img/tileset.png: $(SRC_DIRECTORY)/blender/tiles/tiles.blend
 	mkdir -p $(DATA_DIRECTORY)/img/tiles
-	cd $(SRC_DIRECTORY)/blender/tiles; blender -b $(notdir $<) -P render.py
+	cd $(SRC_DIRECTORY)/blender/tiles; $(BLENDER) -b $(notdir $<) -P render.py
 	php $(SRC_DIRECTORY)/blender/tiles/generate-tileset.php
 	$(call FIX_TILE_TRANSPARENCY,$(SRC_DIRECTORY)/blender/tiles/render/tileset.png)
 
@@ -64,7 +65,7 @@ $(DATA_DIRECTORY)/img/gui/statusbar.png:
 
 $(DATA_DIRECTORY)/img/gui/add-building/add-building-grid.png: $(SRC_DIRECTORY)/blender/ui/add-building-grid/add-building-grid.blend
 	$(CREATE_TARGET_DIRECTORY)
-	cd $(SRC_DIRECTORY)/blender/ui/add-building-grid; blender -b $(notdir $<) -P render.py
+	cd $(SRC_DIRECTORY)/blender/ui/add-building-grid; $(BLENDER) -b $(notdir $<) -P render.py
 	mv $(SRC_DIRECTORY)/blender/ui/add-building-grid/add-building-grid.png $@
 	
 ########################################################################################################################
@@ -79,7 +80,7 @@ BUILDINGS := butchers cathedral cattle-farm chapel foresters hunters-hut marketp
 define RENDER_BUILDING
 $(DATA_DIRECTORY)/img/objects/$(1).png: $(SRC_DIRECTORY)/blender/buildings/$(1)/$(1).blend
 	$$(CREATE_TARGET_DIRECTORY)
-	cd $(SRC_DIRECTORY)/blender/buildings/$(1); blender -b $$(notdir $$<) -P ../render-building.py
+	cd $(SRC_DIRECTORY)/blender/buildings/$(1); $(BLENDER) -b $$(notdir $$<) -P ../render-building.py
 
 	# geometry muss angegeben werden, sonst greift der Default von 120x120
 	$(MONTAGE) \
@@ -101,7 +102,7 @@ STREET_TILESETS := cobbled-street farm-road
 define RENDER_STREET_TILESET
 $(DATA_DIRECTORY)/img/objects/$(1).png: $(SRC_DIRECTORY)/blender/streets/$(1)/$(1).blend
 	mkdir -p $(DATA_DIRECTORY)/img/objects
-	cd $(SRC_DIRECTORY)/blender/streets/$(1); blender -b $$(notdir $$<) -P ../render-street-tileset.py
+	cd $(SRC_DIRECTORY)/blender/streets/$(1); $(BLENDER) -b $$(notdir $$<) -P ../render-street-tileset.py
 
 	# geometry muss angegeben werden, sonst greift der Default von 120x120
 	$(MONTAGE) \
@@ -132,7 +133,7 @@ HARVESTABLES := northern-forest1 northern-forest2
 define RENDER_HARVESTABLE
 $(DATA_DIRECTORY)/img/harvestables/$(1).png: $(SRC_DIRECTORY)/blender/harvestables/$(1)/$(1).blend
 	$$(CREATE_TARGET_DIRECTORY)
-	cd $(SRC_DIRECTORY)/blender/harvestables/$(1); blender -b $$(notdir $$<) -P ../render-harvestable.py
+	cd $(SRC_DIRECTORY)/blender/harvestables/$(1); $(BLENDER) -b $$(notdir $$<) -P ../render-harvestable.py
 
 	# geometry muss angegeben werden, sonst greift der Default von 120x120
 	$(MONTAGE) \
@@ -160,7 +161,7 @@ $(DATA_DIRECTORY)/img/goods/marketplace-icon/$(1).png $(DATA_DIRECTORY)/img/good
 	mkdir -p $(DATA_DIRECTORY)/img/goods/marketplace-icon
 	mkdir -p $(DATA_DIRECTORY)/img/goods/icon
 	
-	cd $$(dir $$<); blender -b $$(notdir $$<) -P ../render.py
+	cd $$(dir $$<); $(BLENDER) -b $$(notdir $$<) -P ../render.py
 	
 	mv -f $$(dir $$<)icon.png $(DATA_DIRECTORY)/img/goods/icon/$(1).png
 	convert $(SRC_DIRECTORY)/xcf/goods/marketplace-icon-background.xcf -resize 42x42 -flatten $$(dir $$<)marketplace-icon.png -gravity center -composite $(DATA_DIRECTORY)/img/goods/marketplace-icon/$(1).png
@@ -178,7 +179,7 @@ ANIMATIONS := carrier
 define RENDER_ANIMATION
 $(DATA_DIRECTORY)/img/objects/$(1).png: $(SRC_DIRECTORY)/blender/animations/$(1)/$(1).blend
 	$$(CREATE_TARGET_DIRECTORY)
-	cd $(SRC_DIRECTORY)/blender/animations/$(1); blender -b $$(notdir $$<) -P ../render-animation.py
+	cd $(SRC_DIRECTORY)/blender/animations/$(1); $(BLENDER) -b $$(notdir $$<) -P ../render-animation.py
 
 	# geometry muss angegeben werden, sonst greift der Default von 120x120
 	$(MONTAGE) \
@@ -201,7 +202,7 @@ $(foreach ANIMATION,$(ANIMATIONS),$(eval $(call RENDER_ANIMATION,$(ANIMATION))))
 
 render-cart: $(SRC_DIRECTORY)/blender/animations/cart/cart.blend
 	mkdir -p $(DATA_DIRECTORY)/img/objects
-	cd $(SRC_DIRECTORY)/blender/animations/cart; blender -b $(notdir $<) -P render-cart.py
+	cd $(SRC_DIRECTORY)/blender/animations/cart; $(BLENDER) -b $(notdir $<) -P render-cart.py
 
 	# geometry muss angegeben werden, sonst greift der Default von 120x120
 	$(MONTAGE) \
@@ -226,12 +227,32 @@ render-cart: $(SRC_DIRECTORY)/blender/animations/cart/cart.blend
 	    -geometry +0+0 -tile x8 $(DATA_DIRECTORY)/img/objects/cart-with-cargo.png
 
 ########################################################################################################################
+# Schiffe                                                                                                              #
+########################################################################################################################
+
+$(DATA_DIRECTORY)/img/ships/little-ship.png: $(SRC_DIRECTORY)/blender/ships/little-ship/little-ship.blend
+	$(CREATE_TARGET_DIRECTORY)
+	cd $(SRC_DIRECTORY)/blender/ships/little-ship; $(BLENDER) -b $(notdir $<) -P render.py
+
+	# geometry muss angegeben werden, sonst greift der Default von 120x120
+	$(MONTAGE) \
+	    $(SRC_DIRECTORY)/blender/ships/little-ship/render/angle0.png \
+	    $(SRC_DIRECTORY)/blender/ships/little-ship/render/angle45.png \
+	    $(SRC_DIRECTORY)/blender/ships/little-ship/render/angle90.png \
+	    $(SRC_DIRECTORY)/blender/ships/little-ship/render/angle135.png \
+	    $(SRC_DIRECTORY)/blender/ships/little-ship/render/angle180.png \
+	    $(SRC_DIRECTORY)/blender/ships/little-ship/render/angle225.png \
+	    $(SRC_DIRECTORY)/blender/ships/little-ship/render/angle270.png \
+	    $(SRC_DIRECTORY)/blender/ships/little-ship/render/angle315.png \
+	    -geometry +0+0 -tile x8 $@
+
+########################################################################################################################
 # Banner                                                                                                               #
 ########################################################################################################################
 
 render-coat-of-arms: $(SRC_DIRECTORY)/blender/ui/coat-of-arms/coat-of-arms.blend $(DATA_DIRECTORY)/img/population-man.png
 	mkdir -p $(DATA_DIRECTORY)/img/gui/coat-of-arms
-	cd $(SRC_DIRECTORY)/blender/ui/coat-of-arms; blender -b coat-of-arms.blend -P render.py
+	cd $(SRC_DIRECTORY)/blender/ui/coat-of-arms; $(BLENDER) -b coat-of-arms.blend -P render.py
 
 	cp -rf $(SRC_DIRECTORY)/blender/ui/coat-of-arms/render/* $(DATA_DIRECTORY)/img/gui/coat-of-arms
 	rm -rf $(SRC_DIRECTORY)/blender/ui/coat-of-arms/render
@@ -281,6 +302,7 @@ render-blender: \
 		$(DATA_DIRECTORY)/img/harvestables/$(HARVESTABLE).png \
 	) \
 	render-cart \
+	$(DATA_DIRECTORY)/img/ships/little-ship.png \
 	render-coat-of-arms \
 	$(DATA_DIRECTORY)/img/coin.png \
 	$(DATA_DIRECTORY)/img/population-man.png
@@ -300,6 +322,8 @@ clean-blender:
 	rm -rf $(foreach HARVESTABLE,$(HARVESTABLES), $(SRC_DIRECTORY)/blender/harvestables/$(HARVESTABLE)/render)
 	rm -f $(DATA_DIRECTORY)/img/objects/cart-without-cargo.png
 	rm -f $(DATA_DIRECTORY)/img/objects/cart-with-cargo.png
+	rm -rf $(SRC_DIRECTORY)/blender/ships/little-ship/render
+	rm -f $(DATA_DIRECTORY)/img/ships/little-ship.png
 	rm -rf $(DATA_DIRECTORY)/img/gui/coat-of-arms
 	rm -f $(DATA_DIRECTORY)/img/coin.png
 	rm -f $(DATA_DIRECTORY)/img/population-man.png
