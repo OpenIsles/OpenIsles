@@ -150,13 +150,13 @@ $(foreach HARVESTABLE,$(HARVESTABLES),$(eval $(call RENDER_HARVESTABLE,$(HARVEST
 # Gütersymbole                                                                                                         #
 ########################################################################################################################
 
-GOODS := bricks cattle cloth food tools wood wool
+GOODS := bricks cattle cloth food sugarcane tools wood wool
 
 define RENDER_GOODS_ICONS
 $(DATA_DIRECTORY)/img/goods/marketplace-icon/$(1).png $(DATA_DIRECTORY)/img/goods/icon/$(1).png: \
 	$(SRC_DIRECTORY)/blender/goods/$(1)/$(1).blend \
 	$(SRC_DIRECTORY)/blender/goods/render.py \
-	$(SRC_DIRECTORY)/xcf/goods/marketplace-icon-background.xcf
+	$(SRC_DIRECTORY)/xcf/goods/marketplace-icon-background.png
 	
 	mkdir -p $(DATA_DIRECTORY)/img/goods/marketplace-icon
 	mkdir -p $(DATA_DIRECTORY)/img/goods/icon
@@ -164,7 +164,7 @@ $(DATA_DIRECTORY)/img/goods/marketplace-icon/$(1).png $(DATA_DIRECTORY)/img/good
 	cd $$(dir $$<); $(BLENDER) -b $$(notdir $$<) -P ../render.py
 	
 	mv -f $$(dir $$<)icon.png $(DATA_DIRECTORY)/img/goods/icon/$(1).png
-	convert $(SRC_DIRECTORY)/xcf/goods/marketplace-icon-background.xcf -resize 42x42 -flatten $$(dir $$<)marketplace-icon.png -gravity center -composite $(DATA_DIRECTORY)/img/goods/marketplace-icon/$(1).png
+	convert $(SRC_DIRECTORY)/xcf/goods/marketplace-icon-background.png -resize 42x42 $$(dir $$<)marketplace-icon.png -gravity center -composite $(DATA_DIRECTORY)/img/goods/marketplace-icon/$(1).png
 	rm -f $$(dir $$<)marketplace-icon.png
 endef
 
