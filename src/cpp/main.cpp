@@ -186,6 +186,8 @@ int main(int argc, char** argv) {
 
     game->loadGameFromTMX(cmdlineParams.mapFileToLoad);
 
+    sdlRenderer->showWindow();
+
 	// Mainloop //////////////////////////////////////////////////////////////////////////////////////////////////////
 
     int benchmarkFramesToGo = cmdlineParams.benchmarkFrames;

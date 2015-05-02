@@ -21,7 +21,7 @@ SDLRenderer::SDLRenderer() {
    }
 
    window = SDL_CreateWindow(
-       "OpenIsles", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_SHOWN);
+       "OpenIsles", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_HIDDEN);
    if (window == nullptr) {
       std::cerr << "SDL could not create window: " << SDL_GetError() << std::endl;
       return;
@@ -58,6 +58,11 @@ SDLRenderer::~SDLRenderer() {
    SDL_DestroyRenderer(renderer);
    SDL_DestroyWindow(window);
    SDL_Quit();
+}
+
+void SDLRenderer::showWindow() {
+   SDL_ShowWindow(window);
+   SDL_RaiseWindow(window);
 }
 
 const int SDLRenderer::getWindowWidth() const {

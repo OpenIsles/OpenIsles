@@ -15,6 +15,8 @@ public:
     NoSDLRenderer() {}
     virtual ~NoSDLRenderer() {}
 
+    virtual void showWindow() {}
+
     virtual const int getWindowWidth() const {
         return 0;
     }

@@ -39,6 +39,8 @@ public:
     SDLRenderer();
     virtual ~SDLRenderer();
 
+    virtual void showWindow();
+
     virtual const int getWindowWidth() const;
     virtual const int getWindowHeight() const;
 

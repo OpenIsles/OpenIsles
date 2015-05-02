@@ -33,6 +33,12 @@ public:
     virtual const int getWindowHeight() const = 0;
 
     /**
+     * @brief Zeigt das Fenster an und bringt es in den Vordergrund.
+     * Initial wird das Fenster nicht gezeigt.
+     */
+    virtual void showWindow() = 0;
+
+    /**
      * @brief Setzt das Clipping-Rechteck, in welchem der Renderer zeichnet.
      * @param rect neues Clipping-Rechteck oder `nullptr`, um Clipping zu deaktivieren
      */
