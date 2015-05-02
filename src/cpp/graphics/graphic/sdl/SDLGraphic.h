@@ -91,6 +91,14 @@ private:
      */
     void createMaskedTexture();
 
+	/**
+	 * @brief Interner Helper, der die Grafik an eine bestimmte Stelle mit definierter Zielgröße zeichnet.
+	 * Es wird normal (keine drawingFlags) gezeichnet.
+	 *
+	 * @param rectDestination SDL-Rechteck mit Zielkoordinaten und -Größe
+	 */
+	void drawAt(const SDL_Rect& rectDestination) const;
+
 };
 
 #endif

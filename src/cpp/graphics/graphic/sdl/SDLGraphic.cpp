@@ -181,13 +181,17 @@ void SDLGraphic::getPixel(int x, int y, uint8_t* r, uint8_t* g, uint8_t* b, uint
 
 void SDLGraphic::drawAt(int x, int y) const {
 	SDL_Rect rectDestination = { x, y, width, height };
-    SDL_Renderer* sdlRealRenderer = (dynamic_cast<SDLRenderer*>(renderer))->getRealRenderer();
-    SDL_RenderCopy(sdlRealRenderer, texture, nullptr, &rectDestination);
+    drawAt(rectDestination);
 }
 
 void SDLGraphic::drawScaledAt(int x, int y, double scale) const {
 	SDL_Rect rectDestination = { x, y, (int) (getWidth() * scale), (int) (getHeight() * scale) };
+    drawAt(rectDestination);
+}
+
+void SDLGraphic::drawAt(const SDL_Rect& rectDestination) const {
     SDL_Renderer* sdlRealRenderer = (dynamic_cast<SDLRenderer*>(renderer))->getRealRenderer();
+    SDL_SetTextureColorMod(texture, 255, 255, 255);
     SDL_RenderCopy(sdlRealRenderer, texture, nullptr, &rectDestination);
 }
 
