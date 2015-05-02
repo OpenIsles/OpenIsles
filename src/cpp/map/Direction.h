@@ -56,7 +56,7 @@ using EighthDirection = char;
 /**
  * @brief Makro um über alle 8 möglichen Ansichten/Richtungen zu iterieren
  */
-#define forEachEighthDirection(var) for (EighthDirection var = Direction::MIN; var < Direction::MAX; var++ )
+#define forEachEighthDirection(var) for (EighthDirection var = Direction::MIN; var < Direction::MAX; var++)
 
 
 /**
