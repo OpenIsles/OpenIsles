@@ -39,9 +39,9 @@ enum StructurePlacing {
 
 
 typedef
-struct BuildingConfig {
+struct MapObjectConfig {
     /**
-     * @brief Name des Gebäudes
+     * @brief Name des Map-Objekts
      */
     const char* name;
 
@@ -51,12 +51,12 @@ struct BuildingConfig {
     std::string nameInSavefile;
 
     /**
-      * @brief gibt an, wie das Gebäude platziert wird
+      * @brief gibt an, wie das Map-Objekt platziert wird
       */
     StructurePlacing structurePlacing;
     
     /**
-     * @brief Einzugsbereich des Gebäudes. Es gilt hierbei 0 = außerhalb, 1 = Einzugsbereich.
+     * @brief Einzugsbereich des Map-Objekts (optional). Es gilt hierbei 0 = außerhalb, 1 = Einzugsbereich.
      * 
      * Um das Rechteck korrekt anzuwenden, muss dieses symmetrisch um die Gebäudemitte angewandt werden.
      * Bsp: Ein 2x2-Gebäude mit einem 8x4-Einzugsbereich.
@@ -116,21 +116,21 @@ struct BuildingConfig {
     unsigned char inhabitants = 0;
 
     
-    ~BuildingConfig() {
+    ~MapObjectConfig() {
         if (catchmentArea != nullptr) {
             delete catchmentArea;
         }
     }
 
     /**
-     * @return Gebäudenamen
+     * @return Name des Map-Objekts
      */
     const char* getName() const {
         return name;
     }
     
     /**
-     * @return Einzugsbereich
+     * @return Einzugsbereich (kann `nullptr` sein, wenn das Map-Objekt keinen Einzugsbereich besitzt)
      */
     RectangleData<char>* getCatchmentArea() const {
         return catchmentArea;
@@ -150,7 +150,7 @@ struct BuildingConfig {
         return &buildingProduction;
     }
 
-} BuildingConfig;
+} MapObjectConfig;
 
 
 /**
@@ -228,9 +228,9 @@ class ConfigMgr {
     
 private:
     /**
-     * @brief Array mit Zeigern auf die Gebäude-Konfigurationen
+     * @brief Array mit Zeigern auf die Map-Objekt-Konfigurationen
      */
-    BuildingConfig** buildingConfigs;
+    MapObjectConfig** mapObjectConfigs;
 
     /**
      * @brief Map, die eine Zuordnung von `nameInSavefile` auf den zugehörigen `MapObjectType` macht.
@@ -279,8 +279,8 @@ public:
      * @return Konfiguration
      */
     VIRTUAL_ONLY_IN_TESTS
-    const BuildingConfig* getBuildingConfig(MapObjectType mapObjectType) const {
-        return buildingConfigs[mapObjectType];
+    const MapObjectConfig* getMapObjectConfig(MapObjectType mapObjectType) const {
+        return mapObjectConfigs[mapObjectType];
     }
 
     /**
@@ -333,9 +333,9 @@ public:
 
 private:
     /**
-     * @brief Konstruiert (TODO aus einer Datei laden) die Konfiguration der Gebäude
+     * @brief Konstruiert (TODO aus einer Datei laden) die Konfiguration der Map-Objekte
      */
-    void loadBuildingConfig();
+    void loadMapObjectConfigs();
 
     /**
      * @brief Lädt die Konfiguration der Gelände-Kacheln

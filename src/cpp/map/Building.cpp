@@ -4,15 +4,15 @@
 
 
 bool Building::isInsideCatchmentArea(const ConfigMgr* configMgr, const MapCoords& mapCoords) const {
-    const BuildingConfig* buildingConfig = configMgr->getBuildingConfig(mapObjectType);
-    const RectangleData<char>* catchmentArea = buildingConfig->getCatchmentArea();
+    const MapObjectConfig* mapObjectConfig = configMgr->getMapObjectConfig(mapObjectType);
+    const RectangleData<char>* catchmentArea = mapObjectConfig->getCatchmentArea();
 
     // Gebäude hat keinen Einzugsbereich?
     if (catchmentArea == nullptr) {
         return false;
     }
 
-    // Koordinaten innerhalb von buildingConfig.catchmentArea.data ermitteln
+    // Koordinaten innerhalb von mapObjectConfig.catchmentArea.data ermitteln
     int x, y;
     if (view == Direction::SOUTH) {
         x = (mapCoords.x() - this->mapCoords.x()) + ((catchmentArea->width - this->mapWidth) / 2);

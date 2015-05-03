@@ -18,10 +18,10 @@ EconomicsMgr::~EconomicsMgr() {
 
 void EconomicsMgr::updateProduction(Building* building) {
     const MapObjectType& mapObjectType = building->getMapObjectType();
-    const BuildingConfig* buildingConfig = context->configMgr->getBuildingConfig(mapObjectType);
+    const MapObjectConfig* mapObjectConfig = context->configMgr->getMapObjectConfig(mapObjectType);
 
     // Produziert eh nix bzw. Lager schon voll? Dann nix zu tun.
-    if (!buildingConfig->getBuildingProduction()->output.isUsed() ||
+    if (!mapObjectConfig->getBuildingProduction()->output.isUsed() ||
         building->productionSlots.output.isInventoryFull()) {
 
         return;
@@ -33,54 +33,57 @@ void EconomicsMgr::updateProduction(Building* building) {
     double oneMinuteTicks = (double) 60000 / context->game->getSpeed();
 
     // Haben wir Eingabegüter, dann wird nur produziert, wie diese verfügbar sind
-    if (buildingConfig->getBuildingProduction()->input.isUsed()) {
-        inputConsumed = (double) ticksPastSinceLastUpdate / oneMinuteTicks * buildingConfig->inputConsumptionRate;
+    if (mapObjectConfig->getBuildingProduction()->input.isUsed()) {
+        inputConsumed = (double) ticksPastSinceLastUpdate / oneMinuteTicks * mapObjectConfig->inputConsumptionRate;
 
         // nur verbrauchen, was auch da is
         if (inputConsumed > building->productionSlots.input.inventory) {
             inputConsumed = building->productionSlots.input.inventory;
         }
-        ticksInputConsumed = (unsigned int) (inputConsumed * oneMinuteTicks / buildingConfig->inputConsumptionRate);
+        ticksInputConsumed =
+            (unsigned int) (inputConsumed * oneMinuteTicks / mapObjectConfig->inputConsumptionRate);
 
-        if (buildingConfig->getBuildingProduction()->input2.isUsed()) {
-            input2Consumed = (double) ticksPastSinceLastUpdate / oneMinuteTicks * buildingConfig->input2ConsumptionRate;
+        if (mapObjectConfig->getBuildingProduction()->input2.isUsed()) {
+            input2Consumed =
+                (double) ticksPastSinceLastUpdate / oneMinuteTicks * mapObjectConfig->input2ConsumptionRate;
 
             // nur verbrauchen, was auch da is
             if (input2Consumed > building->productionSlots.input2.inventory) {
                 input2Consumed = building->productionSlots.input2.inventory;
             }
-            ticksInput2Consumed = (unsigned int) (input2Consumed * oneMinuteTicks / buildingConfig->input2ConsumptionRate);
+            ticksInput2Consumed =
+                (unsigned int) (input2Consumed * oneMinuteTicks / mapObjectConfig->input2ConsumptionRate);
         }
     }
 
     // Minimum-Ticks ermitteln, in denen wirklich produziert wurde
     unsigned int ticksWeReallyProduced = ticksPastSinceLastUpdate;
-    if (buildingConfig->getBuildingProduction()->input.isUsed()) {
+    if (mapObjectConfig->getBuildingProduction()->input.isUsed()) {
         ticksWeReallyProduced = std::min(ticksWeReallyProduced, ticksInputConsumed);
 
-        if (buildingConfig->getBuildingProduction()->input2.isUsed()) {
+        if (mapObjectConfig->getBuildingProduction()->input2.isUsed()) {
             ticksWeReallyProduced = std::min(ticksWeReallyProduced, ticksInput2Consumed);
         }
     }
 
     // Jetzt die Produktion durchführen
-    if (buildingConfig->getBuildingProduction()->input.isUsed()) {
-        inputConsumed = (double) ticksWeReallyProduced / oneMinuteTicks * buildingConfig->inputConsumptionRate;
+    if (mapObjectConfig->getBuildingProduction()->input.isUsed()) {
+        inputConsumed = (double) ticksWeReallyProduced / oneMinuteTicks * mapObjectConfig->inputConsumptionRate;
         building->productionSlots.input.decreaseInventory(inputConsumed);
 
-        if (buildingConfig->getBuildingProduction()->input2.isUsed()) {
-            input2Consumed = (double) ticksWeReallyProduced / oneMinuteTicks * buildingConfig->input2ConsumptionRate;
+        if (mapObjectConfig->getBuildingProduction()->input2.isUsed()) {
+            input2Consumed = (double) ticksWeReallyProduced / oneMinuteTicks * mapObjectConfig->input2ConsumptionRate;
             building->productionSlots.input2.decreaseInventory(input2Consumed);
         }
     }
-    outputProduced = (double) ticksWeReallyProduced / oneMinuteTicks * buildingConfig->productionRate;
+    outputProduced = (double) ticksWeReallyProduced / oneMinuteTicks * mapObjectConfig->productionRate;
     building->productionSlots.output.increaseInventory(outputProduced);
 }
 
 FindBuildingToGetGoodsFromResult EconomicsMgr::findBuildingToGetGoodsFrom(Building* building) {
     const MapObjectType& mapObjectType = building->getMapObjectType();
-    const BuildingConfig* buildingConfig = context->configMgr->getBuildingConfig(mapObjectType);
-    const RectangleData<char>* catchmentArea = buildingConfig->getCatchmentArea();
+    const MapObjectConfig* mapObjectConfig = context->configMgr->getMapObjectConfig(mapObjectType);
+    const RectangleData<char>* catchmentArea = mapObjectConfig->getCatchmentArea();
     if (catchmentArea == nullptr) {
         return FindBuildingToGetGoodsFromResult(); // kein Einzugsbereich
     }
@@ -101,8 +104,8 @@ FindBuildingToGetGoodsFromResult EconomicsMgr::findBuildingToGetGoodsFrom(Buildi
 
     bool isStorageBuilding = building->isStorageBuilding();
     if (!isStorageBuilding) {
-        goodsRequired1 = buildingConfig->getBuildingProduction()->input.goodsType;
-        goodsRequired2 = buildingConfig->getBuildingProduction()->input2.goodsType;
+        goodsRequired1 = mapObjectConfig->getBuildingProduction()->input.goodsType;
+        goodsRequired2 = mapObjectConfig->getBuildingProduction()->input2.goodsType;
 
         // Wir brauchen nur, wenn die Lager nicht voll sind
         if (goodsRequired1 != GoodsType::NO_GOODS) {
@@ -159,7 +162,8 @@ FindBuildingToGetGoodsFromResult EconomicsMgr::findBuildingToGetGoodsFrom(Buildi
             }
 
             // Gebäude, die gar nix produzieren, bringen uns nix, z.B. öffentliche Gebäude.
-            const BuildingConfig* buildingThereConfig = context->configMgr->getBuildingConfig(buildingThere->getMapObjectType());
+            const MapObjectConfig* buildingThereConfig = context->configMgr->getMapObjectConfig(
+                buildingThere->getMapObjectType());
             if (!isStorgeBuildingThere && !buildingThereConfig->getBuildingProduction()->output.isUsed()) {
                 continue;
             }

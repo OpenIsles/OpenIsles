@@ -514,8 +514,8 @@ bool GuiMap::onEventElement(SDL_Event& event) {
 
             // Ok, wir müssen nun ggf. was platzieren. Es kommt nun drauf an, was wir grade platzieren
             const MapObjectType& mapObjectType = context->guiMgr->getPanelState().addingMapObject;
-            const BuildingConfig* buildingConfig = context->configMgr->getBuildingConfig(mapObjectType);
-            StructurePlacing structurePlacing = buildingConfig->structurePlacing;
+            const MapObjectConfig* mapObjectConfig = context->configMgr->getMapObjectConfig(mapObjectType);
+            StructurePlacing structurePlacing = mapObjectConfig->structurePlacing;
             const FourthDirection& view = context->guiMgr->getPanelState().addingMapObjectView;
 
             if (structurePlacing == INDIVIDUALLY) {
@@ -717,7 +717,7 @@ void GuiMap::finishAddingStructure() {
             // Resourcen bezahlen
             Colony* colony = context->game->getColony(
                 currentPlayer, context->game->getMap()->getMapTileAt(mapCoords)->isle);
-            const BuildingCosts* buildingCosts = context->configMgr->getBuildingConfig(mapObjectType)->getBuildingCosts();
+            const BuildingCosts* buildingCosts = context->configMgr->getMapObjectConfig(mapObjectType)->getBuildingCosts();
             currentPlayer->coins -= buildingCosts->coins;
             colony->subtractBuildingCosts(buildingCosts);
         }
@@ -751,7 +751,7 @@ unsigned char GuiMap::isAllowedToPlaceMapObject(
     Colony* colony = context->game->getColony(currentPlayer, isle);
 
     if (colony != nullptr) {
-        const BuildingCosts* buildingCosts = context->configMgr->getBuildingConfig(mapObjectType)->getBuildingCosts();
+        const BuildingCosts* buildingCosts = context->configMgr->getMapObjectConfig(mapObjectType)->getBuildingCosts();
         if ((buildingCosts->coins > currentPlayer->coins) ||
             (buildingCosts->tools > colony->getGoods(GoodsType::TOOLS).inventory) ||
             (buildingCosts->wood > colony->getGoods(GoodsType::WOOD).inventory) ||
@@ -798,8 +798,8 @@ void GuiMap::drawCatchmentArea(IRenderer* const renderer, const Building* buildi
 
     renderer->setDrawColor(Color(0xc8, 0xaf, 0x37, 255));
 
-    const BuildingConfig* buildingConfig = context->configMgr->getBuildingConfig(building->getMapObjectType());
-    const RectangleData<char>* catchmentArea = buildingConfig->getCatchmentArea();
+    const MapObjectConfig* MapObjectConfig = context->configMgr->getMapObjectConfig(building->getMapObjectType());
+    const RectangleData<char>* catchmentArea = MapObjectConfig->getCatchmentArea();
 
     if (catchmentArea != nullptr) {
         const MapCoords& mapCoords = building->getMapCoords();
@@ -1059,8 +1059,8 @@ void GuiMap::updateMapObjectsTemporarilyDrawingFlags() {
     // Wir nutzen die Tatsache aus, dass immer nur dieselben Gebäude in der Bauqueue sind.
     Structure* firstStructureInList = mapObjectsBeingAdded.front();
     const MapObjectType& mapObjectType = firstStructureInList->getMapObjectType();
-    const BuildingConfig* buildingConfig = context->configMgr->getBuildingConfig(mapObjectType);
-    const BuildingCosts& buildingCostsOneTime = buildingConfig->buildingCosts;
+    const MapObjectConfig* MapObjectConfig = context->configMgr->getMapObjectConfig(mapObjectType);
+    const BuildingCosts& buildingCostsOneTime = MapObjectConfig->buildingCosts;
 
     const Player* currentPlayer = context->game->getCurrentPlayer();
 
@@ -1096,8 +1096,8 @@ void GuiMap::updateMapObjectsTemporarilyDrawingFlags() {
 
 void GuiMap::updateBuildingCosts(MapObjectType mapObjectType) {
     // Wir nutzen die Tatsache aus, dass immer nur dieselben Gebäude in der Bauqueue sind.
-    const BuildingConfig* buildingConfig = context->configMgr->getBuildingConfig(mapObjectType);
-    const BuildingCosts& buildingCostsOneTime = buildingConfig->buildingCosts;
+    const MapObjectConfig* MapObjectConfig = context->configMgr->getMapObjectConfig(mapObjectType);
+    const BuildingCosts& buildingCostsOneTime = MapObjectConfig->buildingCosts;
 
     unsigned long structuresCount = mapObjectsBeingAdded.size();
     if (structuresCount == 0) {

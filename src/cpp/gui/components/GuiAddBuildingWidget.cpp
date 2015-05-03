@@ -27,13 +27,13 @@ void GuiAddBuildingWidget::renderElement(IRenderer* renderer) {
     getWindowCoords(windowX, windowY);
 
     const MapObjectType& mapObjectType = context->guiMgr->getPanelState().addingMapObject;
-    const BuildingConfig* buildingConfig = context->configMgr->getBuildingConfig(mapObjectType);
+    const MapObjectConfig* mapObjectConfig = context->configMgr->getMapObjectConfig(mapObjectType);
 
-    // Gebäudename
-    context->fontMgr->renderText(renderer, buildingConfig->getName(), windowX + width/2, windowY + 15,
+    // Name des Map-Objekts
+    context->fontMgr->renderText(renderer, mapObjectConfig->getName(), windowX + width/2, windowY + 15,
         &colorLightBrown, &colorBlack, "DroidSans-Bold.ttf", 15, RENDERTEXT_HALIGN_CENTER);
 
-    // Gebäude-Grafik
+    // Grafik
     const FourthDirection& view = context->guiMgr->getPanelState().addingMapObjectView;
     const std::string buildingGraphicsSetName = context->graphicsMgr->getGraphicSetNameForMapObject(mapObjectType);
     const GraphicSet* buildingGraphicsSet = context->graphicsMgr->getGraphicSet(buildingGraphicsSetName);
@@ -53,7 +53,7 @@ void GuiAddBuildingWidget::renderElement(IRenderer* renderer) {
     buildingGraphic->drawScaledAt(x, y, scale);
 
     // produzierte Waren
-    const ProductionSlots* buildingProduction = buildingConfig->getBuildingProduction();
+    const ProductionSlots* buildingProduction = mapObjectConfig->getBuildingProduction();
     int productionY = windowY + 160;
     if (buildingProduction->input2.isUsed()) {
         // input + input2 -> output
@@ -81,24 +81,28 @@ void GuiAddBuildingWidget::renderElement(IRenderer* renderer) {
     int costsY = productionY + 60;
 
     context->graphicsMgr->getGraphicSet("coin")->getStatic()->getGraphic()->drawAt(windowX, costsY);
-    context->fontMgr->renderText(renderer, toString(buildingConfig->getBuildingCosts()->coins), windowX + 35, costsY + 12,
+    context->fontMgr->renderText(
+        renderer, toString(mapObjectConfig->getBuildingCosts()->coins), windowX + 35, costsY + 12,
         &colorWhite, &colorBlack, "DroidSans-Bold.ttf", 14, RENDERTEXT_HALIGN_LEFT | RENDERTEXT_VALIGN_MIDDLE);
 
     costsY += 30;
 
     std::string graphicSetName = context->graphicsMgr->getGraphicSetNameForGoodIcons(GoodsType::TOOLS, false);
     context->graphicsMgr->getGraphicSet(graphicSetName)->getStatic()->getGraphic()->drawAt(windowX, costsY);
-    context->fontMgr->renderText(renderer, toString(buildingConfig->getBuildingCosts()->tools), windowX + 35, costsY + 16,
+    context->fontMgr->renderText(
+        renderer, toString(mapObjectConfig->getBuildingCosts()->tools), windowX + 35, costsY + 16,
         &colorWhite, &colorBlack, "DroidSans-Bold.ttf", 14, RENDERTEXT_HALIGN_LEFT | RENDERTEXT_VALIGN_MIDDLE);
 
     graphicSetName = context->graphicsMgr->getGraphicSetNameForGoodIcons(GoodsType::WOOD, false);
     context->graphicsMgr->getGraphicSet(graphicSetName)->getStatic()->getGraphic()->drawAt(windowX + 60, costsY);
-    context->fontMgr->renderText(renderer, toString(buildingConfig->getBuildingCosts()->wood), windowX + 95, costsY + 16,
+    context->fontMgr->renderText(
+        renderer, toString(mapObjectConfig->getBuildingCosts()->wood), windowX + 95, costsY + 16,
         &colorWhite, &colorBlack, "DroidSans-Bold.ttf", 14, RENDERTEXT_HALIGN_LEFT | RENDERTEXT_VALIGN_MIDDLE);
 
     graphicSetName = context->graphicsMgr->getGraphicSetNameForGoodIcons(GoodsType::BRICKS, false);
     context->graphicsMgr->getGraphicSet(graphicSetName)->getStatic()->getGraphic()->drawAt(windowX + 120, costsY);
-    context->fontMgr->renderText(renderer, toString(buildingConfig->getBuildingCosts()->bricks), windowX + 155, costsY + 16,
+    context->fontMgr->renderText(
+        renderer, toString(mapObjectConfig->getBuildingCosts()->bricks), windowX + 155, costsY + 16,
         &colorWhite, &colorBlack, "DroidSans-Bold.ttf", 14, RENDERTEXT_HALIGN_LEFT | RENDERTEXT_VALIGN_MIDDLE);
 
 }

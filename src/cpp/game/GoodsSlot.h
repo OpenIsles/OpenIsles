@@ -11,8 +11,11 @@ enum GoodsType : char {
     NO_GOODS = 127,
 
     // Rohstoffe
-    WOOL = 0,
+    START_RAW_MATERIALS = 0, // Marker für isRawMaterial()
+    WOOL = START_RAW_MATERIALS,
+    SUGARCANE,
     CATTLE,
+    END_RAW_MATERIALS = CATTLE, // Marker für isRawMaterial()
 
     // Güter
     FOOD,
@@ -152,7 +155,7 @@ public:
      * @return `true`, wenn wir einen Rohstoff haben, sonst `false`
      */
     inline bool isRawMaterial() const {
-        return (goodsType == WOOL || goodsType == CATTLE);
+        return (goodsType >= START_RAW_MATERIALS && goodsType <= END_RAW_MATERIALS);
     }
 
     /**

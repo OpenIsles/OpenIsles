@@ -93,9 +93,9 @@ void drawFrame(const Context& context, IRenderer* renderer) {
     if (selectedMapObject != nullptr) {
         const Building* selectedBuilding = reinterpret_cast<const Building*>(selectedMapObject);
         if (selectedBuilding != nullptr) {
-            const BuildingConfig* buildingConfig =
-                context.configMgr->getBuildingConfig(selectedBuilding->getMapObjectType());
-            context.fontMgr->renderText(renderer, buildingConfig->name, 753, 744,
+            const MapObjectConfig* mapObjectConfig =
+                context.configMgr->getMapObjectConfig(selectedBuilding->getMapObjectType());
+            context.fontMgr->renderText(renderer, mapObjectConfig->name, 753, 744,
                 &colorWhite, nullptr, "DroidSans-Bold.ttf", 14, RENDERTEXT_HALIGN_RIGHT);
         }
     }

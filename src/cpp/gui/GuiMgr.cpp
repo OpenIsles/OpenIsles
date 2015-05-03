@@ -509,7 +509,7 @@ void GuiMgr::updateGuiFromPanelState() {
     GuiResourcesBar* guiResourcesBar = (GuiResourcesBar*) findElement(GUI_ID_RESOURCES_BAR);
     if (panelState.selectedPanelButton == PanelButton::ADD_BUILDING) {
         const MapObjectType& mapObjectType = context->guiMgr->getPanelState().addingMapObject;
-        const BuildingCosts& buildingCosts = context->configMgr->getBuildingConfig(mapObjectType)->buildingCosts;
+        const BuildingCosts& buildingCosts = context->configMgr->getMapObjectConfig(mapObjectType)->buildingCosts;
 
         guiResourcesBar->showBuildingCosts(buildingCosts);
     } else {

@@ -100,10 +100,10 @@ Structure* Game::addStructure(
 
     // Building? Defaults für Produktionsdaten setzen
     Building* building = dynamic_cast<Building*>(structure);
-    const BuildingConfig* buildingConfig = nullptr;
+    const MapObjectConfig* mapObjectConfig = nullptr;
     if (building != nullptr) {
-        buildingConfig = context->configMgr->getBuildingConfig(mapObjectType);
-        building->productionSlots = ProductionSlots(buildingConfig->buildingProduction);
+        mapObjectConfig = context->configMgr->getMapObjectConfig(mapObjectType);
+        building->productionSlots = ProductionSlots(mapObjectConfig->buildingProduction);
     }
 
     // Objekt in die Liste aufnehmen.
@@ -132,7 +132,7 @@ Structure* Game::addStructure(
         if (building->isHouse()) {
             // TODO Start-Einwohnerzahl setzen
         } else {
-            context->game->addInhabitantsToBuilding(building, buildingConfig->inhabitants);
+            context->game->addInhabitantsToBuilding(building, mapObjectConfig->inhabitants);
         }
     }
 

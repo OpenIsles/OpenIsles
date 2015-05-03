@@ -75,7 +75,7 @@ $(DATA_DIRECTORY)/img/gui/add-building/add-building-grid.png: $(SRC_DIRECTORY)/b
 BUILDINGS := butchers cathedral cattle-farm chapel foresters hunters-hut marketplace office1 office2 \
              pioneers-house1 pioneers-house2 pioneers-house3 pioneers-house4 pioneers-house5 \
              settlers-house1 settlers-house2 settlers-house3 settlers-house4 settlers-house5 \
-             sheep-farm square1 square2 square3 stonemason tavern toolsmiths weaving-mill1
+             sheep-farm square1 square2 square3 stonemason sugarcane-plantation tavern toolsmiths weaving-mill1
 
 define RENDER_BUILDING
 $(DATA_DIRECTORY)/img/objects/$(1).png: $(SRC_DIRECTORY)/blender/buildings/$(1)/$(1).blend
@@ -128,7 +128,7 @@ $(foreach STREET_TILESET,$(STREET_TILESETS),$(eval $(call RENDER_STREET_TILESET,
 # Erntebare Landschaften                                                                                               #
 ########################################################################################################################
 
-HARVESTABLES := northern-forest1 northern-forest2
+HARVESTABLES := northern-forest1 northern-forest2 sugarcane-field
 
 define RENDER_HARVESTABLE
 $(DATA_DIRECTORY)/img/harvestables/$(1).png: $(SRC_DIRECTORY)/blender/harvestables/$(1)/$(1).blend

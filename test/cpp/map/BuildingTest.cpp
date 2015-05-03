@@ -11,7 +11,7 @@
 class BuildingTestConfigMgr : public ConfigMgr {
 
 private:
-    BuildingConfig buildingConfig;
+    MapObjectConfig mapObjectConfig;
 
 public:
     /**
@@ -19,11 +19,11 @@ public:
      * @param catchmentArea Einzugsbereich
      */
     BuildingTestConfigMgr(RectangleData<char>* catchmentArea) {
-        buildingConfig.catchmentArea = catchmentArea;
+        mapObjectConfig.catchmentArea = catchmentArea;
     }
 
-    const BuildingConfig* getBuildingConfig(MapObjectType mapObjectType) const override {
-        return &buildingConfig;
+    const MapObjectConfig* getMapObjectConfig(MapObjectType mapObjectType) const override {
+        return &mapObjectConfig;
     }
 };
 

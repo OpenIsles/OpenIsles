@@ -141,8 +141,8 @@ void Map::addMapObject(MapObject* mapObject) {
 void Map::addOfficeCatchmentAreaToMap(const Building& building) {
     const MapCoords& mapCoords = building.getMapCoords();
     
-    const BuildingConfig* buildingConfig = context->configMgr->getBuildingConfig(building.getMapObjectType());
-    RectangleData<char>* catchmentArea = buildingConfig->getCatchmentArea();
+    const MapObjectConfig* mapObjectConfig = context->configMgr->getMapObjectConfig(building.getMapObjectType());
+    RectangleData<char>* catchmentArea = mapObjectConfig->getCatchmentArea();
     int catchmentAreaRadius = std::max(catchmentArea->width, catchmentArea->height); // TODO sehr optimierungsbedürftig, dafür funktionierts erstmal in allen Ansichten
     
     // TODO Sehr hässlich, aber tuts erstmal sicher, ohne Gefahr.

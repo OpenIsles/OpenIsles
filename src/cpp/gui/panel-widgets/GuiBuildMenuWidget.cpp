@@ -68,7 +68,11 @@ GuiBuildMenuWidget::GuiBuildMenuWidget(const Context* const context) : GuiPanelW
             "add-building-group/farm-pressed", {
                 { MapObjectType::NO_MAP_OBJECT, nullptr, "add-building-button/dummy" },
                 { MapObjectType::NO_MAP_OBJECT, nullptr, "add-building-button/dummy" },
-                { MapObjectType::NO_MAP_OBJECT, nullptr, "add-building-button/dummy" },
+                {
+                    MapObjectType::SUGARCANE_PLANTATION,
+                    "Zuckerrohrplantage",
+                    "add-building-button/sugarcane-plantation"
+                },
                 { MapObjectType::NO_MAP_OBJECT, nullptr, "add-building-button/dummy" },
                 { MapObjectType::NO_MAP_OBJECT, nullptr, "add-building-button/dummy" },
                 { MapObjectType::NO_MAP_OBJECT, nullptr, "add-building-button/dummy" },

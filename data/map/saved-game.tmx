@@ -905,7 +905,7 @@
     <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="farm_road_straight_90" type="structure" x="2144" y="1280" width="32" height="32">
+  <object name="farm_road_curve_270" type="structure" x="2144" y="1280" width="32" height="32">
    <properties>
     <property name="player" value="1"/>
    </properties>
@@ -3193,6 +3193,166 @@
    <properties>
     <property name="age" value="2.2"/>
     <property name="view" value="west"/>
+   </properties>
+  </object>
+  <object name="farm_road_straight_0" type="structure" x="2112" y="1280" width="32" height="32">
+   <properties>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object name="sugarcane_plantation" type="building" x="2048" y="1280" width="64" height="64">
+   <properties>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object name="sugarcane_field" type="harvestable" x="2112" y="1312" width="32" height="32">
+   <properties>
+    <property name="age" value="1"/>
+    <property name="view" value="east"/>
+   </properties>
+  </object>
+  <object name="sugarcane_field" type="harvestable" x="2048" y="1376" width="32" height="32">
+   <properties>
+    <property name="age" value="1"/>
+    <property name="view" value="east"/>
+   </properties>
+  </object>
+  <object name="sugarcane_field" type="harvestable" x="2016" y="1248" width="32" height="32">
+   <properties>
+    <property name="age" value="1"/>
+    <property name="view" value="west"/>
+   </properties>
+  </object>
+  <object name="sugarcane_field" type="harvestable" x="2080" y="1344" width="32" height="32">
+   <properties>
+    <property name="age" value="2"/>
+    <property name="view" value="south"/>
+   </properties>
+  </object>
+  <object name="sugarcane_field" type="harvestable" x="2048" y="1216" width="32" height="32">
+   <properties>
+    <property name="age" value="3"/>
+    <property name="view" value="south"/>
+   </properties>
+  </object>
+  <object name="sugarcane_field" type="harvestable" x="2016" y="1312" width="32" height="32">
+   <properties>
+    <property name="age" value="4"/>
+    <property name="view" value="south"/>
+   </properties>
+  </object>
+  <object name="sugarcane_field" type="harvestable" x="2016" y="1216" width="32" height="32">
+   <properties>
+    <property name="age" value="4"/>
+    <property name="view" value="west"/>
+   </properties>
+  </object>
+  <object name="sugarcane_field" type="harvestable" x="2080" y="1216" width="32" height="32">
+   <properties>
+    <property name="age" value="2"/>
+    <property name="view" value="south"/>
+   </properties>
+  </object>
+  <object name="sugarcane_field" type="harvestable" x="2112" y="1344" width="32" height="32">
+   <properties>
+    <property name="age" value="2"/>
+    <property name="view" value="east"/>
+   </properties>
+  </object>
+  <object name="sugarcane_field" type="harvestable" x="2144" y="1312" width="32" height="32">
+   <properties>
+    <property name="age" value="1"/>
+    <property name="view" value="east"/>
+   </properties>
+  </object>
+  <object name="sugarcane_field" type="harvestable" x="2016" y="1344" width="32" height="32">
+   <properties>
+    <property name="age" value="1"/>
+    <property name="view" value="south"/>
+   </properties>
+  </object>
+  <object name="sugarcane_field" type="harvestable" x="1984" y="1280" width="32" height="32">
+   <properties>
+    <property name="age" value="3"/>
+    <property name="view" value="south"/>
+   </properties>
+  </object>
+  <object name="sugarcane_field" type="harvestable" x="2016" y="1280" width="32" height="32">
+   <properties>
+    <property name="age" value="3"/>
+    <property name="view" value="west"/>
+   </properties>
+  </object>
+  <object name="sugarcane_field" type="harvestable" x="2080" y="1248" width="32" height="32">
+   <properties>
+    <property name="age" value="3"/>
+    <property name="view" value="west"/>
+   </properties>
+  </object>
+  <object name="sugarcane_field" type="harvestable" x="2048" y="1248" width="32" height="32">
+   <properties>
+    <property name="age" value="2"/>
+    <property name="view" value="west"/>
+   </properties>
+  </object>
+  <object name="sugarcane_field" type="harvestable" x="2112" y="1248" width="32" height="32">
+   <properties>
+    <property name="age" value="4"/>
+    <property name="view" value="north"/>
+   </properties>
+  </object>
+  <object name="sugarcane_field" type="harvestable" x="2048" y="1344" width="32" height="32">
+   <properties>
+    <property name="age" value="2"/>
+    <property name="view" value="north"/>
+   </properties>
+  </object>
+  <object name="sugarcane_field" type="harvestable" x="2112" y="1376" width="32" height="32">
+   <properties>
+    <property name="age" value="1"/>
+    <property name="view" value="north"/>
+   </properties>
+  </object>
+  <object name="sugarcane_field" type="harvestable" x="2080" y="1376" width="32" height="32">
+   <properties>
+    <property name="age" value="2"/>
+    <property name="view" value="east"/>
+   </properties>
+  </object>
+  <object name="sugarcane_field" type="harvestable" x="2016" y="1376" width="32" height="32">
+   <properties>
+    <property name="age" value="3"/>
+    <property name="view" value="east"/>
+   </properties>
+  </object>
+  <object name="sugarcane_field" type="harvestable" x="1984" y="1248" width="32" height="32">
+   <properties>
+    <property name="age" value="2"/>
+    <property name="view" value="west"/>
+   </properties>
+  </object>
+  <object name="sugarcane_field" type="harvestable" x="1984" y="1312" width="32" height="32">
+   <properties>
+    <property name="age" value="3"/>
+    <property name="view" value="west"/>
+   </properties>
+  </object>
+  <object name="sugarcane_field" type="harvestable" x="2144" y="1344" width="32" height="32">
+   <properties>
+    <property name="age" value="2"/>
+    <property name="view" value="east"/>
+   </properties>
+  </object>
+  <object name="sugarcane_field" type="harvestable" x="1984" y="1344" width="32" height="32">
+   <properties>
+    <property name="age" value="4"/>
+    <property name="view" value="north"/>
+   </properties>
+  </object>
+  <object name="sugarcane_field" type="harvestable" x="2112" y="1216" width="32" height="32">
+   <properties>
+    <property name="age" value="4"/>
+    <property name="view" value="south"/>
    </properties>
   </object>
  </objectgroup>
