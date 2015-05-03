@@ -250,7 +250,7 @@ void Map::clearMap() {
     isles.clear();
 }
 
-bool Map::isStreetAt(const MapCoords& mapCoords) {
+bool Map::isStreetAt(const MapCoords& mapCoords) const {
     MapObjectFixed* mapObject = getMapObjectFixedAt(mapCoords);
     if (mapObject == nullptr) {
         return false;
@@ -258,4 +258,14 @@ bool Map::isStreetAt(const MapCoords& mapCoords) {
 
     Structure* structure = dynamic_cast<Structure*>(mapObject);
     return ((structure != nullptr) && structure->isStreet());
+}
+
+bool Map::isWalkableForCartAt(const MapCoords& mapCoords) const {
+    MapObjectFixed* mapObject = getMapObjectFixedAt(mapCoords);
+    if (mapObject == nullptr) {
+        return false;
+    }
+
+    Structure* structure = dynamic_cast<Structure*>(mapObject);
+    return ((structure != nullptr) && structure->isWalkableForCart());
 }

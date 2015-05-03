@@ -55,6 +55,9 @@ Isle::Isle(const char* filename) {
 
 	// XML-Document wegräumen
 	delete xmlDocument;
+
+	// Insel sind (TODO) vorerst immer in derselben Ansicht
+	view = Direction::SOUTH;
 }
 
 Isle::~Isle() {

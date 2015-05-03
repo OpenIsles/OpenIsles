@@ -277,9 +277,17 @@ public:
 	/**
 	 * @brief Ermittelt, ob an einer bestimmten Stelle ein Weg liegt.
 	 * @param mapCoords Map-Koordianten
-	 * @return true, wenn ein Weg (Feldweg, Pflasterstraße oder Platz) da ist; sonst false.
+	 * @return `true`, wenn ein Weg (Feldweg oder Pflasterstraße) da ist; sonst `false`.
 	 */
-	bool isStreetAt(const MapCoords& mapCoords);
+	bool isStreetAt(const MapCoords& mapCoords) const;
+
+    /**
+	 * @brief Ermittelt, ob ein Marktkarren eine bestimmte Stelle befahren darf.
+	 * @param mapCoords Map-Koordianten
+	 * @return `true`, wenn ein Marktkarren dort fahren darf, d.&nbsp;h. ein Feldweg, Pflasterstraße oder Platz da ist;
+     * sonst `false`.
+	 */
+    bool isWalkableForCartAt(const MapCoords& mapCoords) const;
 
 private:
     /**

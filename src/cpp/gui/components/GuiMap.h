@@ -2,6 +2,8 @@
 #define _GUI_MAP_H
 
 #include <SDL_render.h>
+#include <memory>
+#include <unordered_map>
 #include "Context.h"
 #include "gui/components/GuiBase.h"
 #include "gui/components/GuiResourcesBar.h"
@@ -53,16 +55,46 @@
 
 /**
  * @brief Ähnlich `MapTile` stellt diese Struktur eine Kachel auf der Karte dar. Hier sind alle Infos drin, die wir
- * zwar zeichnen müssen, allerdings noch nicht im Spielstand enthalten sind.
+ * temporär brauchen. Wir müssen sie zwar zeichnen, allerdings sind sie noch nicht im Spielstand enthalten.
+ *
+ * Außerdem sind hier bevorstehende Veränderungen enthalten. Beispiele:
+ * - Eine Waldkachel muss temporär gezeichnet werden (als Hover-Objekt bezeichnet).
+ *   Sie ist aktuell nicht gesetzt, da der Spieler noch nicht die Maustaste gedrückt hat.
+ * - Eine Straßen-Kurve-Kachel muss temporär durch eine T-Kachel ersetzt werden, wenn eine Straße angeschlossen wird.
+ *   Auch diese Veränderung muss bei Bauabschluss in den Spielzustand übernommen werden.
+ * - Temporär muss eine Kachel maskiert gezeichnet werden.
+ *   Bei Bauabschluss muss die Kachel gelöscht werden, da der Nutzer das Abrisswerkzeug benutzt hat.
+ * - Temporär wird statt einer Waldkachel ein Wohnhaus gezeichnet. Hier ist zu beachten, dass das Wohnhaus 2x2 Felder
+ *   groß ist, die Waldkachel nur 1x1. Alle 4 Kacheln erhalten eine temporäre `draw`-Ersetzung. Außerdings ist die
+ *   `build`-Ersetzung nur bei einer Kachel das Wohnhaus. Die anderen 3 Kacheln sind auf `nullptr` gesetzt.
  */
-struct MapTileTemporialy {
+struct MapTileTemporarily {
 
 public:
     /**
-     * @brief Zeiger auf ein MapObject (durch `mapObjectsBeingAdded` verwaltet), das auf dieser Kachel gezeichnet
-     * werden soll oder nullptr, wenns nix da is.
+     * @brief Zeiger auf ein MapObject (selbst-verwaltet), das auf dieser Kachel gezeichnet werden soll.
+     * `nullptr` bedeutet, keine Ersetzung beim Zeichnen.
      */
-    MapObjectFixed* mapObject = nullptr;
+    MapObjectFixed* mapObjectToDraw = nullptr;
+
+    /**
+     * @brief wenn auf `true` gesetzt, wird die Kachel maskiert gezeichnet.
+     */
+    bool drawTileMasked = false;
+
+    /**
+     * @brief Zeiger auf ein MapObject (selbst-verwaltet), das beim Abschluss der Bauoperation das bestehende
+     * Map-Objekt ersetzt (bzw. hinzugefügt werden soll). `nullptr` bedeutet "keine Ersetzung". Um das Objekt zu
+     * löschen, muss stattdessen `deleteMapObjectHere` auf `true` gesetzt werden.
+     */
+    MapObjectFixed* mapObjectToReplaceWith = nullptr;
+
+    /**
+     * @brief auf `true` gesetzt wird beim Abschluss der Bauoperation das bestehende Map-Objekt gelöscht.
+     * Wird für Abreißen und Überbauen von kleineren Objekten durch größere benutzt benutzt.
+     */
+    bool deleteMapObjectHere = false;
+
 };
 
 
@@ -85,26 +117,16 @@ private:
     bool inBuildingMode = false;
 
     /**
-     * Liste von Map-Objekten, die gerade hinzugefügt werden. Die Reihenfolge ist die, in der der Spieler sie
-     * hinzugefügt hat. Im Falle von Resourcenmangel werden nur vordersten Objekte wirklich gesetzt.
-     * In dieser Liste sind alle Gebäude, die beim Loslassen der linken Maustaste wirklich gesetzt werden. D.&nbsp;h.
-     * `mapObjectBeingAddedHovering` befindet sich NICHT in dieser Liste
+     * Build-Queue = Liste von Map-Objekten, die gebaut werden sollen. Die Reihenfolge ist die, in der der Spieler sie
+     * hinzugefügt hat. Im Falle von Resourcenmangel werden nur vordersten Objekte wirklich gebaut.
      *
-     * Die `drawingFlags` dieser Objekte sind nicht immer korrekt, da sich die verfügbaren Resourcen ständig ändern.
-     * Sie werden bei jedem Frame vor dem Zeichnen aktualisiert.
+     * In dieser Liste sind alle Gebäude, die beim Loslassen der linken Maustaste wirklich gesetzt werden.
+     * Ist die linke Maustaste noch nicht gedrückt, d.&nbsp;h. der Spieler sieht das Objekt nur als Hover-Objekt,
+     * so befindet sich dieses Objekt NICHT in dieser Build-Queue.
      *
-     * TODO später mit einem Zusatzflag, ob sie nicht grade abgerissen werden
+     * Die `drawingFlags` dieser Objekte sind irrelevant.
      */
-    std::list<Structure*> mapObjectsBeingAdded;
-
-    /**
-     * @brief Zeiger auf ein Gebäude (selbst verwaltet), was gerade positioniert wird. Es befindet sich nicht in
-     * `mapObjectsBeingAdded`, da noch unklar ist, wo der Spieler es hinsetzen will.
-     *
-     * Wir haben hier immer genau dann einen Wert gesetzt, wenn `inBuildingMode == true` und der Spieler noch nicht
-     * die linke Maustaste gedrückt hat.
-     */
-    Structure* mapObjectBeingAddedHovering = nullptr;
+    std::list<MapObjectFixed*> buildQueue;
 
     // Datenstrukturen, die wir zum Rendern brauchen ///////////////////////////////////////////////////////////////////
 
@@ -117,15 +139,18 @@ private:
 
     /**
      * @brief Datenstruktur, mit der uns merken, was temporär zu zeichnen ist. Das sind alle Objekte, die gerade
-     * positioniert werden oder im Begriff sind, abgerissen zu werden.
+     * positioniert werden, im Begriff sind, abgerissen zu werden oder das Hover-Objekt.
+     *
+     * Die `drawingFlags` dieser Objekte sind nicht immer korrekt, da sich die verfügbaren Resourcen ständig ändern.
+     * Sie werden bei jedem Frame vor dem Zeichnen aktualisiert.
      */
-    RectangleData<MapTileTemporialy*>* mapTilesToDrawTemporarily = nullptr;
+    std::unordered_map<const MapCoords, MapTileTemporarily> mapTilesToDrawTemporarily;
 
     /**
-     * @brief Zeiger auf ein Gebäude (durch `mapObjectsBeingAdded` verwaltet), für welches der
+     * @brief Zeiger auf ein Gebäude (durch `mapTilesToDrawTemporarily` verwaltet), für welches der
      * Einzugsbereich gezeichnet werden soll.
      */
-    Building* buildingToDrawCatchmentArea = nullptr;
+    Building* buildingToDrawCatchmentArea = nullptr; // TODO kann man wohl wegrefactoren. Das erste Gebäude in mapTilesToDrawTemporarily einfach beim Rendern merken.
 
 #ifdef DEBUG
     /**
@@ -180,6 +205,9 @@ public:
     void onRotateAddingStructure();
 
 private:
+
+    // TODO Methoden sortieren!!!
+
     /**
      * @brief Zeichnet den Einzugsbereich eines Gebäudes.
      * @param renderer (Dependency)
@@ -188,11 +216,13 @@ private:
     void drawCatchmentArea(IRenderer* const renderer, const Building* building);
 
     /**
-     * @brief interner Klickhandler, wenn in die Karte geklickt wurde.
+     * @brief interner Klickhandler, wenn in die Karte geklickt wurde, um etwas zu selektieren
+     * (d.&nbsp;h. nicht im Baumodus).
+     *
      * @param mouseX X-Fenster-Koordinate, die geklickt wurde
      * @param mouseY Y-Fenster-Koordinate, die geklickt wurde
      */
-    void onClickInMap(int mouseX, int mouseY);
+    void onClickInMapForSelection(int mouseX, int mouseY);
 
     /**
      * Prüft, ob eine bestimmte Struktur an eine bestimmte Position gesetzt werden darf.
@@ -206,38 +236,26 @@ private:
     unsigned char isAllowedToPlaceMapObject(
         const MapCoords& mapCoords, MapObjectType mapObjectType, const FourthDirection& view) const;
 
-//    /**
-//     * @brief Berechnet welcher konkrete MapObjectType für eine Straßenkachel verwendet werden muss. Als Eingabeparameter
-//     * abstractStreetMapObjectType wird festgelegt, ob Pflasterstraße oder Feldweg und an welchen Map-Koordinaten die
-//     * Grafik gesetzt werden soll. Diese Methode bestimmt ausgehend von umliegenden Wegen, ob Gerade, Kurve, T-Stück
-//     * oder Kreuzung verwendet werden muss und gibt diesen MapObjectType zurück.
-//     * @param mapCoords Map-Koordinaten, für die berechnet werden soll
-//     * @param abstractStreetMapObjectType spezifiziert, welcher Typ von Weg gewünscht wird
-//     * @return konkreter MapObjectType, der an dieser Stelle verwendet werden muss
-//     * TODO Feldweg
-//     */
-//    MapObjectType getConcreteStreetMapObjectType(
-//        const MapCoords& mapCoords, MapObjectType abstractStreetMapObjectType) const;
-
     /**
-     * @brief Entfernt alle Objekte in `mapObjectsBeingAdded` und `mapTilesToDrawTemporarily` und setzt
+     * @brief Entfernt alle Objekte in `buildQueue` und `mapTilesToDrawTemporarily` und setzt
      * `buildingToDrawCatchmentArea` auf `nullptr`.
      */
     void clearAllTemporarily();
 
     /**
-    * @brief Beendet das Setzen neuer Gebäude. Alle Gebäude werden nun gesetzt.
+    * @brief interner Eventhandler, der beim Loselassen der linken Maustaste im Baumodus greift.
+    * Beendet das Setzen neuer Gebäude. Alle Gebäude werden nun gesetzt.
     */
-    void finishAddingStructure();
+    void onReleaseMouseLeftInBuildingMode();
 
     /**
-     * @brief Fügt ein Gebäude zu `mapObjectsBeingAdded` hinzu.
+     * @brief Fügt ein Gebäude zu `buildQueue` hinzu.
      * @param mapCoords Map-Koordinaten, wo das Gebäude platziert werden soll
      */
     void addCurrentStructureToMapObjectsBeingAdded(const MapCoords& mapCoords);
 
     /**
-     * @brief Aktualisiert die `drawingFlags` der `mapObjectsBeingAdded` und `mapObjectBeingAddedHovering`.
+     * @brief Aktualisiert die `drawingFlags` der `mapTilesToDrawTemporarily`.
      * Dies ist immer vor jedem Frame-Rendern notwendig, da sich ständig die verfügbaren Resourcen ändern.
      */
     void updateMapObjectsTemporarilyDrawingFlags();
@@ -248,6 +266,52 @@ private:
      *                      also geben wir sie der Methode gleich mit.
      */
     void updateBuildingCosts(MapObjectType mapObjectType);
+
+    /**
+     * @brief Erzeugt/Aktualisiert das Hover-Objekt.
+     *
+     * Dieser interne Eventhandler wird aufgerufen, wenn
+     * - die Maus auf eine andere Kachel bewegt wurde,
+     * - wir uns im Baumodus befinden
+     * - und die Maustaste NICHT gedrückt ist.
+     *
+     * Ebenfalls muss diese Methode aufgerufen werden, wenn
+     * - in den Baumodus gewechselt wird, damit das Hover-Objekt gezeigt wird oder
+     * - der Spieler das Objekt dreht, damit das Hover-Objekt aktualisiert wird.
+     */
+    void updateHoverObject();
+
+    /**
+     * Fügt ggf. ein neues MapTileTemporarily-Objekt zu mapTilesToDrawTemporarily hinzu.
+     * Wir tun das wenn,
+     * - die linke Maustaste im Baumodus gerade heruntergedrückt wurde
+     *   (d.&nbsp;h. der Spieler grade mit dem Bau beginnt)
+     * - oder die linke Maustaste bereits gedrückt ist und die Maus auf eine neue Kachel bewegt wurde.
+     *
+     * Wenn an dem Ort gebaut werden darf (d.&nbsp;h. nix im Weg is), wird mapTilesToDrawTemporarily ergänzt.
+     * Andernfalls passiert gar nix.
+     */
+    void addToBuildQueue();
+
+    /**
+     * @brief Aktualisiert die `mapTilesToDrawTemporarily` einer bestimmten. Dies verändert ggf. eine
+     * Straßenkachel, wenn wir im Begriff sind, Straßen zu bauen und somit z.&nbsp;B. eine Gerade zu einem
+     * T-Stück wird.
+     *
+     * @param mapCoordsToUpdate Map-Koordinate, die ggf. aktualisiert werden soll
+     */
+    void updateMapTilesToDrawTemporarilyForStreetsAt(const MapCoords& mapCoordsToUpdate);
+
+    /**
+     * @brief Aktualisiert die `mapTilesToDrawTemporarily` um eine bestimmte Kachel herum. Dies verändert ggf.
+     * Straßenkacheln, wenn wir im Begriff sind, Straßen zu bauen und somit z.&nbsp;B. eine Gerade zu einem
+     * T-Stück wird.
+     *
+     * @param mapCoordsToUpdateAround Map-Koordinate, um die horizontal- und vertikal-angrenzende Felder ggf.
+     * aktualisiert werden sollen
+     */
+    void updateMapTilesToDrawTemporarilyForStreetsAround(const MapCoords& mapCoordsToUpdateAround);
+
 };
 
 #endif

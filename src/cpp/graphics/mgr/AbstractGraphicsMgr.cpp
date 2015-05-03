@@ -113,10 +113,6 @@ void AbstractGraphicsMgr::loadGraphics() {
     loadStaticGraphicSet("button-music", "data/img/gui/button-music.png");
     loadStaticGraphicSet("button-music-pressed", "data/img/gui/button-music-pressed.png");
 
-    renderer->setHintRenderScaleQuality("0");
-    loadStaticGraphicSet("plain-tile", "data/img/plain-tile.png");
-    renderer->setHintRenderScaleQuality("2");
-
     loadStaticAnimationGraphicSetWith8Views("carrier", "data/img/objects/carrier.png", 1, 1, 31);
     loadStaticAnimationGraphicSetWith8Views("cart-without-cargo", "data/img/objects/cart-without-cargo.png", 1, 1, 32);
     loadStaticAnimationGraphicSetWith8Views("cart-with-cargo", "data/img/objects/cart-with-cargo.png", 1, 1, 32);
