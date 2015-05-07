@@ -72,10 +72,11 @@ struct MapTileTemporarily {
 
 public:
     /**
-     * @brief Zeiger auf ein MapObject (selbst-verwaltet), das auf dieser Kachel gezeichnet werden soll.
+     * @brief Zeiger auf ein MapObject, das auf dieser Kachel gezeichnet werden soll.
      * `nullptr` bedeutet, keine Ersetzung beim Zeichnen.
+     * Dasselbe Objekt wird via shared_ptr mehrfach in die Map eingebunden, wenn es mehrere Kacheln belegt.
      */
-    MapObjectFixed* mapObjectToDraw = nullptr;
+    std::shared_ptr<MapObjectFixed> mapObjectToDraw = nullptr;
 
     /**
      * @brief wenn auf `true` gesetzt, wird die Kachel maskiert gezeichnet.
@@ -126,7 +127,7 @@ private:
      *
      * Die `drawingFlags` dieser Objekte sind irrelevant.
      */
-    std::list<MapObjectFixed*> buildQueue;
+    std::list<std::shared_ptr<MapObjectFixed>> buildQueue;
 
     // Datenstrukturen, die wir zum Rendern brauchen ///////////////////////////////////////////////////////////////////
 
@@ -147,10 +148,9 @@ private:
     std::unordered_map<const MapCoords, MapTileTemporarily> mapTilesToDrawTemporarily;
 
     /**
-     * @brief Zeiger auf ein Gebäude (durch `mapTilesToDrawTemporarily` verwaltet), für welches der
-     * Einzugsbereich gezeichnet werden soll.
+     * @brief Zeiger auf ein Gebäude, für welches der Einzugsbereich gezeichnet werden soll.
      */
-    Building* buildingToDrawCatchmentArea = nullptr; // TODO kann man wohl wegrefactoren. Das erste Gebäude in mapTilesToDrawTemporarily einfach beim Rendern merken.
+    std::shared_ptr<Building> buildingToDrawCatchmentArea = nullptr; // TODO kann man wohl wegrefactoren. Das erste Gebäude in mapTilesToDrawTemporarily einfach beim Rendern merken.
 
 #ifdef DEBUG
     /**
@@ -213,7 +213,7 @@ private:
      * @param renderer (Dependency)
      * @param building Gebäude
      */
-    void drawCatchmentArea(IRenderer* const renderer, const Building* building);
+    void drawCatchmentArea(IRenderer* const renderer, const Building& building);
 
     /**
      * @brief interner Klickhandler, wenn in die Karte geklickt wurde, um etwas zu selektieren

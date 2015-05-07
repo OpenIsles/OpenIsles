@@ -176,7 +176,7 @@ void GuiMap::renderElement(IRenderer* renderer) {
         // Temporär was anderes zeichnen?
         auto iterMapTileTemporarily = mapTilesToDrawTemporarily.find(mapCoords);
         if (iterMapTileTemporarily != mapTilesToDrawTemporarily.cend()) {
-            mapObjectToDrawHere = iterMapTileTemporarily->second.mapObjectToDraw;
+            mapObjectToDrawHere = iterMapTileTemporarily->second.mapObjectToDraw.get();
             updateMapObjectsTemporarilyDrawingFlags();
         }
 
@@ -367,7 +367,7 @@ void GuiMap::renderElement(IRenderer* renderer) {
 
     // Einzugsbereich jetzt malen, damit er oben drauf is
     if (buildingToDrawCatchmentArea != nullptr) {
-        drawCatchmentArea(renderer, buildingToDrawCatchmentArea);
+        drawCatchmentArea(renderer, *buildingToDrawCatchmentArea);
     }
 
 #ifdef DEBUG_A_STAR
@@ -626,12 +626,12 @@ void GuiMap::updateHoverObject() {
     // Zu belegende Kachel mehrfach durchgehen.
 
     // Loop 1: Gucken, ob das Gebäude komplett Platz hat. Falls nicht, nur Gelände maskiert anzeigen.
-    bool noFreeSpace = false;
+    bool allTilesFree = true;
     for (int y = mapCoordsUnderMouse.y(); y < mapCoordsUnderMouse.y() + mapHeight; y++) {
         for (int x = mapCoordsUnderMouse.x(); x < mapCoordsUnderMouse.x() + mapWidth; x++) {
 
             if (map->getMapObjectFixedAt(MapCoords(x, y)) != nullptr) {
-                noFreeSpace = true;
+                allTilesFree = false;
                 goto endLoop1;
             }
         }
@@ -639,25 +639,29 @@ void GuiMap::updateHoverObject() {
 endLoop1:
 
     // Loop 2: Nun durchgehen und entweder das masked-Flag oder das neu zu erstellende Map-Objekt setzen.
+    std::shared_ptr<MapObjectFixed> mapObjectHover;
+    if (allTilesFree) {
+        MapObjectFixed* mapObjectFixed = (mapObjectType >= START_BUILDINGS) ? new Building() : new Structure(); // TODO Harvestable; Idee: Fabrik-Methode
+        mapObjectFixed->setMapObjectType(mapObjectType);
+        mapObjectFixed->setMapCoords(mapCoordsUnderMouse);
+        mapObjectFixed->setMapWidth(graphic->getMapWidth());
+        mapObjectFixed->setMapHeight(graphic->getMapHeight());
+        mapObjectFixed->setView(view);
+        mapObjectFixed->setDrawingFlags(IGraphic::DRAWING_FLAG_MASKED);
+
+        mapObjectHover.reset(mapObjectFixed);
+
+        buildingToDrawCatchmentArea = std::dynamic_pointer_cast<Building>(mapObjectHover);
+    }
+
     for (int y = mapCoordsUnderMouse.y(); y < mapCoordsUnderMouse.y() + mapHeight; y++) {
         for (int x = mapCoordsUnderMouse.x(); x < mapCoordsUnderMouse.x() + mapWidth; x++) {
             const MapCoords& mapCoords = MapCoords(x, y);
 
-            if (noFreeSpace && map->getMapObjectFixedAt(mapCoords) == nullptr) {
-                 mapTilesToDrawTemporarily[mapCoords].drawTileMasked = true;
-            } else if (!noFreeSpace) {
-                // TODO shared_ptr benutzen
-                MapObjectFixed* mapObjectHover = (mapObjectType >= START_BUILDINGS) ? new Building() : new Structure(); // TODO Harvestable; Idee: Fabrik-Methode
-                mapObjectHover->setMapObjectType(mapObjectType);
-                mapObjectHover->setMapCoords(mapCoordsUnderMouse);
-                mapObjectHover->setMapWidth(graphic->getMapWidth());
-                mapObjectHover->setMapHeight(graphic->getMapHeight());
-                mapObjectHover->setView(view);
-                mapObjectHover->setDrawingFlags(IGraphic::DRAWING_FLAG_MASKED);
-
+            if (allTilesFree) {
                 mapTilesToDrawTemporarily[mapCoords].mapObjectToDraw = mapObjectHover;
-
-                buildingToDrawCatchmentArea = dynamic_cast<Building*>(mapObjectHover);
+            } else if (!allTilesFree && map->getMapObjectFixedAt(mapCoords) == nullptr) {
+                mapTilesToDrawTemporarily[mapCoords].drawTileMasked = true;
             }
         }
     }
@@ -820,7 +824,7 @@ unsigned char GuiMap::isAllowedToPlaceMapObject(
 
             auto iterMapTileTemporarily = mapTilesToDrawTemporarily.find(MapCoords(x, y));
             if (iterMapTileTemporarily != mapTilesToDrawTemporarily.cend()) {
-                if (iterMapTileTemporarily->second.mapObjectToDraw != nullptr) {
+                if (iterMapTileTemporarily->second.mapObjectToDraw) {
                     // Zwar noch nicht echt gebaut, allerdings wollen wir da was hinbauen.
                     result |= PLACING_STRUCTURE_SOMETHING_IN_THE_WAY_TEMPORARILY;
                 }
@@ -839,18 +843,18 @@ unsigned char GuiMap::isAllowedToPlaceMapObject(
     return result;
 }
 
-void GuiMap::drawCatchmentArea(IRenderer* const renderer, const Building* building) {
+void GuiMap::drawCatchmentArea(IRenderer* const renderer, const Building& building) {
     Map* map = context->game->getMap();
     int screenZoom = map->getScreenZoom();
     const FourthDirection& screenView = map->getScreenView();
 
     renderer->setDrawColor(Color(0xc8, 0xaf, 0x37, 255));
 
-    const BuildingConfig* buildingConfig = context->configMgr->getBuildingConfig(building->getMapObjectType());
+    const BuildingConfig* buildingConfig = context->configMgr->getBuildingConfig(building.getMapObjectType());
     const RectangleData<char>* catchmentArea = buildingConfig->getCatchmentArea();
 
     if (catchmentArea != nullptr) {
-        const MapCoords& mapCoords = building->getMapCoords();
+        const MapCoords& mapCoords = building.getMapCoords();
         int catchmentAreaRadius = std::max(catchmentArea->width, catchmentArea->height); // TODO sehr optimierungsbedürftig, dafür funktionierts erstmal in allen Ansichten
 
         for (int mapY = mapCoords.y() - catchmentAreaRadius; mapY <= mapCoords.y() + catchmentAreaRadius; mapY++) {
@@ -860,11 +864,11 @@ void GuiMap::drawCatchmentArea(IRenderer* const renderer, const Building* buildi
                 MapCoords mapCoordsSouth(mapX, mapY + 1);
 
                 bool mapCoordsHereInSideCatchmentArea =
-                    building->isInsideCatchmentArea(context->configMgr, mapCoordsHere);
+                    building.isInsideCatchmentArea(context->configMgr, mapCoordsHere);
                 bool mapCoordsEastInSideCatchmentArea =
-                    building->isInsideCatchmentArea(context->configMgr, mapCoordsEast);
+                    building.isInsideCatchmentArea(context->configMgr, mapCoordsEast);
                 bool mapCoordsSouthInSideCatchmentArea =
-                    building->isInsideCatchmentArea(context->configMgr, mapCoordsSouth);
+                    building.isInsideCatchmentArea(context->configMgr, mapCoordsSouth);
 
                 auto drawLineBetweenMapCoords = [&](const MapCoords& mapCoords1, const MapCoords& mapCoords2) {
                     ScreenCoords screenCoords1 = MapCoordUtils::mapToScreenCoords(mapCoords1, screenView, *map);
@@ -941,18 +945,11 @@ void GuiMap::onRotateAddingStructure() {
 }
 
 void GuiMap::clearAllTemporarily() {
-    for (auto iter = buildQueue.cbegin(); iter != buildQueue.cend(); iter++) {
-        MapObjectFixed* mapObject = *iter;
-        delete mapObject;
-    }
     buildQueue.clear();
 
     for (auto iter = mapTilesToDrawTemporarily.cbegin(); iter != mapTilesToDrawTemporarily.cend(); iter++) {
         const MapTileTemporarily& mapTileTemporarily = iter->second;
 
-        if (mapTileTemporarily.mapObjectToDraw != nullptr) {
-            delete mapTileTemporarily.mapObjectToDraw;
-        }
         if (mapTileTemporarily.mapObjectToReplaceWith != nullptr) {
             delete mapTileTemporarily.mapObjectToReplaceWith;
         }
@@ -980,37 +977,29 @@ void GuiMap::addCurrentStructureToBuildQueue(const MapCoords& mapCoords) {
         mapObjectType = (MapObjectType) randomPioneerHouse(randomEngine);
     }
 
-    Structure* structureBeingAdded = (mapObjectType >= START_BUILDINGS) ? new Building() : new Structure(); // TODO Fabrik-Methode
-    structureBeingAdded->setMapObjectType(mapObjectType);
-    structureBeingAdded->setMapCoords(mapCoords);
-    structureBeingAdded->setMapWidth(graphic->getMapWidth());
-    structureBeingAdded->setMapHeight(graphic->getMapHeight());
-    structureBeingAdded->setView(context->guiMgr->getPanelState().addingMapObjectView);
-    structureBeingAdded->setDrawingFlags(IGraphic::DRAWING_FLAG_MASKED);
+    Structure* structure = (mapObjectType >= START_BUILDINGS) ? new Building() : new Structure(); // TODO Fabrik-Methode
+    structure->setMapObjectType(mapObjectType);
+    structure->setMapCoords(mapCoords);
+    structure->setMapWidth(graphic->getMapWidth());
+    structure->setMapHeight(graphic->getMapHeight());
+    structure->setView(context->guiMgr->getPanelState().addingMapObjectView);
+    structure->setDrawingFlags(IGraphic::DRAWING_FLAG_MASKED);
 
+    std::shared_ptr<MapObjectFixed> structureBeingAdded(structure);
     buildQueue.push_back(structureBeingAdded);
 
     for (int my = mapCoords.y(); my < mapCoords.y() + graphic->getMapHeight(); my++) {
         for (int mx = mapCoords.x(); mx < mapCoords.x() + graphic->getMapWidth(); mx++) {
-            // Für mapTilesToDrawTemporarily nochmal anlegen
-            // TODO shared_ptr
-            Structure* structure = (mapObjectType >= START_BUILDINGS) ? new Building() : new Structure(); // TODO Fabrik-Methode
-            structure->setMapObjectType(mapObjectType);
-            structure->setMapCoords(mapCoords);
-            structure->setMapWidth(graphic->getMapWidth());
-            structure->setMapHeight(graphic->getMapHeight());
-            structure->setView(context->guiMgr->getPanelState().addingMapObjectView);
-            structure->setDrawingFlags(IGraphic::DRAWING_FLAG_MASKED);
-            mapTilesToDrawTemporarily[MapCoords(mx, my)].mapObjectToDraw = structure;
+            mapTilesToDrawTemporarily[MapCoords(mx, my)].mapObjectToDraw = structureBeingAdded;
         }
     }
 
     // Hovering beenden. Jetzt ist die linke Maustaste runtergedrückt und wir adden immer zu buildQueue.
-    MapObjectFixed* firstMapObjectInList = buildQueue.front();
+    std::shared_ptr<MapObjectFixed> firstMapObjectInList = buildQueue.front();
 
     // Einzugsbereich wird am ersten Gebäude in buildQueue gezeichnet
     // TODO nur machen, wenn wir grade das erste Objekt in die Liste haben
-    buildingToDrawCatchmentArea = dynamic_cast<Building*>(firstMapObjectInList);
+    buildingToDrawCatchmentArea = std::dynamic_pointer_cast<Building>(firstMapObjectInList);
 
     updateMapTilesToDrawTemporarilyForStreetsAt(mapCoords);
     updateMapTilesToDrawTemporarilyForStreetsAround(mapCoords);
@@ -1023,33 +1012,28 @@ void GuiMap::updateMapObjectsTemporarilyDrawingFlags() {
     // Build-Queue leer? D.h. nur das Hover-Objekt ist in mapTilesToDrawTemporarily
     if (inBuildingMode && buildQueue.empty()) {
         assert(mapTilesToDrawTemporarily.size() > 0);
-        const MapObjectFixed* mapObjectFixed = mapTilesToDrawTemporarily.cbegin()->second.mapObjectToDraw;
 
-        if (mapObjectFixed == nullptr) {
+        if (!mapTilesToDrawTemporarily.cbegin()->second.mapObjectToDraw) {
             return; // kein Hover-Objekt da? Dann darfs hier eh nicht platziert werden, z.B. weil Platz belegt
         }
 
-        const MapCoords& mapCoords = mapObjectFixed->getMapCoords();
-        const MapObjectType& mapObjectType = mapObjectFixed->getMapObjectType();
-        const FourthDirection& view = mapObjectFixed->getView();
+        const MapObjectFixed& mapObjectFixed = *mapTilesToDrawTemporarily.cbegin()->second.mapObjectToDraw;
+        const MapCoords& mapCoords = mapObjectFixed.getMapCoords();
+        const MapObjectType& mapObjectType = mapObjectFixed.getMapObjectType();
+        const FourthDirection& view = mapObjectFixed.getView();
 
         bool noResources =
             (isAllowedToPlaceMapObject(mapCoords, mapObjectType, view) & PLACING_STRUCTURE_NO_RESOURCES);
 
-        // TODO shared_ptr hätte was, dann können wir uns die Schleife sparen, wenn das Objekt nur einmal da is
-        for(auto iter = mapTilesToDrawTemporarily.begin(); iter != mapTilesToDrawTemporarily.end(); iter++) {
-            MapObjectFixed* hoverObject = iter->second.mapObjectToDraw;
+        // In mapTilesToDrawTemporarily können zwar mehrere Kacheln stehen, allerdings referenzieren diese
+        // alle dasselbe Objekt, nämlich das Hover-Objekt.
+        auto iter = mapTilesToDrawTemporarily.begin();
+        MapObjectFixed& hoverObject = *iter->second.mapObjectToDraw;
 
-            if (hoverObject == nullptr) {
-                std::cerr << "hoverObject == nullptr" << std::endl; // TODO das darf nicht passieren, weil wir das ganz oben schon anfangen. Ein Mix von mapObjectToDraw und drawTileMasked ist eigentlich nicht möglich!
-                continue;
-            }
-
-            if (noResources) {
-                hoverObject->setDrawingFlags(hoverObject->getDrawingFlags() | IGraphic::DRAWING_FLAG_BLINK);
-            } else {
-                hoverObject->setDrawingFlags(hoverObject->getDrawingFlags() & ~IGraphic::DRAWING_FLAG_BLINK);
-            }
+        if (noResources) {
+            hoverObject.setDrawingFlags(hoverObject.getDrawingFlags() | IGraphic::DRAWING_FLAG_BLINK);
+        } else {
+            hoverObject.setDrawingFlags(hoverObject.getDrawingFlags() & ~IGraphic::DRAWING_FLAG_BLINK);
         }
 
         return;
@@ -1145,9 +1129,8 @@ void GuiMap::updateMapTilesToDrawTemporarilyForStreetsAt(const MapCoords& mapCoo
     auto getMapObject = [&](const MapCoords& mapCoords) {
         auto iterMapTileTemporialy = mapTilesToDrawTemporarily.find(mapCoords);
         if (iterMapTileTemporialy != mapTilesToDrawTemporarily.cend()) {
-            MapObjectFixed* mapObjectFixed = iterMapTileTemporialy->second.mapObjectToDraw;
-            if (mapObjectFixed != nullptr) {
-                return mapObjectFixed;
+            if (iterMapTileTemporialy->second.mapObjectToDraw) {
+                return iterMapTileTemporialy->second.mapObjectToDraw.get();
             }
         }
 
@@ -1180,7 +1163,7 @@ void GuiMap::updateMapTilesToDrawTemporarilyForStreetsAt(const MapCoords& mapCoo
 
         auto iterMapTileTemporialy = mapTilesToDrawTemporarily.find(mapCoordsInLamdba);
         if (iterMapTileTemporialy != mapTilesToDrawTemporarily.cend()) {
-            Structure* structure = dynamic_cast<Structure*>(iterMapTileTemporialy->second.mapObjectToDraw);
+            Structure* structure = dynamic_cast<Structure*>(iterMapTileTemporialy->second.mapObjectToDraw.get());
             if (structure != nullptr && structure->isStreet()) {
                 return true;
             }
@@ -1235,11 +1218,11 @@ void GuiMap::updateMapTilesToDrawTemporarilyForStreetsAt(const MapCoords& mapCoo
         structureToTemporarilyReplaceWith->setView(Direction::SOUTH); // TODO Drehung von Straßen funktioniert noch nicht korrekt
         structureToTemporarilyReplaceWith->setDrawingFlags(0);
 
-        mapTilesToDrawTemporarily[mapCoordsToUpdate].mapObjectToDraw = structureToTemporarilyReplaceWith;
+        mapTilesToDrawTemporarily[mapCoordsToUpdate].mapObjectToDraw.reset(structureToTemporarilyReplaceWith);
     } else {
-        MapObjectFixed* mapObjectToAlter = iterMapTileTemporialy->second.mapObjectToDraw; // TODO ggf. -> mapObjectToReplaceWith?
-        mapObjectToAlter->setMapObjectType(mapObjectTypeShouldBe);
-        mapObjectToAlter->setView(Direction::SOUTH); // TODO Drehung von Straßen funktioniert noch nicht korrekt
+        MapObjectFixed& mapObjectToAlter = *iterMapTileTemporialy->second.mapObjectToDraw; // TODO ggf. -> mapObjectToReplaceWith?
+        mapObjectToAlter.setMapObjectType(mapObjectTypeShouldBe);
+        mapObjectToAlter.setView(Direction::SOUTH); // TODO Drehung von Straßen funktioniert noch nicht korrekt
     }
 
     // TODO mapObjectToReplaceWith
