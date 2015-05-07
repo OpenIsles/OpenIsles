@@ -250,9 +250,11 @@ private:
 
     /**
      * @brief Fügt ein Gebäude zu `buildQueue` hinzu.
+     * Der Aufrufer muss sich sicher sein, dass das Gebäude hier platziert werden darf.
+     *
      * @param mapCoords Map-Koordinaten, wo das Gebäude platziert werden soll
      */
-    void addCurrentStructureToMapObjectsBeingAdded(const MapCoords& mapCoords);
+    void addCurrentStructureToBuildQueue(const MapCoords& mapCoords);
 
     /**
      * @brief Aktualisiert die `drawingFlags` der `mapTilesToDrawTemporarily`.
@@ -282,7 +284,7 @@ private:
     void updateHoverObject();
 
     /**
-     * Fügt ggf. ein neues MapTileTemporarily-Objekt zu mapTilesToDrawTemporarily hinzu.
+     * Fügt ggf. ein oder mehrere neue MapTileTemporarily-Objekte zu mapTilesToDrawTemporarily hinzu.
      * Wir tun das wenn,
      * - die linke Maustaste im Baumodus gerade heruntergedrückt wurde
      *   (d.&nbsp;h. der Spieler grade mit dem Bau beginnt)
@@ -290,8 +292,12 @@ private:
      *
      * Wenn an dem Ort gebaut werden darf (d.&nbsp;h. nix im Weg is), wird mapTilesToDrawTemporarily ergänzt.
      * Andernfalls passiert gar nix.
+     *
+     * @param mustClearAllTemporarily (nur relevant, wenn StructurePlacing == INDIVIDUALLY)
+     *                                `true`, um `clearAllTemporarily()` aufzurufen, bevor die neuen
+     *                                MapTileTemporarily-Objekte hinzugefügt werden.
      */
-    void addToBuildQueue();
+    void addToBuildQueue(bool mustClearAllTemporarily);
 
     /**
      * @brief Aktualisiert die `mapTilesToDrawTemporarily` einer bestimmten. Dies verändert ggf. eine
