@@ -1040,45 +1040,45 @@ void GuiMap::updateMapObjectsTemporarilyDrawingFlags() {
 
         return;
     }
-//
-//    // Ansonsten gucken wir buildQueue durch
-//
-//    // Wir nutzen die Tatsache aus, dass immer nur dieselben Gebäude in der Bauqueue sind.
-//    Structure* firstStructureInList = buildQueue.front();
-//    const MapObjectType& mapObjectType = firstStructureInList->getMapObjectType();
-//    const BuildingConfig* buildingConfig = context->configMgr->getBuildingConfig(mapObjectType);
-//    const BuildingCosts& buildingCostsOneTime = buildingConfig->buildingCosts;
-//
-//    const Player* currentPlayer = context->game->getCurrentPlayer();
-//
-//    bool outOfResources = false;
-//
-//    // Der Reihe nach alle zu setzenden Gebäude durchgehen und gucken, wann/ob die Resourcen ausgehen
-//    int structuresCount = 1;
-//    for (auto iter = buildQueue.cbegin(); iter != buildQueue.cend(); iter++, structuresCount++) {
-//        Structure* mapObject = *iter;
-//
-//        if (!outOfResources) {
-//            BuildingCosts sumBuildingCostTilHere = buildingCostsOneTime * structuresCount;
-//
-//            // TODO aktuell können in buildQueue Gebäude von verschiedenen Siedlungen sein. Das muss gefixed werden. Nur von einer Siedlung ist erlaubt.
-//            Colony* colony = context->game->getColony(
-//                currentPlayer, context->game->getMap()->getMapTileAt(mapObject->getMapCoords())->isle);
-//            if (currentPlayer->coins < sumBuildingCostTilHere.coins ||
-//                colony->getGoods(GoodsType::TOOLS).inventory < sumBuildingCostTilHere.tools ||
-//                colony->getGoods(GoodsType::WOOD).inventory < sumBuildingCostTilHere.wood ||
-//                colony->getGoods(GoodsType::BRICKS).inventory < sumBuildingCostTilHere.bricks) {
-//
-//                outOfResources = true;
-//            }
-//        }
-//
-//        if (outOfResources) {
-//            mapObject->setDrawingFlags(mapObject->getDrawingFlags() | IGraphic::DRAWING_FLAG_BLINK);
-//        } else {
-//            mapObject->setDrawingFlags(mapObject->getDrawingFlags() & ~IGraphic::DRAWING_FLAG_BLINK);
-//        }
-//    }
+
+    // Ansonsten gucken wir buildQueue durch
+
+    // Wir nutzen die Tatsache aus, dass immer nur dieselben Gebäude in der Bauqueue sind.
+    Structure& firstStructureInList = *std::dynamic_pointer_cast<Structure>(buildQueue.front());
+    const MapObjectType& mapObjectType = firstStructureInList.getMapObjectType();
+    const BuildingConfig* buildingConfig = context->configMgr->getBuildingConfig(mapObjectType);
+    const BuildingCosts& buildingCostsOneTime = buildingConfig->buildingCosts;
+
+    const Player* currentPlayer = context->game->getCurrentPlayer();
+
+    bool outOfResources = false;
+
+    // Der Reihe nach alle zu setzenden Gebäude durchgehen und gucken, wann/ob die Resourcen ausgehen
+    int structuresCount = 1;
+    for (auto iter = buildQueue.cbegin(); iter != buildQueue.cend(); iter++, structuresCount++) {
+        Structure& mapObject = *std::dynamic_pointer_cast<Structure>(*iter);
+
+        if (!outOfResources) {
+            BuildingCosts sumBuildingCostTilHere = buildingCostsOneTime * structuresCount;
+
+            // TODO aktuell können in buildQueue Gebäude von verschiedenen Siedlungen sein. Das muss gefixed werden. Nur von einer Siedlung ist erlaubt.
+            Colony* colony = context->game->getColony(
+                currentPlayer, context->game->getMap()->getMapTileAt(mapObject.getMapCoords())->isle);
+            if (currentPlayer->coins < sumBuildingCostTilHere.coins ||
+                colony->getGoods(GoodsType::TOOLS).inventory < sumBuildingCostTilHere.tools ||
+                colony->getGoods(GoodsType::WOOD).inventory < sumBuildingCostTilHere.wood ||
+                colony->getGoods(GoodsType::BRICKS).inventory < sumBuildingCostTilHere.bricks) {
+
+                outOfResources = true;
+            }
+        }
+
+        if (outOfResources) {
+            mapObject.setDrawingFlags(mapObject.getDrawingFlags() | IGraphic::DRAWING_FLAG_BLINK);
+        } else {
+            mapObject.setDrawingFlags(mapObject.getDrawingFlags() & ~IGraphic::DRAWING_FLAG_BLINK);
+        }
+    }
 }
 
 void GuiMap::updateBuildingCosts(MapObjectType mapObjectType) {
