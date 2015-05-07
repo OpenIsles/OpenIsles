@@ -264,10 +264,8 @@ private:
 
     /**
      * @brief Aktualisiert die Baukosten in der Resourcen-Leiste.
-     * @param mapObjectType Gebäude, was wir grade bauen. Alle Aufrufer haben diese Info parat,
-     *                      also geben wir sie der Methode gleich mit.
      */
-    void updateBuildingCosts(MapObjectType mapObjectType);
+    void updateBuildingCosts();
 
     /**
      * @brief Erzeugt/Aktualisiert das Hover-Objekt.

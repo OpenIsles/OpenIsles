@@ -531,8 +531,6 @@ bool GuiMap::onEventElement(SDL_Event& event) {
 void GuiMap::addToBuildQueue(bool mustClearAllTemporarily) {
     const MapCoords& mapCoordsUnderMouse = context->guiMgr->getMapCoordsUnderMouse();
 
-    std::cerr << "addToBuildQueue" << std::endl;
-
     // Ok, wir müssen nun ggf. was platzieren. Es kommt nun drauf an, was wir grade platzieren
     const MapObjectType& mapObjectType = context->guiMgr->getPanelState().addingMapObject;
     const BuildingConfig* buildingConfig = context->configMgr->getBuildingConfig(mapObjectType);
@@ -738,47 +736,37 @@ void GuiMap::onClickInMapForSelection(int mouseX, int mouseY) {
 }
 
 void GuiMap::onReleaseMouseLeftInBuildingMode() {
+    Player* currentPlayer = context->game->getCurrentPlayer();
 
-    std::cerr << "onReleaseMouseLeftInBuildingMode" << std::endl;
+    // Der Reihe nach alle zu setzenden Gebäude durchgehen. Gehen die Resourcen aus, brechen wir ab.
+    for (auto iter = buildQueue.cbegin(); iter != buildQueue.cend(); iter++) {
+        const MapObjectFixed& mapObject = **iter;
 
-    // TODO
-//    Player* currentPlayer = context->game->getCurrentPlayer();
-//
-//    // Der Reihe nach alle zu setzenden Gebäude durchgehen. Gehen die Resourcen aus, brechen wir ab.
-//    bool dontAddStructure = false;
-//    for (auto iter = buildQueue.cbegin(); iter != buildQueue.cend(); iter++) {
-//        MapObjectFixed* mapObject = *iter;
-//
-//        if (!dontAddStructure) {
-//            const MapObjectType& mapObjectType = mapObject->getMapObjectType();
-//            const MapCoords& mapCoords = mapObject->getMapCoords();
-//
-//            const FourthDirection& view = mapObject->getView();
-//            unsigned char isAllowedToPlaceResult = isAllowedToPlaceMapObject(mapCoords, mapObjectType, view);
-//            if ((isAllowedToPlaceResult & ~PLACING_STRUCTURE_SOMETHING_IN_THE_WAY_TEMPORARILY) != PLACING_STRUCTURE_ALLOWED) {
-//                // Dürfen wir nicht mehr setzen (zwischenzeitlich was im Weg oder Resourcen ausgegangen), dann abbrechen
-//                dontAddStructure = true;
-//                continue;
-//            }
-//
-//            // Ok, Gebäude nun wirklich setzen
-//            context->game->addStructure(mapCoords, mapObjectType, view, currentPlayer);
-//
-//            // Resourcen bezahlen
-//            Colony* colony = context->game->getColony(
-//                currentPlayer, context->game->getMap()->getMapTileAt(mapCoords)->isle);
-//            const BuildingCosts* buildingCosts = context->configMgr->getBuildingConfig(mapObjectType)->getBuildingCosts();
-//            currentPlayer->coins -= buildingCosts->coins;
-//            colony->subtractBuildingCosts(buildingCosts);
-//        }
-//
-//        delete mapObject;
-//    }
-//    buildQueue.clear();
-//
-//    // Datenstruktur bereinigen und gleich weitermachen mit Bauen
-//    onCancelAddingStructure();
-//    onStartAddingStructure();
+        const MapObjectType& mapObjectType = mapObject.getMapObjectType();
+        const MapCoords& mapCoords = mapObject.getMapCoords();
+
+        const FourthDirection& view = mapObject.getView();
+        unsigned char isAllowedToPlaceResult = isAllowedToPlaceMapObject(mapCoords, mapObjectType, view);
+        if ((isAllowedToPlaceResult & ~PLACING_STRUCTURE_SOMETHING_IN_THE_WAY_TEMPORARILY) != PLACING_STRUCTURE_ALLOWED) {
+            // Dürfen wir nicht mehr setzen (zwischenzeitlich was im Weg oder Resourcen ausgegangen), dann abbrechen
+            break;
+        }
+
+        // Ok, Gebäude nun wirklich setzen
+        context->game->addStructure(mapCoords, mapObjectType, view, currentPlayer);
+
+        // Resourcen bezahlen
+        Colony* colony = context->game->getColony(
+            currentPlayer, context->game->getMap()->getMapTileAt(mapCoords)->isle);
+        const BuildingCosts* buildingCosts = context->configMgr->getBuildingConfig(mapObjectType)->getBuildingCosts();
+        currentPlayer->coins -= buildingCosts->coins;
+        colony->subtractBuildingCosts(buildingCosts);
+    }
+    buildQueue.clear();
+
+    // Datenstruktur bereinigen und gleich weitermachen mit Bauen
+    onCancelAddingStructure();
+    onStartAddingStructure();
 }
 
 unsigned char GuiMap::isAllowedToPlaceMapObject(
@@ -929,10 +917,8 @@ void GuiMap::onStartAddingStructure() {
     // Move-Handler triggern, damit die Hover-Grafik gezeigt wird
     updateHoverObject();
 
-    // TODO
-
     // Baukosten in der Resourcen-Leiste nach einem Mehrfachbauen wieder auf 1x zurücksetzen
-//    updateBuildingCosts(mapObjectType);
+    updateBuildingCosts();
 }
 
 void GuiMap::onCancelAddingStructure() {
@@ -1007,7 +993,7 @@ void GuiMap::addCurrentStructureToBuildQueue(const MapCoords& mapCoords) {
     updateMapTilesToDrawTemporarilyForStreetsAround(mapCoords);
 
     // Baukosten in der Resourcen-Leiste aktualisieren
-    updateBuildingCosts(firstMapObjectInList->getMapObjectType());
+    updateBuildingCosts();
 }
 
 void GuiMap::updateMapObjectsTemporarilyDrawingFlags() {
@@ -1081,8 +1067,9 @@ void GuiMap::updateMapObjectsTemporarilyDrawingFlags() {
     }
 }
 
-void GuiMap::updateBuildingCosts(MapObjectType mapObjectType) {
+void GuiMap::updateBuildingCosts() {
     // Wir nutzen die Tatsache aus, dass immer nur dieselben Gebäude in der Bauqueue sind.
+    const MapObjectType& mapObjectType = context->guiMgr->getPanelState().addingMapObject;
     const BuildingConfig* buildingConfig = context->configMgr->getBuildingConfig(mapObjectType);
     const BuildingCosts& buildingCostsOneTime = buildingConfig->buildingCosts;
 
@@ -1090,8 +1077,6 @@ void GuiMap::updateBuildingCosts(MapObjectType mapObjectType) {
     if (structuresCount == 0) {
         structuresCount = 1;
     }
-
-    std::cerr << "structuresCount = " << structuresCount << std::endl;
 
     guiResourcesBar->showBuildingCosts(buildingCostsOneTime * structuresCount);
 }
@@ -1217,14 +1202,14 @@ void GuiMap::updateMapTilesToDrawTemporarilyForStreetsAt(const MapCoords& mapCoo
         structureToTemporarilyReplaceWith->setMapCoords(mapCoordsToUpdate);
         structureToTemporarilyReplaceWith->setMapWidth(1);
         structureToTemporarilyReplaceWith->setMapHeight(1);
-        structureToTemporarilyReplaceWith->setView(Direction::SOUTH); // TODO Drehung von Straßen funktioniert noch nicht korrekt
+        structureToTemporarilyReplaceWith->setView(Direction::SOUTH);
         structureToTemporarilyReplaceWith->setDrawingFlags(0);
 
         mapTilesToDrawTemporarily[mapCoordsToUpdate].mapObjectToDraw.reset(structureToTemporarilyReplaceWith);
     } else {
         MapObjectFixed& mapObjectToAlter = *iterMapTileTemporialy->second.mapObjectToDraw; // TODO ggf. -> mapObjectToReplaceWith?
         mapObjectToAlter.setMapObjectType(mapObjectTypeShouldBe);
-        mapObjectToAlter.setView(Direction::SOUTH); // TODO Drehung von Straßen funktioniert noch nicht korrekt
+        mapObjectToAlter.setView(Direction::SOUTH);
     }
 
     // TODO mapObjectToReplaceWith
