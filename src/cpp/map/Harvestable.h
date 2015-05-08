@@ -13,12 +13,6 @@ class Harvestable : public MapObjectFixed {
 private:
     // TODO Unterscheidung der verschiedenen Landschaften. Aktuell benutzen wir nur Wald und auch immer nur eine Kachel
 
-    // TODO das wird man vermutlich in MapObjectFixed verlagern können. Schließlich sollten auch Inseln drehbar sein
-    /**
-     * @brief Ausrichtung der Kachel
-     */
-    FourthDirection view;
-
     /**
      * @brief Alter der Landschaft. Dies gibt an, welche Grafik (wie hoch ist das Zeugs gewachsen?) wir verwenden und
      * ob geerntet werden kann.
@@ -46,14 +40,6 @@ public:
     }
 
     virtual bool updateObject(const Context& context) override;
-
-    const FourthDirection& getView() const {
-        return view;
-    }
-
-    void setView(FourthDirection view) {
-        this->view = view;
-    }
 
     double getAge() const {
         return age;

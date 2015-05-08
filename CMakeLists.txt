@@ -7,53 +7,127 @@ cmake_minimum_required(VERSION 2.8.12) #  target_compile_options() gibts erst se
 ## Quelldateien ########################################################################################################
 
 set(COMMON_SOURCE_FILES
+    src/cpp/config/BuildingCosts.h
     src/cpp/config/ConfigMgr.cpp
+    src/cpp/config/ConfigMgr.h
     src/cpp/economics/EconomicsMgr.cpp
+    src/cpp/economics/EconomicsMgr.h
     src/cpp/economics/Carrier.cpp
+    src/cpp/economics/Carrier.h
     src/cpp/game/Colony.cpp
+    src/cpp/game/Colony.h
     src/cpp/game/Game.cpp
+    src/cpp/game/Game.h
     src/cpp/game/GameIO.cpp
+    src/cpp/game/GameIO.h
+    src/cpp/game/GoodsSlot.h
     src/cpp/game/Player.cpp
+    src/cpp/game/Player.h
+    src/cpp/graphics/graphic/Animation.h
+    src/cpp/graphics/graphic/GraphicSet.h
+    src/cpp/graphics/graphic/IGraphic.h
     src/cpp/graphics/mgr/AbstractGraphicsMgr.cpp
+    src/cpp/graphics/mgr/AbstractGraphicsMgr.h
+    src/cpp/graphics/mgr/IFontMgr.h
+    src/cpp/graphics/mgr/IGraphicsMgr.h
+    src/cpp/graphics/renderer/IRenderer.h
+    src/cpp/map/coords/DrawCoords.h
     src/cpp/map/coords/MapCoords.cpp
+    src/cpp/map/coords/MapCoords.h
     src/cpp/map/coords/ScreenCoords.cpp
+    src/cpp/map/coords/ScreenCoords.h
+    src/cpp/map/coords/WindowCoords.h
+    src/cpp/map/coords/XYCoords.h
     src/cpp/map/Building.cpp
+    src/cpp/map/Building.h
     src/cpp/map/Direction.cpp
+    src/cpp/map/Direction.h
     src/cpp/map/Harvestable.cpp
+    src/cpp/map/Harvestable.h
     src/cpp/map/Isle.cpp
+    src/cpp/map/Isle.h
     src/cpp/map/Map.cpp
+    src/cpp/map/Map.h
     src/cpp/map/MapCoordUtils.cpp
+    src/cpp/map/MapCoordUtils.h
+    src/cpp/map/MapObject.h
+    src/cpp/map/MapObjectType.h
+    src/cpp/map/Structure.h
     src/cpp/pathfinding/AStar.cpp
+    src/cpp/pathfinding/AStar.h
+    src/cpp/rapidxml/rapidxml.hpp
+    src/cpp/rapidxml/rapidxml_iterators.hpp
+    src/cpp/rapidxml/rapidxml_print.hpp
+    src/cpp/rapidxml/rapidxml_utils.hpp
+    src/cpp/sound/ISoundMgr.h
+    src/cpp/utils/Color.h
     src/cpp/utils/Consts.cpp
+    src/cpp/utils/Consts.h
+    src/cpp/utils/Events.h
+    src/cpp/utils/FpsCounter.h
+    src/cpp/utils/MapCoordsIterator.h
+    src/cpp/utils/Rect.h
+    src/cpp/utils/RectangleData.h
     src/cpp/utils/StringFormat.cpp
+    src/cpp/utils/StringFormat.h
     src/cpp/utils/Ticks.cpp
+    src/cpp/utils/Ticks.h
+    src/cpp/Context.h
+    src/cpp/defines.h
 )
 set(GUI_SOURCE_FILES
     src/cpp/gui/components/GuiAddBuildingWidget.cpp
+    src/cpp/gui/components/GuiAddBuildingWidget.h
+    src/cpp/gui/components/GuiBase.h
     src/cpp/gui/components/GuiButton.cpp
+    src/cpp/gui/components/GuiButton.h
     src/cpp/gui/components/GuiMap.cpp
+    src/cpp/gui/components/GuiMap.h
     src/cpp/gui/components/GuiMinimap.cpp
+    src/cpp/gui/components/GuiMinimap.h
     src/cpp/gui/components/GuiPushButton.cpp
+    src/cpp/gui/components/GuiPushButton.h
     src/cpp/gui/components/GuiResourcesBar.cpp
+    src/cpp/gui/components/GuiResourcesBar.h
     src/cpp/gui/components/GuiStaticElement.cpp
+    src/cpp/gui/components/GuiStaticElement.h
     src/cpp/gui/panel-widgets/GuiSelectedBuildingWidget.cpp
+    src/cpp/gui/panel-widgets/GuiSelectedBuildingWidget.h
     src/cpp/gui/panel-widgets/GuiBuildMenuWidget.cpp
+    src/cpp/gui/panel-widgets/GuiBuildMenuWidget.h
     src/cpp/gui/panel-widgets/GuiColonyGoodsWidget.cpp
+    src/cpp/gui/panel-widgets/GuiColonyGoodsWidget.h
     src/cpp/gui/panel-widgets/GuiDummyWidget.cpp
+    src/cpp/gui/panel-widgets/GuiDummyWidget.h
     src/cpp/gui/panel-widgets/GuiOptionsMenuWidget.cpp
+    src/cpp/gui/panel-widgets/GuiOptionsMenuWidget.h
     src/cpp/gui/GuiMgr.cpp
+    src/cpp/gui/GuiMgr.h
+    src/cpp/gui/Identifiers.h
 )
 set(GRAPHICS_SOURCE_FILES
     src/cpp/graphics/mgr/sdl/SDLFontMgr.cpp
+    src/cpp/graphics/mgr/sdl/SDLFontMgr.h
     src/cpp/graphics/mgr/sdl/SDLGraphicsMgr.cpp
+    src/cpp/graphics/mgr/sdl/SDLGraphicsMgr.h
     src/cpp/graphics/graphic/sdl/SDLGraphic.cpp
+    src/cpp/graphics/graphic/sdl/SDLGraphic.h
     src/cpp/graphics/renderer/sdl/SDLRenderer.cpp
+    src/cpp/graphics/renderer/sdl/SDLRenderer.h
 )
 set(SOUND_SOURCE_FILES
     src/cpp/sound/sdl/SDLSoundMgr.cpp
+    src/cpp/sound/sdl/SDLSoundMgr.h
+)
+set(NOSDL_FILES
+    src/cpp/graphics/graphic/nosdl/NoSDLGraphic.h
+    src/cpp/graphics/mgr/nosdl/NoSDLFontMgr.h
+    src/cpp/graphics/mgr/nosdl/NoSDLGraphicsMgr.h
+    src/cpp/graphics/renderer/nosdl/NoSDLRenderer.h
 )
 set(TEST_FILES
     test/cpp/GameTest.cpp
+    test/cpp/GameTest.h
     test/cpp/economics/EconomicsMgrTest.cpp
     test/cpp/graphics/GraphicSetTest.cpp
     test/cpp/map/coords/MapCoordsTest.cpp
@@ -143,6 +217,7 @@ enable_testing()
 
 add_executable(OpenIsles-Tests
     ${COMMON_SOURCE_FILES}
+    ${NOSDL_FILES}
     ${TEST_FILES}
 )
 

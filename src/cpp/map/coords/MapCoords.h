@@ -152,7 +152,7 @@ public:
  * @param mapCoords Objekt, was ausgegeben werden soll
  * @return Ausgabestream, sodass das Chaining funktioniert
  */
-std::ostream& operator<< (std::ostream& outputStream, const MapCoords& mapCoords);
+std::ostream& operator<<(std::ostream& outputStream, const MapCoords& mapCoords);
 
 /**
  * @brief Ausgabe-Operator, um die Map-Koordinaten auszugeben
@@ -160,7 +160,7 @@ std::ostream& operator<< (std::ostream& outputStream, const MapCoords& mapCoords
  * @param mapCoords Objekt, was ausgegeben werden soll
  * @return Ausgabestream, sodass das Chaining funktioniert
  */
-std::ostream& operator<< (std::ostream& outputStream, const DoubleMapCoords& mapCoords);
+std::ostream& operator<<(std::ostream& outputStream, const DoubleMapCoords& mapCoords);
 
 
 namespace std {
@@ -175,6 +175,19 @@ namespace std {
         return ((a.y() < b.y()) ||
                 ((a.y() == b.y()) && (a.x() < b.x())));
     }
+
+    template<>
+    struct hash<const MapCoords> {
+        /**
+         * @brief Generiert den Hashwert für eine Map-Koordinate
+         * @param mapCoords Map-Koordinate
+         * @return Hashwert
+         */
+        std::size_t operator()(const MapCoords& mapCoords) const {
+            std::hash<int> intHash;
+            return (3 * intHash(mapCoords.x())) ^ (5 * intHash(mapCoords.y()));
+        }
+    };
 
 }
 

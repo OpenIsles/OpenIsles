@@ -2,7 +2,6 @@
 #define _STRUCTURE_H
 
 #include "map/coords/MapCoords.h"
-#include "map/Direction.h"
 #include "map/MapObject.h"
 #include "map/MapObjectType.h"
 
@@ -32,36 +31,37 @@ enum BuildingGroup : unsigned char {
  */
 class Structure : public MapObjectFixed {
 
-protected:
-    /**
-     * @brief Ausrichtung des Objekts
-     */
-    FourthDirection view;
-
 public:
     virtual bool updateObject(const Context& context) override {
         return true;
     }
 
-    const FourthDirection& getView() const {
-        return view;
-    }
-
-    void setView(const FourthDirection& view) {
-        this->view = view;
-    }
-
     /**
-     * @brief Prüft, ob die Struktur ein Weg/Straße oder Platz ist, d.&nbsp;h. etwas, wo ein Marktkarren fahren darf.
-     * @return `true` wenn Weg/Straße oder Platz, sonst `false`
+     * @brief Prüft, ob die Struktur ein Feldweg oder Pflasterstraße ist
+     * @return `true` wenn Feldweg oder Pflasterstraße, sonst `false`
      */
     bool isStreet() const {
         return ((mapObjectType >= MapObjectType::FARM_ROAD_STRAIGHT_0 &&
                  mapObjectType <= MapObjectType::FARM_ROAD_CROSS) ||
                 (mapObjectType >= MapObjectType::COBBLED_STREET_STRAIGHT_0 &&
-                 mapObjectType <= MapObjectType::COBBLED_STREET_CROSS) ||
-                (mapObjectType >= MapObjectType::SQUARE1 &&
-                 mapObjectType <= MapObjectType::SQUARE3));
+                 mapObjectType <= MapObjectType::COBBLED_STREET_CROSS));
+    }
+
+    /**
+     * @brief Prüft, ob die Struktur ein Platz ist, d.&nbsp;h. etwas, wo ein Marktkarren fahren darf.
+     * @return `true` wenn Weg/Straße oder Platz, sonst `false`
+     */
+    bool isPlace() const {
+        return (mapObjectType >= MapObjectType::SQUARE1 && mapObjectType <= MapObjectType::SQUARE3);
+    }
+
+    /**
+	 * @brief Ermittelt, ob ein Marktkarren eine bestimmte Stelle befahren darf.
+	 * @return `true`, wenn ein Marktkarren dort fahren darf, d.&nbsp;h. ein Feldweg, Pflasterstraße oder Platz da ist;
+     * sonst `false`.
+	 */
+    bool isWalkableForCart() const {
+        return (isStreet() || isPlace());
     }
 };
 

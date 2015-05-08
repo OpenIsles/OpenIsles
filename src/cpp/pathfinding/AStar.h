@@ -77,7 +77,7 @@ private:
     bool cutRoute;
 
     /**
-     * @brief `true`, um nur Straßen für die Route zu verwenden, `false` erlaubt auch über Gras zu laufen
+     * @brief `true`, um nur Straßen/Plätze für die Route zu verwenden, `false` erlaubt auch über Gras zu laufen
      */
     bool useStreetOnly;
 
@@ -151,7 +151,8 @@ private:
      * @param buildingToUseCatchmentArea Zeiger auf ein Gebäude. Wenn gesetzt, dürfen für die Route nur Kacheln benutzt
      *                                   werden, die sich im Einzugsbereich dieses Gebäudes befinden. Wird nullptr
      *                                   verwendet, so dürfen für die Route beliebige Felder benutzt werden. (IN)
-     * @param useStreetOnly `true`, um nur Straßen für die Route zu verwenden, `false` erlaubt auch über Gras zu laufen (IN)
+     * @param useStreetOnly `true`, um nur Straßen/Plätze für die Route zu verwenden,
+     *                      `false` erlaubt auch über Gras zu laufen (IN)
      * @param insideSourceOrDestinationBuilding erhält die Info, ob sich die angefragte Kachel im Start- oder
      *                                          Zielgebäude (wenn gesetzt) befindet. (OUT)
      * @return true wenn die Kachel betreten werden darf, sonst false

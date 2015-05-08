@@ -313,7 +313,7 @@ bool AStar::isTileWalkable(const MapCoords& mapCoords, Building* sourceBuilding,
 
     // Gelände prüfen, kann man darf laufen?
     if (useStreetOnly) {
-        if (!insideSourceOrDestinationBuilding && !map->isStreetAt(mapCoords)) {
+        if (!insideSourceOrDestinationBuilding && !map->isWalkableForCartAt(mapCoords)) {
             return false; // keine Straße da
         }
     }

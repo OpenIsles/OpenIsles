@@ -6,6 +6,7 @@
 #include "game/Player.h"
 #include "graphics/mgr/IGraphicsMgr.h"
 #include "map/coords/MapCoords.h"
+#include "map/Direction.h"
 #include "map/MapCoordUtils.h"
 #include "utils/Ticks.h"
 
@@ -144,6 +145,11 @@ protected:
 	 */
 	MapObjectType mapObjectType;
 
+    /**
+     * @brief Ausrichtung des Objekts
+     */
+    FourthDirection view;
+
 public:
 	virtual ~MapObjectFixed() {
 	}
@@ -166,6 +172,14 @@ public:
 
     void setMapObjectType(MapObjectType mapObjectType) {
         this->mapObjectType = mapObjectType;
+    }
+
+    const FourthDirection& getView() const {
+        return view;
+    }
+
+    void setView(const FourthDirection& view) {
+        this->view = view;
     }
 };
 
