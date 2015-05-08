@@ -487,15 +487,14 @@ bool GuiMap::onEventElement(SDL_Event& event) {
             return false;
         }
 
-        // TODO
-//        // Rechtsklick während linke Maustaste gedrückt -> resettet, wir bleiben aber im Baumodus
-//        if (event.type == SDL_MOUSEBUTTONUP &&
-//            event.button.button == SDL_BUTTON_RIGHT &&
-//            isLeftMouseButtonDown) {
-//
-//            clearAllTemporarily();
-//            return false;
-//        }
+        // Rechtsklick während linke Maustaste gedrückt -> resettet, wir bleiben aber im Baumodus
+        if (event.type == SDL_MOUSEBUTTONUP &&
+            event.button.button == SDL_BUTTON_RIGHT &&
+            isLeftMouseButtonDown) {
+
+            clearAllTemporarily();
+            return false;
+        }
 
         // Maustaste losgelassen? Dann jetzt fest die Gebäude setzen
         if (event.type == SDL_MOUSEBUTTONUP &&
