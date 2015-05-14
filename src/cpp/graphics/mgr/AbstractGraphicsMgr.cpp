@@ -46,6 +46,7 @@ void AbstractGraphicsMgr::loadGraphics() {
     loadStaticGraphicSetWith4Views("structures/cathedral", "data/img/objects/cathedral.png", 6, 4);
     loadStaticGraphicSetWith4Views("structures/tavern", "data/img/objects/tavern.png", 2, 3);
     loadStaticGraphicSetWith4Views("structures/sugarcane-plantation", "data/img/objects/sugarcane-plantation.png", 2, 2);
+    loadStaticGraphicSetWith4Views("structures/tobacco-plantation", "data/img/objects/tobacco-plantation.png", 2, 2);
 
     loadStreetTileset("cobbled-street");
     loadStreetTileset("farm-road");
@@ -60,6 +61,7 @@ void AbstractGraphicsMgr::loadGraphics() {
 
     loadStaticGraphicSet("goods-marketplace-icons/wool", "data/img/goods/marketplace-icon/wool.png");
     loadStaticGraphicSet("goods-marketplace-icons/sugarcane", "data/img/goods/marketplace-icon/sugarcane.png");
+    loadStaticGraphicSet("goods-marketplace-icons/tobacco", "data/img/goods/marketplace-icon/tobacco.png");
     loadStaticGraphicSet("goods-marketplace-icons/cattle", "data/img/goods/marketplace-icon/cattle.png");
     loadStaticGraphicSet("goods-marketplace-icons/food", "data/img/goods/marketplace-icon/food.png");
     loadStaticGraphicSet("goods-marketplace-icons/cloth", "data/img/goods/marketplace-icon/cloth.png");
@@ -91,6 +93,7 @@ void AbstractGraphicsMgr::loadGraphics() {
     loadStaticGraphicSet("add-building-button/cathedral", "data/img/gui/add-building/cathedral.png");
     loadStaticGraphicSet("add-building-button/tavern", "data/img/gui/add-building/tavern.png");
     loadStaticGraphicSet("add-building-button/sugarcane-plantation", "data/img/gui/add-building/sugarcane-plantation.png");
+    loadStaticGraphicSet("add-building-button/tobacco-plantation", "data/img/gui/add-building/tobacco-plantation.png");
     loadStaticGraphicSet("add-building-button/square1", "data/img/gui/add-building/square1.png");
     loadStaticGraphicSet("add-building-button/square2", "data/img/gui/add-building/square2.png");
     loadStaticGraphicSet("add-building-button/square3", "data/img/gui/add-building/square3.png");
@@ -123,6 +126,7 @@ void AbstractGraphicsMgr::loadGraphics() {
     loadHarvestablesGraphicSet("harvestables/northern-forest1", "data/img/harvestables/northern-forest1.png", 5);
     loadHarvestablesGraphicSet("harvestables/northern-forest2", "data/img/harvestables/northern-forest2.png", 5);
     loadHarvestablesGraphicSet("harvestables/sugarcane-field", "data/img/harvestables/sugarcane-field.png", 5);
+    loadHarvestablesGraphicSet("harvestables/tobacco-field", "data/img/harvestables/tobacco-field.png", 7);
 }
 
 void AbstractGraphicsMgr::loadTiles() {

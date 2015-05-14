@@ -15,6 +15,7 @@ enum MapObjectType : unsigned char {
     NORTHERN_FOREST2,
 
     SUGARCANE_FIELD,
+    TOBACCO_FIELD,
 
     // Strukturen
     START_STRUCTURES = 51, // Marker, um zu unterscheiden, ob Harvestable, Structure oder Building angelegt werden
@@ -74,6 +75,7 @@ enum MapObjectType : unsigned char {
     CATHEDRAL,
     TAVERN,
     SUGARCANE_PLANTATION,
+    TOBACCO_PLANTATION,
 
     MAX_MAP_OBJECT_TYPE // Marker, wie viel Platz wir im Array brauchen
 } MapObjectType;

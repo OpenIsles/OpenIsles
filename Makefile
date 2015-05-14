@@ -75,7 +75,8 @@ $(DATA_DIRECTORY)/img/gui/add-building/add-building-grid.png: $(SRC_DIRECTORY)/b
 BUILDINGS := butchers cathedral cattle-farm chapel foresters hunters-hut marketplace office1 office2 \
              pioneers-house1 pioneers-house2 pioneers-house3 pioneers-house4 pioneers-house5 \
              settlers-house1 settlers-house2 settlers-house3 settlers-house4 settlers-house5 \
-             sheep-farm square1 square2 square3 stonemason sugarcane-plantation tavern toolsmiths weaving-mill1
+             sheep-farm square1 square2 square3 stonemason sugarcane-plantation tavern tobacco-plantation \
+             toolsmiths weaving-mill1
 
 define RENDER_BUILDING
 $(DATA_DIRECTORY)/img/objects/$(1).png: $(SRC_DIRECTORY)/blender/buildings/$(1)/$(1).blend
@@ -128,7 +129,7 @@ $(foreach STREET_TILESET,$(STREET_TILESETS),$(eval $(call RENDER_STREET_TILESET,
 # Erntebare Landschaften                                                                                               #
 ########################################################################################################################
 
-HARVESTABLES := northern-forest1 northern-forest2 sugarcane-field
+HARVESTABLES := northern-forest1 northern-forest2 sugarcane-field tobacco-field
 
 define RENDER_HARVESTABLE
 $(DATA_DIRECTORY)/img/harvestables/$(1).png: $(SRC_DIRECTORY)/blender/harvestables/$(1)/$(1).blend
@@ -150,7 +151,7 @@ $(foreach HARVESTABLE,$(HARVESTABLES),$(eval $(call RENDER_HARVESTABLE,$(HARVEST
 # Gütersymbole                                                                                                         #
 ########################################################################################################################
 
-GOODS := bricks cattle cloth food sugarcane tools wood wool
+GOODS := bricks cattle cloth food sugarcane tobacco tools wood wool
 
 define RENDER_GOODS_ICONS
 $(DATA_DIRECTORY)/img/goods/marketplace-icon/$(1).png $(DATA_DIRECTORY)/img/goods/icon/$(1).png: \

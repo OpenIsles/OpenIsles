@@ -15,7 +15,7 @@ bool Harvestable::updateObject(const Context& context) {
 
     // Maximales Alter
     if (newAge > 4.0) {
-        newAge = 4; // TODO über Config steuern bzw./und mit der Grafik koppeln
+        newAge = 4; // TODO über Config steuern bzw./und mit der Grafik koppeln (Tabakfeld z.B. hat maxAge 6)
     }
 
     age = newAge;

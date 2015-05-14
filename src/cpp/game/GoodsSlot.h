@@ -14,6 +14,7 @@ enum GoodsType : char {
     START_RAW_MATERIALS = 0, // Marker für isRawMaterial()
     WOOL = START_RAW_MATERIALS,
     SUGARCANE,
+    TOBACCO,
     CATTLE,
     END_RAW_MATERIALS = CATTLE, // Marker für isRawMaterial()
 

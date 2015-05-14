@@ -68,6 +68,7 @@ public:
         if (mapObjectType == MapObjectType::NORTHERN_FOREST1) { graphicSetNameSuffix = "northern-forest1"; }
         else if (mapObjectType == MapObjectType::NORTHERN_FOREST2) { graphicSetNameSuffix = "northern-forest2"; }
         else if (mapObjectType == MapObjectType::SUGARCANE_FIELD) { graphicSetNameSuffix = "sugarcane-field"; }
+        else if (mapObjectType == MapObjectType::TOBACCO_FIELD) { graphicSetNameSuffix = "tobacco-field"; }
 
         else if (mapObjectType == MapObjectType::CHAPEL) { graphicSetNameSuffix = "chapel"; }
         else if (mapObjectType == MapObjectType::PIONEERS_HOUSE1) { graphicSetNameSuffix = "pioneers-house1"; }
@@ -94,6 +95,7 @@ public:
         else if (mapObjectType == MapObjectType::CATHEDRAL) { graphicSetNameSuffix = "cathedral"; }
         else if (mapObjectType == MapObjectType::TAVERN) { graphicSetNameSuffix = "tavern"; }
         else if (mapObjectType == MapObjectType::SUGARCANE_PLANTATION) { graphicSetNameSuffix = "sugarcane-plantation"; }
+        else if (mapObjectType == MapObjectType::TOBACCO_PLANTATION) { graphicSetNameSuffix = "tobacco-plantation"; }
         else if (mapObjectType == MapObjectType::SQUARE1) { graphicSetNameSuffix = "square1"; }
         else if (mapObjectType == MapObjectType::SQUARE2) { graphicSetNameSuffix = "square2"; }
         else if (mapObjectType == MapObjectType::SQUARE3) { graphicSetNameSuffix = "square3"; }
@@ -135,6 +137,7 @@ public:
 
         if (goodsType == GoodsType::WOOL) { graphicSetNameSuffix = "wool"; }
         else if (goodsType == GoodsType::SUGARCANE) { graphicSetNameSuffix = "sugarcane"; }
+        else if (goodsType == GoodsType::TOBACCO) { graphicSetNameSuffix = "tobacco"; }
         else if (goodsType == GoodsType::CATTLE) { graphicSetNameSuffix = "cattle"; }
         else if (goodsType == GoodsType::FOOD) { graphicSetNameSuffix = "food"; }
         else if (goodsType == GoodsType::CLOTH) { graphicSetNameSuffix = "cloth"; }

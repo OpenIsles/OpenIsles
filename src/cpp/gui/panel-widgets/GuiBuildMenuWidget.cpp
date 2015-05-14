@@ -74,7 +74,11 @@ GuiBuildMenuWidget::GuiBuildMenuWidget(const Context* const context) : GuiPanelW
                     "add-building-button/sugarcane-plantation"
                 },
                 { MapObjectType::NO_MAP_OBJECT, nullptr, "add-building-button/dummy" },
-                { MapObjectType::NO_MAP_OBJECT, nullptr, "add-building-button/dummy" },
+                {
+                    MapObjectType::TOBACCO_PLANTATION,
+                    "Tabakplantage",
+                    "add-building-button/tobacco-plantation"
+                },
                 { MapObjectType::NO_MAP_OBJECT, nullptr, "add-building-button/dummy" },
                 { MapObjectType::NO_MAP_OBJECT, nullptr, "add-building-button/dummy" },
                 { MapObjectType::NO_MAP_OBJECT, nullptr, "add-building-button/dummy" },

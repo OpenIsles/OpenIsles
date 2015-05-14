@@ -48,6 +48,15 @@ void ConfigMgr::loadMapObjectConfigs() {
     mapObjectConfigs[MapObjectType::SUGARCANE_FIELD]->buildingCosts = { 5, 0, 0, 0 };
     mapObjectConfigs[MapObjectType::SUGARCANE_FIELD]->buildingProduction = { GoodsSlot(), GoodsSlot(), GoodsSlot() };
     mapMapObjectNameInSavefile[mapObjectConfigs[MapObjectType::SUGARCANE_FIELD]->nameInSavefile] = MapObjectType::SUGARCANE_FIELD;
+    
+    mapObjectConfigs[MapObjectType::TOBACCO_FIELD] = new MapObjectConfig();
+    mapObjectConfigs[MapObjectType::TOBACCO_FIELD]->name = "Tabakfeld";
+    mapObjectConfigs[MapObjectType::TOBACCO_FIELD]->nameInSavefile = "tobacco_field";
+    mapObjectConfigs[MapObjectType::TOBACCO_FIELD]->structurePlacing = StructurePlacing::RECTANGLE;
+    mapObjectConfigs[MapObjectType::TOBACCO_FIELD]->catchmentArea = nullptr;
+    mapObjectConfigs[MapObjectType::TOBACCO_FIELD]->buildingCosts = { 5, 0, 0, 0 };
+    mapObjectConfigs[MapObjectType::TOBACCO_FIELD]->buildingProduction = { GoodsSlot(), GoodsSlot(), GoodsSlot() };
+    mapMapObjectNameInSavefile[mapObjectConfigs[MapObjectType::TOBACCO_FIELD]->nameInSavefile] = MapObjectType::TOBACCO_FIELD;
 
     for (int i = MapObjectType::COBBLED_STREET_STRAIGHT_0; i <= MapObjectType::COBBLED_STREET_CROSS; i++) {
         MapObjectType mapObjectType = (MapObjectType) i;
@@ -360,6 +369,22 @@ void ConfigMgr::loadMapObjectConfigs() {
     mapObjectConfigs[MapObjectType::SUGARCANE_PLANTATION]->productionRate = 2.3;
     mapObjectConfigs[MapObjectType::SUGARCANE_PLANTATION]->inhabitants = 4;
     mapMapObjectNameInSavefile[mapObjectConfigs[MapObjectType::SUGARCANE_PLANTATION]->nameInSavefile] = MapObjectType::SUGARCANE_PLANTATION;
+    
+    mapObjectConfigs[MapObjectType::TOBACCO_PLANTATION] = new MapObjectConfig();
+    mapObjectConfigs[MapObjectType::TOBACCO_PLANTATION]->name = "Tabakplantage";
+    mapObjectConfigs[MapObjectType::TOBACCO_PLANTATION]->nameInSavefile = "tobacco_plantation";
+    mapObjectConfigs[MapObjectType::TOBACCO_PLANTATION]->structurePlacing = StructurePlacing::INDIVIDUALLY;
+    mapObjectConfigs[MapObjectType::TOBACCO_PLANTATION]->catchmentArea = new RectangleData<char>(6, 6);
+    memcpy(mapObjectConfigs[MapObjectType::TOBACCO_PLANTATION]->catchmentArea->data, "011110111111111111111111111111011110", 36);
+    mapObjectConfigs[MapObjectType::TOBACCO_PLANTATION]->buildingCosts = { 300, 2, 3, 8 };
+    mapObjectConfigs[MapObjectType::TOBACCO_PLANTATION]->buildingProduction = {
+        GoodsSlot(GoodsType::TOBACCO, 6),
+        GoodsSlot(),
+        GoodsSlot()
+    };
+    mapObjectConfigs[MapObjectType::TOBACCO_PLANTATION]->productionRate = 1.9;
+    mapObjectConfigs[MapObjectType::TOBACCO_PLANTATION]->inhabitants = 4;
+    mapMapObjectNameInSavefile[mapObjectConfigs[MapObjectType::TOBACCO_PLANTATION]->nameInSavefile] = MapObjectType::TOBACCO_PLANTATION;
 }
 
 void ConfigMgr::loadTilesConfig() {
