@@ -67,8 +67,11 @@ Harvestable* Game::addHarvestable(
 
     assert(mapObjectType < MapObjectType::START_STRUCTURES); // TODO addHarvestable() und addStructure() zusammenlegen?
 
+    const MapObjectConfig* mapObjectConfig = context->configMgr->getMapObjectConfig(mapObjectType);
+    unsigned char maxAge = mapObjectConfig->maxAge;
+
     // Objekt anlegen
-    Harvestable* harvestable = new Harvestable();
+    Harvestable* harvestable = new Harvestable(maxAge);
     harvestable->setMapCoords(mapCoords);
     harvestable->setMapObjectType(mapObjectType);
     harvestable->setView(view);

@@ -32,6 +32,7 @@ void ConfigMgr::loadMapObjectConfigs() {
         mapObjectConfigs[mapObjectType]->catchmentArea = nullptr;
         mapObjectConfigs[mapObjectType]->buildingCosts = { 5, 0, 0, 0 };
         mapObjectConfigs[mapObjectType]->buildingProduction = { GoodsSlot(), GoodsSlot(), GoodsSlot() };
+        mapObjectConfigs[mapObjectType]->maxAge = 4;
     }
     mapObjectConfigs[MapObjectType::NORTHERN_FOREST1]->nameInSavefile = "northern_forest1";
     mapObjectConfigs[MapObjectType::NORTHERN_FOREST2]->nameInSavefile = "northern_forest2";
@@ -47,6 +48,7 @@ void ConfigMgr::loadMapObjectConfigs() {
     mapObjectConfigs[MapObjectType::SUGARCANE_FIELD]->catchmentArea = nullptr;
     mapObjectConfigs[MapObjectType::SUGARCANE_FIELD]->buildingCosts = { 5, 0, 0, 0 };
     mapObjectConfigs[MapObjectType::SUGARCANE_FIELD]->buildingProduction = { GoodsSlot(), GoodsSlot(), GoodsSlot() };
+    mapObjectConfigs[MapObjectType::SUGARCANE_FIELD]->maxAge = 4;
     mapMapObjectNameInSavefile[mapObjectConfigs[MapObjectType::SUGARCANE_FIELD]->nameInSavefile] = MapObjectType::SUGARCANE_FIELD;
     
     mapObjectConfigs[MapObjectType::TOBACCO_FIELD] = new MapObjectConfig();
@@ -56,6 +58,7 @@ void ConfigMgr::loadMapObjectConfigs() {
     mapObjectConfigs[MapObjectType::TOBACCO_FIELD]->catchmentArea = nullptr;
     mapObjectConfigs[MapObjectType::TOBACCO_FIELD]->buildingCosts = { 5, 0, 0, 0 };
     mapObjectConfigs[MapObjectType::TOBACCO_FIELD]->buildingProduction = { GoodsSlot(), GoodsSlot(), GoodsSlot() };
+    mapObjectConfigs[MapObjectType::TOBACCO_FIELD]->maxAge = 6;
     mapMapObjectNameInSavefile[mapObjectConfigs[MapObjectType::TOBACCO_FIELD]->nameInSavefile] = MapObjectType::TOBACCO_FIELD;
 
     for (int i = MapObjectType::COBBLED_STREET_STRAIGHT_0; i <= MapObjectType::COBBLED_STREET_CROSS; i++) {

@@ -115,6 +115,11 @@ struct MapObjectConfig {
      */
     unsigned char inhabitants = 0;
 
+    /**
+     * @brief (nur für `Harvestable`) gibt das maximale Alter an, das diese Landschaft erreichen kann.
+     */
+    unsigned char maxAge = 0;
+
     
     ~MapObjectConfig() {
         if (catchmentArea != nullptr) {
