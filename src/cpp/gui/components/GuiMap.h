@@ -3,6 +3,7 @@
 
 #include <SDL_render.h>
 #include <memory>
+#include <random>
 #include <unordered_map>
 #include "Context.h"
 #include "gui/components/GuiBase.h"
@@ -315,6 +316,13 @@ private:
      * aktualisiert werden sollen
      */
     void updateMapTilesToDrawTemporarilyForStreetsAround(const MapCoords& mapCoordsToUpdateAround);
+
+    /**
+     * @brief Helper, der je nach Map-Objekt-Typ eine konkrete Instanz von `MapObjectFixed` erstellt.
+     * @param mapObjectType Typ des zu erstellenden Map-Objekts
+     * @return neue Instanz eines `MapObjectFixed` mit `type` bereits gesetzt
+     */
+    MapObjectFixed* instantiateMapObjectFixed(const MapObjectType& mapObjectType);
 
 };
 

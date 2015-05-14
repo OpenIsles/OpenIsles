@@ -56,16 +56,41 @@ Colony* Game::getColony(const MapObjectFixed* mapObject) const {
 }
 
 double Game::getSecondsSinceLastUpdate(const MapObject* mapObject) const {
-    const unsigned int ticksPastSinceLastUpdate = context->sdlTicks - mapObject->getLastUpdateTime();
+    unsigned int ticksPastSinceLastUpdate;
+
+    // Sicherung, falls ein minimal-negativer Wert entsteht: dann nehmen wir 0
+    if (context->sdlTicks > mapObject->getLastUpdateTime()) {
+        ticksPastSinceLastUpdate = context->sdlTicks - mapObject->getLastUpdateTime();
+    } else {
+        ticksPastSinceLastUpdate = 0;
+    }
     const double oneSecondTicks = (double) 1000 / context->game->getSpeed();
 
     return (double) ticksPastSinceLastUpdate / oneSecondTicks;
 }
 
+MapObjectFixed* Game::addMapObjectFixed(
+    const MapCoords& mapCoords, MapObjectType mapObjectType, const FourthDirection& view, Player* player) {
+
+    // Harvestable
+    if (mapObjectType < MapObjectType::START_STRUCTURES) {
+        // ein bisschen Zufall für das Startalter, damit die Felder nicht alle gleichzeitig wachsen
+        std::random_device randomDevice;
+        std::default_random_engine randomEngine(randomDevice());
+        std::uniform_real_distribution<double> randomInitAge(0.0, 0.25);
+        double initAge = randomInitAge(randomEngine);
+
+        return addHarvestable(mapCoords, mapObjectType, initAge, view);
+    }
+
+    // Structure/Building
+    return addStructure(mapCoords, mapObjectType, view, player);
+}
+
 Harvestable* Game::addHarvestable(
     const MapCoords& mapCoords, MapObjectType mapObjectType, double age, const FourthDirection& view) {
 
-    assert(mapObjectType < MapObjectType::START_STRUCTURES); // TODO addHarvestable() und addStructure() zusammenlegen?
+    assert(mapObjectType < MapObjectType::START_STRUCTURES);
 
     const MapObjectConfig* mapObjectConfig = context->configMgr->getMapObjectConfig(mapObjectType);
     unsigned char maxAge = mapObjectConfig->maxAge;
@@ -86,7 +111,7 @@ Harvestable* Game::addHarvestable(
 Structure* Game::addStructure(
     const MapCoords& mapCoords, MapObjectType mapObjectType, const FourthDirection& view, Player* player) {
 
-    assert(mapObjectType >= MapObjectType::START_STRUCTURES); // TODO addHarvestable() und addStructure() zusammenlegen?
+    assert(mapObjectType >= MapObjectType::START_STRUCTURES);
 
     const std::string graphicSetName = context->graphicsMgr->getGraphicSetNameForMapObject(mapObjectType);
     const GraphicSet* graphicSet = context->graphicsMgr->getGraphicSet(graphicSetName);

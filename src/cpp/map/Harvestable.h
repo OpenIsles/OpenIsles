@@ -33,13 +33,13 @@ public:
 
 
     virtual void setMapWidth(int mapWidth) override {
-        // Darf nicht aufgerufen werden. Kachelgröße ist IMMER 1x1!
-        assert(false);
+        // Kachelgröße ist IMMER 1x1!
+        assert(mapWidth == 1);
     }
 
     virtual void setMapHeight(int mapHeight) override {
-        // Darf nicht aufgerufen werden. Kachelgröße ist IMMER 1x1!
-        assert(false);
+        // Kachelgröße ist IMMER 1x1!
+        assert(mapHeight == 1);
     }
 
     virtual bool updateObject(const Context& context) override;

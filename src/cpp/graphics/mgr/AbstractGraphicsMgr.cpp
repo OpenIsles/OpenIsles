@@ -89,11 +89,14 @@ void AbstractGraphicsMgr::loadGraphics() {
     loadStaticGraphicSet("add-building-button/house", "data/img/gui/add-building/house.png");
     loadStaticGraphicSet("add-building-button/stonemason", "data/img/gui/add-building/stonemason.png");
     loadStaticGraphicSet("add-building-button/foresters", "data/img/gui/add-building/foresters.png");
+    loadStaticGraphicSet("add-building-button/forest", "data/img/gui/add-building/forest.png");
     loadStaticGraphicSet("add-building-button/hunters-hut", "data/img/gui/add-building/hunters-hut.png");
     loadStaticGraphicSet("add-building-button/cathedral", "data/img/gui/add-building/cathedral.png");
     loadStaticGraphicSet("add-building-button/tavern", "data/img/gui/add-building/tavern.png");
     loadStaticGraphicSet("add-building-button/sugarcane-plantation", "data/img/gui/add-building/sugarcane-plantation.png");
+    loadStaticGraphicSet("add-building-button/sugarcane-field", "data/img/gui/add-building/sugarcane-field.png");
     loadStaticGraphicSet("add-building-button/tobacco-plantation", "data/img/gui/add-building/tobacco-plantation.png");
+    loadStaticGraphicSet("add-building-button/tobacco-field", "data/img/gui/add-building/tobacco-field.png");
     loadStaticGraphicSet("add-building-button/square1", "data/img/gui/add-building/square1.png");
     loadStaticGraphicSet("add-building-button/square2", "data/img/gui/add-building/square2.png");
     loadStaticGraphicSet("add-building-button/square3", "data/img/gui/add-building/square3.png");

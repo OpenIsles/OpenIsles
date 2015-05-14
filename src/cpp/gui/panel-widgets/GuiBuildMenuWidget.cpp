@@ -73,13 +73,21 @@ GuiBuildMenuWidget::GuiBuildMenuWidget(const Context* const context) : GuiPanelW
                     "Zuckerrohrplantage",
                     "add-building-button/sugarcane-plantation"
                 },
-                { MapObjectType::NO_MAP_OBJECT, nullptr, "add-building-button/dummy" },
+                {
+                    MapObjectType::SUGARCANE_FIELD,
+                    "Zuckerrohrfeld",
+                    "add-building-button/sugarcane-field"
+                },
                 {
                     MapObjectType::TOBACCO_PLANTATION,
                     "Tabakplantage",
                     "add-building-button/tobacco-plantation"
                 },
-                { MapObjectType::NO_MAP_OBJECT, nullptr, "add-building-button/dummy" },
+                {
+                    MapObjectType::TOBACCO_FIELD,
+                    "Tabakfeld",
+                    "add-building-button/tobacco-field"
+                },
                 { MapObjectType::NO_MAP_OBJECT, nullptr, "add-building-button/dummy" },
                 { MapObjectType::NO_MAP_OBJECT, nullptr, "add-building-button/dummy" },
                 { MapObjectType::NO_MAP_OBJECT, nullptr, "add-building-button/dummy" },
@@ -104,7 +112,11 @@ GuiBuildMenuWidget::GuiBuildMenuWidget(const Context* const context) : GuiPanelW
                     "Förster",
                     "add-building-button/foresters"
                 },
-                { MapObjectType::NO_MAP_OBJECT, nullptr, "add-building-button/dummy" },
+                {
+                    MapObjectType::NORTHERN_FOREST1,
+                    "Wald",
+                    "add-building-button/forest"
+                },
                 { MapObjectType::NO_MAP_OBJECT, nullptr, "add-building-button/dummy" }
             }
         }, {

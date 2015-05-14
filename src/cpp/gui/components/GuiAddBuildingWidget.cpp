@@ -35,22 +35,31 @@ void GuiAddBuildingWidget::renderElement(IRenderer* renderer) {
 
     // Grafik
     const FourthDirection& view = context->guiMgr->getPanelState().addingMapObjectView;
-    const std::string buildingGraphicsSetName = context->graphicsMgr->getGraphicSetNameForMapObject(mapObjectType);
-    const GraphicSet* buildingGraphicsSet = context->graphicsMgr->getGraphicSet(buildingGraphicsSetName);
-    const IGraphic* buildingGraphic = buildingGraphicsSet->getByView(view)->getGraphic();
+    const std::string graphicsSetName = context->graphicsMgr->getGraphicSetNameForMapObject(mapObjectType);
+    const GraphicSet* graphicSet = context->graphicsMgr->getGraphicSet(graphicsSetName);
+
+    const IGraphic* graphic;
+    if (mapObjectType >= MapObjectType::START_STRUCTURES) {
+        graphic = graphicSet->getByView(view)->getGraphic();
+    } else {
+        // Harvestable? ausgewachsenen Zustand nehmen
+        unsigned char maxAge = context->configMgr->getMapObjectConfig(mapObjectType)->maxAge;
+        const std::string fullgrownState = "growth" + toString(maxAge);
+        graphic = graphicSet->getByStateAndView(fullgrownState, view)->getGraphic();
+    }
 
     double scale; // ggf. verkleinert zeichnen, wenn das Gebäude zu groß is
-    if (buildingGraphic-> getWidth() <= 160) {
+    if (graphic-> getWidth() <= 160) {
         scale = 1;
-    } else if (buildingGraphic->getWidth() <= 240) {
+    } else if (graphic->getWidth() <= 240) {
         scale = 0.666666666;
     } else {
         scale = 0.5;
     }
 
-    int x = windowX + 110 - (int)(buildingGraphic->getWidth() * scale / 2);
+    int x = windowX + 110 - (int)(graphic->getWidth() * scale / 2);
     int y = windowY + 40;
-    buildingGraphic->drawScaledAt(x, y, scale);
+    graphic->drawScaledAt(x, y, scale);
 
     // produzierte Waren
     const ProductionSlots* buildingProduction = mapObjectConfig->getBuildingProduction();

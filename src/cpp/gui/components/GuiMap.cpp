@@ -195,47 +195,33 @@ void GuiMap::renderElement(IRenderer* renderer) {
             const Structure* structure = dynamic_cast<const Structure*>(mapObjectToDrawHere);
             const Harvestable* harvestable = dynamic_cast<const Harvestable*>(mapObjectToDrawHere);
 
-            int moMapWidth, moMapHeight;
-            int tileOffsetXInMapObject, tileOffsetYInMapObject;
-            int drawingFlags = 0;
-            const IGraphic* graphicToDrawHere = nullptr;
-
             // Ausrechnen, welchen Schnibbel der Grafik wir anzeigen müssen
-            moMapWidth = mapObjectToDrawHere->getMapWidth();
-            moMapHeight = mapObjectToDrawHere->getMapHeight();
+            int moMapWidth = mapObjectToDrawHere->getMapWidth();
+            int moMapHeight = mapObjectToDrawHere->getMapHeight();
 
-            tileOffsetXInMapObject = mapCoords.x() - moMapCoords.x(); // (0 ... moMapWidth-1)
-            tileOffsetYInMapObject = mapCoords.y() - moMapCoords.y(); // (0 ... moMapHeight-1)
+            int tileOffsetXInMapObject = mapCoords.x() - moMapCoords.x(); // (0 ... moMapWidth-1)
+            int tileOffsetYInMapObject = mapCoords.y() - moMapCoords.y(); // (0 ... moMapHeight-1)
 
-            // TODO Refactoring: duplicate code
+            int drawingFlags = mapObjectToDrawHere->getDrawingFlags();
+            const MapObjectType& mapObjectType = mapObjectToDrawHere->getMapObjectType();
+
+            const FourthDirection& view = mapObjectToDrawHere->getView();
+            const FourthDirection& viewToRender = Direction::addDirections(view, screenView);
+
+            const std::string& graphicSetName = context->graphicsMgr->getGraphicSetNameForMapObject(mapObjectType);
+            const GraphicSet* mapObjectGraphicSet = context->graphicsMgr->getGraphicSet(graphicSetName);
+
+            const IGraphic* graphicToDrawHere;
             if (structure != nullptr) {
-                drawingFlags = structure->getDrawingFlags();
-                const MapObjectType& mapObjectType = structure->getMapObjectType();
-
-                const FourthDirection& structureView = structure->getView(); // TODO als mapObjectToDrawHere->getView() vereinheitlichen
-                const FourthDirection& viewToRender = Direction::addDirections(structureView, screenView);
-
-                const std::string& graphicSetName = context->graphicsMgr->getGraphicSetNameForMapObject(mapObjectType);
-                const GraphicSet* mapObjectGraphicSet = context->graphicsMgr->getGraphicSet(graphicSetName);
                 graphicToDrawHere = mapObjectGraphicSet->getByView(viewToRender)->getGraphic();
             }
             else if (harvestable != nullptr) {
-                drawingFlags = 0; // TODO für Platzieren/Abreißen werden wir das wohl später doch brauchen
-                const MapObjectType& mapObjectType = harvestable->getMapObjectType();
-
-                const FourthDirection& harvestableView = harvestable->getView(); // TODO als mapObjectToDrawHere->getView() vereinheitlichen
-                const FourthDirection& viewToRender = Direction::addDirections(harvestableView, screenView);
-
-                const std::string& graphicSetName = context->graphicsMgr->getGraphicSetNameForMapObject(mapObjectType);
-                const GraphicSet* mapObjectGraphicSet = context->graphicsMgr->getGraphicSet(graphicSetName);
                 const std::string stateToRender = "growth" + toString(int(harvestable->getAge()));
-
                 graphicToDrawHere = mapObjectGraphicSet->getByStateAndView(stateToRender, viewToRender)->getGraphic();
             }
             else {
                 assert(false);
             }
-
 
             /* Tricky part: Die Berechnung von xInMapObject und yInMapObject in allen Ansichten.
              *
@@ -613,12 +599,9 @@ void GuiMap::updateHoverObject() {
 
     const MapObjectType& mapObjectType = context->guiMgr->getPanelState().addingMapObject;
     const FourthDirection& view = context->guiMgr->getPanelState().addingMapObjectView;
-    const std::string graphicSetName = context->graphicsMgr->getGraphicSetNameForMapObject(mapObjectType);
-    const GraphicSet* graphicSet = context->graphicsMgr->getGraphicSet(graphicSetName);
-    const IGraphic* graphic = graphicSet->getByView(view)->getGraphic();
 
-    const int mapWidth = graphic->getMapWidth();
-    const int mapHeight = graphic->getMapHeight();
+    unsigned char mapWidth, mapHeight;
+    context->graphicsMgr->getMapWidthHeightByMapObjectType(mapObjectType, view, &mapWidth, &mapHeight);
 
     // Zu belegende Kachel mehrfach durchgehen.
 
@@ -638,11 +621,10 @@ endLoop1:
     // Loop 2: Nun durchgehen und entweder das masked-Flag oder das neu zu erstellende Map-Objekt setzen.
     std::shared_ptr<MapObjectFixed> mapObjectHover;
     if (allTilesFree) {
-        MapObjectFixed* mapObjectFixed = (mapObjectType >= START_BUILDINGS) ? new Building() : new Structure(); // TODO Harvestable; Idee: Fabrik-Methode
-        mapObjectFixed->setMapObjectType(mapObjectType);
+        MapObjectFixed* mapObjectFixed = instantiateMapObjectFixed(mapObjectType);
         mapObjectFixed->setMapCoords(mapCoordsUnderMouse);
-        mapObjectFixed->setMapWidth(graphic->getMapWidth());
-        mapObjectFixed->setMapHeight(graphic->getMapHeight());
+        mapObjectFixed->setMapWidth(mapWidth);
+        mapObjectFixed->setMapHeight(mapHeight);
         mapObjectFixed->setView(view);
         mapObjectFixed->setDrawingFlags(IGraphic::DRAWING_FLAG_MASKED);
 
@@ -752,7 +734,7 @@ void GuiMap::onReleaseMouseLeftInBuildingMode() {
         }
 
         // Ok, Gebäude nun wirklich setzen
-        context->game->addStructure(mapCoords, mapObjectType, view, currentPlayer);
+        context->game->addMapObjectFixed(mapCoords, mapObjectType, view, currentPlayer);
 
         // Resourcen bezahlen
         Colony* colony = context->game->getColony(
@@ -798,11 +780,11 @@ unsigned char GuiMap::isAllowedToPlaceMapObject(
     }
 
     // Checken, ob alles frei is, um das Gebäude zu setzen
-    const std::string graphicSetName = context->graphicsMgr->getGraphicSetNameForMapObject(mapObjectType);
-    const GraphicSet* graphicSet = context->graphicsMgr->getGraphicSet(graphicSetName);
-    const IGraphic* graphic = graphicSet->getByView(view)->getGraphic();
-    for (int y = mapCoords.y(); y < mapCoords.y() + graphic->getMapHeight(); y++) {
-        for (int x = mapCoords.x(); x < mapCoords.x() + graphic->getMapWidth(); x++) {
+    unsigned char mapWidth, mapHeight;
+    context->graphicsMgr->getMapWidthHeightByMapObjectType(mapObjectType, view, &mapWidth, &mapHeight);
+
+    for (int y = mapCoords.y(); y < mapCoords.y() + mapHeight; y++) {
+        for (int x = mapCoords.x(); x < mapCoords.x() + mapWidth; x++) {
             // Steht was im Weg?
             MapTile* mapTile = context->game->getMap()->getMapTileAt(MapCoords(x, y));
             if (mapTile->mapObjectFixed != nullptr) {
@@ -950,33 +932,39 @@ void GuiMap::addCurrentStructureToBuildQueue(const MapCoords& mapCoords) {
     MapObjectType mapObjectType = context->guiMgr->getPanelState().addingMapObject;
     const FourthDirection& view = context->guiMgr->getPanelState().addingMapObjectView;
 
-    const std::string graphicSetName = context->graphicsMgr->getGraphicSetNameForMapObject(mapObjectType);
-    const GraphicSet* graphicSet = context->graphicsMgr->getGraphicSet(graphicSetName);
-    const IGraphic* graphic = graphicSet->getByView(view)->getGraphic();
+    unsigned char mapWidth, mapHeight;
+    context->graphicsMgr->getMapWidthHeightByMapObjectType(mapObjectType, view, &mapWidth, &mapHeight);
 
-    // Sonderfall Haus: Wir wählen zufällig ein Pionier-Haus aus
-    if (mapObjectType == MapObjectType::PIONEERS_HOUSE1) {
+    // Sonderfälle, wo zufällig gewählt wird: Haus (= zufälliges Pionier-Haus) und Wald
+    if (mapObjectType == MapObjectType::PIONEERS_HOUSE1 || mapObjectType == MapObjectType::NORTHERN_FOREST1) {
         std::random_device randomDevice;
         std::default_random_engine randomEngine(randomDevice());
-        std::uniform_int_distribution<int> randomPioneerHouse(
-            MapObjectType::PIONEERS_HOUSE1, MapObjectType::PIONEERS_HOUSE5);
 
-        mapObjectType = (MapObjectType) randomPioneerHouse(randomEngine);
+        if (mapObjectType == MapObjectType::PIONEERS_HOUSE1) {
+            std::uniform_int_distribution<int> randomPioneerHouse(
+                MapObjectType::PIONEERS_HOUSE1, MapObjectType::PIONEERS_HOUSE5);
+
+            mapObjectType = (MapObjectType) randomPioneerHouse(randomEngine);
+        } else if (mapObjectType == MapObjectType::NORTHERN_FOREST1) {
+            std::uniform_int_distribution<int> randomNorthernForest(
+                MapObjectType::NORTHERN_FOREST1, MapObjectType::NORTHERN_FOREST2);
+
+            mapObjectType = (MapObjectType) randomNorthernForest(randomEngine);
+        }
     }
 
-    Structure* structure = (mapObjectType >= START_BUILDINGS) ? new Building() : new Structure(); // TODO Fabrik-Methode
-    structure->setMapObjectType(mapObjectType);
+    Structure* structure = (Structure*) instantiateMapObjectFixed(mapObjectType);
     structure->setMapCoords(mapCoords);
-    structure->setMapWidth(graphic->getMapWidth());
-    structure->setMapHeight(graphic->getMapHeight());
+    structure->setMapWidth(mapWidth);
+    structure->setMapHeight(mapHeight);
     structure->setView(context->guiMgr->getPanelState().addingMapObjectView);
     structure->setDrawingFlags(IGraphic::DRAWING_FLAG_MASKED);
 
     std::shared_ptr<MapObjectFixed> structureBeingAdded(structure);
     buildQueue.push_back(structureBeingAdded);
 
-    for (int my = mapCoords.y(); my < mapCoords.y() + graphic->getMapHeight(); my++) {
-        for (int mx = mapCoords.x(); mx < mapCoords.x() + graphic->getMapWidth(); mx++) {
+    for (int my = mapCoords.y(); my < mapCoords.y() + mapHeight; my++) {
+        for (int mx = mapCoords.x(); mx < mapCoords.x() + mapWidth; mx++) {
             mapTilesToDrawTemporarily[MapCoords(mx, my)].mapObjectToDraw = structureBeingAdded;
         }
     }
@@ -1029,8 +1017,8 @@ void GuiMap::updateMapObjectsTemporarilyDrawingFlags() {
     // Ansonsten gucken wir buildQueue durch
 
     // Wir nutzen die Tatsache aus, dass immer nur dieselben Gebäude in der Bauqueue sind.
-    Structure& firstStructureInList = *std::dynamic_pointer_cast<Structure>(buildQueue.front());
-    const MapObjectType& mapObjectType = firstStructureInList.getMapObjectType();
+    MapObjectFixed& firstObjectInList = *buildQueue.front();
+    const MapObjectType& mapObjectType = firstObjectInList.getMapObjectType();
     const MapObjectConfig* MapObjectConfig = context->configMgr->getMapObjectConfig(mapObjectType);
     const BuildingCosts& buildingCostsOneTime = MapObjectConfig->buildingCosts;
 
@@ -1041,7 +1029,7 @@ void GuiMap::updateMapObjectsTemporarilyDrawingFlags() {
     // Der Reihe nach alle zu setzenden Gebäude durchgehen und gucken, wann/ob die Resourcen ausgehen
     int structuresCount = 1;
     for (auto iter = buildQueue.cbegin(); iter != buildQueue.cend(); iter++, structuresCount++) {
-        Structure& mapObject = *std::dynamic_pointer_cast<Structure>(*iter);
+        MapObjectFixed& mapObject = **iter;
 
         if (!outOfResources) {
             BuildingCosts sumBuildingCostTilHere = buildingCostsOneTime * structuresCount;
@@ -1196,8 +1184,7 @@ void GuiMap::updateMapTilesToDrawTemporarilyForStreetsAt(const MapCoords& mapCoo
     // Ansonsten temporär ersetzen.
     auto iterMapTileTemporialy = mapTilesToDrawTemporarily.find(mapCoordsToUpdate);
     if (iterMapTileTemporialy == mapTilesToDrawTemporarily.cend()) {
-        MapObjectFixed* structureToTemporarilyReplaceWith = (mapObjectTypeShouldBe >= START_BUILDINGS) ? new Building() : new Structure(); // TODO Harvestable; Idee: Fabrik-Methode
-        structureToTemporarilyReplaceWith->setMapObjectType(mapObjectTypeShouldBe);
+        MapObjectFixed* structureToTemporarilyReplaceWith = instantiateMapObjectFixed(mapObjectTypeShouldBe);
         structureToTemporarilyReplaceWith->setMapCoords(mapCoordsToUpdate);
         structureToTemporarilyReplaceWith->setMapWidth(1);
         structureToTemporarilyReplaceWith->setMapHeight(1);
@@ -1226,4 +1213,22 @@ void GuiMap::updateMapTilesToDrawTemporarilyForStreetsAround(const MapCoords& ma
     for (const MapCoords& mapCoords : mapCoordsToCheck) {
         updateMapTilesToDrawTemporarilyForStreetsAt(mapCoords);
     }
+}
+
+MapObjectFixed* GuiMap::instantiateMapObjectFixed(const MapObjectType& mapObjectType) {
+    MapObjectFixed* mapObjectFixed;
+
+    if (mapObjectType < MapObjectType::START_STRUCTURES) {
+        unsigned char maxAge = context->configMgr->getMapObjectConfig(mapObjectType)->maxAge;
+        mapObjectFixed = new Harvestable(maxAge);
+    } else if (mapObjectType < MapObjectType::START_BUILDINGS) {
+        mapObjectFixed = new Structure();
+    } else if (mapObjectType >= MapObjectType::START_BUILDINGS) {
+        mapObjectFixed = new Building();
+    } else {
+        assert(false);
+    }
+
+    mapObjectFixed->setMapObjectType(mapObjectType);
+    return mapObjectFixed;
 }
