@@ -221,6 +221,7 @@ void GuiMap::renderElement(IRenderer* renderer) {
             }
             else {
                 assert(false);
+                return;
             }
 
             /* Tricky part: Die Berechnung von xInMapObject und yInMapObject in allen Ansichten.
@@ -1164,6 +1165,7 @@ void GuiMap::updateMapTilesToDrawTemporarilyForStreetsAt(const MapCoords& mapCoo
         mapObjectTypeBase = MapObjectType::FARM_ROAD_STRAIGHT_0;
     } else {
         assert(false);
+        return;
     }
 
     // Kachel bestimmen, die dort liegen sollte.
