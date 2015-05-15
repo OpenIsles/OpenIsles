@@ -52,16 +52,40 @@ clean-gui:
 	rm -f $(DATA_DIRECTORY)/img/gui/statusbar.png
 	rm -f $(DATA_DIRECTORY)/img/gui/add-building/add-building-grid.png
 	
-build-gui: $(DATA_DIRECTORY)/img/gui/panel.png $(DATA_DIRECTORY)/img/gui/statusbar.png $(DATA_DIRECTORY)/img/gui/add-building/add-building-grid.png
+build-gui: \
+	$(DATA_DIRECTORY)/img/gui/panel.png \
+	$(DATA_DIRECTORY)/img/gui/statusbar.png \
+	$(DATA_DIRECTORY)/img/gui/add-building/add-building-grid.png
 
+$(DATA_DIRECTORY)/img/gui/panel.png: $(SRC_DIRECTORY)/psd/marble-panels.psd
+	$(CREATE_TARGET_DIRECTORY)
+	convert $< -crop 256x768+18+12 +repage -flatten \
+		\( \
+		  -size 256x768 xc:none -stroke none \
+		  -fill rgba\(255,255,255,0.7\) \
+		  -draw "polyline 0,0 255,0 252,3 3,3" \
+		  -draw "polyline 0,0 3,3 3,764 0,767" \
+		  -fill rgba\(0,0,0,0.6\) \
+		  -draw "polyline 0,767 255,767 252,764 3,764" \
+		  -draw "polyline 255,0 252,3 252,764 255,767" \
+		  -fill none -stroke rgba\(255,255,255,0.85\) -strokewidth 0.5 \
+		  -draw "polyline 4,4 251,4 251,763 4,763 4,4" \
+		\) -compose softlight -composite $@
 
-$(DATA_DIRECTORY)/img/gui/panel.png:
+$(DATA_DIRECTORY)/img/gui/statusbar.png: $(SRC_DIRECTORY)/psd/marble-panels.psd
 	$(CREATE_TARGET_DIRECTORY)
-	convert -size 236x748 canvas:"#907f67" -mattecolor "#6f5038" -frame 10x10+5+5 $@
-	
-$(DATA_DIRECTORY)/img/gui/statusbar.png:
-	$(CREATE_TARGET_DIRECTORY)
-	convert -size 758x24 canvas:"#907f67" -mattecolor "#6f5038" -frame 5x5+2+2 $@
+	convert $< -rotate 90 -crop 768x34+18+214 +repage -flatten \
+		\( \
+		  -size 768x34 xc:none -stroke none \
+		  -fill rgba\(255,255,255,0.7\) \
+		  -draw "polyline 0,0 767,0 764,3 3,3" \
+		  -draw "polyline 0,0 3,3 3,30 0,33" \
+		  -fill rgba\(0,0,0,0.6\) \
+		  -draw "polyline 0,33 767,33 764,30 3,30" \
+		  -draw "polyline 767,0 764,3 764,30 767,33" \
+		  -fill none -stroke rgba\(255,255,255,0.85\) -strokewidth 0.5 \
+		  -draw "polyline 4,4 763,4 763,29 4,29 4,4" \
+		\) -compose softlight -composite $@
 
 $(DATA_DIRECTORY)/img/gui/add-building/add-building-grid.png: $(SRC_DIRECTORY)/blender/ui/add-building-grid/add-building-grid.blend
 	$(CREATE_TARGET_DIRECTORY)
