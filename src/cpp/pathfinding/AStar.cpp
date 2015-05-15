@@ -311,6 +311,12 @@ bool AStar::isTileWalkable(const MapCoords& mapCoords, Building* sourceBuilding,
         }
     }
 
+    // Landschaft im Weg?
+    Harvestable* harvestable = dynamic_cast<Harvestable*>(mapTile->mapObjectFixed);
+    if (harvestable != nullptr) {
+        return false;
+    }
+
     // Gelände prüfen, kann man darf laufen?
     if (useStreetOnly) {
         if (!insideSourceOrDestinationBuilding && !map->isWalkableForCartAt(mapCoords)) {
