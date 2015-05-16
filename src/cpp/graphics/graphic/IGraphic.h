@@ -36,6 +36,12 @@ public:
      */
     static const int DRAWING_FLAG_DARKENED = (1 << 3);
 
+    /**
+     * @brief zeichnet das Objekt als grauen Schatten (kann nicht mit `DRAWING_FLAG_MASKED` kombiniert werden)
+     * @sa #draw()
+     */
+    static const int DRAWING_FLAG_SHADOW   = (1 << 4);
+
 protected:
     /**
 	 * @brief Breite der Grafik
@@ -119,6 +125,14 @@ public:
      * @param scale Skalierungsfaktor
      */
     virtual void drawScaledAt(int x, int y, double scale) const = 0;
+
+    /**
+     * @brief Zeichnet die Schatten-Grafik skaliert
+     * @param x x-Koordinate, wo hingezeichnet werden soll
+     * @param y y-Koordinate, wo hingezeichnet werden soll
+     * @param scale Skalierungsfaktor
+     */
+    virtual void drawShadowScaledAt(int x, int y, double scale) const = 0;
 
      /**
      * @brief Zeichnet die Grafik mit bestimmten Drawing-Flags. Quell- und Zielbereich können beliebig gewählt werden.

@@ -59,6 +59,7 @@ void GuiAddBuildingWidget::renderElement(IRenderer* renderer) {
 
     int x = windowX + 110 - (int)(graphic->getWidth() * scale / 2);
     int y = windowY + 40;
+    graphic->drawShadowScaledAt(x, y + 12, scale);
     graphic->drawScaledAt(x, y, scale);
 
     // produzierte Waren

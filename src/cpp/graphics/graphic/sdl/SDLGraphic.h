@@ -3,6 +3,7 @@
 
 #include <SDL.h>
 #include <SDL_image.h>
+#include <functional>
 #include "graphics/graphic/IGraphic.h"
 #include "graphics/renderer/IRenderer.h"
 
@@ -23,10 +24,14 @@ protected:
 	SDL_Texture* texture;
 
 	/**
-     * @brief SDL-Texture der maskierten Grafik zurück. Diese wird verwendet, wenn ein neues Gebäude
-     * positioniert wird.
+     * @brief SDL-Texture der maskierten Grafik. Diese wird verwendet, wenn ein neues Gebäude positioniert wird.
      */
     SDL_Texture* textureMasked;
+
+	/**
+     * @brief SDL-Texture der Schatten-Grafik. Diese wird im Panel verwendet, wenn ein Gebäude gebaut wird.
+     */
+    SDL_Texture* textureShadow;
 
 	/**
 	 * @brief SDL-Surface
@@ -78,6 +83,7 @@ public:
 	virtual void getPixel(int x, int y, unsigned char* r, unsigned char* g, unsigned char* b, unsigned char* a) const;
     virtual void drawAt(int x, int y) const;
     virtual void drawScaledAt(int x, int y, double scale) const;
+	virtual void drawShadowScaledAt(int x, int y, double scale) const;
 	virtual void draw(Rect* rectSource, Rect* rectDestination, int drawingFlags, uint32_t sdlTicks) const;
 
 private:
@@ -86,10 +92,13 @@ private:
 	 */
 	void createTextures();
 
-    /**
-     * @brief Erzeugt `textureMasked`. Erwartet, dass `surface` bereits mit der Grafik befüllt ist.
-     */
-    void createMaskedTexture();
+	/**
+	 * @brief Erzeugt eine alternative Textur als der Grafik
+	 * @param fillPixelsFunction Funktion, die die Pixel malt. Als Parameter erhält sie einen Buffer,
+	 *                           der mit Pixel gefüllt werden muss.
+	 * @return Zeiger auf die erzeugte `SDL_Texture` oder `nullptr`, wenn die Grafik das falsche Format hat
+	 */
+	SDL_Texture* createAlternativeTexture(std::function<void(unsigned char* pixelBuffer)> fillPixelsFunction);
 
 	/**
 	 * @brief Interner Helper, der die Grafik an eine bestimmte Stelle mit definierter Zielgröße zeichnet.

@@ -1,3 +1,4 @@
+#include <cassert>
 #include <cstring>
 #include <iostream>
 #include <stdexcept>
@@ -87,59 +88,78 @@ void SDLGraphic::createTextures() {
 		std::cerr << "Could not create texture" << SDL_GetError() << std::endl;
 		throw std::runtime_error("Could not create texture");
 	}
-
 	this->texture = texture;
 
-	createMaskedTexture();
+	textureMasked = createAlternativeTexture([&](unsigned char* pixelBuffer) {
+		for (int y = 0; y < surface->h; y++) {
+			uint32_t* pixelPtr = (uint32_t*) (((unsigned char*) pixelBuffer) + y * surface->pitch);
+
+			int x = 0;
+			if (y % 2) {
+				x = 1;
+				pixelPtr++;
+			}
+
+			for (; x < surface->w; x += 2, pixelPtr += 2) {
+				*pixelPtr &= 0xff000000; // Alpha-Kanel unverändert lassen
+				*pixelPtr |= 0x0037afc8; // Pixelfarbe auf Orange setzen
+			}
+		}
+	});
+
+	textureShadow = createAlternativeTexture([&](unsigned char* pixelBuffer) {
+		for (int y = 0; y < surface->h; y++) {
+			uint32_t* pixelPtr = (uint32_t*) (((unsigned char*) pixelBuffer) + y * surface->pitch);
+
+			for (int x = 0; x < surface->w; x++, pixelPtr++) {
+				// Halbtransparenz entfernen
+				uint32_t alpha = ((*pixelPtr) & 0xff000000) >> 24;
+				if (alpha >= 128) {
+					*pixelPtr = 0xff3f483f; // Pixel auf Grau setzen
+				} else {
+					*pixelPtr = 0x00000000; // Pixel transparent machen
+				}
+			}
+		}
+	});
 }
 
 SDLGraphic::~SDLGraphic() {
 	SDL_FreeSurface(surface);
 	SDL_DestroyTexture(texture);
 	SDL_DestroyTexture(textureMasked);
+	SDL_DestroyTexture(textureShadow);
 
 	width = height = -1;
 	surface = nullptr;
 	texture = nullptr;
 	textureMasked = nullptr;
+	textureShadow = nullptr;
 }
 
-void SDLGraphic::createMaskedTexture() {
+SDL_Texture* SDLGraphic::createAlternativeTexture(std::function<void(unsigned char* pixelBuffer)> fillPixelsFunction) {
     // Wir können nur 32bit-Grafiken bearbeiten
     if (surface->format->format != SDL_PIXELFORMAT_ABGR8888) {
-        textureMasked = nullptr;
-        return;
+        return nullptr;
     }
 
     // Pixel abkopieren und ändern
-    unsigned char* pixelsMasked = new unsigned char[surface->h * surface->pitch];
-    memcpy(pixelsMasked, surface->pixels, surface->h * surface->pitch);
+    unsigned char* pixelBuffer = new unsigned char[surface->h * surface->pitch];
+    memcpy(pixelBuffer, surface->pixels, surface->h * surface->pitch);
 
-    uint32_t* pixelPtr = (uint32_t*) pixelsMasked;
-    for (int y = 0; y < surface->h; y++) {
-        pixelPtr = (uint32_t*) (((unsigned char*) pixelsMasked) + y * surface->pitch);
-
-        int x = 0;
-        if (y % 2) {
-            x = 1;
-            pixelPtr++;
-        }
-
-        for (; x < surface->w; x += 2, pixelPtr += 2) {
-            *pixelPtr &= 0xff000000; // Alpha-Kanel unverändert lassen
-            *pixelPtr |= 0x0037afc8; // Pixelfarbe auf Orange setzen
-        }
-    }
+	fillPixelsFunction(pixelBuffer);
 
     // Textur erstellen
     SDL_Surface* surfaceMasked = SDL_CreateRGBSurfaceFrom(
-        pixelsMasked, surface->w, surface->h, surface->format->BitsPerPixel, surface->pitch,
+		pixelBuffer, surface->w, surface->h, surface->format->BitsPerPixel, surface->pitch,
         surface->format->Rmask, surface->format->Gmask, surface->format->Bmask, surface->format->Amask);
 
     SDL_Renderer* sdlRealRenderer = (dynamic_cast<SDLRenderer*>(renderer))->getRealRenderer();
-    textureMasked = SDL_CreateTextureFromSurface(sdlRealRenderer, surfaceMasked);
+    SDL_Texture* sdlTexture = SDL_CreateTextureFromSurface(sdlRealRenderer, surfaceMasked);
     SDL_FreeSurface(surfaceMasked);
-    delete[] pixelsMasked;
+    delete[] pixelBuffer;
+
+	return sdlTexture;
 }
 
 void SDLGraphic::getPixel(int x, int y, uint8_t* r, uint8_t* g, uint8_t* b, uint8_t* a) const {
@@ -189,6 +209,13 @@ void SDLGraphic::drawScaledAt(int x, int y, double scale) const {
     drawAt(rectDestination);
 }
 
+void SDLGraphic::drawShadowScaledAt(int x, int y, double scale) const {
+	SDL_Rect rectDestination = { x, y, (int) (getWidth() * scale), (int) (getHeight() * scale) };
+    SDL_Renderer* sdlRealRenderer = (dynamic_cast<SDLRenderer*>(renderer))->getRealRenderer();
+    SDL_SetTextureColorMod(textureShadow, 255, 255, 255);
+    SDL_RenderCopy(sdlRealRenderer, textureShadow, nullptr, &rectDestination);
+}
+
 void SDLGraphic::drawAt(const SDL_Rect& rectDestination) const {
     SDL_Renderer* sdlRealRenderer = (dynamic_cast<SDLRenderer*>(renderer))->getRealRenderer();
     SDL_SetTextureColorMod(texture, 255, 255, 255);
@@ -202,7 +229,16 @@ void SDLGraphic::draw(Rect* rectSource, Rect* rectDestination, int drawingFlags,
     }
 
     // normale oder maskierte Textur?
-    SDL_Texture* textureToDraw = (drawingFlags & DRAWING_FLAG_MASKED) ? textureMasked : texture;
+	SDL_Texture* textureToDraw;
+
+	assert((drawingFlags & (DRAWING_FLAG_MASKED | DRAWING_FLAG_SHADOW)) != (DRAWING_FLAG_MASKED | DRAWING_FLAG_SHADOW));
+	if (drawingFlags & DRAWING_FLAG_MASKED) {
+		textureToDraw = textureMasked;
+	} else if (drawingFlags & DRAWING_FLAG_SHADOW) {
+		textureToDraw = textureShadow;
+	} else {
+		textureToDraw = texture;
+	}
 
     // Abgedunkelt oder rot zeichnen?
     if (drawingFlags & DRAWING_FLAG_DARKENED) {
