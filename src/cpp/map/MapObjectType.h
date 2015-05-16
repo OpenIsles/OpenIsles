@@ -76,6 +76,7 @@ enum MapObjectType : unsigned char {
     TAVERN,
     SUGARCANE_PLANTATION,
     TOBACCO_PLANTATION,
+    DISTILLERY,
 
     MAX_MAP_OBJECT_TYPE // Marker, wie viel Platz wir im Array brauchen
 } MapObjectType;

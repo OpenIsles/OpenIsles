@@ -45,7 +45,11 @@ GuiBuildMenuWidget::GuiBuildMenuWidget(const Context* const context) : GuiPanelW
                     "add-building-button/toolsmiths"
                 },
                 { MapObjectType::NO_MAP_OBJECT, nullptr, "add-building-button/dummy" },
-                { MapObjectType::NO_MAP_OBJECT, nullptr, "add-building-button/dummy" },
+                {
+                    MapObjectType::DISTILLERY,
+                    "Rumbrennerei",
+                    "add-building-button/distillery"
+                },
                 { MapObjectType::NO_MAP_OBJECT, nullptr, "add-building-button/dummy" },
                 { MapObjectType::NO_MAP_OBJECT, nullptr, "add-building-button/dummy" },
                 {

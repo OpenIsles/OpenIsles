@@ -388,6 +388,22 @@ void ConfigMgr::loadMapObjectConfigs() {
     mapObjectConfigs[MapObjectType::TOBACCO_PLANTATION]->productionRate = 1.9;
     mapObjectConfigs[MapObjectType::TOBACCO_PLANTATION]->inhabitants = 4;
     mapMapObjectNameInSavefile[mapObjectConfigs[MapObjectType::TOBACCO_PLANTATION]->nameInSavefile] = MapObjectType::TOBACCO_PLANTATION;
+
+    mapObjectConfigs[MapObjectType::DISTILLERY] = new MapObjectConfig();
+    mapObjectConfigs[MapObjectType::DISTILLERY]->name = "Rumbrennerei";
+    mapObjectConfigs[MapObjectType::DISTILLERY]->nameInSavefile = "distillery";
+    mapObjectConfigs[MapObjectType::DISTILLERY]->structurePlacing = StructurePlacing::INDIVIDUALLY;
+    mapObjectConfigs[MapObjectType::DISTILLERY]->catchmentArea = new RectangleData<char>(26, 26);
+    memcpy(mapObjectConfigs[MapObjectType::DISTILLERY]->catchmentArea->data, "0000000001111111100000000000000001111111111110000000000001111111111111111000000000111111111111111111000000011111111111111111111000001111111111111111111111000011111111111111111111110001111111111111111111111110011111111111111111111111101111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111011111111111111111111111100111111111111111111111111000111111111111111111111100001111111111111111111111000001111111111111111111100000001111111111111111110000000001111111111111111000000000000111111111111000000000000000011111111000000000", 676);
+    mapObjectConfigs[MapObjectType::DISTILLERY]->buildingCosts = { 200, 3, 2, 5 };
+    mapObjectConfigs[MapObjectType::DISTILLERY]->buildingProduction = {
+        GoodsSlot(GoodsType::ALCOHOL, 4),
+        GoodsSlot(GoodsType::SUGARCANE, 6),
+        GoodsSlot()
+    };
+    mapObjectConfigs[MapObjectType::DISTILLERY]->productionRate = 2.5;
+    mapObjectConfigs[MapObjectType::DISTILLERY]->inputConsumptionRate = 5;
+    mapMapObjectNameInSavefile[mapObjectConfigs[MapObjectType::DISTILLERY]->nameInSavefile] = MapObjectType::DISTILLERY;
 }
 
 void ConfigMgr::loadTilesConfig() {

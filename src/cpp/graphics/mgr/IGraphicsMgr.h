@@ -96,6 +96,7 @@ public:
         else if (mapObjectType == MapObjectType::TAVERN) { graphicSetNameSuffix = "tavern"; }
         else if (mapObjectType == MapObjectType::SUGARCANE_PLANTATION) { graphicSetNameSuffix = "sugarcane-plantation"; }
         else if (mapObjectType == MapObjectType::TOBACCO_PLANTATION) { graphicSetNameSuffix = "tobacco-plantation"; }
+        else if (mapObjectType == MapObjectType::DISTILLERY) { graphicSetNameSuffix = "distillery"; }
         else if (mapObjectType == MapObjectType::SQUARE1) { graphicSetNameSuffix = "square1"; }
         else if (mapObjectType == MapObjectType::SQUARE2) { graphicSetNameSuffix = "square2"; }
         else if (mapObjectType == MapObjectType::SQUARE3) { graphicSetNameSuffix = "square3"; }
