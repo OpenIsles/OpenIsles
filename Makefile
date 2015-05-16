@@ -36,7 +36,6 @@ FIX_TILE_TRANSPARENCY = \
 ########################################################################################################################
 
 $(DATA_DIRECTORY)/img/tileset.png: $(SRC_DIRECTORY)/blender/tiles/tiles.blend
-	mkdir -p $(DATA_DIRECTORY)/img/tiles
 	cd $(SRC_DIRECTORY)/blender/tiles; $(BLENDER) -b $(notdir $<) -P render.py
 	php $(SRC_DIRECTORY)/blender/tiles/generate-tileset.php
 	$(call FIX_TILE_TRANSPARENCY,$(SRC_DIRECTORY)/blender/tiles/render/tileset.png)
@@ -87,10 +86,10 @@ $(DATA_DIRECTORY)/img/gui/statusbar.png: $(SRC_DIRECTORY)/psd/marble-panels.psd
 		  -draw "polyline 4,4 763,4 763,29 4,29 4,4" \
 		\) -compose softlight -composite $@
 
-$(DATA_DIRECTORY)/img/gui/add-building/add-building-grid.png: $(SRC_DIRECTORY)/blender/ui/add-building-grid/add-building-grid.blend
+$(DATA_DIRECTORY)/img/gui/add-building/add-building-grid.png: $(SRC_DIRECTORY)/blender/gui/add-building-grid/add-building-grid.blend
 	$(CREATE_TARGET_DIRECTORY)
-	cd $(SRC_DIRECTORY)/blender/ui/add-building-grid; $(BLENDER) -b $(notdir $<) -P render.py
-	mv $(SRC_DIRECTORY)/blender/ui/add-building-grid/add-building-grid.png $@
+	cd $(SRC_DIRECTORY)/blender/gui/add-building-grid; $(BLENDER) -b $(notdir $<) -P render.py
+	mv $(SRC_DIRECTORY)/blender/gui/add-building-grid/add-building-grid.png $@
 	
 ########################################################################################################################
 # Gebäude                                                                                                              #
@@ -103,7 +102,7 @@ BUILDINGS := butchers cathedral cattle-farm chapel foresters hunters-hut marketp
              toolsmiths weaving-mill1
 
 define RENDER_BUILDING
-$(DATA_DIRECTORY)/img/objects/$(1).png: $(SRC_DIRECTORY)/blender/buildings/$(1)/$(1).blend
+$(DATA_DIRECTORY)/img/buildings/$(1).png: $(SRC_DIRECTORY)/blender/buildings/$(1)/$(1).blend
 	$$(CREATE_TARGET_DIRECTORY)
 	cd $(SRC_DIRECTORY)/blender/buildings/$(1); $(BLENDER) -b $$(notdir $$<) -P ../render-building.py
 
@@ -125,8 +124,8 @@ $(foreach BUILDING,$(BUILDINGS),$(eval $(call RENDER_BUILDING,$(BUILDING))))
 STREET_TILESETS := cobbled-street farm-road
 
 define RENDER_STREET_TILESET
-$(DATA_DIRECTORY)/img/objects/$(1).png: $(SRC_DIRECTORY)/blender/streets/$(1)/$(1).blend
-	mkdir -p $(DATA_DIRECTORY)/img/objects
+$(DATA_DIRECTORY)/img/streets/$(1).png: $(SRC_DIRECTORY)/blender/streets/$(1)/$(1).blend
+	$$(CREATE_TARGET_DIRECTORY)
 	cd $(SRC_DIRECTORY)/blender/streets/$(1); $(BLENDER) -b $$(notdir $$<) -P ../render-street-tileset.py
 
 	# geometry muss angegeben werden, sonst greift der Default von 120x120
@@ -202,7 +201,7 @@ $(foreach GOOD,$(GOODS),$(eval $(call RENDER_GOODS_ICONS,$(GOOD))))
 ANIMATIONS := carrier
 
 define RENDER_ANIMATION
-$(DATA_DIRECTORY)/img/objects/$(1).png: $(SRC_DIRECTORY)/blender/animations/$(1)/$(1).blend
+$(DATA_DIRECTORY)/img/animations/$(1).png: $(SRC_DIRECTORY)/blender/animations/$(1)/$(1).blend
 	$$(CREATE_TARGET_DIRECTORY)
 	cd $(SRC_DIRECTORY)/blender/animations/$(1); $(BLENDER) -b $$(notdir $$<) -P ../render-animation.py
 
@@ -226,7 +225,7 @@ $(foreach ANIMATION,$(ANIMATIONS),$(eval $(call RENDER_ANIMATION,$(ANIMATION))))
 ########################################################################################################################
 
 render-cart: $(SRC_DIRECTORY)/blender/animations/cart/cart.blend
-	mkdir -p $(DATA_DIRECTORY)/img/objects
+	mkdir -p $(DATA_DIRECTORY)/img/animations
 	cd $(SRC_DIRECTORY)/blender/animations/cart; $(BLENDER) -b $(notdir $<) -P render-cart.py
 
 	# geometry muss angegeben werden, sonst greift der Default von 120x120
@@ -239,7 +238,7 @@ render-cart: $(SRC_DIRECTORY)/blender/animations/cart/cart.blend
 	    $(SRC_DIRECTORY)/blender/animations/cart/render/without_cargo/angle225/* \
 	    $(SRC_DIRECTORY)/blender/animations/cart/render/without_cargo/angle270/* \
 	    $(SRC_DIRECTORY)/blender/animations/cart/render/without_cargo/angle315/* \
-	    -geometry +0+0 -tile x8 $(DATA_DIRECTORY)/img/objects/cart-without-cargo.png
+	    -geometry +0+0 -tile x8 $(DATA_DIRECTORY)/img/animations/cart-without-cargo.png
 	$(MONTAGE) \
 	    $(SRC_DIRECTORY)/blender/animations/cart/render/with_cargo/angle0/* \
 	    $(SRC_DIRECTORY)/blender/animations/cart/render/with_cargo/angle45/* \
@@ -249,7 +248,7 @@ render-cart: $(SRC_DIRECTORY)/blender/animations/cart/cart.blend
 	    $(SRC_DIRECTORY)/blender/animations/cart/render/with_cargo/angle225/* \
 	    $(SRC_DIRECTORY)/blender/animations/cart/render/with_cargo/angle270/* \
 	    $(SRC_DIRECTORY)/blender/animations/cart/render/with_cargo/angle315/* \
-	    -geometry +0+0 -tile x8 $(DATA_DIRECTORY)/img/objects/cart-with-cargo.png
+	    -geometry +0+0 -tile x8 $(DATA_DIRECTORY)/img/animations/cart-with-cargo.png
 
 ########################################################################################################################
 # Schiffe                                                                                                              #
@@ -275,18 +274,18 @@ $(DATA_DIRECTORY)/img/ships/little-ship.png: $(SRC_DIRECTORY)/blender/ships/litt
 # Banner                                                                                                               #
 ########################################################################################################################
 
-render-coat-of-arms: $(SRC_DIRECTORY)/blender/ui/coat-of-arms/coat-of-arms.blend $(DATA_DIRECTORY)/img/population-man.png
+render-coat-of-arms: $(SRC_DIRECTORY)/blender/gui/coat-of-arms/coat-of-arms.blend $(DATA_DIRECTORY)/img/gui/population-man.png
 	mkdir -p $(DATA_DIRECTORY)/img/gui/coat-of-arms
-	cd $(SRC_DIRECTORY)/blender/ui/coat-of-arms; $(BLENDER) -b coat-of-arms.blend -P render.py
+	cd $(SRC_DIRECTORY)/blender/gui/coat-of-arms; $(BLENDER) -b coat-of-arms.blend -P render.py
 
-	cp -rf $(SRC_DIRECTORY)/blender/ui/coat-of-arms/render/* $(DATA_DIRECTORY)/img/gui/coat-of-arms
-	rm -rf $(SRC_DIRECTORY)/blender/ui/coat-of-arms/render
+	cp -rf $(SRC_DIRECTORY)/blender/gui/coat-of-arms/render/* $(DATA_DIRECTORY)/img/gui/coat-of-arms
+	rm -rf $(SRC_DIRECTORY)/blender/gui/coat-of-arms/render
 
 	mkdir -p $(DATA_DIRECTORY)/img/gui/coat-of-arms/population
 	for color in blue red white yellow; \
 		do convert -background transparent $(DATA_DIRECTORY)/img/gui/coat-of-arms/small/$$color.png \
 		           -gravity north-west -extent 30x30 \
-		           $(DATA_DIRECTORY)/img/population-man.png -geometry +11+0 -composite \
+		           $(DATA_DIRECTORY)/img/gui/population-man.png -geometry +11+0 -composite \
 		           $(DATA_DIRECTORY)/img/gui/coat-of-arms/population/$$color.png; \
 	done
 
@@ -294,15 +293,15 @@ render-coat-of-arms: $(SRC_DIRECTORY)/blender/ui/coat-of-arms/coat-of-arms.blend
 # Sonstige Blender-Sachen                                                                                              #
 ########################################################################################################################
 
-$(DATA_DIRECTORY)/img/coin.png: $(SRC_DIRECTORY)/blender/ui/coin/coin.blend
+$(DATA_DIRECTORY)/img/gui/coin.png: $(SRC_DIRECTORY)/blender/gui/coin/coin.blend
 	$(CREATE_TARGET_DIRECTORY)
 	blender -b $< -o //coin\#.png -f 1
-	mv $(SRC_DIRECTORY)/blender/ui/coin/coin1.png $@
+	mv $(SRC_DIRECTORY)/blender/gui/coin/coin1.png $@
 	
-$(DATA_DIRECTORY)/img/population-man.png: $(SRC_DIRECTORY)/blender/ui/population-man/population-man.blend
+$(DATA_DIRECTORY)/img/gui/population-man.png: $(SRC_DIRECTORY)/blender/gui/population-man/population-man.blend
 	$(CREATE_TARGET_DIRECTORY)
 	blender -b $< -o //population-man\#.png -f 1
-	mv $(SRC_DIRECTORY)/blender/ui/population-man/population-man1.png $@
+	mv $(SRC_DIRECTORY)/blender/gui/population-man/population-man1.png $@
 
 ########################################################################################################################
 # PHONYs um alle Blender-Sachen zu rendern und zu cleanen                                                              #
@@ -310,18 +309,18 @@ $(DATA_DIRECTORY)/img/population-man.png: $(SRC_DIRECTORY)/blender/ui/population
 
 render-blender: \
 	$(foreach BUILDING,$(BUILDINGS), \
-	    $(DATA_DIRECTORY)/img/objects/$(BUILDING).png \
+	    $(DATA_DIRECTORY)/img/buildings/$(BUILDING).png \
 	) \
 	$(foreach GOOD,$(GOODS), \
 	    $(DATA_DIRECTORY)/img/goods/marketplace-icon/$(GOOD).png \
 	    $(DATA_DIRECTORY)/img/goods/icon/$(GOOD).png \
 	) \
 	$(foreach ANIMATION,$(ANIMATIONS), \
-		$(DATA_DIRECTORY)/img/objects/$(ANIMATION).png \
+		$(DATA_DIRECTORY)/img/animations/$(ANIMATION).png \
 	) \
 	$(DATA_DIRECTORY)/img/tileset.png \
 	$(foreach STREET_TILESET,$(STREET_TILESETS), \
-		$(DATA_DIRECTORY)/img/objects/$(STREET_TILESET).png \
+		$(DATA_DIRECTORY)/img/streets/$(STREET_TILESET).png \
 	) \
 	$(foreach HARVESTABLE,$(HARVESTABLES), \
 		$(DATA_DIRECTORY)/img/harvestables/$(HARVESTABLE).png \
@@ -329,26 +328,31 @@ render-blender: \
 	render-cart \
 	$(DATA_DIRECTORY)/img/ships/little-ship.png \
 	render-coat-of-arms \
-	$(DATA_DIRECTORY)/img/coin.png \
-	$(DATA_DIRECTORY)/img/population-man.png
+	$(DATA_DIRECTORY)/img/gui/coin.png \
+	$(DATA_DIRECTORY)/img/gui/population-man.png
 	
 clean-blender:
-	rm -f $(foreach BUILDING,$(BUILDINGS), $(DATA_DIRECTORY)/img/objects/$(BUILDING).png)
+	rm -f $(foreach BUILDING,$(BUILDINGS), $(DATA_DIRECTORY)/img/buildings/$(BUILDING).png)
 	rm -rf $(foreach BUILDING,$(BUILDINGS), $(SRC_DIRECTORY)/blender/buildings/$(BUILDING)/render)
 	rm -rf $(DATA_DIRECTORY)/img/goods
-	rm -f $(foreach ANIMATION,$(ANIMATIONS), $(DATA_DIRECTORY)/img/objects/$(ANIMATION).png)
+	rm -f $(foreach ANIMATION,$(ANIMATIONS), $(DATA_DIRECTORY)/img/animations/$(ANIMATION).png)
 	rm -rf $(foreach ANIMATION,$(ANIMATIONS), $(SRC_DIRECTORY)/blender/animations/$(ANIMATION)/render)
 	rm -rf $(SRC_DIRECTORY)/blender/animations/cart/render
 	rm -f $(DATA_DIRECTORY)/img/tileset.png
 	rm -rf $(SRC_DIRECTORY)/blender/tiles/render
 	rm -rf $(foreach STREET_TILESET,$(STREET_TILESETS), $(SRC_DIRECTORY)/blender/streets/$(STREET_TILESET)/render)
-	rm -f $(foreach STREET_TILESET,$(STREET_TILESETS), $(DATA_DIRECTORY)/img/objects/$(STREET_TILESET).png)
+	rm -f $(foreach STREET_TILESET,$(STREET_TILESETS), $(DATA_DIRECTORY)/img/streets/$(STREET_TILESET).png)
 	rm -f $(foreach HARVESTABLE,$(HARVESTABLES), $(DATA_DIRECTORY)/img/harvestables/$(HARVESTABLE).png)
 	rm -rf $(foreach HARVESTABLE,$(HARVESTABLES), $(SRC_DIRECTORY)/blender/harvestables/$(HARVESTABLE)/render)
-	rm -f $(DATA_DIRECTORY)/img/objects/cart-without-cargo.png
-	rm -f $(DATA_DIRECTORY)/img/objects/cart-with-cargo.png
+	rm -f $(DATA_DIRECTORY)/img/animations/cart-without-cargo.png
+	rm -f $(DATA_DIRECTORY)/img/animations/cart-with-cargo.png
 	rm -rf $(SRC_DIRECTORY)/blender/ships/little-ship/render
 	rm -f $(DATA_DIRECTORY)/img/ships/little-ship.png
 	rm -rf $(DATA_DIRECTORY)/img/gui/coat-of-arms
-	rm -f $(DATA_DIRECTORY)/img/coin.png
-	rm -f $(DATA_DIRECTORY)/img/population-man.png
+	rm -f $(DATA_DIRECTORY)/img/gui/coin.png
+	rm -f $(DATA_DIRECTORY)/img/gui/population-man.png
+	rm -rf $(DATA_DIRECTORY)/img/animations
+	rm -rf $(DATA_DIRECTORY)/img/buildings
+	rm -rf $(DATA_DIRECTORY)/img/harvestables
+	rm -rf $(DATA_DIRECTORY)/img/ships
+	rm -rf $(DATA_DIRECTORY)/img/streets
