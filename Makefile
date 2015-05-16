@@ -175,7 +175,7 @@ $(foreach HARVESTABLE,$(HARVESTABLES),$(eval $(call RENDER_HARVESTABLE,$(HARVEST
 # Gütersymbole                                                                                                         #
 ########################################################################################################################
 
-GOODS := bricks cattle cloth food sugarcane tobacco tools wood wool
+GOODS := alcohol bricks cattle cloth food sugarcane tobacco tools wood wool
 
 define RENDER_GOODS_ICONS
 $(DATA_DIRECTORY)/img/goods/marketplace-icon/$(1).png $(DATA_DIRECTORY)/img/goods/icon/$(1).png: \

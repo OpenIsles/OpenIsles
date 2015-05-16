@@ -28,10 +28,13 @@
  <objectgroup name="colonies" width="300" height="300">
   <object name="Meine Hauptstadt" type="colony" x="1600" y="1344" width="32" height="32">
    <properties>
+    <property name="goods_alcohol" value="1"/>
     <property name="goods_bricks" value="2"/>
     <property name="goods_cattle" value="0"/>
     <property name="goods_cloth" value="0"/>
     <property name="goods_food" value="0"/>
+    <property name="goods_sugarcane" value="5"/>
+    <property name="goods_tobacco" value="7"/>
     <property name="goods_tools" value="15"/>
     <property name="goods_wood" value="30"/>
     <property name="goods_wool" value="0"/>
@@ -40,10 +43,13 @@
   </object>
   <object name="Meine Zweitinsel" type="colony" x="6368" y="2464" width="32" height="32">
    <properties>
+    <property name="goods_alcohol" value="0"/>
     <property name="goods_bricks" value="7"/>
     <property name="goods_cattle" value="0"/>
     <property name="goods_cloth" value="0"/>
     <property name="goods_food" value="0"/>
+    <property name="goods_sugarcane" value="0"/>
+    <property name="goods_tobacco" value="0"/>
     <property name="goods_tools" value="5"/>
     <property name="goods_wood" value="15"/>
     <property name="goods_wool" value="0"/>
@@ -52,10 +58,13 @@
   </object>
   <object name="Hauptstadt von Spieler 2" type="colony" x="7296" y="6848" width="32" height="32">
    <properties>
+    <property name="goods_alcohol" value="0"/>
     <property name="goods_bricks" value="10"/>
     <property name="goods_cattle" value="0"/>
     <property name="goods_cloth" value="0"/>
     <property name="goods_food" value="0"/>
+    <property name="goods_sugarcane" value="0"/>
+    <property name="goods_tobacco" value="0"/>
     <property name="goods_tools" value="20"/>
     <property name="goods_wood" value="30"/>
     <property name="goods_wool" value="0"/>
@@ -64,10 +73,13 @@
   </object>
   <object name="Hauptstadt von Spieler 3" type="colony" x="896" y="7232" width="32" height="32">
    <properties>
+    <property name="goods_alcohol" value="0"/>
     <property name="goods_bricks" value="10"/>
     <property name="goods_cattle" value="0"/>
     <property name="goods_cloth" value="0"/>
     <property name="goods_food" value="0"/>
+    <property name="goods_sugarcane" value="0"/>
+    <property name="goods_tobacco" value="0"/>
     <property name="goods_tools" value="20"/>
     <property name="goods_wood" value="30"/>
     <property name="goods_wool" value="0"/>
@@ -76,10 +88,13 @@
   </object>
   <object name="Hauptstadt von Spieler 4" type="colony" x="4160" y="3008" width="32" height="32">
    <properties>
+    <property name="goods_alcohol" value="0"/>
     <property name="goods_bricks" value="10"/>
     <property name="goods_cattle" value="0"/>
     <property name="goods_cloth" value="0"/>
     <property name="goods_food" value="0"/>
+    <property name="goods_sugarcane" value="0"/>
+    <property name="goods_tobacco" value="0"/>
     <property name="goods_tools" value="20"/>
     <property name="goods_wood" value="30"/>
     <property name="goods_wool" value="0"/>

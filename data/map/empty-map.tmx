@@ -22,10 +22,13 @@
  <objectgroup name="colonies" width="150" height="150">
   <object name="Kolonie" type="colony" x="832" y="896" width="32" height="32">
    <properties>
+    <property name="goods_alcohol" value="0"/>
     <property name="goods_bricks" value="30"/>
     <property name="goods_cattle" value="5"/>
     <property name="goods_cloth" value="0"/>
     <property name="goods_food" value="0"/>
+    <property name="goods_sugarcane" value="5"/>
+    <property name="goods_tobacco" value="7"/>
     <property name="goods_tools" value="30"/>
     <property name="goods_wood" value="30"/>
     <property name="goods_wool" value="5"/>

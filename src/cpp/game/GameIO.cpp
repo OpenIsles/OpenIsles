@@ -207,12 +207,19 @@ void GameIO::loadColonies(Game* game, rapidxml::xml_node<>* objectgroupColoniesN
         Colony* colony = game->foundNewColony(player, mapTile->isle);
 
         // Waren
+        // TODO Das muss irgendwie hübscher werden. In Zukunft muss alles mit den String-Keys laufen
         colony->getGoods(GoodsType::WOOL).inventory =
             std::atoi(getPropertyValueFromPropertiesNode(propertiesNode, "goods_wool"));
+        colony->getGoods(GoodsType::SUGARCANE).inventory =
+            std::atoi(getPropertyValueFromPropertiesNode(propertiesNode, "goods_sugarcane"));
+        colony->getGoods(GoodsType::TOBACCO).inventory =
+            std::atoi(getPropertyValueFromPropertiesNode(propertiesNode, "goods_tobacco"));
         colony->getGoods(GoodsType::CATTLE).inventory =
             std::atoi(getPropertyValueFromPropertiesNode(propertiesNode, "goods_cattle"));
         colony->getGoods(GoodsType::FOOD).inventory =
             std::atoi(getPropertyValueFromPropertiesNode(propertiesNode, "goods_food"));
+        colony->getGoods(GoodsType::ALCOHOL).inventory =
+            std::atoi(getPropertyValueFromPropertiesNode(propertiesNode, "goods_alcohol"));
         colony->getGoods(GoodsType::CLOTH).inventory =
             std::atoi(getPropertyValueFromPropertiesNode(propertiesNode, "goods_cloth"));
         colony->getGoods(GoodsType::TOOLS).inventory =

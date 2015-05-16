@@ -20,6 +20,7 @@ enum GoodsType : char {
 
     // Güter
     FOOD,
+    ALCOHOL,
     CLOTH,
 
     // Baumaterialen

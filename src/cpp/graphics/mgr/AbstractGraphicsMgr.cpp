@@ -64,6 +64,7 @@ void AbstractGraphicsMgr::loadGraphics() {
     loadStaticGraphicSet("goods-marketplace-icons/tobacco", "data/img/goods/marketplace-icon/tobacco.png");
     loadStaticGraphicSet("goods-marketplace-icons/cattle", "data/img/goods/marketplace-icon/cattle.png");
     loadStaticGraphicSet("goods-marketplace-icons/food", "data/img/goods/marketplace-icon/food.png");
+    loadStaticGraphicSet("goods-marketplace-icons/alcohol", "data/img/goods/marketplace-icon/alcohol.png");
     loadStaticGraphicSet("goods-marketplace-icons/cloth", "data/img/goods/marketplace-icon/cloth.png");
     loadStaticGraphicSet("goods-marketplace-icons/tools", "data/img/goods/marketplace-icon/tools.png");
     loadStaticGraphicSet("goods-marketplace-icons/wood", "data/img/goods/marketplace-icon/wood.png");

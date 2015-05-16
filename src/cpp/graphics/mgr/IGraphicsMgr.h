@@ -140,6 +140,7 @@ public:
         else if (goodsType == GoodsType::TOBACCO) { graphicSetNameSuffix = "tobacco"; }
         else if (goodsType == GoodsType::CATTLE) { graphicSetNameSuffix = "cattle"; }
         else if (goodsType == GoodsType::FOOD) { graphicSetNameSuffix = "food"; }
+        else if (goodsType == GoodsType::ALCOHOL) { graphicSetNameSuffix = "alcohol"; }
         else if (goodsType == GoodsType::CLOTH) { graphicSetNameSuffix = "cloth"; }
         else if (goodsType == GoodsType::TOOLS) { graphicSetNameSuffix = "tools"; }
         else if (goodsType == GoodsType::WOOD) { graphicSetNameSuffix = "wood"; }
