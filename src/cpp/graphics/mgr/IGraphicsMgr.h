@@ -130,24 +130,10 @@ public:
         return graphicSetNamePrefix + "/" + graphicSetNameSuffix;
     }
 
-    std::string getGraphicSetNameForGoodIcons(GoodsType goodsType, bool marketplaceIcon) const {
-        std::string graphicSetNamePrefix = (marketplaceIcon) ? "goods-marketplace-icons" : "goods-icons";
+    std::string getGraphicSetNameForGoodIcons(const Good* good, bool marketplaceIcon) const {
+        const std::string graphicSetNamePrefix = (marketplaceIcon) ? "goods-marketplace-icons" : "goods-icons";
 
-        // TODO Das muss irgendwie hübscher werden. In Zukunft muss alles mit den String-Keys laufen
-        std::string graphicSetNameSuffix;
-
-        if (goodsType == GoodsType::WOOL) { graphicSetNameSuffix = "wool"; }
-        else if (goodsType == GoodsType::SUGARCANE) { graphicSetNameSuffix = "sugarcane"; }
-        else if (goodsType == GoodsType::TOBACCO) { graphicSetNameSuffix = "tobacco"; }
-        else if (goodsType == GoodsType::CATTLE) { graphicSetNameSuffix = "cattle"; }
-        else if (goodsType == GoodsType::FOOD) { graphicSetNameSuffix = "food"; }
-        else if (goodsType == GoodsType::ALCOHOL) { graphicSetNameSuffix = "alcohol"; }
-        else if (goodsType == GoodsType::CLOTH) { graphicSetNameSuffix = "cloth"; }
-        else if (goodsType == GoodsType::TOOLS) { graphicSetNameSuffix = "tools"; }
-        else if (goodsType == GoodsType::WOOD) { graphicSetNameSuffix = "wood"; }
-        else if (goodsType == GoodsType::BRICKS) { graphicSetNameSuffix = "bricks"; }
-
-        return graphicSetNamePrefix + "/" + graphicSetNameSuffix;
+        return graphicSetNamePrefix + "/" + good->name;
     }
 
     std::string getGraphicSetNameForCoatOfArmsPopulation(PlayerColor playerColor) const {

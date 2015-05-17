@@ -10,6 +10,7 @@ set(COMMON_SOURCE_FILES
     src/cpp/config/BuildingCosts.h
     src/cpp/config/ConfigMgr.cpp
     src/cpp/config/ConfigMgr.h
+    src/cpp/config/Good.h
     src/cpp/economics/EconomicsMgr.cpp
     src/cpp/economics/EconomicsMgr.h
     src/cpp/economics/Carrier.cpp

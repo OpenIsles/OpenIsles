@@ -517,8 +517,8 @@ void GuiMgr::updateGuiFromPanelState() {
     }
 }
 
-void GuiMgr::drawGoodsBox(int x, int y, GoodsType goodsType, double inventory, double capacity) {
-    const std::string graphicSetName = context->graphicsMgr->getGraphicSetNameForGoodIcons(goodsType, true);
+void GuiMgr::drawGoodsBox(int x, int y, const Good* good, double inventory, double capacity) {
+    const std::string graphicSetName = context->graphicsMgr->getGraphicSetNameForGoodIcons(good, true);
     context->graphicsMgr->getGraphicSet(graphicSetName)->getStatic()->getGraphic()->drawAt(x, y);
 
     if (inventory != -1) {

@@ -56,20 +56,15 @@ void AbstractGraphicsMgr::loadGraphics() {
     loadStaticGraphicSetWith4Views("structures/square2", "data/img/buildings/square2.png", 1, 1);
     loadStaticGraphicSetWith4Views("structures/square3", "data/img/buildings/square3.png", 1, 1);
 
-    loadStaticGraphicSet("goods-icons/tools", "data/img/goods/icon/tools.png");
-    loadStaticGraphicSet("goods-icons/wood", "data/img/goods/icon/wood.png");
-    loadStaticGraphicSet("goods-icons/bricks", "data/img/goods/icon/bricks.png");
+    const std::list<Good>& allGoods = configMgr->getAllGoodsOrdered();
+    for (auto iter = allGoods.cbegin(); iter != allGoods.cend(); iter++) {
+        const Good* good = &*iter;
 
-    loadStaticGraphicSet("goods-marketplace-icons/wool", "data/img/goods/marketplace-icon/wool.png");
-    loadStaticGraphicSet("goods-marketplace-icons/sugarcane", "data/img/goods/marketplace-icon/sugarcane.png");
-    loadStaticGraphicSet("goods-marketplace-icons/tobacco", "data/img/goods/marketplace-icon/tobacco.png");
-    loadStaticGraphicSet("goods-marketplace-icons/cattle", "data/img/goods/marketplace-icon/cattle.png");
-    loadStaticGraphicSet("goods-marketplace-icons/food", "data/img/goods/marketplace-icon/food.png");
-    loadStaticGraphicSet("goods-marketplace-icons/alcohol", "data/img/goods/marketplace-icon/alcohol.png");
-    loadStaticGraphicSet("goods-marketplace-icons/cloth", "data/img/goods/marketplace-icon/cloth.png");
-    loadStaticGraphicSet("goods-marketplace-icons/tools", "data/img/goods/marketplace-icon/tools.png");
-    loadStaticGraphicSet("goods-marketplace-icons/wood", "data/img/goods/marketplace-icon/wood.png");
-    loadStaticGraphicSet("goods-marketplace-icons/bricks", "data/img/goods/marketplace-icon/bricks.png");
+        loadStaticGraphicSet("goods-icons/" + good->name,
+                             std::string("data/img/goods/icon/" + good->name + ".png").c_str());
+        loadStaticGraphicSet("goods-marketplace-icons/" + good->name,
+                             std::string("data/img/goods/marketplace-icon/" + good->name + ".png").c_str());
+    }
 
     loadStaticGraphicSet("coin", "data/img/gui/coin.png");
     loadStaticGraphicSet("panel", "data/img/gui/panel.png");

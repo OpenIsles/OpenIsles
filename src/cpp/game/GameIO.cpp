@@ -54,7 +54,7 @@ void GameIO::loadGameFromTMX(
     loadMap(game, configMgr, graphicsMgr, objectgroupIslesNode);
 
     // Siedlungen laden
-    loadColonies(game, objectgroupColoniesNode);
+    loadColonies(game, configMgr, objectgroupColoniesNode);
 
     // Strukturen und Gebäude laden
     loadMapObjects(game, configMgr, objectgroupMapObjectsNode);
@@ -185,7 +185,7 @@ void GameIO::loadMap(
     map->screenView = Direction::SOUTH;
 }
 
-void GameIO::loadColonies(Game* game, rapidxml::xml_node<>* objectgroupColoniesNode) {
+void GameIO::loadColonies(Game* game, const ConfigMgr* configMgr, rapidxml::xml_node<>* objectgroupColoniesNode) {
     Map* map = game->getMap();
 
     for (rapidxml::xml_node<>* objectNode = objectgroupColoniesNode->first_node("object", 6, true); objectNode != nullptr;
@@ -207,27 +207,19 @@ void GameIO::loadColonies(Game* game, rapidxml::xml_node<>* objectgroupColoniesN
         Colony* colony = game->foundNewColony(player, mapTile->isle);
 
         // Waren
-        // TODO Das muss irgendwie hübscher werden. In Zukunft muss alles mit den String-Keys laufen
-        colony->getGoods(GoodsType::WOOL).inventory =
-            std::atoi(getPropertyValueFromPropertiesNode(propertiesNode, "goods_wool"));
-        colony->getGoods(GoodsType::SUGARCANE).inventory =
-            std::atoi(getPropertyValueFromPropertiesNode(propertiesNode, "goods_sugarcane"));
-        colony->getGoods(GoodsType::TOBACCO).inventory =
-            std::atoi(getPropertyValueFromPropertiesNode(propertiesNode, "goods_tobacco"));
-        colony->getGoods(GoodsType::CATTLE).inventory =
-            std::atoi(getPropertyValueFromPropertiesNode(propertiesNode, "goods_cattle"));
-        colony->getGoods(GoodsType::FOOD).inventory =
-            std::atoi(getPropertyValueFromPropertiesNode(propertiesNode, "goods_food"));
-        colony->getGoods(GoodsType::ALCOHOL).inventory =
-            std::atoi(getPropertyValueFromPropertiesNode(propertiesNode, "goods_alcohol"));
-        colony->getGoods(GoodsType::CLOTH).inventory =
-            std::atoi(getPropertyValueFromPropertiesNode(propertiesNode, "goods_cloth"));
-        colony->getGoods(GoodsType::TOOLS).inventory =
-            std::atoi(getPropertyValueFromPropertiesNode(propertiesNode, "goods_tools"));
-        colony->getGoods(GoodsType::WOOD).inventory =
-            std::atoi(getPropertyValueFromPropertiesNode(propertiesNode, "goods_wood"));
-        colony->getGoods(GoodsType::BRICKS).inventory =
-            std::atoi(getPropertyValueFromPropertiesNode(propertiesNode, "goods_bricks"));
+        const std::unordered_map<std::string, Good>& allGoods = configMgr->getAllGoods();
+        for (auto iter = allGoods.cbegin(); iter != allGoods.cend(); iter++) {
+            const Good& good = iter->second;
+            std::string xmlAttributeName = "goods_" + good.name;
+
+            const char* xmlAttributeValue = getPropertyValueFromPropertiesNode(propertiesNode, xmlAttributeName.c_str());
+            if (xmlAttributeValue != nullptr) {
+                colony->getGoods(&good).inventory = std::atoi(xmlAttributeValue);
+            } else {
+                colony->getGoods(&good).inventory = 0;
+                std::cerr << "Warning: Did not find Good '" << good.name << "' in savefile" << std::endl;
+            }
+        }
     }
 }
 

@@ -1,6 +1,8 @@
 #ifndef _COLONY_H
 #define _COLONY_H
 
+#include <string>
+#include <unordered_map>
 #include <vector>
 #include "config/BuildingCosts.h"
 #include "game/GoodsSlot.h"
@@ -13,9 +15,9 @@ class Colony {
     
 private:
     /**
-     * @brief Lagerbestände pro Gütertyp. Vektor-Indexes siehe GoodsType.
+     * @brief Lagerbestände pro Gütertyp. Map-Key ist `Good.name`.
      */
-    std::vector<GoodsSlot> goods;
+    std::unordered_map<std::string, GoodsSlot> goods;
 
 public:
     /**
@@ -25,17 +27,29 @@ public:
     
 public:
     /**
-     * Legt eine neue Kolonie mit 30t Lagerkapazität in allen Slots an.
+     * @brief Legt eine neue Kolonie mit 30t Lagerkapazität in allen Slots an.
+     * @param allGoods Map mit allen verfügbaren Gütern
      */
-	Colony();
+	Colony(const std::unordered_map<std::string, Good>& allGoods);
+
 	~Colony();
 
     /**
      * @brief Liefert den Slot für einen bestimmten Warentyp zurück. Dieser enthält Lagerbestand und -Kapazität.
+     * @param goodName Name des Guts
      * @return Slot für den angeforderten Warentyp
      */
-    GoodsSlot& getGoods(GoodsType goodsType) {
-        return goods[goodsType];
+    GoodsSlot& getGoods(const std::string& goodName) {
+        return goods[goodName];
+    }
+
+    /**
+     * @brief Liefert den Slot für einen bestimmten Warentyp zurück. Dieser enthält Lagerbestand und -Kapazität.
+     * @param good Gut
+     * @return Slot für den angeforderten Warentyp
+     */
+    GoodsSlot& getGoods(const Good* good) {
+        return getGoods(good->name);
     }
     
     /**
@@ -43,9 +57,9 @@ public:
      * @param buildingCosts Gebäudekosten, wo denen die Güterkosten dekrementiert werden.
      */
     void subtractBuildingCosts(const BuildingCosts* buildingCosts) {
-        goods[GoodsType::TOOLS].inventory -= buildingCosts->tools;
-        goods[GoodsType::WOOD].inventory -= buildingCosts->wood;
-        goods[GoodsType::BRICKS].inventory -= buildingCosts->bricks;
+        getGoods("tools").inventory -= buildingCosts->tools;
+        getGoods("wood").inventory -= buildingCosts->wood;
+        getGoods("bricks").inventory -= buildingCosts->bricks;
     }
 
     /**

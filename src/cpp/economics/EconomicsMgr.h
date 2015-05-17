@@ -40,7 +40,7 @@ struct FindBuildingToGetGoodsFromResult {
      */
     FindBuildingToGetGoodsFromResult() {
         building = nullptr;
-        goodsSlot.goodsType = GoodsType::NO_GOODS;
+        goodsSlot.good = nullptr;
         lastGoodsCollections = 0;
     }
 
@@ -51,11 +51,12 @@ struct FindBuildingToGetGoodsFromResult {
      * @param result Objekt, was ausgegeben werden soll
      * @return Ausgabestream, sodass das Chaining funktioniert
      */
-    friend std::ostream& operator<< (std::ostream& outputStream, FindBuildingToGetGoodsFromResult const& result) {
+    friend std::ostream& operator<<(std::ostream& outputStream, FindBuildingToGetGoodsFromResult const& result) {
         const MapCoords& mapCoords = result.building->getMapCoords();
 
         return outputStream << "{ building = (" << mapCoords.x() << ", " << mapCoords.y() << "), routeLen = " <<
-            result.route.size() << ", goods = ( goodsType = " << result.goodsSlot.goodsType <<
+            result.route.size() << ", goods = ( goodName = " <<
+            ((result.goodsSlot.good != nullptr) ? result.goodsSlot.good->name : "(empty)") <<
             ", inventory = " << result.goodsSlot.inventory << " of " << result.goodsSlot.capacity <<
             ", ratio = " << (result.goodsSlot.inventory / result.goodsSlot.capacity) <<
             " ), lastGoodsCollections = " << result.lastGoodsCollections << " }";

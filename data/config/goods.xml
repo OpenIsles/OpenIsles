@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<goods>
+    <!-- Rohstoffe -->
+    <good name="wool" raw-material="true">Wolle</good>
+    <good name="sugar" raw-material="true">Zucker</good>
+    <good name="tobacco" raw-material="true">Tabak</good>
+    <good name="cattle" raw-material="true">Schlachtvieh</good>
+
+    <!-- Verbrauchsgüter -->
+    <good name="food">Nahrung</good>
+    <good name="alcohol">Alkohol</good>
+    <good name="cloth">Stoffe</good>
+
+    <!-- Baumaterialen -->
+    <good name="tools">Werkzeug</good>
+    <good name="wood">Holz</good>
+    <good name="bricks">Ziegel</good>
+</goods>

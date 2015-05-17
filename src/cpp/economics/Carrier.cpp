@@ -3,10 +3,8 @@
 #include "game/Colony.h"
 #include "game/Game.h"
 
-enum GoodsType : char;
 
-
-Carrier::Carrier(Building* owningBuilding, Route route, GoodsType goodsType, bool onOutboundTrip) :
+Carrier::Carrier(Building* owningBuilding, Route route, const Good* good, bool onOutboundTrip) :
     owningBuilding(owningBuilding), route(route), onOutboundTrip(onOutboundTrip) {
 
     // TODO Bewegliche Map-Objekte dürfen aktuell nur 1 Kachel groß sein. Später, wenn Schiffe (speziell Fischerboot-Carrier) da sind, müssen wir das erweitern.
@@ -14,7 +12,7 @@ Carrier::Carrier(Building* owningBuilding, Route route, GoodsType goodsType, boo
     setMapWidth(1);
     setMapHeight(1);
 
-    carriedGoods.goodsType = goodsType;
+    carriedGoods.good = good;
 
     // Animation initialisieren
     animationFrame = 0;
@@ -108,7 +106,7 @@ bool Carrier::updateObject(const Context& context) {
                     if (targetBuilding->isStorageBuilding()) {
                         // Lagergebäude: Waren aus der Siedlung aufladen
                         Colony* colony = context.game->getColony(targetBuilding);
-                        goodsSlotToTakeFrom = &colony->getGoods(carriedGoods.goodsType);
+                        goodsSlotToTakeFrom = &colony->getGoods(carriedGoods.good);
                     } else {
                         // Waren aus dem Gebäude aufladen
                         goodsSlotToTakeFrom = &targetBuilding->productionSlots.output;
@@ -120,7 +118,7 @@ bool Carrier::updateObject(const Context& context) {
                     // verloren. Wir müssen hier in Ganzzahlen denken: Haben wir 2,999t Platz, dürfen wir nicht 3t
                     // aufladen, sondern nur 2t.
                     GoodsSlot* goodsSlotWeWillUnloadToLater =
-                        findGoodsSlotToUnloadTo(context, owningBuilding, carriedGoods.goodsType);
+                        findGoodsSlotToUnloadTo(context, owningBuilding, carriedGoods.good);
                     int remainingCapacityToUnloadLater = (int) (
                         (double) goodsSlotWeWillUnloadToLater->capacity - goodsSlotWeWillUnloadToLater->inventory);
                     if (goodsWeCollect > remainingCapacityToUnloadLater) {
@@ -150,7 +148,7 @@ bool Carrier::updateObject(const Context& context) {
                             owningBuilding->isStorageBuilding() ? "cart-with-cargo" : "carrier");
 
                         Carrier* returnCarrier = new Carrier(
-                            owningBuilding, returnRoute, goodsSlotToTakeFrom->goodsType, false);
+                            owningBuilding, returnRoute, goodsSlotToTakeFrom->good, false);
                         returnCarrier->setMapCoords((DoubleMapCoords) firstHopOnReturnRoute);
                         returnCarrier->updateCurrentMovingDirection();
                         returnCarrier->setAnimations(graphicSet);
@@ -169,7 +167,7 @@ bool Carrier::updateObject(const Context& context) {
                 // Das war Rückweg -> Waren ausladen und Träger zerstören
                 else if (!onOutboundTrip) {
                     GoodsSlot* goodsSlotToUnloadTo =
-                        findGoodsSlotToUnloadTo(context, owningBuilding, carriedGoods.goodsType);
+                        findGoodsSlotToUnloadTo(context, owningBuilding, carriedGoods.good);
                     goodsSlotToUnloadTo->increaseInventory(carriedGoods.inventory);
 
                     deleteMe = true;
@@ -199,20 +197,20 @@ bool Carrier::updateObject(const Context& context) {
     return (!deleteMe);
 }
 
-GoodsSlot* Carrier::findGoodsSlotToUnloadTo(const Context& context, Building* building, GoodsType goodsType) {
+GoodsSlot* Carrier::findGoodsSlotToUnloadTo(const Context& context, Building* building, const Good* good) {
     bool isStorageBuilding = building->isStorageBuilding();
 
     // Lagergebäude: Waren der Siedlung gutschreiben
     if (isStorageBuilding) {
         Colony* colony = context.game->getColony(building);
-        return &colony->getGoods(goodsType);
+        return &colony->getGoods(good);
     }
         // Produktionsgebäude: Gucken, in welchen Slot die Waren müssen
     else {
-        if (building->productionSlots.input.goodsType == goodsType) {
+        if (building->productionSlots.input.good == good) {
             return &building->productionSlots.input;
         }
-        else if (building->productionSlots.input2.goodsType == goodsType) {
+        else if (building->productionSlots.input2.good == good) {
             return &building->productionSlots.input2;
         }
 

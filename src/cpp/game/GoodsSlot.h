@@ -1,38 +1,7 @@
 #ifndef _GOODS_SLOT_H
 #define _GOODS_SLOT_H
 
-
-/**
-* Enum für die verschiedenen Gütertypen
-*/
-typedef
-enum GoodsType : char {
-    // Spezialwert, der dem null-Wert entspricht
-    NO_GOODS = 127,
-
-    // Rohstoffe
-    START_RAW_MATERIALS = 0, // Marker für isRawMaterial()
-    WOOL = START_RAW_MATERIALS,
-    SUGARCANE,
-    TOBACCO,
-    CATTLE,
-    END_RAW_MATERIALS = CATTLE, // Marker für isRawMaterial()
-
-    // Güter
-    FOOD,
-    ALCOHOL,
-    CLOTH,
-
-    // Baumaterialen
-    TOOLS,
-    WOOD,
-    BRICKS,
-
-    // Spezialwert am Ende, damit wir wissen, wie groß wir Arrays etc. machen müssen
-    MAX_GOOD
-
-} GoodsType;
-
+#include "config/Good.h"
 
 /**
 * @brief stellt einen Slot für Waren dar. Diese Klasse hält die Infos, ob mit dem Slot was assoziiert is,
@@ -43,9 +12,9 @@ class GoodsSlot {
 
 public:
     /**
-     * @brief Gut bzw. NO_GOODS, wenn der Container nicht belegt ist
+     * @brief Zeiger auf das Gut bzw. `nullptr`, wenn der Container nicht belegt ist
      */
-    GoodsType goodsType;
+    const Good* good;
 
     /**
      * @brief Lagerbestand als exakter Wert. Der Benutzer wird immer nur die ganzen Waren zu Gesicht bekommen. Intern
@@ -69,35 +38,34 @@ public:
     /**
      * @brief Konstruktur, um einen unbenutzten Slot anzulegen
      */
-    GoodsSlot() : GoodsSlot(NO_GOODS) {
+    GoodsSlot() : GoodsSlot(nullptr) {
     }
 
     /**
      * @brief Konstruktur, um einen Slot für ein bestimmtes Gut anzulegen.
      * Lagerbestand und -kapazität werden auf 0 gesetzt.
-     * @param goodsType Gut
+     * @param good Gut
      */
-    GoodsSlot(GoodsType goodsType) : GoodsSlot(goodsType, 0) {
+    GoodsSlot(const Good* good) : GoodsSlot(good, 0) {
     }
 
     /**
      * @brief Konstruktur, um einen Slot für ein bestimmtes Gut und einer bestimmten Lagerkapazität anzulegen.
      * Lagerbestand wird auf 0 gesetzt.
-     * @param goodsType Gut
+     * @param good Gut
      * @param capacity Lagerkapazität
      */
-    GoodsSlot(GoodsType goodsType, unsigned int capacity) : goodsType(goodsType), capacity(capacity) {
+    GoodsSlot(const Good* good, unsigned int capacity) : good(good), capacity(capacity) {
         inventory = 0;
         markedForPickup = false;
     }
-
 
     /**
      * @brief Prüft, ob der Slot belegt ist
      * @return true, wenn der Slot belegt ist, sonst false.
      */
     inline bool isUsed() const {
-        return (goodsType != GoodsType::NO_GOODS);
+        return (good != nullptr);
     }
 
     /**
@@ -157,7 +125,7 @@ public:
      * @return `true`, wenn wir einen Rohstoff haben, sonst `false`
      */
     inline bool isRawMaterial() const {
-        return (goodsType >= START_RAW_MATERIALS && goodsType <= END_RAW_MATERIALS);
+        return good->rawMaterial;
     }
 
     /**

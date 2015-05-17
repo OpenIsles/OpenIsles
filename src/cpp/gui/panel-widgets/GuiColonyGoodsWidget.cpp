@@ -1,3 +1,4 @@
+#include <list>
 #include <SDL.h>
 #include "config/ConfigMgr.h"
 #include "game/Colony.h"
@@ -36,18 +37,21 @@ void GuiColonyGoodsWidget::renderElement(IRenderer* renderer) {
 //        &colorLightBrown, &colorBlack, "DroidSans-Bold.ttf", 15, RENDERTEXT_HALIGN_CENTER);
 
     // Waren
+    const std::list<Good>& allGoods = context->configMgr->getAllGoodsOrdered();
+
     int xStart = windowX + 22;
 
     int x = xStart;
     int y = windowY + 68;
-    for (int i = 0; i < GoodsType::MAX_GOOD; i++) {
-        GoodsType goodsType = (GoodsType) i;
-        GoodsSlot goods = colony->getGoods(goodsType);
+    int i = 0;
+    for (auto iter = allGoods.cbegin(); iter != allGoods.cend(); iter++, i++) {
+        const Good* good = &*iter;
+        GoodsSlot goods = colony->getGoods(good);
 
         int inventory = (int) floor(goods.inventory);
         int capacity = (int) floor(goods.capacity);
 
-        context->guiMgr->drawGoodsBox(x, y, goodsType, inventory, capacity);
+        context->guiMgr->drawGoodsBox(x, y, good, inventory, capacity);
 
         if (i % 4 == 3) {
             x = xStart;

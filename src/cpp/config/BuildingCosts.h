@@ -13,7 +13,7 @@ struct BuildingCosts {
     unsigned int coins;
 
     /**
-     * @brief Werkzeuge
+     * @brief Werkzeug
      */
     unsigned int tools;
 

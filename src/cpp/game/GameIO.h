@@ -43,9 +43,10 @@ private:
     /**
      * @brief Lädt die Siedlungen aus der tiled-TMX-Datei
      * @param game Spiel, in das der Spielstand geladen werden soll
+     * @param configMgr (Dependency)
      * @param objectgroupColoniesNode <objectgroup>-Knoten der "colonies"-Ebene aus der tiled-Datei
      */
-    static void loadColonies(Game* game, rapidxml::xml_node<>* objectgroupColoniesNode);
+    static void loadColonies(Game* game, const ConfigMgr* configMgr, rapidxml::xml_node<>* objectgroupColoniesNode);
 
     /**
      * @brief Lädt die Map-Objekte (Strukturen, Gebäude und Wälder) aus der tiled-TMX-Datei

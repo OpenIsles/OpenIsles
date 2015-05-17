@@ -68,23 +68,26 @@ void GuiAddBuildingWidget::renderElement(IRenderer* renderer) {
     if (buildingProduction->input2.isUsed()) {
         // input + input2 -> output
 
-        context->guiMgr->drawGoodsBox(windowX + 29, productionY, buildingProduction->input.goodsType, -1, -1);
-        context->graphicsMgr->getGraphicSet("production-plus")->getStatic()->getGraphic()->drawAt(windowX + 75, productionY);
-        context->guiMgr->drawGoodsBox(windowX + 90, productionY, buildingProduction->input2.goodsType, -1, -1);
-        context->graphicsMgr->getGraphicSet("production-arrow")->getStatic()->getGraphic()->drawAt(windowX + 136, productionY);
-        context->guiMgr->drawGoodsBox(windowX + 150, productionY, buildingProduction->output.goodsType, -1, -1);
+        context->guiMgr->drawGoodsBox(windowX + 29, productionY, buildingProduction->input.good, -1, -1);
+        context->graphicsMgr->getGraphicSet("production-plus")->getStatic()->getGraphic()->drawAt(
+            windowX + 75, productionY);
+        context->guiMgr->drawGoodsBox(windowX + 90, productionY, buildingProduction->input2.good, -1, -1);
+        context->graphicsMgr->getGraphicSet("production-arrow")->getStatic()->getGraphic()->drawAt(
+            windowX + 136, productionY);
+        context->guiMgr->drawGoodsBox(windowX + 150, productionY, buildingProduction->output.good, -1, -1);
     }
     else if (buildingProduction->input.isUsed()) {
         // input -> output
 
-        context->guiMgr->drawGoodsBox(windowX + 60, productionY, buildingProduction->input.goodsType, -1, -1);
-        context->graphicsMgr->getGraphicSet("production-arrow")->getStatic()->getGraphic()->drawAt(windowX + 106, productionY);
-        context->guiMgr->drawGoodsBox(windowX + 120, productionY, buildingProduction->output.goodsType, -1, -1);
+        context->guiMgr->drawGoodsBox(windowX + 60, productionY, buildingProduction->input.good, -1, -1);
+        context->graphicsMgr->getGraphicSet("production-arrow")->getStatic()->getGraphic()->drawAt(
+            windowX + 106, productionY);
+        context->guiMgr->drawGoodsBox(windowX + 120, productionY, buildingProduction->output.good, -1, -1);
     }
     else if (buildingProduction->output.isUsed()) {
         // output
 
-        context->guiMgr->drawGoodsBox(windowX + 90, productionY, buildingProduction->output.goodsType, -1, -1);
+        context->guiMgr->drawGoodsBox(windowX + 90, productionY, buildingProduction->output.good, -1, -1);
     }
 
     // Baukosten
@@ -97,22 +100,24 @@ void GuiAddBuildingWidget::renderElement(IRenderer* renderer) {
 
     costsY += 30;
 
-    std::string graphicSetName = context->graphicsMgr->getGraphicSetNameForGoodIcons(GoodsType::TOOLS, false);
+    const Good* good = context->configMgr->getGood("tools");
+    std::string graphicSetName = context->graphicsMgr->getGraphicSetNameForGoodIcons(good, false);
     context->graphicsMgr->getGraphicSet(graphicSetName)->getStatic()->getGraphic()->drawAt(windowX, costsY);
     context->fontMgr->renderText(
         renderer, toString(mapObjectConfig->getBuildingCosts()->tools), windowX + 35, costsY + 16,
         &colorWhite, &colorBlack, "DroidSans-Bold.ttf", 14, RENDERTEXT_HALIGN_LEFT | RENDERTEXT_VALIGN_MIDDLE);
 
-    graphicSetName = context->graphicsMgr->getGraphicSetNameForGoodIcons(GoodsType::WOOD, false);
+    good = context->configMgr->getGood("wood");
+    graphicSetName = context->graphicsMgr->getGraphicSetNameForGoodIcons(good, false);
     context->graphicsMgr->getGraphicSet(graphicSetName)->getStatic()->getGraphic()->drawAt(windowX + 60, costsY);
     context->fontMgr->renderText(
         renderer, toString(mapObjectConfig->getBuildingCosts()->wood), windowX + 95, costsY + 16,
         &colorWhite, &colorBlack, "DroidSans-Bold.ttf", 14, RENDERTEXT_HALIGN_LEFT | RENDERTEXT_VALIGN_MIDDLE);
 
-    graphicSetName = context->graphicsMgr->getGraphicSetNameForGoodIcons(GoodsType::BRICKS, false);
+    good = context->configMgr->getGood("bricks");
+    graphicSetName = context->graphicsMgr->getGraphicSetNameForGoodIcons(good, false);
     context->graphicsMgr->getGraphicSet(graphicSetName)->getStatic()->getGraphic()->drawAt(windowX + 120, costsY);
     context->fontMgr->renderText(
         renderer, toString(mapObjectConfig->getBuildingCosts()->bricks), windowX + 155, costsY + 16,
         &colorWhite, &colorBlack, "DroidSans-Bold.ttf", 14, RENDERTEXT_HALIGN_LEFT | RENDERTEXT_VALIGN_MIDDLE);
-
 }

@@ -49,28 +49,31 @@ void GuiSelectedBuildingWidget::renderElement(IRenderer* renderer) {
         // input + input2 -> output
 
         context->guiMgr->drawGoodsBox(windowX + 42, productionY,
-            productionSlots->input.goodsType, productionSlots->input.inventory, -1);
-        context->graphicsMgr->getGraphicSet("production-plus")->getStatic()->getGraphic()->drawAt(windowX + 88, productionY);
+            productionSlots->input.good, productionSlots->input.inventory, -1);
+        context->graphicsMgr->getGraphicSet("production-plus")->getStatic()->getGraphic()->drawAt(
+            windowX + 88, productionY);
         context->guiMgr->drawGoodsBox(windowX + 103, productionY,
-            productionSlots->input2.goodsType, productionSlots->input2.inventory, -1);
-        context->graphicsMgr->getGraphicSet("production-arrow")->getStatic()->getGraphic()->drawAt(windowX + 149, productionY);
+            productionSlots->input2.good, productionSlots->input2.inventory, -1);
+        context->graphicsMgr->getGraphicSet("production-arrow")->getStatic()->getGraphic()->drawAt(
+            windowX + 149, productionY);
         context->guiMgr->drawGoodsBox(windowX + 163, productionY,
-            productionSlots->output.goodsType, productionSlots->output.inventory, -1);
+            productionSlots->output.good, productionSlots->output.inventory, -1);
     }
     else if (productionSlots->input.isUsed()) {
         // input -> output
 
         context->guiMgr->drawGoodsBox(windowX + 73, productionY,
-            productionSlots->input.goodsType, productionSlots->input.inventory, -1);
-        context->graphicsMgr->getGraphicSet("production-arrow")->getStatic()->getGraphic()->drawAt(windowX + 119, productionY);
+            productionSlots->input.good, productionSlots->input.inventory, -1);
+        context->graphicsMgr->getGraphicSet("production-arrow")->getStatic()->getGraphic()->drawAt(
+            windowX + 119, productionY);
         context->guiMgr->drawGoodsBox(windowX + 133, productionY,
-            productionSlots->output.goodsType, productionSlots->output.inventory, -1);
+            productionSlots->output.good, productionSlots->output.inventory, -1);
     }
     else if (productionSlots->output.isUsed()) {
         // output
 
         context->guiMgr->drawGoodsBox(windowX + 103, productionY,
-            productionSlots->output.goodsType, productionSlots->output.inventory, -1);
+            productionSlots->output.good, productionSlots->output.inventory, -1);
     }
 
     // TODO Auslastung

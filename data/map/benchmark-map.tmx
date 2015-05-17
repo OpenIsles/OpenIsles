@@ -23,7 +23,7 @@
     <property name="goods_cattle" value="5"/>
     <property name="goods_cloth" value="0"/>
     <property name="goods_food" value="0"/>
-    <property name="goods_sugarcane" value="5"/>
+    <property name="goods_sugar" value="5"/>
     <property name="goods_tobacco" value="7"/>
     <property name="goods_tools" value="30"/>
     <property name="goods_wood" value="30"/>

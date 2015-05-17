@@ -71,10 +71,10 @@ public:
      * @brief Konstruiert einen neuen Träger mit einem konkreten Abhol-/Lieferauftrag.
      * @param owningBuilding Gebäude, zu dem dieser Träger gehört.
      * @param route Route, die der Träger ablaufen soll
-     * @param goodsType Warentyp, der abzuholen bzw. zu liefern ist
+     * @param good Gut, das abzuholen bzw. zu liefern ist
      * @param onOutboundTrip `true` für Hinweg, `false` für Rückweg.
      */
-    Carrier(Building* owningBuilding, Route route, GoodsType goodsType, bool onOutboundTrip);
+    Carrier(Building* owningBuilding, Route route, const Good* good, bool onOutboundTrip);
 
     ~Carrier() {}
 
@@ -108,10 +108,10 @@ private:
      *
      * @param context (Dependency)
      * @param building Gebäude, das das Ziel des Trägers ist
-     * @param goodsType Warentyp, den wir ausladen wollen
+     * @param good Gut, das wir ausladen wollen
      * @return GoodsSlot, in welchen die Waren ausgeladen werden sollten
      */
-    GoodsSlot* findGoodsSlotToUnloadTo(const Context& context, Building* building, GoodsType goodsType);
+    GoodsSlot* findGoodsSlotToUnloadTo(const Context& context, Building* building, const Good* good);
 };
 
 #endif

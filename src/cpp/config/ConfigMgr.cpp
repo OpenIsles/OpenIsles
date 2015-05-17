@@ -2,10 +2,12 @@
 #include <iostream>
 #include <stdexcept>
 #include "config/ConfigMgr.h"
+#include "config/Good.h"
 #include "utils/StringFormat.h"
 
 
 ConfigMgr::ConfigMgr() {
+    loadGoods();
     loadMapObjectConfigs();
     loadTilesConfig();
 }
@@ -17,6 +19,32 @@ ConfigMgr::~ConfigMgr() {
         }
     }
     delete[] mapObjectConfigs;
+}
+
+void ConfigMgr::loadGoods() {
+    rapidxml::file<> xmlFile("data/config/goods.xml");
+
+    rapidxml::xml_document<>* xmlDocument = new rapidxml::xml_document<>();
+    xmlDocument->parse<0>(xmlFile.data());
+
+    rapidxml::xml_node<>* goodsNode = xmlDocument->first_node("goods", 5, true);
+
+    for (rapidxml::xml_node<>* goodNode = goodsNode->first_node("good", 4, true); goodNode != nullptr;
+         goodNode = goodNode->next_sibling("good", 4, true)) {
+
+        const char* name = goodNode->first_attribute("name", 4, true)->value();
+        const char* label = goodNode->value();
+        bool rawMaterial = xmlAttributeToBool(goodNode->first_attribute("raw-material", 12, true), false);
+
+        Good& good = goodsMap[name];
+        good.name = name;
+        good.label = label;
+        good.rawMaterial = rawMaterial;
+
+        goodsList.push_back(good);
+    }
+
+    delete xmlDocument;
 }
 
 void ConfigMgr::loadMapObjectConfigs() {
@@ -180,7 +208,7 @@ void ConfigMgr::loadMapObjectConfigs() {
     memcpy(mapObjectConfigs[MapObjectType::STONEMASON]->catchmentArea->data, "0000011111100000000111111111100000111111111111000111111111111110011111111111111011111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111101111111111111100111111111111110001111111111110000011111111110000000011111100000", 256);
     mapObjectConfigs[MapObjectType::STONEMASON]->buildingCosts = { 100, 5, 5, 0 };
     mapObjectConfigs[MapObjectType::STONEMASON]->buildingProduction = {
-        GoodsSlot(GoodsType::BRICKS, 8),
+        GoodsSlot(getGood("bricks"), 8),
         GoodsSlot(),
         GoodsSlot()
     };
@@ -229,7 +257,7 @@ void ConfigMgr::loadMapObjectConfigs() {
     memcpy(mapObjectConfigs[MapObjectType::FORESTERS]->catchmentArea->data, "0011110001111110111111111111111111111111111111110111111000111100", 64);
     mapObjectConfigs[MapObjectType::FORESTERS]->buildingCosts = { 50, 2, 0, 0 };
     mapObjectConfigs[MapObjectType::FORESTERS]->buildingProduction = {
-        GoodsSlot(GoodsType::WOOD, 10),
+        GoodsSlot(getGood("wood"), 10),
         GoodsSlot(),
         GoodsSlot()
     };
@@ -245,7 +273,7 @@ void ConfigMgr::loadMapObjectConfigs() {
     memcpy(mapObjectConfigs[MapObjectType::SHEEP_FARM]->catchmentArea->data, "0011110001111110111111111111111111111111111111110111111000111100", 64);
     mapObjectConfigs[MapObjectType::SHEEP_FARM]->buildingCosts = { 200, 2, 4, 0 };
     mapObjectConfigs[MapObjectType::SHEEP_FARM]->buildingProduction = {
-        GoodsSlot(GoodsType::WOOL, 3),
+        GoodsSlot(getGood("wool"), 3),
         GoodsSlot(),
         GoodsSlot()
     };
@@ -261,8 +289,8 @@ void ConfigMgr::loadMapObjectConfigs() {
     memcpy(mapObjectConfigs[MapObjectType::WEAVING_MILL1]->catchmentArea->data, "0000000000001111111100000000000000000000011111111111111000000000000000011111111111111111100000000000001111111111111111111100000000000111111111111111111111100000000011111111111111111111111100000001111111111111111111111111100000111111111111111111111111111100001111111111111111111111111111000111111111111111111111111111111001111111111111111111111111111110011111111111111111111111111111101111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111011111111111111111111111111111100111111111111111111111111111111001111111111111111111111111111110001111111111111111111111111111000011111111111111111111111111110000011111111111111111111111111000000011111111111111111111111100000000011111111111111111111110000000000011111111111111111111000000000000011111111111111111100000000000000001111111111111100000000000000000000011111111000000000000", 1024);
     mapObjectConfigs[MapObjectType::WEAVING_MILL1]->buildingCosts = { 200, 3, 6, 0 };
     mapObjectConfigs[MapObjectType::WEAVING_MILL1]->buildingProduction = {
-        GoodsSlot(GoodsType::CLOTH, 7),
-        GoodsSlot(GoodsType::WOOL, 7),
+        GoodsSlot(getGood("cloth"), 7),
+        GoodsSlot(getGood("wool"), 7),
         GoodsSlot()
     };
     mapObjectConfigs[MapObjectType::WEAVING_MILL1]->productionRate = 10.0;
@@ -278,7 +306,7 @@ void ConfigMgr::loadMapObjectConfigs() {
     memcpy(mapObjectConfigs[MapObjectType::CATTLE_FARM]->catchmentArea->data, "011110111111111111111111111111011110", 36);
     mapObjectConfigs[MapObjectType::CATTLE_FARM]->buildingCosts = { 100, 1, 4, 0 };
     mapObjectConfigs[MapObjectType::CATTLE_FARM]->buildingProduction = {
-        GoodsSlot(GoodsType::CATTLE, 4),
+        GoodsSlot(getGood("cattle"), 4),
         GoodsSlot(),
         GoodsSlot()
     };
@@ -294,8 +322,8 @@ void ConfigMgr::loadMapObjectConfigs() {
     memcpy(mapObjectConfigs[MapObjectType::BUTCHERS]->catchmentArea->data, "0000000111111110000000000001111111111110000000001111111111111100000001111111111111111000001111111111111111110001111111111111111111100111111111111111111110111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111110111111111111111111110011111111111111111111000111111111111111111000001111111111111111000000011111111111111000000000111111111111000000000000111111110000000", 484);
     mapObjectConfigs[MapObjectType::BUTCHERS]->buildingCosts = { 150, 3, 6, 0 };
     mapObjectConfigs[MapObjectType::BUTCHERS]->buildingProduction = {
-        GoodsSlot(GoodsType::FOOD, 4),
-        GoodsSlot(GoodsType::CATTLE, 4),
+        GoodsSlot(getGood("food"), 4),
+        GoodsSlot(getGood("cattle"), 4),
         GoodsSlot()
     };
     mapObjectConfigs[MapObjectType::BUTCHERS]->productionRate = 5;
@@ -311,7 +339,7 @@ void ConfigMgr::loadMapObjectConfigs() {
     memcpy(mapObjectConfigs[MapObjectType::TOOLSMITHS]->catchmentArea->data, "0000000000001111111100000000000000000000011111111111111000000000000000011111111111111111100000000000001111111111111111111100000000000111111111111111111111100000000011111111111111111111111100000001111111111111111111111111100000111111111111111111111111111100001111111111111111111111111111000111111111111111111111111111111001111111111111111111111111111110011111111111111111111111111111101111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111011111111111111111111111111111100111111111111111111111111111111001111111111111111111111111111110001111111111111111111111111111000011111111111111111111111111110000011111111111111111111111111000000011111111111111111111111100000000011111111111111111111110000000000011111111111111111111000000000000011111111111111111100000000000000001111111111111100000000000000000000011111111000000000000", 1024);
     mapObjectConfigs[MapObjectType::TOOLSMITHS]->buildingCosts = { 150, 3, 2, 5 };
     mapObjectConfigs[MapObjectType::TOOLSMITHS]->buildingProduction = {
-        GoodsSlot(GoodsType::TOOLS, 5),
+        GoodsSlot(getGood("tools"), 5),
         GoodsSlot(),
         GoodsSlot()
     };
@@ -327,7 +355,7 @@ void ConfigMgr::loadMapObjectConfigs() {
     memcpy(mapObjectConfigs[MapObjectType::HUNTERS_HUT]->catchmentArea->data, "0000001111100000000001111111110000000111111111110000011111111111110001111111111111110011111111111111101111111111111111111111111111111111111111111111111111111111111111111111111111111111111011111111111111100111111111111111000111111111111100000111111111110000000111111111000000000011111000000", 289);
     mapObjectConfigs[MapObjectType::HUNTERS_HUT]->buildingCosts = { 50, 2, 2, 0 };
     mapObjectConfigs[MapObjectType::HUNTERS_HUT]->buildingProduction = {
-        GoodsSlot(GoodsType::FOOD, 3),
+        GoodsSlot(getGood("food"), 3),
         GoodsSlot(),
         GoodsSlot()
     };
@@ -365,7 +393,7 @@ void ConfigMgr::loadMapObjectConfigs() {
     memcpy(mapObjectConfigs[MapObjectType::SUGARCANE_PLANTATION]->catchmentArea->data, "011110111111111111111111111111011110", 36);
     mapObjectConfigs[MapObjectType::SUGARCANE_PLANTATION]->buildingCosts = { 300, 2, 3, 8 };
     mapObjectConfigs[MapObjectType::SUGARCANE_PLANTATION]->buildingProduction = {
-        GoodsSlot(GoodsType::SUGARCANE, 6),
+        GoodsSlot(getGood("sugar"), 6),
         GoodsSlot(),
         GoodsSlot()
     };
@@ -381,7 +409,7 @@ void ConfigMgr::loadMapObjectConfigs() {
     memcpy(mapObjectConfigs[MapObjectType::TOBACCO_PLANTATION]->catchmentArea->data, "011110111111111111111111111111011110", 36);
     mapObjectConfigs[MapObjectType::TOBACCO_PLANTATION]->buildingCosts = { 300, 2, 3, 8 };
     mapObjectConfigs[MapObjectType::TOBACCO_PLANTATION]->buildingProduction = {
-        GoodsSlot(GoodsType::TOBACCO, 6),
+        GoodsSlot(getGood("tobacco"), 6),
         GoodsSlot(),
         GoodsSlot()
     };
@@ -397,8 +425,8 @@ void ConfigMgr::loadMapObjectConfigs() {
     memcpy(mapObjectConfigs[MapObjectType::DISTILLERY]->catchmentArea->data, "0000000001111111100000000000000001111111111110000000000001111111111111111000000000111111111111111111000000011111111111111111111000001111111111111111111111000011111111111111111111110001111111111111111111111110011111111111111111111111101111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111011111111111111111111111100111111111111111111111111000111111111111111111111100001111111111111111111111000001111111111111111111100000001111111111111111110000000001111111111111111000000000000111111111111000000000000000011111111000000000", 676);
     mapObjectConfigs[MapObjectType::DISTILLERY]->buildingCosts = { 200, 3, 2, 5 };
     mapObjectConfigs[MapObjectType::DISTILLERY]->buildingProduction = {
-        GoodsSlot(GoodsType::ALCOHOL, 4),
-        GoodsSlot(GoodsType::SUGARCANE, 6),
+        GoodsSlot(getGood("alcohol"), 4),
+        GoodsSlot(getGood("sugar"), 6),
         GoodsSlot()
     };
     mapObjectConfigs[MapObjectType::DISTILLERY]->productionRate = 2.5;

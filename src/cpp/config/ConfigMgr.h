@@ -1,9 +1,11 @@
 #ifndef _CONFIG_MGR_H
 #define _CONFIG_MGR_H
 
+#include <list>
 #include <unordered_map>
 #include "defines.h"
 #include "config/BuildingCosts.h"
+#include "config/Good.h"
 #include "game/GoodsSlot.h"
 #include "map/Building.h"
 #include "map/Direction.h"
@@ -233,6 +235,16 @@ class ConfigMgr {
     
 private:
     /**
+     * @brief Map aller Güter. Map-Key ist der Name des Guts.
+     */
+    std::unordered_map<std::string, Good> goodsMap;
+
+    /**
+     * @brief Liste aller Güter. Im Gegensatz zur Map haben wir mit dieser Liste eine Sortierung der Güter
+     */
+    std::list<Good> goodsList;
+
+    /**
      * @brief Array mit Zeigern auf die Map-Objekt-Konfigurationen
      */
     MapObjectConfig** mapObjectConfigs;
@@ -289,6 +301,31 @@ public:
     }
 
     /**
+     * @brief Liefert alle verfügbaren Güter im Spiel als Map zurück.
+     * @return Map mit allen Gütern
+     */
+    const std::unordered_map<std::string, Good>& getAllGoods() const {
+        return goodsMap;
+    }
+
+    /**
+     * @brief Liefert alle verfügbaren Güter im Spiel als sortierte Liste zurück.
+     * @return Liste mit allen Gütern
+     */
+    const std::list<Good>& getAllGoodsOrdered() const {
+        return goodsList;
+    }
+
+    /**
+     * @brief Liefert ein Gut zurück
+     * @param goodName Name des Guts
+     * @return Gut
+     */
+    const Good* getGood(const std::string& goodName) const {
+        return &goodsMap.at(goodName);
+    }
+
+    /**
      * @brief Liefert den `MapObjectType` einer Struktur/Gebäudes ausgehend von einem `nameInSavefile` zurück.
      * @param nameInSavefile Name des Map-Objekts im Spielstand
      * @return `MapObjectType`. `NO_MAP_OBJECT`, wenn der Name nicht gefunden wurde
@@ -337,6 +374,11 @@ public:
     }
 
 private:
+    /**
+     * @brief Lädt die Waren
+     */
+    void loadGoods();
+
     /**
      * @brief Konstruiert (TODO aus einer Datei laden) die Konfiguration der Map-Objekte
      */

@@ -55,7 +55,7 @@ TEST_F(EconomicsMgrTest, updateCarrier) {
     cattleFarm->productionSlots.output.increaseInventory(999);
 
     // Anfangsbedingungen: kein Marktkarren da, Gebäudelager voll und bereit zur Abholung, 5t in der Kolonie
-    ASSERT_EQ(5, colony->getGoods(GoodsType::CATTLE).inventory);
+    ASSERT_EQ(5, colony->getGoods("cattle").inventory);
 
     ASSERT_TRUE(office1->carrier == nullptr);
 
@@ -75,7 +75,7 @@ TEST_F(EconomicsMgrTest, updateCarrier) {
     ASSERT_EQ(office1->carrier->owningBuilding, office1);
     ASSERT_TRUE(office1->carrier->route.back() == MapCoords(26, 27));
     ASSERT_TRUE(office1->carrier->onOutboundTrip);
-    ASSERT_EQ(GoodsType::CATTLE, office1->carrier->carriedGoods.goodsType);
+    ASSERT_EQ("cattle", office1->carrier->carriedGoods.good->name);
     ASSERT_EQ(0, office1->carrier->carriedGoods.inventory);
     ASSERT_TRUE(office1->carrier->getMapCoords() == DoubleMapCoords(28, 19));
     ASSERT_TRUE(office1->carrier->getCurrentMovingDirection() == Direction::SOUTH);
@@ -134,7 +134,7 @@ TEST_F(EconomicsMgrTest, updateCarrier) {
     ASSERT_EQ(13501, office1->carrier->getLastUpdateTime());
     ASSERT_TRUE(office1->carrier->route.back() == MapCoords(28, 19));
     ASSERT_FALSE(office1->carrier->onOutboundTrip);
-    ASSERT_EQ(GoodsType::CATTLE, office1->carrier->carriedGoods.goodsType);
+    ASSERT_EQ("cattle", office1->carrier->carriedGoods.good->name);
     ASSERT_EQ(4, office1->carrier->carriedGoods.inventory); // Rinderfarm kann nur 4 Tonnen halten
     ASSERT_TRUE(office1->carrier->getMapCoords() == DoubleMapCoords(26, 27));
     ASSERT_TRUE(office1->carrier->getCurrentMovingDirection() == Direction::NORTH);
@@ -150,5 +150,5 @@ TEST_F(EconomicsMgrTest, updateCarrier) {
     office1->carrier->update(context);
 
     ASSERT_TRUE(office1->carrier == nullptr);
-    ASSERT_EQ(9, colony->getGoods(GoodsType::CATTLE).inventory);
+    ASSERT_EQ(9, colony->getGoods("cattle").inventory);
 }

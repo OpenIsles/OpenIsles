@@ -77,7 +77,7 @@ void Building::sendNewCarrier(const Context& context) {
         // Träger anlegen und zuweisen
         const MapCoords& firstHopOnRoute = result.route.front();
 
-        carrier = new Carrier(this, result.route, result.goodsSlot.goodsType, true);
+        carrier = new Carrier(this, result.route, result.goodsSlot.good, true);
         carrier->setMapCoords((DoubleMapCoords) firstHopOnRoute);
         carrier->updateCurrentMovingDirection();
         carrier->setAnimations(

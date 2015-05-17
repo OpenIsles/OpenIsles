@@ -99,27 +99,27 @@ FindBuildingToGetGoodsFromResult EconomicsMgr::findBuildingToGetGoodsFrom(Buildi
      */
 
     // Welche Ware brauchen wir überhaupt?
-    GoodsType goodsRequired1 = GoodsType::NO_GOODS;
-    GoodsType goodsRequired2 = GoodsType::NO_GOODS;
+    const Good* goodRequired1 = nullptr;
+    const Good* goodRequired2 = nullptr;
 
     bool isStorageBuilding = building->isStorageBuilding();
     if (!isStorageBuilding) {
-        goodsRequired1 = mapObjectConfig->getBuildingProduction()->input.goodsType;
-        goodsRequired2 = mapObjectConfig->getBuildingProduction()->input2.goodsType;
+        goodRequired1 = mapObjectConfig->getBuildingProduction()->input.good;
+        goodRequired2 = mapObjectConfig->getBuildingProduction()->input2.good;
 
         // Wir brauchen nur, wenn die Lager nicht voll sind
-        if (goodsRequired1 != GoodsType::NO_GOODS) {
+        if (goodRequired1 != nullptr) {
             if (building->productionSlots.input.getRemainingCapacity() < 1) {
-                goodsRequired1 = GoodsType::NO_GOODS;
+                goodRequired1 = nullptr;
             }
         }
-        if (goodsRequired2 != GoodsType::NO_GOODS) {
+        if (goodRequired2 != nullptr) {
             if (building->productionSlots.input2.getRemainingCapacity() < 1) {
-                goodsRequired2 = GoodsType::NO_GOODS;
+                goodRequired2 = nullptr;
             }
         }
 
-        if (goodsRequired1 == GoodsType::NO_GOODS && goodsRequired2 == GoodsType::NO_GOODS) {
+        if (goodRequired1 == nullptr && goodRequired2 == nullptr) {
             return FindBuildingToGetGoodsFromResult(); // Wir brauchen (aktuell?) keine Waren
         }
     }
@@ -170,8 +170,8 @@ FindBuildingToGetGoodsFromResult EconomicsMgr::findBuildingToGetGoodsFrom(Buildi
 
             // Liefert das Gebäude was passendes?
             if (!isStorageBuilding && !isStorgeBuildingThere && (
-                    buildingThereConfig->getBuildingProduction()->output.goodsType != goodsRequired1 &&
-                    buildingThereConfig->getBuildingProduction()->output.goodsType != goodsRequired2)) {
+                    buildingThereConfig->getBuildingProduction()->output.good != goodRequired1 &&
+                    buildingThereConfig->getBuildingProduction()->output.good != goodRequired2)) {
 
                 continue; // produziert nix passendes
             }
@@ -194,7 +194,7 @@ FindBuildingToGetGoodsFromResult EconomicsMgr::findBuildingToGetGoodsFrom(Buildi
                 GoodsSlot* buildingThereOutputProductionSlot = &buildingThere->productionSlots.output;
 
                 // Wir holen nur ab, wenn die Lager der Siedlung nicht schon voll sind
-                if (colony->getGoods(buildingThereOutputProductionSlot->goodsType).getRemainingCapacity() < 1) {
+                if (colony->getGoods(buildingThereOutputProductionSlot->good).getRemainingCapacity() < 1) {
                     continue;
                 }
 
@@ -227,14 +227,14 @@ FindBuildingToGetGoodsFromResult EconomicsMgr::findBuildingToGetGoodsFrom(Buildi
                 bool goods1CanBePickedUpFromStorage = false;
                 bool goods2CanBePickedUpFromStorage = false;
 
-                if ((goodsRequired1 != GoodsType::NO_GOODS) && colony->getGoods(goodsRequired1).inventory > 0) {
+                if ((goodRequired1 != nullptr) && colony->getGoods(goodRequired1).inventory > 0) {
                     goods1CanBePickedUpFromStorage = true;
                 }
-                if ((goodsRequired2 != GoodsType::NO_GOODS) && colony->getGoods(goodsRequired2).inventory > 0) {
+                if ((goodRequired2 != nullptr) && colony->getGoods(goodRequired2).inventory > 0) {
                     goods2CanBePickedUpFromStorage = true;
                 }
 
-                GoodsType goodsTypeWeChoose;
+                const Good* goodWeChoose;
 
                 // Nix passendes in der Kolonie?
                 if (!goods1CanBePickedUpFromStorage && !goods2CanBePickedUpFromStorage) {
@@ -248,26 +248,26 @@ FindBuildingToGetGoodsFromResult EconomicsMgr::findBuildingToGetGoodsFrom(Buildi
                     if ((building->productionSlots.input.inventory / building->productionSlots.input.capacity) <
                         (building->productionSlots.input2.inventory / building->productionSlots.input2.capacity)) {
 
-                        goodsTypeWeChoose = goodsRequired1;
+                        goodWeChoose = goodRequired1;
                     } else {
-                        goodsTypeWeChoose = goodsRequired2;
+                        goodWeChoose = goodRequired2;
                     }
                 }
 
                 // Nur genaue eine Ware verfügbar?
                 else if (goods1CanBePickedUpFromStorage) {
-                    goodsTypeWeChoose = goodsRequired1;
+                    goodWeChoose = goodRequired1;
                 } else if (goods2CanBePickedUpFromStorage) {
-                    goodsTypeWeChoose = goodsRequired2;
+                    goodWeChoose = goodRequired2;
                 }
 
-                potentialResult.goodsSlot.goodsType = goodsTypeWeChoose;
-                potentialResult.goodsSlot.inventory = colony->getGoods(goodsTypeWeChoose).inventory;
-                potentialResult.goodsSlot.capacity = colony->getGoods(goodsTypeWeChoose).capacity;
+                potentialResult.goodsSlot.good = goodWeChoose;
+                potentialResult.goodsSlot.inventory = colony->getGoods(goodWeChoose).inventory;
+                potentialResult.goodsSlot.capacity = colony->getGoods(goodWeChoose).capacity;
                 potentialResult.lastGoodsCollections = context->sdlTicks + 1; // Zeit in der Zukunft nehmen, damit diese Route als letztes verwendet wird
             }
             else {
-                potentialResult.goodsSlot.goodsType = buildingThereConfig->getBuildingProduction()->output.goodsType;
+                potentialResult.goodsSlot.good = buildingThereConfig->getBuildingProduction()->output.good;
                 potentialResult.goodsSlot.inventory = buildingThere->productionSlots.output.inventory;
                 potentialResult.goodsSlot.capacity = buildingThere->productionSlots.output.capacity;
                 potentialResult.lastGoodsCollections = buildingThere->lastGoodsCollections;

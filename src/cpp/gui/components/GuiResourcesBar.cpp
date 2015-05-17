@@ -45,21 +45,26 @@ void GuiResourcesBar::renderElement(IRenderer* renderer) {
 
     // Waren (nur für den eigenen Spieler)
     if (mapTileAtCursor->player == currentPlayer) {
-        GoodsType goodsToDraw[] = { GoodsType::TOOLS, GoodsType::WOOD, GoodsType::BRICKS };
+        const Good* goodsToDraw[] = {
+            context->configMgr->getGood("tools"),
+            context->configMgr->getGood("wood"),
+            context->configMgr->getGood("bricks" )
+        };
+
         int x = 290;
-        for (unsigned int i = 0; i < sizeof(goodsToDraw); i++, x += 110) {
-            GoodsType goodsType = goodsToDraw[i];
-            const std::string graphicSetName = context->graphicsMgr->getGraphicSetNameForGoodIcons(goodsType, false);
+        for (unsigned int i = 0; i < 3; i++, x += 110) {
+            const Good* good = goodsToDraw[i];
+            const std::string graphicSetName = context->graphicsMgr->getGraphicSetNameForGoodIcons(good, false);
             context->graphicsMgr->getGraphicSet(graphicSetName)->getStatic()->getGraphic()->drawAt(x, 5);
 
-            int goodsInventory = (int) colony->getGoods(goodsType).inventory;
+            int goodsInventory = (int) colony->getGoods(good).inventory;
             outputString = toString(goodsInventory);
             if (drawBuildingCosts) {
                 outputString += " (";
                 outputString += toString(
-                    (goodsType == GoodsType::TOOLS) ? buildingCosts.tools :
-                        (goodsType == GoodsType::WOOD) ? buildingCosts.wood :
-                            (goodsType == GoodsType::BRICKS) ? buildingCosts.bricks : 0);
+                    (good->name == "tools") ? buildingCosts.tools :
+                        (good->name == "wood") ? buildingCosts.wood :
+                            (good->name == "bricks") ? buildingCosts.bricks : 0);
                 outputString += ")";
             }
 

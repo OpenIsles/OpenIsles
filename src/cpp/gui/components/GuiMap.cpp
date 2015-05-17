@@ -773,9 +773,9 @@ unsigned char GuiMap::isAllowedToPlaceMapObject(
     if (colony != nullptr) {
         const BuildingCosts* buildingCosts = context->configMgr->getMapObjectConfig(mapObjectType)->getBuildingCosts();
         if ((buildingCosts->coins > currentPlayer->coins) ||
-            (buildingCosts->tools > colony->getGoods(GoodsType::TOOLS).inventory) ||
-            (buildingCosts->wood > colony->getGoods(GoodsType::WOOD).inventory) ||
-            (buildingCosts->bricks > colony->getGoods(GoodsType::BRICKS).inventory)) {
+            (buildingCosts->tools > colony->getGoods("tools").inventory) ||
+            (buildingCosts->wood > colony->getGoods("wood").inventory) ||
+            (buildingCosts->bricks > colony->getGoods("bricks").inventory)) {
             result |= PLACING_STRUCTURE_NO_RESOURCES;
         }
     }
@@ -1039,9 +1039,9 @@ void GuiMap::updateMapObjectsTemporarilyDrawingFlags() {
             Colony* colony = context->game->getColony(
                 currentPlayer, context->game->getMap()->getMapTileAt(mapObject.getMapCoords())->isle);
             if (currentPlayer->coins < sumBuildingCostTilHere.coins ||
-                colony->getGoods(GoodsType::TOOLS).inventory < sumBuildingCostTilHere.tools ||
-                colony->getGoods(GoodsType::WOOD).inventory < sumBuildingCostTilHere.wood ||
-                colony->getGoods(GoodsType::BRICKS).inventory < sumBuildingCostTilHere.bricks) {
+                colony->getGoods("tools").inventory < sumBuildingCostTilHere.tools ||
+                colony->getGoods("wood").inventory < sumBuildingCostTilHere.wood ||
+                colony->getGoods("bricks").inventory < sumBuildingCostTilHere.bricks) {
 
                 outOfResources = true;
             }
