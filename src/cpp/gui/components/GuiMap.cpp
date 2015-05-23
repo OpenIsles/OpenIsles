@@ -116,7 +116,7 @@ void GuiMap::renderElement(IRenderer* renderer) {
         const Animation* tileAnimation = mapTile->getTileAnimationForView(screenView);
         const IGraphic* tileGraphic = tileAnimation->getGraphic();
 
-        Rect rectDestination = MapCoordUtils::mapToDrawCoords(mapCoords, *map, 0, *tileGraphic);
+        Rect rectDestination = MapCoordUtils::mapToDrawCoords(mapCoords, *map, 0, *tileGraphic, 1, 1);
 
         // Clipping
         if (rectDestination.x >= Consts::mapClipRect.x + Consts::mapClipRect.w ||
@@ -346,7 +346,8 @@ void GuiMap::renderElement(IRenderer* renderer) {
             const Animation* animation = carrier->getAnimations()[animViewIndex];
             const IGraphic* animationCurrentFrame = animation->getFrame((unsigned int) carrier->animationFrame);
 
-            Rect rect = MapCoordUtils::mapToDrawCoords(mapCoords, *map, 1, *animationCurrentFrame);
+            Rect rect = MapCoordUtils::mapToDrawCoords(
+                mapCoords, *map, 1, *animationCurrentFrame, carrier->getMapWidth(), carrier->getMapHeight());
 
             animationCurrentFrame->drawScaledAt(rect.x, rect.y, (double) 1 / (double) screenZoom);
         }
@@ -601,8 +602,15 @@ void GuiMap::updateHoverObject() {
     const MapObjectType& mapObjectType = context->guiMgr->getPanelState().addingMapObject;
     const FourthDirection& view = context->guiMgr->getPanelState().addingMapObjectView;
 
+    const MapObjectConfig* mapObjectConfig = context->configMgr->getMapObjectConfig(mapObjectType);
     unsigned char mapWidth, mapHeight;
-    context->graphicsMgr->getMapWidthHeightByMapObjectType(mapObjectType, view, &mapWidth, &mapHeight);
+    if (view == Direction::NORTH || view == Direction::SOUTH) {
+        mapWidth = mapObjectConfig->mapWidth;
+        mapHeight = mapObjectConfig->mapHeight;
+    } else {
+        mapWidth = mapObjectConfig->mapHeight;
+        mapHeight = mapObjectConfig->mapWidth;
+    }
 
     // Zu belegende Kachel mehrfach durchgehen.
 
@@ -781,8 +789,15 @@ unsigned char GuiMap::isAllowedToPlaceMapObject(
     }
 
     // Checken, ob alles frei is, um das Gebäude zu setzen
+    const MapObjectConfig* mapObjectConfig = context->configMgr->getMapObjectConfig(mapObjectType);
     unsigned char mapWidth, mapHeight;
-    context->graphicsMgr->getMapWidthHeightByMapObjectType(mapObjectType, view, &mapWidth, &mapHeight);
+    if (view == Direction::NORTH || view == Direction::SOUTH) {
+        mapWidth = mapObjectConfig->mapWidth;
+        mapHeight = mapObjectConfig->mapHeight;
+    } else {
+        mapWidth = mapObjectConfig->mapHeight;
+        mapHeight = mapObjectConfig->mapWidth;
+    }
 
     for (int y = mapCoords.y(); y < mapCoords.y() + mapHeight; y++) {
         for (int x = mapCoords.x(); x < mapCoords.x() + mapWidth; x++) {
@@ -933,8 +948,15 @@ void GuiMap::addCurrentStructureToBuildQueue(const MapCoords& mapCoords) {
     MapObjectType mapObjectType = context->guiMgr->getPanelState().addingMapObject;
     const FourthDirection& view = context->guiMgr->getPanelState().addingMapObjectView;
 
+    const MapObjectConfig* mapObjectConfig = context->configMgr->getMapObjectConfig(mapObjectType);
     unsigned char mapWidth, mapHeight;
-    context->graphicsMgr->getMapWidthHeightByMapObjectType(mapObjectType, view, &mapWidth, &mapHeight);
+    if (view == Direction::NORTH || view == Direction::SOUTH) {
+        mapWidth = mapObjectConfig->mapWidth;
+        mapHeight = mapObjectConfig->mapHeight;
+    } else {
+        mapWidth = mapObjectConfig->mapHeight;
+        mapHeight = mapObjectConfig->mapWidth;
+    }
 
     // Sonderfälle, wo zufällig gewählt wird: Haus (= zufälliges Pionier-Haus) und Wald
     if (mapObjectType == MapObjectType::PIONEERS_HOUSE1 || mapObjectType == MapObjectType::NORTHERN_FOREST1) {

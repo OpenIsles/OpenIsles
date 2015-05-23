@@ -53,18 +53,6 @@ protected:
 	 */
 	int height;
 
-	/**
-     * @brief Breite (X-Richtung) der Grafik in Map-Koordinaten
-	 * Dieser Wert ist 0, wenn die Grafik nicht auf der Karte dargestellt werden kann.
-     */
-    unsigned char mapWidth;
-
-    /**
-     * @brief Höhe (Y-Richtung) der Grafik in Map-Koordinaten
-	 * Dieser Wert ist 0, wenn die Grafik nicht auf der Karte dargestellt werden kann.
-     */
-    unsigned char mapHeight;
-
 public:
     virtual ~IGraphic() {}
 
@@ -82,22 +70,6 @@ public:
      */
     int getHeight() const {
         return height;
-    }
-
-    /**
-     * @brief Liefert die Breite der Grafik in Map-Koordinaten zurück.
-     * @return Breite in Map-Koordinaten oder 0, wenn die Grafik nicht im Map-Koordinatensystem positioniert werden kann.
-     */
-	unsigned char getMapWidth() const {
-        return mapWidth;
-    }
-
-	/**
-     * @brief Liefert die Höhe der Grafik in Map-Koordinaten zurück.
-     * @return Höhe in Map-Koordinaten oder 0, wenn die Grafik nicht im Map-Koordinatensystem positioniert werden kann.
-     */
-	unsigned char getMapHeight() const {
-        return mapHeight;
     }
 
     /**

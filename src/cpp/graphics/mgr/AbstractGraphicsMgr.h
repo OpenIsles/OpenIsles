@@ -61,13 +61,11 @@ public:
 
 protected:
     virtual void loadStaticGraphicSet(const std::string&, const char* graphicFilename);
-    virtual void loadStaticGraphicSet(const std::string&, const char* graphicFilename, unsigned char mapWidth, unsigned char mapHeight);
     virtual void loadStaticAnimationGraphicSetWith8Views(
-        const std::string& graphicSetName, const char* graphicFilename,
-        unsigned char mapWidth, unsigned char mapHeight, unsigned int countFrames);
+        const std::string& graphicSetName, const char* graphicFilename, unsigned int countFrames);
 
     /**
-     * @brief Lädt eine Grafik ohne Größen-Entsprechung in Kachel-Koordinaten
+     * @brief Lädt eine Grafik.
      * Implementierungen wählen die entsprechende Grafik-Implementierung.
      *
      * @param filename Dateiname der zu ladenden Grafik
@@ -75,26 +73,13 @@ protected:
     virtual IGraphic* loadGraphic(const char* filename) = 0;
 
     /**
-     * @brief Lädt eine Grafik.
-     * Implementierungen wählen die entsprechende Grafik-Implementierung.
-     *
-     * @param filename Dateiname der zu ladenden Grafik
-     * @param mapWidth Breite der Grafik in Map-Koordinaten
-     * @param mapHeight Höhe der Grafik in Map-Koordinaten
-     */
-    virtual IGraphic* loadGraphic(const char* filename, unsigned char mapWidth, unsigned char mapHeight) = 0;
-
-    /**
      * @brief Erzeugt eine Grafik aus einem Ausschnitt einer anderen Gragfik.
      * Implementierungen wählen die entsprechende Grafik-Implementierung.
      *
      * @param srcGraphic Quellgrafik
      * @param srcRect Rechteck innerhalb der Quellgrafik, die den Bereich markiert, welcher die neue Grafik auszeichnet
-	 * @param mapWidth Breite der Grafik in Map-Koordinaten
-	 * @param mapHeight Höhe der Grafik in Map-Koordinaten
      */
-    virtual IGraphic* loadGraphic(
-        const IGraphic& srcGraphic, const Rect& srcRect, unsigned char mapWidth, unsigned char mapHeight) = 0;
+    virtual IGraphic* loadGraphic(const IGraphic& srcGraphic, const Rect& srcRect) = 0;
 
 private:
     /**
@@ -113,11 +98,8 @@ private:
      *
      * @param graphicSetName GrafikSet-Name
      * @param graphicFilename Quellgrafik
-	 * @param mapWidth Breite der Grafik in Map-Koordinaten
-	 * @param mapHeight Höhe der Grafik in Map-Koordinaten
      */
-    void loadStaticGraphicSetWith4Views(
-        const std::string& graphicSetName, const char* graphicFilename, unsigned char mapWidth, unsigned char mapHeight);
+    void loadStaticGraphicSetWith4Views(const std::string& graphicSetName, const char* graphicFilename);
 
     /**
      * @brief Lädt eine Harvestable-Grafik für erntebare Landschaft. Die Grafik enthält vertikal-gekachelt

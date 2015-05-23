@@ -137,10 +137,10 @@ TEST_F(MapCoordUtilsTest, getDrawCoordsForBuilding) {
     map->setMapCoordsCentered(MapCoords(5, 5));
     map->setScreenZoom(1);
 
-    IGraphic* graphic1 = new NoSDLGraphic(nullptr, "unsere Grafik", 224, 160, 4, 3);
-    IGraphic* graphic2 = new NoSDLGraphic(nullptr, "unsere Grafik", 224, 160, 3, 4);
-    IGraphic* graphic3 = new NoSDLGraphic(nullptr, "unsere Grafik", 224, 160, 4, 3);
-    IGraphic* graphic4 = new NoSDLGraphic(nullptr, "unsere Grafik", 224, 160, 3, 4);
+    IGraphic* graphic1 = new NoSDLGraphic(nullptr, "unsere Grafik", 224, 160);
+    IGraphic* graphic2 = new NoSDLGraphic(nullptr, "unsere Grafik", 224, 160);
+    IGraphic* graphic3 = new NoSDLGraphic(nullptr, "unsere Grafik", 224, 160);
+    IGraphic* graphic4 = new NoSDLGraphic(nullptr, "unsere Grafik", 224, 160);
 
     GraphicSet graphicSet;
     graphicSet.addByView(Direction::SOUTH, new Animation(graphic1));

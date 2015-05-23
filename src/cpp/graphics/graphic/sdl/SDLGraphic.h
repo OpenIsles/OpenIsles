@@ -40,40 +40,19 @@ protected:
 
 public:
     /**
-     * @brief Konstruktor. Lädt die Grafik aus einer Datei und setzt Map-Koordinatengröße auf 0
+     * @brief Konstruktor. Lädt die Grafik aus einer Datei
 	 * @param renderer (Dependency)
      * @param filename Dateiname der zu ladenden Grafik
      */
     SDLGraphic(IRenderer* const renderer, const char* filename);
 
 	/**
-     * @brief Konstruktor. Lädt die Grafik aus einer Datei
-	 * @param renderer (Dependency)
-     * @param filename Dateiname der zu ladenden Grafik
-	 * @param mapWidth Breite der Grafik in Map-Koordinaten
-	 * @param mapHeight Höhe der Grafik in Map-Koordinaten
-     */
-	SDLGraphic(IRenderer* const renderer, const char* filename, unsigned char mapWidth, unsigned char mapHeight);
-
-	/**
-     * @brief Konstruktor. Erzeugt eine Grafik als Teil einer anderen Grafik und setzt Map-Koordinatengröße auf 0
-	 * @param renderer (Dependency)
-     * @param graphic Quellgrafik
-	 * @param rect Rechteck innerhalb der Quellgrafik, die den Bereich markiert, welcher die neue Grafik auszeichnet
-     */
-    SDLGraphic(IRenderer* const renderer, const SDLGraphic& srcGraphic, const Rect& srcRect);
-
-	/**
      * @brief Konstruktor. Erzeugt eine Grafik als Teil einer anderen Grafik
 	 * @param renderer (Dependency)
      * @param srcGraphic Quellgrafik
 	 * @param srcRect Rechteck innerhalb der Quellgrafik, die den Bereich markiert, welcher die neue Grafik auszeichnet
-	 * @param mapWidth Breite der Grafik in Map-Koordinaten
-	 * @param mapHeight Höhe der Grafik in Map-Koordinaten
      */
-	SDLGraphic(
-		IRenderer* const renderer, const SDLGraphic& srcGraphic, const Rect& srcRect,
-		unsigned char mapWidth, unsigned char mapHeight);
+	SDLGraphic(IRenderer* const renderer, const SDLGraphic& srcGraphic, const Rect& srcRect);
 
     /**
      * @brief Destruktor. Entlädt die Grafik und gibt Speicher frei.

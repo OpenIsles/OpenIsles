@@ -22,18 +22,12 @@ public:
     virtual ~SDLGraphicsMgr() {}
 
 private:
-	virtual IGraphic* loadGraphic(const char* filename) {
+    virtual IGraphic* loadGraphic(const char* filename) {
         return new SDLGraphic(renderer, filename);
     }
 
-    virtual IGraphic* loadGraphic(const char* filename, unsigned char mapWidth, unsigned char mapHeight) {
-        return new SDLGraphic(renderer, filename, mapWidth, mapHeight);
-    }
-
-    virtual IGraphic* loadGraphic(
-        const IGraphic& srcGraphic, const Rect& srcRect, unsigned char mapWidth, unsigned char mapHeight) {
-
-        return new SDLGraphic(renderer, dynamic_cast<const SDLGraphic&>(srcGraphic), srcRect, mapWidth, mapHeight);
+    virtual IGraphic* loadGraphic(const IGraphic& srcGraphic, const Rect& srcRect) {
+        return new SDLGraphic(renderer, dynamic_cast<const SDLGraphic&>(srcGraphic), srcRect);
     }
 
 };

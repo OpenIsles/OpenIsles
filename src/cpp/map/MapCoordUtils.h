@@ -55,10 +55,13 @@ public:
      * @param map (Dependency)
      * @param elevation Elevation, auf die die Grafik gezeichnet werden soll
      * @param graphic zu zeichnende MapObject-Grafik
+     * @param mapWidth Breite der Grafik in Map-Koordinaten
+     * @param mapHeight Höhe der Grafik in Map-Koordinaten
      * @return Rechteck mit den Draw-Koordinaten, wo die Grafik hingezeichnet werden muss
      */
     static Rect mapToDrawCoords(
-        const DoubleMapCoords& mapCoords, const Map& map, int elevation, const IGraphic& graphic);
+        const DoubleMapCoords& mapCoords, const Map& map, int elevation, const IGraphic& graphic,
+        unsigned char mapWidth, unsigned char mapHeight);
 
     /**
      * @brief Berechnet ausgehend von Map-Koordinaten und einer Grafik das SDL-Rechteck, an welche Stelle
@@ -70,9 +73,12 @@ public:
      * @param map (Dependency)
      * @param elevation Elevation, auf die die Grafik gezeichnet werden soll
      * @param graphic zu zeichnende MapObject-Grafik
+     * @param mapWidth Breite der Grafik in Map-Koordinaten
+     * @param mapHeight Höhe der Grafik in Map-Koordinaten
      * @return Rechteck mit den Draw-Koordinaten, wo die Grafik hingezeichnet werden muss
      */
-    static Rect mapToDrawCoords(const MapCoords& mapCoords, const Map& map, int elevation, const IGraphic& graphic);
+    static Rect mapToDrawCoords(const MapCoords& mapCoords, const Map& map, int elevation, const IGraphic& graphic,
+                                unsigned char mapWidth, unsigned char mapHeight);
 
     /**
      * @brief Berechnet für ein bestimmtes Gebäude das SDL-Rechteck, an welche Stelle die Grafik gesetzt werden muss.
@@ -127,10 +133,13 @@ private:
      * @param map (Dependency)
      * @param elevation Elevation, auf die die Grafik gezeichnet werden soll
      * @param graphic zu zeichnende MapObject-Grafik
+     * @param mapWidth Breite der Grafik in Map-Koordinaten
+     * @param mapHeight Höhe der Grafik in Map-Koordinaten
      * @return Rechteck mit den Draw-Koordinaten, wo die Grafik hingezeichnet werden muss (Ausgabe)
      */
     static Rect screenToDrawCoords(
-        const ScreenCoords& screenCoords, const Map& map, int elevation, const IGraphic& graphic);
+        const ScreenCoords& screenCoords, const Map& map, int elevation, const IGraphic& graphic,
+        unsigned char mapWidth, unsigned char mapHeight);
 
 };
 

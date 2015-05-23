@@ -154,33 +154,6 @@ public:
      */
     virtual IRenderer* const getRenderer() const = 0;
 
-    /**
-     * @brief Hilfs-Methode, um mittels eines `mapObjectType` die `mapWidth` und `mapHeight` zu ermitteln.
-     * Diese Methode übernimmt die Fallunterscheidung `Structure` vs. `Harvestable`. Für `Harvestable`-Objekte
-     * brauchen wir Growth-Zustand, um an die Grafik zu kommen.
-     *
-     * @param mapObjectType Typ des Objekts
-     * @param view gewünschte Ansicht, für die `mapWidth` und `mapHeight` ermitteln werden soll
-     * @param mapWidth (OUT) erhält die Breite des Objekts in Kacheleinheiten
-     * @param mapHeight (OUT) erhält die Höhe des Objekts in Kacheleinheiten
-     */
-    void getMapWidthHeightByMapObjectType(const MapObjectType& mapObjectType, const FourthDirection& view,
-                                          unsigned char* mapWidth, unsigned char* mapHeight) {
-
-        const std::string graphicSetName = getGraphicSetNameForMapObject(mapObjectType);
-        const GraphicSet* graphicSet = getGraphicSet(graphicSetName);
-
-        const IGraphic* graphic;
-        if (mapObjectType >= MapObjectType::START_STRUCTURES) {
-            graphic = graphicSet->getByView(view)->getGraphic();
-        } else {
-            // Harvestable? Growth-Zustand 0 nehmen, die sind eh alle gleich
-            graphic = graphicSet->getByStateAndView("growth0", view)->getGraphic();
-        }
-
-        *mapWidth = graphic->getMapWidth();
-        *mapHeight = graphic->getMapHeight();
-    }
 };
 
 #endif

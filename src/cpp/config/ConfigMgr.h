@@ -48,6 +48,16 @@ struct MapObjectConfig {
     const char* name;
 
     /**
+     * @brief Breite (X-Richtung) des Map-Objekts in Map-Koordinaten
+     */
+    unsigned char mapWidth;
+
+    /**
+     * @brief Höhe (Y-Richtung) des Map-Objekts in Map-Koordinaten
+     */
+    unsigned char mapHeight;
+
+    /**
      * @brief Bezeichnung in einem gespeicherten Spielstand
      */
     std::string nameInSavefile;

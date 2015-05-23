@@ -114,24 +114,28 @@ Structure* Game::addStructure(
 
     assert(mapObjectType >= MapObjectType::START_STRUCTURES);
 
-    const std::string graphicSetName = context->graphicsMgr->getGraphicSetNameForMapObject(mapObjectType);
-    const GraphicSet* graphicSet = context->graphicsMgr->getGraphicSet(graphicSetName);
-    const IGraphic* graphic = graphicSet->getByView(view)->getGraphic();
+    const MapObjectConfig* mapObjectConfig = context->configMgr->getMapObjectConfig(mapObjectType);
+    unsigned char mapWidth, mapHeight;
+    if (view == Direction::NORTH || view == Direction::SOUTH) {
+        mapWidth = mapObjectConfig->mapWidth;
+        mapHeight = mapObjectConfig->mapHeight;
+    } else {
+        mapWidth = mapObjectConfig->mapHeight;
+        mapHeight = mapObjectConfig->mapWidth;
+    }
 
     // Objekt anlegen
     Structure* structure = (mapObjectType >= START_BUILDINGS) ? new Building() : new Structure();
     structure->setMapCoords(mapCoords);
-    structure->setMapWidth(graphic->getMapWidth());
-    structure->setMapHeight(graphic->getMapHeight());
+    structure->setMapWidth(mapWidth);
+    structure->setMapHeight(mapHeight);
     structure->setMapObjectType(mapObjectType);
     structure->setPlayer(player);
     structure->setView(view);
 
     // Building? Defaults für Produktionsdaten setzen
     Building* building = dynamic_cast<Building*>(structure);
-    const MapObjectConfig* mapObjectConfig = nullptr;
     if (building != nullptr) {
-        mapObjectConfig = context->configMgr->getMapObjectConfig(mapObjectType);
         building->productionSlots = ProductionSlots(mapObjectConfig->buildingProduction);
     }
 

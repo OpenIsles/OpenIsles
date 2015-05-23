@@ -77,19 +77,21 @@ MapCoords MapCoordUtils::screenToMapCoords(
 }
 
 Rect MapCoordUtils::mapToDrawCoords(
-    const DoubleMapCoords& mapCoords, const Map& map, int elevation, const IGraphic& graphic) {
+    const DoubleMapCoords& mapCoords, const Map& map, int elevation, const IGraphic& graphic,
+    unsigned char mapWidth, unsigned char mapHeight) {
 
     ScreenCoords screenCoords = mapToScreenCoords(mapCoords, map.getScreenView(), map);
 
-    return screenToDrawCoords(screenCoords, map, elevation, graphic);
+    return screenToDrawCoords(screenCoords, map, elevation, graphic, mapWidth, mapHeight);
 }
 
 Rect MapCoordUtils::mapToDrawCoords(
-    const MapCoords& mapCoords, const Map& map, int elevation, const IGraphic& graphic) {
+    const MapCoords& mapCoords, const Map& map, int elevation, const IGraphic& graphic,
+    unsigned char mapWidth, unsigned char mapHeight) {
 
     ScreenCoords screenCoords = mapToScreenCoords(mapCoords, map.getScreenView(), map);
 
-    return screenToDrawCoords(screenCoords, map, elevation, graphic);
+    return screenToDrawCoords(screenCoords, map, elevation, graphic, mapWidth, mapHeight);
 }
 
 Rect MapCoordUtils::getDrawCoordsForBuilding(const Map& map, IGraphicsMgr* graphicsMgr, const Building* building) {
@@ -104,7 +106,7 @@ Rect MapCoordUtils::getDrawCoordsForBuilding(const Map& map, IGraphicsMgr* graph
 
     const int elevation = 1; // TODO für Gebäude wie Anlegestelle, Fischerhütte etc. muss auf 0 gesetzt werden
 
-    return mapToDrawCoords(mapCoords, map, elevation, *graphic);
+    return mapToDrawCoords(mapCoords, map, elevation, *graphic, building->getMapWidth(), building->getMapHeight());
 }
 
 ScreenCoords MapCoordUtils::getScreenCoordsUnderMouse(const Map& map, int mouseCurrentX, int mouseCurrentY) {
@@ -178,7 +180,10 @@ void MapCoordUtils::getMapCoordsInScreenEdges(const Map& map,
     }
 }
 
-Rect MapCoordUtils::screenToDrawCoords(const ScreenCoords& screenCoords, const Map& map, int elevation, const IGraphic& graphic) {
+Rect MapCoordUtils::screenToDrawCoords(
+    const ScreenCoords& screenCoords, const Map& map, int elevation, const IGraphic& graphic,
+    unsigned char mapWidth, unsigned char mapHeight) {
+
     Rect drawCoordsRect;
 
     drawCoordsRect.x = screenCoords.x();
@@ -187,17 +192,17 @@ Rect MapCoordUtils::screenToDrawCoords(const ScreenCoords& screenCoords, const M
     // Grafik entsprechend ihrer Größe in Map-Koordinaten ausrichten.
     const FourthDirection& screenView = map.getScreenView();
     if (screenView == Direction::SOUTH) {
-        drawCoordsRect.x -= graphic.getWidth() - graphic.getMapWidth() * IGraphicsMgr::TILE_WIDTH_HALF;
-        drawCoordsRect.y -= graphic.getHeight() - (graphic.getMapWidth() + graphic.getMapHeight()) * IGraphicsMgr::TILE_HEIGHT_HALF;
+        drawCoordsRect.x -= graphic.getWidth() - mapWidth * IGraphicsMgr::TILE_WIDTH_HALF;
+        drawCoordsRect.y -= graphic.getHeight() - (mapWidth + mapHeight) * IGraphicsMgr::TILE_HEIGHT_HALF;
     } else if (screenView == Direction::EAST) {
         drawCoordsRect.x -= graphic.getWidth() - IGraphicsMgr::TILE_WIDTH_HALF;
-        drawCoordsRect.y -= graphic.getHeight() - (graphic.getMapHeight() + 1) * IGraphicsMgr::TILE_HEIGHT_HALF;
+        drawCoordsRect.y -= graphic.getHeight() - (mapWidth + 1) * IGraphicsMgr::TILE_HEIGHT_HALF;
     } else if (screenView == Direction::NORTH) {
-        drawCoordsRect.x -= graphic.getWidth() - graphic.getMapHeight() * IGraphicsMgr::TILE_WIDTH_HALF;
+        drawCoordsRect.x -= graphic.getWidth() - mapHeight * IGraphicsMgr::TILE_WIDTH_HALF;
         drawCoordsRect.y -= graphic.getHeight() - IGraphicsMgr::TILE_HEIGHT;
     } else if (screenView == Direction::WEST) {
         drawCoordsRect.x -= IGraphicsMgr::TILE_WIDTH_HALF;
-        drawCoordsRect.y -= graphic.getHeight() - (graphic.getMapWidth() + 1) * IGraphicsMgr::TILE_HEIGHT_HALF;
+        drawCoordsRect.y -= graphic.getHeight() - (mapHeight + 1) * IGraphicsMgr::TILE_HEIGHT_HALF;
     } else {
         assert(false);
     }

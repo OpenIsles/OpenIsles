@@ -56,6 +56,8 @@ void ConfigMgr::loadMapObjectConfigs() {
 
         mapObjectConfigs[mapObjectType] = new MapObjectConfig();
         mapObjectConfigs[mapObjectType]->name = "Wald";
+        mapObjectConfigs[mapObjectType]->mapWidth = 1;
+        mapObjectConfigs[mapObjectType]->mapHeight = 1;
         mapObjectConfigs[mapObjectType]->structurePlacing = StructurePlacing::RECTANGLE;
         mapObjectConfigs[mapObjectType]->catchmentArea = nullptr;
         mapObjectConfigs[mapObjectType]->buildingCosts = { 5, 0, 0, 0 };
@@ -71,6 +73,8 @@ void ConfigMgr::loadMapObjectConfigs() {
     
     mapObjectConfigs[MapObjectType::SUGARCANE_FIELD] = new MapObjectConfig();
     mapObjectConfigs[MapObjectType::SUGARCANE_FIELD]->name = "Zuckerrohrfeld";
+    mapObjectConfigs[MapObjectType::SUGARCANE_FIELD]->mapWidth = 1;
+    mapObjectConfigs[MapObjectType::SUGARCANE_FIELD]->mapHeight = 1;
     mapObjectConfigs[MapObjectType::SUGARCANE_FIELD]->nameInSavefile = "sugarcane_field";
     mapObjectConfigs[MapObjectType::SUGARCANE_FIELD]->structurePlacing = StructurePlacing::RECTANGLE;
     mapObjectConfigs[MapObjectType::SUGARCANE_FIELD]->catchmentArea = nullptr;
@@ -81,6 +85,8 @@ void ConfigMgr::loadMapObjectConfigs() {
     
     mapObjectConfigs[MapObjectType::TOBACCO_FIELD] = new MapObjectConfig();
     mapObjectConfigs[MapObjectType::TOBACCO_FIELD]->name = "Tabakfeld";
+    mapObjectConfigs[MapObjectType::TOBACCO_FIELD]->mapWidth = 1;
+    mapObjectConfigs[MapObjectType::TOBACCO_FIELD]->mapHeight = 1;
     mapObjectConfigs[MapObjectType::TOBACCO_FIELD]->nameInSavefile = "tobacco_field";
     mapObjectConfigs[MapObjectType::TOBACCO_FIELD]->structurePlacing = StructurePlacing::RECTANGLE;
     mapObjectConfigs[MapObjectType::TOBACCO_FIELD]->catchmentArea = nullptr;
@@ -94,6 +100,8 @@ void ConfigMgr::loadMapObjectConfigs() {
 
         mapObjectConfigs[mapObjectType] = new MapObjectConfig();
         mapObjectConfigs[mapObjectType]->name = "Pflasterstraße";
+        mapObjectConfigs[mapObjectType]->mapWidth = 1;
+        mapObjectConfigs[mapObjectType]->mapHeight = 1;
         mapObjectConfigs[mapObjectType]->structurePlacing = StructurePlacing::PATH;
         mapObjectConfigs[mapObjectType]->catchmentArea = nullptr;
         mapObjectConfigs[mapObjectType]->buildingCosts = { 5, 0, 0, 1 };
@@ -120,6 +128,8 @@ void ConfigMgr::loadMapObjectConfigs() {
 
         mapObjectConfigs[mapObjectType] = new MapObjectConfig();
         mapObjectConfigs[mapObjectType]->name = "Feldweg";
+        mapObjectConfigs[mapObjectType]->mapWidth = 1;
+        mapObjectConfigs[mapObjectType]->mapHeight = 1;
         mapObjectConfigs[mapObjectType]->structurePlacing = StructurePlacing::PATH;
         mapObjectConfigs[mapObjectType]->catchmentArea = nullptr;
         mapObjectConfigs[mapObjectType]->buildingCosts = { 5, 0, 0, 0 };
@@ -145,6 +155,8 @@ void ConfigMgr::loadMapObjectConfigs() {
         MapObjectType mapObjectType = (MapObjectType) i;
 
         mapObjectConfigs[mapObjectType] = new MapObjectConfig();
+        mapObjectConfigs[mapObjectType]->mapWidth = 1;
+        mapObjectConfigs[mapObjectType]->mapHeight = 1;
         mapObjectConfigs[mapObjectType]->structurePlacing = StructurePlacing::RECTANGLE;
         mapObjectConfigs[mapObjectType]->catchmentArea = nullptr;
         mapObjectConfigs[mapObjectType]->buildingCosts = { 5, 0, 0, 1 };
@@ -163,6 +175,8 @@ void ConfigMgr::loadMapObjectConfigs() {
 
     mapObjectConfigs[MapObjectType::CHAPEL] = new MapObjectConfig();
     mapObjectConfigs[MapObjectType::CHAPEL]->name = "Kapelle";
+    mapObjectConfigs[MapObjectType::CHAPEL]->mapWidth = 2;
+    mapObjectConfigs[MapObjectType::CHAPEL]->mapHeight = 1;
     mapObjectConfigs[MapObjectType::CHAPEL]->nameInSavefile = "chapel";
     mapObjectConfigs[MapObjectType::CHAPEL]->structurePlacing = StructurePlacing::INDIVIDUALLY;
     mapObjectConfigs[MapObjectType::CHAPEL]->catchmentArea = new RectangleData<char>(18, 17);
@@ -177,6 +191,8 @@ void ConfigMgr::loadMapObjectConfigs() {
 
         mapObjectConfigs[mapObjectType] = new MapObjectConfig();
         mapObjectConfigs[mapObjectType]->name = "Haus (Pioniere)";
+        mapObjectConfigs[mapObjectType]->mapWidth = 2;
+        mapObjectConfigs[mapObjectType]->mapHeight = 2;
         mapObjectConfigs[mapObjectType]->nameInSavefile = std::string("pioneers_house") + toString(i);
         mapObjectConfigs[mapObjectType]->structurePlacing = StructurePlacing::INDIVIDUALLY;
         mapObjectConfigs[mapObjectType]->catchmentArea = new RectangleData<char>(14, 14);
@@ -191,6 +207,8 @@ void ConfigMgr::loadMapObjectConfigs() {
 
         mapObjectConfigs[mapObjectType] = new MapObjectConfig();
         mapObjectConfigs[mapObjectType]->name = "Haus (Siedler)";
+        mapObjectConfigs[mapObjectType]->mapWidth = 2;
+        mapObjectConfigs[mapObjectType]->mapHeight = 2;
         mapObjectConfigs[mapObjectType]->nameInSavefile = std::string("settlers_house") + toString(i);
         mapObjectConfigs[mapObjectType]->structurePlacing = StructurePlacing::INDIVIDUALLY;
         mapObjectConfigs[mapObjectType]->catchmentArea = new RectangleData<char>(14, 14);
@@ -202,6 +220,8 @@ void ConfigMgr::loadMapObjectConfigs() {
 
     mapObjectConfigs[MapObjectType::STONEMASON] = new MapObjectConfig();
     mapObjectConfigs[MapObjectType::STONEMASON]->name = "Steinbruch";
+    mapObjectConfigs[MapObjectType::STONEMASON]->mapWidth = 2;
+    mapObjectConfigs[MapObjectType::STONEMASON]->mapHeight = 2;
     mapObjectConfigs[MapObjectType::STONEMASON]->nameInSavefile = "stonemason";
     mapObjectConfigs[MapObjectType::STONEMASON]->structurePlacing = StructurePlacing::INDIVIDUALLY;
     mapObjectConfigs[MapObjectType::STONEMASON]->catchmentArea = new RectangleData<char>(16, 16);
@@ -218,6 +238,8 @@ void ConfigMgr::loadMapObjectConfigs() {
 
     mapObjectConfigs[MapObjectType::OFFICE1] = new MapObjectConfig();
     mapObjectConfigs[MapObjectType::OFFICE1]->name = "Kontor I";
+    mapObjectConfigs[MapObjectType::OFFICE1]->mapWidth = 3;
+    mapObjectConfigs[MapObjectType::OFFICE1]->mapHeight = 2;
     mapObjectConfigs[MapObjectType::OFFICE1]->nameInSavefile = "office1";
     mapObjectConfigs[MapObjectType::OFFICE1]->structurePlacing = StructurePlacing::INDIVIDUALLY;
     mapObjectConfigs[MapObjectType::OFFICE1]->catchmentArea = new RectangleData<char>(38, 38);
@@ -229,6 +251,8 @@ void ConfigMgr::loadMapObjectConfigs() {
 
     mapObjectConfigs[MapObjectType::OFFICE2] = new MapObjectConfig();
     mapObjectConfigs[MapObjectType::OFFICE2]->name = "Kontor II";
+    mapObjectConfigs[MapObjectType::OFFICE2]->mapWidth = 3;
+    mapObjectConfigs[MapObjectType::OFFICE2]->mapHeight = 2;
     mapObjectConfigs[MapObjectType::OFFICE2]->nameInSavefile = "office2";
     mapObjectConfigs[MapObjectType::OFFICE2]->structurePlacing = StructurePlacing::INDIVIDUALLY;
     mapObjectConfigs[MapObjectType::OFFICE2]->catchmentArea = new RectangleData<char>(38, 38);
@@ -240,6 +264,8 @@ void ConfigMgr::loadMapObjectConfigs() {
 
     mapObjectConfigs[MapObjectType::MARKETPLACE] = new MapObjectConfig();
     mapObjectConfigs[MapObjectType::MARKETPLACE]->name = "Marktplatz";
+    mapObjectConfigs[MapObjectType::MARKETPLACE]->mapWidth = 4;
+    mapObjectConfigs[MapObjectType::MARKETPLACE]->mapHeight = 3;
     mapObjectConfigs[MapObjectType::MARKETPLACE]->nameInSavefile = "marketplace";
     mapObjectConfigs[MapObjectType::MARKETPLACE]->structurePlacing = StructurePlacing::INDIVIDUALLY;
     mapObjectConfigs[MapObjectType::MARKETPLACE]->catchmentArea = new RectangleData<char>(38, 38);
@@ -251,6 +277,8 @@ void ConfigMgr::loadMapObjectConfigs() {
 
     mapObjectConfigs[MapObjectType::FORESTERS] = new MapObjectConfig();
     mapObjectConfigs[MapObjectType::FORESTERS]->name = "Forsthaus";
+    mapObjectConfigs[MapObjectType::FORESTERS]->mapWidth = 2;
+    mapObjectConfigs[MapObjectType::FORESTERS]->mapHeight = 2;
     mapObjectConfigs[MapObjectType::FORESTERS]->nameInSavefile = "foresters";
     mapObjectConfigs[MapObjectType::FORESTERS]->structurePlacing = StructurePlacing::INDIVIDUALLY;
     mapObjectConfigs[MapObjectType::FORESTERS]->catchmentArea = new RectangleData<char>(8, 8);
@@ -267,6 +295,8 @@ void ConfigMgr::loadMapObjectConfigs() {
 
     mapObjectConfigs[MapObjectType::SHEEP_FARM] = new MapObjectConfig();
     mapObjectConfigs[MapObjectType::SHEEP_FARM]->name = "Schaffarm";
+    mapObjectConfigs[MapObjectType::SHEEP_FARM]->mapWidth = 2;
+    mapObjectConfigs[MapObjectType::SHEEP_FARM]->mapHeight = 2;
     mapObjectConfigs[MapObjectType::SHEEP_FARM]->nameInSavefile = "sheep_farm";
     mapObjectConfigs[MapObjectType::SHEEP_FARM]->structurePlacing = StructurePlacing::INDIVIDUALLY;
     mapObjectConfigs[MapObjectType::SHEEP_FARM]->catchmentArea = new RectangleData<char>(8, 8);
@@ -283,6 +313,8 @@ void ConfigMgr::loadMapObjectConfigs() {
 
     mapObjectConfigs[MapObjectType::WEAVING_MILL1] = new MapObjectConfig();
     mapObjectConfigs[MapObjectType::WEAVING_MILL1]->name = "Webstube";
+    mapObjectConfigs[MapObjectType::WEAVING_MILL1]->mapWidth = 2;
+    mapObjectConfigs[MapObjectType::WEAVING_MILL1]->mapHeight = 2;
     mapObjectConfigs[MapObjectType::WEAVING_MILL1]->nameInSavefile = "weaving_mill1";
     mapObjectConfigs[MapObjectType::WEAVING_MILL1]->structurePlacing = StructurePlacing::INDIVIDUALLY;
     mapObjectConfigs[MapObjectType::WEAVING_MILL1]->catchmentArea = new RectangleData<char>(32, 32);
@@ -300,6 +332,8 @@ void ConfigMgr::loadMapObjectConfigs() {
 
     mapObjectConfigs[MapObjectType::CATTLE_FARM] = new MapObjectConfig();
     mapObjectConfigs[MapObjectType::CATTLE_FARM]->name = "Rinderfarm";
+    mapObjectConfigs[MapObjectType::CATTLE_FARM]->mapWidth = 2;
+    mapObjectConfigs[MapObjectType::CATTLE_FARM]->mapHeight = 2;
     mapObjectConfigs[MapObjectType::CATTLE_FARM]->nameInSavefile = "cattle_farm";
     mapObjectConfigs[MapObjectType::CATTLE_FARM]->structurePlacing = StructurePlacing::INDIVIDUALLY;
     mapObjectConfigs[MapObjectType::CATTLE_FARM]->catchmentArea = new RectangleData<char>(6, 6);
@@ -316,6 +350,8 @@ void ConfigMgr::loadMapObjectConfigs() {
 
     mapObjectConfigs[MapObjectType::BUTCHERS] = new MapObjectConfig();
     mapObjectConfigs[MapObjectType::BUTCHERS]->name = "Fleischerei";
+    mapObjectConfigs[MapObjectType::BUTCHERS]->mapWidth = 2;
+    mapObjectConfigs[MapObjectType::BUTCHERS]->mapHeight = 2;
     mapObjectConfigs[MapObjectType::BUTCHERS]->nameInSavefile = "butchers";
     mapObjectConfigs[MapObjectType::BUTCHERS]->structurePlacing = StructurePlacing::INDIVIDUALLY;
     mapObjectConfigs[MapObjectType::BUTCHERS]->catchmentArea = new RectangleData<char>(22, 22);
@@ -333,6 +369,8 @@ void ConfigMgr::loadMapObjectConfigs() {
 
     mapObjectConfigs[MapObjectType::TOOLSMITHS] = new MapObjectConfig();
     mapObjectConfigs[MapObjectType::TOOLSMITHS]->name = "Werkzeugschmiede";
+    mapObjectConfigs[MapObjectType::TOOLSMITHS]->mapWidth = 2;
+    mapObjectConfigs[MapObjectType::TOOLSMITHS]->mapHeight = 2;
     mapObjectConfigs[MapObjectType::TOOLSMITHS]->nameInSavefile = "toolsmiths";
     mapObjectConfigs[MapObjectType::TOOLSMITHS]->structurePlacing = StructurePlacing::INDIVIDUALLY;
     mapObjectConfigs[MapObjectType::TOOLSMITHS]->catchmentArea = new RectangleData<char>(32, 32);
@@ -349,6 +387,8 @@ void ConfigMgr::loadMapObjectConfigs() {
 
     mapObjectConfigs[MapObjectType::HUNTERS_HUT] = new MapObjectConfig();
     mapObjectConfigs[MapObjectType::HUNTERS_HUT]->name = "Jagdhütte";
+    mapObjectConfigs[MapObjectType::HUNTERS_HUT]->mapWidth = 1;
+    mapObjectConfigs[MapObjectType::HUNTERS_HUT]->mapHeight = 1;
     mapObjectConfigs[MapObjectType::HUNTERS_HUT]->nameInSavefile = "hunters_hut";
     mapObjectConfigs[MapObjectType::HUNTERS_HUT]->structurePlacing = StructurePlacing::INDIVIDUALLY;
     mapObjectConfigs[MapObjectType::HUNTERS_HUT]->catchmentArea = new RectangleData<char>(17, 17);
@@ -365,6 +405,8 @@ void ConfigMgr::loadMapObjectConfigs() {
     
     mapObjectConfigs[MapObjectType::CATHEDRAL] = new MapObjectConfig();
     mapObjectConfigs[MapObjectType::CATHEDRAL]->name = "Kathedrale";
+    mapObjectConfigs[MapObjectType::CATHEDRAL]->mapWidth = 6;
+    mapObjectConfigs[MapObjectType::CATHEDRAL]->mapHeight = 4;
     mapObjectConfigs[MapObjectType::CATHEDRAL]->nameInSavefile = "cathedral";
     mapObjectConfigs[MapObjectType::CATHEDRAL]->structurePlacing = StructurePlacing::INDIVIDUALLY;
     mapObjectConfigs[MapObjectType::CATHEDRAL]->catchmentArea = new RectangleData<char>(50, 50);
@@ -376,6 +418,8 @@ void ConfigMgr::loadMapObjectConfigs() {
 
     mapObjectConfigs[MapObjectType::TAVERN] = new MapObjectConfig();
     mapObjectConfigs[MapObjectType::TAVERN]->name = "Wirtshaus";
+    mapObjectConfigs[MapObjectType::TAVERN]->mapWidth = 2;
+    mapObjectConfigs[MapObjectType::TAVERN]->mapHeight = 3;
     mapObjectConfigs[MapObjectType::TAVERN]->nameInSavefile = "tavern";
     mapObjectConfigs[MapObjectType::TAVERN]->structurePlacing = StructurePlacing::INDIVIDUALLY;
     mapObjectConfigs[MapObjectType::TAVERN]->catchmentArea = new RectangleData<char>(26, 25);
@@ -387,6 +431,8 @@ void ConfigMgr::loadMapObjectConfigs() {
     
     mapObjectConfigs[MapObjectType::SUGARCANE_PLANTATION] = new MapObjectConfig();
     mapObjectConfigs[MapObjectType::SUGARCANE_PLANTATION]->name = "Zuckerrohrplantage";
+    mapObjectConfigs[MapObjectType::SUGARCANE_PLANTATION]->mapWidth = 2;
+    mapObjectConfigs[MapObjectType::SUGARCANE_PLANTATION]->mapHeight = 2;
     mapObjectConfigs[MapObjectType::SUGARCANE_PLANTATION]->nameInSavefile = "sugarcane_plantation";
     mapObjectConfigs[MapObjectType::SUGARCANE_PLANTATION]->structurePlacing = StructurePlacing::INDIVIDUALLY;
     mapObjectConfigs[MapObjectType::SUGARCANE_PLANTATION]->catchmentArea = new RectangleData<char>(6, 6);
@@ -403,6 +449,8 @@ void ConfigMgr::loadMapObjectConfigs() {
     
     mapObjectConfigs[MapObjectType::TOBACCO_PLANTATION] = new MapObjectConfig();
     mapObjectConfigs[MapObjectType::TOBACCO_PLANTATION]->name = "Tabakplantage";
+    mapObjectConfigs[MapObjectType::TOBACCO_PLANTATION]->mapWidth = 2;
+    mapObjectConfigs[MapObjectType::TOBACCO_PLANTATION]->mapHeight = 2;
     mapObjectConfigs[MapObjectType::TOBACCO_PLANTATION]->nameInSavefile = "tobacco_plantation";
     mapObjectConfigs[MapObjectType::TOBACCO_PLANTATION]->structurePlacing = StructurePlacing::INDIVIDUALLY;
     mapObjectConfigs[MapObjectType::TOBACCO_PLANTATION]->catchmentArea = new RectangleData<char>(6, 6);
@@ -419,6 +467,8 @@ void ConfigMgr::loadMapObjectConfigs() {
 
     mapObjectConfigs[MapObjectType::DISTILLERY] = new MapObjectConfig();
     mapObjectConfigs[MapObjectType::DISTILLERY]->name = "Rumbrennerei";
+    mapObjectConfigs[MapObjectType::DISTILLERY]->mapWidth = 2;
+    mapObjectConfigs[MapObjectType::DISTILLERY]->mapHeight = 2;
     mapObjectConfigs[MapObjectType::DISTILLERY]->nameInSavefile = "distillery";
     mapObjectConfigs[MapObjectType::DISTILLERY]->structurePlacing = StructurePlacing::INDIVIDUALLY;
     mapObjectConfigs[MapObjectType::DISTILLERY]->catchmentArea = new RectangleData<char>(26, 26);

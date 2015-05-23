@@ -23,17 +23,11 @@ public:
 
 private:
 	virtual IGraphic* loadGraphic(const char* filename) {
-        return new NoSDLGraphic(renderer, filename, 0, 0);
+        return new NoSDLGraphic(renderer, filename);
     }
 
-    virtual IGraphic* loadGraphic(const char* filename, unsigned char mapWidth, unsigned char mapHeight) {
-        return new NoSDLGraphic(renderer, filename, mapWidth, mapHeight);
-    }
-
-    virtual IGraphic* loadGraphic(
-        const IGraphic& srcGraphic, const Rect& srcRect, unsigned char mapWidth, unsigned char mapHeight) {
-
-        return new NoSDLGraphic(renderer, srcGraphic, srcRect, mapWidth, mapHeight);
+    virtual IGraphic* loadGraphic(const IGraphic& srcGraphic, const Rect& srcRect) {
+        return new NoSDLGraphic(renderer, srcGraphic, srcRect);
     }
 
 };

@@ -7,14 +7,7 @@
 #include "utils/StringFormat.h"
 
 
-SDLGraphic::SDLGraphic(IRenderer* const renderer, const char* filename) : SDLGraphic(renderer, filename, 0, 0) {}
-
-SDLGraphic::SDLGraphic(IRenderer* const renderer, const char* filename, unsigned char mapWidth, unsigned char mapHeight) :
-	renderer(renderer) {
-
-	this->mapWidth = mapWidth;
-	this->mapHeight = mapHeight;
-
+SDLGraphic::SDLGraphic(IRenderer* const renderer, const char* filename) : renderer(renderer) {
 	SDL_Surface* surface = IMG_Load(filename);
 	if (surface == nullptr) {
 		std::cerr << "Could not load graphic '" << filename << "': " << IMG_GetError() << std::endl;
@@ -30,16 +23,8 @@ SDLGraphic::SDLGraphic(IRenderer* const renderer, const char* filename, unsigned
 			<< toString(height) << ")" << std::endl;
 }
 
-SDLGraphic::SDLGraphic(IRenderer* const renderer, const SDLGraphic& srcGraphic, const Rect& srcRect) :
-	SDLGraphic(renderer, srcGraphic, srcRect, 0, 0) {}
-
-
-SDLGraphic::SDLGraphic(IRenderer* const renderer, const SDLGraphic& srcGraphic, const Rect& srcRect,
-	                   unsigned char mapWidth, unsigned char mapHeight) :
-	renderer(renderer) {
-
-	this->mapWidth = mapWidth;
-	this->mapHeight = mapHeight;
+SDLGraphic::SDLGraphic(
+	IRenderer* const renderer, const SDLGraphic& srcGraphic, const Rect& srcRect) : renderer(renderer) {
 
 	// Prüfen, ob das Rechteck komplett innerhalb der Grafik liegt
 	if (srcRect.x + srcRect.w > srcGraphic.width ||
