@@ -52,7 +52,7 @@ private:
      * @brief Lädt die Map-Objekte (Strukturen, Gebäude und Wälder) aus der tiled-TMX-Datei
      * @param game Spiel, in das der Spielstand geladen werden soll
      * @param configMgr (Dependency)
-     * @param objectgroupMapObjectsNode <objectgroup>-Knoten der "mapobjects"-Ebene aus der tiled-Datei
+     * @param objectgroupMapObjectsNode <objectgroup>-Knoten der "map-objects"-Ebene aus der tiled-Datei
      */
     static void loadMapObjects(Game* game, const ConfigMgr* configMgr, rapidxml::xml_node<>* objectgroupMapObjectsNode);
 

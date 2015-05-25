@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" orientation="isometric" width="40" height="40" tilewidth="64" tileheight="32">
  <properties>
-  <property name="current_player" value="1"/>
-  <property name="player1_color" value="red"/>
-  <property name="player1_name" value="Spieler 1"/>
-  <property name="player2_color" value="yellow"/>
-  <property name="player2_name" value="Spieler 2"/>
-  <property name="player3_color" value="white"/>
-  <property name="player3_name" value="Spieler 3"/>
-  <property name="player4_color" value="blue"/>
-  <property name="player4_name" value="Spieler 4"/>
+  <property name="current-player" value="1"/>
+  <property name="player1-color" value="red"/>
+  <property name="player1-name" value="Spieler 1"/>
+  <property name="player2-color" value="yellow"/>
+  <property name="player2-name" value="Spieler 2"/>
+  <property name="player3-color" value="white"/>
+  <property name="player3-name" value="Spieler 3"/>
+  <property name="player4-color" value="blue"/>
+  <property name="player4-name" value="Spieler 4"/>
  </properties>
  <objectgroup name="isles" width="40" height="40">
   <object name="small1" type="isle" x="128" y="128" width="960" height="960"/>
@@ -17,6 +17,6 @@
  </objectgroup>
  <objectgroup name="colonies" width="40" height="40">
  </objectgroup>
- <objectgroup name="mapobjects" width="40" height="40">
+ <objectgroup name="map-objects" width="40" height="40">
  </objectgroup>
 </map>

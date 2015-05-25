@@ -26,11 +26,10 @@ void GuiAddBuildingWidget::renderElement(IRenderer* renderer) {
     int windowX, windowY;
     getWindowCoords(windowX, windowY);
 
-    const MapObjectType& mapObjectType = context->guiMgr->getPanelState().addingMapObject;
-    const MapObjectConfig* mapObjectConfig = context->configMgr->getMapObjectConfig(mapObjectType);
+    const MapObjectType* mapObjectType = context->guiMgr->getPanelState().addingMapObject;
 
     // Name des Map-Objekts
-    context->fontMgr->renderText(renderer, mapObjectConfig->getName(), windowX + width/2, windowY + 15,
+    context->fontMgr->renderText(renderer, mapObjectType->title, windowX + width/2, windowY + 15,
         &colorLightBrown, &colorBlack, "DroidSans-Bold.ttf", 15, RENDERTEXT_HALIGN_CENTER);
 
     // Grafik
@@ -39,11 +38,11 @@ void GuiAddBuildingWidget::renderElement(IRenderer* renderer) {
     const GraphicSet* graphicSet = context->graphicsMgr->getGraphicSet(graphicsSetName);
 
     const IGraphic* graphic;
-    if (mapObjectType >= MapObjectType::START_STRUCTURES) {
+    if (mapObjectType->type != MapObjectTypeClass::HARVESTABLE) {
         graphic = graphicSet->getByView(view)->getGraphic();
     } else {
         // Harvestable? ausgewachsenen Zustand nehmen
-        unsigned char maxAge = context->configMgr->getMapObjectConfig(mapObjectType)->maxAge;
+        unsigned char maxAge = mapObjectType->maxAge;
         const std::string fullgrownState = "growth" + toString(maxAge);
         graphic = graphicSet->getByStateAndView(fullgrownState, view)->getGraphic();
     }
@@ -63,31 +62,31 @@ void GuiAddBuildingWidget::renderElement(IRenderer* renderer) {
     graphic->drawScaledAt(x, y, scale);
 
     // produzierte Waren
-    const ProductionSlots* buildingProduction = mapObjectConfig->getBuildingProduction();
+    const ProductionSlots& buildingProduction = mapObjectType->buildingProduction;
     int productionY = windowY + 160;
-    if (buildingProduction->input2.isUsed()) {
+    if (buildingProduction.input2.isUsed()) {
         // input + input2 -> output
 
-        context->guiMgr->drawGoodsBox(windowX + 29, productionY, buildingProduction->input.good, -1, -1);
+        context->guiMgr->drawGoodsBox(windowX + 29, productionY, buildingProduction.input.good, -1, -1);
         context->graphicsMgr->getGraphicSet("production-plus")->getStatic()->getGraphic()->drawAt(
             windowX + 75, productionY);
-        context->guiMgr->drawGoodsBox(windowX + 90, productionY, buildingProduction->input2.good, -1, -1);
+        context->guiMgr->drawGoodsBox(windowX + 90, productionY, buildingProduction.input2.good, -1, -1);
         context->graphicsMgr->getGraphicSet("production-arrow")->getStatic()->getGraphic()->drawAt(
             windowX + 136, productionY);
-        context->guiMgr->drawGoodsBox(windowX + 150, productionY, buildingProduction->output.good, -1, -1);
+        context->guiMgr->drawGoodsBox(windowX + 150, productionY, buildingProduction.output.good, -1, -1);
     }
-    else if (buildingProduction->input.isUsed()) {
+    else if (buildingProduction.input.isUsed()) {
         // input -> output
 
-        context->guiMgr->drawGoodsBox(windowX + 60, productionY, buildingProduction->input.good, -1, -1);
+        context->guiMgr->drawGoodsBox(windowX + 60, productionY, buildingProduction.input.good, -1, -1);
         context->graphicsMgr->getGraphicSet("production-arrow")->getStatic()->getGraphic()->drawAt(
             windowX + 106, productionY);
-        context->guiMgr->drawGoodsBox(windowX + 120, productionY, buildingProduction->output.good, -1, -1);
+        context->guiMgr->drawGoodsBox(windowX + 120, productionY, buildingProduction.output.good, -1, -1);
     }
-    else if (buildingProduction->output.isUsed()) {
+    else if (buildingProduction.output.isUsed()) {
         // output
 
-        context->guiMgr->drawGoodsBox(windowX + 90, productionY, buildingProduction->output.good, -1, -1);
+        context->guiMgr->drawGoodsBox(windowX + 90, productionY, buildingProduction.output.good, -1, -1);
     }
 
     // Baukosten
@@ -95,7 +94,7 @@ void GuiAddBuildingWidget::renderElement(IRenderer* renderer) {
 
     context->graphicsMgr->getGraphicSet("coin")->getStatic()->getGraphic()->drawAt(windowX, costsY);
     context->fontMgr->renderText(
-        renderer, toString(mapObjectConfig->getBuildingCosts()->coins), windowX + 35, costsY + 12,
+        renderer, toString(mapObjectType->buildingCosts.coins), windowX + 35, costsY + 12,
         &colorWhite, &colorBlack, "DroidSans-Bold.ttf", 14, RENDERTEXT_HALIGN_LEFT | RENDERTEXT_VALIGN_MIDDLE);
 
     costsY += 30;
@@ -104,20 +103,20 @@ void GuiAddBuildingWidget::renderElement(IRenderer* renderer) {
     std::string graphicSetName = context->graphicsMgr->getGraphicSetNameForGoodIcons(good, false);
     context->graphicsMgr->getGraphicSet(graphicSetName)->getStatic()->getGraphic()->drawAt(windowX, costsY);
     context->fontMgr->renderText(
-        renderer, toString(mapObjectConfig->getBuildingCosts()->tools), windowX + 35, costsY + 16,
+        renderer, toString(mapObjectType->buildingCosts.tools), windowX + 35, costsY + 16,
         &colorWhite, &colorBlack, "DroidSans-Bold.ttf", 14, RENDERTEXT_HALIGN_LEFT | RENDERTEXT_VALIGN_MIDDLE);
 
     good = context->configMgr->getGood("wood");
     graphicSetName = context->graphicsMgr->getGraphicSetNameForGoodIcons(good, false);
     context->graphicsMgr->getGraphicSet(graphicSetName)->getStatic()->getGraphic()->drawAt(windowX + 60, costsY);
     context->fontMgr->renderText(
-        renderer, toString(mapObjectConfig->getBuildingCosts()->wood), windowX + 95, costsY + 16,
+        renderer, toString(mapObjectType->buildingCosts.wood), windowX + 95, costsY + 16,
         &colorWhite, &colorBlack, "DroidSans-Bold.ttf", 14, RENDERTEXT_HALIGN_LEFT | RENDERTEXT_VALIGN_MIDDLE);
 
     good = context->configMgr->getGood("bricks");
     graphicSetName = context->graphicsMgr->getGraphicSetNameForGoodIcons(good, false);
     context->graphicsMgr->getGraphicSet(graphicSetName)->getStatic()->getGraphic()->drawAt(windowX + 120, costsY);
     context->fontMgr->renderText(
-        renderer, toString(mapObjectConfig->getBuildingCosts()->bricks), windowX + 155, costsY + 16,
+        renderer, toString(mapObjectType->buildingCosts.bricks), windowX + 155, costsY + 16,
         &colorWhite, &colorBlack, "DroidSans-Bold.ttf", 14, RENDERTEXT_HALIGN_LEFT | RENDERTEXT_VALIGN_MIDDLE);
 }

@@ -41,10 +41,10 @@ public:
      * @return `true` wenn Feldweg oder Pflasterstraße, sonst `false`
      */
     bool isStreet() const {
-        return ((mapObjectType >= MapObjectType::FARM_ROAD_STRAIGHT_0 &&
-                 mapObjectType <= MapObjectType::FARM_ROAD_CROSS) ||
-                (mapObjectType >= MapObjectType::COBBLED_STREET_STRAIGHT_0 &&
-                 mapObjectType <= MapObjectType::COBBLED_STREET_CROSS));
+        // TODO Flag sollte direkt an der Config gesteuert werden
+
+        return (mapObjectType->name.substr(0, 9) == "farm-road" ||
+                mapObjectType->name.substr(0, 14) == "cobbled-street");
     }
 
     /**
@@ -52,7 +52,9 @@ public:
      * @return `true` wenn Weg/Straße oder Platz, sonst `false`
      */
     bool isPlace() const {
-        return (mapObjectType >= MapObjectType::SQUARE1 && mapObjectType <= MapObjectType::SQUARE3);
+        // TODO Flag sollte direkt an der Config gesteuert werden
+
+        return (mapObjectType->name.substr(0, 6) == "square");
     }
 
     /**

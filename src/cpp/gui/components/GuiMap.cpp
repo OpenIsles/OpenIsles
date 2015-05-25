@@ -130,7 +130,7 @@ void GuiMap::renderElement(IRenderer* renderer) {
         int drawingFlags = 0;
         if (selectedMapObject != nullptr) {
             bool insideCatchmentArea =
-                (selectedBuilding != nullptr && selectedBuilding->isInsideCatchmentArea(context->configMgr, mapCoords));
+                (selectedBuilding != nullptr && selectedBuilding->isInsideCatchmentArea(mapCoords));
 
             if (!insideCatchmentArea) {
                 drawingFlags |= IGraphic::DRAWING_FLAG_DARKENED;
@@ -203,7 +203,7 @@ void GuiMap::renderElement(IRenderer* renderer) {
             int tileOffsetYInMapObject = mapCoords.y() - moMapCoords.y(); // (0 ... moMapHeight-1)
 
             int drawingFlags = mapObjectToDrawHere->getDrawingFlags();
-            const MapObjectType& mapObjectType = mapObjectToDrawHere->getMapObjectType();
+            const MapObjectType* mapObjectType = mapObjectToDrawHere->getMapObjectType();
 
             const FourthDirection& view = mapObjectToDrawHere->getView();
             const FourthDirection& viewToRender = Direction::addDirections(view, screenView);
@@ -297,7 +297,7 @@ void GuiMap::renderElement(IRenderer* renderer) {
             if (selectedMapObject != nullptr) {
                 bool insideCatchmentArea =
                     (selectedBuilding != nullptr &&
-                     selectedBuilding->isInsideCatchmentArea(context->configMgr, *mapObjectToDrawHere));
+                     selectedBuilding->isInsideCatchmentArea(*mapObjectToDrawHere));
 
                 if (!insideCatchmentArea) {
                     drawingFlags |= IGraphic::DRAWING_FLAG_DARKENED;
@@ -519,9 +519,8 @@ void GuiMap::addToBuildQueue(bool mustClearAllTemporarily) {
     const MapCoords& mapCoordsUnderMouse = context->guiMgr->getMapCoordsUnderMouse();
 
     // Ok, wir müssen nun ggf. was platzieren. Es kommt nun drauf an, was wir grade platzieren
-    const MapObjectType& mapObjectType = context->guiMgr->getPanelState().addingMapObject;
-    const MapObjectConfig* mapObjectConfig = context->configMgr->getMapObjectConfig(mapObjectType);
-    StructurePlacing structurePlacing = mapObjectConfig->structurePlacing;
+    const MapObjectType* mapObjectType = context->guiMgr->getPanelState().addingMapObject;
+    StructurePlacing structurePlacing = mapObjectType->structurePlacing;
     const FourthDirection& view = context->guiMgr->getPanelState().addingMapObjectView;
 
     if (structurePlacing == INDIVIDUALLY) {
@@ -599,17 +598,16 @@ void GuiMap::updateHoverObject() {
 
     clearAllTemporarily();
 
-    const MapObjectType& mapObjectType = context->guiMgr->getPanelState().addingMapObject;
+    const MapObjectType* mapObjectType = context->guiMgr->getPanelState().addingMapObject;
     const FourthDirection& view = context->guiMgr->getPanelState().addingMapObjectView;
 
-    const MapObjectConfig* mapObjectConfig = context->configMgr->getMapObjectConfig(mapObjectType);
     unsigned char mapWidth, mapHeight;
     if (view == Direction::NORTH || view == Direction::SOUTH) {
-        mapWidth = mapObjectConfig->mapWidth;
-        mapHeight = mapObjectConfig->mapHeight;
+        mapWidth = mapObjectType->mapWidth;
+        mapHeight = mapObjectType->mapHeight;
     } else {
-        mapWidth = mapObjectConfig->mapHeight;
-        mapHeight = mapObjectConfig->mapWidth;
+        mapWidth = mapObjectType->mapHeight;
+        mapHeight = mapObjectType->mapWidth;
     }
 
     // Zu belegende Kachel mehrfach durchgehen.
@@ -732,7 +730,7 @@ void GuiMap::onReleaseMouseLeftInBuildingMode() {
     for (auto iter = buildQueue.cbegin(); iter != buildQueue.cend(); iter++) {
         const MapObjectFixed& mapObject = **iter;
 
-        const MapObjectType& mapObjectType = mapObject.getMapObjectType();
+        const MapObjectType* mapObjectType = mapObject.getMapObjectType();
         const MapCoords& mapCoords = mapObject.getMapCoords();
 
         const FourthDirection& view = mapObject.getView();
@@ -748,8 +746,8 @@ void GuiMap::onReleaseMouseLeftInBuildingMode() {
         // Resourcen bezahlen
         Colony* colony = context->game->getColony(
             currentPlayer, context->game->getMap()->getMapTileAt(mapCoords)->isle);
-        const BuildingCosts* buildingCosts = context->configMgr->getMapObjectConfig(mapObjectType)->getBuildingCosts();
-        currentPlayer->coins -= buildingCosts->coins;
+        const BuildingCosts& buildingCosts = mapObjectType->buildingCosts;
+        currentPlayer->coins -= buildingCosts.coins;
         colony->subtractBuildingCosts(buildingCosts);
     }
     buildQueue.clear();
@@ -760,7 +758,7 @@ void GuiMap::onReleaseMouseLeftInBuildingMode() {
 }
 
 unsigned char GuiMap::isAllowedToPlaceMapObject(
-    const MapCoords& mapCoords, MapObjectType mapObjectType, const FourthDirection& view) const {
+    const MapCoords& mapCoords, const MapObjectType* mapObjectType, const FourthDirection& view) const {
 
     MapTile* mapTile = context->game->getMap()->getMapTileAt(mapCoords);
     if (mapTile == nullptr) {
@@ -779,24 +777,23 @@ unsigned char GuiMap::isAllowedToPlaceMapObject(
     Colony* colony = context->game->getColony(currentPlayer, isle);
 
     if (colony != nullptr) {
-        const BuildingCosts* buildingCosts = context->configMgr->getMapObjectConfig(mapObjectType)->getBuildingCosts();
-        if ((buildingCosts->coins > currentPlayer->coins) ||
-            (buildingCosts->tools > colony->getGoods("tools").inventory) ||
-            (buildingCosts->wood > colony->getGoods("wood").inventory) ||
-            (buildingCosts->bricks > colony->getGoods("bricks").inventory)) {
+        const BuildingCosts& buildingCosts = mapObjectType->buildingCosts;
+        if ((buildingCosts.coins > currentPlayer->coins) ||
+            (buildingCosts.tools > colony->getGoods("tools").inventory) ||
+            (buildingCosts.wood > colony->getGoods("wood").inventory) ||
+            (buildingCosts.bricks > colony->getGoods("bricks").inventory)) {
             result |= PLACING_STRUCTURE_NO_RESOURCES;
         }
     }
 
     // Checken, ob alles frei is, um das Gebäude zu setzen
-    const MapObjectConfig* mapObjectConfig = context->configMgr->getMapObjectConfig(mapObjectType);
     unsigned char mapWidth, mapHeight;
     if (view == Direction::NORTH || view == Direction::SOUTH) {
-        mapWidth = mapObjectConfig->mapWidth;
-        mapHeight = mapObjectConfig->mapHeight;
+        mapWidth = mapObjectType->mapWidth;
+        mapHeight = mapObjectType->mapHeight;
     } else {
-        mapWidth = mapObjectConfig->mapHeight;
-        mapHeight = mapObjectConfig->mapWidth;
+        mapWidth = mapObjectType->mapHeight;
+        mapHeight = mapObjectType->mapWidth;
     }
 
     for (int y = mapCoords.y(); y < mapCoords.y() + mapHeight; y++) {
@@ -835,59 +832,56 @@ void GuiMap::drawCatchmentArea(IRenderer* const renderer, const Building& buildi
 
     renderer->setDrawColor(Color(0xc8, 0xaf, 0x37, 255));
 
-    const MapObjectConfig* MapObjectConfig = context->configMgr->getMapObjectConfig(building.getMapObjectType());
-    const RectangleData<char>* catchmentArea = MapObjectConfig->getCatchmentArea();
+    if (!building.getMapObjectType()->catchmentArea) {
+        return;
+    }
+    const RectangleData<char>& catchmentArea = *building.getMapObjectType()->catchmentArea;
 
-    if (catchmentArea != nullptr) {
-        const MapCoords& mapCoords = building.getMapCoords();
-        int catchmentAreaRadius = std::max(catchmentArea->width, catchmentArea->height); // TODO sehr optimierungsbedürftig, dafür funktionierts erstmal in allen Ansichten
+    const MapCoords& mapCoords = building.getMapCoords();
+    int catchmentAreaRadius = std::max(catchmentArea.width, catchmentArea.height); // TODO sehr optimierungsbedürftig, dafür funktionierts erstmal in allen Ansichten
 
-        for (int mapY = mapCoords.y() - catchmentAreaRadius; mapY <= mapCoords.y() + catchmentAreaRadius; mapY++) {
-            for (int mapX = mapCoords.x() - catchmentAreaRadius; mapX <= mapCoords.x() + catchmentAreaRadius; mapX++) {
-                MapCoords mapCoordsHere(mapX, mapY);
-                MapCoords mapCoordsEast(mapX + 1, mapY);
-                MapCoords mapCoordsSouth(mapX, mapY + 1);
+    for (int mapY = mapCoords.y() - catchmentAreaRadius; mapY <= mapCoords.y() + catchmentAreaRadius; mapY++) {
+        for (int mapX = mapCoords.x() - catchmentAreaRadius; mapX <= mapCoords.x() + catchmentAreaRadius; mapX++) {
+            MapCoords mapCoordsHere(mapX, mapY);
+            MapCoords mapCoordsEast(mapX + 1, mapY);
+            MapCoords mapCoordsSouth(mapX, mapY + 1);
 
-                bool mapCoordsHereInSideCatchmentArea =
-                    building.isInsideCatchmentArea(context->configMgr, mapCoordsHere);
-                bool mapCoordsEastInSideCatchmentArea =
-                    building.isInsideCatchmentArea(context->configMgr, mapCoordsEast);
-                bool mapCoordsSouthInSideCatchmentArea =
-                    building.isInsideCatchmentArea(context->configMgr, mapCoordsSouth);
+            bool mapCoordsHereInSideCatchmentArea = building.isInsideCatchmentArea(mapCoordsHere);
+            bool mapCoordsEastInSideCatchmentArea = building.isInsideCatchmentArea(mapCoordsEast);
+            bool mapCoordsSouthInSideCatchmentArea = building.isInsideCatchmentArea(mapCoordsSouth);
 
-                auto drawLineBetweenMapCoords = [&](const MapCoords& mapCoords1, const MapCoords& mapCoords2) {
-                    ScreenCoords screenCoords1 = MapCoordUtils::mapToScreenCoords(mapCoords1, screenView, *map);
-                    ScreenCoords screenCoords2 = MapCoordUtils::mapToScreenCoords(mapCoords2, screenView, *map);
+            auto drawLineBetweenMapCoords = [&](const MapCoords& mapCoords1, const MapCoords& mapCoords2) {
+                ScreenCoords screenCoords1 = MapCoordUtils::mapToScreenCoords(mapCoords1, screenView, *map);
+                ScreenCoords screenCoords2 = MapCoordUtils::mapToScreenCoords(mapCoords2, screenView, *map);
 
-                    int drawX1 = screenCoords1.x() / screenZoom;
-                    int drawY1 = (screenCoords1.y() - IGraphicsMgr::ELEVATION_HEIGHT) / screenZoom;
-                    drawX1 += Consts::mapClipRect.w / 2;
-                    drawY1 += Consts::mapClipRect.h / 2;
+                int drawX1 = screenCoords1.x() / screenZoom;
+                int drawY1 = (screenCoords1.y() - IGraphicsMgr::ELEVATION_HEIGHT) / screenZoom;
+                drawX1 += Consts::mapClipRect.w / 2;
+                drawY1 += Consts::mapClipRect.h / 2;
 
-                    int drawX2 = screenCoords2.x() / screenZoom;
-                    int drawY2 = (screenCoords2.y() - IGraphicsMgr::ELEVATION_HEIGHT) / screenZoom;
-                    drawX2 += Consts::mapClipRect.w / 2;
-                    drawY2 += Consts::mapClipRect.h / 2;
+                int drawX2 = screenCoords2.x() / screenZoom;
+                int drawY2 = (screenCoords2.y() - IGraphicsMgr::ELEVATION_HEIGHT) / screenZoom;
+                drawX2 += Consts::mapClipRect.w / 2;
+                drawY2 += Consts::mapClipRect.h / 2;
 
-                    renderer->drawLine(drawX1, drawY1, drawX2, drawY2);
-                };
+                renderer->drawLine(drawX1, drawY1, drawX2, drawY2);
+            };
 
-                bool drawYLine =
-                    ((mapCoordsHereInSideCatchmentArea && !mapCoordsEastInSideCatchmentArea) ||
-                    (!mapCoordsHereInSideCatchmentArea && mapCoordsEastInSideCatchmentArea));
-                bool drawXLine =
-                    ((mapCoordsHereInSideCatchmentArea && !mapCoordsSouthInSideCatchmentArea) ||
-                    (!mapCoordsHereInSideCatchmentArea && mapCoordsSouthInSideCatchmentArea));
+            bool drawYLine =
+                ((mapCoordsHereInSideCatchmentArea && !mapCoordsEastInSideCatchmentArea) ||
+                (!mapCoordsHereInSideCatchmentArea && mapCoordsEastInSideCatchmentArea));
+            bool drawXLine =
+                ((mapCoordsHereInSideCatchmentArea && !mapCoordsSouthInSideCatchmentArea) ||
+                (!mapCoordsHereInSideCatchmentArea && mapCoordsSouthInSideCatchmentArea));
 
-                // Übergang West -> Ost (mapX-Richtung)
-                if (drawYLine) {
-                    drawLineBetweenMapCoords(mapCoordsEast, MapCoords(mapX + 1, mapY + 1));
-                }
+            // Übergang West -> Ost (mapX-Richtung)
+            if (drawYLine) {
+                drawLineBetweenMapCoords(mapCoordsEast, MapCoords(mapX + 1, mapY + 1));
+            }
 
-                // Übergang Nord -> Süd (mapY-Richtung)
-                if (drawXLine) {
-                    drawLineBetweenMapCoords(mapCoordsSouth, MapCoords(mapX + 1, mapY + 1));
-                }
+            // Übergang Nord -> Süd (mapY-Richtung)
+            if (drawXLine) {
+                drawLineBetweenMapCoords(mapCoordsSouth, MapCoords(mapX + 1, mapY + 1));
             }
         }
     }
@@ -945,34 +939,33 @@ void GuiMap::clearAllTemporarily() {
 }
 
 void GuiMap::addCurrentStructureToBuildQueue(const MapCoords& mapCoords) {
-    MapObjectType mapObjectType = context->guiMgr->getPanelState().addingMapObject;
+    const MapObjectType* mapObjectType = context->guiMgr->getPanelState().addingMapObject;
     const FourthDirection& view = context->guiMgr->getPanelState().addingMapObjectView;
 
-    const MapObjectConfig* mapObjectConfig = context->configMgr->getMapObjectConfig(mapObjectType);
     unsigned char mapWidth, mapHeight;
     if (view == Direction::NORTH || view == Direction::SOUTH) {
-        mapWidth = mapObjectConfig->mapWidth;
-        mapHeight = mapObjectConfig->mapHeight;
+        mapWidth = mapObjectType->mapWidth;
+        mapHeight = mapObjectType->mapHeight;
     } else {
-        mapWidth = mapObjectConfig->mapHeight;
-        mapHeight = mapObjectConfig->mapWidth;
+        mapWidth = mapObjectType->mapHeight;
+        mapHeight = mapObjectType->mapWidth;
     }
 
     // Sonderfälle, wo zufällig gewählt wird: Haus (= zufälliges Pionier-Haus) und Wald
-    if (mapObjectType == MapObjectType::PIONEERS_HOUSE1 || mapObjectType == MapObjectType::NORTHERN_FOREST1) {
+    if (mapObjectType->name == "pioneers-house1" || mapObjectType->name == "northern-forest1") {
         std::random_device randomDevice;
         std::default_random_engine randomEngine(randomDevice());
 
-        if (mapObjectType == MapObjectType::PIONEERS_HOUSE1) {
-            std::uniform_int_distribution<int> randomPioneerHouse(
-                MapObjectType::PIONEERS_HOUSE1, MapObjectType::PIONEERS_HOUSE5);
+        if (mapObjectType->name == "pioneers-house1") {
+            std::uniform_int_distribution<int> randomPioneerHouse(1, 5);
+            std::string mapObjectTypeName = "pioneers-house" + toString(randomPioneerHouse(randomEngine));
 
-            mapObjectType = (MapObjectType) randomPioneerHouse(randomEngine);
-        } else if (mapObjectType == MapObjectType::NORTHERN_FOREST1) {
-            std::uniform_int_distribution<int> randomNorthernForest(
-                MapObjectType::NORTHERN_FOREST1, MapObjectType::NORTHERN_FOREST2);
+            mapObjectType = context->configMgr->getMapObjectType(mapObjectTypeName);
+        } else if (mapObjectType->name == "northern-forest1") {
+            std::uniform_int_distribution<int> randomNorthernForest(1, 2);
+            std::string mapObjectTypeName = "northern-forest" + toString(randomNorthernForest(randomEngine));
 
-            mapObjectType = (MapObjectType) randomNorthernForest(randomEngine);
+            mapObjectType = context->configMgr->getMapObjectType(mapObjectTypeName);
         }
     }
 
@@ -1017,7 +1010,7 @@ void GuiMap::updateMapObjectsTemporarilyDrawingFlags() {
 
         const MapObjectFixed& mapObjectFixed = *mapTilesToDrawTemporarily.cbegin()->second.mapObjectToDraw;
         const MapCoords& mapCoords = mapObjectFixed.getMapCoords();
-        const MapObjectType& mapObjectType = mapObjectFixed.getMapObjectType();
+        const MapObjectType* mapObjectType = mapObjectFixed.getMapObjectType();
         const FourthDirection& view = mapObjectFixed.getView();
 
         bool noResources =
@@ -1041,9 +1034,8 @@ void GuiMap::updateMapObjectsTemporarilyDrawingFlags() {
 
     // Wir nutzen die Tatsache aus, dass immer nur dieselben Gebäude in der Bauqueue sind.
     MapObjectFixed& firstObjectInList = *buildQueue.front();
-    const MapObjectType& mapObjectType = firstObjectInList.getMapObjectType();
-    const MapObjectConfig* MapObjectConfig = context->configMgr->getMapObjectConfig(mapObjectType);
-    const BuildingCosts& buildingCostsOneTime = MapObjectConfig->buildingCosts;
+    const MapObjectType* mapObjectType = firstObjectInList.getMapObjectType();
+    const BuildingCosts& buildingCostsOneTime = mapObjectType->buildingCosts;
 
     const Player* currentPlayer = context->game->getCurrentPlayer();
 
@@ -1079,9 +1071,8 @@ void GuiMap::updateMapObjectsTemporarilyDrawingFlags() {
 
 void GuiMap::updateBuildingCosts() {
     // Wir nutzen die Tatsache aus, dass immer nur dieselben Gebäude in der Bauqueue sind.
-    const MapObjectType& mapObjectType = context->guiMgr->getPanelState().addingMapObject;
-    const MapObjectConfig* MapObjectConfig = context->configMgr->getMapObjectConfig(mapObjectType);
-    const BuildingCosts& buildingCostsOneTime = MapObjectConfig->buildingCosts;
+    const MapObjectType* mapObjectType = context->guiMgr->getPanelState().addingMapObject;
+    const BuildingCosts& buildingCostsOneTime = mapObjectType->buildingCosts;
 
     unsigned long structuresCount = buildQueue.size();
     if (structuresCount == 0) {
@@ -1093,9 +1084,8 @@ void GuiMap::updateBuildingCosts() {
 
 
 /**
- * MapObjectType-Offsets je Bitmaske "angrenzende Straßen".
- * Dieser Offset muss auf den ersten MapObjectType eines Weg-Typs addiert werden (z.&nbsp;B. `FARM_ROAD_STRAIGHT_0`
- * oder `COBBLED_STREET_STRAIGHT_0`).
+ * Suffixe von MapObjectType-Name je Bitmaske "angrenzende Straßen".
+ * Dieses Suffixe muss an den Base-Namen (`farm-road` oder `cobbled-street`) angehängt werden.
  *
  * Array-Index gibt an, von welcher Seite eine andere Straße/Weg angrenzt:
  * - Bit gesetzt = Straße/Weg da
@@ -1107,10 +1097,50 @@ void GuiMap::updateBuildingCosts() {
  * |     Bit 3    |     Bit 2     |     Bit 1     |     Bit 0     |
  * ----------------------------------------------------------------
  * </pre>
+ *
+ * z.&nbsp;B. T-Stück.
+ * <pre>
+ *
+ *              isStreetAbove = 0
+ *
+ *                 |----------
+ *                 |         |
+ *  isStreetLeft   |         |    isStreetRight
+ *      = 1        |XXXXXXXXX|         = 1
+ *                 |    X    |
+ *                 |    X    |
+ *                 ----------|
+ *
+ *              isStreetBelow = 1
+ *
+ * ----------------------------------------------------------------
+ * | isStreetLeft | isStreetAbove | isStreetRight | isStreetBelow |
+ * |     Bit 3    |     Bit 2     |     Bit 1     |     Bit 0     |
+ * ----------------------------------------------------------------
+ * |       1      |       0       |       1       |       1       |  --> 11d
+ * --------------------------------------------------------------------------
+ *
+ * mapObjectTypeNameSuffixBitmask[11] = "tee270"
+ *
+ * </pre>
  */
-static const unsigned char mapObjectTypeOffsetsBitmask[16] = {
-    (unsigned char) -1, // alle Felder frei = Sonderbedeutung, weil wir diesen Wert dann nicht brauchen
-    1, 0, 3, 1, 1, 2, 8, 0, 4, 0, 9, 5, 6, 7, 10
+static const char* mapObjectTypeNameSuffixBitmask[16] = {
+    nullptr, // alle Felder frei = Sonderbedeutung, weil wir diesen Wert dann nicht brauchen
+    "-straight90",
+    "-straight0",
+    "-curve90",
+    "-straight90",
+    "-straight90",
+    "-curve0",
+    "-tee180",
+    "-straight0",
+    "-curve180",
+    "-straight0",
+    "-tee270",
+    "-curve270",
+    "-tee0",
+    "-tee90",
+    "-cross"
 };
 
 void GuiMap::updateMapTilesToDrawTemporarilyForStreetsAt(const MapCoords& mapCoordsToUpdate) {
@@ -1139,15 +1169,10 @@ void GuiMap::updateMapTilesToDrawTemporarilyForStreetsAt(const MapCoords& mapCoo
         return;
     }
 
-    MapObjectType mapObjectTypeActual = structureActualHere->getMapObjectType();
-    bool isCobbledStreet = (
-        mapObjectTypeActual >= MapObjectType::COBBLED_STREET_STRAIGHT_0 &&
-        mapObjectTypeActual <= MapObjectType::COBBLED_STREET_CROSS
-    );
-    bool isFarmRoad = (
-        mapObjectTypeActual >= MapObjectType::FARM_ROAD_STRAIGHT_0 &&
-        mapObjectTypeActual <= MapObjectType::FARM_ROAD_CROSS
-    );
+    const MapObjectType* mapObjectTypeActual = structureActualHere->getMapObjectType();
+    // TODO Basename sollte direkt in der Config sein und nicht mehr jedes Teil als eigenes Stück
+    bool isCobbledStreet = (mapObjectTypeActual->name.substr(0, 14) == "cobbled-street");
+    bool isFarmRoad = (mapObjectTypeActual->name.substr(0, 9) == "farm-road");
     if (!isCobbledStreet && !isFarmRoad) {
         return;
     }
@@ -1169,7 +1194,7 @@ void GuiMap::updateMapTilesToDrawTemporarilyForStreetsAt(const MapCoords& mapCoo
         return false;
     };
 
-    // siehe mapObjectTypeOffsetsBitmask
+    // siehe mapObjectTypeNameSuffixBitmask
     char isStreetBelow = isStreetThere(MapCoords(mapCoordsToUpdate.x(), mapCoordsToUpdate.y() + 1)) ? 1 : 0; // Bit 0
     char isStreetRight = isStreetThere(MapCoords(mapCoordsToUpdate.x() + 1, mapCoordsToUpdate.y())) ? 1 : 0; // Bit 1
     char isStreetAbove = isStreetThere(MapCoords(mapCoordsToUpdate.x(), mapCoordsToUpdate.y() - 1)) ? 1 : 0; // Bit 2
@@ -1180,11 +1205,11 @@ void GuiMap::updateMapTilesToDrawTemporarilyForStreetsAt(const MapCoords& mapCoo
         return;
     }
 
-    MapObjectType mapObjectTypeBase;
+    std::string mapObjectTypeNameBase;
     if (isCobbledStreet) {
-        mapObjectTypeBase = MapObjectType::COBBLED_STREET_STRAIGHT_0;
+        mapObjectTypeNameBase = "cobbled-street";
     } else if (isFarmRoad) {
-        mapObjectTypeBase = MapObjectType::FARM_ROAD_STRAIGHT_0;
+        mapObjectTypeNameBase = "farm-road";
     } else {
         assert(false);
         return;
@@ -1192,12 +1217,14 @@ void GuiMap::updateMapTilesToDrawTemporarilyForStreetsAt(const MapCoords& mapCoo
 
     // Kachel bestimmen, die dort liegen sollte.
     int index = (isStreetLeft << 3) | (isStreetAbove << 2) | (isStreetRight << 1) | isStreetBelow;
-    MapObjectType mapObjectTypeShouldBe = MapObjectType(mapObjectTypeBase + mapObjectTypeOffsetsBitmask[index]);
+    const MapObjectType* mapObjectTypeShouldBe =
+        context->configMgr->getMapObjectType(mapObjectTypeNameBase + mapObjectTypeNameSuffixBitmask[index]);
 
     // Sonderfall: Wenn der Spieler beim Bauen die Kachel gedreht hat, würden wir gleich den falschen MapObjectType
     // vergleichen, deswegen passen wir das vorher noch an.
     if (structureActualHere->getView() == Direction::EAST || structureActualHere->getView() == Direction::WEST) {
-        mapObjectTypeActual = MapObjectType(mapObjectTypeActual + 1); // aus ...STRAIGHT_0 machen wir ...STRAIGHT_90
+         // aus ...straight0 machen wir ...straight90
+        mapObjectTypeActual = context->configMgr->getMapObjectType(mapObjectTypeNameBase + "straight90");
     }
 
     // Wenn keine Abweichung, ok
@@ -1239,18 +1266,18 @@ void GuiMap::updateMapTilesToDrawTemporarilyForStreetsAround(const MapCoords& ma
     }
 }
 
-MapObjectFixed* GuiMap::instantiateMapObjectFixed(const MapObjectType& mapObjectType) {
+MapObjectFixed* GuiMap::instantiateMapObjectFixed(const MapObjectType* mapObjectType) {
     MapObjectFixed* mapObjectFixed;
 
-    if (mapObjectType < MapObjectType::START_STRUCTURES) {
-        unsigned char maxAge = context->configMgr->getMapObjectConfig(mapObjectType)->maxAge;
-        mapObjectFixed = new Harvestable(maxAge);
-    } else if (mapObjectType < MapObjectType::START_BUILDINGS) {
+    if (mapObjectType->type == MapObjectTypeClass::HARVESTABLE) {
+        mapObjectFixed = new Harvestable(mapObjectType->maxAge);
+    } else if (mapObjectType->type == MapObjectTypeClass::STRUCTURE) {
         mapObjectFixed = new Structure();
-    } else if (mapObjectType >= MapObjectType::START_BUILDINGS) {
+    } else if (mapObjectType->type == MapObjectTypeClass::BUILDING) {
         mapObjectFixed = new Building();
     } else {
         assert(false);
+        return nullptr;
     }
 
     mapObjectFixed->setMapObjectType(mapObjectType);

@@ -21,48 +21,48 @@ void AbstractGraphicsMgr::loadGraphics() {
     // anisotropic filtering für die Gebäude aktivieren, damit beim Skalieren das Mask-Overlay ordentlich is
     renderer->setHintRenderScaleQuality("2");
 
-	loadStaticGraphicSetWith4Views("structures/chapel", "data/img/buildings/chapel.png");
-	loadStaticGraphicSetWith4Views("structures/pioneers-house1", "data/img/buildings/pioneers-house1.png");
-    loadStaticGraphicSetWith4Views("structures/pioneers-house2", "data/img/buildings/pioneers-house2.png");
-    loadStaticGraphicSetWith4Views("structures/pioneers-house3", "data/img/buildings/pioneers-house3.png");
-    loadStaticGraphicSetWith4Views("structures/pioneers-house4", "data/img/buildings/pioneers-house4.png");
-    loadStaticGraphicSetWith4Views("structures/pioneers-house5", "data/img/buildings/pioneers-house5.png");
-    loadStaticGraphicSetWith4Views("structures/settlers-house1", "data/img/buildings/settlers-house1.png");
-    loadStaticGraphicSetWith4Views("structures/settlers-house2", "data/img/buildings/settlers-house2.png");
-    loadStaticGraphicSetWith4Views("structures/settlers-house3", "data/img/buildings/settlers-house3.png");
-    loadStaticGraphicSetWith4Views("structures/settlers-house4", "data/img/buildings/settlers-house4.png");
-    loadStaticGraphicSetWith4Views("structures/settlers-house5", "data/img/buildings/settlers-house5.png");
-	loadStaticGraphicSetWith4Views("structures/stonemason", "data/img/buildings/stonemason.png");
-    loadStaticGraphicSetWith4Views("structures/office1", "data/img/buildings/office1.png");
-    loadStaticGraphicSetWith4Views("structures/office2", "data/img/buildings/office2.png");
-    loadStaticGraphicSetWith4Views("structures/marketplace", "data/img/buildings/marketplace.png");
-    loadStaticGraphicSetWith4Views("structures/foresters", "data/img/buildings/foresters.png");
-    loadStaticGraphicSetWith4Views("structures/sheep-farm", "data/img/buildings/sheep-farm.png");
-    loadStaticGraphicSetWith4Views("structures/weaving-mill1", "data/img/buildings/weaving-mill1.png");
-    loadStaticGraphicSetWith4Views("structures/cattle-farm", "data/img/buildings/cattle-farm.png");
-    loadStaticGraphicSetWith4Views("structures/butchers", "data/img/buildings/butchers.png");
-    loadStaticGraphicSetWith4Views("structures/toolsmiths", "data/img/buildings/toolsmiths.png");
-    loadStaticGraphicSetWith4Views("structures/hunters-hut", "data/img/buildings/hunters-hut.png");
-    loadStaticGraphicSetWith4Views("structures/cathedral", "data/img/buildings/cathedral.png");
-    loadStaticGraphicSetWith4Views("structures/tavern", "data/img/buildings/tavern.png");
-    loadStaticGraphicSetWith4Views("structures/sugarcane-plantation", "data/img/buildings/sugarcane-plantation.png");
-    loadStaticGraphicSetWith4Views("structures/tobacco-plantation", "data/img/buildings/tobacco-plantation.png");
-    loadStaticGraphicSetWith4Views("structures/distillery", "data/img/buildings/distillery.png");
+	loadStaticGraphicSetWith4Views("building/chapel", "data/img/buildings/chapel.png");
+	loadStaticGraphicSetWith4Views("building/pioneers-house1", "data/img/buildings/pioneers-house1.png");
+    loadStaticGraphicSetWith4Views("building/pioneers-house2", "data/img/buildings/pioneers-house2.png");
+    loadStaticGraphicSetWith4Views("building/pioneers-house3", "data/img/buildings/pioneers-house3.png");
+    loadStaticGraphicSetWith4Views("building/pioneers-house4", "data/img/buildings/pioneers-house4.png");
+    loadStaticGraphicSetWith4Views("building/pioneers-house5", "data/img/buildings/pioneers-house5.png");
+    loadStaticGraphicSetWith4Views("building/settlers-house1", "data/img/buildings/settlers-house1.png");
+    loadStaticGraphicSetWith4Views("building/settlers-house2", "data/img/buildings/settlers-house2.png");
+    loadStaticGraphicSetWith4Views("building/settlers-house3", "data/img/buildings/settlers-house3.png");
+    loadStaticGraphicSetWith4Views("building/settlers-house4", "data/img/buildings/settlers-house4.png");
+    loadStaticGraphicSetWith4Views("building/settlers-house5", "data/img/buildings/settlers-house5.png");
+	loadStaticGraphicSetWith4Views("building/stonemason", "data/img/buildings/stonemason.png");
+    loadStaticGraphicSetWith4Views("building/office1", "data/img/buildings/office1.png");
+    loadStaticGraphicSetWith4Views("building/office2", "data/img/buildings/office2.png");
+    loadStaticGraphicSetWith4Views("building/marketplace", "data/img/buildings/marketplace.png");
+    loadStaticGraphicSetWith4Views("building/foresters", "data/img/buildings/foresters.png");
+    loadStaticGraphicSetWith4Views("building/sheep-farm", "data/img/buildings/sheep-farm.png");
+    loadStaticGraphicSetWith4Views("building/weaving-mill1", "data/img/buildings/weaving-mill1.png");
+    loadStaticGraphicSetWith4Views("building/cattle-farm", "data/img/buildings/cattle-farm.png");
+    loadStaticGraphicSetWith4Views("building/butchers", "data/img/buildings/butchers.png");
+    loadStaticGraphicSetWith4Views("building/toolsmiths", "data/img/buildings/toolsmiths.png");
+    loadStaticGraphicSetWith4Views("building/hunters-hut", "data/img/buildings/hunters-hut.png");
+    loadStaticGraphicSetWith4Views("building/cathedral", "data/img/buildings/cathedral.png");
+    loadStaticGraphicSetWith4Views("building/tavern", "data/img/buildings/tavern.png");
+    loadStaticGraphicSetWith4Views("building/sugarcane-plantation", "data/img/buildings/sugarcane-plantation.png");
+    loadStaticGraphicSetWith4Views("building/tobacco-plantation", "data/img/buildings/tobacco-plantation.png");
+    loadStaticGraphicSetWith4Views("building/distillery", "data/img/buildings/distillery.png");
 
     loadStreetTileset("cobbled-street");
     loadStreetTileset("farm-road");
 
-    loadStaticGraphicSetWith4Views("structures/square1", "data/img/buildings/square1.png");
-    loadStaticGraphicSetWith4Views("structures/square2", "data/img/buildings/square2.png");
-    loadStaticGraphicSetWith4Views("structures/square3", "data/img/buildings/square3.png");
+    loadStaticGraphicSetWith4Views("structure/square1", "data/img/buildings/square1.png");
+    loadStaticGraphicSetWith4Views("structure/square2", "data/img/buildings/square2.png");
+    loadStaticGraphicSetWith4Views("structure/square3", "data/img/buildings/square3.png");
 
     const std::list<Good>& allGoods = configMgr->getAllGoodsOrdered();
     for (auto iter = allGoods.cbegin(); iter != allGoods.cend(); iter++) {
         const Good* good = &*iter;
 
-        loadStaticGraphicSet("goods-icons/" + good->name,
+        loadStaticGraphicSet("goods-icon/" + good->name,
                              std::string("data/img/goods/icon/" + good->name + ".png").c_str());
-        loadStaticGraphicSet("goods-marketplace-icons/" + good->name,
+        loadStaticGraphicSet("goods-marketplace-icon/" + good->name,
                              std::string("data/img/goods/marketplace-icon/" + good->name + ".png").c_str());
     }
 
@@ -76,17 +76,17 @@ void AbstractGraphicsMgr::loadGraphics() {
     loadStaticGraphicSet("add-building-button/marketplace", "data/img/gui/add-building/marketplace.png");
     loadStaticGraphicSet("add-building-button/office1", "data/img/gui/add-building/office1.png");
     loadStaticGraphicSet("add-building-button/office2", "data/img/gui/add-building/office2.png");
-    loadStaticGraphicSet("add-building-button/cobbled-street", "data/img/gui/add-building/cobbled-street.png");
-    loadStaticGraphicSet("add-building-button/farm-road", "data/img/gui/add-building/farm-road.png");
+    loadStaticGraphicSet("add-building-button/cobbled-street-straight0", "data/img/gui/add-building/cobbled-street.png"); // TODO "cobbled-street"
+    loadStaticGraphicSet("add-building-button/farm-road-straight0", "data/img/gui/add-building/farm-road.png"); // TODO "farm-road"
     loadStaticGraphicSet("add-building-button/sheep-farm", "data/img/gui/add-building/sheep-farm.png");
     loadStaticGraphicSet("add-building-button/weaving-mill1", "data/img/gui/add-building/weaving-mill1.png");
     loadStaticGraphicSet("add-building-button/cattle-farm", "data/img/gui/add-building/cattle-farm.png");
     loadStaticGraphicSet("add-building-button/butchers", "data/img/gui/add-building/butchers.png");
     loadStaticGraphicSet("add-building-button/toolsmiths", "data/img/gui/add-building/toolsmiths.png");
-    loadStaticGraphicSet("add-building-button/house", "data/img/gui/add-building/house.png");
+    loadStaticGraphicSet("add-building-button/pioneers-house1", "data/img/gui/add-building/house.png"); // TODO "house"
     loadStaticGraphicSet("add-building-button/stonemason", "data/img/gui/add-building/stonemason.png");
     loadStaticGraphicSet("add-building-button/foresters", "data/img/gui/add-building/foresters.png");
-    loadStaticGraphicSet("add-building-button/forest", "data/img/gui/add-building/forest.png");
+    loadStaticGraphicSet("add-building-button/northern-forest1", "data/img/gui/add-building/forest.png"); // TODO "forest"
     loadStaticGraphicSet("add-building-button/hunters-hut", "data/img/gui/add-building/hunters-hut.png");
     loadStaticGraphicSet("add-building-button/cathedral", "data/img/gui/add-building/cathedral.png");
     loadStaticGraphicSet("add-building-button/tavern", "data/img/gui/add-building/tavern.png");
@@ -124,10 +124,10 @@ void AbstractGraphicsMgr::loadGraphics() {
     loadStaticAnimationGraphicSetWith8Views("cart-without-cargo", "data/img/animations/cart-without-cargo.png", 32);
     loadStaticAnimationGraphicSetWith8Views("cart-with-cargo", "data/img/animations/cart-with-cargo.png", 32);
 
-    loadHarvestablesGraphicSet("harvestables/northern-forest1", "data/img/harvestables/northern-forest1.png", 5);
-    loadHarvestablesGraphicSet("harvestables/northern-forest2", "data/img/harvestables/northern-forest2.png", 5);
-    loadHarvestablesGraphicSet("harvestables/sugarcane-field", "data/img/harvestables/sugarcane-field.png", 5);
-    loadHarvestablesGraphicSet("harvestables/tobacco-field", "data/img/harvestables/tobacco-field.png", 7);
+    loadHarvestablesGraphicSet("harvestable/northern-forest1", "data/img/harvestables/northern-forest1.png", 5);
+    loadHarvestablesGraphicSet("harvestable/northern-forest2", "data/img/harvestables/northern-forest2.png", 5);
+    loadHarvestablesGraphicSet("harvestable/sugarcane-field", "data/img/harvestables/sugarcane-field.png", 5);
+    loadHarvestablesGraphicSet("harvestable/tobacco-field", "data/img/harvestables/tobacco-field.png", 7);
 }
 
 void AbstractGraphicsMgr::loadTiles() {
@@ -242,7 +242,7 @@ void AbstractGraphicsMgr::loadStreetTileset(const std::string& streetTileset) {
             graphicSet->addByView(view, new Animation(sdlFrameGraphic));
         }
 
-        const std::string graphicSetName = "structures/" + streetTileset + "-" + streetTiles[i].angleName;
+        const std::string graphicSetName = "structure/" + streetTileset + "-" + streetTiles[i].angleName;
         graphicSets[graphicSetName] = graphicSet;
     }
 

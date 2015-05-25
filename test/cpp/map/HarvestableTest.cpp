@@ -13,8 +13,10 @@ protected:
 
         FourthDirection southView = Direction::SOUTH;
 
-        northernForest1 = game->addHarvestable(MapCoords(30, 30), MapObjectType::NORTHERN_FOREST1, 1.0, southView);
-        northernForest2 = game->addHarvestable(MapCoords(30, 31), MapObjectType::NORTHERN_FOREST2, 1.3, southView);
+        northernForest1 = game->addHarvestable(
+            MapCoords(30, 30), configMgr->getMapObjectType("northern-forest1"), 1.0, southView);
+        northernForest2 = game->addHarvestable(
+            MapCoords(30, 31), configMgr->getMapObjectType("northern-forest2"), 1.3, southView);
 
         // Spielgeschwindigkeit auf 1x setzen. Die Tests hier sind genau getimt.
         context.game->setSpeed(1);

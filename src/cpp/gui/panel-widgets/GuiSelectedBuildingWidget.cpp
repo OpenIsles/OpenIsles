@@ -35,11 +35,10 @@ void GuiSelectedBuildingWidget::renderElement(IRenderer* renderer) {
     int windowX, windowY;
     getWindowCoords(windowX, windowY);
 
-    const MapObjectType& mapObjectType = selectedBuilding->getMapObjectType();
-    const MapObjectConfig* mapObjectConfig = context->configMgr->getMapObjectConfig(mapObjectType);
+    const MapObjectType* mapObjectType = selectedBuilding->getMapObjectType();
 
     // Gebäudename
-    context->fontMgr->renderText(renderer, mapObjectConfig->getName(), windowX + width/2, windowY + 23,
+    context->fontMgr->renderText(renderer, mapObjectType->title, windowX + width/2, windowY + 23,
         &colorWhite, &colorBlack, "DroidSans-Bold.ttf", 15, RENDERTEXT_HALIGN_CENTER);
 
     // produzierte Waren

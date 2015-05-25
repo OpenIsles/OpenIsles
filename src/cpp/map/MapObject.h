@@ -143,7 +143,7 @@ protected:
     /**
 	 * @brief Objekt-Typ
 	 */
-	MapObjectType mapObjectType;
+	const MapObjectType* mapObjectType;
 
     /**
      * @brief Ausrichtung des Objekts
@@ -166,11 +166,11 @@ public:
 		return mapCoords;
 	}
 
-    MapObjectType getMapObjectType() const {
+    const MapObjectType* getMapObjectType() const {
         return mapObjectType;
     }
 
-    void setMapObjectType(MapObjectType mapObjectType) {
+    void setMapObjectType(const MapObjectType* mapObjectType) {
         this->mapObjectType = mapObjectType;
     }
 

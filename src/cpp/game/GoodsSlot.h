@@ -34,6 +34,12 @@ public:
      */
     bool markedForPickup;
 
+    /**
+     * @brief Gibt an, wie viele Güter pro 60 Sekunden in diesem Slot verbraucht bzw. generiert werden.
+     * Dieses Feld wird nur für `MapObjectType.productionSlots` verwendet.
+     */
+    double rate = 0;
+
 public:
     /**
      * @brief Konstruktur, um einen unbenutzten Slot anzulegen

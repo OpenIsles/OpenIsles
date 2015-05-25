@@ -1,84 +1,144 @@
 #ifndef _MAP_OBJECT_TYPE_H
 #define _MAP_OBJECT_TYPE_H
 
+#include <memory>
+#include <string>
+#include "config/BuildingCosts.h"
+#include "game/ProductionSlots.h"
+#include "utils/RectangleData.h"
+
+
 /**
- * @brief Enum zur Unterscheidung der verschiedenen Map-Objekte
+ * @brief gibt an, wie Strukturen platziert wird
  */
-typedef
-enum MapObjectType : unsigned char {
-    // kein Map-Objekt
-    NO_MAP_OBJECT = 0,
+enum StructurePlacing {
 
-    // Erntebare Landschaften
-    START_HARVESTABLES = 1, // Marker, um zu unterscheiden, ob Harvestable, Structure oder Building angelegt werden
-    NORTHERN_FOREST1 = 1,
-    NORTHERN_FOREST2,
+    /**
+     * @brief mehreren Struktur werden einzeln platziert
+     */
+    INDIVIDUALLY,
 
-    SUGARCANE_FIELD,
-    TOBACCO_FIELD,
+    /**
+     * @brief mehreren Struktur werden als Rechteck platziert
+     */
+    RECTANGLE,
 
-    // Strukturen
-    START_STRUCTURES = 51, // Marker, um zu unterscheiden, ob Harvestable, Structure oder Building angelegt werden
-    COBBLED_STREET_STRAIGHT_0 = 51,
-    COBBLED_STREET_STRAIGHT_90,
-    COBBLED_STREET_CURVE_0,
-    COBBLED_STREET_CURVE_90,
-    COBBLED_STREET_CURVE_180,
-    COBBLED_STREET_CURVE_270,
-    COBBLED_STREET_TEE_0,
-    COBBLED_STREET_TEE_90,
-    COBBLED_STREET_TEE_180,
-    COBBLED_STREET_TEE_270,
-    COBBLED_STREET_CROSS,
+    /**
+     * @brief mehreren Struktur werden mittels eines Pfads platziert
+     */
+    PATH
 
-    FARM_ROAD_STRAIGHT_0,
-    FARM_ROAD_STRAIGHT_90,
-    FARM_ROAD_CURVE_0,
-    FARM_ROAD_CURVE_90,
-    FARM_ROAD_CURVE_180,
-    FARM_ROAD_CURVE_270,
-    FARM_ROAD_TEE_0,
-    FARM_ROAD_TEE_90,
-    FARM_ROAD_TEE_180,
-    FARM_ROAD_TEE_270,
-    FARM_ROAD_CROSS,
+};
 
-    SQUARE1,
-    SQUARE2,
-    SQUARE3,
+/**
+ * @brief Enum, der den Map-Objekten die zugehörige Klasse im Code zuordnet
+ */
+enum MapObjectTypeClass {
+    /**
+     * @brief `Harvestable`
+     */
+    HARVESTABLE,
 
-    // Gebäude
-    START_BUILDINGS = 101, // Marker, um zu unterscheiden, ob Harvestable, Structure oder Building angelegt werden
+    /**
+     * @brief `Structure`
+     */
+    STRUCTURE,
 
-    CHAPEL = 101,
-    PIONEERS_HOUSE1,
-    PIONEERS_HOUSE2,
-    PIONEERS_HOUSE3,
-    PIONEERS_HOUSE4,
-    PIONEERS_HOUSE5,
-    SETTLERS_HOUSE1,
-    SETTLERS_HOUSE2,
-    SETTLERS_HOUSE3,
-    SETTLERS_HOUSE4,
-    SETTLERS_HOUSE5,
-    STONEMASON,
-    OFFICE1,
-    OFFICE2,
-    MARKETPLACE,
-    FORESTERS,
-    SHEEP_FARM,
-    WEAVING_MILL1,
-    CATTLE_FARM,
-    BUTCHERS,
-    TOOLSMITHS,
-    HUNTERS_HUT,
-    CATHEDRAL,
-    TAVERN,
-    SUGARCANE_PLANTATION,
-    TOBACCO_PLANTATION,
-    DISTILLERY,
+    /**
+     * @brief `Building`
+     */
+    BUILDING
+};
 
-    MAX_MAP_OBJECT_TYPE // Marker, wie viel Platz wir im Array brauchen
-} MapObjectType;
+
+/**
+ * @brief Datenstruktur, die alle Infos zu einem verfügbaren Map-Objekt-Typ enthält.
+ *
+ * Mit Ausnahme des ConfigMgr, der diese Datenstruktur verwaltet, sollte diese Struktur nur als `const MapObjectType*`
+ * benutzt werden.
+ */
+struct MapObjectType {
+
+    /**
+     * @brief zugehörige Klasse im Code für dieses Map-Objekt
+     */
+    MapObjectTypeClass type;
+
+    /**
+     * @brief interne Bezeichnung (z.&nbsp;B. in einem gespeicherten Spielstand)
+     */
+    std::string name;
+
+    /**
+     * @brief Name des Map-Objekts (für den Spieler)
+     */
+    std::string title;
+
+    /**
+     * @brief Breite (X-Richtung) des Map-Objekts in Map-Koordinaten
+     */
+    unsigned char mapWidth;
+
+    /**
+     * @brief Höhe (Y-Richtung) des Map-Objekts in Map-Koordinaten
+     */
+    unsigned char mapHeight;
+
+    /**
+      * @brief gibt an, wie das Map-Objekt platziert wird
+      */
+    StructurePlacing structurePlacing;
+
+    /**
+     * @brief Einzugsbereich des Map-Objekts (optional). Es gilt hierbei 0 = außerhalb, 1 = Einzugsbereich.
+     *
+     * Um das Rechteck korrekt anzuwenden, muss dieses symmetrisch um die Gebäudemitte angewandt werden.
+     * Bsp: Ein 2x2-Gebäude mit einem 8x4-Einzugsbereich.
+     *
+     * <pre>
+     * Richtig:                            Falsch:
+     * -------------------------------     -------------------------------
+     * | | | | | | | | | | | | | | | |     | | | | | | | | | | | | | | | |
+     * ------=================--------     -------------------------------
+     * | | | I | | | | | | | I | | | |     | | | | | | | | | | | | | | | |
+     * ------I---------------I--------     --------=================------
+     * | | | I | | |X|X| | | I | | | |     | | | | I | |X|X| | | | I | | |
+     * ------I---------------I--------     --------I---------------I------
+     * | | | I | | |X|X| | | I | | | |     | | | | I | |X|X| | | | I | | |
+     * ------I---------------I--------     --------I---------------I------
+     * | | | I | | | | | | | I | | | |     | | | | I | | | | | | | I | | |
+     * ------=================--------     --------I---------------I------
+     * | | | | | | | | | | | | | | | |     | | | | I | | | | | | | I | | |
+     * -------------------------------     --------=================------
+     * </pre>
+     *
+     * Der Einzugsbereich muss desweiteren folgende Bedingungen erfüllen, damit die Anwendung korrekt funktioniert:
+     * - Es darf keine Leerzeile/-spalte geben. Das Rechteck muss so klein wie möglich gewählt sein.
+     * - Der Einzugsbereich darf nicht nach innen gewölbt sein. Nur runde oder rechteckige Formen sind erlaubt.
+     */
+    std::unique_ptr<RectangleData<char>> catchmentArea;
+
+    /**
+     * @brief Baukosten
+     */
+    BuildingCosts buildingCosts;
+
+    /**
+     * @brief Güter, die verbraucht und hergestellt werden.
+     */
+    ProductionSlots buildingProduction;
+
+    /**
+     * @brief gibt für Nicht-Wohngebäude an, wie viele Einwohner sich im Gebäude befinden. Jede Plantage,
+     * jeder Produktionsbetrieb, wie auch öffentliche Gebäude haben diese fixe Einwohnerzahl pro Gebäude.
+     */
+    unsigned char inhabitants = 0;
+
+    /**
+     * @brief (nur für `Harvestable`) gibt das maximale Alter an, das diese Landschaft erreichen kann.
+     */
+    unsigned char maxAge = 0;
+
+};
 
 #endif

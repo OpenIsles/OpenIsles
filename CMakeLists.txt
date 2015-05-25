@@ -24,6 +24,7 @@ set(COMMON_SOURCE_FILES
     src/cpp/game/GoodsSlot.h
     src/cpp/game/Player.cpp
     src/cpp/game/Player.h
+    src/cpp/game/ProductionSlots.h
     src/cpp/graphics/graphic/Animation.h
     src/cpp/graphics/graphic/GraphicSet.h
     src/cpp/graphics/graphic/IGraphic.h
@@ -129,6 +130,7 @@ set(NOSDL_FILES
 set(TEST_FILES
     test/cpp/GameTest.cpp
     test/cpp/GameTest.h
+    test/cpp/config/ConfigMgrTest.cpp
     test/cpp/economics/EconomicsMgrTest.cpp
     test/cpp/graphics/GraphicSetTest.cpp
     test/cpp/map/coords/MapCoordsTest.cpp

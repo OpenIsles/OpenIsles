@@ -235,7 +235,7 @@ private:
      * @return Bitmaske, die angibt, ob das Gebäude gesetzt werden darf.
      */
     unsigned char isAllowedToPlaceMapObject(
-        const MapCoords& mapCoords, MapObjectType mapObjectType, const FourthDirection& view) const;
+        const MapCoords& mapCoords, const MapObjectType* mapObjectType, const FourthDirection& view) const;
 
     /**
      * @brief Entfernt alle Objekte in `buildQueue` und `mapTilesToDrawTemporarily` und setzt
@@ -322,7 +322,7 @@ private:
      * @param mapObjectType Typ des zu erstellenden Map-Objekts
      * @return neue Instanz eines `MapObjectFixed` mit `type` bereits gesetzt
      */
-    MapObjectFixed* instantiateMapObjectFixed(const MapObjectType& mapObjectType);
+    MapObjectFixed* instantiateMapObjectFixed(const MapObjectType* mapObjectType);
 
 };
 

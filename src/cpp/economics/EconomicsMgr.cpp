@@ -17,11 +17,10 @@ EconomicsMgr::~EconomicsMgr() {
 }
 
 void EconomicsMgr::updateProduction(Building* building) {
-    const MapObjectType& mapObjectType = building->getMapObjectType();
-    const MapObjectConfig* mapObjectConfig = context->configMgr->getMapObjectConfig(mapObjectType);
+    const MapObjectType* mapObjectType = building->getMapObjectType();
 
     // Produziert eh nix bzw. Lager schon voll? Dann nix zu tun.
-    if (!mapObjectConfig->getBuildingProduction()->output.isUsed() ||
+    if (!mapObjectType->buildingProduction.output.isUsed() ||
         building->productionSlots.output.isInventoryFull()) {
 
         return;
@@ -33,60 +32,61 @@ void EconomicsMgr::updateProduction(Building* building) {
     double oneMinuteTicks = (double) 60000 / context->game->getSpeed();
 
     // Haben wir Eingabegüter, dann wird nur produziert, wie diese verfügbar sind
-    if (mapObjectConfig->getBuildingProduction()->input.isUsed()) {
-        inputConsumed = (double) ticksPastSinceLastUpdate / oneMinuteTicks * mapObjectConfig->inputConsumptionRate;
+    if (mapObjectType->buildingProduction.input.isUsed()) {
+        inputConsumed =
+            (double) ticksPastSinceLastUpdate / oneMinuteTicks * mapObjectType->buildingProduction.input.rate;
 
         // nur verbrauchen, was auch da is
         if (inputConsumed > building->productionSlots.input.inventory) {
             inputConsumed = building->productionSlots.input.inventory;
         }
         ticksInputConsumed =
-            (unsigned int) (inputConsumed * oneMinuteTicks / mapObjectConfig->inputConsumptionRate);
+            (unsigned int) (inputConsumed * oneMinuteTicks / mapObjectType->buildingProduction.input.rate);
 
-        if (mapObjectConfig->getBuildingProduction()->input2.isUsed()) {
+        if (mapObjectType->buildingProduction.input2.isUsed()) {
             input2Consumed =
-                (double) ticksPastSinceLastUpdate / oneMinuteTicks * mapObjectConfig->input2ConsumptionRate;
+                (double) ticksPastSinceLastUpdate / oneMinuteTicks * mapObjectType->buildingProduction.input2.rate;
 
             // nur verbrauchen, was auch da is
             if (input2Consumed > building->productionSlots.input2.inventory) {
                 input2Consumed = building->productionSlots.input2.inventory;
             }
             ticksInput2Consumed =
-                (unsigned int) (input2Consumed * oneMinuteTicks / mapObjectConfig->input2ConsumptionRate);
+                (unsigned int) (input2Consumed * oneMinuteTicks / mapObjectType->buildingProduction.input2.rate);
         }
     }
 
     // Minimum-Ticks ermitteln, in denen wirklich produziert wurde
     unsigned int ticksWeReallyProduced = ticksPastSinceLastUpdate;
-    if (mapObjectConfig->getBuildingProduction()->input.isUsed()) {
+    if (mapObjectType->buildingProduction.input.isUsed()) {
         ticksWeReallyProduced = std::min(ticksWeReallyProduced, ticksInputConsumed);
 
-        if (mapObjectConfig->getBuildingProduction()->input2.isUsed()) {
+        if (mapObjectType->buildingProduction.input2.isUsed()) {
             ticksWeReallyProduced = std::min(ticksWeReallyProduced, ticksInput2Consumed);
         }
     }
 
     // Jetzt die Produktion durchführen
-    if (mapObjectConfig->getBuildingProduction()->input.isUsed()) {
-        inputConsumed = (double) ticksWeReallyProduced / oneMinuteTicks * mapObjectConfig->inputConsumptionRate;
+    if (mapObjectType->buildingProduction.input.isUsed()) {
+        inputConsumed = (double) ticksWeReallyProduced / oneMinuteTicks * mapObjectType->buildingProduction.input.rate;
         building->productionSlots.input.decreaseInventory(inputConsumed);
 
-        if (mapObjectConfig->getBuildingProduction()->input2.isUsed()) {
-            input2Consumed = (double) ticksWeReallyProduced / oneMinuteTicks * mapObjectConfig->input2ConsumptionRate;
+        if (mapObjectType->buildingProduction.input2.isUsed()) {
+            input2Consumed =
+                (double) ticksWeReallyProduced / oneMinuteTicks * mapObjectType->buildingProduction.input2.rate;
             building->productionSlots.input2.decreaseInventory(input2Consumed);
         }
     }
-    outputProduced = (double) ticksWeReallyProduced / oneMinuteTicks * mapObjectConfig->productionRate;
+    outputProduced = (double) ticksWeReallyProduced / oneMinuteTicks * mapObjectType->buildingProduction.output.rate;
     building->productionSlots.output.increaseInventory(outputProduced);
 }
 
 FindBuildingToGetGoodsFromResult EconomicsMgr::findBuildingToGetGoodsFrom(Building* building) {
-    const MapObjectType& mapObjectType = building->getMapObjectType();
-    const MapObjectConfig* mapObjectConfig = context->configMgr->getMapObjectConfig(mapObjectType);
-    const RectangleData<char>* catchmentArea = mapObjectConfig->getCatchmentArea();
-    if (catchmentArea == nullptr) {
+    const MapObjectType* mapObjectType = building->getMapObjectType();
+    if (!mapObjectType->catchmentArea) {
         return FindBuildingToGetGoodsFromResult(); // kein Einzugsbereich
     }
+    const RectangleData<char>& catchmentArea = *mapObjectType->catchmentArea;
 
     /*
      * Anno 1602 macht es so: Ein Gebäude, was zwei Waren braucht, schickt den Träger hintereinander los für die Waren,
@@ -94,7 +94,7 @@ FindBuildingToGetGoodsFromResult EconomicsMgr::findBuildingToGetGoodsFrom(Buildi
      * Ist die erste Ware nicht verfügbar, wird die zweite Ware auch niemals geholt, selbst wie diese da wäre.
      *
      * Wir verbessern diesen Mechanismus: Wir versuchen grundsätzlich so viele Waren wie möglich abzuholen. Stehen
-     * mehrere zur Verfügung, so  wählen wir die beste Alternative, nämlich die für die Ware, die drigender gebraucht
+     * mehrere zur Verfügung, so wählen wir die beste Alternative, nämlich die für die Ware, die drigender gebraucht
      * wird. Somit würde die zweite Ware geholt werden, selbst wenn die erste noch nicht zur Verfügung steht.
      */
 
@@ -104,8 +104,8 @@ FindBuildingToGetGoodsFromResult EconomicsMgr::findBuildingToGetGoodsFrom(Buildi
 
     bool isStorageBuilding = building->isStorageBuilding();
     if (!isStorageBuilding) {
-        goodRequired1 = mapObjectConfig->getBuildingProduction()->input.good;
-        goodRequired2 = mapObjectConfig->getBuildingProduction()->input2.good;
+        goodRequired1 = mapObjectType->buildingProduction.input.good;
+        goodRequired2 = mapObjectType->buildingProduction.input2.good;
 
         // Wir brauchen nur, wenn die Lager nicht voll sind
         if (goodRequired1 != nullptr) {
@@ -132,7 +132,7 @@ FindBuildingToGetGoodsFromResult EconomicsMgr::findBuildingToGetGoodsFrom(Buildi
 
     Map* map = context->game->getMap();
     const MapCoords& mapCoords = building->getMapCoords();
-    int catchmentAreaRadius = std::max(catchmentArea->width, catchmentArea->height); // TODO sehr optimierungsbedürftig, dafür funktionierts erstmal in allen Ansichten
+    int catchmentAreaRadius = std::max(catchmentArea.width, catchmentArea.height); // TODO sehr optimierungsbedürftig, dafür funktionierts erstmal in allen Ansichten
     AStar aStar(context, building, true, isStorageBuilding, false);
 
     for (int mapY = mapCoords.y() - catchmentAreaRadius; mapY <= mapCoords.y() + catchmentAreaRadius; mapY++) {
@@ -162,16 +162,15 @@ FindBuildingToGetGoodsFromResult EconomicsMgr::findBuildingToGetGoodsFrom(Buildi
             }
 
             // Gebäude, die gar nix produzieren, bringen uns nix, z.B. öffentliche Gebäude.
-            const MapObjectConfig* buildingThereConfig = context->configMgr->getMapObjectConfig(
-                buildingThere->getMapObjectType());
-            if (!isStorgeBuildingThere && !buildingThereConfig->getBuildingProduction()->output.isUsed()) {
+            const MapObjectType* buildingThereType = buildingThere->getMapObjectType();
+            if (!isStorgeBuildingThere && !buildingThereType->buildingProduction.output.isUsed()) {
                 continue;
             }
 
             // Liefert das Gebäude was passendes?
             if (!isStorageBuilding && !isStorgeBuildingThere && (
-                    buildingThereConfig->getBuildingProduction()->output.good != goodRequired1 &&
-                    buildingThereConfig->getBuildingProduction()->output.good != goodRequired2)) {
+                    buildingThereType->buildingProduction.output.good != goodRequired1 &&
+                    buildingThereType->buildingProduction.output.good != goodRequired2)) {
 
                 continue; // produziert nix passendes
             }
@@ -267,7 +266,7 @@ FindBuildingToGetGoodsFromResult EconomicsMgr::findBuildingToGetGoodsFrom(Buildi
                 potentialResult.lastGoodsCollections = context->sdlTicks + 1; // Zeit in der Zukunft nehmen, damit diese Route als letztes verwendet wird
             }
             else {
-                potentialResult.goodsSlot.good = buildingThereConfig->getBuildingProduction()->output.good;
+                potentialResult.goodsSlot.good = buildingThereType->buildingProduction.output.good;
                 potentialResult.goodsSlot.inventory = buildingThere->productionSlots.output.inventory;
                 potentialResult.goodsSlot.capacity = buildingThere->productionSlots.output.capacity;
                 potentialResult.lastGoodsCollections = buildingThere->lastGoodsCollections;

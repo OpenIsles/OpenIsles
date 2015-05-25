@@ -71,10 +71,10 @@ double Game::getSecondsSinceLastUpdate(const MapObject* mapObject) const {
 }
 
 MapObjectFixed* Game::addMapObjectFixed(
-    const MapCoords& mapCoords, MapObjectType mapObjectType, const FourthDirection& view, Player* player) {
+    const MapCoords& mapCoords, const MapObjectType* mapObjectType, const FourthDirection& view, Player* player) {
 
     // Harvestable
-    if (mapObjectType < MapObjectType::START_STRUCTURES) {
+    if (mapObjectType->type == MapObjectTypeClass::HARVESTABLE) {
         // ein bisschen Zufall für das Startalter, damit die Felder nicht alle gleichzeitig wachsen
         std::random_device randomDevice;
         std::default_random_engine randomEngine(randomDevice());
@@ -89,12 +89,11 @@ MapObjectFixed* Game::addMapObjectFixed(
 }
 
 Harvestable* Game::addHarvestable(
-    const MapCoords& mapCoords, MapObjectType mapObjectType, double age, const FourthDirection& view) {
+    const MapCoords& mapCoords, const MapObjectType* mapObjectType, double age, const FourthDirection& view) {
 
-    assert(mapObjectType < MapObjectType::START_STRUCTURES);
+    assert(mapObjectType->type == MapObjectTypeClass::HARVESTABLE);
 
-    const MapObjectConfig* mapObjectConfig = context->configMgr->getMapObjectConfig(mapObjectType);
-    unsigned char maxAge = mapObjectConfig->maxAge;
+    unsigned char maxAge = mapObjectType->maxAge;
 
     // Objekt anlegen
     Harvestable* harvestable = new Harvestable(maxAge);
@@ -110,22 +109,21 @@ Harvestable* Game::addHarvestable(
 }
 
 Structure* Game::addStructure(
-    const MapCoords& mapCoords, MapObjectType mapObjectType, const FourthDirection& view, Player* player) {
+    const MapCoords& mapCoords, const MapObjectType* mapObjectType, const FourthDirection& view, Player* player) {
 
-    assert(mapObjectType >= MapObjectType::START_STRUCTURES);
+    assert(mapObjectType->type == MapObjectTypeClass::STRUCTURE || mapObjectType->type == MapObjectTypeClass::BUILDING);
 
-    const MapObjectConfig* mapObjectConfig = context->configMgr->getMapObjectConfig(mapObjectType);
     unsigned char mapWidth, mapHeight;
     if (view == Direction::NORTH || view == Direction::SOUTH) {
-        mapWidth = mapObjectConfig->mapWidth;
-        mapHeight = mapObjectConfig->mapHeight;
+        mapWidth = mapObjectType->mapWidth;
+        mapHeight = mapObjectType->mapHeight;
     } else {
-        mapWidth = mapObjectConfig->mapHeight;
-        mapHeight = mapObjectConfig->mapWidth;
+        mapWidth = mapObjectType->mapHeight;
+        mapHeight = mapObjectType->mapWidth;
     }
 
     // Objekt anlegen
-    Structure* structure = (mapObjectType >= START_BUILDINGS) ? new Building() : new Structure();
+    Structure* structure = (mapObjectType->type == MapObjectTypeClass::BUILDING) ? new Building() : new Structure();
     structure->setMapCoords(mapCoords);
     structure->setMapWidth(mapWidth);
     structure->setMapHeight(mapHeight);
@@ -136,14 +134,17 @@ Structure* Game::addStructure(
     // Building? Defaults für Produktionsdaten setzen
     Building* building = dynamic_cast<Building*>(structure);
     if (building != nullptr) {
-        building->productionSlots = ProductionSlots(mapObjectConfig->buildingProduction);
+        building->productionSlots = ProductionSlots(mapObjectType->buildingProduction);
     }
 
     // Objekt in die Liste aufnehmen.
     map->addMapObject(structure);
 
     // Kontor oder Marktplatz? Einzugbereich in mapTiles aktualisieren und Lagerkapazität der Kolonie erhöhen
-    if (building != nullptr && (mapObjectType == OFFICE1 || mapObjectType == OFFICE2 || mapObjectType == MARKETPLACE)) {
+    // TODO Flag an die Config, dass das Gebäude zum baubaren Einzugsbereich zählt
+    if (building != nullptr &&
+        (mapObjectType->name == "office1" || mapObjectType->name == "office2" || mapObjectType->name == "marketplace")) {
+
         map->addOfficeCatchmentAreaToMap(*building);
 #ifndef NO_SDL
         context->guiMgr->onOfficeCatchmentAreaChanged();
@@ -152,11 +153,11 @@ Structure* Game::addStructure(
 
     Colony* colony = context->game->getColony(structure); // Colony kann erst gefunden werden, wenn addOfficeCatchmentAreaToMap() aufgerufen wurde
     // TODO Lagerkapazitäterhöhung über Config lösen
-    if (mapObjectType == OFFICE1) {
+    if (mapObjectType->name == "office1") {
         colony->increaseGoodsCapacity(30);
-    } else if (mapObjectType == OFFICE2) {
+    } else if (mapObjectType->name == "office2") {
         colony->increaseGoodsCapacity(50);
-    } else if (mapObjectType == MARKETPLACE) {
+    } else if (mapObjectType->name == "marketplace") {
         colony->increaseGoodsCapacity(10);
     }
 
@@ -165,7 +166,7 @@ Structure* Game::addStructure(
         if (building->isHouse()) {
             // TODO Start-Einwohnerzahl setzen
         } else {
-            context->game->addInhabitantsToBuilding(building, mapObjectConfig->inhabitants);
+            context->game->addInhabitantsToBuilding(building, mapObjectType->inhabitants);
         }
     }
 

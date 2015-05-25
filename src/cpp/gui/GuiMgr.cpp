@@ -148,7 +148,7 @@ void GuiMgr::initGui() {
 
     // Initial ist für den Gebäudebau der Förster ausgewählt...
     panelState.selectedBuildingGroup = BuildingGroup::FARM;
-    panelState.addingMapObject = MapObjectType::FORESTERS;
+    panelState.addingMapObject = context->configMgr->getMapObjectType("foresters");
     panelState.addingMapObjectView = Direction::SOUTH;
     panelState.buildingMenuOpen = false;
 
@@ -508,8 +508,8 @@ void GuiMgr::updateGuiFromPanelState() {
     // Baukosten aktualisieren
     GuiResourcesBar* guiResourcesBar = (GuiResourcesBar*) findElement(GUI_ID_RESOURCES_BAR);
     if (panelState.selectedPanelButton == PanelButton::ADD_BUILDING) {
-        const MapObjectType& mapObjectType = context->guiMgr->getPanelState().addingMapObject;
-        const BuildingCosts& buildingCosts = context->configMgr->getMapObjectConfig(mapObjectType)->buildingCosts;
+        const MapObjectType* mapObjectType = context->guiMgr->getPanelState().addingMapObject;
+        const BuildingCosts& buildingCosts = mapObjectType->buildingCosts;
 
         guiResourcesBar->showBuildingCosts(buildingCosts);
     } else {

@@ -77,7 +77,7 @@ struct PanelState {
     /**
      * @brief zuletzt/aktuell gewähltes Map-Objekt im Baumenü
      */
-    MapObjectType addingMapObject;
+    const MapObjectType* addingMapObject;
 
     /**
      * @brief zuletzt/aktuell gewählte Ausrichtung des Map-Objekts im Baumenü

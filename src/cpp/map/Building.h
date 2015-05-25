@@ -3,31 +3,8 @@
 
 #include <gtest/gtest.h>
 #include "economics/Carrier.h"
-#include "game/GoodsSlot.h"
+#include "game/ProductionSlots.h"
 #include "map/Structure.h"
-
-/**
- * @brief Enthält die Slots für produzierte und zu verbrauchende Güter eines Gebäudes.
- */
-typedef
-struct ProductionSlots {
-
-    /**
-     * @brief produzierte Güter
-     */
-    GoodsSlot output;
-
-    /**
-     * @brief verbrauchte Güter
-     */
-    GoodsSlot input;
-
-    /**
-     * @brief weitere verbrauchte Güter, wenn das Gebäude aus zwei verschiedenen Gütern was herstellt
-     */
-    GoodsSlot input2;
-
-} ProductionSlots;
 
 
 /**
@@ -75,21 +52,19 @@ public:
     
     /**
      * @brief Testet, ob eine bestimmte Kachel innerhalb des Einzugsgebiets des Gebäudes liegt
-     * @param configMgr Dependency
      * @param mapCoords Map-Koordinaten, die getestet wird
      * @return `true`, wenn die Kachel innerhalb des Einzugsgebiets liegt; sonst `false`
      */
-    bool isInsideCatchmentArea(const ConfigMgr* configMgr, const MapCoords& mapCoords) const;
+    bool isInsideCatchmentArea(const MapCoords& mapCoords) const;
     
     /**
      * @brief Testet, ob ein bestimmtes Map-Objekt innerhalb des Einzugsgebiets des Gebäudes liegt. Dies ist immer dann
      * der Fall, wenn mindestens eine Kachel des Mapobjekts im Einzuggebiet liegt.
      *
-     * @param configMgr Dependency
      * @param otherMapObject Map-Objekt, was getestet wird
      * @return `true`, wenn das Map-Objekt innerhalb des Einzugsgebiets liegt; sonst `false`
      */
-    bool isInsideCatchmentArea(const ConfigMgr* configMgr, const MapObjectFixed& otherMapObject) const;
+    bool isInsideCatchmentArea(const MapObjectFixed& otherMapObject) const;
 
     /**
      * @brief Prüft, ob das Gebäude ein Lagergebäude (Kontor oder Marketplatz), von welchem ALLE Waren abgeholt und
@@ -97,7 +72,9 @@ public:
      * @return `true` wenn Lagergebäude (Kontor oder Marketplatz), sonst `false`
      */
     bool isStorageBuilding() const {
-        return (mapObjectType == OFFICE1 || mapObjectType == OFFICE2 || mapObjectType == MARKETPLACE);
+        // TODO Flag über die Config steuern (= ob Einzugsbereich zum Baubereich zählt(?)))
+        return (mapObjectType->name == "office1" || mapObjectType->name == "office2" ||
+                mapObjectType->name == "marketplace");
     }
 
     /**
@@ -105,12 +82,13 @@ public:
      * @return `true` wenn Haus, sonst `false`
      */
     bool isHouse() const {
-        return (mapObjectType == PIONEERS_HOUSE1 || mapObjectType == PIONEERS_HOUSE2 ||
-                mapObjectType == PIONEERS_HOUSE3 || mapObjectType == PIONEERS_HOUSE4 ||
-                mapObjectType == PIONEERS_HOUSE5 ||
-                mapObjectType == SETTLERS_HOUSE1 || mapObjectType == SETTLERS_HOUSE2 ||
-                mapObjectType == SETTLERS_HOUSE3 || mapObjectType == SETTLERS_HOUSE4 ||
-                mapObjectType == SETTLERS_HOUSE5);
+        // TODO Flag über die Config steuern
+        return (mapObjectType->name == "pioneers-house1" || mapObjectType->name == "pioneers-house2" ||
+                mapObjectType->name == "pioneers-house3" || mapObjectType->name == "pioneers-house4" ||
+                mapObjectType->name == "pioneers-house5" ||
+                mapObjectType->name == "settlers-house1" || mapObjectType->name == "settlers-house2" ||
+                mapObjectType->name == "settlers-house3" || mapObjectType->name == "settlers-house4" ||
+                mapObjectType->name == "settlers-house5");
     }
 
 private:

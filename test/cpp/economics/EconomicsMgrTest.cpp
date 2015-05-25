@@ -18,17 +18,26 @@ protected:
         office1 = dynamic_cast<Building*>(game->getMap()->getMapObjectFixedAt(MapCoords(28, 18)));
 
         // Rinderfarm bauen und Zick-Zack-Straße zum Kontor ziehen
-        game->addStructure(MapCoords(28, 20), MapObjectType::COBBLED_STREET_STRAIGHT_90, southView, player);
-        game->addStructure(MapCoords(28, 21), MapObjectType::COBBLED_STREET_STRAIGHT_90, southView, player);
-        game->addStructure(MapCoords(28, 22), MapObjectType::COBBLED_STREET_CURVE_270, southView, player);
-        game->addStructure(MapCoords(27, 22), MapObjectType::COBBLED_STREET_STRAIGHT_0, southView, player);
-        game->addStructure(MapCoords(26, 22), MapObjectType::COBBLED_STREET_CURVE_90, southView, player);
-        game->addStructure(MapCoords(26, 23), MapObjectType::COBBLED_STREET_STRAIGHT_90, southView, player);
-        game->addStructure(MapCoords(26, 24), MapObjectType::COBBLED_STREET_STRAIGHT_90, southView, player);
-        game->addStructure(MapCoords(26, 25), MapObjectType::COBBLED_STREET_STRAIGHT_90, southView, player);
-        game->addStructure(MapCoords(26, 26), MapObjectType::COBBLED_STREET_STRAIGHT_90, southView, player);
-        cattleFarm = dynamic_cast<Building*>(
-            game->addStructure(MapCoords(26, 27), MapObjectType::CATTLE_FARM, southView, player));
+        game->addStructure(
+            MapCoords(28, 20), configMgr->getMapObjectType("cobbled-street-straight90"), southView, player);
+        game->addStructure(
+            MapCoords(28, 21), configMgr->getMapObjectType("cobbled-street-straight90"), southView, player);
+        game->addStructure(
+            MapCoords(28, 22), configMgr->getMapObjectType("cobbled-street-curve270"), southView, player);
+        game->addStructure(
+            MapCoords(27, 22), configMgr->getMapObjectType("cobbled-street-straight0"), southView, player);
+        game->addStructure(
+            MapCoords(26, 22), configMgr->getMapObjectType("cobbled-street-curve90"), southView, player);
+        game->addStructure(
+            MapCoords(26, 23), configMgr->getMapObjectType("cobbled-street-straight90"), southView, player);
+        game->addStructure(
+            MapCoords(26, 24), configMgr->getMapObjectType("cobbled-street-straight90"), southView, player);
+        game->addStructure(
+            MapCoords(26, 25), configMgr->getMapObjectType("cobbled-street-straight90"), southView, player);
+        game->addStructure(
+            MapCoords(26, 26), configMgr->getMapObjectType("cobbled-street-straight90"), southView, player);
+        cattleFarm = dynamic_cast<Building*>(game->addStructure(
+            MapCoords(26, 27), configMgr->getMapObjectType("cattle-farm"), southView, player));
 
         // Spielgeschwindigkeit auf 1x setzen. Die Tests hier sind genau getimt.
         context.game->setSpeed(1);

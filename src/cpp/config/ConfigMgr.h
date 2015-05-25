@@ -2,172 +2,16 @@
 #define _CONFIG_MGR_H
 
 #include <list>
+#include <gtest/gtest.h>
 #include <unordered_map>
 #include "defines.h"
-#include "config/BuildingCosts.h"
 #include "config/Good.h"
 #include "game/GoodsSlot.h"
 #include "map/Building.h"
 #include "map/Direction.h"
+#include "map/MapObjectType.h"
 #include "rapidxml/rapidxml.hpp"
 #include "rapidxml/rapidxml_utils.hpp"
-#include "utils/RectangleData.h"
-
-
-enum MapObjectType : unsigned char;
-
-
-/**
- * @brief gibt an, wie Strukturen platziert wird
- */
-enum StructurePlacing {
-
-    /**
-     * @brief mehreren Struktur werden einzeln platziert
-     */
-    INDIVIDUALLY,
-
-    /**
-     * @brief mehreren Struktur werden als Rechteck platziert
-     */
-    RECTANGLE,
-
-    /**
-     * @brief mehreren Struktur werden mittels eines Pfads platziert
-     */
-    PATH
-
-};
-
-
-typedef
-struct MapObjectConfig {
-    /**
-     * @brief Name des Map-Objekts
-     */
-    const char* name;
-
-    /**
-     * @brief Breite (X-Richtung) des Map-Objekts in Map-Koordinaten
-     */
-    unsigned char mapWidth;
-
-    /**
-     * @brief Höhe (Y-Richtung) des Map-Objekts in Map-Koordinaten
-     */
-    unsigned char mapHeight;
-
-    /**
-     * @brief Bezeichnung in einem gespeicherten Spielstand
-     */
-    std::string nameInSavefile;
-
-    /**
-      * @brief gibt an, wie das Map-Objekt platziert wird
-      */
-    StructurePlacing structurePlacing;
-    
-    /**
-     * @brief Einzugsbereich des Map-Objekts (optional). Es gilt hierbei 0 = außerhalb, 1 = Einzugsbereich.
-     * 
-     * Um das Rechteck korrekt anzuwenden, muss dieses symmetrisch um die Gebäudemitte angewandt werden.
-     * Bsp: Ein 2x2-Gebäude mit einem 8x4-Einzugsbereich.
-     *
-     * <pre>
-     * Richtig:                            Falsch:
-     * -------------------------------     -------------------------------
-     * | | | | | | | | | | | | | | | |     | | | | | | | | | | | | | | | |
-     * ------=================--------     -------------------------------
-     * | | | I | | | | | | | I | | | |     | | | | | | | | | | | | | | | |
-     * ------I---------------I--------     --------=================------
-     * | | | I | | |X|X| | | I | | | |     | | | | I | |X|X| | | | I | | |
-     * ------I---------------I--------     --------I---------------I------
-     * | | | I | | |X|X| | | I | | | |     | | | | I | |X|X| | | | I | | |
-     * ------I---------------I--------     --------I---------------I------
-     * | | | I | | | | | | | I | | | |     | | | | I | | | | | | | I | | |
-     * ------=================--------     --------I---------------I------
-     * | | | | | | | | | | | | | | | |     | | | | I | | | | | | | I | | |
-     * -------------------------------     --------=================------
-     * </pre>
-     *
-     * Der Einzugsbereich muss desweiteren folgende Bedingungen erfüllen, damit die Anwendung korrekt funktioniert:
-     * - Es darf keine Leerzeile/-spalte geben. Das Rechteck muss so klein wie möglich gewählt sein.
-     * - Der Einzugsbereich darf nicht nach innen gewölbt sein. Nur runde oder rechteckige Formen sind erlaubt.
-     */
-    RectangleData<char>* catchmentArea = nullptr;
-    
-    /**
-     * @brief Baukosten
-     */
-    BuildingCosts buildingCosts;
-
-    /**
-     * @brief Güter, die verbraucht und hergestellt werden.
-     */
-    ProductionSlots buildingProduction;
-
-    /**
-     * @brief gibt an, wie viele Güter pro 60 Sekunden generiert werden
-     */
-    double productionRate = 0;
-
-    /**
-     * @brief gibt an, wie viele Güter vom ersten Input-Slot pro 60 Sekunden verbraucht werden
-     */
-    double inputConsumptionRate = 0;
-
-    /**
-     * @brief gibt an, wie viele Güter vom zweiten Input-Slot pro 60 Sekunden verbraucht werden
-     */
-    double input2ConsumptionRate = 0;
-
-    /**
-     * @brief gibt für Nicht-Wohngebäude an, wie viele Einwohner sich im Gebäude befinden. Jede Plantage,
-     * jeder Produktionsbetrieb, wie auch öffentliche Gebäude haben diese fixe Einwohnerzahl pro Gebäude.
-     */
-    unsigned char inhabitants = 0;
-
-    /**
-     * @brief (nur für `Harvestable`) gibt das maximale Alter an, das diese Landschaft erreichen kann.
-     */
-    unsigned char maxAge = 0;
-
-    
-    ~MapObjectConfig() {
-        if (catchmentArea != nullptr) {
-            delete catchmentArea;
-        }
-    }
-
-    /**
-     * @return Name des Map-Objekts
-     */
-    const char* getName() const {
-        return name;
-    }
-    
-    /**
-     * @return Einzugsbereich (kann `nullptr` sein, wenn das Map-Objekt keinen Einzugsbereich besitzt)
-     */
-    RectangleData<char>* getCatchmentArea() const {
-        return catchmentArea;
-    }
-    
-    /**
-     * @return Baukosten
-     */
-    const BuildingCosts* getBuildingCosts() const {
-        return &buildingCosts;
-    }
-
-    /**
-     * @return produzierte und verbrauchte Güter
-     */
-    const ProductionSlots* getBuildingProduction() const {
-        return &buildingProduction;
-    }
-
-} MapObjectConfig;
 
 
 /**
@@ -242,6 +86,8 @@ struct MapTileConfig {
  * @brief Klasse, die die Konfiguration enthält
  */
 class ConfigMgr {
+
+    FRIEND_TEST(ConfigMgrTest, parseCatchmentArea);
     
 private:
     /**
@@ -255,15 +101,9 @@ private:
     std::list<Good> goodsList;
 
     /**
-     * @brief Array mit Zeigern auf die Map-Objekt-Konfigurationen
+     * @brief Map aller Map-Objekt-Typen. Map-Key ist der Name des Map-Objekt-Typs.
      */
-    MapObjectConfig** mapObjectConfigs;
-
-    /**
-     * @brief Map, die eine Zuordnung von `nameInSavefile` auf den zugehörigen `MapObjectType` macht.
-     * Diese Map brauchen wir beim Laden eines Spielstands.
-     */
-    std::unordered_map<std::string, MapObjectType> mapMapObjectNameInSavefile;
+    std::unordered_map<std::string, MapObjectType> mapObjectTypesMap;
 
     /**
      * @brief Map, die Tilenamen auf die Tile-Konfiguration abbildet
@@ -299,16 +139,6 @@ public:
      */
     VIRTUAL_ONLY_IN_TESTS
     ~ConfigMgr();
-    
-    /**
-     * @brief Liefert die Konfiguration eines Map-Objekts zurück
-     * @param mapObjectType Typ des Map-Objekts
-     * @return Konfiguration
-     */
-    VIRTUAL_ONLY_IN_TESTS
-    const MapObjectConfig* getMapObjectConfig(MapObjectType mapObjectType) const {
-        return mapObjectConfigs[mapObjectType];
-    }
 
     /**
      * @brief Liefert alle verfügbaren Güter im Spiel als Map zurück.
@@ -336,16 +166,16 @@ public:
     }
 
     /**
-     * @brief Liefert den `MapObjectType` einer Struktur/Gebäudes ausgehend von einem `nameInSavefile` zurück.
-     * @param nameInSavefile Name des Map-Objekts im Spielstand
-     * @return `MapObjectType`. `NO_MAP_OBJECT`, wenn der Name nicht gefunden wurde
+     * @brief Liefert den `MapObjectType` einer Struktur/Gebäudes ausgehend von seinem Namen zurück.
+     * @param name Name des Map-Objekts
+     * @return `MapObjectType`. `nullptr`, wenn es keinen solchen Map-Objekt-Typ gibt.
      */
-    const MapObjectType getMapObjectType(const std::string& nameInSavefile) const {
-        auto iter = mapMapObjectNameInSavefile.find(nameInSavefile);
-        if (iter != mapMapObjectNameInSavefile.end()) {
-            return iter->second;
+    const MapObjectType* getMapObjectType(const std::string& name) const {
+        auto iter = mapObjectTypesMap.find(name);
+        if (iter != mapObjectTypesMap.end()) {
+            return &iter->second;
         } else {
-            return MapObjectType::NO_MAP_OBJECT;
+            return nullptr;
         }
     }
 
@@ -390,9 +220,9 @@ private:
     void loadGoods();
 
     /**
-     * @brief Konstruiert (TODO aus einer Datei laden) die Konfiguration der Map-Objekte
+     * @brief Lädt die Konfiguration der verfügbaren Map-Objekt-Typen
      */
-    void loadMapObjectConfigs();
+    void loadMapObjectTypes();
 
     /**
      * @brief Lädt die Konfiguration der Gelände-Kacheln
@@ -406,7 +236,25 @@ private:
      * @param attribute XML-Attribut (kann `nullptr` sein)
      * @param defaultValue Default-Wert, der verwendet wird, wenn das Attribut nicht vorhanden ist.
      */
-    bool xmlAttributeToBool(rapidxml::xml_attribute<>* attribute, bool defaultValue);
+    static bool xmlAttributeToBool(rapidxml::xml_attribute<>* attribute, bool defaultValue);
+
+    /**
+     * @brief Helper, der aus dem Wert eines `<catchment-area>`-Tags die Datenstruktur des Einzugsbereichs liest.
+     * Er ermittelt Breite/Höhe des Einzugsbereichs und stellt sicher, dass der String ordentlich geparst werden kann.
+     *
+     * @param catchmentAreaValue String, der den Wert des XML-Tags `<catchment-area>` enthält
+     * @return Zeiger auf die `RectangleData`-Struktur mit dem Einzugsbereich
+     */
+    static RectangleData<char>* parseCatchmentArea(const char* catchmentAreaValue);
+
+    /**
+     * @brief Liest aus einem `<production-slots>`-Unterknoten (`<output>`, `<input>` oder `<input2>`) die Daten
+     * und füllt damit den entsprechenden `GoodsSlot`.
+     *
+     * @param goodSlot Datenstruktur, die gefüllt wird
+     * @param produtionSlotNode Zeiger auf den XML-Knoten. Darf nicht `nullptr` sein.
+     */
+    void readGoodSlotConfig(GoodsSlot& goodSlot, rapidxml::xml_node<>* produtionSlotNode);
 };
 
 #endif

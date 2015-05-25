@@ -56,10 +56,10 @@ public:
      * @brief Erniedrigt die Lagerbestände der Güter der Siedlung für den Bau eines Gebäudes
      * @param buildingCosts Gebäudekosten, wo denen die Güterkosten dekrementiert werden.
      */
-    void subtractBuildingCosts(const BuildingCosts* buildingCosts) {
-        getGoods("tools").inventory -= buildingCosts->tools;
-        getGoods("wood").inventory -= buildingCosts->wood;
-        getGoods("bricks").inventory -= buildingCosts->bricks;
+    void subtractBuildingCosts(const BuildingCosts& buildingCosts) {
+        getGoods("tools").inventory -= buildingCosts.tools;
+        getGoods("wood").inventory -= buildingCosts.wood;
+        getGoods("bricks").inventory -= buildingCosts.bricks;
     }
 
     /**

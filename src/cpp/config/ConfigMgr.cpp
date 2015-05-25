@@ -1,24 +1,26 @@
 #include <cstring>
 #include <iostream>
 #include <stdexcept>
+#include <string>
 #include "config/ConfigMgr.h"
 #include "config/Good.h"
 #include "utils/StringFormat.h"
 
 
+// TODO Fehlermanagement, wenn die XML-Dateien mal nicht so hübsch aussiehen, dass alle Tags da sind
+
 ConfigMgr::ConfigMgr() {
     loadGoods();
-    loadMapObjectConfigs();
+    std::cout << "Loaded goods." << std::endl;
+
+    loadMapObjectTypes();
+    std::cout << "Loaded mapObjectTypes." << std::endl;
+
     loadTilesConfig();
+    std::cout << "Loaded tiles." << std::endl;
 }
 
 ConfigMgr::~ConfigMgr() {
-    for(int i = 0; i < MapObjectType::MAX_MAP_OBJECT_TYPE; i++) {
-        if (mapObjectConfigs[i] != nullptr) {
-            delete mapObjectConfigs[i];
-        }
-    }
-    delete[] mapObjectConfigs;
 }
 
 void ConfigMgr::loadGoods() {
@@ -47,446 +49,98 @@ void ConfigMgr::loadGoods() {
     delete xmlDocument;
 }
 
-void ConfigMgr::loadMapObjectConfigs() {
-    mapObjectConfigs = new MapObjectConfig*[MapObjectType::MAX_MAP_OBJECT_TYPE];
-    memset(mapObjectConfigs, 0, MapObjectType::MAX_MAP_OBJECT_TYPE * sizeof(MapObjectConfig*));
-    
-    for (int i = MapObjectType::NORTHERN_FOREST1; i <= MapObjectType::NORTHERN_FOREST2; i++) {
-        MapObjectType mapObjectType = (MapObjectType) i;
+void ConfigMgr::loadMapObjectTypes() {
+    rapidxml::file<> xmlFile("data/config/map-objects.xml");
 
-        mapObjectConfigs[mapObjectType] = new MapObjectConfig();
-        mapObjectConfigs[mapObjectType]->name = "Wald";
-        mapObjectConfigs[mapObjectType]->mapWidth = 1;
-        mapObjectConfigs[mapObjectType]->mapHeight = 1;
-        mapObjectConfigs[mapObjectType]->structurePlacing = StructurePlacing::RECTANGLE;
-        mapObjectConfigs[mapObjectType]->catchmentArea = nullptr;
-        mapObjectConfigs[mapObjectType]->buildingCosts = { 5, 0, 0, 0 };
-        mapObjectConfigs[mapObjectType]->buildingProduction = { GoodsSlot(), GoodsSlot(), GoodsSlot() };
-        mapObjectConfigs[mapObjectType]->maxAge = 4;
-    }
-    mapObjectConfigs[MapObjectType::NORTHERN_FOREST1]->nameInSavefile = "northern_forest1";
-    mapObjectConfigs[MapObjectType::NORTHERN_FOREST2]->nameInSavefile = "northern_forest2";
-    for (int i = MapObjectType::NORTHERN_FOREST1; i <= MapObjectType::NORTHERN_FOREST2; i++) {
-        MapObjectType mapObjectType = (MapObjectType) i;
-        mapMapObjectNameInSavefile[mapObjectConfigs[mapObjectType]->nameInSavefile] = mapObjectType;
-    }
-    
-    mapObjectConfigs[MapObjectType::SUGARCANE_FIELD] = new MapObjectConfig();
-    mapObjectConfigs[MapObjectType::SUGARCANE_FIELD]->name = "Zuckerrohrfeld";
-    mapObjectConfigs[MapObjectType::SUGARCANE_FIELD]->mapWidth = 1;
-    mapObjectConfigs[MapObjectType::SUGARCANE_FIELD]->mapHeight = 1;
-    mapObjectConfigs[MapObjectType::SUGARCANE_FIELD]->nameInSavefile = "sugarcane_field";
-    mapObjectConfigs[MapObjectType::SUGARCANE_FIELD]->structurePlacing = StructurePlacing::RECTANGLE;
-    mapObjectConfigs[MapObjectType::SUGARCANE_FIELD]->catchmentArea = nullptr;
-    mapObjectConfigs[MapObjectType::SUGARCANE_FIELD]->buildingCosts = { 5, 0, 0, 0 };
-    mapObjectConfigs[MapObjectType::SUGARCANE_FIELD]->buildingProduction = { GoodsSlot(), GoodsSlot(), GoodsSlot() };
-    mapObjectConfigs[MapObjectType::SUGARCANE_FIELD]->maxAge = 4;
-    mapMapObjectNameInSavefile[mapObjectConfigs[MapObjectType::SUGARCANE_FIELD]->nameInSavefile] = MapObjectType::SUGARCANE_FIELD;
-    
-    mapObjectConfigs[MapObjectType::TOBACCO_FIELD] = new MapObjectConfig();
-    mapObjectConfigs[MapObjectType::TOBACCO_FIELD]->name = "Tabakfeld";
-    mapObjectConfigs[MapObjectType::TOBACCO_FIELD]->mapWidth = 1;
-    mapObjectConfigs[MapObjectType::TOBACCO_FIELD]->mapHeight = 1;
-    mapObjectConfigs[MapObjectType::TOBACCO_FIELD]->nameInSavefile = "tobacco_field";
-    mapObjectConfigs[MapObjectType::TOBACCO_FIELD]->structurePlacing = StructurePlacing::RECTANGLE;
-    mapObjectConfigs[MapObjectType::TOBACCO_FIELD]->catchmentArea = nullptr;
-    mapObjectConfigs[MapObjectType::TOBACCO_FIELD]->buildingCosts = { 5, 0, 0, 0 };
-    mapObjectConfigs[MapObjectType::TOBACCO_FIELD]->buildingProduction = { GoodsSlot(), GoodsSlot(), GoodsSlot() };
-    mapObjectConfigs[MapObjectType::TOBACCO_FIELD]->maxAge = 6;
-    mapMapObjectNameInSavefile[mapObjectConfigs[MapObjectType::TOBACCO_FIELD]->nameInSavefile] = MapObjectType::TOBACCO_FIELD;
+    rapidxml::xml_document<>* xmlDocument = new rapidxml::xml_document<>();
+    xmlDocument->parse<0>(xmlFile.data());
 
-    for (int i = MapObjectType::COBBLED_STREET_STRAIGHT_0; i <= MapObjectType::COBBLED_STREET_CROSS; i++) {
-        MapObjectType mapObjectType = (MapObjectType) i;
+    rapidxml::xml_node<>* mapObjectsNode = xmlDocument->first_node("map-objects", 11, true);
 
-        mapObjectConfigs[mapObjectType] = new MapObjectConfig();
-        mapObjectConfigs[mapObjectType]->name = "Pflasterstraße";
-        mapObjectConfigs[mapObjectType]->mapWidth = 1;
-        mapObjectConfigs[mapObjectType]->mapHeight = 1;
-        mapObjectConfigs[mapObjectType]->structurePlacing = StructurePlacing::PATH;
-        mapObjectConfigs[mapObjectType]->catchmentArea = nullptr;
-        mapObjectConfigs[mapObjectType]->buildingCosts = { 5, 0, 0, 1 };
-        mapObjectConfigs[mapObjectType]->buildingProduction = { GoodsSlot(), GoodsSlot(), GoodsSlot() };
-    }
-    mapObjectConfigs[MapObjectType::COBBLED_STREET_STRAIGHT_0]->nameInSavefile = "cobbled_street_straight_0";
-    mapObjectConfigs[MapObjectType::COBBLED_STREET_STRAIGHT_90]->nameInSavefile = "cobbled_street_straight_90";
-    mapObjectConfigs[MapObjectType::COBBLED_STREET_CURVE_0]->nameInSavefile = "cobbled_street_curve_0";
-    mapObjectConfigs[MapObjectType::COBBLED_STREET_CURVE_90]->nameInSavefile = "cobbled_street_curve_90";
-    mapObjectConfigs[MapObjectType::COBBLED_STREET_CURVE_180]->nameInSavefile = "cobbled_street_curve_180";
-    mapObjectConfigs[MapObjectType::COBBLED_STREET_CURVE_270]->nameInSavefile = "cobbled_street_curve_270";
-    mapObjectConfigs[MapObjectType::COBBLED_STREET_TEE_0]->nameInSavefile = "cobbled_street_tee_0";
-    mapObjectConfigs[MapObjectType::COBBLED_STREET_TEE_90]->nameInSavefile = "cobbled_street_tee_90";
-    mapObjectConfigs[MapObjectType::COBBLED_STREET_TEE_180]->nameInSavefile = "cobbled_street_tee_180";
-    mapObjectConfigs[MapObjectType::COBBLED_STREET_TEE_270]->nameInSavefile = "cobbled_street_tee_270";
-    mapObjectConfigs[MapObjectType::COBBLED_STREET_CROSS]->nameInSavefile = "cobbled_street_cross";
-    for (int i = MapObjectType::COBBLED_STREET_STRAIGHT_0; i <= MapObjectType::COBBLED_STREET_CROSS; i++) {
-        MapObjectType mapObjectType = (MapObjectType) i;
-        mapMapObjectNameInSavefile[mapObjectConfigs[mapObjectType]->nameInSavefile] = mapObjectType;
-    }
-    
-    for (int i = MapObjectType::FARM_ROAD_STRAIGHT_0; i <= MapObjectType::FARM_ROAD_CROSS; i++) {
-        MapObjectType mapObjectType = (MapObjectType) i;
+    for (rapidxml::xml_node<>* node = mapObjectsNode->first_node(); node != nullptr; node = node->next_sibling()) {
+        std::string name = std::string(node->first_attribute("name", 4, true)->value());
+        MapObjectType& mapObjectType = mapObjectTypesMap[name];
+        mapObjectType.name = name;
 
-        mapObjectConfigs[mapObjectType] = new MapObjectConfig();
-        mapObjectConfigs[mapObjectType]->name = "Feldweg";
-        mapObjectConfigs[mapObjectType]->mapWidth = 1;
-        mapObjectConfigs[mapObjectType]->mapHeight = 1;
-        mapObjectConfigs[mapObjectType]->structurePlacing = StructurePlacing::PATH;
-        mapObjectConfigs[mapObjectType]->catchmentArea = nullptr;
-        mapObjectConfigs[mapObjectType]->buildingCosts = { 5, 0, 0, 0 };
-        mapObjectConfigs[mapObjectType]->buildingProduction = { GoodsSlot(), GoodsSlot(), GoodsSlot() };
-    }
-    mapObjectConfigs[MapObjectType::FARM_ROAD_STRAIGHT_0]->nameInSavefile = "farm_road_straight_0";
-    mapObjectConfigs[MapObjectType::FARM_ROAD_STRAIGHT_90]->nameInSavefile = "farm_road_straight_90";
-    mapObjectConfigs[MapObjectType::FARM_ROAD_CURVE_0]->nameInSavefile = "farm_road_curve_0";
-    mapObjectConfigs[MapObjectType::FARM_ROAD_CURVE_90]->nameInSavefile = "farm_road_curve_90";
-    mapObjectConfigs[MapObjectType::FARM_ROAD_CURVE_180]->nameInSavefile = "farm_road_curve_180";
-    mapObjectConfigs[MapObjectType::FARM_ROAD_CURVE_270]->nameInSavefile = "farm_road_curve_270";
-    mapObjectConfigs[MapObjectType::FARM_ROAD_TEE_0]->nameInSavefile = "farm_road_tee_0";
-    mapObjectConfigs[MapObjectType::FARM_ROAD_TEE_90]->nameInSavefile = "farm_road_tee_90";
-    mapObjectConfigs[MapObjectType::FARM_ROAD_TEE_180]->nameInSavefile = "farm_road_tee_180";
-    mapObjectConfigs[MapObjectType::FARM_ROAD_TEE_270]->nameInSavefile = "farm_road_tee_270";
-    mapObjectConfigs[MapObjectType::FARM_ROAD_CROSS]->nameInSavefile = "farm_road_cross";
-    for (int i = MapObjectType::FARM_ROAD_STRAIGHT_0; i <= MapObjectType::FARM_ROAD_CROSS; i++) {
-        MapObjectType mapObjectType = (MapObjectType) i;
-        mapMapObjectNameInSavefile[mapObjectConfigs[mapObjectType]->nameInSavefile] = mapObjectType;
+        // Knoten-Typ
+        const char* nodeName = node->name();
+        if (strcmp(nodeName, "harvestable") == 0) {
+            mapObjectType.type = MapObjectTypeClass::HARVESTABLE;
+        } else if (strcmp(nodeName, "structure") == 0) {
+            mapObjectType.type = MapObjectTypeClass::STRUCTURE;
+        } else if (strcmp(nodeName, "building") == 0) {
+            mapObjectType.type = MapObjectTypeClass::BUILDING;
+        } else {
+            std::cerr << "Illegal node '" << nodeName << "'." << std::endl;
+            throw std::runtime_error("Illegal node");
+        }
+
+        // Basics
+        mapObjectType.mapWidth = (unsigned char) std::stoul(node->first_attribute("width", 5, true)->value());
+        mapObjectType.mapHeight = (unsigned char) std::stoul(node->first_attribute("height", 6, true)->value());
+        mapObjectType.title = std::string(node->first_node("title", 5, true)->value());
+
+        // Structure-Placing
+        const char* structurePlacing = node->first_node("structure-placing", 17, true)->value();
+        if (strcmp(structurePlacing, "individually") == 0) {
+            mapObjectType.structurePlacing = StructurePlacing::INDIVIDUALLY;
+        } else if (strcmp(structurePlacing, "rectangle") == 0) {
+            mapObjectType.structurePlacing = StructurePlacing::RECTANGLE;
+        } else if (strcmp(structurePlacing, "path") == 0) {
+            mapObjectType.structurePlacing = StructurePlacing::PATH;
+        } else {
+            std::cerr << "Illegal value '" << structurePlacing << "' for structurePlacing." << std::endl;
+            throw std::runtime_error("Illegal value for structurePlacing");
+        }
+
+        // Baukosten
+        rapidxml::xml_node<>* buildingCostsNode = node->first_node("building-costs", 14, true);
+        BuildingCosts& buildingCosts = mapObjectType.buildingCosts;
+        buildingCosts.coins = (unsigned int) std::stoul(buildingCostsNode->first_node("coins", 5, true)->value());
+        buildingCosts.tools = (unsigned int) std::stoul(buildingCostsNode->first_node("tools", 5, true)->value());
+        buildingCosts.wood = (unsigned int) std::stoul(buildingCostsNode->first_node("wood", 4, true)->value());
+        buildingCosts.bricks = (unsigned int) std::stoul(buildingCostsNode->first_node("bricks", 6, true)->value());
+
+        // optionale Tags
+        rapidxml::xml_node<>* catchmentAreaNode = node->first_node("catchment-area", 14, true);
+        if (catchmentAreaNode != nullptr) {
+            const char* catchmentAreaValue = catchmentAreaNode->value();
+            mapObjectType.catchmentArea.reset(parseCatchmentArea(catchmentAreaValue));
+        }
+
+        rapidxml::xml_node<>* productionSlotsNode = node->first_node("production-slots", 16, true);
+        if (productionSlotsNode != nullptr) {
+            rapidxml::xml_node<>* outputNode = productionSlotsNode->first_node("output", 6, true);
+            readGoodSlotConfig(mapObjectType.buildingProduction.output, outputNode);
+
+            rapidxml::xml_node<>* inputNode = productionSlotsNode->first_node("input", 5, true);
+            if (inputNode != nullptr) {
+                readGoodSlotConfig(mapObjectType.buildingProduction.input, inputNode);
+
+                rapidxml::xml_node<>* input2Node = productionSlotsNode->first_node("input2", 6, true);
+                if (input2Node != nullptr) {
+                    readGoodSlotConfig(mapObjectType.buildingProduction.input2, input2Node);
+                }
+            }
+        }
+
+        rapidxml::xml_node<>* inhabitantsNode = node->first_node("inhabitants", 11, true);
+        if (inhabitantsNode != nullptr) {
+            mapObjectType.inhabitants = (unsigned char) std::stoul(inhabitantsNode->value());
+        }
+
+        rapidxml::xml_node<>* maxAgeNode = node->first_node("max-age", 7, true);
+        if (maxAgeNode != nullptr) {
+            mapObjectType.maxAge = (unsigned char) std::stoul(maxAgeNode->value());
+        }
+
+        std::cout << "Loaded mapObjectType '" << mapObjectType.name << "'." << std::endl;
     }
 
-    for (int i = MapObjectType::SQUARE1; i <= MapObjectType::SQUARE3; i++) {
-        MapObjectType mapObjectType = (MapObjectType) i;
-
-        mapObjectConfigs[mapObjectType] = new MapObjectConfig();
-        mapObjectConfigs[mapObjectType]->mapWidth = 1;
-        mapObjectConfigs[mapObjectType]->mapHeight = 1;
-        mapObjectConfigs[mapObjectType]->structurePlacing = StructurePlacing::RECTANGLE;
-        mapObjectConfigs[mapObjectType]->catchmentArea = nullptr;
-        mapObjectConfigs[mapObjectType]->buildingCosts = { 5, 0, 0, 1 };
-        mapObjectConfigs[mapObjectType]->buildingProduction = { GoodsSlot(), GoodsSlot(), GoodsSlot() };
-    }
-    mapObjectConfigs[MapObjectType::SQUARE1]->name = "Platz I";
-    mapObjectConfigs[MapObjectType::SQUARE2]->name = "Platz II";
-    mapObjectConfigs[MapObjectType::SQUARE3]->name = "Platz III";
-    mapObjectConfigs[MapObjectType::SQUARE1]->nameInSavefile = "square1";
-    mapObjectConfigs[MapObjectType::SQUARE2]->nameInSavefile = "square2";
-    mapObjectConfigs[MapObjectType::SQUARE3]->nameInSavefile = "square3";
-    for (int i = MapObjectType::SQUARE1; i <= MapObjectType::SQUARE3; i++) {
-        MapObjectType mapObjectType = (MapObjectType) i;
-        mapMapObjectNameInSavefile[mapObjectConfigs[mapObjectType]->nameInSavefile] = mapObjectType;
-    }
-
-    mapObjectConfigs[MapObjectType::CHAPEL] = new MapObjectConfig();
-    mapObjectConfigs[MapObjectType::CHAPEL]->name = "Kapelle";
-    mapObjectConfigs[MapObjectType::CHAPEL]->mapWidth = 2;
-    mapObjectConfigs[MapObjectType::CHAPEL]->mapHeight = 1;
-    mapObjectConfigs[MapObjectType::CHAPEL]->nameInSavefile = "chapel";
-    mapObjectConfigs[MapObjectType::CHAPEL]->structurePlacing = StructurePlacing::INDIVIDUALLY;
-    mapObjectConfigs[MapObjectType::CHAPEL]->catchmentArea = new RectangleData<char>(18, 17);
-    memcpy(mapObjectConfigs[MapObjectType::CHAPEL]->catchmentArea->data, "000000111111000000000011111111110000000111111111111000001111111111111100011111111111111110011111111111111110111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111011111111111111110011111111111111110001111111111111100000111111111111000000011111111110000000000111111000000", 306);
-    mapObjectConfigs[MapObjectType::CHAPEL]->buildingCosts = { 100, 2, 5, 0 };
-    mapObjectConfigs[MapObjectType::CHAPEL]->buildingProduction = { GoodsSlot(), GoodsSlot(), GoodsSlot() };
-    mapObjectConfigs[MapObjectType::CHAPEL]->inhabitants = 1;
-    mapMapObjectNameInSavefile[mapObjectConfigs[MapObjectType::CHAPEL]->nameInSavefile] = MapObjectType::CHAPEL;
-
-    for (int i = 1; i <= 5; i++) {
-        MapObjectType mapObjectType = (MapObjectType) (MapObjectType::PIONEERS_HOUSE1 + i - 1);
-
-        mapObjectConfigs[mapObjectType] = new MapObjectConfig();
-        mapObjectConfigs[mapObjectType]->name = "Haus (Pioniere)";
-        mapObjectConfigs[mapObjectType]->mapWidth = 2;
-        mapObjectConfigs[mapObjectType]->mapHeight = 2;
-        mapObjectConfigs[mapObjectType]->nameInSavefile = std::string("pioneers_house") + toString(i);
-        mapObjectConfigs[mapObjectType]->structurePlacing = StructurePlacing::INDIVIDUALLY;
-        mapObjectConfigs[mapObjectType]->catchmentArea = new RectangleData<char>(14, 14);
-        memcpy(mapObjectConfigs[mapObjectType]->catchmentArea->data, "0000111111000000011111111000001111111111000111111111111011111111111111111111111111111111111111111111111111111111111111111111111111111111111101111111111110001111111111000001111111100000001111110000", 196);
-        mapObjectConfigs[mapObjectType]->buildingCosts = { 0, 0, 3, 0 };
-        mapObjectConfigs[mapObjectType]->buildingProduction = { GoodsSlot(), GoodsSlot(), GoodsSlot() };
-        mapMapObjectNameInSavefile[mapObjectConfigs[mapObjectType]->nameInSavefile] = mapObjectType;
-    }
-
-    for (int i = 1; i <= 5; i++) {
-        MapObjectType mapObjectType = (MapObjectType) (MapObjectType::SETTLERS_HOUSE1 + i - 1);
-
-        mapObjectConfigs[mapObjectType] = new MapObjectConfig();
-        mapObjectConfigs[mapObjectType]->name = "Haus (Siedler)";
-        mapObjectConfigs[mapObjectType]->mapWidth = 2;
-        mapObjectConfigs[mapObjectType]->mapHeight = 2;
-        mapObjectConfigs[mapObjectType]->nameInSavefile = std::string("settlers_house") + toString(i);
-        mapObjectConfigs[mapObjectType]->structurePlacing = StructurePlacing::INDIVIDUALLY;
-        mapObjectConfigs[mapObjectType]->catchmentArea = new RectangleData<char>(14, 14);
-        memcpy(mapObjectConfigs[mapObjectType]->catchmentArea->data, "0000111111000000011111111000001111111111000111111111111011111111111111111111111111111111111111111111111111111111111111111111111111111111111101111111111110001111111111000001111111100000001111110000", 196);
-        mapObjectConfigs[mapObjectType]->buildingCosts = { 0, 1, 3, 0 };
-        mapObjectConfigs[mapObjectType]->buildingProduction = { GoodsSlot(), GoodsSlot(), GoodsSlot() };
-        mapMapObjectNameInSavefile[mapObjectConfigs[mapObjectType]->nameInSavefile] = mapObjectType;
-    }
-
-    mapObjectConfigs[MapObjectType::STONEMASON] = new MapObjectConfig();
-    mapObjectConfigs[MapObjectType::STONEMASON]->name = "Steinbruch";
-    mapObjectConfigs[MapObjectType::STONEMASON]->mapWidth = 2;
-    mapObjectConfigs[MapObjectType::STONEMASON]->mapHeight = 2;
-    mapObjectConfigs[MapObjectType::STONEMASON]->nameInSavefile = "stonemason";
-    mapObjectConfigs[MapObjectType::STONEMASON]->structurePlacing = StructurePlacing::INDIVIDUALLY;
-    mapObjectConfigs[MapObjectType::STONEMASON]->catchmentArea = new RectangleData<char>(16, 16);
-    memcpy(mapObjectConfigs[MapObjectType::STONEMASON]->catchmentArea->data, "0000011111100000000111111111100000111111111111000111111111111110011111111111111011111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111101111111111111100111111111111110001111111111110000011111111110000000011111100000", 256);
-    mapObjectConfigs[MapObjectType::STONEMASON]->buildingCosts = { 100, 5, 5, 0 };
-    mapObjectConfigs[MapObjectType::STONEMASON]->buildingProduction = {
-        GoodsSlot(getGood("bricks"), 8),
-        GoodsSlot(),
-        GoodsSlot()
-    };
-    mapObjectConfigs[MapObjectType::STONEMASON]->productionRate = 2.9;
-    mapObjectConfigs[MapObjectType::STONEMASON]->inhabitants = 2;
-    mapMapObjectNameInSavefile[mapObjectConfigs[MapObjectType::STONEMASON]->nameInSavefile] = MapObjectType::STONEMASON;
-
-    mapObjectConfigs[MapObjectType::OFFICE1] = new MapObjectConfig();
-    mapObjectConfigs[MapObjectType::OFFICE1]->name = "Kontor I";
-    mapObjectConfigs[MapObjectType::OFFICE1]->mapWidth = 3;
-    mapObjectConfigs[MapObjectType::OFFICE1]->mapHeight = 2;
-    mapObjectConfigs[MapObjectType::OFFICE1]->nameInSavefile = "office1";
-    mapObjectConfigs[MapObjectType::OFFICE1]->structurePlacing = StructurePlacing::INDIVIDUALLY;
-    mapObjectConfigs[MapObjectType::OFFICE1]->catchmentArea = new RectangleData<char>(38, 38);
-    memcpy(mapObjectConfigs[MapObjectType::OFFICE1]->catchmentArea->data, "0000000000000001111111100000000000000000000000000111111111111111100000000000000000000111111111111111111110000000000000000011111111111111111111110000000000000011111111111111111111111111000000000001111111111111111111111111111000000000111111111111111111111111111111000000001111111111111111111111111111110000000111111111111111111111111111111110000011111111111111111111111111111111110000111111111111111111111111111111111100011111111111111111111111111111111111100111111111111111111111111111111111111001111111111111111111111111111111111110011111111111111111111111111111111111101111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111011111111111111111111111111111111111100111111111111111111111111111111111111001111111111111111111111111111111111110011111111111111111111111111111111111100011111111111111111111111111111111110000111111111111111111111111111111111100000111111111111111111111111111111110000000111111111111111111111111111111000000001111111111111111111111111111110000000001111111111111111111111111111000000000001111111111111111111111111100000000000000111111111111111111111100000000000000000111111111111111111110000000000000000000011111111111111110000000000000000000000000011111111000000000000000", 1444);
-    mapObjectConfigs[MapObjectType::OFFICE1]->buildingCosts = { 100, 3, 6, 0 };
-    mapObjectConfigs[MapObjectType::OFFICE1]->buildingProduction = { GoodsSlot(), GoodsSlot(), GoodsSlot() };
-    mapObjectConfigs[MapObjectType::OFFICE1]->inhabitants = 2;
-    mapMapObjectNameInSavefile[mapObjectConfigs[MapObjectType::OFFICE1]->nameInSavefile] = MapObjectType::OFFICE1;
-
-    mapObjectConfigs[MapObjectType::OFFICE2] = new MapObjectConfig();
-    mapObjectConfigs[MapObjectType::OFFICE2]->name = "Kontor II";
-    mapObjectConfigs[MapObjectType::OFFICE2]->mapWidth = 3;
-    mapObjectConfigs[MapObjectType::OFFICE2]->mapHeight = 2;
-    mapObjectConfigs[MapObjectType::OFFICE2]->nameInSavefile = "office2";
-    mapObjectConfigs[MapObjectType::OFFICE2]->structurePlacing = StructurePlacing::INDIVIDUALLY;
-    mapObjectConfigs[MapObjectType::OFFICE2]->catchmentArea = new RectangleData<char>(38, 38);
-    memcpy(mapObjectConfigs[MapObjectType::OFFICE2]->catchmentArea->data, "0000000000000001111111100000000000000000000000000111111111111111100000000000000000000111111111111111111110000000000000000011111111111111111111110000000000000011111111111111111111111111000000000001111111111111111111111111111000000000111111111111111111111111111111000000001111111111111111111111111111110000000111111111111111111111111111111110000011111111111111111111111111111111110000111111111111111111111111111111111100011111111111111111111111111111111111100111111111111111111111111111111111111001111111111111111111111111111111111110011111111111111111111111111111111111101111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111011111111111111111111111111111111111100111111111111111111111111111111111111001111111111111111111111111111111111110011111111111111111111111111111111111100011111111111111111111111111111111110000111111111111111111111111111111111100000111111111111111111111111111111110000000111111111111111111111111111111000000001111111111111111111111111111110000000001111111111111111111111111111000000000001111111111111111111111111100000000000000111111111111111111111100000000000000000111111111111111111110000000000000000000011111111111111110000000000000000000000000011111111000000000000000", 1444);
-    mapObjectConfigs[MapObjectType::OFFICE2]->buildingCosts = { 180, 3, 7, 0 };
-    mapObjectConfigs[MapObjectType::OFFICE2]->buildingProduction = { GoodsSlot(), GoodsSlot(), GoodsSlot() };
-    mapObjectConfigs[MapObjectType::OFFICE2]->inhabitants = 3;
-    mapMapObjectNameInSavefile[mapObjectConfigs[MapObjectType::OFFICE2]->nameInSavefile] = MapObjectType::OFFICE2;
-
-    mapObjectConfigs[MapObjectType::MARKETPLACE] = new MapObjectConfig();
-    mapObjectConfigs[MapObjectType::MARKETPLACE]->name = "Marktplatz";
-    mapObjectConfigs[MapObjectType::MARKETPLACE]->mapWidth = 4;
-    mapObjectConfigs[MapObjectType::MARKETPLACE]->mapHeight = 3;
-    mapObjectConfigs[MapObjectType::MARKETPLACE]->nameInSavefile = "marketplace";
-    mapObjectConfigs[MapObjectType::MARKETPLACE]->structurePlacing = StructurePlacing::INDIVIDUALLY;
-    mapObjectConfigs[MapObjectType::MARKETPLACE]->catchmentArea = new RectangleData<char>(38, 38);
-    memcpy(mapObjectConfigs[MapObjectType::MARKETPLACE]->catchmentArea->data, "0000000000000001111111100000000000000000000000000111111111111111100000000000000000000111111111111111111110000000000000000011111111111111111111110000000000000011111111111111111111111111000000000001111111111111111111111111111000000000111111111111111111111111111111000000001111111111111111111111111111110000000111111111111111111111111111111110000011111111111111111111111111111111110000111111111111111111111111111111111100011111111111111111111111111111111111100111111111111111111111111111111111111001111111111111111111111111111111111110011111111111111111111111111111111111101111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111011111111111111111111111111111111111100111111111111111111111111111111111111001111111111111111111111111111111111110011111111111111111111111111111111111100011111111111111111111111111111111110000111111111111111111111111111111111100000111111111111111111111111111111110000000111111111111111111111111111111000000001111111111111111111111111111110000000001111111111111111111111111111000000000001111111111111111111111111100000000000000111111111111111111111100000000000000000111111111111111111110000000000000000000011111111111111110000000000000000000000000011111111000000000000000", 1444);
-    mapObjectConfigs[MapObjectType::MARKETPLACE]->buildingCosts = { 200, 4, 10, 0 };
-    mapObjectConfigs[MapObjectType::MARKETPLACE]->buildingProduction = { GoodsSlot(), GoodsSlot(), GoodsSlot() };
-    mapObjectConfigs[MapObjectType::MARKETPLACE]->inhabitants = 3;
-    mapMapObjectNameInSavefile[mapObjectConfigs[MapObjectType::MARKETPLACE]->nameInSavefile] = MapObjectType::MARKETPLACE;
-
-    mapObjectConfigs[MapObjectType::FORESTERS] = new MapObjectConfig();
-    mapObjectConfigs[MapObjectType::FORESTERS]->name = "Forsthaus";
-    mapObjectConfigs[MapObjectType::FORESTERS]->mapWidth = 2;
-    mapObjectConfigs[MapObjectType::FORESTERS]->mapHeight = 2;
-    mapObjectConfigs[MapObjectType::FORESTERS]->nameInSavefile = "foresters";
-    mapObjectConfigs[MapObjectType::FORESTERS]->structurePlacing = StructurePlacing::INDIVIDUALLY;
-    mapObjectConfigs[MapObjectType::FORESTERS]->catchmentArea = new RectangleData<char>(8, 8);
-    memcpy(mapObjectConfigs[MapObjectType::FORESTERS]->catchmentArea->data, "0011110001111110111111111111111111111111111111110111111000111100", 64);
-    mapObjectConfigs[MapObjectType::FORESTERS]->buildingCosts = { 50, 2, 0, 0 };
-    mapObjectConfigs[MapObjectType::FORESTERS]->buildingProduction = {
-        GoodsSlot(getGood("wood"), 10),
-        GoodsSlot(),
-        GoodsSlot()
-    };
-    mapObjectConfigs[MapObjectType::FORESTERS]->productionRate = 3.5;
-    mapObjectConfigs[MapObjectType::FORESTERS]->inhabitants = 1;
-    mapMapObjectNameInSavefile[mapObjectConfigs[MapObjectType::FORESTERS]->nameInSavefile] = MapObjectType::FORESTERS;
-
-    mapObjectConfigs[MapObjectType::SHEEP_FARM] = new MapObjectConfig();
-    mapObjectConfigs[MapObjectType::SHEEP_FARM]->name = "Schaffarm";
-    mapObjectConfigs[MapObjectType::SHEEP_FARM]->mapWidth = 2;
-    mapObjectConfigs[MapObjectType::SHEEP_FARM]->mapHeight = 2;
-    mapObjectConfigs[MapObjectType::SHEEP_FARM]->nameInSavefile = "sheep_farm";
-    mapObjectConfigs[MapObjectType::SHEEP_FARM]->structurePlacing = StructurePlacing::INDIVIDUALLY;
-    mapObjectConfigs[MapObjectType::SHEEP_FARM]->catchmentArea = new RectangleData<char>(8, 8);
-    memcpy(mapObjectConfigs[MapObjectType::SHEEP_FARM]->catchmentArea->data, "0011110001111110111111111111111111111111111111110111111000111100", 64);
-    mapObjectConfigs[MapObjectType::SHEEP_FARM]->buildingCosts = { 200, 2, 4, 0 };
-    mapObjectConfigs[MapObjectType::SHEEP_FARM]->buildingProduction = {
-        GoodsSlot(getGood("wool"), 3),
-        GoodsSlot(),
-        GoodsSlot()
-    };
-    mapObjectConfigs[MapObjectType::SHEEP_FARM]->productionRate = 30;
-    mapObjectConfigs[MapObjectType::SHEEP_FARM]->inhabitants = 2;
-    mapMapObjectNameInSavefile[mapObjectConfigs[MapObjectType::SHEEP_FARM]->nameInSavefile] = MapObjectType::SHEEP_FARM;
-
-    mapObjectConfigs[MapObjectType::WEAVING_MILL1] = new MapObjectConfig();
-    mapObjectConfigs[MapObjectType::WEAVING_MILL1]->name = "Webstube";
-    mapObjectConfigs[MapObjectType::WEAVING_MILL1]->mapWidth = 2;
-    mapObjectConfigs[MapObjectType::WEAVING_MILL1]->mapHeight = 2;
-    mapObjectConfigs[MapObjectType::WEAVING_MILL1]->nameInSavefile = "weaving_mill1";
-    mapObjectConfigs[MapObjectType::WEAVING_MILL1]->structurePlacing = StructurePlacing::INDIVIDUALLY;
-    mapObjectConfigs[MapObjectType::WEAVING_MILL1]->catchmentArea = new RectangleData<char>(32, 32);
-    memcpy(mapObjectConfigs[MapObjectType::WEAVING_MILL1]->catchmentArea->data, "0000000000001111111100000000000000000000011111111111111000000000000000011111111111111111100000000000001111111111111111111100000000000111111111111111111111100000000011111111111111111111111100000001111111111111111111111111100000111111111111111111111111111100001111111111111111111111111111000111111111111111111111111111111001111111111111111111111111111110011111111111111111111111111111101111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111011111111111111111111111111111100111111111111111111111111111111001111111111111111111111111111110001111111111111111111111111111000011111111111111111111111111110000011111111111111111111111111000000011111111111111111111111100000000011111111111111111111110000000000011111111111111111111000000000000011111111111111111100000000000000001111111111111100000000000000000000011111111000000000000", 1024);
-    mapObjectConfigs[MapObjectType::WEAVING_MILL1]->buildingCosts = { 200, 3, 6, 0 };
-    mapObjectConfigs[MapObjectType::WEAVING_MILL1]->buildingProduction = {
-        GoodsSlot(getGood("cloth"), 7),
-        GoodsSlot(getGood("wool"), 7),
-        GoodsSlot()
-    };
-    mapObjectConfigs[MapObjectType::WEAVING_MILL1]->productionRate = 10.0;
-    mapObjectConfigs[MapObjectType::WEAVING_MILL1]->inputConsumptionRate = 5.0;
-    mapObjectConfigs[MapObjectType::WEAVING_MILL1]->inhabitants = 2;
-    mapMapObjectNameInSavefile[mapObjectConfigs[MapObjectType::WEAVING_MILL1]->nameInSavefile] = MapObjectType::WEAVING_MILL1;
-
-    mapObjectConfigs[MapObjectType::CATTLE_FARM] = new MapObjectConfig();
-    mapObjectConfigs[MapObjectType::CATTLE_FARM]->name = "Rinderfarm";
-    mapObjectConfigs[MapObjectType::CATTLE_FARM]->mapWidth = 2;
-    mapObjectConfigs[MapObjectType::CATTLE_FARM]->mapHeight = 2;
-    mapObjectConfigs[MapObjectType::CATTLE_FARM]->nameInSavefile = "cattle_farm";
-    mapObjectConfigs[MapObjectType::CATTLE_FARM]->structurePlacing = StructurePlacing::INDIVIDUALLY;
-    mapObjectConfigs[MapObjectType::CATTLE_FARM]->catchmentArea = new RectangleData<char>(6, 6);
-    memcpy(mapObjectConfigs[MapObjectType::CATTLE_FARM]->catchmentArea->data, "011110111111111111111111111111011110", 36);
-    mapObjectConfigs[MapObjectType::CATTLE_FARM]->buildingCosts = { 100, 1, 4, 0 };
-    mapObjectConfigs[MapObjectType::CATTLE_FARM]->buildingProduction = {
-        GoodsSlot(getGood("cattle"), 4),
-        GoodsSlot(),
-        GoodsSlot()
-    };
-    mapObjectConfigs[MapObjectType::CATTLE_FARM]->productionRate = 7.5;
-    mapObjectConfigs[MapObjectType::CATTLE_FARM]->inhabitants = 2;
-    mapMapObjectNameInSavefile[mapObjectConfigs[MapObjectType::CATTLE_FARM]->nameInSavefile] = MapObjectType::CATTLE_FARM;
-
-    mapObjectConfigs[MapObjectType::BUTCHERS] = new MapObjectConfig();
-    mapObjectConfigs[MapObjectType::BUTCHERS]->name = "Fleischerei";
-    mapObjectConfigs[MapObjectType::BUTCHERS]->mapWidth = 2;
-    mapObjectConfigs[MapObjectType::BUTCHERS]->mapHeight = 2;
-    mapObjectConfigs[MapObjectType::BUTCHERS]->nameInSavefile = "butchers";
-    mapObjectConfigs[MapObjectType::BUTCHERS]->structurePlacing = StructurePlacing::INDIVIDUALLY;
-    mapObjectConfigs[MapObjectType::BUTCHERS]->catchmentArea = new RectangleData<char>(22, 22);
-    memcpy(mapObjectConfigs[MapObjectType::BUTCHERS]->catchmentArea->data, "0000000111111110000000000001111111111110000000001111111111111100000001111111111111111000001111111111111111110001111111111111111111100111111111111111111110111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111110111111111111111111110011111111111111111111000111111111111111111000001111111111111111000000011111111111111000000000111111111111000000000000111111110000000", 484);
-    mapObjectConfigs[MapObjectType::BUTCHERS]->buildingCosts = { 150, 3, 6, 0 };
-    mapObjectConfigs[MapObjectType::BUTCHERS]->buildingProduction = {
-        GoodsSlot(getGood("food"), 4),
-        GoodsSlot(getGood("cattle"), 4),
-        GoodsSlot()
-    };
-    mapObjectConfigs[MapObjectType::BUTCHERS]->productionRate = 5;
-    mapObjectConfigs[MapObjectType::BUTCHERS]->inputConsumptionRate = 10;
-    mapObjectConfigs[MapObjectType::BUTCHERS]->inhabitants = 2;
-    mapMapObjectNameInSavefile[mapObjectConfigs[MapObjectType::BUTCHERS]->nameInSavefile] = MapObjectType::BUTCHERS;
-
-    mapObjectConfigs[MapObjectType::TOOLSMITHS] = new MapObjectConfig();
-    mapObjectConfigs[MapObjectType::TOOLSMITHS]->name = "Werkzeugschmiede";
-    mapObjectConfigs[MapObjectType::TOOLSMITHS]->mapWidth = 2;
-    mapObjectConfigs[MapObjectType::TOOLSMITHS]->mapHeight = 2;
-    mapObjectConfigs[MapObjectType::TOOLSMITHS]->nameInSavefile = "toolsmiths";
-    mapObjectConfigs[MapObjectType::TOOLSMITHS]->structurePlacing = StructurePlacing::INDIVIDUALLY;
-    mapObjectConfigs[MapObjectType::TOOLSMITHS]->catchmentArea = new RectangleData<char>(32, 32);
-    memcpy(mapObjectConfigs[MapObjectType::TOOLSMITHS]->catchmentArea->data, "0000000000001111111100000000000000000000011111111111111000000000000000011111111111111111100000000000001111111111111111111100000000000111111111111111111111100000000011111111111111111111111100000001111111111111111111111111100000111111111111111111111111111100001111111111111111111111111111000111111111111111111111111111111001111111111111111111111111111110011111111111111111111111111111101111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111011111111111111111111111111111100111111111111111111111111111111001111111111111111111111111111110001111111111111111111111111111000011111111111111111111111111110000011111111111111111111111111000000011111111111111111111111100000000011111111111111111111110000000000011111111111111111111000000000000011111111111111111100000000000000001111111111111100000000000000000000011111111000000000000", 1024);
-    mapObjectConfigs[MapObjectType::TOOLSMITHS]->buildingCosts = { 150, 3, 2, 5 };
-    mapObjectConfigs[MapObjectType::TOOLSMITHS]->buildingProduction = {
-        GoodsSlot(getGood("tools"), 5),
-        GoodsSlot(),
-        GoodsSlot()
-    };
-    mapObjectConfigs[MapObjectType::TOOLSMITHS]->productionRate = 2.5;
-    mapObjectConfigs[MapObjectType::TOOLSMITHS]->inhabitants = 3;
-    mapMapObjectNameInSavefile[mapObjectConfigs[MapObjectType::TOOLSMITHS]->nameInSavefile] = MapObjectType::TOOLSMITHS;
-
-    mapObjectConfigs[MapObjectType::HUNTERS_HUT] = new MapObjectConfig();
-    mapObjectConfigs[MapObjectType::HUNTERS_HUT]->name = "Jagdhütte";
-    mapObjectConfigs[MapObjectType::HUNTERS_HUT]->mapWidth = 1;
-    mapObjectConfigs[MapObjectType::HUNTERS_HUT]->mapHeight = 1;
-    mapObjectConfigs[MapObjectType::HUNTERS_HUT]->nameInSavefile = "hunters_hut";
-    mapObjectConfigs[MapObjectType::HUNTERS_HUT]->structurePlacing = StructurePlacing::INDIVIDUALLY;
-    mapObjectConfigs[MapObjectType::HUNTERS_HUT]->catchmentArea = new RectangleData<char>(17, 17);
-    memcpy(mapObjectConfigs[MapObjectType::HUNTERS_HUT]->catchmentArea->data, "0000001111100000000001111111110000000111111111110000011111111111110001111111111111110011111111111111101111111111111111111111111111111111111111111111111111111111111111111111111111111111111011111111111111100111111111111111000111111111111100000111111111110000000111111111000000000011111000000", 289);
-    mapObjectConfigs[MapObjectType::HUNTERS_HUT]->buildingCosts = { 50, 2, 2, 0 };
-    mapObjectConfigs[MapObjectType::HUNTERS_HUT]->buildingProduction = {
-        GoodsSlot(getGood("food"), 3),
-        GoodsSlot(),
-        GoodsSlot()
-    };
-    mapObjectConfigs[MapObjectType::HUNTERS_HUT]->productionRate = 2;
-    mapObjectConfigs[MapObjectType::HUNTERS_HUT]->inhabitants = 1;
-    mapMapObjectNameInSavefile[mapObjectConfigs[MapObjectType::HUNTERS_HUT]->nameInSavefile] = MapObjectType::HUNTERS_HUT;
-    
-    mapObjectConfigs[MapObjectType::CATHEDRAL] = new MapObjectConfig();
-    mapObjectConfigs[MapObjectType::CATHEDRAL]->name = "Kathedrale";
-    mapObjectConfigs[MapObjectType::CATHEDRAL]->mapWidth = 6;
-    mapObjectConfigs[MapObjectType::CATHEDRAL]->mapHeight = 4;
-    mapObjectConfigs[MapObjectType::CATHEDRAL]->nameInSavefile = "cathedral";
-    mapObjectConfigs[MapObjectType::CATHEDRAL]->structurePlacing = StructurePlacing::INDIVIDUALLY;
-    mapObjectConfigs[MapObjectType::CATHEDRAL]->catchmentArea = new RectangleData<char>(50, 50);
-    memcpy(mapObjectConfigs[MapObjectType::CATHEDRAL]->catchmentArea->data, "0000000000000000000011111111110000000000000000000000000000000000001111111111111111110000000000000000000000000000001111111111111111111111000000000000000000000000001111111111111111111111111100000000000000000000000111111111111111111111111111100000000000000000000111111111111111111111111111111110000000000000000011111111111111111111111111111111110000000000000001111111111111111111111111111111111110000000000000111111111111111111111111111111111111110000000000011111111111111111111111111111111111111110000000000111111111111111111111111111111111111111100000000011111111111111111111111111111111111111111100000001111111111111111111111111111111111111111111100000011111111111111111111111111111111111111111111000001111111111111111111111111111111111111111111111000011111111111111111111111111111111111111111111110001111111111111111111111111111111111111111111111110011111111111111111111111111111111111111111111111100111111111111111111111111111111111111111111111111001111111111111111111111111111111111111111111111110111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111110111111111111111111111111111111111111111111111111001111111111111111111111111111111111111111111111110011111111111111111111111111111111111111111111111100111111111111111111111111111111111111111111111111000111111111111111111111111111111111111111111111100001111111111111111111111111111111111111111111111000001111111111111111111111111111111111111111111100000011111111111111111111111111111111111111111111000000011111111111111111111111111111111111111111100000000011111111111111111111111111111111111111110000000000111111111111111111111111111111111111111100000000000111111111111111111111111111111111111110000000000000111111111111111111111111111111111111000000000000000111111111111111111111111111111111100000000000000000111111111111111111111111111111110000000000000000000011111111111111111111111111110000000000000000000000011111111111111111111111111000000000000000000000000001111111111111111111111000000000000000000000000000000111111111111111111000000000000000000000000000000000000111111111100000000000000000000", 2500);
-    mapObjectConfigs[MapObjectType::CATHEDRAL]->buildingCosts = { 7500, 25, 25, 70 };
-    mapObjectConfigs[MapObjectType::CATHEDRAL]->buildingProduction = { GoodsSlot(), GoodsSlot(), GoodsSlot() };
-    mapObjectConfigs[MapObjectType::CATHEDRAL]->inhabitants = 5;
-    mapMapObjectNameInSavefile[mapObjectConfigs[MapObjectType::CATHEDRAL]->nameInSavefile] = MapObjectType::CATHEDRAL;
-
-    mapObjectConfigs[MapObjectType::TAVERN] = new MapObjectConfig();
-    mapObjectConfigs[MapObjectType::TAVERN]->name = "Wirtshaus";
-    mapObjectConfigs[MapObjectType::TAVERN]->mapWidth = 2;
-    mapObjectConfigs[MapObjectType::TAVERN]->mapHeight = 3;
-    mapObjectConfigs[MapObjectType::TAVERN]->nameInSavefile = "tavern";
-    mapObjectConfigs[MapObjectType::TAVERN]->structurePlacing = StructurePlacing::INDIVIDUALLY;
-    mapObjectConfigs[MapObjectType::TAVERN]->catchmentArea = new RectangleData<char>(26, 25);
-    memcpy(mapObjectConfigs[MapObjectType::TAVERN]->catchmentArea->data, "00000000011111111000000000000000011111111111100000000000011111111111111110000000001111111111111111110000000111111111111111111110000011111111111111111111110000111111111111111111111100011111111111111111111111100111111111111111111111111011111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111011111111111111111111111100111111111111111111111111000111111111111111111111100001111111111111111111111000001111111111111111111100000001111111111111111110000000001111111111111111000000000000111111111111000000000000000011111111000000000", 650);
-    mapObjectConfigs[MapObjectType::TAVERN]->buildingCosts = { 250, 3, 4, 6 };
-    mapObjectConfigs[MapObjectType::TAVERN]->buildingProduction = { GoodsSlot(), GoodsSlot(), GoodsSlot() };
-    mapObjectConfigs[MapObjectType::TAVERN]->inhabitants = 3;
-    mapMapObjectNameInSavefile[mapObjectConfigs[MapObjectType::TAVERN]->nameInSavefile] = MapObjectType::TAVERN;
-    
-    mapObjectConfigs[MapObjectType::SUGARCANE_PLANTATION] = new MapObjectConfig();
-    mapObjectConfigs[MapObjectType::SUGARCANE_PLANTATION]->name = "Zuckerrohrplantage";
-    mapObjectConfigs[MapObjectType::SUGARCANE_PLANTATION]->mapWidth = 2;
-    mapObjectConfigs[MapObjectType::SUGARCANE_PLANTATION]->mapHeight = 2;
-    mapObjectConfigs[MapObjectType::SUGARCANE_PLANTATION]->nameInSavefile = "sugarcane_plantation";
-    mapObjectConfigs[MapObjectType::SUGARCANE_PLANTATION]->structurePlacing = StructurePlacing::INDIVIDUALLY;
-    mapObjectConfigs[MapObjectType::SUGARCANE_PLANTATION]->catchmentArea = new RectangleData<char>(6, 6);
-    memcpy(mapObjectConfigs[MapObjectType::SUGARCANE_PLANTATION]->catchmentArea->data, "011110111111111111111111111111011110", 36);
-    mapObjectConfigs[MapObjectType::SUGARCANE_PLANTATION]->buildingCosts = { 300, 2, 3, 8 };
-    mapObjectConfigs[MapObjectType::SUGARCANE_PLANTATION]->buildingProduction = {
-        GoodsSlot(getGood("sugar"), 6),
-        GoodsSlot(),
-        GoodsSlot()
-    };
-    mapObjectConfigs[MapObjectType::SUGARCANE_PLANTATION]->productionRate = 2.3;
-    mapObjectConfigs[MapObjectType::SUGARCANE_PLANTATION]->inhabitants = 4;
-    mapMapObjectNameInSavefile[mapObjectConfigs[MapObjectType::SUGARCANE_PLANTATION]->nameInSavefile] = MapObjectType::SUGARCANE_PLANTATION;
-    
-    mapObjectConfigs[MapObjectType::TOBACCO_PLANTATION] = new MapObjectConfig();
-    mapObjectConfigs[MapObjectType::TOBACCO_PLANTATION]->name = "Tabakplantage";
-    mapObjectConfigs[MapObjectType::TOBACCO_PLANTATION]->mapWidth = 2;
-    mapObjectConfigs[MapObjectType::TOBACCO_PLANTATION]->mapHeight = 2;
-    mapObjectConfigs[MapObjectType::TOBACCO_PLANTATION]->nameInSavefile = "tobacco_plantation";
-    mapObjectConfigs[MapObjectType::TOBACCO_PLANTATION]->structurePlacing = StructurePlacing::INDIVIDUALLY;
-    mapObjectConfigs[MapObjectType::TOBACCO_PLANTATION]->catchmentArea = new RectangleData<char>(6, 6);
-    memcpy(mapObjectConfigs[MapObjectType::TOBACCO_PLANTATION]->catchmentArea->data, "011110111111111111111111111111011110", 36);
-    mapObjectConfigs[MapObjectType::TOBACCO_PLANTATION]->buildingCosts = { 300, 2, 3, 8 };
-    mapObjectConfigs[MapObjectType::TOBACCO_PLANTATION]->buildingProduction = {
-        GoodsSlot(getGood("tobacco"), 6),
-        GoodsSlot(),
-        GoodsSlot()
-    };
-    mapObjectConfigs[MapObjectType::TOBACCO_PLANTATION]->productionRate = 1.9;
-    mapObjectConfigs[MapObjectType::TOBACCO_PLANTATION]->inhabitants = 4;
-    mapMapObjectNameInSavefile[mapObjectConfigs[MapObjectType::TOBACCO_PLANTATION]->nameInSavefile] = MapObjectType::TOBACCO_PLANTATION;
-
-    mapObjectConfigs[MapObjectType::DISTILLERY] = new MapObjectConfig();
-    mapObjectConfigs[MapObjectType::DISTILLERY]->name = "Rumbrennerei";
-    mapObjectConfigs[MapObjectType::DISTILLERY]->mapWidth = 2;
-    mapObjectConfigs[MapObjectType::DISTILLERY]->mapHeight = 2;
-    mapObjectConfigs[MapObjectType::DISTILLERY]->nameInSavefile = "distillery";
-    mapObjectConfigs[MapObjectType::DISTILLERY]->structurePlacing = StructurePlacing::INDIVIDUALLY;
-    mapObjectConfigs[MapObjectType::DISTILLERY]->catchmentArea = new RectangleData<char>(26, 26);
-    memcpy(mapObjectConfigs[MapObjectType::DISTILLERY]->catchmentArea->data, "0000000001111111100000000000000001111111111110000000000001111111111111111000000000111111111111111111000000011111111111111111111000001111111111111111111111000011111111111111111111110001111111111111111111111110011111111111111111111111101111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111011111111111111111111111100111111111111111111111111000111111111111111111111100001111111111111111111111000001111111111111111111100000001111111111111111110000000001111111111111111000000000000111111111111000000000000000011111111000000000", 676);
-    mapObjectConfigs[MapObjectType::DISTILLERY]->buildingCosts = { 200, 3, 2, 5 };
-    mapObjectConfigs[MapObjectType::DISTILLERY]->buildingProduction = {
-        GoodsSlot(getGood("alcohol"), 4),
-        GoodsSlot(getGood("sugar"), 6),
-        GoodsSlot()
-    };
-    mapObjectConfigs[MapObjectType::DISTILLERY]->productionRate = 2.5;
-    mapObjectConfigs[MapObjectType::DISTILLERY]->inputConsumptionRate = 5;
-    mapMapObjectNameInSavefile[mapObjectConfigs[MapObjectType::DISTILLERY]->nameInSavefile] = MapObjectType::DISTILLERY;
+    delete xmlDocument;
 }
 
 void ConfigMgr::loadTilesConfig() {
-    // TODO Fehlermanagement, wenn die XML-Datei mal nicht so hübsch aussieht, dass alle Tags da sind
-
     // Datei öffnen
     rapidxml::file<> xmlFile("data/config/tiles.xml");
 
@@ -513,10 +167,10 @@ void ConfigMgr::loadTilesConfig() {
         for (rapidxml::xml_node<>* tmxTileNode = tileNode->first_node("tmx-tile", 8, true); tmxTileNode != nullptr;
              tmxTileNode = tmxTileNode->next_sibling("tmx-tile", 8, true)) {
 
-            int tmxTileIndex = atoi(tmxTileNode->first_attribute("tmx-tile-index", 14, true)->value());
+            int tmxTileIndex = std::stoi(tmxTileNode->first_attribute("tmx-tile-index", 14, true)->value());
             const char* tileViewName = tmxTileNode->first_attribute("view", 4, true)->value();
-            int xOffsetInTileset = atoi(tmxTileNode->first_attribute("x", 1, true)->value());
-            int yOffsetInTileset = atoi(tmxTileNode->first_attribute("y", 1, true)->value());
+            int xOffsetInTileset = std::stoi(tmxTileNode->first_attribute("x", 1, true)->value());
+            int yOffsetInTileset = std::stoi(tmxTileNode->first_attribute("y", 1, true)->value());
 
             FourthDirection tileView = Direction::fromString(tileViewName);
             mapTileConfig.mapTileViewsOffsetXYInTileset[tileView] =
@@ -554,4 +208,77 @@ bool ConfigMgr::xmlAttributeToBool(rapidxml::xml_attribute<>* attribute, bool de
         std::cerr << "Illegal bool value '" << value << "'." << std::endl;
         throw std::runtime_error("Illegal bool value");
     }
+}
+
+RectangleData<char>* ConfigMgr::parseCatchmentArea(const char* catchmentAreaValue) {
+    // Step 1: Durchgehen und width/height des Einzugsbereichs prüfen und ob alles zusammenpasst ///////////////////////
+    bool notReachedFirstLine = true;
+    int x = 0, y = 0; // 0-based Koordinaten, die wir grade vor uns haben
+    int catchmentAreaWidth = 0;
+    for (const char* ptr = catchmentAreaValue; *ptr != '\0'; ptr++) {
+        if (notReachedFirstLine) {
+            if (*ptr == '\n') {
+                notReachedFirstLine = false;
+            } else if (*ptr == ' ') {
+                // Zeichen ok, ignorieren
+            } else {
+                throw std::runtime_error("Could not parse catchmentArea: Illegal char before first line");
+            }
+            continue;
+        }
+
+        if (*ptr == ' ') {
+            if (x == 0) {
+                continue; // Leerzeichen am Zeilenanfang ok
+            } else {
+                throw std::runtime_error("Could not parse catchmentArea: Illegal space inside line");
+            }
+        }
+
+        if (*ptr == '0' || *ptr == '1') {
+            x++;
+        }
+
+        if (*ptr == '\n') {
+            // Zeile zu Ende? Wenn erste Zeile, gibt diese die Breite des Einzugsbereichs vor.
+            // Jede weitere Zeile muss dieselbe Breite haben.
+            if (y == 0) {
+                catchmentAreaWidth = x;
+            } else {
+                if (x != catchmentAreaWidth) {
+                    throw std::runtime_error("Could not parse catchmentArea: widths are not equal");
+                }
+            }
+
+            x = 0;
+            y++;
+        }
+    }
+
+    // Letzte Zeile muss leer sein.
+    if (x != 0) {
+        throw std::runtime_error("Could not parse catchmentArea: Last line was not completly empty.");
+    }
+    int catchmentAreaHeight = y;
+
+    // Step 2: Nun nur durchgehen und die '1'/'0'-Zeichen aufnehmen
+    RectangleData<char>* catchmentArea = new RectangleData<char>(catchmentAreaWidth, catchmentAreaHeight);
+
+    int i = 0;
+    for (const char* ptr = catchmentAreaValue; *ptr != '\0'; ptr++) {
+        if (*ptr == '0' || *ptr == '1') {
+            catchmentArea->data[i++] = *ptr;
+        }
+    }
+
+    return catchmentArea;
+}
+
+void ConfigMgr::readGoodSlotConfig(GoodsSlot& goodSlot, rapidxml::xml_node<>* produtionSlotNode) {
+    const char* goodName = produtionSlotNode->first_attribute("good", 4, true)->value();
+    const Good* good = getGood(goodName);
+
+    goodSlot.good = good;
+    goodSlot.capacity = (unsigned int) std::stoul(produtionSlotNode->first_attribute("capacity", 8, true)->value());
+    goodSlot.rate = std::stod(produtionSlotNode->first_attribute("rate", 4, true)->value());
 }

@@ -22,9 +22,8 @@ void GuiColonyGoodsWidget::renderElement(IRenderer* renderer) {
         return;
     }
 
-    const MapObjectType& mapObjectType = selectedBuilding->getMapObjectType();
-    if (mapObjectType != OFFICE1 && mapObjectType != OFFICE2 && mapObjectType != MARKETPLACE) {
-        return; // Widget wird nur für Kontor und Marktplatz angezeigt
+    if (!selectedBuilding->isStorageBuilding()) {
+        return; // Widget wird nur für Lagergebäude angezeigt
     }
 
     int windowX, windowY;

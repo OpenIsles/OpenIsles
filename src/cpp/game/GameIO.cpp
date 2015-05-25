@@ -42,7 +42,7 @@ void GameIO::loadGameFromTMX(
             objectgroupIslesNode = objectgroupNode;
         } else if (strcmp(layerName, "colonies") == 0) {
             objectgroupColoniesNode = objectgroupNode;
-        } else if (strcmp(layerName, "mapobjects") == 0) {
+        } else if (strcmp(layerName, "map-objects") == 0) {
             objectgroupMapObjectsNode = objectgroupNode;
         }
     }
@@ -66,10 +66,10 @@ void GameIO::loadGameFromTMX(
 void GameIO::loadPlayers(Game* game, rapidxml::xml_node<>* mapNode) {
     rapidxml::xml_node<>* propertiesNode = mapNode->first_node("properties", 10, true);
 
-    int currentPlayerNr = std::atoi(getPropertyValueFromPropertiesNode(propertiesNode, "current_player"));
+    int currentPlayerNr = std::atoi(getPropertyValueFromPropertiesNode(propertiesNode, "current-player"));
 
     for (int i = 1; i <= 4; i++) {
-        std::string playerAttrPrefix = "player" + toString(i) + "_";
+        std::string playerAttrPrefix = "player" + toString(i) + "-";
 
         // Spielerfarbe
         std::string playerColorAttrName = playerAttrPrefix + "color";
@@ -210,7 +210,7 @@ void GameIO::loadColonies(Game* game, const ConfigMgr* configMgr, rapidxml::xml_
         const std::unordered_map<std::string, Good>& allGoods = configMgr->getAllGoods();
         for (auto iter = allGoods.cbegin(); iter != allGoods.cend(); iter++) {
             const Good& good = iter->second;
-            std::string xmlAttributeName = "goods_" + good.name;
+            std::string xmlAttributeName = "goods-" + good.name;
 
             const char* xmlAttributeValue = getPropertyValueFromPropertiesNode(propertiesNode, xmlAttributeName.c_str());
             if (xmlAttributeValue != nullptr) {
@@ -241,9 +241,9 @@ void GameIO::loadMapObjects(Game* game, const ConfigMgr* configMgr, rapidxml::xm
             int playerNr = std::atoi(getPropertyValueFromPropertiesNode(propertiesNode, "player"));
             Player* player = game->getPlayer(playerNr - 1);
 
-            const MapObjectType& mapObjectType = configMgr->getMapObjectType(nodeNameValue);
-            if (mapObjectType == MapObjectType::NO_MAP_OBJECT) {
-                std::cerr << "Illegal structure or building name '" << nodeNameValue << "'" << std::endl;
+            const MapObjectType* mapObjectType = configMgr->getMapObjectType(nodeNameValue);
+            if (mapObjectType == nullptr) {
+                std::cerr << "Illegal mapObjectType '" << nodeNameValue << "'" << std::endl;
                 throw std::runtime_error("Illegal structure or building name");
             }
 
@@ -254,8 +254,8 @@ void GameIO::loadMapObjects(Game* game, const ConfigMgr* configMgr, rapidxml::xm
         else if (strcmp(nodeType, "harvestable") == 0) {
             // TODO Aus nodeNameValue weiteres Identifizierungsmerkmal lesen (verschiedene Tiles, Nord-/Südwälder zu haben, Wald/Getreide/etc.)
             // TODO Refactoring: duplicate code
-            const MapObjectType& mapObjectType = configMgr->getMapObjectType(nodeNameValue);
-            if (mapObjectType == MapObjectType::NO_MAP_OBJECT) {
+            const MapObjectType* mapObjectType = configMgr->getMapObjectType(nodeNameValue);
+            if (mapObjectType == nullptr) {
                 std::cerr << "Illegal harvestable name '" << nodeNameValue << "'" << std::endl;
                 throw std::runtime_error("Illegal harvestable name");
             }

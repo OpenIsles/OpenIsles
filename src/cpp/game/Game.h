@@ -153,7 +153,7 @@ public:
      * @return Zeiger auf das neu angelegte Harvestable-Objekt
      */
     MapObjectFixed* addMapObjectFixed(
-        const MapCoords& mapCoords, MapObjectType mapObjectType, const FourthDirection& view, Player* player);
+        const MapCoords& mapCoords, const MapObjectType* mapObjectType, const FourthDirection& view, Player* player);
 
     /**
      * @brief Fügt eine neue Landschaftkachel, die abgeerntet werden kann, der Karte hinzu.
@@ -164,7 +164,7 @@ public:
      * @return Zeiger auf das neu angelegte Harvestable-Objekt
      */
     Harvestable* addHarvestable(
-        const MapCoords& mapCoords, MapObjectType mapObjectType, double age, const FourthDirection& view);
+        const MapCoords& mapCoords, const MapObjectType* mapObjectType, double age, const FourthDirection& view);
 
     /**
      * @brief Fügt eine neue Struktur der Karte hinzu.
@@ -175,7 +175,7 @@ public:
      * @return Zeiger auf die neu angelegte Struktur
      */
     Structure* addStructure(
-        const MapCoords& mapCoords, MapObjectType mapObjectType, const FourthDirection& view, Player* player);
+        const MapCoords& mapCoords, const MapObjectType* mapObjectType, const FourthDirection& view, Player* player);
 
     /**
      * @brief Ändert die Einwohner innerhalb eines Gebäudes. Positive Werte fügen Bewohner hinzu, negative nehmen

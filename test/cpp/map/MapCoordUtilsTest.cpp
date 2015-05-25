@@ -119,7 +119,7 @@ public:
     MapCoordUtilsTestGraphicsMgr(GraphicSet* const graphicSet) :
         NoSDLGraphicsMgr(nullptr, nullptr), graphicSet(graphicSet) {}
 
-    virtual std::string getGraphicSetNameForMapObject(MapObjectType mapObjectType) const {
+    virtual std::string getGraphicSetNameForMapObject(const MapObjectType* mapObjectType) const {
         return "irrelevant :-)";
     }
 

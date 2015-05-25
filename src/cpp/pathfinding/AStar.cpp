@@ -326,7 +326,7 @@ bool AStar::isTileWalkable(const MapCoords& mapCoords, Building* sourceBuilding,
 
     // Einschränkung durch Einzugsbereich?
     if (buildingToUseCatchmentArea != nullptr) {
-        if (!buildingToUseCatchmentArea->isInsideCatchmentArea(context->configMgr, mapCoords)) {
+        if (!buildingToUseCatchmentArea->isInsideCatchmentArea(mapCoords)) {
             return false;
         }
     }

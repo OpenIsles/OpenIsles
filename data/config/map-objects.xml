@@ -1,0 +1,1266 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map-objects>
+
+    <!-- Handwerksbetriebe -->
+
+    <building name="stonemason" width="2" height="2">
+        <title>Steinbruch</title>
+        <structure-placing>individually</structure-placing>
+        <building-costs>
+            <coins>100</coins>
+            <tools>5</tools>
+            <wood>5</wood>
+            <bricks>0</bricks>
+        </building-costs>
+        <catchment-area>
+            0000011111100000
+            0001111111111000
+            0011111111111100
+            0111111111111110
+            0111111111111110
+            1111111111111111
+            1111111111111111
+            1111111111111111
+            1111111111111111
+            1111111111111111
+            1111111111111111
+            0111111111111110
+            0111111111111110
+            0011111111111100
+            0001111111111000
+            0000011111100000
+        </catchment-area>
+        <production-slots>
+            <output good="bricks" capacity="8" rate="2.9" />
+        </production-slots>
+        <inhabitants>2</inhabitants>
+    </building>
+
+    <building name="toolsmiths" width="2" height="2">
+        <title>Werkzeugschmiede</title>
+        <structure-placing>individually</structure-placing>
+        <building-costs>
+            <coins>150</coins>
+            <tools>3</tools>
+            <wood>2</wood>
+            <bricks>5</bricks>
+        </building-costs>
+        <catchment-area>
+            00000000000011111111000000000000
+            00000000011111111111111000000000
+            00000001111111111111111110000000
+            00000011111111111111111111000000
+            00000111111111111111111111100000
+            00001111111111111111111111110000
+            00011111111111111111111111111000
+            00111111111111111111111111111100
+            00111111111111111111111111111100
+            01111111111111111111111111111110
+            01111111111111111111111111111110
+            01111111111111111111111111111110
+            11111111111111111111111111111111
+            11111111111111111111111111111111
+            11111111111111111111111111111111
+            11111111111111111111111111111111
+            11111111111111111111111111111111
+            11111111111111111111111111111111
+            11111111111111111111111111111111
+            11111111111111111111111111111111
+            01111111111111111111111111111110
+            01111111111111111111111111111110
+            01111111111111111111111111111110
+            00111111111111111111111111111100
+            00111111111111111111111111111100
+            00011111111111111111111111111000
+            00001111111111111111111111110000
+            00000111111111111111111111100000
+            00000011111111111111111111000000
+            00000001111111111111111110000000
+            00000000011111111111111000000000
+            00000000000011111111000000000000
+        </catchment-area>
+        <production-slots>
+            <output good="tools" capacity="5" rate="1.65" />
+        </production-slots>
+        <inhabitants>3</inhabitants>
+    </building>
+
+    <building name="distillery" width="2" height="2">
+        <title>Rumbrennerei</title>
+        <structure-placing>individually</structure-placing>
+        <building-costs>
+            <coins>200</coins>
+            <tools>3</tools>
+            <wood>2</wood>
+            <bricks>5</bricks>
+        </building-costs>
+        <catchment-area>
+            00000000011111111000000000
+            00000001111111111110000000
+            00000111111111111111100000
+            00001111111111111111110000
+            00011111111111111111111000
+            00111111111111111111111100
+            00111111111111111111111100
+            01111111111111111111111110
+            01111111111111111111111110
+            11111111111111111111111111
+            11111111111111111111111111
+            11111111111111111111111111
+            11111111111111111111111111
+            11111111111111111111111111
+            11111111111111111111111111
+            11111111111111111111111111
+            11111111111111111111111111
+            01111111111111111111111110
+            01111111111111111111111110
+            00111111111111111111111100
+            00111111111111111111111100
+            00011111111111111111111000
+            00001111111111111111110000
+            00000111111111111111100000
+            00000001111111111110000000
+            00000000011111111000000000
+        </catchment-area>
+        <production-slots>
+            <input good="sugar" capacity="6" rate="5.0" />
+            <output good="alcohol" capacity="4" rate="2.5" />
+        </production-slots>
+        <inhabitants>3</inhabitants>
+    </building>
+
+    <building name="weaving-mill1" width="2" height="2">
+        <title>Webstube</title>
+        <structure-placing>individually</structure-placing>
+        <building-costs>
+            <coins>200</coins>
+            <tools>3</tools>
+            <wood>6</wood>
+            <bricks>0</bricks>
+        </building-costs>
+        <catchment-area>
+            00000000000011111111000000000000
+            00000000011111111111111000000000
+            00000001111111111111111110000000
+            00000011111111111111111111000000
+            00000111111111111111111111100000
+            00001111111111111111111111110000
+            00011111111111111111111111111000
+            00111111111111111111111111111100
+            00111111111111111111111111111100
+            01111111111111111111111111111110
+            01111111111111111111111111111110
+            01111111111111111111111111111110
+            11111111111111111111111111111111
+            11111111111111111111111111111111
+            11111111111111111111111111111111
+            11111111111111111111111111111111
+            11111111111111111111111111111111
+            11111111111111111111111111111111
+            11111111111111111111111111111111
+            11111111111111111111111111111111
+            01111111111111111111111111111110
+            01111111111111111111111111111110
+            01111111111111111111111111111110
+            00111111111111111111111111111100
+            00111111111111111111111111111100
+            00011111111111111111111111111000
+            00001111111111111111111111110000
+            00000111111111111111111111100000
+            00000011111111111111111111000000
+            00000001111111111111111110000000
+            00000000011111111111111000000000
+            00000000000011111111000000000000
+        </catchment-area>
+        <production-slots>
+            <input good="wool" capacity="7" rate="3.9" />
+            <output good="cloth" capacity="7" rate="1.95" />
+        </production-slots>
+        <inhabitants>2</inhabitants>
+    </building>
+
+    <building name="butchers" width="2" height="2">
+        <title>Fleischerei</title>
+        <structure-placing>individually</structure-placing>
+        <building-costs>
+            <coins>150</coins>
+            <tools>3</tools>
+            <wood>6</wood>
+            <bricks>0</bricks>
+        </building-costs>
+        <catchment-area>
+            0000000111111110000000
+            0000011111111111100000
+            0000111111111111110000
+            0001111111111111111000
+            0011111111111111111100
+            0111111111111111111110
+            0111111111111111111110
+            1111111111111111111111
+            1111111111111111111111
+            1111111111111111111111
+            1111111111111111111111
+            1111111111111111111111
+            1111111111111111111111
+            1111111111111111111111
+            1111111111111111111111
+            0111111111111111111110
+            0111111111111111111110
+            0011111111111111111100
+            0001111111111111111000
+            0000111111111111110000
+            0000011111111111100000
+            0000000111111110000000
+        </catchment-area>
+        <production-slots>
+            <input good="cattle" capacity="4" rate="4.8" />
+            <output good="food" capacity="4" rate="2.4" />
+        </production-slots>
+        <inhabitants>2</inhabitants>
+    </building>
+
+    <!-- Farmen und Plantagen -->
+
+    <building name="sugarcane-plantation" width="2" height="2">
+        <title>Zuckerrohrplantage</title>
+        <structure-placing>individually</structure-placing>
+        <building-costs>
+            <coins>300</coins>
+            <tools>2</tools>
+            <wood>3</wood>
+            <bricks>8</bricks>
+        </building-costs>
+        <catchment-area>
+            011110
+            111111
+            111111
+            111111
+            111111
+            011110
+        </catchment-area>
+        <production-slots>
+            <output good="sugar" capacity="6" rate="2.3" />
+        </production-slots>
+        <inhabitants>4</inhabitants>
+    </building>
+
+    <harvestable name="sugarcane-field" width="1" height="1">
+        <title>Zuckerrohrfeld</title>
+        <structure-placing>rectangle</structure-placing>
+        <building-costs>
+            <coins>5</coins>
+            <tools>0</tools>
+            <wood>0</wood>
+            <bricks>0</bricks>
+        </building-costs>
+        <max-age>4</max-age>
+    </harvestable>
+
+    <building name="tobacco-plantation" width="2" height="2">
+        <title>Tabakplantage</title>
+        <structure-placing>individually</structure-placing>
+        <building-costs>
+            <coins>300</coins>
+            <tools>2</tools>
+            <wood>3</wood>
+            <bricks>8</bricks>
+        </building-costs>
+        <catchment-area>
+            011110
+            111111
+            111111
+            111111
+            111111
+            011110
+        </catchment-area>
+        <production-slots>
+            <output good="tobacco" capacity="6" rate="1.9" />
+        </production-slots>
+        <inhabitants>4</inhabitants>
+    </building>
+
+    <harvestable name="tobacco-field" width="1" height="1">
+        <title>Tabakfeld</title>
+        <structure-placing>rectangle</structure-placing>
+        <building-costs>
+            <coins>5</coins>
+            <tools>0</tools>
+            <wood>0</wood>
+            <bricks>0</bricks>
+        </building-costs>
+        <max-age>6</max-age>
+    </harvestable>
+
+    <building name="sheep-farm" width="2" height="2">
+        <title>Schaffarm</title>
+        <structure-placing>individually</structure-placing>
+        <building-costs>
+            <coins>200</coins>
+            <tools>2</tools>
+            <wood>4</wood>
+            <bricks>0</bricks>
+        </building-costs>
+        <catchment-area>
+            00111100
+            01111110
+            11111111
+            11111111
+            11111111
+            11111111
+            01111110
+            00111100
+        </catchment-area>
+        <production-slots>
+            <output good="wool" capacity="3" rate="1.95" />
+        </production-slots>
+        <inhabitants>2</inhabitants>
+    </building>
+
+    <building name="cattle-farm" width="2" height="2">
+        <title>Rinderfarm</title>
+        <structure-placing>individually</structure-placing>
+        <building-costs>
+            <coins>100</coins>
+            <tools>1</tools>
+            <wood>4</wood>
+            <bricks>0</bricks>
+        </building-costs>
+        <catchment-area>
+            011110
+            111111
+            111111
+            111111
+            111111
+            011110
+        </catchment-area>
+        <production-slots>
+            <output good="cattle" capacity="4" rate="2.3" />
+        </production-slots>
+        <inhabitants>2</inhabitants>
+    </building>
+
+    <building name="hunters-hut" width="1" height="1">
+        <title>Jägerhütte</title>
+        <structure-placing>individually</structure-placing>
+        <building-costs>
+            <coins>50</coins>
+            <tools>2</tools>
+            <wood>2</wood>
+            <bricks>0</bricks>
+        </building-costs>
+        <catchment-area>
+            00000011111000000
+            00001111111110000
+            00011111111111000
+            00111111111111100
+            01111111111111110
+            01111111111111110
+            11111111111111111
+            11111111111111111
+            11111111111111111
+            11111111111111111
+            11111111111111111
+            01111111111111110
+            01111111111111110
+            00111111111111100
+            00011111111111000
+            00001111111110000
+            00000011111000000
+        </catchment-area>
+        <production-slots>
+            <output good="food" capacity="3" rate="2.0" />
+        </production-slots>
+        <inhabitants>1</inhabitants>
+    </building>
+
+    <building name="foresters" width="2" height="2">
+        <title>Forsthaus</title>
+        <structure-placing>individually</structure-placing>
+        <building-costs>
+            <coins>50</coins>
+            <tools>2</tools>
+            <wood>0</wood>
+            <bricks>0</bricks>
+        </building-costs>
+        <catchment-area>
+            00111100
+            01111110
+            11111111
+            11111111
+            11111111
+            11111111
+            01111110
+            00111100
+        </catchment-area>
+        <production-slots>
+            <output good="wood" capacity="10" rate="2.8" />
+        </production-slots>
+        <inhabitants>1</inhabitants>
+    </building>
+
+    <harvestable name="northern-forest1" width="1" height="1">
+        <title>Wald</title>
+        <structure-placing>rectangle</structure-placing>
+        <building-costs>
+            <coins>5</coins>
+            <tools>0</tools>
+            <wood>0</wood>
+            <bricks>0</bricks>
+        </building-costs>
+        <max-age>4</max-age>
+    </harvestable>
+
+    <harvestable name="northern-forest2" width="1" height="1">
+        <title>Wald</title>
+        <structure-placing>rectangle</structure-placing>
+        <building-costs>
+            <coins>5</coins>
+            <tools>0</tools>
+            <wood>0</wood>
+            <bricks>0</bricks>
+        </building-costs>
+        <max-age>4</max-age>
+    </harvestable>
+
+    <!-- Hafenanlagen -->
+
+    <building name="office1" width="3" height="2">
+        <title>Kontor I</title>
+        <structure-placing>individually</structure-placing>
+        <building-costs>
+            <coins>100</coins>
+            <tools>3</tools>
+            <wood>6</wood>
+            <bricks>0</bricks>
+        </building-costs>
+        <catchment-area>
+            00000000000000011111111000000000000000
+            00000000000111111111111111100000000000
+            00000000011111111111111111111000000000
+            00000000111111111111111111111100000000
+            00000011111111111111111111111111000000
+            00000111111111111111111111111111100000
+            00001111111111111111111111111111110000
+            00001111111111111111111111111111110000
+            00011111111111111111111111111111111000
+            00111111111111111111111111111111111100
+            00111111111111111111111111111111111100
+            01111111111111111111111111111111111110
+            01111111111111111111111111111111111110
+            01111111111111111111111111111111111110
+            01111111111111111111111111111111111110
+            11111111111111111111111111111111111111
+            11111111111111111111111111111111111111
+            11111111111111111111111111111111111111
+            11111111111111111111111111111111111111
+            11111111111111111111111111111111111111
+            11111111111111111111111111111111111111
+            11111111111111111111111111111111111111
+            11111111111111111111111111111111111111
+            01111111111111111111111111111111111110
+            01111111111111111111111111111111111110
+            01111111111111111111111111111111111110
+            01111111111111111111111111111111111110
+            00111111111111111111111111111111111100
+            00111111111111111111111111111111111100
+            00011111111111111111111111111111111000
+            00001111111111111111111111111111110000
+            00001111111111111111111111111111110000
+            00000111111111111111111111111111100000
+            00000011111111111111111111111111000000
+            00000000111111111111111111111100000000
+            00000000011111111111111111111000000000
+            00000000000111111111111111100000000000
+            00000000000000011111111000000000000000
+        </catchment-area>
+        <inhabitants>2</inhabitants>
+    </building>
+
+    <building name="office2" width="3" height="2">
+        <title>Kontor II</title>
+        <structure-placing>individually</structure-placing>
+        <building-costs>
+            <coins>180</coins>
+            <tools>3</tools>
+            <wood>7</wood>
+            <bricks>0</bricks>
+        </building-costs>
+        <catchment-area>
+            00000000000000011111111000000000000000
+            00000000000111111111111111100000000000
+            00000000011111111111111111111000000000
+            00000000111111111111111111111100000000
+            00000011111111111111111111111111000000
+            00000111111111111111111111111111100000
+            00001111111111111111111111111111110000
+            00001111111111111111111111111111110000
+            00011111111111111111111111111111111000
+            00111111111111111111111111111111111100
+            00111111111111111111111111111111111100
+            01111111111111111111111111111111111110
+            01111111111111111111111111111111111110
+            01111111111111111111111111111111111110
+            01111111111111111111111111111111111110
+            11111111111111111111111111111111111111
+            11111111111111111111111111111111111111
+            11111111111111111111111111111111111111
+            11111111111111111111111111111111111111
+            11111111111111111111111111111111111111
+            11111111111111111111111111111111111111
+            11111111111111111111111111111111111111
+            11111111111111111111111111111111111111
+            01111111111111111111111111111111111110
+            01111111111111111111111111111111111110
+            01111111111111111111111111111111111110
+            01111111111111111111111111111111111110
+            00111111111111111111111111111111111100
+            00111111111111111111111111111111111100
+            00011111111111111111111111111111111000
+            00001111111111111111111111111111110000
+            00001111111111111111111111111111110000
+            00000111111111111111111111111111100000
+            00000011111111111111111111111111000000
+            00000000111111111111111111111100000000
+            00000000011111111111111111111000000000
+            00000000000111111111111111100000000000
+            00000000000000011111111000000000000000
+        </catchment-area>
+        <inhabitants>3</inhabitants>
+    </building>
+
+    <!-- Öffentliche Gebäude -->
+
+    <building name="cathedral" width="6" height="4">
+        <title>Kathedrale</title>
+        <structure-placing>individually</structure-placing>
+        <building-costs>
+            <coins>7500</coins>
+            <tools>25</tools>
+            <wood>25</wood>
+            <bricks>70</bricks>
+        </building-costs>
+        <catchment-area>
+            00000000000000000000111111111100000000000000000000
+            00000000000000001111111111111111110000000000000000
+            00000000000000111111111111111111111100000000000000
+            00000000000011111111111111111111111111000000000000
+            00000000000111111111111111111111111111100000000000
+            00000000011111111111111111111111111111111000000000
+            00000000111111111111111111111111111111111100000000
+            00000001111111111111111111111111111111111110000000
+            00000011111111111111111111111111111111111111000000
+            00000111111111111111111111111111111111111111100000
+            00000111111111111111111111111111111111111111100000
+            00001111111111111111111111111111111111111111110000
+            00011111111111111111111111111111111111111111111000
+            00011111111111111111111111111111111111111111111000
+            00111111111111111111111111111111111111111111111100
+            00111111111111111111111111111111111111111111111100
+            01111111111111111111111111111111111111111111111110
+            01111111111111111111111111111111111111111111111110
+            01111111111111111111111111111111111111111111111110
+            01111111111111111111111111111111111111111111111110
+            11111111111111111111111111111111111111111111111111
+            11111111111111111111111111111111111111111111111111
+            11111111111111111111111111111111111111111111111111
+            11111111111111111111111111111111111111111111111111
+            11111111111111111111111111111111111111111111111111
+            11111111111111111111111111111111111111111111111111
+            11111111111111111111111111111111111111111111111111
+            11111111111111111111111111111111111111111111111111
+            11111111111111111111111111111111111111111111111111
+            11111111111111111111111111111111111111111111111111
+            01111111111111111111111111111111111111111111111110
+            01111111111111111111111111111111111111111111111110
+            01111111111111111111111111111111111111111111111110
+            01111111111111111111111111111111111111111111111110
+            00111111111111111111111111111111111111111111111100
+            00111111111111111111111111111111111111111111111100
+            00011111111111111111111111111111111111111111111000
+            00011111111111111111111111111111111111111111111000
+            00001111111111111111111111111111111111111111110000
+            00000111111111111111111111111111111111111111100000
+            00000111111111111111111111111111111111111111100000
+            00000011111111111111111111111111111111111111000000
+            00000001111111111111111111111111111111111110000000
+            00000000111111111111111111111111111111111100000000
+            00000000011111111111111111111111111111111000000000
+            00000000000111111111111111111111111111100000000000
+            00000000000011111111111111111111111111000000000000
+            00000000000000111111111111111111111100000000000000
+            00000000000000001111111111111111110000000000000000
+            00000000000000000000111111111100000000000000000000
+        </catchment-area>
+        <inhabitants>5</inhabitants>
+    </building>
+
+    <building name="tavern" width="2" height="3">
+        <title>Wirtshaus</title>
+        <structure-placing>individually</structure-placing>
+        <building-costs>
+            <coins>250</coins>
+            <tools>3</tools>
+            <wood>4</wood>
+            <bricks>6</bricks>
+        </building-costs>
+        <catchment-area>
+            00000000011111111000000000
+            00000001111111111110000000
+            00000111111111111111100000
+            00001111111111111111110000
+            00011111111111111111111000
+            00111111111111111111111100
+            00111111111111111111111100
+            01111111111111111111111110
+            01111111111111111111111110
+            11111111111111111111111111
+            11111111111111111111111111
+            11111111111111111111111111
+            11111111111111111111111111
+            11111111111111111111111111
+            11111111111111111111111111
+            11111111111111111111111111
+            01111111111111111111111110
+            01111111111111111111111110
+            00111111111111111111111100
+            00111111111111111111111100
+            00011111111111111111111000
+            00001111111111111111110000
+            00000111111111111111100000
+            00000001111111111110000000
+            00000000011111111000000000
+        </catchment-area>
+        <inhabitants>3</inhabitants>
+    </building>
+
+    <building name="pioneers-house1" width="2" height="2">
+        <title>Haus (Pioniere)</title>
+        <structure-placing>individually</structure-placing>
+        <building-costs>
+            <coins>0</coins>
+            <tools>0</tools>
+            <wood>3</wood>
+            <bricks>0</bricks>
+        </building-costs>
+        <catchment-area>
+            00001111110000
+            00011111111000
+            00111111111100
+            01111111111110
+            11111111111111
+            11111111111111
+            11111111111111
+            11111111111111
+            11111111111111
+            11111111111111
+            01111111111110
+            00111111111100
+            00011111111000
+            00001111110000
+        </catchment-area>
+    </building>
+
+    <building name="pioneers-house2" width="2" height="2">
+        <title>Haus (Pioniere)</title>
+        <structure-placing>individually</structure-placing>
+        <building-costs>
+            <coins>0</coins>
+            <tools>0</tools>
+            <wood>3</wood>
+            <bricks>0</bricks>
+        </building-costs>
+        <catchment-area>
+            00001111110000
+            00011111111000
+            00111111111100
+            01111111111110
+            11111111111111
+            11111111111111
+            11111111111111
+            11111111111111
+            11111111111111
+            11111111111111
+            01111111111110
+            00111111111100
+            00011111111000
+            00001111110000
+        </catchment-area>
+    </building>
+
+    <building name="pioneers-house3" width="2" height="2">
+        <title>Haus (Pioniere)</title>
+        <structure-placing>individually</structure-placing>
+        <building-costs>
+            <coins>0</coins>
+            <tools>0</tools>
+            <wood>3</wood>
+            <bricks>0</bricks>
+        </building-costs>
+        <catchment-area>
+            00001111110000
+            00011111111000
+            00111111111100
+            01111111111110
+            11111111111111
+            11111111111111
+            11111111111111
+            11111111111111
+            11111111111111
+            11111111111111
+            01111111111110
+            00111111111100
+            00011111111000
+            00001111110000
+        </catchment-area>
+    </building>
+
+    <building name="pioneers-house4" width="2" height="2">
+        <title>Haus (Pioniere)</title>
+        <structure-placing>individually</structure-placing>
+        <building-costs>
+            <coins>0</coins>
+            <tools>0</tools>
+            <wood>3</wood>
+            <bricks>0</bricks>
+        </building-costs>
+        <catchment-area>
+            00001111110000
+            00011111111000
+            00111111111100
+            01111111111110
+            11111111111111
+            11111111111111
+            11111111111111
+            11111111111111
+            11111111111111
+            11111111111111
+            01111111111110
+            00111111111100
+            00011111111000
+            00001111110000
+        </catchment-area>
+    </building>
+
+    <building name="pioneers-house5" width="2" height="2">
+        <title>Haus (Pioniere)</title>
+        <structure-placing>individually</structure-placing>
+        <building-costs>
+            <coins>0</coins>
+            <tools>0</tools>
+            <wood>3</wood>
+            <bricks>0</bricks>
+        </building-costs>
+        <catchment-area>
+            00001111110000
+            00011111111000
+            00111111111100
+            01111111111110
+            11111111111111
+            11111111111111
+            11111111111111
+            11111111111111
+            11111111111111
+            11111111111111
+            01111111111110
+            00111111111100
+            00011111111000
+            00001111110000
+        </catchment-area>
+    </building>
+
+    <building name="settlers-house1" width="2" height="2">
+        <title>Haus (Siedler)</title>
+        <structure-placing>individually</structure-placing>
+        <building-costs>
+            <coins>0</coins>
+            <tools>1</tools>
+            <wood>3</wood>
+            <bricks>0</bricks>
+        </building-costs>
+        <catchment-area>
+            00001111110000
+            00011111111000
+            00111111111100
+            01111111111110
+            11111111111111
+            11111111111111
+            11111111111111
+            11111111111111
+            11111111111111
+            11111111111111
+            01111111111110
+            00111111111100
+            00011111111000
+            00001111110000
+        </catchment-area>
+    </building>
+
+    <building name="settlers-house2" width="2" height="2">
+        <title>Haus (Siedler)</title>
+        <structure-placing>individually</structure-placing>
+        <building-costs>
+            <coins>0</coins>
+            <tools>1</tools>
+            <wood>3</wood>
+            <bricks>0</bricks>
+        </building-costs>
+        <catchment-area>
+            00001111110000
+            00011111111000
+            00111111111100
+            01111111111110
+            11111111111111
+            11111111111111
+            11111111111111
+            11111111111111
+            11111111111111
+            11111111111111
+            01111111111110
+            00111111111100
+            00011111111000
+            00001111110000
+        </catchment-area>
+    </building>
+
+    <building name="settlers-house3" width="2" height="2">
+        <title>Haus (Siedler)</title>
+        <structure-placing>individually</structure-placing>
+        <building-costs>
+            <coins>0</coins>
+            <tools>1</tools>
+            <wood>3</wood>
+            <bricks>0</bricks>
+        </building-costs>
+        <catchment-area>
+            00001111110000
+            00011111111000
+            00111111111100
+            01111111111110
+            11111111111111
+            11111111111111
+            11111111111111
+            11111111111111
+            11111111111111
+            11111111111111
+            01111111111110
+            00111111111100
+            00011111111000
+            00001111110000
+        </catchment-area>
+    </building>
+
+    <building name="settlers-house4" width="2" height="2">
+        <title>Haus (Siedler)</title>
+        <structure-placing>individually</structure-placing>
+        <building-costs>
+            <coins>0</coins>
+            <tools>1</tools>
+            <wood>3</wood>
+            <bricks>0</bricks>
+        </building-costs>
+        <catchment-area>
+            00001111110000
+            00011111111000
+            00111111111100
+            01111111111110
+            11111111111111
+            11111111111111
+            11111111111111
+            11111111111111
+            11111111111111
+            11111111111111
+            01111111111110
+            00111111111100
+            00011111111000
+            00001111110000
+        </catchment-area>
+    </building>
+
+    <building name="settlers-house5" width="2" height="2">
+        <title>Haus (Siedler)</title>
+        <structure-placing>individually</structure-placing>
+        <building-costs>
+            <coins>0</coins>
+            <tools>1</tools>
+            <wood>3</wood>
+            <bricks>0</bricks>
+        </building-costs>
+        <catchment-area>
+            00001111110000
+            00011111111000
+            00111111111100
+            01111111111110
+            11111111111111
+            11111111111111
+            11111111111111
+            11111111111111
+            11111111111111
+            11111111111111
+            01111111111110
+            00111111111100
+            00011111111000
+            00001111110000
+        </catchment-area>
+    -straight0</building>
+
+    <building name="marketplace" width="4" height="3">
+        <title>Marktplatz</title>
+        <structure-placing>individually</structure-placing>
+        <building-costs>
+            <coins>200</coins>
+            <tools>4</tools>
+            <wood>10</wood>
+            <bricks>0</bricks>
+        </building-costs>
+        <catchment-area>
+            00000000000000011111111000000000000000
+            00000000000111111111111111100000000000
+            00000000011111111111111111111000000000
+            00000000111111111111111111111100000000
+            00000011111111111111111111111111000000
+            00000111111111111111111111111111100000
+            00001111111111111111111111111111110000
+            00001111111111111111111111111111110000
+            00011111111111111111111111111111111000
+            00111111111111111111111111111111111100
+            00111111111111111111111111111111111100
+            01111111111111111111111111111111111110
+            01111111111111111111111111111111111110
+            01111111111111111111111111111111111110
+            01111111111111111111111111111111111110
+            11111111111111111111111111111111111111
+            11111111111111111111111111111111111111
+            11111111111111111111111111111111111111
+            11111111111111111111111111111111111111
+            11111111111111111111111111111111111111
+            11111111111111111111111111111111111111
+            11111111111111111111111111111111111111
+            11111111111111111111111111111111111111
+            01111111111111111111111111111111111110
+            01111111111111111111111111111111111110
+            01111111111111111111111111111111111110
+            01111111111111111111111111111111111110
+            00111111111111111111111111111111111100
+            00111111111111111111111111111111111100
+            00011111111111111111111111111111111000
+            00001111111111111111111111111111110000
+            00001111111111111111111111111111110000
+            00000111111111111111111111111111100000
+            00000011111111111111111111111111000000
+            00000000111111111111111111111100000000
+            00000000011111111111111111111000000000
+            00000000000111111111111111100000000000
+            00000000000000011111111000000000000000
+        </catchment-area>
+        <inhabitants>3</inhabitants>
+    </building>
+
+    <building name="chapel" width="2" height="1">
+        <title>Kapelle</title>
+        <structure-placing>individually</structure-placing>
+        <building-costs>
+            <coins>100</coins>
+            <tools>2</tools>
+            <wood>5</wood>
+            <bricks>0</bricks>
+        </building-costs>
+        <catchment-area>
+            000000111111000000
+            000011111111110000
+            000111111111111000
+            001111111111111100
+            011111111111111110
+            011111111111111110
+            111111111111111111
+            111111111111111111
+            111111111111111111
+            111111111111111111
+            111111111111111111
+            011111111111111110
+            011111111111111110
+            001111111111111100
+            000111111111111000
+            000011111111110000
+            000000111111000000
+        </catchment-area>
+        <inhabitants>3</inhabitants>
+    </building>
+
+    <!-- Straßen und Plätze -->
+
+    <structure name="square1" width="1" height="1">
+        <title>Platz I</title>
+        <structure-placing>rectangle</structure-placing>
+        <building-costs>
+            <coins>5</coins>
+            <tools>0</tools>
+            <wood>0</wood>
+            <bricks>1</bricks>
+        </building-costs>
+    </structure>
+
+    <structure name="square2" width="1" height="1">
+        <title>Platz II</title>
+        <structure-placing>rectangle</structure-placing>
+        <building-costs>
+            <coins>5</coins>
+            <tools>0</tools>
+            <wood>0</wood>
+            <bricks>1</bricks>
+        </building-costs>
+    </structure>
+
+    <structure name="square3" width="1" height="1">
+        <title>Platz III</title>
+        <structure-placing>rectangle</structure-placing>
+        <building-costs>
+            <coins>5</coins>
+            <tools>0</tools>
+            <wood>0</wood>
+            <bricks>1</bricks>
+        </building-costs>
+    </structure>
+
+    <structure name="farm-road-straight0" width="1" height="1">
+        <title>Feldweg</title>
+        <structure-placing>path</structure-placing>
+        <building-costs>
+            <coins>5</coins>
+            <tools>0</tools>
+            <wood>0</wood>
+            <bricks>0</bricks>
+        </building-costs>
+    </structure>
+
+    <structure name="farm-road-straight90" width="1" height="1">
+        <title>Feldweg</title>
+        <structure-placing>path</structure-placing>
+        <building-costs>
+            <coins>5</coins>
+            <tools>0</tools>
+            <wood>0</wood>
+            <bricks>0</bricks>
+        </building-costs>
+    </structure>
+
+    <structure name="farm-road-curve0" width="1" height="1">
+        <title>Feldweg</title>
+        <structure-placing>path</structure-placing>
+        <building-costs>
+            <coins>5</coins>
+            <tools>0</tools>
+            <wood>0</wood>
+            <bricks>0</bricks>
+        </building-costs>
+    </structure>
+
+    <structure name="farm-road-curve90" width="1" height="1">
+        <title>Feldweg</title>
+        <structure-placing>path</structure-placing>
+        <building-costs>
+            <coins>5</coins>
+            <tools>0</tools>
+            <wood>0</wood>
+            <bricks>0</bricks>
+        </building-costs>
+    </structure>
+
+    <structure name="farm-road-curve180" width="1" height="1">
+        <title>Feldweg</title>
+        <structure-placing>path</structure-placing>
+        <building-costs>
+            <coins>5</coins>
+            <tools>0</tools>
+            <wood>0</wood>
+            <bricks>0</bricks>
+        </building-costs>
+    </structure>
+
+    <structure name="farm-road-curve270" width="1" height="1">
+        <title>Feldweg</title>
+        <structure-placing>path</structure-placing>
+        <building-costs>
+            <coins>5</coins>
+            <tools>0</tools>
+            <wood>0</wood>
+            <bricks>0</bricks>
+        </building-costs>
+    </structure>
+
+    <structure name="farm-road-tee0" width="1" height="1">
+        <title>Feldweg</title>
+        <structure-placing>path</structure-placing>
+        <building-costs>
+            <coins>5</coins>
+            <tools>0</tools>
+            <wood>0</wood>
+            <bricks>0</bricks>
+        </building-costs>
+    </structure>
+
+    <structure name="farm-road-tee90" width="1" height="1">
+        <title>Feldweg</title>
+        <structure-placing>path</structure-placing>
+        <building-costs>
+            <coins>5</coins>
+            <tools>0</tools>
+            <wood>0</wood>
+            <bricks>0</bricks>
+        </building-costs>
+    </structure>
+
+    <structure name="farm-road-tee180" width="1" height="1">
+        <title>Feldweg</title>
+        <structure-placing>path</structure-placing>
+        <building-costs>
+            <coins>5</coins>
+            <tools>0</tools>
+            <wood>0</wood>
+            <bricks>0</bricks>
+        </building-costs>
+    </structure>
+
+    <structure name="farm-road-tee270" width="1" height="1">
+        <title>Feldweg</title>
+        <structure-placing>path</structure-placing>
+        <building-costs>
+            <coins>5</coins>
+            <tools>0</tools>
+            <wood>0</wood>
+            <bricks>0</bricks>
+        </building-costs>
+    </structure>
+
+    <structure name="farm-road-cross" width="1" height="1">
+        <title>Feldweg</title>
+        <structure-placing>path</structure-placing>
+        <building-costs>
+            <coins>5</coins>
+            <tools>0</tools>
+            <wood>0</wood>
+            <bricks>0</bricks>
+        </building-costs>
+    </structure>
+
+    <structure name="cobbled-street-straight0" width="1" height="1">
+        <title>Pflasterstraße</title>
+        <structure-placing>path</structure-placing>
+        <building-costs>
+            <coins>5</coins>
+            <tools>0</tools>
+            <wood>0</wood>
+            <bricks>1</bricks>
+        </building-costs>
+    </structure>
+
+    <structure name="cobbled-street-straight90" width="1" height="1">
+        <title>Pflasterstraße</title>
+        <structure-placing>path</structure-placing>
+        <building-costs>
+            <coins>5</coins>
+            <tools>0</tools>
+            <wood>0</wood>
+            <bricks>1</bricks>
+        </building-costs>
+    </structure>
+
+    <structure name="cobbled-street-curve0" width="1" height="1">
+        <title>Pflasterstraße</title>
+        <structure-placing>path</structure-placing>
+        <building-costs>
+            <coins>5</coins>
+            <tools>0</tools>
+            <wood>0</wood>
+            <bricks>1</bricks>
+        </building-costs>
+    </structure>
+
+    <structure name="cobbled-street-curve90" width="1" height="1">
+        <title>Pflasterstraße</title>
+        <structure-placing>path</structure-placing>
+        <building-costs>
+            <coins>5</coins>
+            <tools>0</tools>
+            <wood>0</wood>
+            <bricks>1</bricks>
+        </building-costs>
+    </structure>
+
+    <structure name="cobbled-street-curve180" width="1" height="1">
+        <title>Pflasterstraße</title>
+        <structure-placing>path</structure-placing>
+        <building-costs>
+            <coins>5</coins>
+            <tools>0</tools>
+            <wood>0</wood>
+            <bricks>1</bricks>
+        </building-costs>
+    </structure>
+
+    <structure name="cobbled-street-curve270" width="1" height="1">
+        <title>Pflasterstraße</title>
+        <structure-placing>path</structure-placing>
+        <building-costs>
+            <coins>5</coins>
+            <tools>0</tools>
+            <wood>0</wood>
+            <bricks>1</bricks>
+        </building-costs>
+    </structure>
+
+    <structure name="cobbled-street-tee0" width="1" height="1">
+        <title>Pflasterstraße</title>
+        <structure-placing>path</structure-placing>
+        <building-costs>
+            <coins>5</coins>
+            <tools>0</tools>
+            <wood>0</wood>
+            <bricks>1</bricks>
+        </building-costs>
+    </structure>
+
+    <structure name="cobbled-street-tee90" width="1" height="1">
+        <title>Pflasterstraße</title>
+        <structure-placing>path</structure-placing>
+        <building-costs>
+            <coins>5</coins>
+            <tools>0</tools>
+            <wood>0</wood>
+            <bricks>1</bricks>
+        </building-costs>
+    </structure>
+
+    <structure name="cobbled-street-tee180" width="1" height="1">
+        <title>Pflasterstraße</title>
+        <structure-placing>path</structure-placing>
+        <building-costs>
+            <coins>5</coins>
+            <tools>0</tools>
+            <wood>0</wood>
+            <bricks>1</bricks>
+        </building-costs>
+    </structure>
+
+    <structure name="cobbled-street-tee270" width="1" height="1">
+        <title>Pflasterstraße</title>
+        <structure-placing>path</structure-placing>
+        <building-costs>
+            <coins>5</coins>
+            <tools>0</tools>
+            <wood>0</wood>
+            <bricks>1</bricks>
+        </building-costs>
+    </structure>
+
+    <structure name="cobbled-street-cross" width="1" height="1">
+        <title>Pflasterstraße</title>
+        <structure-placing>path</structure-placing>
+        <building-costs>
+            <coins>5</coins>
+            <tools>0</tools>
+            <wood>0</wood>
+            <bricks>1</bricks>
+        </building-costs>
+    </structure>
+
+</map-objects>
