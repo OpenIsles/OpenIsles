@@ -8,6 +8,7 @@
 
     <!-- Verbrauchsgüter -->
     <good name="food">Nahrung</good>
+    <good name="tobacco-goods">Tabakwaren</good>
     <good name="alcohol">Alkohol</good>
     <good name="cloth">Stoffe</good>
 

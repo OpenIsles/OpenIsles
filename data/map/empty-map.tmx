@@ -29,6 +29,7 @@
     <property name="goods-food" value="0"/>
     <property name="goods-sugar" value="5"/>
     <property name="goods-tobacco" value="7"/>
+    <property name="goods-tobacco-goods" value="0"/>
     <property name="goods-tools" value="30"/>
     <property name="goods-wood" value="30"/>
     <property name="goods-wool" value="5"/>
