@@ -48,6 +48,7 @@ void AbstractGraphicsMgr::loadGraphics() {
     loadStaticGraphicSetWith4Views("building/sugarcane-plantation", "data/img/buildings/sugarcane-plantation.png");
     loadStaticGraphicSetWith4Views("building/tobacco-plantation", "data/img/buildings/tobacco-plantation.png");
     loadStaticGraphicSetWith4Views("building/distillery", "data/img/buildings/distillery.png");
+    loadStaticGraphicSetWith4Views("building/tobacco-goods", "data/img/buildings/tobacco-goods.png");
 
     loadStreetTileset("cobbled-street");
     loadStreetTileset("farm-road");
@@ -95,6 +96,7 @@ void AbstractGraphicsMgr::loadGraphics() {
     loadStaticGraphicSet("add-building-button/tobacco-plantation", "data/img/gui/add-building/tobacco-plantation.png");
     loadStaticGraphicSet("add-building-button/tobacco-field", "data/img/gui/add-building/tobacco-field.png");
     loadStaticGraphicSet("add-building-button/distillery", "data/img/gui/add-building/distillery.png");
+    loadStaticGraphicSet("add-building-button/tobacco-goods", "data/img/gui/add-building/tobacco-goods.png");
     loadStaticGraphicSet("add-building-button/square1", "data/img/gui/add-building/square1.png");
     loadStaticGraphicSet("add-building-button/square2", "data/img/gui/add-building/square2.png");
     loadStaticGraphicSet("add-building-button/square3", "data/img/gui/add-building/square3.png");

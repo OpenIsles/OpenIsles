@@ -85,6 +85,50 @@
         <inhabitants>3</inhabitants>
     </building>
 
+    <building name="tobacco-goods" width="2" height="2">
+        <title>Tabakwaren</title>
+        <structure-placing>individually</structure-placing>
+        <building-costs>
+            <coins>200</coins>
+            <tools>3</tools>
+            <wood>2</wood>
+            <bricks>5</bricks>
+        </building-costs>
+        <catchment-area>
+            00000000011111111000000000
+            00000001111111111110000000
+            00000111111111111111100000
+            00001111111111111111110000
+            00011111111111111111111000
+            00111111111111111111111100
+            00111111111111111111111100
+            01111111111111111111111110
+            01111111111111111111111110
+            11111111111111111111111111
+            11111111111111111111111111
+            11111111111111111111111111
+            11111111111111111111111111
+            11111111111111111111111111
+            11111111111111111111111111
+            11111111111111111111111111
+            11111111111111111111111111
+            01111111111111111111111110
+            01111111111111111111111110
+            00111111111111111111111100
+            00111111111111111111111100
+            00011111111111111111111000
+            00001111111111111111110000
+            00000111111111111111100000
+            00000001111111111110000000
+            00000000011111111000000000
+        </catchment-area>
+        <production-slots>
+            <input good="tobacco" capacity="6" rate="4.0" />
+            <output good="tobacco-goods" capacity="4" rate="2.0" />
+        </production-slots>
+        <inhabitants>2</inhabitants>
+    </building>
+
     <building name="distillery" width="2" height="2">
         <title>Rumbrennerei</title>
         <structure-placing>individually</structure-placing>
