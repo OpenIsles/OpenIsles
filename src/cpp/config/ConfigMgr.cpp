@@ -43,7 +43,7 @@ void ConfigMgr::loadGoods() {
         good.label = label;
         good.rawMaterial = rawMaterial;
 
-        goodsList.push_back(good);
+        goodsList.push_back(&good);
     }
 
     delete xmlDocument;

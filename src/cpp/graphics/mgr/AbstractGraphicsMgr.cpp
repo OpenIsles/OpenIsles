@@ -57,9 +57,9 @@ void AbstractGraphicsMgr::loadGraphics() {
     loadStaticGraphicSetWith4Views("structure/square2", "data/img/buildings/square2.png");
     loadStaticGraphicSetWith4Views("structure/square3", "data/img/buildings/square3.png");
 
-    const std::list<Good>& allGoods = configMgr->getAllGoodsOrdered();
+    const std::list<const Good*>& allGoods = configMgr->getAllGoodsOrdered();
     for (auto iter = allGoods.cbegin(); iter != allGoods.cend(); iter++) {
-        const Good* good = &*iter;
+        const Good* good = *iter;
 
         loadStaticGraphicSet("goods-icon/" + good->name,
                              std::string("data/img/goods/icon/" + good->name + ".png").c_str());

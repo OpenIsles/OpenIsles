@@ -92,13 +92,15 @@ class ConfigMgr {
 private:
     /**
      * @brief Map aller Güter. Map-Key ist der Name des Guts.
+     * In dieser Datenstruktur sind die einzigen Instanzen von `Good`. Alle anderen Objekte referenzieren diese
+     * per const-Zeiger.
      */
     std::unordered_map<std::string, Good> goodsMap;
 
     /**
      * @brief Liste aller Güter. Im Gegensatz zur Map haben wir mit dieser Liste eine Sortierung der Güter
      */
-    std::list<Good> goodsList;
+    std::list<const Good*> goodsList;
 
     /**
      * @brief Map aller Map-Objekt-Typen. Map-Key ist der Name des Map-Objekt-Typs.
@@ -152,7 +154,7 @@ public:
      * @brief Liefert alle verfügbaren Güter im Spiel als sortierte Liste zurück.
      * @return Liste mit allen Gütern
      */
-    const std::list<Good>& getAllGoodsOrdered() const {
+    const std::list<const Good*>& getAllGoodsOrdered() const {
         return goodsList;
     }
 

@@ -160,6 +160,24 @@ private:
     SDLGraphic* debugGridOverlayGraphic;
 #endif
 
+    /**
+     * @brief Referenz auf das Baumaterial "Werkzeug"
+     * TODO wenn wir alles konfigurierbar machen wollen, sollte das später auch mal weg und die Baumaterialen dynamisch werden
+     */
+    const Good* toolsGood;
+
+    /**
+     * @brief Referenz auf das Baumaterial "Holz"
+     * TODO wenn wir alles konfigurierbar machen wollen, sollte das später auch mal weg und die Baumaterialen dynamisch werden
+     */
+    const Good* woodGood;
+
+    /**
+     * @brief Referenz auf das Baumaterial "Ziegel"
+     * TODO wenn wir alles konfigurierbar machen wollen, sollte das später auch mal weg und die Baumaterialen dynamisch werden
+     */
+    const Good* bricksGood;
+
 public:
     /**
      * @brief Konstruktor. Positioniert die Komponente entsprechend `Consts::mapClipRect`.

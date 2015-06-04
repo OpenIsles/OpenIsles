@@ -30,6 +30,10 @@ GuiMap::GuiMap(const Context* const context, GuiResourcesBar* guiResourcesBar) :
 
     setCoords(Consts::mapClipRect.x, Consts::mapClipRect.y, Consts::mapClipRect.w, Consts::mapClipRect.h);
 
+    toolsGood = context->configMgr->getGood("tools");
+    woodGood = context->configMgr->getGood("wood");
+    bricksGood = context->configMgr->getGood("bricks");
+
 #ifdef DEBUG
     debugGridOverlayGraphic = new SDLGraphic(context->graphicsMgr->getRenderer(), "data/debug-grid-overlay.png");
 #endif
@@ -747,8 +751,11 @@ void GuiMap::onReleaseMouseLeftInBuildingMode() {
         Colony* colony = context->game->getColony(
             currentPlayer, context->game->getMap()->getMapTileAt(mapCoords)->isle);
         const BuildingCosts& buildingCosts = mapObjectType->buildingCosts;
+
         currentPlayer->coins -= buildingCosts.coins;
-        colony->subtractBuildingCosts(buildingCosts);
+        colony->getGoods(toolsGood).inventory -= buildingCosts.tools;
+        colony->getGoods(woodGood).inventory -= buildingCosts.wood;
+        colony->getGoods(bricksGood).inventory -= buildingCosts.bricks;
     }
     buildQueue.clear();
 
@@ -779,9 +786,9 @@ unsigned char GuiMap::isAllowedToPlaceMapObject(
     if (colony != nullptr) {
         const BuildingCosts& buildingCosts = mapObjectType->buildingCosts;
         if ((buildingCosts.coins > currentPlayer->coins) ||
-            (buildingCosts.tools > colony->getGoods("tools").inventory) ||
-            (buildingCosts.wood > colony->getGoods("wood").inventory) ||
-            (buildingCosts.bricks > colony->getGoods("bricks").inventory)) {
+            (buildingCosts.tools > colony->getGoods(toolsGood).inventory) ||
+            (buildingCosts.wood > colony->getGoods(woodGood).inventory) ||
+            (buildingCosts.bricks > colony->getGoods(bricksGood).inventory)) {
             result |= PLACING_STRUCTURE_NO_RESOURCES;
         }
     }
@@ -1039,6 +1046,15 @@ void GuiMap::updateMapObjectsTemporarilyDrawingFlags() {
 
     const Player* currentPlayer = context->game->getCurrentPlayer();
 
+    // TODO aktuell können in buildQueue Gebäude von verschiedenen Siedlungen sein. Das muss gefixed werden. Nur von einer Siedlung ist erlaubt.
+    // Wir verwenden das erstbeste MapObject in der buildQueue, um die Kolonie rauszufinden, in der wir bauen wollen.
+    MapObjectFixed& someMapObject = **buildQueue.cbegin();
+    Colony* colony = context->game->getColony(
+        currentPlayer, context->game->getMap()->getMapTileAt(someMapObject.getMapCoords())->isle);
+    const double toolsInColony = colony->getGoods(toolsGood).inventory;
+    const double woodInColony = colony->getGoods(woodGood).inventory;
+    const double bricksInColony = colony->getGoods(bricksGood).inventory;
+
     bool outOfResources = false;
 
     // Der Reihe nach alle zu setzenden Gebäude durchgehen und gucken, wann/ob die Resourcen ausgehen
@@ -1049,13 +1065,10 @@ void GuiMap::updateMapObjectsTemporarilyDrawingFlags() {
         if (!outOfResources) {
             BuildingCosts sumBuildingCostTilHere = buildingCostsOneTime * structuresCount;
 
-            // TODO aktuell können in buildQueue Gebäude von verschiedenen Siedlungen sein. Das muss gefixed werden. Nur von einer Siedlung ist erlaubt.
-            Colony* colony = context->game->getColony(
-                currentPlayer, context->game->getMap()->getMapTileAt(mapObject.getMapCoords())->isle);
             if (currentPlayer->coins < sumBuildingCostTilHere.coins ||
-                colony->getGoods("tools").inventory < sumBuildingCostTilHere.tools ||
-                colony->getGoods("wood").inventory < sumBuildingCostTilHere.wood ||
-                colony->getGoods("bricks").inventory < sumBuildingCostTilHere.bricks) {
+                toolsInColony < sumBuildingCostTilHere.tools ||
+                woodInColony < sumBuildingCostTilHere.wood ||
+                bricksInColony < sumBuildingCostTilHere.bricks) {
 
                 outOfResources = true;
             }

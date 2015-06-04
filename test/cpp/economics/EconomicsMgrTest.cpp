@@ -59,12 +59,13 @@ TEST_F(EconomicsMgrTest, updateCarrier) {
     const double allowedCoordsError = 0.01;
 
     Colony* colony = game->getColony(office1);
+    const Good* cattleGood = configMgr->getGood("cattle");
 
     // Lager voll machen
     cattleFarm->productionSlots.output.increaseInventory(999);
 
     // Anfangsbedingungen: kein Marktkarren da, Gebäudelager voll und bereit zur Abholung, 5t in der Kolonie
-    ASSERT_EQ(5, colony->getGoods("cattle").inventory);
+    ASSERT_EQ(5, colony->getGoods(cattleGood).inventory);
 
     ASSERT_TRUE(office1->carrier == nullptr);
 
@@ -159,5 +160,5 @@ TEST_F(EconomicsMgrTest, updateCarrier) {
     office1->carrier->update(context);
 
     ASSERT_TRUE(office1->carrier == nullptr);
-    ASSERT_EQ(9, colony->getGoods("cattle").inventory);
+    ASSERT_EQ(9, colony->getGoods(cattleGood).inventory);
 }

@@ -48,7 +48,7 @@ void GuiResourcesBar::renderElement(IRenderer* renderer) {
         const Good* goodsToDraw[] = {
             context->configMgr->getGood("tools"),
             context->configMgr->getGood("wood"),
-            context->configMgr->getGood("bricks" )
+            context->configMgr->getGood("bricks")
         };
 
         int x = 290;

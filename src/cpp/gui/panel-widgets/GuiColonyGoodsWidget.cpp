@@ -36,7 +36,7 @@ void GuiColonyGoodsWidget::renderElement(IRenderer* renderer) {
 //        &colorLightBrown, &colorBlack, "DroidSans-Bold.ttf", 15, RENDERTEXT_HALIGN_CENTER);
 
     // Waren
-    const std::list<Good>& allGoods = context->configMgr->getAllGoodsOrdered();
+    const std::list<const Good*>& allGoods = context->configMgr->getAllGoodsOrdered();
 
     int xStart = windowX + 22;
 
@@ -44,7 +44,7 @@ void GuiColonyGoodsWidget::renderElement(IRenderer* renderer) {
     int y = windowY + 68;
     int i = 0;
     for (auto iter = allGoods.cbegin(); iter != allGoods.cend(); iter++, i++) {
-        const Good* good = &*iter;
+        const Good* good = *iter;
         GoodsSlot goods = colony->getGoods(good);
 
         int inventory = (int) floor(goods.inventory);

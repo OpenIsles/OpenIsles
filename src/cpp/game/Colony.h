@@ -15,9 +15,9 @@ class Colony {
     
 private:
     /**
-     * @brief Lagerbestände pro Gütertyp. Map-Key ist `Good.name`.
+     * @brief Lagerbestände pro Gütertyp.
      */
-    std::unordered_map<std::string, GoodsSlot> goods;
+    std::unordered_map<const Good*, GoodsSlot> goods;
 
 public:
     /**
@@ -36,30 +36,11 @@ public:
 
     /**
      * @brief Liefert den Slot für einen bestimmten Warentyp zurück. Dieser enthält Lagerbestand und -Kapazität.
-     * @param goodName Name des Guts
-     * @return Slot für den angeforderten Warentyp
-     */
-    GoodsSlot& getGoods(const std::string& goodName) {
-        return goods[goodName];
-    }
-
-    /**
-     * @brief Liefert den Slot für einen bestimmten Warentyp zurück. Dieser enthält Lagerbestand und -Kapazität.
      * @param good Gut
      * @return Slot für den angeforderten Warentyp
      */
     GoodsSlot& getGoods(const Good* good) {
-        return getGoods(good->name);
-    }
-    
-    /**
-     * @brief Erniedrigt die Lagerbestände der Güter der Siedlung für den Bau eines Gebäudes
-     * @param buildingCosts Gebäudekosten, wo denen die Güterkosten dekrementiert werden.
-     */
-    void subtractBuildingCosts(const BuildingCosts& buildingCosts) {
-        getGoods("tools").inventory -= buildingCosts.tools;
-        getGoods("wood").inventory -= buildingCosts.wood;
-        getGoods("bricks").inventory -= buildingCosts.bricks;
+        return goods[good];
     }
 
     /**
