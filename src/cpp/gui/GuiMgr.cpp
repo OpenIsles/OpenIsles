@@ -22,6 +22,7 @@
 
 static Color colorWhite = Color(255, 255, 255, 255);
 static Color colorBlack = Color(0, 0, 0, 255);
+static Color colorLightBrown = Color(223, 216, 183, 255);
 
 #ifdef DEBUG_A_STAR
 #include "map/coords/MapCoords.h"
@@ -557,3 +558,18 @@ inline void GuiMgr::scrollMap(Map* map, int xDelta, int yDelta) {
     ((GuiMinimap*) findElement(GUI_ID_MINIMAP))->onMapCoordsChanged();
 }
 
+void GuiMgr::drawPanelHeader(int x, int y, const std::string& string, const Player* drawPlayersCoatOfArms) {
+    context->graphicsMgr->getGraphicSet("panel-header")->getStatic()->getGraphic()->drawAt(x, y);
+    context->fontMgr->renderText(renderer, string, x + 118, y + 19,
+        &colorLightBrown, &colorBlack, "DroidSans-Bold.ttf", 15, RENDERTEXT_HALIGN_CENTER | RENDERTEXT_VALIGN_MIDDLE);
+
+    if (drawPlayersCoatOfArms != nullptr) {
+        const std::string graphicSetName =
+            context->graphicsMgr->getGraphicSetNameForCoatOfArms("large", drawPlayersCoatOfArms->getColor());
+        const IGraphic* coatOfArmsGraphic =
+            context->graphicsMgr->getGraphicSet(graphicSetName)->getStatic()->getGraphic();
+
+        coatOfArmsGraphic->drawShadowAt(x + 209, y + 6);
+        coatOfArmsGraphic->drawAt(x + 203, y);
+    }
+}

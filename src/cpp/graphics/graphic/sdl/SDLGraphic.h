@@ -62,6 +62,7 @@ public:
 	virtual void getPixel(int x, int y, unsigned char* r, unsigned char* g, unsigned char* b, unsigned char* a) const;
     virtual void drawAt(int x, int y) const;
     virtual void drawScaledAt(int x, int y, double scale) const;
+	virtual void drawShadowAt(int x, int y) const;
 	virtual void drawShadowScaledAt(int x, int y, double scale) const;
 	virtual void draw(Rect* rectSource, Rect* rectDestination, int drawingFlags, uint32_t sdlTicks) const;
 

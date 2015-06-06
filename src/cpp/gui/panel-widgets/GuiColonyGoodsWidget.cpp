@@ -3,14 +3,8 @@
 #include "config/ConfigMgr.h"
 #include "game/Colony.h"
 #include "game/Game.h"
-//#include "gui/SDLFontMgr.h"
 #include "gui/panel-widgets/GuiColonyGoodsWidget.h"
 #include "map/Map.h"
-//#include "utils/Color.h"
-
-
-//static Color colorLightBrown = Color(223, 216, 183, 255);
-//static Color colorBlack = Color(0, 0, 0, 255);
 
 
 GuiColonyGoodsWidget::GuiColonyGoodsWidget(const Context* const context) : GuiPanelWidget(context) {
@@ -32,8 +26,7 @@ void GuiColonyGoodsWidget::renderElement(IRenderer* renderer) {
     // Name der Siedlung
     Colony* colony = context->game->getColony(selectedBuilding);
 
-//    context->fontMgr->renderText(renderer, "Siedlungsname", windowX + width/2, windowY + 15, // TODO Siedlungsname aus Savegame laden; is da schon drin
-//        &colorLightBrown, &colorBlack, "DroidSans-Bold.ttf", 15, RENDERTEXT_HALIGN_CENTER);
+//    context->guiMgr->drawPanelHeader(windowX, windowY, "Siedlungsname", nullptr); // TODO Siedlungsname aus Savegame laden; is da schon drin
 
     // Waren
     const std::list<const Good*>& allGoods = context->configMgr->getAllGoodsOrdered();

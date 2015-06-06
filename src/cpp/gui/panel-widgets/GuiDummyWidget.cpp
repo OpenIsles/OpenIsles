@@ -1,3 +1,4 @@
+#include "game/Game.h"
 #include "graphics/mgr/IFontMgr.h"
 #include "gui/panel-widgets/GuiDummyWidget.h"
 #include "utils/Color.h"
@@ -13,6 +14,8 @@ GuiDummyWidget::GuiDummyWidget(const Context* const context) : GuiPanelWidget(co
 void GuiDummyWidget::renderElement(IRenderer* renderer) {
     int windowX, windowY;
     getWindowCoords(windowX, windowY);
+
+    context->guiMgr->drawPanelHeader(windowX, windowY, "Dummy-Widget", context->game->getCurrentPlayer());
 
     context->fontMgr->renderText(renderer, "Dummy-Widget", windowX + width/2, windowY + height/2,
         &colorYellow, &colorRed, "DroidSans.ttf", 15, RENDERTEXT_HALIGN_CENTER | RENDERTEXT_VALIGN_MIDDLE);

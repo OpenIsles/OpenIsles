@@ -86,7 +86,7 @@ public:
         return graphicSetNamePrefix + "/" + good->name;
     }
 
-    std::string getGraphicSetNameForCoatOfArmsPopulation(PlayerColor playerColor) const {
+    std::string getGraphicSetNameForCoatOfArms(const std::string& prefix, PlayerColor playerColor) const {
         std::string graphicSetNameSuffix;
 
         // TODO Das muss irgendwie hübscher werden. In Zukunft muss alles mit den String-Keys laufen
@@ -95,7 +95,7 @@ public:
         else if (playerColor == PlayerColor::YELLOW) { graphicSetNameSuffix = "yellow"; }
         else if (playerColor == PlayerColor::WHITE) { graphicSetNameSuffix = "white"; }
 
-        return "coat-of-arms/population/" + graphicSetNameSuffix;
+        return "coat-of-arms/" + prefix + "/" + graphicSetNameSuffix;
     }
 
     /**

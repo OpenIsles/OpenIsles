@@ -75,7 +75,7 @@ void GuiResourcesBar::renderElement(IRenderer* renderer) {
 
     // Einwohnerzahl (immer anzeigen)
     const std::string graphicSetName =
-        context->graphicsMgr->getGraphicSetNameForCoatOfArmsPopulation(mapTileAtCursor->player->getColor());
+        context->graphicsMgr->getGraphicSetNameForCoatOfArms("population", mapTileAtCursor->player->getColor());
     const IGraphic* populationIconGraphic = context->graphicsMgr->getGraphicSet(graphicSetName)->getStatic()->getGraphic();
     populationIconGraphic->drawAt(655, 6);
 

@@ -23,3 +23,10 @@ GuiOptionsMenuWidget::GuiOptionsMenuWidget(const Context* const context) : GuiPa
     context->guiMgr->registerElement(GUI_ID_MUSIC_PUSH_BUTTON, musicPushButton);
     addChildElement(musicPushButton);
 }
+
+void GuiOptionsMenuWidget::renderElement(IRenderer* renderer) {
+    int windowX, windowY;
+    getWindowCoords(windowX, windowY);
+
+    context->guiMgr->drawPanelHeader(windowX, windowY, "Einstellungen", nullptr);
+}

@@ -99,6 +99,13 @@ public:
     virtual void drawScaledAt(int x, int y, double scale) const = 0;
 
     /**
+     * @brief Zeichnet die Schatten-Grafik
+     * @param x x-Koordinate, wo hingezeichnet werden soll
+     * @param y y-Koordinate, wo hingezeichnet werden soll
+     */
+    virtual void drawShadowAt(int x, int y) const = 0;
+
+    /**
      * @brief Zeichnet die Schatten-Grafik skaliert
      * @param x x-Koordinate, wo hingezeichnet werden soll
      * @param y y-Koordinate, wo hingezeichnet werden soll

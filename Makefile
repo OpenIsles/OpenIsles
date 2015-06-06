@@ -49,11 +49,13 @@ $(DATA_DIRECTORY)/img/tileset.png: $(SRC_DIRECTORY)/blender/tiles/tiles.blend
 clean-gui:
 	rm -f $(DATA_DIRECTORY)/img/gui/panel.png
 	rm -f $(DATA_DIRECTORY)/img/gui/statusbar.png
+	rm -f $(DATA_DIRECTORY)/img/gui/panel-header.png
 	rm -f $(DATA_DIRECTORY)/img/gui/add-building/add-building-grid.png
 	
 build-gui: \
 	$(DATA_DIRECTORY)/img/gui/panel.png \
 	$(DATA_DIRECTORY)/img/gui/statusbar.png \
+	$(DATA_DIRECTORY)/img/gui/panel-header.png \
 	$(DATA_DIRECTORY)/img/gui/add-building/add-building-grid.png
 
 $(DATA_DIRECTORY)/img/gui/panel.png: $(SRC_DIRECTORY)/psd/marble-panels.psd
@@ -85,6 +87,9 @@ $(DATA_DIRECTORY)/img/gui/statusbar.png: $(SRC_DIRECTORY)/psd/marble-panels.psd
 		  -fill none -stroke rgba\(255,255,255,0.85\) -strokewidth 0.5 \
 		  -draw "polyline 4,4 763,4 763,29 4,29 4,4" \
 		\) -compose softlight -composite $@
+
+$(DATA_DIRECTORY)/img/gui/panel-header.png: $(SRC_DIRECTORY)/psd/panel-header.psd
+	convert -background transparent $< -flatten $@
 
 $(DATA_DIRECTORY)/img/gui/add-building/add-building-grid.png: $(SRC_DIRECTORY)/blender/gui/add-building-grid/add-building-grid.blend
 	$(CREATE_TARGET_DIRECTORY)

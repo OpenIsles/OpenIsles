@@ -1,13 +1,7 @@
 #include "config/ConfigMgr.h"
 #include "game/Game.h"
-#include "graphics/mgr/IFontMgr.h"
 #include "gui/panel-widgets/GuiSelectedBuildingWidget.h"
 #include "map/Map.h"
-#include "utils/Color.h"
-
-
-static Color colorBlack = Color(0, 0, 0, 255);
-static Color colorWhite = Color(255, 255, 255, 255);
 
 
 GuiSelectedBuildingWidget::GuiSelectedBuildingWidget(const Context* const context) : GuiPanelWidget(context) {
@@ -38,8 +32,7 @@ void GuiSelectedBuildingWidget::renderElement(IRenderer* renderer) {
     const MapObjectType* mapObjectType = selectedBuilding->getMapObjectType();
 
     // Gebäudename
-    context->fontMgr->renderText(renderer, mapObjectType->title, windowX + width/2, windowY + 23,
-        &colorWhite, &colorBlack, "DroidSans-Bold.ttf", 15, RENDERTEXT_HALIGN_CENTER);
+    context->guiMgr->drawPanelHeader(windowX, windowY, mapObjectType->title, nullptr);
 
     // produzierte Waren
     const ProductionSlots* productionSlots = &selectedBuilding->productionSlots;

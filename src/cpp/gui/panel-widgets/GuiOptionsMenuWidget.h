@@ -19,9 +19,7 @@ public:
     /**
      * @brief Zeichnet das Element (ohne Kinder)
      */
-    virtual void renderElement(IRenderer* renderer) {
-        // nix tun
-    }
+    virtual void renderElement(IRenderer* renderer);
 
     /**
      * @brief Callback, der ein Event handelt

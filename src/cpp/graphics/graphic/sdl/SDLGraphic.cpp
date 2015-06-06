@@ -201,6 +201,10 @@ void SDLGraphic::drawShadowScaledAt(int x, int y, double scale) const {
     SDL_RenderCopy(sdlRealRenderer, textureShadow, nullptr, &rectDestination);
 }
 
+void SDLGraphic::drawShadowAt(int x, int y) const {
+	drawShadowScaledAt(x, y, 1.0);
+}
+
 void SDLGraphic::drawAt(const SDL_Rect& rectDestination) const {
     SDL_Renderer* sdlRealRenderer = (dynamic_cast<SDLRenderer*>(renderer))->getRealRenderer();
     SDL_SetTextureColorMod(texture, 255, 255, 255);

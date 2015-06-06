@@ -70,6 +70,7 @@ void AbstractGraphicsMgr::loadGraphics() {
     loadStaticGraphicSet("coin", "data/img/gui/coin.png");
     loadStaticGraphicSet("panel", "data/img/gui/panel.png");
     loadStaticGraphicSet("statusbar", "data/img/gui/statusbar.png");
+    loadStaticGraphicSet("panel-header", "data/img/gui/panel-header.png");
 
     loadStaticGraphicSet("add-building-grid", "data/img/gui/add-building/add-building-grid.png");
 
@@ -118,6 +119,11 @@ void AbstractGraphicsMgr::loadGraphics() {
     loadStaticGraphicSet("coat-of-arms/population/blue", "data/img/gui/coat-of-arms/population/blue.png");
     loadStaticGraphicSet("coat-of-arms/population/yellow", "data/img/gui/coat-of-arms/population/yellow.png");
     loadStaticGraphicSet("coat-of-arms/population/white", "data/img/gui/coat-of-arms/population/white.png");
+
+    loadStaticGraphicSet("coat-of-arms/large/red", "data/img/gui/coat-of-arms/large/red.png");
+    loadStaticGraphicSet("coat-of-arms/large/blue", "data/img/gui/coat-of-arms/large/blue.png");
+    loadStaticGraphicSet("coat-of-arms/large/yellow", "data/img/gui/coat-of-arms/large/yellow.png");
+    loadStaticGraphicSet("coat-of-arms/large/white", "data/img/gui/coat-of-arms/large/white.png");
 
     loadStaticGraphicSet("button-music", "data/img/gui/button-music.png");
     loadStaticGraphicSet("button-music-pressed", "data/img/gui/button-music-pressed.png");
