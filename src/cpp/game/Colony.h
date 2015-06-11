@@ -21,6 +21,11 @@ private:
 
 public:
     /**
+     * @brief Name der Siedlung
+     */
+    std::string name;
+
+    /**
      * @brief Einwohner der Siedlung
      */
     unsigned int population;

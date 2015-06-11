@@ -197,6 +197,7 @@ void GameIO::loadColonies(Game* game, const ConfigMgr* configMgr, rapidxml::xml_
         }
 
         MapCoords mapCoords = getMapCoordsFromObjectNode(objectNode);
+        std::string colonyName = objectNode->first_attribute("name", 4, true)->value();
 
         rapidxml::xml_node<>* propertiesNode = objectNode->first_node("properties", 10, true);
         int playerNr = std::atoi(getPropertyValueFromPropertiesNode(propertiesNode, "player"));
@@ -204,7 +205,7 @@ void GameIO::loadColonies(Game* game, const ConfigMgr* configMgr, rapidxml::xml_
         MapTile* mapTile = map->mapTiles->getData(mapCoords.x(), mapCoords.y(), nullptr);
 
         // Siedlung anlegen
-        Colony* colony = game->foundNewColony(player, mapTile->isle);
+        Colony* colony = game->foundNewColony(player, colonyName, mapTile->isle);
 
         // Waren
         const std::unordered_map<std::string, Good>& allGoods = configMgr->getAllGoods();

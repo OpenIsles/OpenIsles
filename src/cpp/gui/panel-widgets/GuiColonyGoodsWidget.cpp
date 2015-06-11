@@ -25,8 +25,7 @@ void GuiColonyGoodsWidget::renderElement(IRenderer* renderer) {
 
     // Name der Siedlung
     Colony* colony = context->game->getColony(selectedBuilding);
-
-//    context->guiMgr->drawPanelHeader(windowX, windowY, "Siedlungsname", nullptr); // TODO Siedlungsname aus Savegame laden; is da schon drin
+    context->guiMgr->drawPanelHeader(windowX, windowY, colony->name, nullptr);
 
     // Waren
     const std::list<const Good*>& allGoods = context->configMgr->getAllGoodsOrdered();

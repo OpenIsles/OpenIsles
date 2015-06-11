@@ -32,4 +32,6 @@ TEST_F(GameTest, SetUp) {
     ASSERT_EQ(mapTileOnOffice1->player, playerOffice1);
     ASSERT_EQ(PlayerColor::RED, playerOffice1->getColor());
     ASSERT_EQ("Spieler 1", playerOffice1->getName());
+
+    ASSERT_EQ("Kolonie", game->getColony(mapObjectOffice1)->name);
 }

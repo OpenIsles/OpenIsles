@@ -31,18 +31,19 @@ Game::~Game() {
     delete map;
 }
 
-Colony* Game::foundNewColony(const Player* player, Isle* isle) {
+Colony* Game::foundNewColony(const Player* player, const std::string& colonyName, const Isle* isle) {
     const std::unordered_map<std::string, Good>& allGoods = context->configMgr->getAllGoods();
     Colony* colony = new Colony(allGoods);
+    colony->name = colonyName;
     
-    colonies.insert(std::pair<std::pair<const Player*, Isle*>, Colony*>(
-        std::pair<const Player*, Isle*>(player, isle), colony));
+    colonies.insert(std::pair<std::pair<const Player*, const Isle*>, Colony*>(
+        std::pair<const Player*, const Isle*>(player, isle), colony));
     
     return colony;
 }
 
-Colony* Game::getColony(const Player* player, Isle* isle) const {
-    auto iter = colonies.find(std::pair<const Player*, Isle*>(player, isle));
+Colony* Game::getColony(const Player* player, const Isle* isle) const {
+    auto iter = colonies.find(std::pair<const Player*, const Isle*>(player, isle));
     if (iter == colonies.end()) {
         return nullptr;
     }
