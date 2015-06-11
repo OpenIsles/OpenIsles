@@ -260,6 +260,12 @@ void GuiMgr::onEvent(SDL_Event& event) {
             eventToPush.user.data1 = motionMapCoordsEvent;
             SDL_PushEvent(&eventToPush);
 
+            /*
+             * TODO Event-Flut verhindern. Wenn die Maus zu schnell bewegt wird, werden zu viele
+             * USER_EVENT_MOUSEMOTION_MAPCOORDS-Events generiert und die Abarbeitung dieser a) dauert lange und b)
+             * ist sinnfrei, mehrmals pro Frame zu machen
+             */
+
             mapCoordsUnderMouse = newMapCoordsUnderMouse;
         }
     }

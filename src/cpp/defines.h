@@ -4,9 +4,34 @@
 // Bestimmte Methoden sind nur dann virtuell, wenn wir die Tests kompilieren. Wir sparen uns für die richtige
 // Anwendung den vtable-Overhead :-)
 #ifdef DEFINE_VIRTUAL_ONLY_IN_TESTS
-#define VIRTUAL_ONLY_IN_TESTS virtual
+    #define VIRTUAL_ONLY_IN_TESTS virtual
 #else
-#define VIRTUAL_ONLY_IN_TESTS
+    #define VIRTUAL_ONLY_IN_TESTS
+#endif
+
+// Helper für Performance-Messungen. Mit dem limit-Parameter kann ab einer zu hohen Zeit zwischen stderr/stdout
+// unterschieden werden, damit in der IDE hohe Zahlen in Rot dargestellt werden.
+#ifdef DEBUG
+    #include <chrono>
+    #include <iostream>
+
+    #define PERFORMANCE_START(name) \
+        std::chrono::steady_clock::time_point performanceCounterStart ## name = std::chrono::steady_clock::now();
+
+    #define PERFORMANCE_END(name, limit) \
+        std::chrono::steady_clock::time_point performanceCounterEnd ## name = std::chrono::steady_clock::now(); \
+        auto performanceCounterTime ## name = \
+            std::chrono::duration_cast<std::chrono::milliseconds>( \
+                performanceCounterEnd ## name - performanceCounterStart ## name).count(); \
+        \
+        if (performanceCounterTime ## name > limit) { \
+            std::cerr << #name << " took " << performanceCounterTime ## name << "ms" << std::endl; \
+        } else { \
+            std::cout << #name << " took " << performanceCounterTime ## name << "ms" << std::endl; \
+        }
+#else
+    #define PERFORMANCE_START(name)
+    #define PERFORMANCE_END(name)
 #endif
 
 #endif

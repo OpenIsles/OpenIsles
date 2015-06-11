@@ -178,18 +178,6 @@ public:
         const MapCoords& mapCoords, const MapObjectType* mapObjectType, const FourthDirection& view, Player* player);
 
     /**
-     * @brief Ändert die Einwohner innerhalb eines Gebäudes. Positive Werte fügen Bewohner hinzu, negative nehmen
-     * welche weg.
-     *
-     * Diese Methode aktualisiert gleich die Einwohnerzahl der Kolonie. Es sollte immer diese Methode benutzt werden,
-     * um Einwohner zu ändern.
-     *
-     * @param building Gebäude, dessen Einwohner geändert werden sollen
-     * @param amount Bevölkerung, die hinzukommen soll
-     */
-    void addInhabitantsToBuilding(Building* building, char amount);
-
-    /**
      * @brief Schaltet das aktuell gewählte MapObject um.
      * Diese Methode sagt dem GuiMgr Bescheid, damit das Panel rechts angepasst wird.
      *
@@ -202,6 +190,19 @@ public:
      * @param filename Dateiname mit den zu ladenden Spielstand-Daten
      */
     void loadGameFromTMX(char const* filename);
+
+private:
+    /**
+     * @brief Ändert die Einwohner innerhalb eines Gebäudes. Positive Werte fügen Bewohner hinzu, negative nehmen
+     * welche weg.
+     *
+     * Diese Methode aktualisiert gleich die Einwohnerzahl der Kolonie. Es sollte immer diese Methode benutzt werden,
+     * um Einwohner zu ändern.
+     *
+     * @param building Gebäude, dessen Einwohner geändert werden sollen
+     * @param amount Bevölkerung, die hinzukommen soll
+     */
+    void addInhabitantsToBuilding(Building* building, char amount);
 };
 
 #endif
