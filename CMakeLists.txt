@@ -66,10 +66,10 @@ set(COMMON_SOURCE_FILES
     src/cpp/utils/Consts.cpp
     src/cpp/utils/Consts.h
     src/cpp/utils/Events.h
-    src/cpp/utils/FpsCounter.h
     src/cpp/utils/MapCoordsIterator.h
     src/cpp/utils/Rect.h
     src/cpp/utils/RectangleData.h
+    src/cpp/utils/PerformanceCounter.h
     src/cpp/utils/StringFormat.cpp
     src/cpp/utils/StringFormat.h
     src/cpp/utils/Ticks.cpp
