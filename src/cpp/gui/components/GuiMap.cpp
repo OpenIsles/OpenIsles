@@ -161,6 +161,8 @@ void GuiMap::renderElement(IRenderer* renderer) {
     memset(mapObjectAlreadyDrawnThere->data, 0,
         mapObjectAlreadyDrawnThere->width * mapObjectAlreadyDrawnThere->height * sizeof(char));
 
+    updateMapObjectsTemporarilyDrawingFlags();
+
     // TODO Start und End noch ein wenig weiter ausweiten?
     mapCoordsIterator.iterate([&] (const MapCoords& mapCoords) {
         // Außerhalb der Karte?
@@ -181,7 +183,6 @@ void GuiMap::renderElement(IRenderer* renderer) {
         auto iterMapTileTemporarily = mapTilesToDrawTemporarily.find(mapCoords);
         if (iterMapTileTemporarily != mapTilesToDrawTemporarily.cend()) {
             mapObjectToDrawHere = iterMapTileTemporarily->second.mapObjectToDraw.get();
-            updateMapObjectsTemporarilyDrawingFlags();
         }
 
         // Nichts temporär? Dann gucken, ob im Spielstand was is, was wir zeichnen müssen
@@ -1007,10 +1008,12 @@ void GuiMap::addCurrentStructureToBuildQueue(const MapCoords& mapCoords) {
 }
 
 void GuiMap::updateMapObjectsTemporarilyDrawingFlags() {
-    // Build-Queue leer? D.h. nur das Hover-Objekt ist in mapTilesToDrawTemporarily
-    if (inBuildingMode && buildQueue.empty()) {
-        assert(mapTilesToDrawTemporarily.size() > 0);
+    if (inBuildingMode == false || mapTilesToDrawTemporarily.empty()) {
+        return;
+    }
 
+    // Build-Queue leer? D.h. nur das Hover-Objekt ist in mapTilesToDrawTemporarily
+    if (buildQueue.empty()) {
         if (!mapTilesToDrawTemporarily.cbegin()->second.mapObjectToDraw) {
             return; // kein Hover-Objekt da? Dann darfs hier eh nicht platziert werden, z.B. weil Platz belegt
         }
