@@ -1,7 +1,10 @@
 #ifndef _BUILDING_H
 #define _BUILDING_H
 
+#ifdef TESTS_ENABLED
 #include <gtest/gtest.h>
+#endif
+
 #include "economics/Carrier.h"
 #include "game/ProductionSlots.h"
 #include "map/Structure.h"
@@ -12,7 +15,9 @@
  */
 class Building : public Structure {
 
+#ifdef TESTS_ENABLED
     FRIEND_TEST(EconomicsMgrTest, updateCarrier);
+#endif
     friend class EconomicsMgr; // EconomicsMgr soll zum Bewegen des Trägers einfach zugreifen können
     friend class GuiMap; // GuiMap soll zum Rendern des Trägers einfach zugreifen können
 
