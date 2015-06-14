@@ -1,6 +1,7 @@
 #ifndef _I_GRAPHICS_MGR_H
 #define _I_GRAPHICS_MGR_H
 
+#include <cassert>
 #include <string>
 #include "defines.h"
 #include "game/GoodsSlot.h"
