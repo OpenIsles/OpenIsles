@@ -1,8 +1,11 @@
 #ifndef _CONFIG_MGR_H
 #define _CONFIG_MGR_H
 
-#include <list>
+#ifdef TESTS_ENABLED
 #include <gtest/gtest.h>
+#endif
+
+#include <list>
 #include <unordered_map>
 #include "defines.h"
 #include "config/Good.h"
@@ -87,7 +90,9 @@ struct MapTileConfig {
  */
 class ConfigMgr {
 
+#ifdef TESTS_ENABLED
     FRIEND_TEST(ConfigMgrTest, parseCatchmentArea);
+#endif
     
 private:
     /**

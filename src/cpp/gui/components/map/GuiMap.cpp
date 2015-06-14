@@ -106,9 +106,7 @@ void GuiMap::renderElement(IRenderer* renderer) {
     MapCoordsIterator mapCoordsIterator(MapCoords(mapXStart, mapYStart), MapCoords(mapXEnd, mapYEnd), screenView);
 
     // Nur die Kartenfläche vollmalen
-    Rect sdlMapClipRect(Consts::mapClipRect);
-    sdlMapClipRect.y = renderer->getWindowHeight() - (sdlMapClipRect.y + sdlMapClipRect.h); // SDL misst das Rechteck von UNTEN, kp, warum und ob das ein Bug is
-    renderer->setClipRect(&sdlMapClipRect);
+    renderer->setClipRect(&Consts::mapClipRect);
 
     // Kacheln rendern
     mapCoordsIterator.iterate([&] (const MapCoords& mapCoords) {

@@ -16,6 +16,18 @@ std::string toString(unsigned long x) {
 std::string toString(double x) {
     return std::to_string(x);
 }
+
+int stringToInteger(std::string s) {
+    return std::stoi(s);
+}
+
+unsigned long stringToUnsignedLong(std::string s) {
+    return std::stoul(s);
+}
+
+double stringToDouble(std::string s) {
+    return std::stod(s);
+}
 #endif
 
 #ifdef WINDOWS
@@ -41,7 +53,26 @@ std::string toString(unsigned long x) {
 
 std::string toString(double x) {
     char buffer[30];
-    sprintf(buffer, "%lf", x);
+    sprintf(buffer, "%f", x);
     return std::string(buffer);
 }
+
+int stringToInteger(std::string s) {
+    int x;
+    sscanf(s.c_str(), "%d", &x);
+    return x;
+}
+
+unsigned long stringToUnsignedLong(std::string s) {
+    unsigned long x;
+    sscanf(s.c_str(), "%lu", &x);
+    return x;
+}
+
+double stringToDouble(std::string s) {
+    double x;
+    sscanf(s.c_str(), "%lf", &x);
+    return x;
+}
+
 #endif

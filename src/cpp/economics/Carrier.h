@@ -1,7 +1,10 @@
 #ifndef _CARRIER_H
 #define _CARRIER_H
 
+#ifdef TESTS_ENABLED
 #include <gtest/gtest.h>
+#endif
+
 #include "Context.h"
 #include "game/GoodsSlot.h"
 #include "graphics/graphic/Animation.h"
@@ -16,7 +19,9 @@ class Building;
  */
 class Carrier : public MapObjectMoving {
 
+#ifdef TESTS_ENABLED
     FRIEND_TEST(EconomicsMgrTest, updateCarrier);
+#endif
     friend class EconomicsMgr; // EconomicsMgr soll zum Aktualisieren des Trägers einfach zugreifen können
     friend class GuiMap; // GuiMap soll zum Rendern des Trägers einfach zugreifen können
 

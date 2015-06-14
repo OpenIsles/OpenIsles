@@ -216,26 +216,28 @@ file(COPY ${CMAKE_SOURCE_DIR}/data DESTINATION ${CMAKE_BINARY_DIR})
 
 ## Target: OpenIsles-Tests - die Tests #################################################################################
 
-enable_testing()
+find_package(GTest) # nur verfügbar, wenn Google Test vorhanden is
+if(GTEST_FOUND)
+    enable_testing()
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DTESTS_ENABLED")
 
-add_executable(OpenIsles-Tests
-    ${COMMON_SOURCE_FILES}
-    ${NOSDL_FILES}
-    ${TEST_FILES}
-)
+    add_executable(OpenIsles-Tests
+        ${COMMON_SOURCE_FILES}
+        ${NOSDL_FILES}
+        ${TEST_FILES}
+    )
 
-target_include_directories(OpenIsles-Tests PUBLIC ${CMAKE_SOURCE_DIR}/test/cpp)
+    target_include_directories(OpenIsles-Tests PUBLIC ${CMAKE_SOURCE_DIR}/test/cpp)
 
-# data-Verzeichnis für Tests erweitern
-file(COPY ${CMAKE_SOURCE_DIR}/test/data DESTINATION ${CMAKE_BINARY_DIR})
+    # data-Verzeichnis für Tests erweitern
+    file(COPY ${CMAKE_SOURCE_DIR}/test/data DESTINATION ${CMAKE_BINARY_DIR})
 
-# Google Test
-find_package(GTest REQUIRED)
-target_include_directories(OpenIsles-Tests PUBLIC ${GTEST_INCLUDE_DIRS})
-target_compile_definitions(OpenIsles-Tests PUBLIC "-DNO_SDL -DDEFINE_VIRTUAL_ONLY_IN_TESTS")
-target_link_libraries(OpenIsles-Tests ${GTEST_BOTH_LIBRARIES} pthread) # BOTH-Variable benutzen, damit wir uns an jeder Testdatei die main()-Methode sparen
+    target_include_directories(OpenIsles-Tests PUBLIC ${GTEST_INCLUDE_DIRS})
+    target_compile_definitions(OpenIsles-Tests PUBLIC "-DNO_SDL -DDEFINE_VIRTUAL_ONLY_IN_TESTS")
+    target_link_libraries(OpenIsles-Tests ${GTEST_BOTH_LIBRARIES} pthread) # BOTH-Variable benutzen, damit wir uns an jeder Testdatei die main()-Methode sparen
 
-add_test(OpenIslesTests OpenIsles-Tests)
+    add_test(OpenIslesTests OpenIsles-Tests)
+endif(GTEST_FOUND)
 
 
 ## Doxygen #############################################################################################################

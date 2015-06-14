@@ -1,7 +1,10 @@
 #ifndef _MAP_OBJECT_H
 #define _MAP_OBJECT_H
 
+#ifdef TESTS_ENABLED
 #include <gtest/gtest.h>
+#endif
+
 #include "Context.h"
 #include "game/Player.h"
 #include "graphics/mgr/IGraphicsMgr.h"
@@ -15,9 +18,11 @@
  */
 class MapObject {
 
+#ifdef TESTS_ENABLED
     // Tests sollen die Update-Zeit via setLastUpdateTime() manipulieren dürfen.
     FRIEND_TEST(EconomicsMgrTest, updateCarrier);
     FRIEND_TEST(HarvestableTest, growHarvestable);
+#endif
 
 protected:
 	/**
@@ -190,7 +195,9 @@ public:
  */
 class MapObjectMoving : public MapObject {
 
+#ifdef TESTS_ENABLED
     FRIEND_TEST(EconomicsMgrTest, updateCarrier); // Test soll die Update-Zeit via setLastUpdateTime() manipulieren dürfen.
+#endif
 
 protected:
 	/**

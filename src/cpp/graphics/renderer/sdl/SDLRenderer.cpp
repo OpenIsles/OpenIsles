@@ -1,3 +1,4 @@
+#include <cstdlib>
 #include "graphics/renderer/sdl/SDLRenderer.h"
 
 // Fenster-Größe
@@ -75,7 +76,15 @@ const int SDLRenderer::getWindowHeight() const {
 
 void SDLRenderer::setClipRect(const Rect* const rect) {
     if (rect != nullptr) {
+        // SDL misst das Rechteck von UNTEN, kp, warum und ob das ein Bug is.
+        // Das Problem tritt auch nur in Linux auf. Unter Windows verhält sich SDL_RenderSetClipRect() wie erwartet.
+#ifdef LINUX
+        int fixedY = getWindowHeight() - (rect->y + rect->h);
+        SDL_Rect sdlRect = { rect->x, fixedY, rect->w, rect->h };
+#else
         SDL_Rect sdlRect = { rect->x, rect->y, rect->w, rect->h };
+#endif
+
         SDL_RenderSetClipRect(renderer, &sdlRect);
     } else {
         SDL_RenderSetClipRect(renderer, nullptr);
