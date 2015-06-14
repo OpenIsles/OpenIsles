@@ -53,7 +53,7 @@ std::string toString(unsigned long x) {
 
 std::string toString(double x) {
     char buffer[30];
-    sprintf(buffer, "%lf", x);
+    sprintf(buffer, "%f", x);
     return std::string(buffer);
 }
 
