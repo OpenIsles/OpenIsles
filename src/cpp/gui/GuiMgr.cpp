@@ -421,6 +421,11 @@ void GuiMgr::onEvent(SDL_Event& event) {
             ((GuiMap*) findElement(GUI_ID_MAP))->onRotateAddingStructure();
         }
 
+        // offiziellen FPS-Counter an-/ausschalten
+        else if (event.key.keysym.scancode == SDL_SCANCODE_F && (event.key.keysym.mod & KMOD_SHIFT)) {
+            game->toggleFpsCounter();
+        }
+
 #ifdef DEBUG_A_STAR
         bool needToRecalculate = false;
 

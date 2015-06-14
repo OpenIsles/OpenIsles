@@ -48,6 +48,11 @@ private:
      */
     double speed;
 
+    /**
+     * @brief gibt an, ob die offizielle FPS-Anzeige sichtbar ist
+     */
+    bool fpsCounterEnabled = false;
+
 public:
 	Game(const Context* const context);
 	~Game();
@@ -131,6 +136,21 @@ public:
      */
     void setSpeed(double speed) {
         this->speed = speed;
+    }
+
+    /**
+     * @brief Liefert zurück, ob die offizielle FPS-Anzeige aktiviert ist
+     * @return `true`, wenn die offizielle FPS-Anzeige aktiviert ist
+     */
+    bool isFpsCounterEnabled() const {
+        return fpsCounterEnabled;
+    }
+
+    /**
+     * @brief Schaltet die Anzeige der offiziellen FPS-Anzeige um
+     */
+    void toggleFpsCounter() {
+        this->fpsCounterEnabled = !this->fpsCounterEnabled;
     }
 
     /**

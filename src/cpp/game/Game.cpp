@@ -13,6 +13,10 @@
 Game::Game(const Context* const context) : ContextAware(context) {
     speed = 1;
     map = new Map(context);
+
+#ifdef DEBUG
+    fpsCounterEnabled = true;
+#endif
 }
 
 Game::~Game() {

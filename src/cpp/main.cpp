@@ -41,6 +41,9 @@ static Color colorWhite = Color(255, 255, 255, 255);
 static std::string debugOutput[7];
 #endif
 
+
+static PerformanceCounter fpsCounter(500);
+
 /**
  * @brief hält die Befehlszeilen-Parameter
  */
@@ -96,6 +99,22 @@ void drawFrame(const Context& context, IRenderer* renderer) {
             context.fontMgr->renderText(renderer, selectedBuilding->getMapObjectType()->title, 753, 743,
                 &colorWhite, nullptr, "DroidSans-Bold.ttf", 14, RENDERTEXT_HALIGN_RIGHT);
         }
+    }
+
+    // FPS-Anzeige
+    if (context.game->isFpsCounterEnabled()) {
+        context.fontMgr->renderText(renderer, "FPS:",
+                                    10, 686, &colorWhite, nullptr, "DroidSans-Bold.ttf", 14, RENDERTEXT_HALIGN_LEFT);
+
+        context.fontMgr->renderText(renderer, "current:",
+                                    77, 698, &colorWhite, nullptr, "DroidSans-Bold.ttf", 14, RENDERTEXT_HALIGN_RIGHT);
+        context.fontMgr->renderText(renderer, toString((int) fpsCounter.getFpsCurrent()),
+                                    80, 698, &colorWhite, nullptr, "DroidSans.ttf", 14, RENDERTEXT_HALIGN_LEFT);
+
+        context.fontMgr->renderText(renderer, "average:",
+                                    77, 711, &colorWhite, nullptr, "DroidSans-Bold.ttf", 14, RENDERTEXT_HALIGN_RIGHT);
+        context.fontMgr->renderText(renderer, toString(fpsCounter.getFpsAvg()),
+                                    80, 711, &colorWhite, nullptr, "DroidSans.ttf", 14, RENDERTEXT_HALIGN_LEFT);
     }
 
 #ifdef DEBUG
@@ -177,10 +196,11 @@ int main(int argc, char** argv) {
     EconomicsMgr* economicsMgr = new EconomicsMgr(&context);
     context.economicsMgr = economicsMgr;
 
-    PerformanceCounter performanceCounterFps(500);
+#ifdef DEBUG
     PerformanceCounter performanceCounterEvents(500);
     PerformanceCounter performanceCounterUpdates(500);
     PerformanceCounter performanceCounterRendering(500);
+#endif
     
     Game* game = new Game(&context);
     context.game = game;
@@ -194,7 +214,7 @@ int main(int argc, char** argv) {
     int benchmarkFramesToGo = cmdlineParams.benchmarkFrames;
     Map* map = game->getMap();
 	while (!guiMgr->hasToQuitGame()) {
-		performanceCounterFps.start();
+		fpsCounter.start();
 
         // während eines Frames nur einmal auf die Uhr gucken, damit z.B. beim Blinkend-Zeichnen nicht ein Schnibbel
         // eines Gebäude gezeichnet und ein anderer ne Millisekunde später nicht mehr
@@ -202,7 +222,9 @@ int main(int argc, char** argv) {
 
 
 		// Events handeln
+#ifdef DEBUG
         performanceCounterEvents.start();
+#endif
 
         SDL_Event event;
 		while (SDL_PollEvent(&event)) {
@@ -215,11 +237,15 @@ int main(int argc, char** argv) {
             }
 		}
 
+#ifdef DEBUG
         performanceCounterEvents.end();
+#endif
 
 
         // Objekte aktualisieren
+#ifdef DEBUG
         performanceCounterUpdates.start();
+#endif
 
         std::list<MapObject*> mapObjectsToDelete;
         std::list<MapObject*> mapObjects = map->getMapObjects();
@@ -238,7 +264,9 @@ int main(int argc, char** argv) {
             context.game->getMap()->deleteMapObject(mapObject);
         }
 
+#ifdef DEBUG
         performanceCounterUpdates.end();
+#endif
 
 
         // Position des Mauszeigers holen
@@ -259,27 +287,24 @@ int main(int argc, char** argv) {
             *map, mapCoordsTopLeft, mapCoordsTopRight, mapCoordsBottomLeft, mapCoordsBottomRight);
 
 		// Debug-Infos vorbereiten, damit wir sie später einfach nur ausgeben können
-		debugOutput[0] = "FPS: average = " + toString(performanceCounterFps.getFpsAvg()) +
-            ", current = " + toString(performanceCounterFps.getFpsCurrent());
-
-        debugOutput[1] = "PerfCounters: events avg " + toString(performanceCounterEvents.getMillisAvg()) +
+        debugOutput[0] = "PerfCounters: events avg " + toString(performanceCounterEvents.getMillisAvg()) +
             ", current = " + toString(performanceCounterEvents.getMillisCurrent()) +
             "; updates avg " + toString(performanceCounterUpdates.getMillisAvg()) +
             ", current = " + toString(performanceCounterUpdates.getMillisCurrent()) +
             "; rendering avg " + toString(performanceCounterRendering.getMillisAvg()) +
             ", current = " + toString(performanceCounterRendering.getMillisCurrent());
 
-        debugOutput[2] = "Screen: mapCentered = (" +
+        debugOutput[1] = "Screen: mapCentered = (" +
             toString(mapCoordsCentered.x()) + ", " + toString(mapCoordsCentered.y()) + "), zoom = " +
             toString(screenZoom) + ", view = " + toString(screenView);
 
-        debugOutput[3] = "ScreenEdges: topLeft = (" +
+        debugOutput[2] = "ScreenEdges: topLeft = (" +
             toString(mapCoordsTopLeft.x()) + ", " + toString(mapCoordsTopLeft.y()) + "), topRight = (" +
             toString(mapCoordsTopRight.x()) + ", " + toString(mapCoordsTopRight.y()) + "), bottomLeft = (" +
             toString(mapCoordsBottomLeft.x()) + ", " + toString(mapCoordsBottomLeft.y()) + "), bottomRight = (" +
             toString(mapCoordsBottomRight.x()) + ", " + toString(mapCoordsBottomRight.y()) + ")";
 
-        debugOutput[4] = "mouse = (" +
+        debugOutput[3] = "mouse = (" +
             toString(context.mouseCurrentX) + ", " + toString(context.mouseCurrentY) + "), screen = (" +
             toString(mouseCurrentScreenCoords.x()) + ", " + toString(mouseCurrentScreenCoords.y()) + "), mapElevated = (" +
             toString(mouseCurrentMapCoords.x()) + ", " + toString(mouseCurrentMapCoords.y()) + "), ";
@@ -292,7 +317,7 @@ int main(int argc, char** argv) {
             const MapObjectFixed* smoFixed = dynamic_cast<const MapObjectFixed*>(selectedMapObject);
             if (smoFixed != nullptr) {
                 const MapCoords& mapCoords = smoFixed->getMapCoords();
-                debugOutput[5] = "selectedMapObject(Fixed) on mapCoords (" +
+                debugOutput[4] = "selectedMapObject(Fixed) on mapCoords (" +
                     toString(mapCoords.x()) + ", " + toString(mapCoords.y()) + "), size = (" +
                     toString(mapWidth) + ", " + toString(mapHeight) + ")";
             }
@@ -300,18 +325,18 @@ int main(int argc, char** argv) {
                 const MapObjectMoving* smoMoving = dynamic_cast<const MapObjectMoving*>(selectedMapObject);
                 if (smoMoving != nullptr) {
                     const DoubleMapCoords& mapCoords = smoMoving->getMapCoords();
-                    debugOutput[5] = "selectedMapObject(Moving) on mapCoords (" +
+                    debugOutput[4] = "selectedMapObject(Moving) on mapCoords (" +
                         toString(mapCoords.x()) + ", " + toString(mapCoords.y()) + "), size = (" +
                         toString(mapWidth) + ", " + toString(mapHeight) + ")";
                 }
                 else {
-                    debugOutput[5] = "selectedMapObject(UNKNOWN!?) size = (" +
+                    debugOutput[4] = "selectedMapObject(UNKNOWN!?) size = (" +
                         toString(mapWidth) + ", " + toString(mapHeight) + ")";
                 }
             }
 
         } else {
-            debugOutput[5] = "";
+            debugOutput[4] = "";
         }
 
 #ifdef DEBUG_A_STAR
@@ -337,13 +362,19 @@ int main(int argc, char** argv) {
 #endif // DEBUG
 
 
+#ifdef DEBUG
         performanceCounterRendering.start();
+#endif
+
         sdlRenderer->startFrame();
 		drawFrame(context, sdlRenderer);
         sdlRenderer->endFrame();
-        performanceCounterRendering.end();
 
-		performanceCounterFps.end();
+#ifdef DEBUG
+        performanceCounterRendering.end();
+#endif
+
+		fpsCounter.end();
 
         // Benchmarking: nur x Frames, dann wird automatisch beendet
         if (benchmarkFramesToGo > 0) {
