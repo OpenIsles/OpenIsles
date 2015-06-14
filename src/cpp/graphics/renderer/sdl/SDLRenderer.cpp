@@ -1,3 +1,4 @@
+#include <cstdlib>
 #include "graphics/renderer/sdl/SDLRenderer.h"
 
 // Fenster-Größe
