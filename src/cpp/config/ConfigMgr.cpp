@@ -76,8 +76,10 @@ void ConfigMgr::loadMapObjectTypes() {
         }
 
         // Basics
-        mapObjectType.mapWidth = (unsigned char) std::stoul(node->first_attribute("width", 5, true)->value());
-        mapObjectType.mapHeight = (unsigned char) std::stoul(node->first_attribute("height", 6, true)->value());
+        mapObjectType.mapWidth = (unsigned char) stringToUnsignedLong(
+            node->first_attribute("width", 5, true)->value());
+        mapObjectType.mapHeight = (unsigned char) stringToUnsignedLong(
+            node->first_attribute("height", 6, true)->value());
         mapObjectType.title = std::string(node->first_node("title", 5, true)->value());
 
         // Structure-Placing
@@ -96,10 +98,14 @@ void ConfigMgr::loadMapObjectTypes() {
         // Baukosten
         rapidxml::xml_node<>* buildingCostsNode = node->first_node("building-costs", 14, true);
         BuildingCosts& buildingCosts = mapObjectType.buildingCosts;
-        buildingCosts.coins = (unsigned int) std::stoul(buildingCostsNode->first_node("coins", 5, true)->value());
-        buildingCosts.tools = (unsigned int) std::stoul(buildingCostsNode->first_node("tools", 5, true)->value());
-        buildingCosts.wood = (unsigned int) std::stoul(buildingCostsNode->first_node("wood", 4, true)->value());
-        buildingCosts.bricks = (unsigned int) std::stoul(buildingCostsNode->first_node("bricks", 6, true)->value());
+        buildingCosts.coins = (unsigned int) stringToUnsignedLong(
+            buildingCostsNode->first_node("coins", 5, true)->value());
+        buildingCosts.tools = (unsigned int) stringToUnsignedLong(
+            buildingCostsNode->first_node("tools", 5, true)->value());
+        buildingCosts.wood = (unsigned int) stringToUnsignedLong(
+            buildingCostsNode->first_node("wood", 4, true)->value());
+        buildingCosts.bricks = (unsigned int) stringToUnsignedLong(
+            buildingCostsNode->first_node("bricks", 6, true)->value());
 
         // optionale Tags
         rapidxml::xml_node<>* catchmentAreaNode = node->first_node("catchment-area", 14, true);
@@ -126,12 +132,12 @@ void ConfigMgr::loadMapObjectTypes() {
 
         rapidxml::xml_node<>* inhabitantsNode = node->first_node("inhabitants", 11, true);
         if (inhabitantsNode != nullptr) {
-            mapObjectType.inhabitants = (unsigned char) std::stoul(inhabitantsNode->value());
+            mapObjectType.inhabitants = (unsigned char) stringToUnsignedLong(inhabitantsNode->value());
         }
 
         rapidxml::xml_node<>* maxAgeNode = node->first_node("max-age", 7, true);
         if (maxAgeNode != nullptr) {
-            mapObjectType.maxAge = (unsigned char) std::stoul(maxAgeNode->value());
+            mapObjectType.maxAge = (unsigned char) stringToUnsignedLong(maxAgeNode->value());
         }
 
         std::cout << "Loaded mapObjectType '" << mapObjectType.name << "'." << std::endl;
@@ -167,10 +173,10 @@ void ConfigMgr::loadTilesConfig() {
         for (rapidxml::xml_node<>* tmxTileNode = tileNode->first_node("tmx-tile", 8, true); tmxTileNode != nullptr;
              tmxTileNode = tmxTileNode->next_sibling("tmx-tile", 8, true)) {
 
-            int tmxTileIndex = std::stoi(tmxTileNode->first_attribute("tmx-tile-index", 14, true)->value());
+            int tmxTileIndex = stringToInteger(tmxTileNode->first_attribute("tmx-tile-index", 14, true)->value());
             const char* tileViewName = tmxTileNode->first_attribute("view", 4, true)->value();
-            int xOffsetInTileset = std::stoi(tmxTileNode->first_attribute("x", 1, true)->value());
-            int yOffsetInTileset = std::stoi(tmxTileNode->first_attribute("y", 1, true)->value());
+            int xOffsetInTileset = stringToInteger(tmxTileNode->first_attribute("x", 1, true)->value());
+            int yOffsetInTileset = stringToInteger(tmxTileNode->first_attribute("y", 1, true)->value());
 
             FourthDirection tileView = Direction::fromString(tileViewName);
             mapTileConfig.mapTileViewsOffsetXYInTileset[tileView] =
@@ -279,6 +285,7 @@ void ConfigMgr::readGoodSlotConfig(GoodsSlot& goodSlot, rapidxml::xml_node<>* pr
     const Good* good = getGood(goodName);
 
     goodSlot.good = good;
-    goodSlot.capacity = (unsigned int) std::stoul(produtionSlotNode->first_attribute("capacity", 8, true)->value());
-    goodSlot.rate = std::stod(produtionSlotNode->first_attribute("rate", 4, true)->value());
+    goodSlot.capacity = (unsigned int) stringToUnsignedLong(
+        produtionSlotNode->first_attribute("capacity", 8, true)->value());
+    goodSlot.rate = stringToDouble(produtionSlotNode->first_attribute("rate", 4, true)->value());
 }
