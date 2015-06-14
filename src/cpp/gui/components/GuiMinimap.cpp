@@ -24,9 +24,8 @@ void GuiMinimap::renderElement(IRenderer* renderer) {
     getWindowCoords(windowX, windowY);
 
     // Nur die Kartenfläche vollmalen
-    Rect fixedMinimapClipRect = Rect(windowX, windowY, width, height);
-    fixedMinimapClipRect.y = renderer->getWindowHeight() - (windowY + height); // SDL misst das Rechteck von UNTEN, kp, warum und ob das ein Bug is
-    renderer->setClipRect(&fixedMinimapClipRect);
+    Rect minimapClipRect = Rect(windowX, windowY, width, height);
+    renderer->setClipRect(&minimapClipRect);
 
     // Karte zeichnen
     SDL_Rect sdlMinimapClipRect = { windowX, windowY, width, height };
