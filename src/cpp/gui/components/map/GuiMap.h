@@ -6,8 +6,8 @@
 #include <random>
 #include <unordered_map>
 #include "Context.h"
+#include "gui/components/map/GuiResourcesBar.h"
 #include "gui/components/GuiBase.h"
-#include "gui/components/GuiResourcesBar.h"
 #include "map/Direction.h"
 #include "map/Structure.h"
 #include "utils/RectangleData.h"

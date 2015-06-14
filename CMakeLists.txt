@@ -78,19 +78,19 @@ set(COMMON_SOURCE_FILES
     src/cpp/defines.h
 )
 set(GUI_SOURCE_FILES
+    src/cpp/gui/components/map/GuiMap.cpp
+    src/cpp/gui/components/map/GuiMap.h
+    src/cpp/gui/components/map/GuiResourcesBar.cpp
+    src/cpp/gui/components/map/GuiResourcesBar.h
     src/cpp/gui/components/GuiAddBuildingWidget.cpp
     src/cpp/gui/components/GuiAddBuildingWidget.h
     src/cpp/gui/components/GuiBase.h
     src/cpp/gui/components/GuiButton.cpp
     src/cpp/gui/components/GuiButton.h
-    src/cpp/gui/components/GuiMap.cpp
-    src/cpp/gui/components/GuiMap.h
     src/cpp/gui/components/GuiMinimap.cpp
     src/cpp/gui/components/GuiMinimap.h
     src/cpp/gui/components/GuiPushButton.cpp
     src/cpp/gui/components/GuiPushButton.h
-    src/cpp/gui/components/GuiResourcesBar.cpp
-    src/cpp/gui/components/GuiResourcesBar.h
     src/cpp/gui/components/GuiStaticElement.cpp
     src/cpp/gui/components/GuiStaticElement.h
     src/cpp/gui/panel-widgets/GuiSelectedBuildingWidget.cpp

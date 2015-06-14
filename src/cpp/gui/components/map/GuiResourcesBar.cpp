@@ -3,7 +3,7 @@
 #include "game/Game.h"
 #include "graphics/mgr/IFontMgr.h"
 #include "gui/GuiMgr.h"
-#include "gui/components/GuiResourcesBar.h"
+#include "gui/components/map/GuiResourcesBar.h"
 #include "utils/Color.h"
 
 static Color colorWhite = Color(255, 255, 255, 255);
