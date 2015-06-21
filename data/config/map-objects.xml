@@ -335,6 +335,18 @@
         <max-age>6</max-age>
     </harvestable>
 
+    <harvestable name="spices-field" width="1" height="1">
+        <title>Gewürzfeld</title>
+        <structure-placing>rectangle</structure-placing>
+        <building-costs>
+            <coins>5</coins>
+            <tools>0</tools>
+            <wood>0</wood>
+            <bricks>0</bricks>
+        </building-costs>
+        <max-age>5</max-age>
+    </harvestable>
+
     <building name="sheep-farm" width="2" height="2">
         <title>Schaffarm</title>
         <structure-placing>individually</structure-placing>

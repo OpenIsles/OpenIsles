@@ -53,7 +53,7 @@ GuiBuildMenuWidget::GuiBuildMenuWidget(const Context* const context) : GuiPanelW
                 context->configMgr->getMapObjectType("tobacco-plantation"),
                 context->configMgr->getMapObjectType("tobacco-field"),
                 nullptr,
-                nullptr,
+                context->configMgr->getMapObjectType("spices-field"),
                 nullptr,
                 nullptr,
                 context->configMgr->getMapObjectType("sheep-farm"),

@@ -157,7 +157,7 @@ $(foreach STREET_TILESET,$(STREET_TILESETS),$(eval $(call RENDER_STREET_TILESET,
 # Erntebare Landschaften                                                                                               #
 ########################################################################################################################
 
-HARVESTABLES := northern-forest1 northern-forest2 sugarcane-field tobacco-field
+HARVESTABLES := northern-forest1 northern-forest2 spices-field sugarcane-field tobacco-field
 
 define RENDER_HARVESTABLE
 $(DATA_DIRECTORY)/img/harvestables/$(1).png: $(SRC_DIRECTORY)/blender/harvestables/$(1)/$(1).blend

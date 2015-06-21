@@ -96,6 +96,7 @@ void AbstractGraphicsMgr::loadGraphics() {
     loadStaticGraphicSet("add-building-button/sugarcane-field", "data/img/gui/add-building/sugarcane-field.png");
     loadStaticGraphicSet("add-building-button/tobacco-plantation", "data/img/gui/add-building/tobacco-plantation.png");
     loadStaticGraphicSet("add-building-button/tobacco-field", "data/img/gui/add-building/tobacco-field.png");
+    loadStaticGraphicSet("add-building-button/spices-field", "data/img/gui/add-building/spices-field.png");
     loadStaticGraphicSet("add-building-button/distillery", "data/img/gui/add-building/distillery.png");
     loadStaticGraphicSet("add-building-button/tobacco-goods", "data/img/gui/add-building/tobacco-goods.png");
     loadStaticGraphicSet("add-building-button/square1", "data/img/gui/add-building/square1.png");
@@ -136,6 +137,7 @@ void AbstractGraphicsMgr::loadGraphics() {
     loadHarvestablesGraphicSet("harvestable/northern-forest2", "data/img/harvestables/northern-forest2.png", 5);
     loadHarvestablesGraphicSet("harvestable/sugarcane-field", "data/img/harvestables/sugarcane-field.png", 5);
     loadHarvestablesGraphicSet("harvestable/tobacco-field", "data/img/harvestables/tobacco-field.png", 7);
+    loadHarvestablesGraphicSet("harvestable/spices-field", "data/img/harvestables/spices-field.png", 6);
 }
 
 void AbstractGraphicsMgr::loadTiles() {
