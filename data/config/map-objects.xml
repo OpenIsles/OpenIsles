@@ -335,6 +335,29 @@
         <max-age>6</max-age>
     </harvestable>
 
+    <building name="spices-plantation" width="2" height="2">
+        <title>Gewürzplantage</title>
+        <structure-placing>individually</structure-placing>
+        <building-costs>
+            <coins>300</coins>
+            <tools>2</tools>
+            <wood>3</wood>
+            <bricks>8</bricks>
+        </building-costs>
+        <catchment-area>
+            011110
+            111111
+            111111
+            111111
+            111111
+            011110
+        </catchment-area>
+        <production-slots>
+            <output good="spices" capacity="4" rate="1.4" />
+        </production-slots>
+        <inhabitants>4</inhabitants>
+    </building>
+
     <harvestable name="spices-field" width="1" height="1">
         <title>Gewürzfeld</title>
         <structure-placing>rectangle</structure-placing>
