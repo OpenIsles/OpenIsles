@@ -133,13 +133,6 @@ private:
     // Datenstrukturen, die wir zum Rendern brauchen ///////////////////////////////////////////////////////////////////
 
     /**
-     * @brief Hilfsstruktur, die zum Zeichnen der Map-Objekte benötigt wird. Wir wollen sie nicht jedes Frame neu
-     * anlegen, weil sie immer so groß wie die Karte ist.
-     * @sa renderMap()
-     */
-    RectangleData<char>* mapObjectAlreadyDrawnThere = nullptr;
-
-    /**
      * @brief Datenstruktur, mit der uns merken, was temporär zu zeichnen ist. Das sind alle Objekte, die gerade
      * positioniert werden, im Begriff sind, abgerissen zu werden oder das Hover-Objekt.
      *
@@ -202,8 +195,7 @@ public:
     virtual bool onEventElement(SDL_Event& event);
 
     /**
-     * @brief Callback, wenn ein neues Spiel startet. In diesem Fall müssen wir `mapObjectAlreadyDrawnThere`
-     * auf die neue Map-Größe bringen.
+     * @brief Callback, wenn ein neues Spiel startet.
      */
     void onNewGame();
 

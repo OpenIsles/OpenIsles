@@ -40,11 +40,6 @@ GuiMap::GuiMap(const Context* const context, GuiResourcesBar* guiResourcesBar) :
 }
 
 GuiMap::~GuiMap() {
-    if (mapObjectAlreadyDrawnThere != nullptr) {
-        delete mapObjectAlreadyDrawnThere;
-        mapObjectAlreadyDrawnThere = nullptr;
-    }
-
     clearAllTemporarily();
 
 #ifdef DEBUG
@@ -108,12 +103,16 @@ void GuiMap::renderElement(IRenderer* renderer) {
     // Nur die Kartenfläche vollmalen
     renderer->setClipRect(&Consts::mapClipRect);
 
-    // Kacheln rendern
+    updateMapObjectsTemporarilyDrawingFlags();
+
+    // Jetzt rendern
     mapCoordsIterator.iterate([&] (const MapCoords& mapCoords) {
         const MapTile* mapTile = map->getMapTileAt(mapCoords);
         if (mapTile == nullptr) {
             return;
         }
+
+        // Kachel rendern //////////////////////////////////////////////////////////////////////////
 
         const Animation* tileAnimation = mapTile->getTileAnimationForView(screenView);
         const IGraphic* tileGraphic = tileAnimation->getGraphic();
@@ -153,32 +152,14 @@ void GuiMap::renderElement(IRenderer* renderer) {
 #endif
 
         tileGraphic->draw(nullptr, &rectDestination, drawingFlags, context->sdlTicks);
-    });
 
-    // Objekte rendern
-    memset(mapObjectAlreadyDrawnThere->data, 0,
-        mapObjectAlreadyDrawnThere->width * mapObjectAlreadyDrawnThere->height * sizeof(char));
 
-    updateMapObjectsTemporarilyDrawingFlags();
-
-    // TODO Start und End noch ein wenig weiter ausweiten?
-    mapCoordsIterator.iterate([&] (const MapCoords& mapCoords) {
-        // Außerhalb der Karte?
-        if (mapCoords.x() < 0 || mapCoords.y() < 0 || mapCoords.x() >= map->getWidth() || mapCoords.y() >= map->getHeight()) {
-            return;
-        }
-
-        // Hier schon bemalt?
-        if (mapObjectAlreadyDrawnThere->getData(mapCoords.x(), mapCoords.y(), 1) == 1) {
-            return;
-        }
+        // MapObjekt auf die Kachel rendern ////////////////////////////////////////////////////////
 
         // Gucken, ob/welches Objekt wir hier malen müssen
-        const MapTile* mapTile = map->getMapTileAt(mapCoords);
         const MapObjectFixed* mapObjectToDrawHere = nullptr;
 
         // Temporär was anderes zeichnen?
-        auto iterMapTileTemporarily = mapTilesToDrawTemporarily.find(mapCoords);
         if (iterMapTileTemporarily != mapTilesToDrawTemporarily.cend()) {
             mapObjectToDrawHere = iterMapTileTemporarily->second.mapObjectToDraw.get();
         }
@@ -193,6 +174,7 @@ void GuiMap::renderElement(IRenderer* renderer) {
 
         if (mapObjectToDrawHere != nullptr) {
             // @see docs/drawing-order-x-tiles.xcf für Variablen
+            // TODO Vorsicht: doc/drawing-order-x-tiles.xcf ist veraltet -> mapObjectAlreadyDrawnThere gibts nicht mehr
 
             const MapCoords& moMapCoords = mapObjectToDrawHere->getMapCoords();
             const Structure* structure = dynamic_cast<const Structure*>(mapObjectToDrawHere);
@@ -307,33 +289,11 @@ void GuiMap::renderElement(IRenderer* renderer) {
                 }
             }
             graphicToDrawHere->draw(&rectSource, &rectDestination, drawingFlags, context->sdlTicks);
-
-            // In mapObjectAlreadyDrawnThere die Kacheln-Spalte als erledigt markieren
-            do {
-                mapObjectAlreadyDrawnThere->setData(
-                    moMapCoords.x() + tileOffsetXInMapObject, moMapCoords.y() + tileOffsetYInMapObject, 1);
-
-                if (screenView == Direction::SOUTH) {
-                    tileOffsetXInMapObject++;
-                    tileOffsetYInMapObject++;
-                } else if (screenView == Direction::EAST) {
-                    tileOffsetXInMapObject++;
-                    tileOffsetYInMapObject--;
-                } else if (screenView == Direction::NORTH) {
-                    tileOffsetXInMapObject--;
-                    tileOffsetYInMapObject--;
-                } else if (screenView == Direction::WEST) {
-                    tileOffsetXInMapObject--;
-                    tileOffsetYInMapObject++;
-                } else {
-                    assert(false);
-                }
-            } while (
-                tileOffsetXInMapObject < moMapWidth && tileOffsetYInMapObject < moMapHeight &&
-                tileOffsetXInMapObject >= 0 && tileOffsetYInMapObject >= 0);
         }
 
-        // Träger etc. zeichnen
+
+        // Träger etc. auf die Kachel zeichnen /////////////////////////////////////////////////////
+
         for (auto iter = mapTile->mapObjectsMoving.cbegin(); iter != mapTile->mapObjectsMoving.cend(); iter++) {
             MapObjectMoving* mapObject = *iter;
             // TODO Aktuell machen wir nur Träger
@@ -894,17 +854,7 @@ void GuiMap::drawCatchmentArea(IRenderer* const renderer, const Building& buildi
 }
 
 void GuiMap::onNewGame() {
-    Map* map = context->game->getMap();
-    int newMapWidth = map->getWidth();
-    int newMapHeight = map->getHeight();
-
     // Alles wegräumen und neu anlegen
-    if (mapObjectAlreadyDrawnThere != nullptr) {
-        delete mapObjectAlreadyDrawnThere;
-        mapObjectAlreadyDrawnThere = nullptr;
-    }
-    mapObjectAlreadyDrawnThere = new RectangleData<char>(newMapWidth, newMapHeight);
-
     clearAllTemporarily();
 }
 
