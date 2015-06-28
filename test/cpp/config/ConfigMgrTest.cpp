@@ -84,7 +84,11 @@ TEST(ConfigMgrTest, loadMapObjectTypes) {
     ASSERT_EQ(6, distillery->buildingProduction.input.capacity);
     ASSERT_EQ(5.0, distillery->buildingProduction.input.rate);
     // TODO Testcase für output, input UND input2 gesetzt; aktuell haben wir kein solches Gebäude
-    // TODO Testcase für kombinierte Bitmaske in placeableOnMapTileTypeMask
+
+    const MapObjectType* pier = configMgr.getMapObjectType("pier");
+    ASSERT_EQ(
+        (MapTileTypeInt) MapTileType::SHORE_OCEAN | (MapTileTypeInt) MapTileType::SHORE_GRASS,
+        pier->placeableOnMapTileTypeMask);
 }
 
 

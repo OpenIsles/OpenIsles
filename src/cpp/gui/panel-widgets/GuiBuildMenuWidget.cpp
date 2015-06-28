@@ -77,7 +77,7 @@ GuiBuildMenuWidget::GuiBuildMenuWidget(const Context* const context) : GuiPanelW
                 nullptr,
                 nullptr,
                 nullptr,
-                nullptr,
+                context->configMgr->getMapObjectType("pier"),
                 nullptr,
                 nullptr,
                 context->configMgr->getMapObjectType("office1"),

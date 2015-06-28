@@ -557,6 +557,21 @@
 
     <!-- Hafenanlagen -->
 
+    <structure name="pier" width="1" height="1">
+        <title>Anlegestelle</title>
+        <structure-placing>individually</structure-placing>
+        <placeable-on>
+            <map-tile-type>shore-ocean</map-tile-type>
+            <map-tile-type>shore-grass</map-tile-type>
+        </placeable-on>
+        <building-costs>
+            <coins>15</coins>
+            <tools>0</tools>
+            <wood>0</wood>
+            <bricks>2</bricks>
+        </building-costs>
+    </structure>
+
     <building name="office1" width="3" height="2">
         <title>Kontor I</title>
         <structure-placing>individually</structure-placing>

@@ -268,7 +268,7 @@ void GuiMap::renderElement(IRenderer* renderer) {
             Rect rectSource(xInMapObject, 0, IGraphicsMgr::TILE_WIDTH, graphicToDrawHere->getHeight());
 
             ScreenCoords screenCoords = MapCoordUtils::mapToScreenCoords(mapCoords, screenView, *map);
-            const int elevation = 1; // TODO für Gebäude wie Anlegestelle, Fischerhütte etc. muss auf 0 gesetzt werden
+            int elevation = (mapObjectType->name == "pier") ? 0 : 1; // TODO in die Config nehmen!
 
             int destDrawX = screenCoords.x() - IGraphicsMgr::TILE_WIDTH_HALF;
             int destDrawY = screenCoords.y() - yInMapObject - elevation * IGraphicsMgr::ELEVATION_HEIGHT;

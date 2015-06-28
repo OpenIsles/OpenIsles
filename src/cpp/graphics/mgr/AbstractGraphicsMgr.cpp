@@ -57,6 +57,7 @@ void AbstractGraphicsMgr::loadGraphics() {
     loadStaticGraphicSetWith4Views("structure/square1", "data/img/buildings/square1.png");
     loadStaticGraphicSetWith4Views("structure/square2", "data/img/buildings/square2.png");
     loadStaticGraphicSetWith4Views("structure/square3", "data/img/buildings/square3.png");
+    loadStaticGraphicSetWith4Views("structure/pier", "data/img/buildings/pier.png");
 
     const std::list<const Good*>& allGoods = configMgr->getAllGoodsOrdered();
     for (auto iter = allGoods.cbegin(); iter != allGoods.cend(); iter++) {
@@ -104,6 +105,7 @@ void AbstractGraphicsMgr::loadGraphics() {
     loadStaticGraphicSet("add-building-button/square1", "data/img/gui/add-building/square1.png");
     loadStaticGraphicSet("add-building-button/square2", "data/img/gui/add-building/square2.png");
     loadStaticGraphicSet("add-building-button/square3", "data/img/gui/add-building/square3.png");
+    loadStaticGraphicSet("add-building-button/pier", "data/img/gui/add-building/pier.png");
     loadStaticGraphicSet("add-building-button/dummy", "data/img/gui/add-building/dummy.png");
 
     loadStaticGraphicSet("add-building-group/craftsman", "data/img/gui/button-add-building-craftsman.png");
