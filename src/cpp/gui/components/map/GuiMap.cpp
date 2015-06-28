@@ -35,7 +35,10 @@ GuiMap::GuiMap(const Context* const context, GuiResourcesBar* guiResourcesBar) :
     bricksGood = context->configMgr->getGood("bricks");
 
 #ifdef DEBUG
-    debugGridOverlayGraphic = new SDLGraphic(context->graphicsMgr->getRenderer(), "data/debug-grid-overlay.png");
+    debugGridOverlayGraphics[0] = new SDLGraphic(
+        context->graphicsMgr->getRenderer(), "data/debug-grid-overlay-elevation0.png");
+    debugGridOverlayGraphics[1] = new SDLGraphic(
+        context->graphicsMgr->getRenderer(), "data/debug-grid-overlay-elevation1.png");
 #endif
 }
 
@@ -43,7 +46,8 @@ GuiMap::~GuiMap() {
     clearAllTemporarily();
 
 #ifdef DEBUG
-    delete debugGridOverlayGraphic;
+    delete debugGridOverlayGraphics[0];
+    delete debugGridOverlayGraphics[1];
 #endif
 }
 
@@ -371,7 +375,8 @@ void GuiMap::renderElement(IRenderer* renderer) {
 
 #ifdef DEBUG_GUIMAP
     // Grid zeichnen, an dem wir uns orientieren können
-    debugGridOverlayGraphic->drawAt(0, 0);
+    debugGridOverlayGraphics[0]->drawAt(0, 0);
+    debugGridOverlayGraphics[1]->drawAt(0, 0);
 
     // Zusätzlich die Mitte markieren. Die sollte sich genau im ScreenCoords(0, 0)-Punkt decken
     int x = Consts::mapClipRect.w / 2;

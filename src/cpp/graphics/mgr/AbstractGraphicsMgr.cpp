@@ -153,7 +153,7 @@ void AbstractGraphicsMgr::loadTiles() {
 
         GraphicSet* graphicSet = new GraphicSet();
 
-        Rect tileRect(0, 0, TILE_WIDTH, TILE_HEIGHT + ELEVATION_HEIGHT);
+        Rect tileRect(0, 0, 64, 64);
         forEachFourthDirection(fourDirectionsView) {
             const std::pair<int, int>& xyOffsetInTileset =
                 mapTileConfig.mapTileViewsOffsetXYInTileset.at(fourDirectionsView);

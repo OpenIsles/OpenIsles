@@ -43,7 +43,7 @@ public:
     /**
      * @brief Höhe der Elevation in Pixel. Entspricht dem e in doc/map-coords.xcf
      */
-    static const int ELEVATION_HEIGHT = 32;
+    static const int ELEVATION_HEIGHT = 20;
 
 public:
     /**

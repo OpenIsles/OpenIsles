@@ -148,9 +148,9 @@ private:
 
 #ifdef DEBUG
     /**
-     * @brief Hilfsgrafik mit Gitternetz-Linien-Overlay
+     * @brief Hilfsgrafiken mit Gitternetz-Linien-Overlay für elevation 0 und 1.
      */
-    SDLGraphic* debugGridOverlayGraphic;
+    SDLGraphic* debugGridOverlayGraphics[2];
 #endif
 
     /**
