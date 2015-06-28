@@ -11,10 +11,10 @@
   <property name="player4-color" value="blue"/>
   <property name="player4-name" value="Spieler 4"/>
  </properties>
- <objectgroup name="isles" width="300" height="300">
+ <objectgroup name="isles">
   <object name="small1" type="isle" x="4064" y="4800" width="960" height="960"/>
   <object name="medium1" type="isle" x="3840" y="6848" width="1600" height="1600"/>
-  <object name="large1" type="isle" x="6496" y="6528" width="2560" height="2560"/>
+  <object name="large1" type="isle" x="6493" y="6528" width="2560" height="2560"/>
   <object name="large1" type="isle" x="736" y="288" width="2560" height="2560"/>
   <object name="medium1" type="isle" x="7296" y="4224" width="1600" height="1600"/>
   <object name="large1" type="isle" x="640" y="6528" width="2560" height="2560"/>
@@ -25,7 +25,7 @@
   <object name="medium1" type="isle" x="6304" y="1824" width="1600" height="1600"/>
   <object type="startpoint" x="1600" y="1024" width="32" height="32"/>
  </objectgroup>
- <objectgroup name="colonies" width="300" height="300">
+ <objectgroup name="colonies">
   <object name="Meine Hauptstadt" type="colony" x="1600" y="1344" width="32" height="32">
    <properties>
     <property name="goods-alcohol" value="1"/>
@@ -43,7 +43,7 @@
     <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="Meine Zweitinsel" type="colony" x="6368" y="2464" width="32" height="32">
+  <object name="Meine Zweitinsel" type="colony" x="6624" y="2752" width="32" height="32">
    <properties>
     <property name="goods-alcohol" value="0"/>
     <property name="goods-bricks" value="7"/>
@@ -60,7 +60,7 @@
     <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="Hauptstadt von Spieler 2" type="colony" x="7296" y="6848" width="32" height="32">
+  <object name="Hauptstadt von Spieler 2" type="colony" x="7392" y="6880" width="32" height="32">
    <properties>
     <property name="goods-alcohol" value="0"/>
     <property name="goods-bricks" value="10"/>
@@ -77,7 +77,7 @@
     <property name="player" value="2"/>
    </properties>
   </object>
-  <object name="Hauptstadt von Spieler 3" type="colony" x="896" y="7232" width="32" height="32">
+  <object name="Hauptstadt von Spieler 3" type="colony" x="1536" y="6880" width="32" height="32">
    <properties>
     <property name="goods-alcohol" value="0"/>
     <property name="goods-bricks" value="10"/>
@@ -94,7 +94,7 @@
     <property name="player" value="3"/>
    </properties>
   </object>
-  <object name="Hauptstadt von Spieler 4" type="colony" x="4160" y="3008" width="32" height="32">
+  <object name="Hauptstadt von Spieler 4" type="colony" x="4256" y="2912" width="32" height="32">
    <properties>
     <property name="goods-alcohol" value="0"/>
     <property name="goods-bricks" value="10"/>
@@ -112,25 +112,29 @@
    </properties>
   </object>
  </objectgroup>
- <objectgroup name="map-objects" width="300" height="300">
-  <object name="office2" type="building" x="1376" y="864" width="96" height="64">
+ <objectgroup name="map-objects">
+  <object name="office2" type="building" x="1280" y="800" width="96" height="64">
    <properties>
     <property name="player" value="1"/>
+    <property name="view" value="north"/>
    </properties>
   </object>
-  <object name="office1" type="building" x="6432" y="2464" width="96" height="64">
+  <object name="office1" type="building" x="6496" y="2720" width="64" height="96">
    <properties>
     <property name="player" value="1"/>
+    <property name="view" value="east"/>
    </properties>
   </object>
-  <object name="office1" type="building" x="7360" y="6848" width="96" height="64">
+  <object name="office1" type="building" x="7456" y="6720" width="96" height="64">
    <properties>
     <property name="player" value="2"/>
+    <property name="view" value="north"/>
    </properties>
   </object>
-  <object name="office1" type="building" x="960" y="7232" width="96" height="64">
+  <object name="office1" type="building" x="1632" y="6720" width="96" height="64">
    <properties>
     <property name="player" value="3"/>
+    <property name="view" value="north"/>
    </properties>
   </object>
   <object name="office1" type="building" x="4224" y="3008" width="64" height="96">
@@ -3551,6 +3555,111 @@
   <object name="farm-road-straight90" type="structure" x="2080" y="1152" width="32" height="32">
    <properties>
     <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object name="cobbled-street-straight0" type="structure" x="1440" y="864" width="32" height="32">
+   <properties>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object name="cobbled-street-straight0" type="structure" x="1408" y="864" width="32" height="32">
+   <properties>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object name="cobbled-street-straight0" type="structure" x="1376" y="864" width="32" height="32">
+   <properties>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object name="cobbled-street-straight0" type="structure" x="1344" y="864" width="32" height="32">
+   <properties>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object name="cobbled-street-straight0" type="structure" x="1312" y="864" width="32" height="32">
+   <properties>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object name="cobbled-street-straight0" type="structure" x="1280" y="864" width="32" height="32">
+   <properties>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object name="pier" type="structure" x="1344" y="768" width="32" height="32">
+   <properties>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object name="pier" type="structure" x="1312" y="768" width="32" height="32">
+   <properties>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object name="pier" type="structure" x="1280" y="768" width="32" height="32">
+   <properties>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object name="pier" type="structure" x="4192" y="3008" width="32" height="32">
+   <properties>
+    <property name="player" value="4"/>
+   </properties>
+  </object>
+  <object name="pier" type="structure" x="4192" y="3040" width="32" height="32">
+   <properties>
+    <property name="player" value="4"/>
+   </properties>
+  </object>
+  <object name="pier" type="structure" x="4192" y="3072" width="32" height="32">
+   <properties>
+    <property name="player" value="4"/>
+   </properties>
+  </object>
+  <object name="pier" type="structure" x="6464" y="2720" width="32" height="32">
+   <properties>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object name="pier" type="structure" x="6464" y="2784" width="32" height="32">
+   <properties>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object name="pier" type="structure" x="6464" y="2752" width="32" height="32">
+   <properties>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object name="pier" type="structure" x="7456" y="6688" width="32" height="32">
+   <properties>
+    <property name="player" value="2"/>
+   </properties>
+  </object>
+  <object name="pier" type="structure" x="7488" y="6688" width="32" height="32">
+   <properties>
+    <property name="player" value="2"/>
+   </properties>
+  </object>
+  <object name="pier" type="structure" x="7521" y="6688" width="32" height="32">
+   <properties>
+    <property name="player" value="2"/>
+   </properties>
+  </object>
+  <object name="pier" type="structure" x="1632" y="6688" width="32" height="32">
+   <properties>
+    <property name="player" value="3"/>
+   </properties>
+  </object>
+  <object name="pier" type="structure" x="1696" y="6688" width="32" height="32">
+   <properties>
+    <property name="player" value="3"/>
+   </properties>
+  </object>
+  <object name="pier" type="structure" x="1664" y="6688" width="32" height="32">
+   <properties>
+    <property name="player" value="3"/>
    </properties>
   </object>
  </objectgroup>
