@@ -4,6 +4,7 @@
 #include <memory>
 #include <string>
 #include "config/BuildingCosts.h"
+#include "config/MapTileType.h"
 #include "game/ProductionSlots.h"
 #include "utils/RectangleData.h"
 
@@ -88,6 +89,11 @@ struct MapObjectType {
       * @brief gibt an, wie das Map-Objekt platziert wird
       */
     StructurePlacing structurePlacing;
+
+    /**
+     * @brief Maske von MapTileType-Enums, auf welchen Typenvon Kacheln das Objekt gebaut werden darf
+     */
+    MapTileTypeInt placeableOnMapTileTypeMask;
 
     /**
      * @brief Einzugsbereich des Map-Objekts (optional). Es gilt hierbei 0 = außerhalb, 1 = Einzugsbereich.

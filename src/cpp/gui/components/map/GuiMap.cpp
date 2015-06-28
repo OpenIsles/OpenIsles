@@ -757,7 +757,7 @@ unsigned char GuiMap::isAllowedToPlaceMapObject(
         }
     }
 
-    // Checken, ob alles frei is, um das Gebäude zu setzen
+    // Checken, ob alles frei und erlaubt is, um das Gebäude zu setzen
     unsigned char mapWidth, mapHeight;
     if (view == Direction::NORTH || view == Direction::SOUTH) {
         mapWidth = mapObjectType->mapWidth;
@@ -769,8 +769,9 @@ unsigned char GuiMap::isAllowedToPlaceMapObject(
 
     for (int y = mapCoords.y(); y < mapCoords.y() + mapHeight; y++) {
         for (int x = mapCoords.x(); x < mapCoords.x() + mapWidth; x++) {
+            const MapTile* mapTile = context->game->getMap()->getMapTileAt(MapCoords(x, y));
+
             // Steht was im Weg?
-            MapTile* mapTile = context->game->getMap()->getMapTileAt(MapCoords(x, y));
             if (mapTile->mapObjectFixed != nullptr) {
                 result |= PLACING_STRUCTURE_SOMETHING_IN_THE_WAY;
             }
@@ -783,10 +784,15 @@ unsigned char GuiMap::isAllowedToPlaceMapObject(
                 }
             }
 
+            // Passt das Gelände?
             const MapTileConfig* mapTileConfig = mapTile->getMapTileConfig();
-            if (mapTile->player == nullptr ||                             // Gebiet nicht erschlossen, ..,
-                mapTile->player != context->game->getCurrentPlayer() ||   // ... nicht unseres...
-                !mapTileConfig->isWalkableAndBuildable) {                 // ... oder Gelände passt nicht
+            if (((MapTileTypeInt) mapTileConfig->mapTileType & mapObjectType->placeableOnMapTileTypeMask) == 0) {
+                result |= PLACING_STRUCTURE_MAP_TILE_TYPE_MISMATCH;
+            }
+
+            // Gebiet erschlossen?
+            if (mapTile->player == nullptr ||                             // Gebiet nicht erschlossen,
+                mapTile->player != context->game->getCurrentPlayer()) {   // oder nicht unseres
 
                 result |= PLACING_STRUCTURE_ROOM_NOT_UNLOCK;
             }

@@ -34,7 +34,7 @@ void Map::initNewMap(int newWidth, int newHeight) {
     height = newHeight;
 
     // mapTiles neu anlegen und mit Ozean initialisieren
-    // TODO in die Config bringen. Aktuell is aber noch unklar, ob wir mehrere isOcean-Kacheln haben werden. oceanTileIndex und oceanTileGraphicSetName hängen über tiles.xml zusammen
+    // TODO in die Config bringen. Aktuell is aber noch unklar, ob wir mehrere isOceanOnMinimap-Kacheln haben werden. oceanTileIndex und oceanTileGraphicSetName hängen über tiles.xml zusammen
     // hübscher machen
     const MapTileConfig* oceanMapTileConfig = context->configMgr->getMapTileConfigOcean();
     std::string oceanTileGraphicSetName = "tiles/water";

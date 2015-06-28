@@ -103,8 +103,9 @@ void GuiMinimap::updateMinimapTexture() {
             const MapTileConfig* mapTileConfig = mapTile->getMapTileConfig();
             Player* player = mapTile->player;
 
-            *(pixelPtr++) =
-                (mapTileConfig->isOcean) ? 0x000090 : (player != nullptr ? ((uint32_t) player->getColor()) : 0x008000);
+            *(pixelPtr++) = (mapTileConfig->isOceanOnMinimap()) ?
+                            0x000090 : (player != nullptr ?
+                                        ((uint32_t) player->getColor()) : 0x008000);
         }
     }
 

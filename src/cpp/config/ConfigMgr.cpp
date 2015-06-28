@@ -1,7 +1,6 @@
 #include <cstring>
 #include <iostream>
 #include <stdexcept>
-#include <string>
 #include "config/ConfigMgr.h"
 #include "config/Good.h"
 #include "utils/StringFormat.h"
@@ -95,6 +94,20 @@ void ConfigMgr::loadMapObjectTypes() {
             throw std::runtime_error("Illegal value for structurePlacing");
         }
 
+        // Baubar auf
+        MapTileTypeInt placeableOnMapTileTypeMask = 0;
+        rapidxml::xml_node<>* placeableOnNode = node->first_node("placeable-on", 12, true);
+        for (rapidxml::xml_node<>* mapTileTypeNode = placeableOnNode->first_node("map-tile-type", 13, true);
+             mapTileTypeNode != nullptr;
+             mapTileTypeNode = mapTileTypeNode->next_sibling("map-tile-type", 13, true)) {
+
+            const char* typeString = mapTileTypeNode->value();
+            MapTileType mapTileType = getMapTileTypeByName(typeString);
+
+            placeableOnMapTileTypeMask |= (MapTileTypeInt) mapTileType;
+        }
+        mapObjectType.placeableOnMapTileTypeMask = placeableOnMapTileTypeMask;
+
         // Baukosten
         rapidxml::xml_node<>* buildingCostsNode = node->first_node("building-costs", 14, true);
         BuildingCosts& buildingCosts = mapObjectType.buildingCosts;
@@ -161,14 +174,13 @@ void ConfigMgr::loadTilesConfig() {
          tileNode = tileNode->next_sibling("tile", 4, true)) {
 
         const char* tileName = tileNode->first_attribute("name", 4, true)->value();
-        bool tileIsOcean = xmlAttributeToBool(tileNode->first_attribute("ocean", 5, true), false);
-        bool tileIsWalkableAndBuildable =
-            xmlAttributeToBool(tileNode->first_attribute("walkable-and-buildable", 22, true), false);
+
+        const char* mapTileTypeName = tileNode->first_attribute("type", 4, true)->value();
+        const MapTileType mapTileType = getMapTileTypeByName(mapTileTypeName);
 
         MapTileConfig& mapTileConfig = mapTileConfigs[tileName];
         mapTileConfig.tileName = std::string(tileName);
-        mapTileConfig.isOcean = tileIsOcean;
-        mapTileConfig.isWalkableAndBuildable = tileIsWalkableAndBuildable;
+        mapTileConfig.mapTileType = mapTileType;
 
         for (rapidxml::xml_node<>* tmxTileNode = tileNode->first_node("tmx-tile", 8, true); tmxTileNode != nullptr;
              tmxTileNode = tmxTileNode->next_sibling("tmx-tile", 8, true)) {
@@ -188,13 +200,44 @@ void ConfigMgr::loadTilesConfig() {
         }
 
         // Den Ozean separat merken
-        // TODO hübscher erkennen
-        if (std::strcmp(tileName, "water") == 0) {
+        // TODO Was, wenn mehrere Ozean-Kacheln in der tiles.xml stehen?
+        if (mapTileType == MapTileType::OCEAN) {
             mapTileConfigOcean = &mapTileConfig;
         }
     }
 
     delete xmlDocument;
+}
+
+MapTileType ConfigMgr::getMapTileTypeByName(const std::string& mapTileTypeName) {
+    if (mapTileTypeName == "ocean") {
+        return MapTileType::OCEAN;
+    }
+    else if (mapTileTypeName == "fish-grounds") {
+        return MapTileType::FISH_GROUNDS;
+    }
+    else if (mapTileTypeName == "shallow-water") {
+        return MapTileType::SHALLOW_WATER;
+    }
+    else if (mapTileTypeName == "shore-ocean") {
+        return MapTileType::SHORE_OCEAN;
+    }
+    else if (mapTileTypeName == "shore-grass") {
+        return MapTileType::SHORE_GRASS;
+    }
+    else if (mapTileTypeName == "river") {
+        return MapTileType::RIVER;
+    }
+    else if (mapTileTypeName == "mountain") {
+        return MapTileType::MOUNTAIN;
+    }
+    else if (mapTileTypeName == "grass") {
+        return MapTileType::GRASS;
+    }
+    else {
+        std::cerr << "Illegal mapTileTypeName '" << mapTileTypeName << "'." << std::endl;
+        throw std::runtime_error("Illegal mapTileTypeName");
+    }
 }
 
 bool ConfigMgr::xmlAttributeToBool(rapidxml::xml_attribute<>* attribute, bool defaultValue) {

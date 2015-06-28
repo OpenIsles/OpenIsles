@@ -43,15 +43,19 @@
 
 /**
  * @brief Setzen der Struktur ist hier nicht erlaubt, weil das Gebiet nicht erschlossen ist.
- * Grafisch wird dies dargestellt, indem die Struktur rot gezeichnet wird
  */
 #define PLACING_STRUCTURE_ROOM_NOT_UNLOCK                    (1 << 3)
+
+/**
+ * @brief Setzen der Struktur ist hier nicht erlaubt, weil das Gelände nicht passt.
+ */
+#define PLACING_STRUCTURE_MAP_TILE_TYPE_MISMATCH             (1 << 4)
 
 /**
  * @brief Setzen der Struktur ist nicht erlaubt, da wir mitten auf dem Ozean außerhalb einer Insel sind.
  * Grafisch wird dies dargestellt, indem gar nix gezeichnet wird.
  */
-#define PLACING_STRUCTURE_OUTSIDE_OF_ISLE                    (1 << 4)
+#define PLACING_STRUCTURE_OUTSIDE_OF_ISLE                    (1 << 5)
 
 
 /**

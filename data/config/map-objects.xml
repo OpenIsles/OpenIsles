@@ -6,6 +6,9 @@
     <building name="stonemason" width="2" height="2">
         <title>Steinbruch</title>
         <structure-placing>individually</structure-placing>
+        <placeable-on>
+            <map-tile-type>grass</map-tile-type>
+        </placeable-on>
         <building-costs>
             <coins>100</coins>
             <tools>5</tools>
@@ -39,6 +42,9 @@
     <building name="toolsmiths" width="2" height="2">
         <title>Werkzeugschmiede</title>
         <structure-placing>individually</structure-placing>
+        <placeable-on>
+            <map-tile-type>grass</map-tile-type>
+        </placeable-on>
         <building-costs>
             <coins>150</coins>
             <tools>3</tools>
@@ -88,6 +94,9 @@
     <building name="tobacco-goods" width="2" height="2">
         <title>Tabakwaren</title>
         <structure-placing>individually</structure-placing>
+        <placeable-on>
+            <map-tile-type>grass</map-tile-type>
+        </placeable-on>
         <building-costs>
             <coins>200</coins>
             <tools>3</tools>
@@ -132,6 +141,9 @@
     <building name="distillery" width="2" height="2">
         <title>Rumbrennerei</title>
         <structure-placing>individually</structure-placing>
+        <placeable-on>
+            <map-tile-type>grass</map-tile-type>
+        </placeable-on>
         <building-costs>
             <coins>200</coins>
             <tools>3</tools>
@@ -176,6 +188,9 @@
     <building name="weaving-mill1" width="2" height="2">
         <title>Webstube</title>
         <structure-placing>individually</structure-placing>
+        <placeable-on>
+            <map-tile-type>grass</map-tile-type>
+        </placeable-on>
         <building-costs>
             <coins>200</coins>
             <tools>3</tools>
@@ -226,6 +241,9 @@
     <building name="butchers" width="2" height="2">
         <title>Fleischerei</title>
         <structure-placing>individually</structure-placing>
+        <placeable-on>
+            <map-tile-type>grass</map-tile-type>
+        </placeable-on>
         <building-costs>
             <coins>150</coins>
             <tools>3</tools>
@@ -268,6 +286,9 @@
     <building name="sugarcane-plantation" width="2" height="2">
         <title>Zuckerrohrplantage</title>
         <structure-placing>individually</structure-placing>
+        <placeable-on>
+            <map-tile-type>grass</map-tile-type>
+        </placeable-on>
         <building-costs>
             <coins>300</coins>
             <tools>2</tools>
@@ -291,6 +312,9 @@
     <harvestable name="sugarcane-field" width="1" height="1">
         <title>Zuckerrohrfeld</title>
         <structure-placing>rectangle</structure-placing>
+        <placeable-on>
+            <map-tile-type>grass</map-tile-type>
+        </placeable-on>
         <building-costs>
             <coins>5</coins>
             <tools>0</tools>
@@ -303,6 +327,9 @@
     <building name="tobacco-plantation" width="2" height="2">
         <title>Tabakplantage</title>
         <structure-placing>individually</structure-placing>
+        <placeable-on>
+            <map-tile-type>grass</map-tile-type>
+        </placeable-on>
         <building-costs>
             <coins>300</coins>
             <tools>2</tools>
@@ -326,6 +353,9 @@
     <harvestable name="tobacco-field" width="1" height="1">
         <title>Tabakfeld</title>
         <structure-placing>rectangle</structure-placing>
+        <placeable-on>
+            <map-tile-type>grass</map-tile-type>
+        </placeable-on>
         <building-costs>
             <coins>5</coins>
             <tools>0</tools>
@@ -338,6 +368,9 @@
     <building name="spices-plantation" width="2" height="2">
         <title>Gewürzplantage</title>
         <structure-placing>individually</structure-placing>
+        <placeable-on>
+            <map-tile-type>grass</map-tile-type>
+        </placeable-on>
         <building-costs>
             <coins>300</coins>
             <tools>2</tools>
@@ -361,6 +394,9 @@
     <harvestable name="spices-field" width="1" height="1">
         <title>Gewürzfeld</title>
         <structure-placing>rectangle</structure-placing>
+        <placeable-on>
+            <map-tile-type>grass</map-tile-type>
+        </placeable-on>
         <building-costs>
             <coins>5</coins>
             <tools>0</tools>
@@ -373,6 +409,9 @@
     <building name="sheep-farm" width="2" height="2">
         <title>Schaffarm</title>
         <structure-placing>individually</structure-placing>
+        <placeable-on>
+            <map-tile-type>grass</map-tile-type>
+        </placeable-on>
         <building-costs>
             <coins>200</coins>
             <tools>2</tools>
@@ -398,6 +437,9 @@
     <building name="cattle-farm" width="2" height="2">
         <title>Rinderfarm</title>
         <structure-placing>individually</structure-placing>
+        <placeable-on>
+            <map-tile-type>grass</map-tile-type>
+        </placeable-on>
         <building-costs>
             <coins>100</coins>
             <tools>1</tools>
@@ -421,6 +463,9 @@
     <building name="hunters-hut" width="1" height="1">
         <title>Jägerhütte</title>
         <structure-placing>individually</structure-placing>
+        <placeable-on>
+            <map-tile-type>grass</map-tile-type>
+        </placeable-on>
         <building-costs>
             <coins>50</coins>
             <tools>2</tools>
@@ -455,6 +500,9 @@
     <building name="foresters" width="2" height="2">
         <title>Forsthaus</title>
         <structure-placing>individually</structure-placing>
+        <placeable-on>
+            <map-tile-type>grass</map-tile-type>
+        </placeable-on>
         <building-costs>
             <coins>50</coins>
             <tools>2</tools>
@@ -480,6 +528,9 @@
     <harvestable name="northern-forest1" width="1" height="1">
         <title>Wald</title>
         <structure-placing>rectangle</structure-placing>
+        <placeable-on>
+            <map-tile-type>grass</map-tile-type>
+        </placeable-on>
         <building-costs>
             <coins>5</coins>
             <tools>0</tools>
@@ -492,6 +543,9 @@
     <harvestable name="northern-forest2" width="1" height="1">
         <title>Wald</title>
         <structure-placing>rectangle</structure-placing>
+        <placeable-on>
+            <map-tile-type>grass</map-tile-type>
+        </placeable-on>
         <building-costs>
             <coins>5</coins>
             <tools>0</tools>
@@ -506,6 +560,9 @@
     <building name="office1" width="3" height="2">
         <title>Kontor I</title>
         <structure-placing>individually</structure-placing>
+        <placeable-on>
+            <map-tile-type>grass</map-tile-type>
+        </placeable-on>
         <building-costs>
             <coins>100</coins>
             <tools>3</tools>
@@ -558,6 +615,9 @@
     <building name="office2" width="3" height="2">
         <title>Kontor II</title>
         <structure-placing>individually</structure-placing>
+        <placeable-on>
+            <map-tile-type>grass</map-tile-type>
+        </placeable-on>
         <building-costs>
             <coins>180</coins>
             <tools>3</tools>
@@ -612,6 +672,9 @@
     <building name="cathedral" width="6" height="4">
         <title>Kathedrale</title>
         <structure-placing>individually</structure-placing>
+        <placeable-on>
+            <map-tile-type>grass</map-tile-type>
+        </placeable-on>
         <building-costs>
             <coins>7500</coins>
             <tools>25</tools>
@@ -676,6 +739,9 @@
     <building name="tavern" width="2" height="3">
         <title>Wirtshaus</title>
         <structure-placing>individually</structure-placing>
+        <placeable-on>
+            <map-tile-type>grass</map-tile-type>
+        </placeable-on>
         <building-costs>
             <coins>250</coins>
             <tools>3</tools>
@@ -715,6 +781,9 @@
     <building name="pioneers-house1" width="2" height="2">
         <title>Haus (Pioniere)</title>
         <structure-placing>individually</structure-placing>
+        <placeable-on>
+            <map-tile-type>grass</map-tile-type>
+        </placeable-on>
         <building-costs>
             <coins>0</coins>
             <tools>0</tools>
@@ -742,6 +811,9 @@
     <building name="pioneers-house2" width="2" height="2">
         <title>Haus (Pioniere)</title>
         <structure-placing>individually</structure-placing>
+        <placeable-on>
+            <map-tile-type>grass</map-tile-type>
+        </placeable-on>
         <building-costs>
             <coins>0</coins>
             <tools>0</tools>
@@ -769,6 +841,9 @@
     <building name="pioneers-house3" width="2" height="2">
         <title>Haus (Pioniere)</title>
         <structure-placing>individually</structure-placing>
+        <placeable-on>
+            <map-tile-type>grass</map-tile-type>
+        </placeable-on>
         <building-costs>
             <coins>0</coins>
             <tools>0</tools>
@@ -796,6 +871,9 @@
     <building name="pioneers-house4" width="2" height="2">
         <title>Haus (Pioniere)</title>
         <structure-placing>individually</structure-placing>
+        <placeable-on>
+            <map-tile-type>grass</map-tile-type>
+        </placeable-on>
         <building-costs>
             <coins>0</coins>
             <tools>0</tools>
@@ -823,6 +901,9 @@
     <building name="pioneers-house5" width="2" height="2">
         <title>Haus (Pioniere)</title>
         <structure-placing>individually</structure-placing>
+        <placeable-on>
+            <map-tile-type>grass</map-tile-type>
+        </placeable-on>
         <building-costs>
             <coins>0</coins>
             <tools>0</tools>
@@ -850,6 +931,9 @@
     <building name="settlers-house1" width="2" height="2">
         <title>Haus (Siedler)</title>
         <structure-placing>individually</structure-placing>
+        <placeable-on>
+            <map-tile-type>grass</map-tile-type>
+        </placeable-on>
         <building-costs>
             <coins>0</coins>
             <tools>1</tools>
@@ -877,6 +961,9 @@
     <building name="settlers-house2" width="2" height="2">
         <title>Haus (Siedler)</title>
         <structure-placing>individually</structure-placing>
+        <placeable-on>
+            <map-tile-type>grass</map-tile-type>
+        </placeable-on>
         <building-costs>
             <coins>0</coins>
             <tools>1</tools>
@@ -904,6 +991,9 @@
     <building name="settlers-house3" width="2" height="2">
         <title>Haus (Siedler)</title>
         <structure-placing>individually</structure-placing>
+        <placeable-on>
+            <map-tile-type>grass</map-tile-type>
+        </placeable-on>
         <building-costs>
             <coins>0</coins>
             <tools>1</tools>
@@ -931,6 +1021,9 @@
     <building name="settlers-house4" width="2" height="2">
         <title>Haus (Siedler)</title>
         <structure-placing>individually</structure-placing>
+        <placeable-on>
+            <map-tile-type>grass</map-tile-type>
+        </placeable-on>
         <building-costs>
             <coins>0</coins>
             <tools>1</tools>
@@ -958,6 +1051,9 @@
     <building name="settlers-house5" width="2" height="2">
         <title>Haus (Siedler)</title>
         <structure-placing>individually</structure-placing>
+        <placeable-on>
+            <map-tile-type>grass</map-tile-type>
+        </placeable-on>
         <building-costs>
             <coins>0</coins>
             <tools>1</tools>
@@ -985,6 +1081,9 @@
     <building name="marketplace" width="4" height="3">
         <title>Marktplatz</title>
         <structure-placing>individually</structure-placing>
+        <placeable-on>
+            <map-tile-type>grass</map-tile-type>
+        </placeable-on>
         <building-costs>
             <coins>200</coins>
             <tools>4</tools>
@@ -1037,6 +1136,9 @@
     <building name="chapel" width="2" height="1">
         <title>Kapelle</title>
         <structure-placing>individually</structure-placing>
+        <placeable-on>
+            <map-tile-type>grass</map-tile-type>
+        </placeable-on>
         <building-costs>
             <coins>100</coins>
             <tools>2</tools>
@@ -1070,6 +1172,9 @@
     <structure name="square1" width="1" height="1">
         <title>Platz I</title>
         <structure-placing>rectangle</structure-placing>
+        <placeable-on>
+            <map-tile-type>grass</map-tile-type>
+        </placeable-on>
         <building-costs>
             <coins>5</coins>
             <tools>0</tools>
@@ -1081,6 +1186,9 @@
     <structure name="square2" width="1" height="1">
         <title>Platz II</title>
         <structure-placing>rectangle</structure-placing>
+        <placeable-on>
+            <map-tile-type>grass</map-tile-type>
+        </placeable-on>
         <building-costs>
             <coins>5</coins>
             <tools>0</tools>
@@ -1092,6 +1200,9 @@
     <structure name="square3" width="1" height="1">
         <title>Platz III</title>
         <structure-placing>rectangle</structure-placing>
+        <placeable-on>
+            <map-tile-type>grass</map-tile-type>
+        </placeable-on>
         <building-costs>
             <coins>5</coins>
             <tools>0</tools>
@@ -1103,6 +1214,9 @@
     <structure name="farm-road-straight0" width="1" height="1">
         <title>Feldweg</title>
         <structure-placing>path</structure-placing>
+        <placeable-on>
+            <map-tile-type>grass</map-tile-type>
+        </placeable-on>
         <building-costs>
             <coins>5</coins>
             <tools>0</tools>
@@ -1114,6 +1228,9 @@
     <structure name="farm-road-straight90" width="1" height="1">
         <title>Feldweg</title>
         <structure-placing>path</structure-placing>
+        <placeable-on>
+            <map-tile-type>grass</map-tile-type>
+        </placeable-on>
         <building-costs>
             <coins>5</coins>
             <tools>0</tools>
@@ -1125,6 +1242,9 @@
     <structure name="farm-road-curve0" width="1" height="1">
         <title>Feldweg</title>
         <structure-placing>path</structure-placing>
+        <placeable-on>
+            <map-tile-type>grass</map-tile-type>
+        </placeable-on>
         <building-costs>
             <coins>5</coins>
             <tools>0</tools>
@@ -1136,6 +1256,9 @@
     <structure name="farm-road-curve90" width="1" height="1">
         <title>Feldweg</title>
         <structure-placing>path</structure-placing>
+        <placeable-on>
+            <map-tile-type>grass</map-tile-type>
+        </placeable-on>
         <building-costs>
             <coins>5</coins>
             <tools>0</tools>
@@ -1147,6 +1270,9 @@
     <structure name="farm-road-curve180" width="1" height="1">
         <title>Feldweg</title>
         <structure-placing>path</structure-placing>
+        <placeable-on>
+            <map-tile-type>grass</map-tile-type>
+        </placeable-on>
         <building-costs>
             <coins>5</coins>
             <tools>0</tools>
@@ -1158,6 +1284,9 @@
     <structure name="farm-road-curve270" width="1" height="1">
         <title>Feldweg</title>
         <structure-placing>path</structure-placing>
+        <placeable-on>
+            <map-tile-type>grass</map-tile-type>
+        </placeable-on>
         <building-costs>
             <coins>5</coins>
             <tools>0</tools>
@@ -1169,6 +1298,9 @@
     <structure name="farm-road-tee0" width="1" height="1">
         <title>Feldweg</title>
         <structure-placing>path</structure-placing>
+        <placeable-on>
+            <map-tile-type>grass</map-tile-type>
+        </placeable-on>
         <building-costs>
             <coins>5</coins>
             <tools>0</tools>
@@ -1180,6 +1312,9 @@
     <structure name="farm-road-tee90" width="1" height="1">
         <title>Feldweg</title>
         <structure-placing>path</structure-placing>
+        <placeable-on>
+            <map-tile-type>grass</map-tile-type>
+        </placeable-on>
         <building-costs>
             <coins>5</coins>
             <tools>0</tools>
@@ -1191,6 +1326,9 @@
     <structure name="farm-road-tee180" width="1" height="1">
         <title>Feldweg</title>
         <structure-placing>path</structure-placing>
+        <placeable-on>
+            <map-tile-type>grass</map-tile-type>
+        </placeable-on>
         <building-costs>
             <coins>5</coins>
             <tools>0</tools>
@@ -1202,6 +1340,9 @@
     <structure name="farm-road-tee270" width="1" height="1">
         <title>Feldweg</title>
         <structure-placing>path</structure-placing>
+        <placeable-on>
+            <map-tile-type>grass</map-tile-type>
+        </placeable-on>
         <building-costs>
             <coins>5</coins>
             <tools>0</tools>
@@ -1213,6 +1354,9 @@
     <structure name="farm-road-cross" width="1" height="1">
         <title>Feldweg</title>
         <structure-placing>path</structure-placing>
+        <placeable-on>
+            <map-tile-type>grass</map-tile-type>
+        </placeable-on>
         <building-costs>
             <coins>5</coins>
             <tools>0</tools>
@@ -1224,6 +1368,9 @@
     <structure name="cobbled-street-straight0" width="1" height="1">
         <title>Pflasterstraße</title>
         <structure-placing>path</structure-placing>
+        <placeable-on>
+            <map-tile-type>grass</map-tile-type>
+        </placeable-on>
         <building-costs>
             <coins>5</coins>
             <tools>0</tools>
@@ -1235,6 +1382,9 @@
     <structure name="cobbled-street-straight90" width="1" height="1">
         <title>Pflasterstraße</title>
         <structure-placing>path</structure-placing>
+        <placeable-on>
+            <map-tile-type>grass</map-tile-type>
+        </placeable-on>
         <building-costs>
             <coins>5</coins>
             <tools>0</tools>
@@ -1246,6 +1396,9 @@
     <structure name="cobbled-street-curve0" width="1" height="1">
         <title>Pflasterstraße</title>
         <structure-placing>path</structure-placing>
+        <placeable-on>
+            <map-tile-type>grass</map-tile-type>
+        </placeable-on>
         <building-costs>
             <coins>5</coins>
             <tools>0</tools>
@@ -1257,6 +1410,9 @@
     <structure name="cobbled-street-curve90" width="1" height="1">
         <title>Pflasterstraße</title>
         <structure-placing>path</structure-placing>
+        <placeable-on>
+            <map-tile-type>grass</map-tile-type>
+        </placeable-on>
         <building-costs>
             <coins>5</coins>
             <tools>0</tools>
@@ -1268,6 +1424,9 @@
     <structure name="cobbled-street-curve180" width="1" height="1">
         <title>Pflasterstraße</title>
         <structure-placing>path</structure-placing>
+        <placeable-on>
+            <map-tile-type>grass</map-tile-type>
+        </placeable-on>
         <building-costs>
             <coins>5</coins>
             <tools>0</tools>
@@ -1279,6 +1438,9 @@
     <structure name="cobbled-street-curve270" width="1" height="1">
         <title>Pflasterstraße</title>
         <structure-placing>path</structure-placing>
+        <placeable-on>
+            <map-tile-type>grass</map-tile-type>
+        </placeable-on>
         <building-costs>
             <coins>5</coins>
             <tools>0</tools>
@@ -1290,6 +1452,9 @@
     <structure name="cobbled-street-tee0" width="1" height="1">
         <title>Pflasterstraße</title>
         <structure-placing>path</structure-placing>
+        <placeable-on>
+            <map-tile-type>grass</map-tile-type>
+        </placeable-on>
         <building-costs>
             <coins>5</coins>
             <tools>0</tools>
@@ -1301,6 +1466,9 @@
     <structure name="cobbled-street-tee90" width="1" height="1">
         <title>Pflasterstraße</title>
         <structure-placing>path</structure-placing>
+        <placeable-on>
+            <map-tile-type>grass</map-tile-type>
+        </placeable-on>
         <building-costs>
             <coins>5</coins>
             <tools>0</tools>
@@ -1312,6 +1480,9 @@
     <structure name="cobbled-street-tee180" width="1" height="1">
         <title>Pflasterstraße</title>
         <structure-placing>path</structure-placing>
+        <placeable-on>
+            <map-tile-type>grass</map-tile-type>
+        </placeable-on>
         <building-costs>
             <coins>5</coins>
             <tools>0</tools>
@@ -1323,6 +1494,9 @@
     <structure name="cobbled-street-tee270" width="1" height="1">
         <title>Pflasterstraße</title>
         <structure-placing>path</structure-placing>
+        <placeable-on>
+            <map-tile-type>grass</map-tile-type>
+        </placeable-on>
         <building-costs>
             <coins>5</coins>
             <tools>0</tools>
@@ -1334,6 +1508,9 @@
     <structure name="cobbled-street-cross" width="1" height="1">
         <title>Pflasterstraße</title>
         <structure-placing>path</structure-placing>
+        <placeable-on>
+            <map-tile-type>grass</map-tile-type>
+        </placeable-on>
         <building-costs>
             <coins>5</coins>
             <tools>0</tools>

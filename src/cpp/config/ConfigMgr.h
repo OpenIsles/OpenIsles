@@ -6,9 +6,11 @@
 #endif
 
 #include <list>
+#include <string>
 #include <unordered_map>
 #include "defines.h"
 #include "config/Good.h"
+#include "config/MapTileType.h"
 #include "game/GoodsSlot.h"
 #include "map/Building.h"
 #include "map/Direction.h"
@@ -72,15 +74,30 @@ struct MapTileConfig {
     std::unordered_map<FourthDirection, std::pair<int, int>> mapTileViewsOffsetXYInTileset;
 
     /**
-     * @brief Flag, ob diese Kachel grundsätzlich für das Drauflaufen (Routing-Algorithmus) und
-     * Bebauen (Setzen neuer Gebäude/Strukturen) geeignet ist.
+     * @brief Referenz auf den Kachel-Typ
      */
-    bool isWalkableAndBuildable;
+    MapTileType mapTileType;
+
+public:
+    /**
+     * @brief Liefert zurück, ob diese Kachel grundsätzlich für das Drauflaufen (Routing-Algorithmus) und
+     * Bebauen (Setzen neuer Gebäude/Strukturen) geeignet ist.
+     *
+     * @return `true`, wenn die Kachel grundsätzlich für Drauflaufen und Bebauen geeignet ist.
+     */
+    bool isWalkableAndBuildable() const {
+        return (mapTileType == MapTileType::GRASS);
+    }
 
     /**
-     * @brief Flag, ob die Kachel Ozean ist. Wird für die Pixel auf der Minimap benutzt.
+     * @brief Liefert zurück, ob die Kachel auf der Minimap als Ozean angezeigt werden soll.
+     * @return `true`, wenn die Kachel auf der Minimap als Ozean angezeigt werden soll.
      */
-    bool isOcean;
+    bool isOceanOnMinimap() const {
+        return ((mapTileType == MapTileType::OCEAN) ||
+                (mapTileType == MapTileType::FISH_GROUNDS) ||
+                (mapTileType == MapTileType::SHALLOW_WATER));
+    }
 
 } MapTileConfig;
 
@@ -237,11 +254,21 @@ private:
     void loadTilesConfig();
 
     /**
+     * @brief Helper, der aus einem String, der aus der XML ausgelesen wurde, den zugehörigen MapTileType findet.
+     * Wirft eine Exception, wenn ein ungültiger String übergeben wurde.
+     *
+     * @param mapTileTypeName String aus der XML
+     * @return MapTileType
+     */
+    static MapTileType getMapTileTypeByName(const std::string& mapTileTypeName);
+
+    /**
      * @brief Helper, der aus einem XML-Attribut einen Bool-Wert liest. Der Wert muss entweder "true" oder "false"
      * sein. Ist das Attribut nicht vorhanden, wird ein bestimmter Default-Wert benutzt.
      *
      * @param attribute XML-Attribut (kann `nullptr` sein)
      * @param defaultValue Default-Wert, der verwendet wird, wenn das Attribut nicht vorhanden ist.
+     * @return Boolwert aus dem XML-Attribut
      */
     static bool xmlAttributeToBool(rapidxml::xml_attribute<>* attribute, bool defaultValue);
 
