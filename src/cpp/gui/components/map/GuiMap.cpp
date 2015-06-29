@@ -815,7 +815,20 @@ void GuiMap::drawCatchmentArea(IRenderer* const renderer, const Building& buildi
     const RectangleData<char>& catchmentArea = *building.getMapObjectType()->catchmentArea;
 
     const MapCoords& mapCoords = building.getMapCoords();
-    int catchmentAreaRadius = std::max(catchmentArea.width, catchmentArea.height); // TODO sehr optimierungsbedürftig, dafür funktionierts erstmal in allen Ansichten
+    int catchmentAreaRadius = std::max(catchmentArea.width, catchmentArea.height) / 2; // TODO sehr optimierungsbedürftig, dafür funktionierts erstmal in allen Ansichten
+
+    // Offset für die Umrechnung von Screen- in Drawing-Koordinaten berechnen.
+    // Je nach Ansicht müssen wir die Koordinaten verschieben, damit die Linien an der richtigen Stelle sitzen.
+    ScreenCoords screenCoordsOffset;
+    if (screenView == Direction::SOUTH) {
+        screenCoordsOffset = ScreenCoords(0, 0);
+    } else if (screenView == Direction::EAST) {
+        screenCoordsOffset = ScreenCoords(IGraphicsMgr::TILE_WIDTH_HALF, IGraphicsMgr::TILE_HEIGHT_HALF);
+    } else if (screenView == Direction::NORTH) {
+        screenCoordsOffset = ScreenCoords(0, IGraphicsMgr::TILE_HEIGHT);
+    } else if (screenView == Direction::WEST) {
+        screenCoordsOffset = ScreenCoords(-IGraphicsMgr::TILE_WIDTH_HALF, IGraphicsMgr::TILE_HEIGHT_HALF);
+    }
 
     for (int mapY = mapCoords.y() - catchmentAreaRadius; mapY <= mapCoords.y() + catchmentAreaRadius; mapY++) {
         for (int mapX = mapCoords.x() - catchmentAreaRadius; mapX <= mapCoords.x() + catchmentAreaRadius; mapX++) {
@@ -830,6 +843,9 @@ void GuiMap::drawCatchmentArea(IRenderer* const renderer, const Building& buildi
             auto drawLineBetweenMapCoords = [&](const MapCoords& mapCoords1, const MapCoords& mapCoords2) {
                 ScreenCoords screenCoords1 = MapCoordUtils::mapToScreenCoords(mapCoords1, screenView, *map);
                 ScreenCoords screenCoords2 = MapCoordUtils::mapToScreenCoords(mapCoords2, screenView, *map);
+
+                screenCoords1 += screenCoordsOffset;
+                screenCoords2 += screenCoordsOffset;
 
                 int drawX1 = screenCoords1.x() / screenZoom;
                 int drawY1 = (screenCoords1.y() - IGraphicsMgr::ELEVATION_HEIGHT) / screenZoom;

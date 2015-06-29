@@ -43,15 +43,24 @@ public:
      * @param screenCoords anderer Operand
      * @return `true`, wenn diese Koordinaten gleich sind, sonst `false`
      */
-    inline bool operator== (const ScreenCoords& screenCoords) const {
+    inline bool operator==(const ScreenCoords& screenCoords) const {
         return ((this->_x == screenCoords._x) && (this->_y == screenCoords._y));
+    }
+
+    /**
+     * @brief Operator zum Addieren einer anderen Screen-Koordinaten
+     * @param summand Summand
+     */
+    inline void operator+=(const ScreenCoords& summand) {
+        _x += summand._x;
+        _y += summand._y;
     }
 
     /**
      * @brief Operator zum Abziehen einer anderen Screen-Koordinaten
      * @param subtrahend Subtrahend
      */
-    inline void operator-= (const ScreenCoords& subtrahend) {
+    inline void operator-=(const ScreenCoords& subtrahend) {
         _x -= subtrahend._x;
         _y -= subtrahend._y;
     }
@@ -63,7 +72,7 @@ public:
  * @param screenCoords Objekt, was ausgegeben werden soll
  * @return Ausgabestream, sodass das Chaining funktioniert
  */
-std::ostream& operator<< (std::ostream& outputStream, const ScreenCoords& screenCoords);
+std::ostream& operator<<(std::ostream& outputStream, const ScreenCoords& screenCoords);
 
 
 #endif
