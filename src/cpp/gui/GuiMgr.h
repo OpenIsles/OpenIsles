@@ -218,6 +218,12 @@ public:
     void onOfficeCatchmentAreaChanged();
 
     /**
+     * @brief Ändert den Text, den die Statusleiste anzeigen soll
+     * @param text anzuzeigender Text
+     */
+    void setStatusBarText(const std::string& text);
+
+    /**
      * @brief Liefert den aktuellen Zustand des Panels zurück
      * @return Zustand des Panels
      */

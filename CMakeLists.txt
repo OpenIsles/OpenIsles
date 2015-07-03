@@ -94,6 +94,8 @@ set(GUI_SOURCE_FILES
     src/cpp/gui/components/GuiPushButton.h
     src/cpp/gui/components/GuiStaticElement.cpp
     src/cpp/gui/components/GuiStaticElement.h
+    src/cpp/gui/components/GuiStatusBar.cpp
+    src/cpp/gui/components/GuiStatusBar.h
     src/cpp/gui/panel-widgets/GuiSelectedBuildingWidget.cpp
     src/cpp/gui/panel-widgets/GuiSelectedBuildingWidget.h
     src/cpp/gui/panel-widgets/GuiBuildMenuWidget.cpp

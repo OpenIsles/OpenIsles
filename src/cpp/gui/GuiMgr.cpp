@@ -1,5 +1,6 @@
 #include <SDL.h>
 #include <string>
+#include <gui/components/GuiStatusBar.h>
 #include "config/ConfigMgr.h"
 #include "game/Game.h"
 #include "graphics/graphic/sdl/SDLGraphic.h"
@@ -9,6 +10,7 @@
 #include "gui/components/GuiButton.h"
 #include "gui/components/GuiPushButton.h"
 #include "gui/components/GuiMinimap.h"
+#include "gui/components/GuiStatusBar.h"
 #include "gui/panel-widgets/GuiBuildMenuWidget.h"
 #include "gui/panel-widgets/GuiColonyGoodsWidget.h"
 #include "gui/panel-widgets/GuiDummyWidget.h"
@@ -41,7 +43,7 @@ GuiMgr::~GuiMgr() {
     // Grafiken wieder wegräumen. Der Konstruktur hat sie alle direkt geladen.
     // TODO Die Grafiken könnte man alle schön in den GraphicsMgr packen, dann muss man hier den Aufwand nicht betreiben
     delete ((GuiStaticElement*) findElement(GUI_ID_PANEL))->getGraphic();
-    delete ((GuiStaticElement*) findElement(GUI_ID_STATUS_BAR))->getGraphic();
+    delete ((GuiStatusBar*) findElement(GUI_ID_STATUS_BAR))->getGraphic();
 
     for (int i = 0; i < 4; i++) {
         delete ((GuiPushButton*) findElement(GUI_ID_PANEL_SWITCH_PUSH_BUTTON_BASE + i))->getGraphic();
@@ -83,7 +85,7 @@ void GuiMgr::initGui() {
 
     // Statusleiste
     graphic = new SDLGraphic(renderer, "data/img/gui/statusbar.png");
-    GuiStaticElement* statusBar = new GuiStaticElement(context);
+    GuiStatusBar* statusBar = new GuiStatusBar(context);
     statusBar->setCoords(0, 734, graphic->getWidth(), graphic->getHeight());
     statusBar->setGraphic(graphic);
     registerElement(GUI_ID_STATUS_BAR, statusBar);
@@ -488,6 +490,10 @@ void GuiMgr::onNewGame() {
 
 void GuiMgr::onOfficeCatchmentAreaChanged() {
     ((GuiMinimap*) findElement(GUI_ID_MINIMAP))->updateMinimapTexture();
+}
+
+void GuiMgr::setStatusBarText(const std::string& text) {
+    ((GuiStatusBar*) findElement(GUI_ID_STATUS_BAR))->setText(text);
 }
 
 void GuiMgr::updateGuiFromPanelState() {
