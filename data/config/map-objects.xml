@@ -531,6 +531,7 @@
         <placeable-on>
             <map-tile-type>grass</map-tile-type>
         </placeable-on>
+        <forest />
         <building-costs>
             <coins>5</coins>
             <tools>0</tools>
@@ -546,6 +547,7 @@
         <placeable-on>
             <map-tile-type>grass</map-tile-type>
         </placeable-on>
+        <forest />
         <building-costs>
             <coins>5</coins>
             <tools>0</tools>

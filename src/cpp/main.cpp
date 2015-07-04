@@ -86,16 +86,7 @@ void drawFrame(const Context& context, IRenderer* renderer);
  *********************************************************************************************************************/
 
 void drawFrame(const Context& context, IRenderer* renderer) {
-    // Statuszeile aktualisieren
-    Map* map = context.game->getMap();
-    const Building* selectedBuilding = reinterpret_cast<const Building*>(map->getSelectedMapObject());
-    if (selectedBuilding != nullptr) {
-        context.guiMgr->setStatusBarText(selectedBuilding->getMapObjectType()->title);
-    } else {
-        context.guiMgr->setStatusBarText("");
-    }
-
-	// UI rendern
+    // UI rendern
     context.guiMgr->render();
 
     // FPS-Anzeige

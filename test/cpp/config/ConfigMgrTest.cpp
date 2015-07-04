@@ -35,6 +35,7 @@ TEST(ConfigMgrTest, loadMapObjectTypes) {
     ASSERT_EQ(false, cathedral->buildingProduction.input2.isUsed());
     ASSERT_EQ(5, cathedral->inhabitants);
     ASSERT_EQ(0, cathedral->maxAge);
+    ASSERT_EQ(false, cathedral->isForest);
 
     const MapObjectType* sugarcaneField = configMgr.getMapObjectType("sugarcane-field");
     ASSERT_TRUE(sugarcaneField != nullptr);
@@ -55,6 +56,7 @@ TEST(ConfigMgrTest, loadMapObjectTypes) {
     ASSERT_EQ(false, sugarcaneField->buildingProduction.input2.isUsed());
     ASSERT_EQ(0, sugarcaneField->inhabitants);
     ASSERT_EQ(4, sugarcaneField->maxAge);
+    ASSERT_EQ(false, sugarcaneField->isForest);
 
     // Teste sonstige Property-Inhalte, die obig nicht abgedeckt wurden
 
@@ -89,6 +91,9 @@ TEST(ConfigMgrTest, loadMapObjectTypes) {
     ASSERT_EQ(
         (MapTileTypeInt) MapTileType::SHORE_OCEAN | (MapTileTypeInt) MapTileType::SHORE_GRASS,
         pier->placeableOnMapTileTypeMask);
+
+    const MapObjectType* northernForest1 = configMgr.getMapObjectType("northern-forest1");
+    ASSERT_EQ(true, northernForest1->isForest);
 }
 
 

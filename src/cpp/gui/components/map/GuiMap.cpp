@@ -480,6 +480,28 @@ bool GuiMap::onEventElement(SDL_Event& event) {
         return false;
     }
 
+    // Mauszeiger bewegt? Dann Statuszeile aktualisieren
+    if (event.type == SDL_MOUSEMOTION && hitTest(event.motion.x, event.motion.y)) {
+        const MapObjectFixed* mapObjectFixed = getMapObjectFixedUnderMouseCoords(event.button.x, event.button.y);
+        if (mapObjectFixed != nullptr && !mapObjectFixed->getMapObjectType()->isForest) {
+            context->guiMgr->setStatusBarText(mapObjectFixed->getMapObjectType()->title);
+        } else {
+            const Map* map = context->game->getMap();
+            const MapCoords& mapCoords = MapCoordUtils::getMapCoordsUnderMouse(*map, event.motion.x, event.motion.y);
+            const MapTile* mapTile = map->getMapTileAt(mapCoords);
+
+            // Fruchtbarkeit nur auf Grassland anzeigen, nicht Küste, Flüsse etc.
+            if (mapTile != nullptr && mapTile->getMapTileConfig()->mapTileType == MapTileType::GRASS) {
+                // TODO Fruchtbarkeit von mapTile->isle;
+                context->guiMgr->setStatusBarText("TODO - Fruchtbarkeit der Insel");
+            } else {
+                context->guiMgr->setStatusBarText("");
+            }
+        }
+
+        return false;
+    }
+
     return true;
 }
 

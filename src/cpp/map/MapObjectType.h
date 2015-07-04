@@ -91,7 +91,7 @@ struct MapObjectType {
     StructurePlacing structurePlacing;
 
     /**
-     * @brief Maske von MapTileType-Enums, auf welchen Typenvon Kacheln das Objekt gebaut werden darf
+     * @brief Maske von MapTileType-Enums, auf welchen Typen von Kacheln das Objekt gebaut werden darf
      */
     MapTileTypeInt placeableOnMapTileTypeMask;
 
@@ -144,6 +144,13 @@ struct MapObjectType {
      * @brief (nur für `Harvestable`) gibt das maximale Alter an, das diese Landschaft erreichen kann.
      */
     unsigned char maxAge = 0;
+
+    /**
+     * @brief Bool-Flag, was angibt, ob das hier ein Wald ist.
+     * Dieses Flag wird verwendet, um in der Statuszeile statt dem Namen des Objekts die Fruchtbarkeit der Insel
+     * anzuzeigen.
+     */
+    bool isForest = false;
 
 };
 

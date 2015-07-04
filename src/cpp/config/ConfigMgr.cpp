@@ -108,6 +108,11 @@ void ConfigMgr::loadMapObjectTypes() {
         }
         mapObjectType.placeableOnMapTileTypeMask = placeableOnMapTileTypeMask;
 
+        // Wald?
+        rapidxml::xml_node<>* forestNode = node->first_node("forest", 6, true);
+        mapObjectType.isForest = (forestNode != nullptr);
+        // TODO das Tag können wir später erweitern, für welchen Inseltyp der Wald ist (nördlich, südlich)
+
         // Baukosten
         rapidxml::xml_node<>* buildingCostsNode = node->first_node("building-costs", 14, true);
         BuildingCosts& buildingCosts = mapObjectType.buildingCosts;
