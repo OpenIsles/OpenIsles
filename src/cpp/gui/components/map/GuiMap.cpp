@@ -656,8 +656,9 @@ const MapObjectFixed* GuiMap::getMapObjectFixedUnderMouseCoords(int mouseX, int 
     Map* map = context->game->getMap();
     int screenZoom = map->getScreenZoom();
 
-    // Objekte dabei rückwärts iterieren. Somit kommen "oben liegende" Objekte zuerst dran.
-    // TODO Überarbeiten, da wir keine Reihenfolge mehr auf den Objekten haben!
+    // Objekte iterieren und merken, welche in Frage kommen
+    std::list<const MapObjectFixed*> mapObjectsHit;
+
     const std::list<MapObject*>& mapObjects = map->getMapObjects();
     for (auto iter = mapObjects.crbegin(); iter != mapObjects.crend(); iter++) {
         MapObject* mapObject = *iter;
@@ -710,11 +711,47 @@ const MapObjectFixed* GuiMap::getMapObjectFixedUnderMouseCoords(int mouseX, int 
 
         // Checken, ob Pixel un-transparent genug ist, um es als Treffer zu nehmen
         if (a > 127) {
-            return mapObjectFixed;
+            mapObjectsHit.push_back(mapObjectFixed);
         }
     }
 
-    return nullptr;
+    unsigned long hits = mapObjectsHit.size();
+    if (hits == 0) {
+        return nullptr;
+    } else if (hits == 1) {
+        return mapObjectsHit.front();
+    }
+
+    // Mehrere Treffer. Wir müssen gucken, wer oben liegt. Je nachdem, wie die Karte ausgerichtet is, anders sortieren
+    const FourthDirection& screenView = map->getScreenView();
+
+    mapObjectsHit.sort([&](const MapObjectFixed*& a, const MapObjectFixed*& b) {
+        if (screenView == Direction::SOUTH) {
+            return
+                (a->getMapCoords().y() > b->getMapCoords().y()) ||
+                ((a->getMapCoords().y() == b->getMapCoords().y()) && (a->getMapCoords().x() > b->getMapCoords().x()));
+        }
+        else if (screenView == Direction::EAST) {
+            return
+                (a->getMapCoords().x() > b->getMapCoords().x()) ||
+                ((a->getMapCoords().x() == b->getMapCoords().x()) && (a->getMapCoords().y() < b->getMapCoords().y()));
+        }
+        else if (screenView == Direction::NORTH) {
+            return
+                (a->getMapCoords().y() < b->getMapCoords().y()) ||
+                ((a->getMapCoords().y() == b->getMapCoords().y()) && (a->getMapCoords().x() < b->getMapCoords().x()));
+        }
+        else if (screenView == Direction::WEST) {
+            return
+                (a->getMapCoords().x() < b->getMapCoords().x()) ||
+                ((a->getMapCoords().x() == b->getMapCoords().x()) && (a->getMapCoords().y() > b->getMapCoords().y()));
+        }
+        else {
+            assert(false);
+            return false;
+        }
+    });
+    return mapObjectsHit.front();
 }
 
 void GuiMap::onClickInMapForSelection(int mouseX, int mouseY) {
