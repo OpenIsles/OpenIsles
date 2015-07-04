@@ -202,7 +202,7 @@ public:
      * @brief Callback, der sich drum kümmert, wenn auf der Karte ein anderes MapObject ausgewählt wurde.
      * @param newSelectedMapObject das neu gewählte MapObject oder `nullptr`, wenn abgewählt wurde
      */
-    void onSelectedMapObjectChanged(MapObject* newSelectedMapObject);
+    void onSelectedMapObjectChanged(const MapObject* newSelectedMapObject);
 
     /**
      * @brief Callback, der in den Datenstrukturen der GUI-Komponenten notwendige Arbeiten erledigt,

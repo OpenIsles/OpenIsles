@@ -464,11 +464,11 @@ void GuiMgr::onEvent(SDL_Event& event) {
 }
 #endif // NO_SDL
 
-void GuiMgr::onSelectedMapObjectChanged(MapObject* newSelectedMapObject) {
+void GuiMgr::onSelectedMapObjectChanged(const MapObject* newSelectedMapObject) {
     if (newSelectedMapObject == nullptr) {
         panelState.activeGuiPanelWidget = (GuiPanelWidget*) findElement(GUI_ID_PLAYER_STATUS_PANEL_WIDGET);
     } else {
-        Building* newSelectedBuilding = dynamic_cast<Building*>(newSelectedMapObject);
+        const Building* newSelectedBuilding = dynamic_cast<const Building*>(newSelectedMapObject);
         if (newSelectedBuilding != nullptr) {
             if (newSelectedBuilding->isStorageBuilding()) {
                 panelState.activeGuiPanelWidget = (GuiPanelWidget*) findElement(GUI_ID_COLONY_GOODS_PANEL_WIDGET);

@@ -189,7 +189,7 @@ void Game::addInhabitantsToBuilding(Building* building, char amount) {
     colony->population += amount;
 }
 
-void Game::setSelectedMapObject(MapObject* selectedMapObject) {
+void Game::setSelectedMapObject(const MapObject* selectedMapObject) {
     map->setSelectedMapObject(selectedMapObject);
 
 #ifndef NO_SDL

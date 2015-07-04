@@ -204,7 +204,7 @@ public:
      *
      * @param selectedMapObject Das neue MapObject, was gewählt sein soll oder `nullptr`, um abzuwählen
      */
-    void setSelectedMapObject(MapObject* selectedMapObject);
+    void setSelectedMapObject(const MapObject* selectedMapObject);
 
     /**
      * @brief Lädt einen Spielstand von einer tiled-TMX-Datei

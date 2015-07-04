@@ -133,7 +133,7 @@ private:
 	/**
 	 * @brief ausgewähltes Objekt oder @c nullptr, wenn nichts ausgewählt ist
 	 */
-	MapObject* selectedMapObject = nullptr;
+	const MapObject* selectedMapObject = nullptr;
 
 	/**
 	 * @brief Map-Koordinaten, die sich aktuell in der Mitte befinden
@@ -225,7 +225,7 @@ public:
      *
      * @param selectedMapObject Das neue MapObject, was gewählt sein soll oder `nullptr`, um abzuwählen
      */
-	void setSelectedMapObject(MapObject* selectedMapObject);
+	void setSelectedMapObject(const MapObject* selectedMapObject);
 
 	/**
 	 * @brief Scrollt die Karte.

@@ -391,7 +391,7 @@ void GuiMap::renderElement(IRenderer* renderer) {
 
         Building* building = dynamic_cast<Building*>(mapObject);
         if (building != nullptr) {
-            Rect rect = MapCoordUtils::getDrawCoordsForBuilding(*map, context->graphicsMgr, building);
+            Rect rect = MapCoordUtils::getDrawCoordsForMapObjectFixed(*map, context->graphicsMgr, building);
             context->graphicsMgr->getRenderer()->drawLine(rect.x, rect.y, rect.x, rect.y+rect.h);
             context->graphicsMgr->getRenderer()->drawLine(rect.x, rect.y, rect.x+rect.w, rect.y);
             context->graphicsMgr->getRenderer()->drawLine(rect.x+rect.w, rect.y, rect.x+rect.w, rect.y+rect.h);
@@ -630,26 +630,21 @@ endLoop1:
     }
 }
 
-void GuiMap::onClickInMapForSelection(int mouseX, int mouseY) {
+const MapObjectFixed* GuiMap::getMapObjectFixedUnderMouseCoords(int mouseX, int mouseY) {
     Map* map = context->game->getMap();
     int screenZoom = map->getScreenZoom();
 
-    // Gucken, ob ein Gebäude geklickt wurde.
     // Objekte dabei rückwärts iterieren. Somit kommen "oben liegende" Objekte zuerst dran.
     // TODO Überarbeiten, da wir keine Reihenfolge mehr auf den Objekten haben!
     const std::list<MapObject*>& mapObjects = map->getMapObjects();
     for (auto iter = mapObjects.crbegin(); iter != mapObjects.crend(); iter++) {
         MapObject* mapObject = *iter;
-
-        // TODO hier später weitere Typen (Schiffe) handeln oder cleverer in Objekt-Methoden arbeiten
-        Building* building = dynamic_cast<Building*>(mapObject);
-        if (building == nullptr) {
-            // Da wir nur die Buildings durchgehen und nicht alle Structures, haben wir den positiven Nebeneffekt,
-            // dass wir z.B. durch eine Mauer durchklicken und ein verstecktes Gebäude dahinter anklicken können.
+        MapObjectFixed* mapObjectFixed = dynamic_cast<MapObjectFixed*>(mapObject);
+        if (mapObjectFixed == nullptr) {
             continue;
         }
 
-        Rect rect = MapCoordUtils::getDrawCoordsForBuilding(*map, context->graphicsMgr, building);
+        Rect rect = MapCoordUtils::getDrawCoordsForMapObjectFixed(*map, context->graphicsMgr, mapObjectFixed);
 
         // Außerhalb der Boundary-Box des Objekt geklickt?
         // TODO für Gebäude mit elevation=0 ggf. anpassen
@@ -672,19 +667,44 @@ void GuiMap::onClickInMapForSelection(int mouseX, int mouseY) {
         int y = (mouseY - rect.y) * screenZoom;
 
         const FourthDirection& screenView = map->getScreenView();
-        const FourthDirection& structureView = building->getView();
+        const FourthDirection& structureView = mapObjectFixed->getView();
         const FourthDirection& viewToRender = Direction::addDirections(structureView, screenView);
 
+        const MapObjectType* mapObjectType = mapObjectFixed->getMapObjectType();
         const std::string graphicSetName =
-            context->graphicsMgr->getGraphicSetNameForMapObject(building->getMapObjectType());
+            context->graphicsMgr->getGraphicSetNameForMapObject(mapObjectType);
         const GraphicSet* graphicSet = context->graphicsMgr->getGraphicSet(graphicSetName);
-        graphicSet->getByView(viewToRender)->getGraphic()->getPixel(x, y, &r, &g, &b, &a);
+        
+        const IGraphic* graphic;
+        if (mapObjectType->type != MapObjectTypeClass::HARVESTABLE) {
+            graphic = graphicSet->getByView(viewToRender)->getGraphic();
+        } else {
+            const Harvestable* harvestable = dynamic_cast<const Harvestable*>(mapObjectFixed);
+            const std::string state = "growth" + toString(int(harvestable->getAge()));
+            graphic = graphicSet->getByStateAndView(state, viewToRender)->getGraphic();
+        }
+        
+        graphic->getPixel(x, y, &r, &g, &b, &a);
 
         // Checken, ob Pixel un-transparent genug ist, um es als Treffer zu nehmen
         if (a > 127) {
-            context->game->setSelectedMapObject(building);
-            return;
+            return mapObjectFixed;
         }
+    }
+
+    return nullptr;
+}
+
+void GuiMap::onClickInMapForSelection(int mouseX, int mouseY) {
+    // TODO hier später weitere Typen (Schiffe) checken
+
+    // Gucken, ob ein Gebäude geklickt wurde.
+    const MapObjectFixed* mapObjectFixedClicked = getMapObjectFixedUnderMouseCoords(mouseX, mouseY);
+    const Building* buildingClicked = dynamic_cast<const Building*>(mapObjectFixedClicked);
+
+    if (buildingClicked != nullptr) {
+        context->game->setSelectedMapObject(buildingClicked);
+        return;
     }
 
     // TODO später ggf. weitere Events

@@ -159,28 +159,28 @@ TEST_F(MapCoordUtilsTest, getDrawCoordsForBuilding) {
     // Testdurchführung
 
     map->setScreenView(Direction::SOUTH);
-    Rect actual = MapCoordUtils::getDrawCoordsForBuilding(*map, &graphicsMgr, &building);
+    Rect actual = MapCoordUtils::getDrawCoordsForMapObjectFixed(*map, &graphicsMgr, &building);
     ASSERT_EQ(288, actual.x);
     ASSERT_EQ(331, actual.y);
     ASSERT_EQ(224, actual.w);
     ASSERT_EQ(160, actual.h);
 
     map->setScreenView(Direction::EAST);
-    actual = MapCoordUtils::getDrawCoordsForBuilding(*map, &graphicsMgr, &building);
+    actual = MapCoordUtils::getDrawCoordsForMapObjectFixed(*map, &graphicsMgr, &building);
     ASSERT_EQ(128, actual.x);
     ASSERT_EQ(267, actual.y);
     ASSERT_EQ(224, actual.w);
     ASSERT_EQ(160, actual.h);
 
     map->setScreenView(Direction::NORTH);
-    actual = MapCoordUtils::getDrawCoordsForBuilding(*map, &graphicsMgr, &building);
+    actual = MapCoordUtils::getDrawCoordsForMapObjectFixed(*map, &graphicsMgr, &building);
     ASSERT_EQ(256, actual.x);
     ASSERT_EQ(187, actual.y);
     ASSERT_EQ(224, actual.w);
     ASSERT_EQ(160, actual.h);
 
     map->setScreenView(Direction::WEST);
-    actual = MapCoordUtils::getDrawCoordsForBuilding(*map, &graphicsMgr, &building);
+    actual = MapCoordUtils::getDrawCoordsForMapObjectFixed(*map, &graphicsMgr, &building);
     ASSERT_EQ(416, actual.x);
     ASSERT_EQ(251, actual.y);
     ASSERT_EQ(224, actual.w);

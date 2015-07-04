@@ -72,7 +72,7 @@ MapObjectFixed* Map::getMapObjectFixedAt(const MapCoords& mapCoords) const {
     return mapTile->mapObjectFixed;
 }
 
-void Map::setSelectedMapObject(MapObject* selectedMapObject) {
+void Map::setSelectedMapObject(const MapObject* selectedMapObject) {
     this->selectedMapObject = selectedMapObject;
 }
 

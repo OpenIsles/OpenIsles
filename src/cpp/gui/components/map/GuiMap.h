@@ -231,6 +231,14 @@ private:
     void drawCatchmentArea(IRenderer* const renderer, const Building& building);
 
     /**
+     * @brief Ermittelt, welches Map-Objekt (MapObjectFixed) an einer bestimmten Maus-Position ganz oben liegt.
+     * @param mouseX X-Fenster-Koordinate
+     * @param mouseY Y-Fenster-Koordinate
+     * @return Map-Objekt oder `nullptr`, wenn dort kein Map-Objekt ist
+     */
+    const MapObjectFixed* getMapObjectFixedUnderMouseCoords(int mouseX, int mouseY);
+
+    /**
      * @brief interner Klickhandler, wenn in die Karte geklickt wurde, um etwas zu selektieren
      * (d.&nbsp;h. nicht im Baumodus).
      *

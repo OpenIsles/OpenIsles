@@ -94,19 +94,32 @@ Rect MapCoordUtils::mapToDrawCoords(
     return screenToDrawCoords(screenCoords, map, elevation, graphic, mapWidth, mapHeight);
 }
 
-Rect MapCoordUtils::getDrawCoordsForBuilding(const Map& map, IGraphicsMgr* graphicsMgr, const Building* building) {
-    const MapCoords& mapCoords = building->getMapCoords();
+Rect MapCoordUtils::getDrawCoordsForMapObjectFixed(
+    const Map& map, IGraphicsMgr* graphicsMgr, const MapObjectFixed* mapObjectFixed) {
 
-    const FourthDirection& structureView = building->getView();
+    const MapCoords& mapCoords = mapObjectFixed->getMapCoords();
+
+    const FourthDirection& structureView = mapObjectFixed->getView();
     const FourthDirection& viewToRender = Direction::addDirections(structureView, map.getScreenView());
 
-	const std::string graphicSetName = graphicsMgr->getGraphicSetNameForMapObject(building->getMapObjectType());
-	const GraphicSet* graphicsSet = graphicsMgr->getGraphicSet(graphicSetName);
-    const IGraphic* graphic = graphicsSet->getByView(viewToRender)->getGraphic();
+    const MapObjectType* mapObjectType = mapObjectFixed->getMapObjectType();
+    const std::string graphicSetName = graphicsMgr->getGraphicSetNameForMapObject(mapObjectType);
+	const GraphicSet* graphicSet = graphicsMgr->getGraphicSet(graphicSetName);
+
+    const IGraphic* graphic;
+    if (mapObjectType->type != MapObjectTypeClass::HARVESTABLE) {
+        graphic = graphicSet->getByView(viewToRender)->getGraphic();
+    } else {
+        // Harvestable? ausgewachsenen Zustand nehmen
+        unsigned char maxAge = mapObjectType->maxAge;
+        const std::string fullgrownState = "growth" + toString(maxAge);
+        graphic = graphicSet->getByStateAndView(fullgrownState, viewToRender)->getGraphic();
+    }
 
     const int elevation = 1; // TODO für Gebäude wie Anlegestelle, Fischerhütte etc. muss auf 0 gesetzt werden
 
-    return mapToDrawCoords(mapCoords, map, elevation, *graphic, building->getMapWidth(), building->getMapHeight());
+    return mapToDrawCoords(
+        mapCoords, map, elevation, *graphic, mapObjectFixed->getMapWidth(), mapObjectFixed->getMapHeight());
 }
 
 ScreenCoords MapCoordUtils::getScreenCoordsUnderMouse(const Map& map, int mouseCurrentX, int mouseCurrentY) {
