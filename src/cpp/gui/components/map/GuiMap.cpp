@@ -20,7 +20,11 @@
 #include "utils/MapCoordsIterator.h"
 #include "utils/StringFormat.h"
 
-#ifdef DEBUG_A_STAR
+#ifdef DEBUG_GUIMAP_COORDS
+#include <sstream>
+#endif
+
+#if defined(DEBUG_A_STAR) || defined(DEBUG_GUIMAP_COORDS)
 #include "graphics/mgr/IFontMgr.h"
 #endif
 
@@ -34,9 +38,13 @@ GuiMap::GuiMap(const Context* const context, GuiResourcesBar* guiResourcesBar) :
     woodGood = context->configMgr->getGood("wood");
     bricksGood = context->configMgr->getGood("bricks");
 
-#ifdef DEBUG
+#ifdef DEBUG_GUIMAP
     debugGridOverlayGraphics[0] = new SDLGraphic(
         context->graphicsMgr->getRenderer(), "data/debug-grid-overlay-elevation0.png");
+    debugGridOverlayGraphics[2] = new SDLGraphic(
+        context->graphicsMgr->getRenderer(), "data/debug-grid-overlay-screencoords.png");
+#endif
+#if defined(DEBUG_GUIMAP_COORDS) || defined(DEBUG_GUIMAP)
     debugGridOverlayGraphics[1] = new SDLGraphic(
         context->graphicsMgr->getRenderer(), "data/debug-grid-overlay-elevation1.png");
 #endif
@@ -45,9 +53,12 @@ GuiMap::GuiMap(const Context* const context, GuiResourcesBar* guiResourcesBar) :
 GuiMap::~GuiMap() {
     clearAllTemporarily();
 
-#ifdef DEBUG
+#ifdef DEBUG_GUIMAP
     delete debugGridOverlayGraphics[0];
     delete debugGridOverlayGraphics[1];
+#endif
+#ifdef DEBUG_GUIMAP_COORDS
+    delete debugGridOverlayGraphics[2];
 #endif
 }
 
@@ -318,6 +329,24 @@ void GuiMap::renderElement(IRenderer* renderer) {
 
             animationCurrentFrame->drawScaledAt(rect.x, rect.y, (double) 1 / (double) screenZoom);
         }
+
+#ifdef DEBUG_GUIMAP_COORDS
+        if (screenZoom == 1) {
+            ScreenCoords screenCoords = MapCoordUtils::mapToScreenCoords(mapCoords, screenView, *map);
+            screenCoords.addY(IGraphicsMgr::TILE_HEIGHT_HALF);
+            screenCoords.subY(IGraphicsMgr::ELEVATION_HEIGHT);
+
+            screenCoords.addX(Consts::mapClipRect.w / 2);
+            screenCoords.addY(Consts::mapClipRect.h / 2);
+
+            std::stringstream stringstream;
+            stringstream << mapCoords;
+
+            static Color colorWhite = Color(255, 255, 255, 95);
+            context->fontMgr->renderText(renderer, stringstream.str(), screenCoords.x(), screenCoords.y(), &colorWhite,
+                                         nullptr, "DroidSans.ttf", 9, RENDERTEXT_HALIGN_CENTER | RENDERTEXT_VALIGN_MIDDLE);
+        }
+#endif
     });
 
     // Einzugsbereich jetzt malen, damit er oben drauf is
@@ -373,10 +402,14 @@ void GuiMap::renderElement(IRenderer* renderer) {
     }
 #endif
 
+#if defined(DEBUG_GUIMAP_COORDS) && !defined(DEBUG_GUIMAP)
+    debugGridOverlayGraphics[1]->drawAt(0, 0);
+#endif
 #ifdef DEBUG_GUIMAP
     // Grid zeichnen, an dem wir uns orientieren können
     debugGridOverlayGraphics[0]->drawAt(0, 0);
     debugGridOverlayGraphics[1]->drawAt(0, 0);
+    debugGridOverlayGraphics[2]->drawAt(0, 0);
 
     // Zusätzlich die Mitte markieren. Die sollte sich genau im ScreenCoords(0, 0)-Punkt decken
     int x = Consts::mapClipRect.w / 2;

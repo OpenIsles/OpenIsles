@@ -12,7 +12,7 @@
 #include "map/Structure.h"
 #include "utils/RectangleData.h"
 
-#ifdef DEBUG
+#if defined(DEBUG_GUIMAP_COORDS) || defined(DEBUG_GUIMAP)
 #include "graphics/graphic/sdl/SDLGraphic.h"
 #endif
 
@@ -150,11 +150,15 @@ private:
      */
     std::shared_ptr<Building> buildingToDrawCatchmentArea = nullptr; // TODO kann man wohl wegrefactoren. Das erste Gebäude in mapTilesToDrawTemporarily einfach beim Rendern merken.
 
-#ifdef DEBUG
+#if defined(DEBUG_GUIMAP) || defined(DEBUG_GUIMAP_COORDS)
     /**
-     * @brief Hilfsgrafiken mit Gitternetz-Linien-Overlay für elevation 0 und 1.
+     * @brief Hilfsgrafiken mit Gitternetz-Linien-Overlays
+     *
+     * 0 = Gitternetz-Linien-Overlay für elevation 0
+     * 1 = Gitternetz-Linien-Overlay für elevation 1
+     * 2 = Achsen für ScreenCoords
      */
-    SDLGraphic* debugGridOverlayGraphics[2];
+    SDLGraphic* debugGridOverlayGraphics[3];
 #endif
 
     /**

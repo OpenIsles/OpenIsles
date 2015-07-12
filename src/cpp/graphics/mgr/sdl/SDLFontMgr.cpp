@@ -18,7 +18,7 @@ void SDLFontMgr::renderText(IRenderer* renderer, std::string string, int x, int 
                             Color* color, Color* shadowColor, std::string fontName, int fontSize, int align) {
     
     TTF_Font* ttfFont = getFont(fontName, fontSize);
-    SDL_Color sdlColor = { color->r, color->g, color->b, color->a };
+    SDL_Color sdlColor = { color->r, color->g, color->b, 255 };
     SDL_Surface* surfaceText = TTF_RenderUTF8_Solid(ttfFont, string.c_str(), sdlColor);
     
     Rect rectDestination;
@@ -64,6 +64,7 @@ void SDLFontMgr::renderText(IRenderer* renderer, std::string string, int x, int 
 
         SDL_Rect sdlRectDistinationShadow = {
             rectDestinationShadow.x, rectDestinationShadow.y, rectDestinationShadow.w, rectDestinationShadow.h };
+        SDL_SetTextureAlphaMod(textureTextShadow, shadowColor->a);
         SDL_RenderCopy(sdlRealRenderer, textureTextShadow, nullptr, &sdlRectDistinationShadow);
         SDL_DestroyTexture(textureTextShadow);
     }
@@ -73,6 +74,7 @@ void SDLFontMgr::renderText(IRenderer* renderer, std::string string, int x, int 
 
     SDL_Rect sdlRectDestination = {
         rectDestination.x, rectDestination.y, rectDestination.w, rectDestination.h };
+    SDL_SetTextureAlphaMod(textureText, color->a);
 	SDL_RenderCopy(sdlRealRenderer, textureText, nullptr, &sdlRectDestination);
 	SDL_DestroyTexture(textureText);
 }
