@@ -156,6 +156,14 @@ protected:
     FourthDirection view;
 
 public:
+    /**
+     * @brief Helper, der je nach Map-Objekt-Typ eine konkrete Instanz von `MapObjectFixed` erstellt.
+     * @param mapObjectType Typ des zu erstellenden Map-Objekts
+     * @return neue Instanz eines `MapObjectFixed` mit `type` bereits gesetzt
+     */
+    static MapObjectFixed* instantiate(const MapObjectType* mapObjectType);
+
+public:
 	virtual ~MapObjectFixed() {
 	}
 

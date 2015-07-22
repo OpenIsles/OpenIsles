@@ -8,6 +8,7 @@
 #include "Context.h"
 #include "gui/components/map/GuiResourcesBar.h"
 #include "gui/components/GuiBase.h"
+#include "map/buildqueue/BuildOperation.h"
 #include "map/Direction.h"
 #include "map/Structure.h"
 #include "utils/RectangleData.h"
@@ -87,20 +88,6 @@ public:
      * @brief wenn auf `true` gesetzt, wird die Kachel maskiert gezeichnet.
      */
     bool drawTileMasked = false;
-
-    /**
-     * @brief Zeiger auf ein MapObject (selbst-verwaltet), das beim Abschluss der Bauoperation das bestehende
-     * Map-Objekt ersetzt (bzw. hinzugefügt werden soll). `nullptr` bedeutet "keine Ersetzung". Um das Objekt zu
-     * löschen, muss stattdessen `deleteMapObjectHere` auf `true` gesetzt werden.
-     */
-    MapObjectFixed* mapObjectToReplaceWith = nullptr;
-
-    /**
-     * @brief auf `true` gesetzt wird beim Abschluss der Bauoperation das bestehende Map-Objekt gelöscht.
-     * Wird für Abreißen und Überbauen von kleineren Objekten durch größere benutzt benutzt.
-     */
-    bool deleteMapObjectHere = false;
-
 };
 
 
@@ -118,37 +105,15 @@ private:
     // Datenstrukturen, die für den Baumodus gebraucht werden //////////////////////////////////////////////////////////
 
     /**
+     * Bauoperation, die grade im Gange is
+     */
+    std::unique_ptr<BuildOperation> buildOperation = nullptr;
+
+    /**
      * @brief `true`, wenn gerade ein neues Gebäude positioniert wird.
      */
     bool inBuildingMode = false;
 
-    /**
-     * Build-Queue = Liste von Map-Objekten, die gebaut werden sollen. Die Reihenfolge ist die, in der der Spieler sie
-     * hinzugefügt hat. Im Falle von Resourcenmangel werden nur vordersten Objekte wirklich gebaut.
-     *
-     * In dieser Liste sind alle Gebäude, die beim Loslassen der linken Maustaste wirklich gesetzt werden.
-     * Ist die linke Maustaste noch nicht gedrückt, d.&nbsp;h. der Spieler sieht das Objekt nur als Hover-Objekt,
-     * so befindet sich dieses Objekt NICHT in dieser Build-Queue.
-     *
-     * Die `drawingFlags` dieser Objekte sind irrelevant.
-     */
-    std::list<std::shared_ptr<MapObjectFixed>> buildQueue;
-
-    // Datenstrukturen, die wir zum Rendern brauchen ///////////////////////////////////////////////////////////////////
-
-    /**
-     * @brief Datenstruktur, mit der uns merken, was temporär zu zeichnen ist. Das sind alle Objekte, die gerade
-     * positioniert werden, im Begriff sind, abgerissen zu werden oder das Hover-Objekt.
-     *
-     * Die `drawingFlags` dieser Objekte sind nicht immer korrekt, da sich die verfügbaren Resourcen ständig ändern.
-     * Sie werden bei jedem Frame vor dem Zeichnen aktualisiert.
-     */
-    std::unordered_map<const MapCoords, MapTileTemporarily> mapTilesToDrawTemporarily;
-
-    /**
-     * @brief Zeiger auf ein Gebäude, für welches der Einzugsbereich gezeichnet werden soll.
-     */
-    std::shared_ptr<Building> buildingToDrawCatchmentArea = nullptr; // TODO kann man wohl wegrefactoren. Das erste Gebäude in mapTilesToDrawTemporarily einfach beim Rendern merken.
 
 #if defined(DEBUG_GUIMAP) || defined(DEBUG_GUIMAP_COORDS)
     /**
@@ -228,11 +193,11 @@ private:
     // TODO Methoden sortieren!!!
 
     /**
-     * @brief Zeichnet den Einzugsbereich eines Gebäudes.
+     * @brief Zeichnet den Einzugsbereich eines zu bauenden Gebäudes.
      * @param renderer (Dependency)
-     * @param building Gebäude
+     * @param mapObjectToBuild Gebäude, das gebaut werden soll
      */
-    void drawCatchmentArea(IRenderer* const renderer, const Building& building);
+    void drawCatchmentArea(IRenderer* const renderer, const MapObjectToBuild& mapObjectToBuild);
 
     /**
      * @brief Ermittelt, welches Map-Objekt (MapObjectFixed) an einer bestimmten Maus-Position ganz oben liegt.
@@ -262,6 +227,12 @@ private:
      */
     unsigned char isAllowedToPlaceMapObject(
         const MapCoords& mapCoords, const MapObjectType* mapObjectType, const FourthDirection& view) const;
+
+    /**
+     * @brief Löscht `buildOperation` und legt eine frische Instanz an.
+     * TODO BUILDOPERATION könnte man hübscher mit BuildOperation.reset() lösen
+     */
+    void resetBuildOperation();
 
     /**
      * @brief Entfernt alle Objekte in `buildQueue` und `mapTilesToDrawTemporarily` und setzt
@@ -309,46 +280,36 @@ private:
     void updateHoverObject();
 
     /**
-     * Fügt ggf. ein oder mehrere neue MapTileTemporarily-Objekte zu mapTilesToDrawTemporarily hinzu.
+     * Fügt ggf. ein oder mehrere neue Bauaufträge zur `buildOperation` hinzu.
      * Wir tun das wenn,
      * - die linke Maustaste im Baumodus gerade heruntergedrückt wurde
      *   (d.&nbsp;h. der Spieler grade mit dem Bau beginnt)
      * - oder die linke Maustaste bereits gedrückt ist und die Maus auf eine neue Kachel bewegt wurde.
      *
-     * Wenn an dem Ort gebaut werden darf (d.&nbsp;h. nix im Weg is), wird mapTilesToDrawTemporarily ergänzt.
-     * Andernfalls passiert gar nix.
-     *
-     * @param mustClearAllTemporarily (nur relevant, wenn StructurePlacing == INDIVIDUALLY)
-     *                                `true`, um `clearAllTemporarily()` aufzurufen, bevor die neuen
-     *                                MapTileTemporarily-Objekte hinzugefügt werden.
+     * @param mustResetBefore (nur relevant, wenn StructurePlacing == INDIVIDUALLY)
+     *                        `true`, um `resetBuildOperation()` aufzurufen, bevor die neuen
+     *                        Bauaufträge hinzugefügt werden.
      */
-    void addToBuildQueue(bool mustClearAllTemporarily);
+    void addToBuildQueration(bool mustResetBefore);
 
-    /**
-     * @brief Aktualisiert die `mapTilesToDrawTemporarily` einer bestimmten. Dies verändert ggf. eine
-     * Straßenkachel, wenn wir im Begriff sind, Straßen zu bauen und somit z.&nbsp;B. eine Gerade zu einem
-     * T-Stück wird.
-     *
-     * @param mapCoordsToUpdate Map-Koordinate, die ggf. aktualisiert werden soll
-     */
-    void updateMapTilesToDrawTemporarilyForStreetsAt(const MapCoords& mapCoordsToUpdate);
-
-    /**
-     * @brief Aktualisiert die `mapTilesToDrawTemporarily` um eine bestimmte Kachel herum. Dies verändert ggf.
-     * Straßenkacheln, wenn wir im Begriff sind, Straßen zu bauen und somit z.&nbsp;B. eine Gerade zu einem
-     * T-Stück wird.
-     *
-     * @param mapCoordsToUpdateAround Map-Koordinate, um die horizontal- und vertikal-angrenzende Felder ggf.
-     * aktualisiert werden sollen
-     */
-    void updateMapTilesToDrawTemporarilyForStreetsAround(const MapCoords& mapCoordsToUpdateAround);
-
-    /**
-     * @brief Helper, der je nach Map-Objekt-Typ eine konkrete Instanz von `MapObjectFixed` erstellt.
-     * @param mapObjectType Typ des zu erstellenden Map-Objekts
-     * @return neue Instanz eines `MapObjectFixed` mit `type` bereits gesetzt
-     */
-    MapObjectFixed* instantiateMapObjectFixed(const MapObjectType* mapObjectType);
+//    /**
+//     * @brief Aktualisiert die `mapTilesToDrawTemporarily` einer bestimmten. Dies verändert ggf. eine
+//     * Straßenkachel, wenn wir im Begriff sind, Straßen zu bauen und somit z.&nbsp;B. eine Gerade zu einem
+//     * T-Stück wird.
+//     *
+//     * @param mapCoordsToUpdate Map-Koordinate, die ggf. aktualisiert werden soll
+//     */
+//    void updateMapTilesToDrawTemporarilyForStreetsAt(const MapCoords& mapCoordsToUpdate);
+//
+//    /**
+//     * @brief Aktualisiert die `mapTilesToDrawTemporarily` um eine bestimmte Kachel herum. Dies verändert ggf.
+//     * Straßenkacheln, wenn wir im Begriff sind, Straßen zu bauen und somit z.&nbsp;B. eine Gerade zu einem
+//     * T-Stück wird.
+//     *
+//     * @param mapCoordsToUpdateAround Map-Koordinate, um die horizontal- und vertikal-angrenzende Felder ggf.
+//     * aktualisiert werden sollen
+//     */
+//    void updateMapTilesToDrawTemporarilyForStreetsAround(const MapCoords& mapCoordsToUpdateAround);
 
 };
 

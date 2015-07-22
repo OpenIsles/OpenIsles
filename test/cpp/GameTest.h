@@ -1,6 +1,7 @@
 #ifndef _GAME_TEST_H
 #define _GAME_TEST_H
 
+#include <string>
 #include <gtest/gtest.h>
 #include "Context.h"
 #include "config/ConfigMgr.h"
@@ -19,6 +20,12 @@
  */
 class GameTest : public testing::Test {
 
+private:
+    /**
+     * Dateiname der Karte, die geladen werden soll.
+     */
+    std::string mapFilename;
+
 protected:
     Context context;
 
@@ -30,6 +37,9 @@ protected:
     Game* game;
 
 protected:
+    GameTest() : GameTest("test-map.tmx") {}
+    GameTest(const std::string& mapFilename) : mapFilename(mapFilename) {}
+
     virtual void SetUp() {
         noSdlRenderer = new NoSDLRenderer();
 
@@ -52,7 +62,8 @@ protected:
         context.sdlTicks = 0;
         setTicks(context.sdlTicks);
 
-        game->loadGameFromTMX("data/map/test-map.tmx");
+        std::string mapPath = "data/map/" + mapFilename;
+        game->loadGameFromTMX(mapPath.c_str());
     }
 
     virtual void TearDown() {

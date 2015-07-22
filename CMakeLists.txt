@@ -34,6 +34,10 @@ set(COMMON_SOURCE_FILES
     src/cpp/graphics/mgr/IFontMgr.h
     src/cpp/graphics/mgr/IGraphicsMgr.h
     src/cpp/graphics/renderer/IRenderer.h
+    src/cpp/map/buildqueue/BuildOperation.cpp
+    src/cpp/map/buildqueue/BuildOperation.h
+    src/cpp/map/buildqueue/BuildOperationResult.h
+    src/cpp/map/buildqueue/MapObjectToBuild.h
     src/cpp/map/coords/DrawCoords.h
     src/cpp/map/coords/MapCoords.cpp
     src/cpp/map/coords/MapCoords.h
@@ -53,6 +57,7 @@ set(COMMON_SOURCE_FILES
     src/cpp/map/Map.h
     src/cpp/map/MapCoordUtils.cpp
     src/cpp/map/MapCoordUtils.h
+    src/cpp/map/MapObject.cpp
     src/cpp/map/MapObject.h
     src/cpp/map/MapObjectType.h
     src/cpp/map/Structure.h
@@ -136,6 +141,7 @@ set(TEST_FILES
     test/cpp/config/ConfigMgrTest.cpp
     test/cpp/economics/EconomicsMgrTest.cpp
     test/cpp/graphics/GraphicSetTest.cpp
+    test/cpp/map/buildqueue/BuildOperationTest.cpp
     test/cpp/map/coords/MapCoordsTest.cpp
     test/cpp/map/BuildingTest.cpp
     test/cpp/map/DirectionTest.cpp

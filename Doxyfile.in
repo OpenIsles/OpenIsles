@@ -2,9 +2,10 @@
 PROJECT_NAME = OpenIsles
 
 # Input/Output
-INPUT = ${CMAKE_SOURCE_DIR}/src/cpp
+INPUT = ${CMAKE_SOURCE_DIR}/src/cpp ${CMAKE_SOURCE_DIR}/test/cpp
 EXCLUDE = ${CMAKE_SOURCE_DIR}/src/cpp/rapidxml
 RECURSIVE = YES
+IMAGE_PATH = ${CMAKE_SOURCE_DIR}/doc/doxygen-images
 OUTPUT_DIRECTORY = ${CMAKE_SOURCE_DIR}/doxygen
 OUTPUT_LANGUAGE = German
 
@@ -18,8 +19,12 @@ HTML_OUTPUT = .
 HTML_FILE_EXTENSION = .html
 SEARCHENGINE = YES
 VERBATIM_HEADERS = NO
+SHOW_USED_FILES = NO
 
 GENERATE_LATEX = NO
+
+# Graphen brauchen zu lange zum Generieren und bringen nicht wirklich einen Nutzen
+HAVE_DOT = NO
 
 # Sonstiges
 CASE_SENSE_NAMES = NO     # immer Kleinbuchstaben-Dateinamen verwenden
