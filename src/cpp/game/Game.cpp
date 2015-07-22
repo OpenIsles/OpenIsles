@@ -56,7 +56,16 @@ Colony* Game::getColony(const Player* player, const Isle* isle) const {
 }
 
 Colony* Game::getColony(const MapObjectFixed* mapObject) const {
-    MapTile* mapTile = map->getMapTileAt(mapObject->getMapCoords());
+    const MapTile* mapTile = map->getMapTileAt(mapObject->getMapCoords());
+
+    return getColony(mapTile->player, mapTile->isle);
+}
+
+Colony* Game::getColony(const MapCoords& mapCoords) const {
+    const MapTile* mapTile = map->getMapTileAt(mapCoords);
+    if (mapTile == nullptr) {
+        return nullptr;
+    }
 
     return getColony(mapTile->player, mapTile->isle);
 }

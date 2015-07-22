@@ -33,6 +33,14 @@ std::string toString(unsigned long x);
  * @param x Zahl
  * @return String
  */
+std::string toString(long x);
+
+/**
+ * Wrapper, um eine Zahl zu einem String umzuwandeln.
+ *
+ * @param x Zahl
+ * @return String
+ */
 std::string toString(double x);
 
 /**

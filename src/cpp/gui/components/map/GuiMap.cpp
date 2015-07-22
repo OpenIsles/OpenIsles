@@ -51,8 +51,6 @@ GuiMap::GuiMap(const Context* const context, GuiResourcesBar* guiResourcesBar) :
 }
 
 GuiMap::~GuiMap() {
-    clearAllTemporarily();
-
 #ifdef DEBUG_GUIMAP
     delete debugGridOverlayGraphics[0];
     delete debugGridOverlayGraphics[1];
@@ -118,7 +116,11 @@ void GuiMap::renderElement(IRenderer* renderer) {
     // Nur die Kartenfläche vollmalen
     renderer->setClipRect(&Consts::mapClipRect);
 
-    updateMapObjectsTemporarilyDrawingFlags();
+    if (buildOperation) {
+        // TODO kann man optimieren, indem wirklich nur bei Änderung der Resourcen (Geld oder Baumaterial der betreffenden Kolonie) aufruft.
+        // Allerdings macht das der Carrier und der weiß nix von Colony oder GUI. Also erstmal so.
+        buildOperation->updateBuildMaterials();
+    }
 
     // Jetzt rendern
     mapCoordsIterator.iterate([&] (const MapCoords& mapCoords) {
@@ -183,10 +185,8 @@ void GuiMap::renderElement(IRenderer* renderer) {
         const MapObjectFixed* mapObjectToDrawHere = nullptr;
 
         // Temporär was anderes zeichnen?
-        bool drawBuildOperationResultBit = false;
         if (buildOperationResultBit) {
             mapObjectToDrawHere = buildOperationResultBit->mapObjectToDraw.get();
-            drawBuildOperationResultBit = true;
         }
 
         // Nichts temporär? Dann gucken, ob im Spielstand was is, was wir zeichnen müssen
@@ -215,13 +215,19 @@ void GuiMap::renderElement(IRenderer* renderer) {
             int drawingFlags = mapObjectToDrawHere->getDrawingFlags();
             const MapObjectType* mapObjectType = mapObjectToDrawHere->getMapObjectType();
 
-            // Maskiert zeichnen,
-            // - das neu zu platzierende Objekt
-            // - ein bereits bestehendes Objekt: nur Strukturen/Harvestables maskiert zeigen, keine Gebäude
-            if (drawBuildOperationResultBit &&
-                ((mapObjectType->type != MapObjectTypeClass::BUILDING) || !buildOperationResultBit->somethingInTheWay)) {
+            if (buildOperationResultBit) {
+                // Maskiert zeichnen,
+                // - das neu zu platzierende Objekt
+                // - ein bereits bestehendes Objekt: nur Strukturen/Harvestables maskiert zeigen, keine Gebäude
+                if ((mapObjectType->type != MapObjectTypeClass::BUILDING) ||
+                    !buildOperationResultBit->somethingInTheWay) {
 
-                drawingFlags = IGraphic::DRAWING_FLAG_MASKED;
+                    drawingFlags = IGraphic::DRAWING_FLAG_MASKED;
+                }
+
+                if (!buildOperationResultBit->resourcesEnoughToBuildThis) {
+                    drawingFlags |= IGraphic::DRAWING_FLAG_BLINK;
+                }
             }
 
             const FourthDirection& view = mapObjectToDrawHere->getView();
@@ -370,9 +376,9 @@ void GuiMap::renderElement(IRenderer* renderer) {
 
     // Einzugsbereich jetzt malen, damit er oben drauf is
     if (buildOperation) {
-        const std::forward_list<MapObjectToBuild>& mapObjectsToBuild = buildOperation->getMapObjectsToBuild();
+        const std::list<MapObjectToBuild>& mapObjectsToBuild = buildOperation->getMapObjectsToBuild();
         // nur zeichnen, wenn genau ein Objekt in der Buildqueue is.
-        if (std::distance(mapObjectsToBuild.cbegin(), mapObjectsToBuild.cend()) == 1) {
+        if (mapObjectsToBuild.size() == 1) {
             const MapObjectToBuild& firstMapObjectToBuild = mapObjectsToBuild.front();
             drawCatchmentArea(renderer, firstMapObjectToBuild);
         }
@@ -505,7 +511,7 @@ bool GuiMap::onEventElement(SDL_Event& event) {
             event.button.button == SDL_BUTTON_RIGHT &&
             isLeftMouseButtonDown) {
 
-            clearAllTemporarily();
+            resetBuildOperation();
             return false;
         }
 
@@ -577,15 +583,9 @@ void GuiMap::addToBuildQueration(bool mustResetBefore) {
         // der Maustaste wir clearen müssen, um das Hover-Objekt vorher wegzukriegen. Allerdings darf beim Mausbewegen
         // dann nicht mehr gecleart werden, um nicht alle Gebäude, die wir schon haben, wieder zu verlieren.
         if (mustResetBefore) {
-//            clearAllTemporarily();
             resetBuildOperation();
         }
 
-//        unsigned char isAllowedToPlaceResult =
-//            isAllowedToPlaceMapObject(mapCoordsUnderMouse, mapObjectType, view);
-//        if ((isAllowedToPlaceResult & ~PLACING_STRUCTURE_NO_RESOURCES) == PLACING_STRUCTURE_ALLOWED) {
-//            addCurrentStructureToBuildQueue(mapCoordsUnderMouse);
-//        }
         buildOperation->requestBuildWhenNothingInTheWay(mapCoordsUnderMouse, mapObjectType, view);
     }
     else if (structurePlacing == RECTANGLE) {
@@ -600,16 +600,11 @@ void GuiMap::addToBuildQueration(bool mustResetBefore) {
             ((mapCoordsClickStart.y() > mapCoordsUnderMouse.y()) ? Direction::NORTH : Direction::WEST) :
             ((mapCoordsClickStart.y() > mapCoordsUnderMouse.y()) ? Direction::EAST : Direction::SOUTH);
 
-//        clearAllTemporarily(); // immer clearen, weil das neue Rechteck alle vorher gesetzten Kacheln ersetzt
-        resetBuildOperation();
+        resetBuildOperation(); // immer clearen, weil das neue Rechteck alle vorher gesetzten Kacheln ersetzt
 
         MapCoordsIterator mapCoordsIterator(mapCoordsClickStart, mapCoordsUnderMouse, iterationDirection);
         mapCoordsIterator.iterate([&] (const MapCoords& mapCoords) {
             buildOperation->requestBuildWhenNothingInTheWay(mapCoords, mapObjectType, view);
-//            unsigned char isAllowedToPlaceResult = isAllowedToPlaceMapObject(mapCoords, mapObjectType, view);
-//            if ((isAllowedToPlaceResult & ~PLACING_STRUCTURE_NO_RESOURCES) == PLACING_STRUCTURE_ALLOWED) {
-//                addCurrentStructureToBuildQueue(mapCoords);
-//            }
         });
     }
     else if (structurePlacing == PATH) {
@@ -627,19 +622,16 @@ void GuiMap::addToBuildQueration(bool mustResetBefore) {
             route = aStar.getRoute(mapCoordsClickStart, mapCoordsUnderMouse);
         }
 
-//        clearAllTemporarily(); // immer clearen, weil der neue Pfad alle vorher gesetzten Kacheln ersetzt
-        resetBuildOperation();
+        resetBuildOperation(); // immer clearen, weil der neue Pfad alle vorher gesetzten Kacheln ersetzt
 
         if (route.routeExists()) {
             std::for_each(route.cbegin(), route.cend(), [&](const MapCoords& mapCoords) {
                 buildOperation->requestBuildWhenNothingInTheWay(mapCoords, mapObjectType, view);
-//                unsigned char isAllowedToPlaceResult = isAllowedToPlaceMapObject(mapCoords, mapObjectType, view);
-//                if ((isAllowedToPlaceResult & ~PLACING_STRUCTURE_NO_RESOURCES) == PLACING_STRUCTURE_ALLOWED) {
-//                    addCurrentStructureToBuildQueue(mapCoords);
-//                }
             });
         }
     }
+
+    updateBuildingCosts();
 }
 
 void GuiMap::updateHoverObject() {
@@ -647,9 +639,8 @@ void GuiMap::updateHoverObject() {
 
     const MapObjectType* mapObjectType = context->guiMgr->getPanelState().addingMapObject;
     const FourthDirection& view = context->guiMgr->getPanelState().addingMapObjectView;
-    const Player* player = context->game->getCurrentPlayer();
 
-    buildOperation.reset(new BuildOperation(*player, *context->game));
+    resetBuildOperation();
     buildOperation->requestBuild(mapCoordsUnderMouse, mapObjectType, view);
 }
 
@@ -872,8 +863,7 @@ void GuiMap::drawCatchmentArea(IRenderer* const renderer, const MapObjectToBuild
 }
 
 void GuiMap::onNewGame() {
-    // Alles wegräumen und neu anlegen
-    clearAllTemporarily();
+    // TODO gucken, ob wir den Callback überhaupt noch brauchen
 }
 
 void GuiMap::onStartAddingStructure() {
@@ -890,7 +880,6 @@ void GuiMap::onCancelAddingStructure() {
     buildOperation.release();
 
     inBuildingMode = false;
-    clearAllTemporarily();
 }
 
 void GuiMap::onRotateAddingStructure() {
@@ -902,151 +891,7 @@ void GuiMap::onRotateAddingStructure() {
 
 void GuiMap::resetBuildOperation() {
     const Player* player = context->game->getCurrentPlayer();
-    buildOperation.reset(new BuildOperation(*player, *context->game));
-}
-
-void GuiMap::clearAllTemporarily() {
-//    buildQueue.clear();
-//    mapTilesToDrawTemporarily.clear();
-}
-
-void GuiMap::addCurrentStructureToBuildQueue(const MapCoords& mapCoords) {
-//    const MapObjectType* mapObjectType = context->guiMgr->getPanelState().addingMapObject;
-//    const FourthDirection& view = context->guiMgr->getPanelState().addingMapObjectView;
-//
-//    unsigned char mapWidth, mapHeight;
-//    if (view == Direction::NORTH || view == Direction::SOUTH) {
-//        mapWidth = mapObjectType->mapWidth;
-//        mapHeight = mapObjectType->mapHeight;
-//    } else {
-//        mapWidth = mapObjectType->mapHeight;
-//        mapHeight = mapObjectType->mapWidth;
-//    }
-//
-//    // Sonderfälle, wo zufällig gewählt wird: Haus (= zufälliges Pionier-Haus) und Wald
-//    if (mapObjectType->name == "pioneers-house1" || mapObjectType->name == "northern-forest1") {
-//        std::random_device randomDevice;
-//        std::default_random_engine randomEngine(randomDevice());
-//
-//        if (mapObjectType->name == "pioneers-house1") {
-//            std::uniform_int_distribution<int> randomPioneerHouse(1, 5);
-//            std::string mapObjectTypeName = "pioneers-house" + toString(randomPioneerHouse(randomEngine));
-//
-//            mapObjectType = context->configMgr->getMapObjectType(mapObjectTypeName);
-//        } else if (mapObjectType->name == "northern-forest1") {
-//            std::uniform_int_distribution<int> randomNorthernForest(1, 2);
-//            std::string mapObjectTypeName = "northern-forest" + toString(randomNorthernForest(randomEngine));
-//
-//            mapObjectType = context->configMgr->getMapObjectType(mapObjectTypeName);
-//        }
-//    }
-//
-//    Structure* structure = (Structure*) MapObjectFixed::instantiate(mapObjectType);
-//    structure->setMapCoords(mapCoords);
-//    structure->setMapWidth(mapWidth);
-//    structure->setMapHeight(mapHeight);
-//    structure->setView(context->guiMgr->getPanelState().addingMapObjectView);
-//    structure->setDrawingFlags(IGraphic::DRAWING_FLAG_MASKED);
-//
-//    std::shared_ptr<MapObjectFixed> structureBeingAdded(structure);
-//    buildQueue.push_back(structureBeingAdded);
-//
-//    for (int my = mapCoords.y(); my < mapCoords.y() + mapHeight; my++) {
-//        for (int mx = mapCoords.x(); mx < mapCoords.x() + mapWidth; mx++) {
-//            mapTilesToDrawTemporarily[MapCoords(mx, my)].mapObjectToDraw = structureBeingAdded;
-//        }
-//    }
-//
-//    // Hovering beenden. Jetzt ist die linke Maustaste runtergedrückt und wir adden immer zu buildQueue.
-//    std::shared_ptr<MapObjectFixed> firstMapObjectInList = buildQueue.front();
-//
-//    // Einzugsbereich wird am ersten Gebäude in buildQueue gezeichnet
-//    // TODO nur machen, wenn wir grade das erste Objekt in die Liste haben
-//    buildingToDrawCatchmentArea = std::dynamic_pointer_cast<Building>(firstMapObjectInList);
-//
-//    updateMapTilesToDrawTemporarilyForStreetsAt(mapCoords);
-//    updateMapTilesToDrawTemporarilyForStreetsAround(mapCoords);
-//
-//    // Baukosten in der Resourcen-Leiste aktualisieren
-//    updateBuildingCosts();
-}
-
-void GuiMap::updateMapObjectsTemporarilyDrawingFlags() {
-//    if (inBuildingMode == false || mapTilesToDrawTemporarily.empty()) {
-//        return;
-//    }
-//
-//    // Build-Queue leer? D.h. nur das Hover-Objekt ist in mapTilesToDrawTemporarily
-//    if (buildQueue.empty()) {
-//        if (!mapTilesToDrawTemporarily.cbegin()->second.mapObjectToDraw) {
-//            return; // kein Hover-Objekt da? Dann darfs hier eh nicht platziert werden, z.B. weil Platz belegt
-//        }
-//
-//        const MapObjectFixed& mapObjectFixed = *mapTilesToDrawTemporarily.cbegin()->second.mapObjectToDraw;
-//        const MapCoords& mapCoords = mapObjectFixed.getMapCoords();
-//        const MapObjectType* mapObjectType = mapObjectFixed.getMapObjectType();
-//        const FourthDirection& view = mapObjectFixed.getView();
-//
-//        bool noResources =
-//            (isAllowedToPlaceMapObject(mapCoords, mapObjectType, view) & PLACING_STRUCTURE_NO_RESOURCES);
-//
-//        // In mapTilesToDrawTemporarily können zwar mehrere Kacheln stehen, allerdings referenzieren diese
-//        // alle dasselbe Objekt, nämlich das Hover-Objekt.
-//        auto iter = mapTilesToDrawTemporarily.begin();
-//        MapObjectFixed& hoverObject = *iter->second.mapObjectToDraw;
-//
-//        if (noResources) {
-//            hoverObject.setDrawingFlags(hoverObject.getDrawingFlags() | IGraphic::DRAWING_FLAG_BLINK);
-//        } else {
-//            hoverObject.setDrawingFlags(hoverObject.getDrawingFlags() & ~IGraphic::DRAWING_FLAG_BLINK);
-//        }
-//
-//        return;
-//    }
-//
-//    // Ansonsten gucken wir buildQueue durch
-//
-//    // Wir nutzen die Tatsache aus, dass immer nur dieselben Gebäude in der Bauqueue sind.
-//    MapObjectFixed& firstObjectInList = *buildQueue.front();
-//    const MapObjectType* mapObjectType = firstObjectInList.getMapObjectType();
-//    const BuildingCosts& buildingCostsOneTime = mapObjectType->buildingCosts;
-//
-//    const Player* currentPlayer = context->game->getCurrentPlayer();
-//
-//    // TODO aktuell können in buildQueue Gebäude von verschiedenen Siedlungen sein. Das muss gefixed werden. Nur von einer Siedlung ist erlaubt.
-//    // Wir verwenden das erstbeste MapObject in der buildQueue, um die Kolonie rauszufinden, in der wir bauen wollen.
-//    MapObjectFixed& someMapObject = **buildQueue.cbegin();
-//    Colony* colony = context->game->getColony(
-//        currentPlayer, context->game->getMap()->getMapTileAt(someMapObject.getMapCoords())->isle);
-//    const double toolsInColony = colony->getGoods(toolsGood).inventory;
-//    const double woodInColony = colony->getGoods(woodGood).inventory;
-//    const double bricksInColony = colony->getGoods(bricksGood).inventory;
-//
-//    bool outOfResources = false;
-//
-//    // Der Reihe nach alle zu setzenden Gebäude durchgehen und gucken, wann/ob die Resourcen ausgehen
-//    int structuresCount = 1;
-//    for (auto iter = buildQueue.cbegin(); iter != buildQueue.cend(); iter++, structuresCount++) {
-//        MapObjectFixed& mapObject = **iter;
-//
-//        if (!outOfResources) {
-//            BuildingCosts sumBuildingCostTilHere = buildingCostsOneTime * structuresCount;
-//
-//            if (currentPlayer->coins < sumBuildingCostTilHere.coins ||
-//                toolsInColony < sumBuildingCostTilHere.tools ||
-//                woodInColony < sumBuildingCostTilHere.wood ||
-//                bricksInColony < sumBuildingCostTilHere.bricks) {
-//
-//                outOfResources = true;
-//            }
-//        }
-//
-//        if (outOfResources) {
-//            mapObject.setDrawingFlags(mapObject.getDrawingFlags() | IGraphic::DRAWING_FLAG_BLINK);
-//        } else {
-//            mapObject.setDrawingFlags(mapObject.getDrawingFlags() & ~IGraphic::DRAWING_FLAG_BLINK);
-//        }
-//    }
+    buildOperation.reset(new BuildOperation(context, *player));
 }
 
 void GuiMap::updateBuildingCosts() {
@@ -1059,8 +904,7 @@ void GuiMap::updateBuildingCosts() {
     const MapObjectType* mapObjectType = context->guiMgr->getPanelState().addingMapObject;
     const BuildingCosts& buildingCostsOneTime = mapObjectType->buildingCosts;
 
-    const std::forward_list<MapObjectToBuild>& mapObjectsToBuild = buildOperation->getMapObjectsToBuild();
-    long structuresCount = std::distance(mapObjectsToBuild.cbegin(), mapObjectsToBuild.cend());
+    long structuresCount = buildOperation->getMapObjectsToBuild().size();
 
     guiResourcesBar->showBuildingCosts(buildingCostsOneTime * structuresCount);
 }

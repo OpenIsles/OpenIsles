@@ -25,8 +25,24 @@ void BuildOperation::requestBuild(const MapCoords& mapCoords, const MapObjectTyp
         }
     }
 
+    // Kolonie prüfen: Alle Objekte in der Bau-Queue müssen in derselben Kolonie sein!
+    if (colony == nullptr) {
+        // Erste Map-Objekt gibt die Kolonie vor
+        colony = context->game->getColony(mapCoords);
+        if (colony == nullptr) {
+            return; // Keine Kolonie, da darf man eh nicht bauen
+        }
+
+    } else {
+        // Jedes weitere Map-Objekt muss in dieser Kolonie sein
+        Colony* colonyThere = context->game->getColony(mapCoords);
+        if ((colony == nullptr) || (colonyThere != colony)) {
+            return;
+        }
+    }
+
     // Objekt in die Bauqueue aufnehmen und Result-Objekt aktualisieren
-    mapObjectsToBuild.push_front({ mapCoords, mapObjectType, view });
+    mapObjectsToBuild.push_back({ mapCoords, mapObjectType, view });
     rebuildResult();
 }
 
@@ -65,7 +81,7 @@ bool BuildOperation::isSomethingInTheWayOnTheMap(const MapObjectToBuild& mapObje
                 return false;
             }
 
-            MapObjectFixed* mapObjectFixedAlreadyThere = game.getMap()->getMapObjectFixedAt(mapCoords);
+            MapObjectFixed* mapObjectFixedAlreadyThere = context->game->getMap()->getMapObjectFixedAt(mapCoords);
             if (mapObjectFixedAlreadyThere != nullptr) {
                 // TODO BUILDOPERATION Überbauen ermöglichen
                 return true;
@@ -79,11 +95,21 @@ bool BuildOperation::isSomethingInTheWayOnTheMap(const MapObjectToBuild& mapObje
 
 // TODO BUILDOPERATION noch ganz viel zu tun....
 void BuildOperation::rebuildResult() {
-    assert(!mapObjectsToBuild.empty());
-
     result.clear();
     result.result = BuildOperationResult::OK;
 
+    if (mapObjectsToBuild.empty()) {
+        return;
+    }
+
+    BuildingCosts resourcesAvailable = {
+        player.coins,
+        (int) colony->getGoods(context->configMgr->getGood("tools")).inventory,
+        (int) colony->getGoods(context->configMgr->getGood("wood")).inventory,
+        (int) colony->getGoods(context->configMgr->getGood("bricks")).inventory
+    };
+
+    bool enoughResources = true;
     for (const MapObjectToBuild& mapObjectToBuild : mapObjectsToBuild) {
         const MapObjectType* mapObjectType = mapObjectToBuild.mapObjectType;
 
@@ -118,7 +144,12 @@ void BuildOperation::rebuildResult() {
             result.result = BuildOperationResult::SOMETHING_IN_THE_WAY;
         }
 
-        resultBit->resourcesEnoughToBuildThis = true; // TODO BUILDOPERATION
+        // Resourcen überprüfen (einmal false geworden, sparen wir uns die Differenz-Bildung)
+        if (enoughResources) {
+            resourcesAvailable -= mapObjectType->buildingCosts;
+            enoughResources = resourcesAvailable.isNonNegative();
+        }
+        resultBit->resourcesEnoughToBuildThis = enoughResources;
 
         // ResultBit den Koordinaten zuweisen
         for (int y = 0, my = mapObjectToBuild.mapCoords.y(); y < mapHeight; y++, my++) {
@@ -127,8 +158,6 @@ void BuildOperation::rebuildResult() {
             }
         }
     }
-
-    // Erstes Map-Objekt (wenn ein Gebäude) kriegt den Einzugsbereich gemalt
 }
 
 

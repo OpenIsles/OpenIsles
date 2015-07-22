@@ -34,7 +34,7 @@ public:
     /**
      * @brief Guthaben an Münzen
      */
-    unsigned long coins;
+    long coins;
     
 private:
     /**

@@ -49,6 +49,17 @@ public:
     }
 
     /**
+     * @brief Liefert den Slot für einen bestimmten Warentyp zurück. Dieser enthält Lagerbestand und -Kapazität.
+     * (const-Variante)
+     *
+     * @param good Gut
+     * @return Slot für den angeforderten Warentyp
+     */
+    const GoodsSlot& getGoods(const Good* good) const {
+        return goods.at(good);
+    }
+
+    /**
      * @brief Erhöht die Lagerkapazität der Kolonie um einen bestimmten Wert. Es werden damit die Lagerkapazitäten
      * in allen Slots erhöht.
      * @param amount Anzahl, um wie viel erhöht werden soll

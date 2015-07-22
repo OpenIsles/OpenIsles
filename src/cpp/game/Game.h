@@ -96,7 +96,7 @@ public:
     }
     
     /**
-     * Gründet eine neue Siedlung
+     * @brief Gründet eine neue Siedlung
      *
      * @param player Spieler, der die Siedlung gründet
      * @param colonyName Name, den die Siedlung erhalten soll
@@ -106,21 +106,29 @@ public:
     Colony* foundNewColony(const Player* player, const std::string& colonyName, const Isle* isle);
     
     /**
-     * Liefert die Siedlung eines Spielers auf einer Insel zurück
+     * @brief Liefert die Siedlung eines Spielers auf einer Insel zurück
      *
      * @param player Spieler
      * @param isle Insel
-     * @return Colony oder nullptr, wenn keine Siedlung da ist
+     * @return Colony oder `nullptr`, wenn keine Siedlung da ist
      */
     Colony* getColony(const Player* player, const Isle* isle) const;
 
     /**
-     * Liefert die Siedlung zurück, in der ein bestimmtes MapObject sich befindet.
+     * @brief Liefert die Siedlung zurück, in der ein bestimmtes MapObject sich befindet.
      *
      * @param mapObject MapObject
-     * @return Colony oder nullptr, wenn keine Siedlung da ist
+     * @return Colony oder `nullptr`, wenn keine Siedlung da ist
      */
     Colony* getColony(const MapObjectFixed* mapObject) const;
+
+    /**
+     * @brief Liefert die Siedlung an einer bestimmten Kachel zurück
+     *
+     * @param mapObject MapObject
+     * @return Colony oder `nullptr`, wenn keine Siedlung da ist
+     */
+    Colony* getColony(const MapCoords& mapCoords) const;
 
     /**
      * @brief Liefert die Spielgeschwindigkeit zurück.

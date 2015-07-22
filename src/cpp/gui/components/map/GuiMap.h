@@ -217,48 +217,16 @@ private:
     void onClickInMapForSelection(int mouseX, int mouseY);
 
     /**
-     * Prüft, ob eine bestimmte Struktur an eine bestimmte Position gesetzt werden darf.
-     *
-     * @param mapCoords Map-Koordinate, wo die Struktur gesetzt werden soll
-     * @param mapObjectType Typ der zu setzenden Struktur
-     * @param view Ausrichtung der Struktur
-     * @sa PLACING_STRUCTURE-Konstanten
-     * @return Bitmaske, die angibt, ob das Gebäude gesetzt werden darf.
-     */
-    unsigned char isAllowedToPlaceMapObject(
-        const MapCoords& mapCoords, const MapObjectType* mapObjectType, const FourthDirection& view) const;
-
-    /**
      * @brief Löscht `buildOperation` und legt eine frische Instanz an.
      * TODO BUILDOPERATION könnte man hübscher mit BuildOperation.reset() lösen
      */
     void resetBuildOperation();
 
     /**
-     * @brief Entfernt alle Objekte in `buildQueue` und `mapTilesToDrawTemporarily` und setzt
-     * `buildingToDrawCatchmentArea` auf `nullptr`.
-     */
-    void clearAllTemporarily();
-
-    /**
     * @brief interner Eventhandler, der beim Loselassen der linken Maustaste im Baumodus greift.
     * Beendet das Setzen neuer Gebäude. Alle Gebäude werden nun gesetzt.
     */
     void onReleaseMouseLeftInBuildingMode();
-
-    /**
-     * @brief Fügt ein Gebäude zu `buildQueue` hinzu.
-     * Der Aufrufer muss sich sicher sein, dass das Gebäude hier platziert werden darf.
-     *
-     * @param mapCoords Map-Koordinaten, wo das Gebäude platziert werden soll
-     */
-    void addCurrentStructureToBuildQueue(const MapCoords& mapCoords);
-
-    /**
-     * @brief Aktualisiert die `drawingFlags` der `mapTilesToDrawTemporarily`.
-     * Dies ist immer vor jedem Frame-Rendern notwendig, da sich ständig die verfügbaren Resourcen ändern.
-     */
-    void updateMapObjectsTemporarilyDrawingFlags();
 
     /**
      * @brief Aktualisiert die Baukosten in der Resourcen-Leiste.

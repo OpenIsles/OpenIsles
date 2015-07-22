@@ -2,42 +2,45 @@
 #define _BUILD_OPERATION_H
 
 #include <cassert>
-#include <forward_list>
+#include <list>
 #include "map/buildqueue/BuildOperation.h"
 #include "map/buildqueue/BuildOperationResult.h"
 #include "map/buildqueue/MapObjectToBuild.h"
 #include "map/MapObject.h"
 #include "game/Colony.h"
 
-class BuildOperation {
+class BuildOperation : public ContextAware {
 
 private:
     /**
-     * Spieler der bauen will
+     * @brief Spieler der bauen will
      */
     const Player& player;
 
+
     /**
-     * Dependency
+     * @brief Bauaufträge ("Build-Queue")
      */
-    const Game& game;
-
+    std::list<MapObjectToBuild> mapObjectsToBuild;
 
     /**
-     * Bauaufträge ("Build-Queue")
+     * @brief Kolonie, in der gebaut wird.
+     *
+     * Es kann immer nur in einer Kolonie gebaut werden. Dieses Feld ist erst gesetzt, wenn
+     * der erste Bauauftrag in der Queue ist.
      */
-    std::forward_list<MapObjectToBuild> mapObjectsToBuild;
+    const Colony* colony = nullptr;
 
     /**
-     * Berechnetes Ergebnis
+     * @brief Berechnetes Ergebnis
      */
     BuildOperationResult result;
 
 public:
-    BuildOperation(const Player& player, const Game& game) : player(player), game(game) {
+    BuildOperation(const Context* const context, const Player& player) : ContextAware(context), player(player) {
     }
 
-    const std::forward_list<MapObjectToBuild>& getMapObjectsToBuild() const {
+    const std::list<MapObjectToBuild>& getMapObjectsToBuild() const {
         return mapObjectsToBuild;
     }
 
@@ -74,7 +77,7 @@ public:
      * @param mapObjectFixed Objekt, das abgerissen werden soll.
      */
     void requestRemoval(const MapObjectFixed& mapObjectFixed) {
-        mapObjectsToBuild.push_front({ mapObjectFixed.getMapCoords() });
+        mapObjectsToBuild.push_back({ mapObjectFixed.getMapCoords() });
         rebuildResult();
     }
 

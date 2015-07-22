@@ -13,6 +13,10 @@ std::string toString(unsigned long x) {
     return std::to_string(x);
 }
 
+std::string toString(long x) {
+    return std::to_string(x);
+}
+
 std::string toString(double x) {
     return std::to_string(x);
 }
@@ -48,6 +52,12 @@ std::string toString(int x) {
 std::string toString(unsigned long x) {
     char buffer[20];
     sprintf(buffer, "%lu", x);
+    return std::string(buffer);
+}
+
+std::string toString(long x) {
+    char buffer[20];
+    sprintf(buffer, "%ld", x);
     return std::string(buffer);
 }
 

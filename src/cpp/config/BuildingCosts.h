@@ -10,28 +10,28 @@ struct BuildingCosts {
     /**
      * @brief Münzen
      */
-    unsigned int coins;
+    long coins;
 
     /**
      * @brief Werkzeug
      */
-    unsigned int tools;
+    int tools;
 
     /**
      * @brief Holz
      */
-    unsigned int wood;
+    int wood;
 
     /**
      * @brief Ziegel
      */
-    unsigned int bricks;
+    int bricks;
 
 public:
     BuildingCosts() : coins(0), tools(0), wood(0), bricks(0) {
     }
 
-    BuildingCosts(unsigned int coins, unsigned int tools, unsigned int wood, unsigned int bricks)
+    BuildingCosts(long coins, int tools, int wood, int bricks)
         : coins(coins), tools(tools), wood(wood), bricks(bricks) {
     }
 
@@ -42,6 +42,25 @@ public:
      */
     BuildingCosts operator*(int n) const {
         return BuildingCosts(coins * n, tools * n, wood * n, bricks * n);
+    }
+
+    /**
+     * @brief Subtraktions-Zuweisungsoperator, der Baukosten abzieht.
+     * @param subtrahend Subtrahend
+     */
+    void operator-=(const BuildingCosts& subtrahend) {
+        coins -= subtrahend.coins;
+        tools -= subtrahend.tools;
+        wood -= subtrahend.wood;
+        bricks -= subtrahend.bricks;
+    }
+
+    /**
+     * @brief Ermittelt, ob alle Felder nicht-negativ sind.
+     * @return `true` wenn alle Felder nicht-negativ sind, sonst `false`.
+     */
+    bool isNonNegative() const {
+        return ((coins >= 0) && (tools >= 0) && (wood >= 0) && (bricks >= 0));
     }
 
 } BuildingCosts;
