@@ -229,37 +229,43 @@ void GameIO::loadMapObjects(Game* game, const ConfigMgr* configMgr, rapidxml::xm
          objectNode = objectNode->next_sibling("object", 6, true)) {
 
         // Allgemeine Daten einlesen
-        const char* nodeType = objectNode->first_attribute("type", 4, true)->value();
         const char* nodeNameValue = objectNode->first_attribute("name", 4, true)->value();
+
+        const MapObjectType* mapObjectType = configMgr->getMapObjectType(nodeNameValue);
+        if (mapObjectType == nullptr) {
+            std::cerr << "Illegal mapObjectType '" << nodeNameValue << "'" << std::endl;
+            throw std::runtime_error("Illegal mapObjectType");
+        }
+        const MapObjectTypeClass& mapObjectTypeClass = mapObjectType->type;
 
         MapCoords mapCoords = getMapCoordsFromObjectNode(objectNode);
         rapidxml::xml_node<>* propertiesNode = objectNode->first_node("properties", 10, true);
 
         EighthDirection view = getViewPropertyValueFromPropertiesNode(propertiesNode);
 
-        // Konkreten Struktur-Typ finden und MapObject anlegen
-        if (strcmp(nodeType, "structure") == 0 || strcmp(nodeType, "building") == 0) {
+        if (mapObjectTypeClass == MapObjectTypeClass::STRUCTURE ||
+            mapObjectTypeClass == MapObjectTypeClass::BUILDING ||
+            mapObjectTypeClass == MapObjectTypeClass::STREET) {
+
             int playerNr = std::atoi(getPropertyValueFromPropertiesNode(propertiesNode, "player"));
             Player* player = game->getPlayer(playerNr - 1);
 
-            const MapObjectType* mapObjectType = configMgr->getMapObjectType(nodeNameValue);
-            if (mapObjectType == nullptr) {
-                std::cerr << "Illegal mapObjectType '" << nodeNameValue << "'" << std::endl;
-                throw std::runtime_error("Illegal structure or building name");
-            }
+            if (mapObjectTypeClass == MapObjectTypeClass::STRUCTURE ||
+                mapObjectTypeClass == MapObjectTypeClass::BUILDING) {
 
-            game->addStructure(mapCoords, mapObjectType, view, player);
+                game->addStructure(mapCoords, mapObjectType, view, player);
+            }
+            else if (mapObjectTypeClass == MapObjectTypeClass::STREET) {
+                const char* connections = getPropertyValueFromPropertiesNode(propertiesNode, "connections");
+                StreetConnections streetConnections(connections);
+
+                game->addStreet(mapCoords, mapObjectType, view, player, streetConnections);
+            }
         }
 
         // MapObject für erntebare Landschaften anlegen
-        else if (strcmp(nodeType, "harvestable") == 0) {
+        else if (mapObjectTypeClass == MapObjectTypeClass::HARVESTABLE) {
             // TODO Aus nodeNameValue weiteres Identifizierungsmerkmal lesen (verschiedene Tiles, Nord-/Südwälder zu haben, Wald/Getreide/etc.)
-            // TODO Refactoring: duplicate code
-            const MapObjectType* mapObjectType = configMgr->getMapObjectType(nodeNameValue);
-            if (mapObjectType == nullptr) {
-                std::cerr << "Illegal harvestable name '" << nodeNameValue << "'" << std::endl;
-                throw std::runtime_error("Illegal harvestable name");
-            }
 
             double age = std::atof(getPropertyValueFromPropertiesNode(propertiesNode, "age"));
 

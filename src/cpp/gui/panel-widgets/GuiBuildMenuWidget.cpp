@@ -100,8 +100,8 @@ GuiBuildMenuWidget::GuiBuildMenuWidget(const Context* const context) : GuiPanelW
                 nullptr,
                 nullptr,
                 nullptr,
-                context->configMgr->getMapObjectType("farm-road-straight0"), // konkreter MapObjectType wird erst beim Platzieren gewählt
-                context->configMgr->getMapObjectType("cobbled-street-straight0"), // konkreter MapObjectType wird erst beim Platzieren gewählt
+                context->configMgr->getMapObjectType("farm-road"),
+                context->configMgr->getMapObjectType("cobbled-street"),
                 context->configMgr->getMapObjectType("pioneers-house1"),
                 context->configMgr->getMapObjectType("marketplace"),
                 context->configMgr->getMapObjectType("chapel"),

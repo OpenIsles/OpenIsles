@@ -62,23 +62,7 @@ public:
 
     VIRTUAL_ONLY_IN_TESTS
     std::string getGraphicSetNameForMapObject(const MapObjectType* mapObjectType) const {
-        // TODO Das muss irgendwie hübscher werden. In Zukunft muss alles mit den String-Keys laufen
-        std::string graphicSetNamePrefix;
-        std::string graphicSetNameSuffix;
-
-        if (mapObjectType->type == HARVESTABLE) {
-            graphicSetNamePrefix = "harvestable";
-        } else if (mapObjectType->type == STRUCTURE) {
-            graphicSetNamePrefix = "structure";
-        } else if (mapObjectType->type == BUILDING) {
-            graphicSetNamePrefix = "building";
-        } else {
-            assert(false);
-        }
-
-        graphicSetNameSuffix = mapObjectType->name;
-
-        return graphicSetNamePrefix + "/" + graphicSetNameSuffix;
+        return "mapobjects/" + mapObjectType->name;
     }
 
     std::string getGraphicSetNameForGoodIcons(const Good* good, bool marketplaceIcon) const {

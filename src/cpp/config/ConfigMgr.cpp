@@ -67,6 +67,8 @@ void ConfigMgr::loadMapObjectTypes() {
             mapObjectType.type = MapObjectTypeClass::HARVESTABLE;
         } else if (strcmp(nodeName, "structure") == 0) {
             mapObjectType.type = MapObjectTypeClass::STRUCTURE;
+        } else if (strcmp(nodeName, "street") == 0) {
+            mapObjectType.type = MapObjectTypeClass::STREET;
         } else if (strcmp(nodeName, "building") == 0) {
             mapObjectType.type = MapObjectTypeClass::BUILDING;
         } else {

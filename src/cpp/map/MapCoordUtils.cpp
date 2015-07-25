@@ -5,6 +5,7 @@
 #include "map/Building.h"
 #include "map/Map.h"
 #include "map/MapCoordUtils.h"
+#include "map/Street.h"
 
 
 ScreenCoords MapCoordUtils::mapToScreenCoords(
@@ -106,14 +107,21 @@ Rect MapCoordUtils::getDrawCoordsForMapObjectFixed(
     const std::string graphicSetName = graphicsMgr->getGraphicSetNameForMapObject(mapObjectType);
 	const GraphicSet* graphicSet = graphicsMgr->getGraphicSet(graphicSetName);
 
+    // TODO duplicate code
     const IGraphic* graphic;
-    if (mapObjectType->type != MapObjectTypeClass::HARVESTABLE) {
-        graphic = graphicSet->getByView(viewToRender)->getGraphic();
-    } else {
+    if (mapObjectType->type == MapObjectTypeClass::HARVESTABLE) {
         // Harvestable? ausgewachsenen Zustand nehmen
         unsigned char maxAge = mapObjectType->maxAge;
         const std::string fullgrownState = "growth" + toString(maxAge);
         graphic = graphicSet->getByStateAndView(fullgrownState, viewToRender)->getGraphic();
+    }
+    else if (mapObjectType->type == MapObjectTypeClass::STREET) {
+        const Street* street = dynamic_cast<const Street*>(mapObjectFixed);
+        const std::string state = street->getStateToRender();
+        graphic = graphicSet->getByStateAndView(state, viewToRender)->getGraphic();
+    }
+    else {
+        graphic = graphicSet->getByView(viewToRender)->getGraphic();
     }
 
     const int elevation = 1; // TODO für Gebäude wie Anlegestelle, Fischerhütte etc. muss auf 0 gesetzt werden

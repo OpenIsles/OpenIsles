@@ -46,6 +46,11 @@ enum MapObjectTypeClass {
     STRUCTURE,
 
     /**
+     * @brief `Street`
+     */
+    STREET,
+
+    /**
      * @brief `Building`
      */
     BUILDING

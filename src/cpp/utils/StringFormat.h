@@ -47,9 +47,10 @@ std::string toString(double x);
  * Wrapper, um einen String in eine Zahl umzuwandeln.
  *
  * @param s String
+ * @param base Zahlenbasis
  * @return Zahl
  */
-int stringToInteger(std::string s);
+int stringToInteger(std::string s, int base = 10);
 
 /**
  * Wrapper, um einen String in eine Zahl umzuwandeln.

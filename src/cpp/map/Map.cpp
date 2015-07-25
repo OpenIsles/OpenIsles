@@ -3,6 +3,7 @@
 #include "game/Colony.h"
 #include "game/Game.h"
 #include "map/Map.h"
+#include "map/Street.h"
 #include "utils/StringFormat.h"
 #include "utils/Rect.h"
 
@@ -255,8 +256,7 @@ bool Map::isStreetAt(const MapCoords& mapCoords) const {
         return false;
     }
 
-    Structure* structure = dynamic_cast<Structure*>(mapObject);
-    return ((structure != nullptr) && structure->isStreet());
+    return (dynamic_cast<Street*>(mapObject) != nullptr);
 }
 
 bool Map::isWalkableForCartAt(const MapCoords& mapCoords) const {

@@ -37,19 +37,14 @@ public:
     }
 
     /**
-     * @brief Prüft, ob die Struktur ein Feldweg oder Pflasterstraße ist
-     * @return `true` wenn Feldweg oder Pflasterstraße, sonst `false`
+     * @brief Prüft, ob die Struktur eine Straße ist
+     * @return `true` wenn Straße, sonst `false`
      */
-    bool isStreet() const {
-        // TODO Flag sollte direkt an der Config gesteuert werden
-
-        return (mapObjectType->name.substr(0, 9) == "farm-road" ||
-                mapObjectType->name.substr(0, 14) == "cobbled-street");
-    }
+    bool isStreet() const;
 
     /**
      * @brief Prüft, ob die Struktur ein Platz ist, d.&nbsp;h. etwas, wo ein Marktkarren fahren darf.
-     * @return `true` wenn Weg/Straße oder Platz, sonst `false`
+     * @return `true` wenn Straße oder Platz, sonst `false`
      */
     bool isPlace() const {
         // TODO Flag sollte direkt an der Config gesteuert werden
@@ -59,7 +54,7 @@ public:
 
     /**
 	 * @brief Ermittelt, ob ein Marktkarren eine bestimmte Stelle befahren darf.
-	 * @return `true`, wenn ein Marktkarren dort fahren darf, d.&nbsp;h. ein Feldweg, Pflasterstraße oder Platz da ist;
+	 * @return `true`, wenn ein Marktkarren dort fahren darf, d.&nbsp;h. eine Straße oder Platz da ist;
      * sonst `false`.
 	 */
     bool isWalkableForCart() const {

@@ -12,6 +12,7 @@
 #include "map/Isle.h"
 #include "map/Map.h"
 #include "map/MapObject.h"
+#include "map/Street.h"
 #include "map/Structure.h"
 #include "Context.h"
 
@@ -198,13 +199,26 @@ public:
     /**
      * @brief Fügt eine neue Struktur der Karte hinzu.
      * @param mapCoords Map-Koordinaten des Objekts
-     * @param mapObjectType Typ der Struktur
-     * @param view Ansicht, mit der das Gebäude positioniert werden soll
-     * @param player Spieler, dem die Struktur gehören soll
+     * @param mapObjectType Typ des Objekt
+     * @param view Ansicht, mit der das Objekt positioniert werden soll
+     * @param player Spieler, dem das Objekt gehören soll
      * @return Zeiger auf die neu angelegte Struktur
      */
     Structure* addStructure(
         const MapCoords& mapCoords, const MapObjectType* mapObjectType, const FourthDirection& view, Player* player);
+
+    /**
+     * @brief Fügt eine neue Straße der Karte hinzu.
+     * @param mapCoords Map-Koordinaten des Objekts
+     * @param mapObjectType Typ des Objekt
+     * @param view Ansicht, mit der das Objekt positioniert werden soll
+     * @param player Spieler, dem das Objekt gehören soll
+     * @param streetConnections Bitmaske, von welcher Seite andere Straßen angrenzen
+     * @return Zeiger auf die neu angelegte Straße
+     */
+    Street* addStreet(
+        const MapCoords& mapCoords, const MapObjectType* mapObjectType, const FourthDirection& view,
+        Player* player, const StreetConnections& streetConnections);
 
     /**
      * @brief Schaltet das aktuell gewählte MapObject um.

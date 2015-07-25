@@ -60,9 +60,12 @@ TEST(ConfigMgrTest, loadMapObjectTypes) {
 
     // Teste sonstige Property-Inhalte, die obig nicht abgedeckt wurden
 
-    const MapObjectType* cobbledStreetTee90 = configMgr.getMapObjectType("cobbled-street-tee90");
-    ASSERT_EQ(MapObjectTypeClass::STRUCTURE, cobbledStreetTee90->type);
-    ASSERT_EQ(StructurePlacing::PATH, cobbledStreetTee90->structurePlacing);
+    const MapObjectType* square1 = configMgr.getMapObjectType("square1");
+    ASSERT_EQ(MapObjectTypeClass::STRUCTURE, square1->type);
+
+    const MapObjectType* cobbledStreet = configMgr.getMapObjectType("cobbled-street");
+    ASSERT_EQ(MapObjectTypeClass::STREET, cobbledStreet->type);
+    ASSERT_EQ(StructurePlacing::PATH, cobbledStreet->structurePlacing);
 
     const MapObjectType* toolsmiths = configMgr.getMapObjectType("toolsmiths");
     ASSERT_EQ(150, toolsmiths->buildingCosts.coins);

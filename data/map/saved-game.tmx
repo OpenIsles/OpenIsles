@@ -113,3551 +113,3681 @@
   </object>
  </objectgroup>
  <objectgroup name="map-objects">
-  <object name="office2" type="building" x="1280" y="800" width="96" height="64">
+  <object name="office2" x="1280" y="800" width="96" height="64">
    <properties>
     <property name="player" value="1"/>
     <property name="view" value="north"/>
    </properties>
   </object>
-  <object name="office1" type="building" x="6496" y="2720" width="64" height="96">
+  <object name="office1" x="6496" y="2720" width="64" height="96">
    <properties>
     <property name="player" value="1"/>
     <property name="view" value="east"/>
    </properties>
   </object>
-  <object name="office1" type="building" x="7456" y="6720" width="96" height="64">
+  <object name="office1" x="7456" y="6720" width="96" height="64">
    <properties>
     <property name="player" value="2"/>
     <property name="view" value="north"/>
    </properties>
   </object>
-  <object name="office1" type="building" x="1632" y="6720" width="96" height="64">
+  <object name="office1" x="1632" y="6720" width="96" height="64">
    <properties>
     <property name="player" value="3"/>
     <property name="view" value="north"/>
    </properties>
   </object>
-  <object name="office1" type="building" x="4224" y="3008" width="64" height="96">
+  <object name="office1" x="4224" y="3008" width="64" height="96">
    <properties>
     <property name="player" value="4"/>
     <property name="view" value="east"/>
    </properties>
   </object>
-  <object name="marketplace" type="building" x="2176" y="1056" width="128" height="96">
+  <object name="marketplace" x="2176" y="1056" width="128" height="96">
    <properties>
     <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="marketplace" type="building" x="1760" y="1216" width="128" height="96">
-   <properties>
-    <property name="player" value="1"/>
-    <property name="view" value="north"/>
-   </properties>
-  </object>
-  <object name="marketplace" type="building" x="1600" y="1216" width="128" height="96">
-   <properties>
-    <property name="player" value="1"/>
-   </properties>
-  </object>
-  <object name="chapel" type="building" x="1824" y="1056" width="64" height="32">
-   <properties>
-    <property name="player" value="1"/>
-   </properties>
-  </object>
-  <object name="pioneers-house1" type="building" x="1536" y="1120" width="64" height="64">
-   <properties>
-    <property name="player" value="1"/>
-   </properties>
-  </object>
-  <object name="cobbled-street-straight0" type="structure" x="1536" y="960" width="32" height="32">
-   <properties>
-    <property name="player" value="1"/>
-   </properties>
-  </object>
-  <object name="cobbled-street-cross" type="structure" x="1728" y="1184" width="32" height="32">
-   <properties>
-    <property name="player" value="1"/>
-   </properties>
-  </object>
-  <object name="cobbled-street-cross" type="structure" x="1728" y="960" width="32" height="32">
-   <properties>
-    <property name="player" value="1"/>
-   </properties>
-  </object>
-  <object name="cobbled-street-straight0" type="structure" x="1696" y="960" width="32" height="32">
-   <properties>
-    <property name="player" value="1"/>
-   </properties>
-  </object>
-  <object name="cobbled-street-straight0" type="structure" x="1632" y="960" width="32" height="32">
-   <properties>
-    <property name="player" value="1"/>
-   </properties>
-  </object>
-  <object name="cobbled-street-straight0" type="structure" x="1664" y="960" width="32" height="32">
-   <properties>
-    <property name="player" value="1"/>
-   </properties>
-  </object>
-  <object name="cobbled-street-straight0" type="structure" x="1600" y="960" width="32" height="32">
-   <properties>
-    <property name="player" value="1"/>
-   </properties>
-  </object>
-  <object name="cobbled-street-straight0" type="structure" x="1568" y="960" width="32" height="32">
-   <properties>
-    <property name="player" value="1"/>
-   </properties>
-  </object>
-  <object name="cobbled-street-straight90" type="structure" x="1504" y="1152" width="32" height="32">
-   <properties>
-    <property name="player" value="1"/>
-   </properties>
-  </object>
-  <object name="cobbled-street-curve0" type="structure" x="1504" y="1184" width="32" height="32">
-   <properties>
-    <property name="player" value="1"/>
-   </properties>
-  </object>
-  <object name="cobbled-street-straight0" type="structure" x="1536" y="1184" width="32" height="32">
-   <properties>
-    <property name="player" value="1"/>
-   </properties>
-  </object>
-  <object name="cobbled-street-straight0" type="structure" x="1568" y="1184" width="32" height="32">
-   <properties>
-    <property name="player" value="1"/>
-   </properties>
-  </object>
-  <object name="cobbled-street-straight0" type="structure" x="1600" y="1184" width="32" height="32">
-   <properties>
-    <property name="player" value="1"/>
-   </properties>
-  </object>
-  <object name="cobbled-street-straight0" type="structure" x="1632" y="1184" width="32" height="32">
-   <properties>
-    <property name="player" value="1"/>
-   </properties>
-  </object>
-  <object name="cobbled-street-straight0" type="structure" x="1664" y="1184" width="32" height="32">
-   <properties>
-    <property name="player" value="1"/>
-   </properties>
-  </object>
-  <object name="cobbled-street-straight0" type="structure" x="1696" y="1184" width="32" height="32">
-   <properties>
-    <property name="player" value="1"/>
-   </properties>
-  </object>
-  <object name="cobbled-street-tee180" type="structure" x="1504" y="960" width="32" height="32">
-   <properties>
-    <property name="player" value="1"/>
-   </properties>
-  </object>
-  <object name="cobbled-street-tee0" type="structure" x="1504" y="1088" width="32" height="32">
-   <properties>
-    <property name="player" value="1"/>
-   </properties>
-  </object>
-  <object name="cobbled-street-straight0" type="structure" x="1472" y="864" width="32" height="32">
-   <properties>
-    <property name="player" value="1"/>
-   </properties>
-  </object>
-  <object name="cobbled-street-curve180" type="structure" x="1504" y="864" width="32" height="32">
-   <properties>
-    <property name="player" value="1"/>
-   </properties>
-  </object>
-  <object name="cobbled-street-straight0" type="structure" x="1472" y="1088" width="32" height="32">
-   <properties>
-    <property name="player" value="1"/>
-   </properties>
-  </object>
-  <object name="cobbled-street-straight0" type="structure" x="1376" y="1088" width="32" height="32">
-   <properties>
-    <property name="player" value="1"/>
-   </properties>
-  </object>
-  <object name="cobbled-street-straight0" type="structure" x="1344" y="1088" width="32" height="32">
-   <properties>
-    <property name="player" value="1"/>
-   </properties>
-  </object>
-  <object name="cobbled-street-straight0" type="structure" x="1408" y="1088" width="32" height="32">
-   <properties>
-    <property name="player" value="1"/>
-   </properties>
-  </object>
-  <object name="cobbled-street-straight0" type="structure" x="1440" y="1088" width="32" height="32">
-   <properties>
-    <property name="player" value="1"/>
-   </properties>
-  </object>
-  <object name="pioneers-house2" type="building" x="1600" y="1120" width="64" height="64">
-   <properties>
-    <property name="player" value="1"/>
-   </properties>
-  </object>
-  <object name="pioneers-house1" type="building" x="1600" y="992" width="64" height="64">
-   <properties>
-    <property name="player" value="1"/>
-   </properties>
-  </object>
-  <object name="settlers-house1" type="building" x="1536" y="992" width="64" height="64">
-   <properties>
-    <property name="player" value="1"/>
-    <property name="view" value="east"/>
-   </properties>
-  </object>
-  <object name="pioneers-house3" type="building" x="1536" y="1056" width="64" height="64">
-   <properties>
-    <property name="player" value="1"/>
-   </properties>
-  </object>
-  <object name="pioneers-house4" type="building" x="1664" y="1120" width="64" height="64">
-   <properties>
-    <property name="player" value="1"/>
-   </properties>
-  </object>
-  <object name="settlers-house4" type="building" x="1664" y="992" width="64" height="64">
-   <properties>
-    <property name="player" value="1"/>
-   </properties>
-  </object>
-  <object name="pioneers-house5" type="building" x="1664" y="1056" width="64" height="64">
-   <properties>
-    <property name="player" value="1"/>
-   </properties>
-  </object>
-  <object name="cobbled-street-straight0" type="structure" x="1888" y="960" width="32" height="32">
-   <properties>
-    <property name="player" value="1"/>
-   </properties>
-  </object>
-  <object name="cobbled-street-straight0" type="structure" x="1824" y="960" width="32" height="32">
-   <properties>
-    <property name="player" value="1"/>
-   </properties>
-  </object>
-  <object name="cobbled-street-straight0" type="structure" x="1888" y="1184" width="32" height="32">
-   <properties>
-    <property name="player" value="1"/>
-   </properties>
-  </object>
-  <object name="pioneers-house4" type="building" x="1824" y="1120" width="64" height="64">
-   <properties>
-    <property name="player" value="1"/>
-   </properties>
-  </object>
-  <object name="cobbled-street-straight0" type="structure" x="1920" y="960" width="32" height="32">
-   <properties>
-    <property name="player" value="1"/>
-   </properties>
-  </object>
-  <object name="cobbled-street-straight0" type="structure" x="1824" y="1184" width="32" height="32">
-   <properties>
-    <property name="player" value="1"/>
-   </properties>
-  </object>
-  <object name="cobbled-street-straight0" type="structure" x="1792" y="960" width="32" height="32">
-   <properties>
-    <property name="player" value="1"/>
-   </properties>
-  </object>
-  <object name="pioneers-house4" type="building" x="1760" y="992" width="64" height="64">
-   <properties>
-    <property name="player" value="1"/>
-   </properties>
-  </object>
-  <object name="farm-road-cross" type="structure" x="1952" y="1184" width="32" height="32">
-   <properties>
-    <property name="player" value="1"/>
-   </properties>
-  </object>
-  <object name="cobbled-street-straight0" type="structure" x="1760" y="1184" width="32" height="32">
-   <properties>
-    <property name="player" value="1"/>
-   </properties>
-  </object>
-  <object name="farm-road-straight0" type="structure" x="1920" y="1184" width="32" height="32">
-   <properties>
-    <property name="player" value="1"/>
-   </properties>
-  </object>
-  <object name="settlers-house5" type="building" x="1888" y="1056" width="64" height="64">
-   <properties>
-    <property name="player" value="1"/>
-   </properties>
-  </object>
-  <object name="pioneers-house3" type="building" x="1888" y="992" width="64" height="64">
-   <properties>
-    <property name="player" value="1"/>
-   </properties>
-  </object>
-  <object name="cobbled-street-straight0" type="structure" x="1856" y="960" width="32" height="32">
-   <properties>
-    <property name="player" value="1"/>
-   </properties>
-  </object>
-  <object name="settlers-house1" type="building" x="1760" y="1120" width="64" height="64">
-   <properties>
-    <property name="player" value="1"/>
-   </properties>
-  </object>
-  <object name="cobbled-street-straight0" type="structure" x="1856" y="1184" width="32" height="32">
-   <properties>
-    <property name="player" value="1"/>
-   </properties>
-  </object>
-  <object name="pioneers-house1" type="building" x="1888" y="1120" width="64" height="64">
-   <properties>
-    <property name="player" value="1"/>
-   </properties>
-  </object>
-  <object name="cobbled-street-tee0" type="structure" x="1952" y="960" width="32" height="32">
-   <properties>
-    <property name="player" value="1"/>
-   </properties>
-  </object>
-  <object name="settlers-house2" type="building" x="1824" y="992" width="64" height="64">
+  <object name="marketplace" x="1760" y="1216" width="128" height="96">
    <properties>
     <property name="player" value="1"/>
     <property name="view" value="north"/>
    </properties>
   </object>
-  <object name="cobbled-street-straight0" type="structure" x="1760" y="960" width="32" height="32">
+  <object name="marketplace" x="1600" y="1216" width="128" height="96">
    <properties>
     <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="cobbled-street-straight0" type="structure" x="1792" y="1184" width="32" height="32">
+  <object name="chapel" x="1824" y="1056" width="64" height="32">
    <properties>
     <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="pioneers-house1" type="building" x="1760" y="1056" width="64" height="64">
+  <object name="pioneers-house1" x="1536" y="1120" width="64" height="64">
    <properties>
     <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="cobbled-street-straight90" type="structure" x="1728" y="1696" width="32" height="32">
+  <object name="cobbled-street" x="1536" y="960" width="32" height="32">
+   <properties>
+    <property name="connections" value="0101"/>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object name="cobbled-street" x="1728" y="1184" width="32" height="32">
+   <properties>
+    <property name="connections" value="1111"/>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object name="cobbled-street" x="1728" y="960" width="32" height="32">
+   <properties>
+    <property name="connections" value="1111"/>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object name="cobbled-street" x="1696" y="960" width="32" height="32">
+   <properties>
+    <property name="connections" value="0101"/>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object name="cobbled-street" x="1632" y="960" width="32" height="32">
+   <properties>
+    <property name="connections" value="0101"/>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object name="cobbled-street" x="1664" y="960" width="32" height="32">
+   <properties>
+    <property name="connections" value="0101"/>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object name="cobbled-street" x="1600" y="960" width="32" height="32">
+   <properties>
+    <property name="connections" value="0101"/>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object name="cobbled-street" x="1568" y="960" width="32" height="32">
+   <properties>
+    <property name="connections" value="0101"/>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object name="cobbled-street" x="1504" y="1152" width="32" height="32">
+   <properties>
+    <property name="connections" value="1010"/>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object name="cobbled-street" x="1504" y="1184" width="32" height="32">
+   <properties>
+    <property name="connections" value="1100"/>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object name="cobbled-street" x="1536" y="1184" width="32" height="32">
+   <properties>
+    <property name="connections" value="0101"/>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object name="cobbled-street" x="1568" y="1184" width="32" height="32">
+   <properties>
+    <property name="connections" value="0101"/>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object name="cobbled-street" x="1600" y="1184" width="32" height="32">
+   <properties>
+    <property name="connections" value="0101"/>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object name="cobbled-street" x="1632" y="1184" width="32" height="32">
+   <properties>
+    <property name="connections" value="0101"/>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object name="cobbled-street" x="1664" y="1184" width="32" height="32">
+   <properties>
+    <property name="connections" value="0101"/>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object name="cobbled-street" x="1696" y="1184" width="32" height="32">
+   <properties>
+    <property name="connections" value="0101"/>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object name="cobbled-street" x="1504" y="960" width="32" height="32">
+   <properties>
+    <property name="connections" value="1110"/>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object name="cobbled-street" x="1504" y="1088" width="32" height="32">
+   <properties>
+    <property name="connections" value="1011"/>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object name="cobbled-street" x="1472" y="864" width="32" height="32">
+   <properties>
+    <property name="connections" value="0101"/>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object name="cobbled-street" x="1504" y="864" width="32" height="32">
+   <properties>
+    <property name="connections" value="0011"/>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object name="cobbled-street" x="1472" y="1088" width="32" height="32">
+   <properties>
+    <property name="connections" value="0101"/>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object name="cobbled-street" x="1376" y="1088" width="32" height="32">
+   <properties>
+    <property name="connections" value="0101"/>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object name="cobbled-street" x="1344" y="1088" width="32" height="32">
+   <properties>
+    <property name="connections" value="0101"/>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object name="cobbled-street" x="1408" y="1088" width="32" height="32">
+   <properties>
+    <property name="connections" value="0101"/>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object name="cobbled-street" x="1440" y="1088" width="32" height="32">
+   <properties>
+    <property name="connections" value="0101"/>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object name="pioneers-house2" x="1600" y="1120" width="64" height="64">
    <properties>
     <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="tavern" type="building" x="1664" y="864" width="64" height="96">
+  <object name="pioneers-house1" x="1600" y="992" width="64" height="64">
    <properties>
     <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="foresters" type="building" x="1344" y="1024" width="64" height="64">
+  <object name="settlers-house1" x="1536" y="992" width="64" height="64">
    <properties>
     <property name="player" value="1"/>
-    <property name="view" value="west"/>
+    <property name="view" value="east"/>
    </properties>
   </object>
-  <object name="foresters" type="building" x="1152" y="1024" width="64" height="64">
-   <properties>
-    <property name="player" value="1"/>
-   </properties>
-  </object>
-  <object name="cobbled-street-straight0" type="structure" x="1312" y="1088" width="32" height="32">
+  <object name="pioneers-house3" x="1536" y="1056" width="64" height="64">
    <properties>
     <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="toolsmiths" type="building" x="1280" y="1120" width="64" height="64">
+  <object name="pioneers-house4" x="1664" y="1120" width="64" height="64">
    <properties>
     <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="stonemason" type="building" x="1344" y="1120" width="64" height="64">
+  <object name="settlers-house4" x="1664" y="992" width="64" height="64">
    <properties>
     <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="weaving-mill1" type="building" x="1760" y="1568" width="64" height="64">
+  <object name="pioneers-house5" x="1664" y="1056" width="64" height="64">
    <properties>
     <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="butchers" type="building" x="1664" y="1600" width="64" height="64">
+  <object name="cobbled-street" x="1888" y="960" width="32" height="32">
+   <properties>
+    <property name="connections" value="0101"/>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object name="cobbled-street" x="1824" y="960" width="32" height="32">
+   <properties>
+    <property name="connections" value="0101"/>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object name="cobbled-street" x="1888" y="1184" width="32" height="32">
+   <properties>
+    <property name="connections" value="0101"/>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object name="pioneers-house4" x="1824" y="1120" width="64" height="64">
    <properties>
     <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="sheep-farm" type="building" x="1984" y="1760" width="64" height="64">
+  <object name="cobbled-street" x="1920" y="960" width="32" height="32">
+   <properties>
+    <property name="connections" value="0101"/>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object name="cobbled-street" x="1824" y="1184" width="32" height="32">
+   <properties>
+    <property name="connections" value="0101"/>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object name="cobbled-street" x="1792" y="960" width="32" height="32">
+   <properties>
+    <property name="connections" value="0101"/>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object name="pioneers-house4" x="1760" y="992" width="64" height="64">
    <properties>
     <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="sheep-farm" type="building" x="1952" y="1472" width="64" height="64">
+  <object name="farm-road" x="1952" y="1184" width="32" height="32">
+   <properties>
+    <property name="connections" value="1111"/>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object name="cobbled-street" x="1760" y="1184" width="32" height="32">
+   <properties>
+    <property name="connections" value="0101"/>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object name="farm-road" x="1920" y="1184" width="32" height="32">
+   <properties>
+    <property name="connections" value="0101"/>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object name="settlers-house5" x="1888" y="1056" width="64" height="64">
    <properties>
     <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="cattle-farm" type="building" x="1504" y="1696" width="64" height="64">
+  <object name="pioneers-house3" x="1888" y="992" width="64" height="64">
    <properties>
     <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="cattle-farm" type="building" x="1536" y="1408" width="64" height="64">
+  <object name="cobbled-street" x="1856" y="960" width="32" height="32">
+   <properties>
+    <property name="connections" value="0101"/>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object name="settlers-house1" x="1760" y="1120" width="64" height="64">
    <properties>
     <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="farm-road-curve180" type="structure" x="2400" y="1120" width="32" height="32">
+  <object name="cobbled-street" x="1856" y="1184" width="32" height="32">
+   <properties>
+    <property name="connections" value="0101"/>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object name="pioneers-house1" x="1888" y="1120" width="64" height="64">
    <properties>
     <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="farm-road-straight0" type="structure" x="2112" y="1184" width="32" height="32">
+  <object name="cobbled-street" x="1952" y="960" width="32" height="32">
    <properties>
+    <property name="connections" value="1011"/>
     <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="farm-road-straight0" type="structure" x="1984" y="1184" width="32" height="32">
-   <properties>
-    <property name="player" value="1"/>
-   </properties>
-  </object>
-  <object name="farm-road-straight0" type="structure" x="2016" y="1184" width="32" height="32">
-   <properties>
-    <property name="player" value="1"/>
-   </properties>
-  </object>
-  <object name="farm-road-straight0" type="structure" x="2048" y="1184" width="32" height="32">
-   <properties>
-    <property name="player" value="1"/>
-   </properties>
-  </object>
-  <object name="farm-road-tee90" type="structure" x="2080" y="1184" width="32" height="32">
-   <properties>
-    <property name="player" value="1"/>
-   </properties>
-  </object>
-  <object name="farm-road-straight90" type="structure" x="2400" y="1152" width="32" height="32">
-   <properties>
-    <property name="player" value="1"/>
-   </properties>
-  </object>
-  <object name="farm-road-curve90" type="structure" x="2304" y="1120" width="32" height="32">
-   <properties>
-    <property name="player" value="1"/>
-   </properties>
-  </object>
-  <object name="farm-road-straight0" type="structure" x="2336" y="1120" width="32" height="32">
-   <properties>
-    <property name="player" value="1"/>
-   </properties>
-  </object>
-  <object name="hunters-hut" type="building" x="2400" y="1184" width="32" height="32">
-   <properties>
-    <property name="player" value="1"/>
-   </properties>
-  </object>
-  <object name="farm-road-straight0" type="structure" x="2368" y="1120" width="32" height="32">
-   <properties>
-    <property name="player" value="1"/>
-   </properties>
-  </object>
-  <object name="farm-road-straight0" type="structure" x="2240" y="1152" width="32" height="32">
-   <properties>
-    <property name="player" value="1"/>
-   </properties>
-  </object>
-  <object name="farm-road-straight0" type="structure" x="2272" y="1152" width="32" height="32">
-   <properties>
-    <property name="player" value="1"/>
-   </properties>
-  </object>
-  <object name="farm-road-straight0" type="structure" x="2176" y="1152" width="32" height="32">
-   <properties>
-    <property name="player" value="1"/>
-   </properties>
-  </object>
-  <object name="farm-road-curve270" type="structure" x="2304" y="1152" width="32" height="32">
-   <properties>
-    <property name="player" value="1"/>
-   </properties>
-  </object>
-  <object name="farm-road-straight0" type="structure" x="2208" y="1152" width="32" height="32">
-   <properties>
-    <property name="player" value="1"/>
-   </properties>
-  </object>
-  <object name="cobbled-street-straight0" type="structure" x="1888" y="736" width="32" height="32">
-   <properties>
-    <property name="player" value="1"/>
-   </properties>
-  </object>
-  <object name="cobbled-street-straight0" type="structure" x="1792" y="736" width="32" height="32">
-   <properties>
-    <property name="player" value="1"/>
-   </properties>
-  </object>
-  <object name="cobbled-street-straight0" type="structure" x="1760" y="736" width="32" height="32">
-   <properties>
-    <property name="player" value="1"/>
-   </properties>
-  </object>
-  <object name="settlers-house4" type="building" x="1760" y="832" width="64" height="64">
+  <object name="settlers-house2" x="1824" y="992" width="64" height="64">
    <properties>
     <property name="player" value="1"/>
     <property name="view" value="north"/>
    </properties>
   </object>
-  <object name="settlers-house3" type="building" x="1760" y="768" width="64" height="64">
+  <object name="cobbled-street" x="1760" y="960" width="32" height="32">
+   <properties>
+    <property name="connections" value="0101"/>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object name="cobbled-street" x="1792" y="1184" width="32" height="32">
+   <properties>
+    <property name="connections" value="0101"/>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object name="pioneers-house1" x="1760" y="1056" width="64" height="64">
+   <properties>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object name="cobbled-street" x="1728" y="1696" width="32" height="32">
+   <properties>
+    <property name="connections" value="1000"/>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object name="tavern" x="1664" y="864" width="64" height="96">
+   <properties>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object name="foresters" x="1344" y="1024" width="64" height="64">
    <properties>
     <property name="player" value="1"/>
     <property name="view" value="west"/>
    </properties>
   </object>
-  <object name="pioneers-house3" type="building" x="1888" y="896" width="64" height="64">
+  <object name="foresters" x="1152" y="1024" width="64" height="64">
    <properties>
     <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="cobbled-street-curve90" type="structure" x="1728" y="736" width="32" height="32">
+  <object name="cobbled-street" x="1312" y="1088" width="32" height="32">
+   <properties>
+    <property name="connections" value="0101"/>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object name="toolsmiths" x="1280" y="1120" width="64" height="64">
    <properties>
     <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="pioneers-house4" type="building" x="1824" y="896" width="64" height="64">
+  <object name="stonemason" x="1344" y="1120" width="64" height="64">
    <properties>
     <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="cobbled-street-curve180" type="structure" x="1952" y="736" width="32" height="32">
+  <object name="weaving-mill1" x="1760" y="1568" width="64" height="64">
    <properties>
     <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="pioneers-house3" type="building" x="1760" y="896" width="64" height="64">
+  <object name="butchers" x="1664" y="1600" width="64" height="64">
    <properties>
     <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="cobbled-street-straight0" type="structure" x="1824" y="736" width="32" height="32">
+  <object name="sheep-farm" x="1984" y="1760" width="64" height="64">
    <properties>
     <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="pioneers-house1" type="building" x="1824" y="768" width="64" height="64">
+  <object name="sheep-farm" x="1952" y="1472" width="64" height="64">
    <properties>
     <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="pioneers-house5" type="building" x="1888" y="832" width="64" height="64">
+  <object name="cattle-farm" x="1504" y="1696" width="64" height="64">
    <properties>
     <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="pioneers-house4" type="building" x="1888" y="768" width="64" height="64">
+  <object name="cattle-farm" x="1536" y="1408" width="64" height="64">
    <properties>
     <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="cobbled-street-straight0" type="structure" x="1920" y="736" width="32" height="32">
+  <object name="farm-road" x="2400" y="1120" width="32" height="32">
+   <properties>
+    <property name="connections" value="0011"/>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object name="farm-road" x="2112" y="1184" width="32" height="32">
+   <properties>
+    <property name="connections" value="0101"/>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object name="farm-road" x="1984" y="1184" width="32" height="32">
+   <properties>
+    <property name="connections" value="0101"/>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object name="farm-road" x="2016" y="1184" width="32" height="32">
+   <properties>
+    <property name="connections" value="0101"/>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object name="farm-road" x="2048" y="1184" width="32" height="32">
+   <properties>
+    <property name="connections" value="0101"/>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object name="farm-road" x="2080" y="1184" width="32" height="32">
+   <properties>
+    <property name="connections" value="1101"/>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object name="farm-road" x="2400" y="1152" width="32" height="32">
+   <properties>
+    <property name="connections" value="1000"/>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object name="farm-road" x="2304" y="1120" width="32" height="32">
+   <properties>
+    <property name="connections" value="0110"/>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object name="farm-road" x="2336" y="1120" width="32" height="32">
+   <properties>
+    <property name="connections" value="0101"/>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object name="hunters-hut" x="2400" y="1184" width="32" height="32">
    <properties>
     <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="cobbled-street-straight0" type="structure" x="1856" y="736" width="32" height="32">
+  <object name="farm-road" x="2368" y="1120" width="32" height="32">
    <properties>
+    <property name="connections" value="0101"/>
     <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="cobbled-street-straight90" type="structure" x="1504" y="1120" width="32" height="32">
+  <object name="farm-road" x="2240" y="1152" width="32" height="32">
    <properties>
+    <property name="connections" value="0101"/>
     <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="cobbled-street-straight90" type="structure" x="1504" y="1024" width="32" height="32">
+  <object name="farm-road" x="2272" y="1152" width="32" height="32">
    <properties>
+    <property name="connections" value="0101"/>
     <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="cobbled-street-straight90" type="structure" x="1504" y="1056" width="32" height="32">
+  <object name="farm-road" x="2176" y="1152" width="32" height="32">
    <properties>
+    <property name="connections" value="0101"/>
     <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="cobbled-street-straight90" type="structure" x="1504" y="896" width="32" height="32">
+  <object name="farm-road" x="2304" y="1152" width="32" height="32">
    <properties>
+    <property name="connections" value="1001"/>
     <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="cobbled-street-straight90" type="structure" x="1504" y="928" width="32" height="32">
+  <object name="farm-road" x="2208" y="1152" width="32" height="32">
    <properties>
+    <property name="connections" value="0101"/>
     <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="cobbled-street-straight90" type="structure" x="1504" y="992" width="32" height="32">
+  <object name="cobbled-street" x="1888" y="736" width="32" height="32">
    <properties>
+    <property name="connections" value="0101"/>
     <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="cobbled-street-straight90" type="structure" x="1728" y="1632" width="32" height="32">
+  <object name="cobbled-street" x="1792" y="736" width="32" height="32">
    <properties>
+    <property name="connections" value="0101"/>
     <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="cobbled-street-straight90" type="structure" x="1728" y="1664" width="32" height="32">
+  <object name="cobbled-street" x="1760" y="736" width="32" height="32">
    <properties>
+    <property name="connections" value="0101"/>
     <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="cobbled-street-straight90" type="structure" x="1728" y="1536" width="32" height="32">
+  <object name="settlers-house4" x="1760" y="832" width="64" height="64">
    <properties>
     <property name="player" value="1"/>
+    <property name="view" value="north"/>
    </properties>
   </object>
-  <object name="cobbled-street-straight90" type="structure" x="1728" y="1600" width="32" height="32">
-   <properties>
-    <property name="player" value="1"/>
-   </properties>
-  </object>
-  <object name="cobbled-street-straight90" type="structure" x="1728" y="1568" width="32" height="32">
-   <properties>
-    <property name="player" value="1"/>
-   </properties>
-  </object>
-  <object name="cobbled-street-straight0" type="structure" x="1728" y="1408" width="32" height="32">
+  <object name="settlers-house3" x="1760" y="768" width="64" height="64">
    <properties>
     <property name="player" value="1"/>
     <property name="view" value="west"/>
    </properties>
   </object>
-  <object name="cobbled-street-straight90" type="structure" x="1728" y="1440" width="32" height="32">
+  <object name="pioneers-house3" x="1888" y="896" width="64" height="64">
    <properties>
     <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="cobbled-street-straight90" type="structure" x="1728" y="1504" width="32" height="32">
+  <object name="cobbled-street" x="1728" y="736" width="32" height="32">
+   <properties>
+    <property name="connections" value="0110"/>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object name="pioneers-house4" x="1824" y="896" width="64" height="64">
    <properties>
     <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="cobbled-street-straight90" type="structure" x="1728" y="1472" width="32" height="32">
+  <object name="cobbled-street" x="1952" y="736" width="32" height="32">
+   <properties>
+    <property name="connections" value="0011"/>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object name="pioneers-house3" x="1760" y="896" width="64" height="64">
    <properties>
     <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="cobbled-street-straight90" type="structure" x="1728" y="1376" width="32" height="32">
+  <object name="cobbled-street" x="1824" y="736" width="32" height="32">
+   <properties>
+    <property name="connections" value="0101"/>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object name="pioneers-house1" x="1824" y="768" width="64" height="64">
    <properties>
     <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="cobbled-street-straight90" type="structure" x="1728" y="1344" width="32" height="32">
+  <object name="pioneers-house5" x="1888" y="832" width="64" height="64">
    <properties>
     <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="cobbled-street-straight90" type="structure" x="1728" y="1216" width="32" height="32">
+  <object name="pioneers-house4" x="1888" y="768" width="64" height="64">
    <properties>
     <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="cobbled-street-straight90" type="structure" x="1728" y="1248" width="32" height="32">
+  <object name="cobbled-street" x="1920" y="736" width="32" height="32">
    <properties>
+    <property name="connections" value="0101"/>
     <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="cobbled-street-straight90" type="structure" x="1728" y="1312" width="32" height="32">
+  <object name="cobbled-street" x="1856" y="736" width="32" height="32">
    <properties>
+    <property name="connections" value="0101"/>
     <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="cobbled-street-straight90" type="structure" x="1728" y="1280" width="32" height="32">
+  <object name="cobbled-street" x="1504" y="1120" width="32" height="32">
    <properties>
+    <property name="connections" value="1010"/>
     <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="cobbled-street-straight90" type="structure" x="1728" y="1120" width="32" height="32">
+  <object name="cobbled-street" x="1504" y="1024" width="32" height="32">
    <properties>
+    <property name="connections" value="1010"/>
     <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="cobbled-street-straight90" type="structure" x="1728" y="1088" width="32" height="32">
+  <object name="cobbled-street" x="1504" y="1056" width="32" height="32">
    <properties>
+    <property name="connections" value="1010"/>
     <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="cobbled-street-straight90" type="structure" x="1728" y="1024" width="32" height="32">
+  <object name="cobbled-street" x="1504" y="896" width="32" height="32">
    <properties>
+    <property name="connections" value="1010"/>
     <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="cobbled-street-straight90" type="structure" x="1728" y="992" width="32" height="32">
+  <object name="cobbled-street" x="1504" y="928" width="32" height="32">
    <properties>
+    <property name="connections" value="1010"/>
     <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="cobbled-street-straight90" type="structure" x="1728" y="1152" width="32" height="32">
+  <object name="cobbled-street" x="1504" y="992" width="32" height="32">
    <properties>
+    <property name="connections" value="1010"/>
     <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="cobbled-street-straight90" type="structure" x="1728" y="1056" width="32" height="32">
+  <object name="cobbled-street" x="1728" y="1632" width="32" height="32">
    <properties>
+    <property name="connections" value="1010"/>
     <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="cobbled-street-straight90" type="structure" x="1952" y="1120" width="32" height="32">
+  <object name="cobbled-street" x="1728" y="1664" width="32" height="32">
    <properties>
+    <property name="connections" value="1010"/>
     <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="cobbled-street-straight90" type="structure" x="1952" y="1088" width="32" height="32">
+  <object name="cobbled-street" x="1728" y="1536" width="32" height="32">
    <properties>
+    <property name="connections" value="1010"/>
     <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="cobbled-street-straight90" type="structure" x="1952" y="1024" width="32" height="32">
+  <object name="cobbled-street" x="1728" y="1600" width="32" height="32">
    <properties>
+    <property name="connections" value="1010"/>
     <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="cobbled-street-straight90" type="structure" x="1952" y="992" width="32" height="32">
+  <object name="cobbled-street" x="1728" y="1568" width="32" height="32">
    <properties>
+    <property name="connections" value="1010"/>
     <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="farm-road-straight90" type="structure" x="1952" y="1152" width="32" height="32">
+  <object name="cobbled-street" x="1728" y="1408" width="32" height="32">
    <properties>
+    <property name="connections" value="1010"/>
     <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="cobbled-street-straight90" type="structure" x="1952" y="1056" width="32" height="32">
+  <object name="cobbled-street" x="1728" y="1440" width="32" height="32">
    <properties>
+    <property name="connections" value="1010"/>
     <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="cobbled-street-straight90" type="structure" x="1952" y="896" width="32" height="32">
+  <object name="cobbled-street" x="1728" y="1504" width="32" height="32">
    <properties>
+    <property name="connections" value="1010"/>
     <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="cobbled-street-straight90" type="structure" x="1952" y="864" width="32" height="32">
+  <object name="cobbled-street" x="1728" y="1472" width="32" height="32">
    <properties>
+    <property name="connections" value="1010"/>
     <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="cobbled-street-straight90" type="structure" x="1952" y="800" width="32" height="32">
+  <object name="cobbled-street" x="1728" y="1376" width="32" height="32">
    <properties>
+    <property name="connections" value="1010"/>
     <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="cobbled-street-straight90" type="structure" x="1952" y="768" width="32" height="32">
+  <object name="cobbled-street" x="1728" y="1344" width="32" height="32">
    <properties>
+    <property name="connections" value="1010"/>
     <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="cobbled-street-straight90" type="structure" x="1952" y="928" width="32" height="32">
+  <object name="cobbled-street" x="1728" y="1216" width="32" height="32">
    <properties>
+    <property name="connections" value="1010"/>
     <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="cobbled-street-straight90" type="structure" x="1952" y="832" width="32" height="32">
+  <object name="cobbled-street" x="1728" y="1248" width="32" height="32">
    <properties>
+    <property name="connections" value="1010"/>
     <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="cobbled-street-straight90" type="structure" x="1728" y="896" width="32" height="32">
+  <object name="cobbled-street" x="1728" y="1312" width="32" height="32">
    <properties>
+    <property name="connections" value="1010"/>
     <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="cobbled-street-straight90" type="structure" x="1728" y="864" width="32" height="32">
+  <object name="cobbled-street" x="1728" y="1280" width="32" height="32">
    <properties>
+    <property name="connections" value="1010"/>
     <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="cobbled-street-straight90" type="structure" x="1728" y="800" width="32" height="32">
+  <object name="cobbled-street" x="1728" y="1120" width="32" height="32">
    <properties>
+    <property name="connections" value="1010"/>
     <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="cobbled-street-straight90" type="structure" x="1728" y="768" width="32" height="32">
+  <object name="cobbled-street" x="1728" y="1088" width="32" height="32">
    <properties>
+    <property name="connections" value="1010"/>
     <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="cobbled-street-straight90" type="structure" x="1728" y="928" width="32" height="32">
+  <object name="cobbled-street" x="1728" y="1024" width="32" height="32">
    <properties>
+    <property name="connections" value="1010"/>
     <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="cobbled-street-straight90" type="structure" x="1728" y="832" width="32" height="32">
+  <object name="cobbled-street" x="1728" y="992" width="32" height="32">
    <properties>
+    <property name="connections" value="1010"/>
     <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="farm-road-curve90" type="structure" x="2144" y="1152" width="32" height="32">
+  <object name="cobbled-street" x="1728" y="1152" width="32" height="32">
    <properties>
+    <property name="connections" value="1010"/>
     <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="farm-road-tee0" type="structure" x="2144" y="1184" width="32" height="32">
+  <object name="cobbled-street" x="1728" y="1056" width="32" height="32">
    <properties>
+    <property name="connections" value="1010"/>
     <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="farm-road-straight90" type="structure" x="1952" y="1312" width="32" height="32">
+  <object name="cobbled-street" x="1952" y="1120" width="32" height="32">
    <properties>
+    <property name="connections" value="1010"/>
     <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="farm-road-straight90" type="structure" x="1952" y="1248" width="32" height="32">
+  <object name="cobbled-street" x="1952" y="1088" width="32" height="32">
    <properties>
+    <property name="connections" value="1010"/>
     <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="farm-road-straight90" type="structure" x="1952" y="1216" width="32" height="32">
+  <object name="cobbled-street" x="1952" y="1024" width="32" height="32">
    <properties>
+    <property name="connections" value="1010"/>
     <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="farm-road-straight90" type="structure" x="1952" y="1280" width="32" height="32">
+  <object name="cobbled-street" x="1952" y="992" width="32" height="32">
    <properties>
+    <property name="connections" value="1010"/>
     <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="farm-road-straight90" type="structure" x="2144" y="1216" width="32" height="32">
+  <object name="farm-road" x="1952" y="1152" width="32" height="32">
    <properties>
+    <property name="connections" value="1010"/>
     <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="farm-road-straight90" type="structure" x="2144" y="1248" width="32" height="32">
+  <object name="cobbled-street" x="1952" y="1056" width="32" height="32">
    <properties>
+    <property name="connections" value="1010"/>
     <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="farm-road-curve270" type="structure" x="2144" y="1280" width="32" height="32">
+  <object name="cobbled-street" x="1952" y="896" width="32" height="32">
    <properties>
+    <property name="connections" value="1010"/>
     <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="5120" y="3360" width="32" height="32">
+  <object name="cobbled-street" x="1952" y="864" width="32" height="32">
+   <properties>
+    <property name="connections" value="1010"/>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object name="cobbled-street" x="1952" y="800" width="32" height="32">
+   <properties>
+    <property name="connections" value="1010"/>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object name="cobbled-street" x="1952" y="768" width="32" height="32">
+   <properties>
+    <property name="connections" value="1010"/>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object name="cobbled-street" x="1952" y="928" width="32" height="32">
+   <properties>
+    <property name="connections" value="1010"/>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object name="cobbled-street" x="1952" y="832" width="32" height="32">
+   <properties>
+    <property name="connections" value="1010"/>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object name="cobbled-street" x="1728" y="896" width="32" height="32">
+   <properties>
+    <property name="connections" value="1010"/>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object name="cobbled-street" x="1728" y="864" width="32" height="32">
+   <properties>
+    <property name="connections" value="1010"/>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object name="cobbled-street" x="1728" y="800" width="32" height="32">
+   <properties>
+    <property name="connections" value="1010"/>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object name="cobbled-street" x="1728" y="768" width="32" height="32">
+   <properties>
+    <property name="connections" value="1010"/>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object name="cobbled-street" x="1728" y="928" width="32" height="32">
+   <properties>
+    <property name="connections" value="1010"/>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object name="cobbled-street" x="1728" y="832" width="32" height="32">
+   <properties>
+    <property name="connections" value="1010"/>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object name="farm-road" x="2144" y="1152" width="32" height="32">
+   <properties>
+    <property name="connections" value="0110"/>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object name="farm-road" x="2144" y="1184" width="32" height="32">
+   <properties>
+    <property name="connections" value="1011"/>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object name="farm-road" x="1952" y="1312" width="32" height="32">
+   <properties>
+    <property name="connections" value="1000"/>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object name="farm-road" x="1952" y="1248" width="32" height="32">
+   <properties>
+    <property name="connections" value="1010"/>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object name="farm-road" x="1952" y="1216" width="32" height="32">
+   <properties>
+    <property name="connections" value="1010"/>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object name="farm-road" x="1952" y="1280" width="32" height="32">
+   <properties>
+    <property name="connections" value="1010"/>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object name="farm-road" x="2144" y="1216" width="32" height="32">
+   <properties>
+    <property name="connections" value="1010"/>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object name="farm-road" x="2144" y="1248" width="32" height="32">
+   <properties>
+    <property name="connections" value="1010"/>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object name="farm-road" x="2144" y="1280" width="32" height="32">
+   <properties>
+    <property name="connections" value="1001"/>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object name="northern-forest2" x="5120" y="3360" width="32" height="32">
    <properties>
     <property name="age" value="0.4"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="5088" y="3392" width="32" height="32">
+  <object name="northern-forest1" x="5088" y="3392" width="32" height="32">
    <properties>
     <property name="age" value="3.7"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="5056" y="3520" width="32" height="32">
+  <object name="northern-forest1" x="5056" y="3520" width="32" height="32">
    <properties>
     <property name="age" value="1.4"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="5088" y="3360" width="32" height="32">
+  <object name="northern-forest2" x="5088" y="3360" width="32" height="32">
    <properties>
     <property name="age" value="2.2"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4896" y="3392" width="32" height="32">
+  <object name="northern-forest1" x="4896" y="3392" width="32" height="32">
    <properties>
     <property name="age" value="4"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="5152" y="3488" width="32" height="32">
+  <object name="northern-forest1" x="5152" y="3488" width="32" height="32">
    <properties>
     <property name="age" value="0.4"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="5184" y="3520" width="32" height="32">
+  <object name="northern-forest1" x="5184" y="3520" width="32" height="32">
    <properties>
     <property name="age" value="2.2"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="5056" y="3552" width="32" height="32">
+  <object name="northern-forest2" x="5056" y="3552" width="32" height="32">
    <properties>
     <property name="age" value="3.7"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="5120" y="3424" width="32" height="32">
+  <object name="northern-forest1" x="5120" y="3424" width="32" height="32">
    <properties>
     <property name="age" value="1.4"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="5216" y="3584" width="32" height="32">
+  <object name="northern-forest1" x="5216" y="3584" width="32" height="32">
    <properties>
     <property name="age" value="4"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="5120" y="3488" width="32" height="32">
+  <object name="northern-forest1" x="5120" y="3488" width="32" height="32">
    <properties>
     <property name="age" value="4"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="5152" y="3552" width="32" height="32">
+  <object name="northern-forest1" x="5152" y="3552" width="32" height="32">
    <properties>
     <property name="age" value="1.4"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="5184" y="3456" width="32" height="32">
+  <object name="northern-forest2" x="5184" y="3456" width="32" height="32">
    <properties>
     <property name="age" value="3.7"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="5120" y="3456" width="32" height="32">
+  <object name="northern-forest1" x="5120" y="3456" width="32" height="32">
    <properties>
     <property name="age" value="2.2"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="5152" y="3584" width="32" height="32">
+  <object name="northern-forest2" x="5152" y="3584" width="32" height="32">
    <properties>
     <property name="age" value="0.4"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="5184" y="3616" width="32" height="32">
+  <object name="northern-forest1" x="5184" y="3616" width="32" height="32">
    <properties>
     <property name="age" value="4"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="5184" y="3424" width="32" height="32">
+  <object name="northern-forest1" x="5184" y="3424" width="32" height="32">
    <properties>
     <property name="age" value="1.4"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="5216" y="3520" width="32" height="32">
+  <object name="northern-forest1" x="5216" y="3520" width="32" height="32">
    <properties>
     <property name="age" value="3.7"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="4736" y="3104" width="32" height="32">
+  <object name="northern-forest2" x="4736" y="3104" width="32" height="32">
    <properties>
     <property name="age" value="2.2"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="5248" y="3552" width="32" height="32">
+  <object name="northern-forest1" x="5248" y="3552" width="32" height="32">
    <properties>
     <property name="age" value="0.4"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="5088" y="3488" width="32" height="32">
+  <object name="northern-forest1" x="5088" y="3488" width="32" height="32">
    <properties>
     <property name="age" value="4"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="5088" y="3584" width="32" height="32">
+  <object name="northern-forest1" x="5088" y="3584" width="32" height="32">
    <properties>
     <property name="age" value="1.4"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="5120" y="3552" width="32" height="32">
+  <object name="northern-forest2" x="5120" y="3552" width="32" height="32">
    <properties>
     <property name="age" value="3.7"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="5120" y="3584" width="32" height="32">
+  <object name="northern-forest1" x="5120" y="3584" width="32" height="32">
    <properties>
     <property name="age" value="2.2"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="5184" y="3584" width="32" height="32">
+  <object name="northern-forest1" x="5184" y="3584" width="32" height="32">
    <properties>
     <property name="age" value="0.4"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="5120" y="3520" width="32" height="32">
+  <object name="northern-forest2" x="5120" y="3520" width="32" height="32">
    <properties>
     <property name="age" value="4"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="5088" y="3520" width="32" height="32">
+  <object name="northern-forest1" x="5088" y="3520" width="32" height="32">
    <properties>
     <property name="age" value="1.4"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="5184" y="3488" width="32" height="32">
+  <object name="northern-forest1" x="5184" y="3488" width="32" height="32">
    <properties>
     <property name="age" value="3.7"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="5216" y="3552" width="32" height="32">
+  <object name="northern-forest2" x="5216" y="3552" width="32" height="32">
    <properties>
     <property name="age" value="2.2"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="5152" y="3424" width="32" height="32">
+  <object name="northern-forest1" x="5152" y="3424" width="32" height="32">
    <properties>
     <property name="age" value="0.4"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="4832" y="3360" width="32" height="32">
+  <object name="northern-forest2" x="4832" y="3360" width="32" height="32">
    <properties>
     <property name="age" value="0.4"/>
     <property name="view" value="east"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4896" y="3296" width="32" height="32">
+  <object name="northern-forest1" x="4896" y="3296" width="32" height="32">
    <properties>
     <property name="age" value="2.2"/>
     <property name="view" value="east"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="4992" y="3552" width="32" height="32">
+  <object name="northern-forest2" x="4992" y="3552" width="32" height="32">
    <properties>
     <property name="age" value="3.7"/>
     <property name="view" value="east"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4864" y="3392" width="32" height="32">
+  <object name="northern-forest1" x="4864" y="3392" width="32" height="32">
    <properties>
     <property name="age" value="1.4"/>
     <property name="view" value="east"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4960" y="3488" width="32" height="32">
+  <object name="northern-forest1" x="4960" y="3488" width="32" height="32">
    <properties>
     <property name="age" value="4"/>
     <property name="view" value="east"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="4992" y="3488" width="32" height="32">
+  <object name="northern-forest2" x="4992" y="3488" width="32" height="32">
    <properties>
     <property name="age" value="2.2"/>
     <property name="view" value="north"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="4704" y="3136" width="32" height="32">
+  <object name="northern-forest2" x="4704" y="3136" width="32" height="32">
    <properties>
     <property name="age" value="4"/>
     <property name="view" value="north"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4928" y="3264" width="32" height="32">
+  <object name="northern-forest1" x="4928" y="3264" width="32" height="32">
    <properties>
     <property name="age" value="1.4"/>
     <property name="view" value="north"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="4864" y="3360" width="32" height="32">
+  <object name="northern-forest2" x="4864" y="3360" width="32" height="32">
    <properties>
     <property name="age" value="0.4"/>
     <property name="view" value="north"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4896" y="3328" width="32" height="32">
+  <object name="northern-forest1" x="4896" y="3328" width="32" height="32">
    <properties>
     <property name="age" value="3.7"/>
     <property name="view" value="north"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4928" y="3296" width="32" height="32">
+  <object name="northern-forest1" x="4928" y="3296" width="32" height="32">
    <properties>
     <property name="age" value="2.2"/>
     <property name="view" value="west"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4864" y="3296" width="32" height="32">
+  <object name="northern-forest1" x="4864" y="3296" width="32" height="32">
    <properties>
     <property name="age" value="4"/>
     <property name="view" value="west"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4832" y="3424" width="32" height="32">
+  <object name="northern-forest1" x="4832" y="3424" width="32" height="32">
    <properties>
     <property name="age" value="1.4"/>
     <property name="view" value="west"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="5120" y="3616" width="32" height="32">
+  <object name="northern-forest2" x="5120" y="3616" width="32" height="32">
    <properties>
     <property name="age" value="0.4"/>
     <property name="view" value="west"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="5152" y="3520" width="32" height="32">
+  <object name="northern-forest1" x="5152" y="3520" width="32" height="32">
    <properties>
     <property name="age" value="3.7"/>
     <property name="view" value="west"/>
    </properties>
   </object>
-  <object name="tavern" type="building" x="1536" y="896" width="96" height="64">
+  <object name="tavern" x="1536" y="896" width="96" height="64">
    <properties>
     <property name="player" value="1"/>
     <property name="view" value="east"/>
    </properties>
   </object>
-  <object name="cobbled-street-straight0" type="structure" x="1280" y="1088" width="32" height="32">
+  <object name="cobbled-street" x="1280" y="1088" width="32" height="32">
    <properties>
+    <property name="connections" value="0101"/>
     <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="cobbled-street-straight0" type="structure" x="1248" y="1088" width="32" height="32">
+  <object name="cobbled-street" x="1248" y="1088" width="32" height="32">
    <properties>
+    <property name="connections" value="0101"/>
     <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="cobbled-street-straight0" type="structure" x="1216" y="1088" width="32" height="32">
+  <object name="cobbled-street" x="1216" y="1088" width="32" height="32">
    <properties>
+    <property name="connections" value="0101"/>
     <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="cobbled-street-straight0" type="structure" x="1184" y="1088" width="32" height="32">
+  <object name="cobbled-street" x="1184" y="1088" width="32" height="32">
    <properties>
+    <property name="connections" value="0100"/>
     <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="1120" y="1056" width="32" height="32">
+  <object name="northern-forest1" x="1120" y="1056" width="32" height="32">
    <properties>
     <property name="age" value="4"/>
     <property name="view" value="east"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="1056" y="1056" width="32" height="32">
+  <object name="northern-forest1" x="1056" y="1056" width="32" height="32">
    <properties>
     <property name="age" value="3"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="1120" y="960" width="32" height="32">
+  <object name="northern-forest1" x="1120" y="960" width="32" height="32">
    <properties>
     <property name="age" value="4"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="1056" y="992" width="32" height="32">
+  <object name="northern-forest2" x="1056" y="992" width="32" height="32">
    <properties>
     <property name="age" value="4"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="1184" y="960" width="32" height="32">
+  <object name="northern-forest1" x="1184" y="960" width="32" height="32">
    <properties>
     <property name="age" value="4"/>
     <property name="view" value="north"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="1152" y="928" width="32" height="32">
+  <object name="northern-forest1" x="1152" y="928" width="32" height="32">
    <properties>
     <property name="age" value="3"/>
     <property name="view" value="south"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="1088" y="992" width="32" height="32">
+  <object name="northern-forest1" x="1088" y="992" width="32" height="32">
    <properties>
     <property name="age" value="3"/>
     <property name="view" value="south"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="1216" y="1056" width="32" height="32">
+  <object name="northern-forest2" x="1216" y="1056" width="32" height="32">
    <properties>
     <property name="age" value="2"/>
     <property name="view" value="east"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="1152" y="1120" width="32" height="32">
+  <object name="northern-forest1" x="1152" y="1120" width="32" height="32">
    <properties>
     <property name="age" value="3"/>
     <property name="view" value="west"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="1248" y="1024" width="32" height="32">
+  <object name="northern-forest1" x="1248" y="1024" width="32" height="32">
    <properties>
     <property name="age" value="3"/>
     <property name="view" value="north"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="1088" y="1088" width="32" height="32">
+  <object name="northern-forest1" x="1088" y="1088" width="32" height="32">
    <properties>
     <property name="age" value="2"/>
     <property name="view" value="north"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="1120" y="1024" width="32" height="32">
+  <object name="northern-forest2" x="1120" y="1024" width="32" height="32">
    <properties>
     <property name="age" value="2"/>
     <property name="view" value="east"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="1216" y="992" width="32" height="32">
+  <object name="northern-forest1" x="1216" y="992" width="32" height="32">
    <properties>
     <property name="age" value="2"/>
     <property name="view" value="north"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="1152" y="1088" width="32" height="32">
+  <object name="northern-forest1" x="1152" y="1088" width="32" height="32">
    <properties>
     <property name="age" value="2"/>
     <property name="view" value="west"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="1152" y="992" width="32" height="32">
+  <object name="northern-forest2" x="1152" y="992" width="32" height="32">
    <properties>
     <property name="age" value="2"/>
     <property name="view" value="south"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="1088" y="1024" width="32" height="32">
+  <object name="northern-forest2" x="1088" y="1024" width="32" height="32">
    <properties>
     <property name="age" value="2"/>
     <property name="view" value="north"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="1120" y="928" width="32" height="32">
+  <object name="northern-forest2" x="1120" y="928" width="32" height="32">
    <properties>
     <property name="age" value="1"/>
     <property name="view" value="west"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="1216" y="1024" width="32" height="32">
+  <object name="northern-forest1" x="1216" y="1024" width="32" height="32">
    <properties>
     <property name="age" value="1"/>
     <property name="view" value="south"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="1152" y="960" width="32" height="32">
+  <object name="northern-forest1" x="1152" y="960" width="32" height="32">
    <properties>
     <property name="age" value="1"/>
     <property name="view" value="south"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="1120" y="992" width="32" height="32">
+  <object name="northern-forest2" x="1120" y="992" width="32" height="32">
    <properties>
     <property name="age" value="1"/>
     <property name="view" value="west"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="1088" y="960" width="32" height="32">
+  <object name="northern-forest1" x="1088" y="960" width="32" height="32">
    <properties>
     <property name="age" value="2"/>
     <property name="view" value="west"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="1184" y="1120" width="32" height="32">
+  <object name="northern-forest1" x="1184" y="1120" width="32" height="32">
    <properties>
     <property name="age" value="1"/>
     <property name="view" value="east"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="1120" y="1088" width="32" height="32">
+  <object name="northern-forest1" x="1120" y="1088" width="32" height="32">
    <properties>
     <property name="age" value="0"/>
     <property name="view" value="north"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="1056" y="1024" width="32" height="32">
+  <object name="northern-forest2" x="1056" y="1024" width="32" height="32">
    <properties>
     <property name="age" value="0"/>
     <property name="view" value="south"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="1184" y="992" width="32" height="32">
+  <object name="northern-forest1" x="1184" y="992" width="32" height="32">
    <properties>
     <property name="age" value="0"/>
     <property name="view" value="east"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="1184" y="928" width="32" height="32">
+  <object name="northern-forest1" x="1184" y="928" width="32" height="32">
    <properties>
     <property name="age" value="2"/>
     <property name="view" value="south"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="1216" y="960" width="32" height="32">
+  <object name="northern-forest1" x="1216" y="960" width="32" height="32">
    <properties>
     <property name="age" value="1"/>
     <property name="view" value="south"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="1216" y="928" width="32" height="32">
+  <object name="northern-forest2" x="1216" y="928" width="32" height="32">
    <properties>
     <property name="age" value="3"/>
     <property name="view" value="north"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="1088" y="1056" width="32" height="32">
+  <object name="northern-forest1" x="1088" y="1056" width="32" height="32">
    <properties>
     <property name="age" value="4"/>
     <property name="view" value="north"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="1056" y="1088" width="32" height="32">
+  <object name="northern-forest1" x="1056" y="1088" width="32" height="32">
    <properties>
     <property name="age" value="4"/>
     <property name="view" value="east"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="1184" y="1152" width="32" height="32">
+  <object name="northern-forest2" x="1184" y="1152" width="32" height="32">
    <properties>
     <property name="age" value="1"/>
     <property name="view" value="north"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="1120" y="1120" width="32" height="32">
+  <object name="northern-forest1" x="1120" y="1120" width="32" height="32">
    <properties>
     <property name="age" value="1"/>
     <property name="view" value="west"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="1216" y="1120" width="32" height="32">
+  <object name="northern-forest2" x="1216" y="1120" width="32" height="32">
    <properties>
     <property name="age" value="1"/>
     <property name="view" value="south"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="1216" y="1152" width="32" height="32">
+  <object name="northern-forest2" x="1216" y="1152" width="32" height="32">
    <properties>
     <property name="age" value="3"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="1152" y="1152" width="32" height="32">
+  <object name="northern-forest1" x="1152" y="1152" width="32" height="32">
    <properties>
     <property name="age" value="3"/>
     <property name="view" value="north"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="1120" y="1152" width="32" height="32">
+  <object name="northern-forest1" x="1120" y="1152" width="32" height="32">
    <properties>
     <property name="age" value="2"/>
     <property name="view" value="east"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="1248" y="992" width="32" height="32">
+  <object name="northern-forest1" x="1248" y="992" width="32" height="32">
    <properties>
     <property name="age" value="2"/>
     <property name="view" value="north"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="1248" y="960" width="32" height="32">
+  <object name="northern-forest1" x="1248" y="960" width="32" height="32">
    <properties>
     <property name="age" value="3"/>
     <property name="view" value="east"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="1248" y="1056" width="32" height="32">
+  <object name="northern-forest1" x="1248" y="1056" width="32" height="32">
    <properties>
     <property name="age" value="3"/>
     <property name="view" value="north"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="1280" y="1056" width="32" height="32">
+  <object name="northern-forest2" x="1280" y="1056" width="32" height="32">
    <properties>
     <property name="age" value="4"/>
     <property name="view" value="east"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="1280" y="1024" width="32" height="32">
+  <object name="northern-forest1" x="1280" y="1024" width="32" height="32">
    <properties>
     <property name="age" value="1"/>
     <property name="view" value="north"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="1280" y="992" width="32" height="32">
+  <object name="northern-forest1" x="1280" y="992" width="32" height="32">
    <properties>
     <property name="age" value="2"/>
     <property name="view" value="north"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="1088" y="1120" width="32" height="32">
+  <object name="northern-forest2" x="1088" y="1120" width="32" height="32">
    <properties>
     <property name="age" value="3"/>
     <property name="view" value="west"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="1248" y="1120" width="32" height="32">
+  <object name="northern-forest2" x="1248" y="1120" width="32" height="32">
    <properties>
     <property name="age" value="4"/>
     <property name="view" value="east"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="5216" y="3296" width="32" height="32">
+  <object name="northern-forest1" x="5216" y="3296" width="32" height="32">
    <properties>
     <property name="age" value="4"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4928" y="3392" width="32" height="32">
+  <object name="northern-forest1" x="4928" y="3392" width="32" height="32">
    <properties>
     <property name="age" value="1.4"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="4928" y="3360" width="32" height="32">
+  <object name="northern-forest2" x="4928" y="3360" width="32" height="32">
    <properties>
     <property name="age" value="4"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="5152" y="3296" width="32" height="32">
+  <object name="northern-forest1" x="5152" y="3296" width="32" height="32">
    <properties>
     <property name="age" value="2.2"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4960" y="3392" width="32" height="32">
+  <object name="northern-forest1" x="4960" y="3392" width="32" height="32">
    <properties>
     <property name="age" value="4"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4992" y="3360" width="32" height="32">
+  <object name="northern-forest1" x="4992" y="3360" width="32" height="32">
    <properties>
     <property name="age" value="0.4"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="4384" y="3232" width="32" height="32">
+  <object name="northern-forest2" x="4384" y="3232" width="32" height="32">
    <properties>
     <property name="age" value="3.7"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4992" y="3296" width="32" height="32">
+  <object name="northern-forest1" x="4992" y="3296" width="32" height="32">
    <properties>
     <property name="age" value="0.4"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="5088" y="3424" width="32" height="32">
+  <object name="northern-forest2" x="5088" y="3424" width="32" height="32">
    <properties>
     <property name="age" value="0.4"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="5024" y="3488" width="32" height="32">
+  <object name="northern-forest2" x="5024" y="3488" width="32" height="32">
    <properties>
     <property name="age" value="4"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4992" y="3456" width="32" height="32">
+  <object name="northern-forest1" x="4992" y="3456" width="32" height="32">
    <properties>
     <property name="age" value="0.4"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="5024" y="3456" width="32" height="32">
+  <object name="northern-forest1" x="5024" y="3456" width="32" height="32">
    <properties>
     <property name="age" value="0.4"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4960" y="3328" width="32" height="32">
+  <object name="northern-forest1" x="4960" y="3328" width="32" height="32">
    <properties>
     <property name="age" value="2.2"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4960" y="3296" width="32" height="32">
+  <object name="northern-forest1" x="4960" y="3296" width="32" height="32">
    <properties>
     <property name="age" value="1.4"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="5024" y="3360" width="32" height="32">
+  <object name="northern-forest1" x="5024" y="3360" width="32" height="32">
    <properties>
     <property name="age" value="3.7"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="4992" y="3424" width="32" height="32">
+  <object name="northern-forest2" x="4992" y="3424" width="32" height="32">
    <properties>
     <property name="age" value="1.4"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="5056" y="3456" width="32" height="32">
+  <object name="northern-forest2" x="5056" y="3456" width="32" height="32">
    <properties>
     <property name="age" value="4"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="4928" y="3456" width="32" height="32">
+  <object name="northern-forest2" x="4928" y="3456" width="32" height="32">
    <properties>
     <property name="age" value="1.4"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="5056" y="3424" width="32" height="32">
+  <object name="northern-forest1" x="5056" y="3424" width="32" height="32">
    <properties>
     <property name="age" value="2.2"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="5056" y="3392" width="32" height="32">
+  <object name="northern-forest2" x="5056" y="3392" width="32" height="32">
    <properties>
     <property name="age" value="3.7"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="4896" y="3424" width="32" height="32">
+  <object name="northern-forest2" x="4896" y="3424" width="32" height="32">
    <properties>
     <property name="age" value="3.7"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4960" y="3456" width="32" height="32">
+  <object name="northern-forest1" x="4960" y="3456" width="32" height="32">
    <properties>
     <property name="age" value="2.2"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="5024" y="3392" width="32" height="32">
+  <object name="northern-forest2" x="5024" y="3392" width="32" height="32">
    <properties>
     <property name="age" value="2.2"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="5024" y="3328" width="32" height="32">
+  <object name="northern-forest1" x="5024" y="3328" width="32" height="32">
    <properties>
     <property name="age" value="3.7"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="5024" y="3296" width="32" height="32">
+  <object name="northern-forest1" x="5024" y="3296" width="32" height="32">
    <properties>
     <property name="age" value="1.4"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="4512" y="3360" width="32" height="32">
+  <object name="northern-forest2" x="4512" y="3360" width="32" height="32">
    <properties>
     <property name="age" value="2.2"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4672" y="3424" width="32" height="32">
+  <object name="northern-forest1" x="4672" y="3424" width="32" height="32">
    <properties>
     <property name="age" value="3.7"/>
     <property name="view" value="north"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4640" y="3392" width="32" height="32">
+  <object name="northern-forest1" x="4640" y="3392" width="32" height="32">
    <properties>
     <property name="age" value="4"/>
     <property name="view" value="west"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="4800" y="3456" width="32" height="32">
+  <object name="northern-forest2" x="4800" y="3456" width="32" height="32">
    <properties>
     <property name="age" value="3.7"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="4608" y="3456" width="32" height="32">
+  <object name="northern-forest2" x="4608" y="3456" width="32" height="32">
    <properties>
     <property name="age" value="0.4"/>
     <property name="view" value="east"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4960" y="3520" width="32" height="32">
+  <object name="northern-forest1" x="4960" y="3520" width="32" height="32">
    <properties>
     <property name="age" value="1.4"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="4928" y="3520" width="32" height="32">
+  <object name="northern-forest2" x="4928" y="3520" width="32" height="32">
    <properties>
     <property name="age" value="0.4"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4672" y="3456" width="32" height="32">
+  <object name="northern-forest1" x="4672" y="3456" width="32" height="32">
    <properties>
     <property name="age" value="2.2"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4480" y="3424" width="32" height="32">
+  <object name="northern-forest1" x="4480" y="3424" width="32" height="32">
    <properties>
     <property name="age" value="2.2"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4896" y="3520" width="32" height="32">
+  <object name="northern-forest1" x="4896" y="3520" width="32" height="32">
    <properties>
     <property name="age" value="1.4"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="4384" y="3424" width="32" height="32">
+  <object name="northern-forest2" x="4384" y="3424" width="32" height="32">
    <properties>
     <property name="age" value="3.7"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="5248" y="3456" width="32" height="32">
+  <object name="northern-forest1" x="5248" y="3456" width="32" height="32">
    <properties>
     <property name="age" value="1.4"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4320" y="3264" width="32" height="32">
+  <object name="northern-forest1" x="4320" y="3264" width="32" height="32">
    <properties>
     <property name="age" value="3.7"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="4608" y="3392" width="32" height="32">
+  <object name="northern-forest2" x="4608" y="3392" width="32" height="32">
    <properties>
     <property name="age" value="1.4"/>
     <property name="view" value="east"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4896" y="3616" width="32" height="32">
+  <object name="northern-forest1" x="4896" y="3616" width="32" height="32">
    <properties>
     <property name="age" value="4"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4288" y="3168" width="32" height="32">
+  <object name="northern-forest1" x="4288" y="3168" width="32" height="32">
    <properties>
     <property name="age" value="4"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4768" y="3520" width="32" height="32">
+  <object name="northern-forest1" x="4768" y="3520" width="32" height="32">
    <properties>
     <property name="age" value="1.4"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4800" y="3424" width="32" height="32">
+  <object name="northern-forest1" x="4800" y="3424" width="32" height="32">
    <properties>
     <property name="age" value="3.7"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="4704" y="3456" width="32" height="32">
+  <object name="northern-forest2" x="4704" y="3456" width="32" height="32">
    <properties>
     <property name="age" value="4"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4768" y="3552" width="32" height="32">
+  <object name="northern-forest1" x="4768" y="3552" width="32" height="32">
    <properties>
     <property name="age" value="0.4"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4832" y="3104" width="32" height="32">
+  <object name="northern-forest1" x="4832" y="3104" width="32" height="32">
    <properties>
     <property name="age" value="0.4"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="4960" y="3552" width="32" height="32">
+  <object name="northern-forest2" x="4960" y="3552" width="32" height="32">
    <properties>
     <property name="age" value="3.7"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="4704" y="3392" width="32" height="32">
+  <object name="northern-forest2" x="4704" y="3392" width="32" height="32">
    <properties>
     <property name="age" value="2.2"/>
     <property name="view" value="west"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4416" y="3328" width="32" height="32">
+  <object name="northern-forest1" x="4416" y="3328" width="32" height="32">
    <properties>
     <property name="age" value="4"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4768" y="3456" width="32" height="32">
+  <object name="northern-forest1" x="4768" y="3456" width="32" height="32">
    <properties>
     <property name="age" value="0.4"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4928" y="3648" width="32" height="32">
+  <object name="northern-forest1" x="4928" y="3648" width="32" height="32">
    <properties>
     <property name="age" value="1.4"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4448" y="3392" width="32" height="32">
+  <object name="northern-forest1" x="4448" y="3392" width="32" height="32">
    <properties>
     <property name="age" value="0.4"/>
     <property name="view" value="west"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="4864" y="3456" width="32" height="32">
+  <object name="northern-forest2" x="4864" y="3456" width="32" height="32">
    <properties>
     <property name="age" value="2.2"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4928" y="3232" width="32" height="32">
+  <object name="northern-forest1" x="4928" y="3232" width="32" height="32">
    <properties>
     <property name="age" value="4"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4736" y="3520" width="32" height="32">
+  <object name="northern-forest1" x="4736" y="3520" width="32" height="32">
    <properties>
     <property name="age" value="3.7"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="4416" y="3424" width="32" height="32">
+  <object name="northern-forest2" x="4416" y="3424" width="32" height="32">
    <properties>
     <property name="age" value="2.2"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4704" y="3552" width="32" height="32">
+  <object name="northern-forest1" x="4704" y="3552" width="32" height="32">
    <properties>
     <property name="age" value="1.4"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4736" y="3456" width="32" height="32">
+  <object name="northern-forest1" x="4736" y="3456" width="32" height="32">
    <properties>
     <property name="age" value="4"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="4672" y="3392" width="32" height="32">
+  <object name="northern-forest2" x="4672" y="3392" width="32" height="32">
    <properties>
     <property name="age" value="2.2"/>
     <property name="view" value="east"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="4576" y="3040" width="32" height="32">
+  <object name="northern-forest2" x="4576" y="3040" width="32" height="32">
    <properties>
     <property name="age" value="1.4"/>
     <property name="view" value="north"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4832" y="3520" width="32" height="32">
+  <object name="northern-forest1" x="4832" y="3520" width="32" height="32">
    <properties>
     <property name="age" value="2.2"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4672" y="3488" width="32" height="32">
+  <object name="northern-forest1" x="4672" y="3488" width="32" height="32">
    <properties>
     <property name="age" value="4"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4768" y="3616" width="32" height="32">
+  <object name="northern-forest1" x="4768" y="3616" width="32" height="32">
    <properties>
     <property name="age" value="4"/>
     <property name="view" value="north"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4960" y="3232" width="32" height="32">
+  <object name="northern-forest1" x="4960" y="3232" width="32" height="32">
    <properties>
     <property name="age" value="2.2"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="4800" y="3488" width="32" height="32">
+  <object name="northern-forest2" x="4800" y="3488" width="32" height="32">
    <properties>
     <property name="age" value="2.2"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4768" y="3584" width="32" height="32">
+  <object name="northern-forest1" x="4768" y="3584" width="32" height="32">
    <properties>
     <property name="age" value="2.2"/>
     <property name="view" value="north"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4832" y="3296" width="32" height="32">
+  <object name="northern-forest1" x="4832" y="3296" width="32" height="32">
    <properties>
     <property name="age" value="3.7"/>
     <property name="view" value="west"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="4768" y="3392" width="32" height="32">
+  <object name="northern-forest2" x="4768" y="3392" width="32" height="32">
    <properties>
     <property name="age" value="0.4"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4416" y="3456" width="32" height="32">
+  <object name="northern-forest1" x="4416" y="3456" width="32" height="32">
    <properties>
     <property name="age" value="0.4"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4704" y="3488" width="32" height="32">
+  <object name="northern-forest1" x="4704" y="3488" width="32" height="32">
    <properties>
     <property name="age" value="1.4"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="5280" y="3424" width="32" height="32">
+  <object name="northern-forest1" x="5280" y="3424" width="32" height="32">
    <properties>
     <property name="age" value="3.7"/>
     <property name="view" value="east"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4832" y="3488" width="32" height="32">
+  <object name="northern-forest1" x="4832" y="3488" width="32" height="32">
    <properties>
     <property name="age" value="3.7"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="4672" y="3520" width="32" height="32">
+  <object name="northern-forest2" x="4672" y="3520" width="32" height="32">
    <properties>
     <property name="age" value="3.7"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4576" y="3488" width="32" height="32">
+  <object name="northern-forest1" x="4576" y="3488" width="32" height="32">
    <properties>
     <property name="age" value="4"/>
     <property name="view" value="east"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4832" y="3616" width="32" height="32">
+  <object name="northern-forest1" x="4832" y="3616" width="32" height="32">
    <properties>
     <property name="age" value="1.4"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4928" y="3584" width="32" height="32">
+  <object name="northern-forest1" x="4928" y="3584" width="32" height="32">
    <properties>
     <property name="age" value="0.4"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="4736" y="3552" width="32" height="32">
+  <object name="northern-forest2" x="4736" y="3552" width="32" height="32">
    <properties>
     <property name="age" value="2.2"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4896" y="3552" width="32" height="32">
+  <object name="northern-forest1" x="4896" y="3552" width="32" height="32">
    <properties>
     <property name="age" value="2.2"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4896" y="3456" width="32" height="32">
+  <object name="northern-forest1" x="4896" y="3456" width="32" height="32">
    <properties>
     <property name="age" value="0.4"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4480" y="3456" width="32" height="32">
+  <object name="northern-forest1" x="4480" y="3456" width="32" height="32">
    <properties>
     <property name="age" value="4"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="4800" y="3392" width="32" height="32">
+  <object name="northern-forest2" x="4800" y="3392" width="32" height="32">
    <properties>
     <property name="age" value="1.4"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="4960" y="3584" width="32" height="32">
+  <object name="northern-forest2" x="4960" y="3584" width="32" height="32">
    <properties>
     <property name="age" value="3.7"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4864" y="3488" width="32" height="32">
+  <object name="northern-forest1" x="4864" y="3488" width="32" height="32">
    <properties>
     <property name="age" value="3.7"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4736" y="3392" width="32" height="32">
+  <object name="northern-forest1" x="4736" y="3392" width="32" height="32">
    <properties>
     <property name="age" value="1.4"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="5248" y="3392" width="32" height="32">
+  <object name="northern-forest1" x="5248" y="3392" width="32" height="32">
    <properties>
     <property name="age" value="0.4"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="4800" y="3616" width="32" height="32">
+  <object name="northern-forest2" x="4800" y="3616" width="32" height="32">
    <properties>
     <property name="age" value="1.4"/>
     <property name="view" value="west"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="5152" y="3328" width="32" height="32">
+  <object name="northern-forest2" x="5152" y="3328" width="32" height="32">
    <properties>
     <property name="age" value="1.4"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4800" y="3584" width="32" height="32">
+  <object name="northern-forest1" x="4800" y="3584" width="32" height="32">
    <properties>
     <property name="age" value="4"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4640" y="3456" width="32" height="32">
+  <object name="northern-forest1" x="4640" y="3456" width="32" height="32">
    <properties>
     <property name="age" value="0.4"/>
     <property name="view" value="north"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4416" y="3232" width="32" height="32">
+  <object name="northern-forest1" x="4416" y="3232" width="32" height="32">
    <properties>
     <property name="age" value="2.2"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4352" y="3360" width="32" height="32">
+  <object name="northern-forest1" x="4352" y="3360" width="32" height="32">
    <properties>
     <property name="age" value="4"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4896" y="3584" width="32" height="32">
+  <object name="northern-forest1" x="4896" y="3584" width="32" height="32">
    <properties>
     <property name="age" value="4"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="4544" y="3456" width="32" height="32">
+  <object name="northern-forest2" x="4544" y="3456" width="32" height="32">
    <properties>
     <property name="age" value="0.4"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4512" y="3424" width="32" height="32">
+  <object name="northern-forest1" x="4512" y="3424" width="32" height="32">
    <properties>
     <property name="age" value="0.4"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4480" y="3392" width="32" height="32">
+  <object name="northern-forest1" x="4480" y="3392" width="32" height="32">
    <properties>
     <property name="age" value="3.7"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4768" y="3168" width="32" height="32">
+  <object name="northern-forest1" x="4768" y="3168" width="32" height="32">
    <properties>
     <property name="age" value="2.2"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="4448" y="3072" width="32" height="32">
+  <object name="northern-forest2" x="4448" y="3072" width="32" height="32">
    <properties>
     <property name="age" value="3.7"/>
     <property name="view" value="north"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="4416" y="3040" width="32" height="32">
+  <object name="northern-forest2" x="4416" y="3040" width="32" height="32">
    <properties>
     <property name="age" value="4"/>
     <property name="view" value="west"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4576" y="3104" width="32" height="32">
+  <object name="northern-forest1" x="4576" y="3104" width="32" height="32">
    <properties>
     <property name="age" value="3.7"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4416" y="3168" width="32" height="32">
+  <object name="northern-forest1" x="4416" y="3168" width="32" height="32">
    <properties>
     <property name="age" value="0.4"/>
     <property name="view" value="east"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="4736" y="3168" width="32" height="32">
+  <object name="northern-forest2" x="4736" y="3168" width="32" height="32">
    <properties>
     <property name="age" value="1.4"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="4704" y="3168" width="32" height="32">
+  <object name="northern-forest2" x="4704" y="3168" width="32" height="32">
    <properties>
     <property name="age" value="0.4"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4448" y="3104" width="32" height="32">
+  <object name="northern-forest1" x="4448" y="3104" width="32" height="32">
    <properties>
     <property name="age" value="2.2"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4768" y="3296" width="32" height="32">
+  <object name="northern-forest1" x="4768" y="3296" width="32" height="32">
    <properties>
     <property name="age" value="2.2"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4896" y="3232" width="32" height="32">
+  <object name="northern-forest1" x="4896" y="3232" width="32" height="32">
    <properties>
     <property name="age" value="1.4"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4672" y="3296" width="32" height="32">
+  <object name="northern-forest1" x="4672" y="3296" width="32" height="32">
    <properties>
     <property name="age" value="3.7"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="4640" y="3328" width="32" height="32">
+  <object name="northern-forest2" x="4640" y="3328" width="32" height="32">
    <properties>
     <property name="age" value="1.4"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4608" y="3296" width="32" height="32">
+  <object name="northern-forest1" x="4608" y="3296" width="32" height="32">
    <properties>
     <property name="age" value="3.7"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="4512" y="3328" width="32" height="32">
+  <object name="northern-forest2" x="4512" y="3328" width="32" height="32">
    <properties>
     <property name="age" value="1.4"/>
     <property name="view" value="east"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4672" y="3264" width="32" height="32">
+  <object name="northern-forest1" x="4672" y="3264" width="32" height="32">
    <properties>
     <property name="age" value="4"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="4608" y="3200" width="32" height="32">
+  <object name="northern-forest2" x="4608" y="3200" width="32" height="32">
    <properties>
     <property name="age" value="4"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4832" y="3200" width="32" height="32">
+  <object name="northern-forest1" x="4832" y="3200" width="32" height="32">
    <properties>
     <property name="age" value="1.4"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="4800" y="3136" width="32" height="32">
+  <object name="northern-forest2" x="4800" y="3136" width="32" height="32">
    <properties>
     <property name="age" value="3.7"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4480" y="3104" width="32" height="32">
+  <object name="northern-forest1" x="4480" y="3104" width="32" height="32">
    <properties>
     <property name="age" value="4"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="4800" y="3232" width="32" height="32">
+  <object name="northern-forest2" x="4800" y="3232" width="32" height="32">
    <properties>
     <property name="age" value="0.4"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4832" y="3264" width="32" height="32">
+  <object name="northern-forest1" x="4832" y="3264" width="32" height="32">
    <properties>
     <property name="age" value="0.4"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4736" y="3200" width="32" height="32">
+  <object name="northern-forest1" x="4736" y="3200" width="32" height="32">
    <properties>
     <property name="age" value="3.7"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4480" y="3040" width="32" height="32">
+  <object name="northern-forest1" x="4480" y="3040" width="32" height="32">
    <properties>
     <property name="age" value="2.2"/>
     <property name="view" value="west"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="4736" y="3360" width="32" height="32">
+  <object name="northern-forest2" x="4736" y="3360" width="32" height="32">
    <properties>
     <property name="age" value="4"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4864" y="3232" width="32" height="32">
+  <object name="northern-forest1" x="4864" y="3232" width="32" height="32">
    <properties>
     <property name="age" value="0.4"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4704" y="3296" width="32" height="32">
+  <object name="northern-forest1" x="4704" y="3296" width="32" height="32">
    <properties>
     <property name="age" value="1.4"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="4672" y="3360" width="32" height="32">
+  <object name="northern-forest2" x="4672" y="3360" width="32" height="32">
    <properties>
     <property name="age" value="0.4"/>
     <property name="view" value="west"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4640" y="3104" width="32" height="32">
+  <object name="northern-forest1" x="4640" y="3104" width="32" height="32">
    <properties>
     <property name="age" value="2.2"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="4736" y="3136" width="32" height="32">
+  <object name="northern-forest2" x="4736" y="3136" width="32" height="32">
    <properties>
     <property name="age" value="4"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="4512" y="3168" width="32" height="32">
+  <object name="northern-forest2" x="4512" y="3168" width="32" height="32">
    <properties>
     <property name="age" value="3.7"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="4672" y="3328" width="32" height="32">
+  <object name="northern-forest2" x="4672" y="3328" width="32" height="32">
    <properties>
     <property name="age" value="2.2"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4480" y="3200" width="32" height="32">
+  <object name="northern-forest1" x="4480" y="3200" width="32" height="32">
    <properties>
     <property name="age" value="1.4"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4640" y="3040" width="32" height="32">
+  <object name="northern-forest1" x="4640" y="3040" width="32" height="32">
    <properties>
     <property name="age" value="4"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="4544" y="3104" width="32" height="32">
+  <object name="northern-forest2" x="4544" y="3104" width="32" height="32">
    <properties>
     <property name="age" value="2.2"/>
     <property name="view" value="east"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4480" y="3008" width="32" height="32">
+  <object name="northern-forest1" x="4480" y="3008" width="32" height="32">
    <properties>
     <property name="age" value="1.4"/>
     <property name="view" value="north"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="4864" y="3264" width="32" height="32">
+  <object name="northern-forest2" x="4864" y="3264" width="32" height="32">
    <properties>
     <property name="age" value="2.2"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4512" y="3136" width="32" height="32">
+  <object name="northern-forest1" x="4512" y="3136" width="32" height="32">
    <properties>
     <property name="age" value="4"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="4544" y="3264" width="32" height="32">
+  <object name="northern-forest2" x="4544" y="3264" width="32" height="32">
    <properties>
     <property name="age" value="4"/>
     <property name="view" value="north"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4608" y="3232" width="32" height="32">
+  <object name="northern-forest1" x="4608" y="3232" width="32" height="32">
    <properties>
     <property name="age" value="2.2"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4576" y="3136" width="32" height="32">
+  <object name="northern-forest1" x="4576" y="3136" width="32" height="32">
    <properties>
     <property name="age" value="2.2"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4544" y="3232" width="32" height="32">
+  <object name="northern-forest1" x="4544" y="3232" width="32" height="32">
    <properties>
     <property name="age" value="2.2"/>
     <property name="view" value="north"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="4704" y="3264" width="32" height="32">
+  <object name="northern-forest2" x="4704" y="3264" width="32" height="32">
    <properties>
     <property name="age" value="3.7"/>
     <property name="view" value="west"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="4544" y="3040" width="32" height="32">
+  <object name="northern-forest2" x="4544" y="3040" width="32" height="32">
    <properties>
     <property name="age" value="0.4"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4864" y="3168" width="32" height="32">
+  <object name="northern-forest1" x="4864" y="3168" width="32" height="32">
    <properties>
     <property name="age" value="0.4"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4480" y="3136" width="32" height="32">
+  <object name="northern-forest1" x="4480" y="3136" width="32" height="32">
    <properties>
     <property name="age" value="1.4"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="4544" y="3296" width="32" height="32">
+  <object name="northern-forest2" x="4544" y="3296" width="32" height="32">
    <properties>
     <property name="age" value="3.7"/>
     <property name="view" value="east"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4800" y="3200" width="32" height="32">
+  <object name="northern-forest1" x="4800" y="3200" width="32" height="32">
    <properties>
     <property name="age" value="3.7"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="4448" y="3264" width="32" height="32">
+  <object name="northern-forest2" x="4448" y="3264" width="32" height="32">
    <properties>
     <property name="age" value="3.7"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4832" y="3168" width="32" height="32">
+  <object name="northern-forest1" x="4832" y="3168" width="32" height="32">
    <properties>
     <property name="age" value="4"/>
     <property name="view" value="east"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4608" y="3264" width="32" height="32">
+  <object name="northern-forest1" x="4608" y="3264" width="32" height="32">
    <properties>
     <property name="age" value="1.4"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="4704" y="3232" width="32" height="32">
+  <object name="northern-forest2" x="4704" y="3232" width="32" height="32">
    <properties>
     <property name="age" value="0.4"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4512" y="3200" width="32" height="32">
+  <object name="northern-forest1" x="4512" y="3200" width="32" height="32">
    <properties>
     <property name="age" value="2.2"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4672" y="3200" width="32" height="32">
+  <object name="northern-forest1" x="4672" y="3200" width="32" height="32">
    <properties>
     <property name="age" value="2.2"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="5024" y="3424" width="32" height="32">
+  <object name="northern-forest1" x="5024" y="3424" width="32" height="32">
    <properties>
     <property name="age" value="0.4"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="4768" y="3328" width="32" height="32">
+  <object name="northern-forest2" x="4768" y="3328" width="32" height="32">
    <properties>
     <property name="age" value="4"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4768" y="3136" width="32" height="32">
+  <object name="northern-forest1" x="4768" y="3136" width="32" height="32">
    <properties>
     <property name="age" value="1.4"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4736" y="3232" width="32" height="32">
+  <object name="northern-forest1" x="4736" y="3232" width="32" height="32">
    <properties>
     <property name="age" value="3.7"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4640" y="3136" width="32" height="32">
+  <object name="northern-forest1" x="4640" y="3136" width="32" height="32">
    <properties>
     <property name="age" value="3.7"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="4608" y="3072" width="32" height="32">
+  <object name="northern-forest2" x="4608" y="3072" width="32" height="32">
    <properties>
     <property name="age" value="1.4"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4736" y="3328" width="32" height="32">
+  <object name="northern-forest1" x="4736" y="3328" width="32" height="32">
    <properties>
     <property name="age" value="0.4"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="4576" y="3264" width="32" height="32">
+  <object name="northern-forest2" x="4576" y="3264" width="32" height="32">
    <properties>
     <property name="age" value="1.4"/>
     <property name="view" value="west"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="4640" y="3264" width="32" height="32">
+  <object name="northern-forest2" x="4640" y="3264" width="32" height="32">
    <properties>
     <property name="age" value="1.4"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="4576" y="3232" width="32" height="32">
+  <object name="northern-forest2" x="4576" y="3232" width="32" height="32">
    <properties>
     <property name="age" value="4"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4544" y="3072" width="32" height="32">
+  <object name="northern-forest1" x="4544" y="3072" width="32" height="32">
    <properties>
     <property name="age" value="0.4"/>
     <property name="view" value="north"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4736" y="3264" width="32" height="32">
+  <object name="northern-forest1" x="4736" y="3264" width="32" height="32">
    <properties>
     <property name="age" value="2.2"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4640" y="3232" width="32" height="32">
+  <object name="northern-forest1" x="4640" y="3232" width="32" height="32">
    <properties>
     <property name="age" value="4"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="4800" y="3104" width="32" height="32">
+  <object name="northern-forest2" x="4800" y="3104" width="32" height="32">
    <properties>
     <property name="age" value="4"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="4832" y="3328" width="32" height="32">
+  <object name="northern-forest2" x="4832" y="3328" width="32" height="32">
    <properties>
     <property name="age" value="0.4"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4800" y="3296" width="32" height="32">
+  <object name="northern-forest1" x="4800" y="3296" width="32" height="32">
    <properties>
     <property name="age" value="0.4"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4768" y="3264" width="32" height="32">
+  <object name="northern-forest1" x="4768" y="3264" width="32" height="32">
    <properties>
     <property name="age" value="3.7"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="4544" y="3136" width="32" height="32">
+  <object name="northern-forest2" x="4544" y="3136" width="32" height="32">
    <properties>
     <property name="age" value="2.2"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4992" y="2848" width="32" height="32">
+  <object name="northern-forest1" x="4992" y="2848" width="32" height="32">
    <properties>
     <property name="age" value="0.4"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="4928" y="2720" width="32" height="32">
+  <object name="northern-forest2" x="4928" y="2720" width="32" height="32">
    <properties>
     <property name="age" value="2.2"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4896" y="2912" width="32" height="32">
+  <object name="northern-forest1" x="4896" y="2912" width="32" height="32">
    <properties>
     <property name="age" value="3.7"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="4832" y="2912" width="32" height="32">
+  <object name="northern-forest2" x="4832" y="2912" width="32" height="32">
    <properties>
     <property name="age" value="3.7"/>
     <property name="view" value="east"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4928" y="2848" width="32" height="32">
+  <object name="northern-forest1" x="4928" y="2848" width="32" height="32">
    <properties>
     <property name="age" value="4"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4448" y="2912" width="32" height="32">
+  <object name="northern-forest1" x="4448" y="2912" width="32" height="32">
    <properties>
     <property name="age" value="4"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4800" y="2944" width="32" height="32">
+  <object name="northern-forest1" x="4800" y="2944" width="32" height="32">
    <properties>
     <property name="age" value="3.7"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="4608" y="2976" width="32" height="32">
+  <object name="northern-forest2" x="4608" y="2976" width="32" height="32">
    <properties>
     <property name="age" value="4"/>
     <property name="view" value="north"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="4832" y="2784" width="32" height="32">
+  <object name="northern-forest2" x="4832" y="2784" width="32" height="32">
    <properties>
     <property name="age" value="1.4"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="5216" y="3328" width="32" height="32">
+  <object name="northern-forest1" x="5216" y="3328" width="32" height="32">
    <properties>
     <property name="age" value="3.7"/>
     <property name="view" value="west"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="5024" y="2944" width="32" height="32">
+  <object name="northern-forest1" x="5024" y="2944" width="32" height="32">
    <properties>
     <property name="age" value="0.4"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="4800" y="2720" width="32" height="32">
+  <object name="northern-forest2" x="4800" y="2720" width="32" height="32">
    <properties>
     <property name="age" value="4"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="4800" y="2816" width="32" height="32">
+  <object name="northern-forest2" x="4800" y="2816" width="32" height="32">
    <properties>
     <property name="age" value="2.2"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4672" y="2880" width="32" height="32">
+  <object name="northern-forest1" x="4672" y="2880" width="32" height="32">
    <properties>
     <property name="age" value="2.2"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="5216" y="3264" width="32" height="32">
+  <object name="northern-forest1" x="5216" y="3264" width="32" height="32">
    <properties>
     <property name="age" value="0.4"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="4608" y="2944" width="32" height="32">
+  <object name="northern-forest2" x="4608" y="2944" width="32" height="32">
    <properties>
     <property name="age" value="2.2"/>
     <property name="view" value="north"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="5056" y="2944" width="32" height="32">
+  <object name="northern-forest1" x="5056" y="2944" width="32" height="32">
    <properties>
     <property name="age" value="4"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4672" y="2784" width="32" height="32">
+  <object name="northern-forest1" x="4672" y="2784" width="32" height="32">
    <properties>
     <property name="age" value="1.4"/>
     <property name="view" value="west"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="4672" y="2912" width="32" height="32">
+  <object name="northern-forest2" x="4672" y="2912" width="32" height="32">
    <properties>
     <property name="age" value="4"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="4896" y="2880" width="32" height="32">
+  <object name="northern-forest2" x="4896" y="2880" width="32" height="32">
    <properties>
     <property name="age" value="1.4"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4448" y="2880" width="32" height="32">
+  <object name="northern-forest1" x="4448" y="2880" width="32" height="32">
    <properties>
     <property name="age" value="3.7"/>
     <property name="view" value="west"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="5024" y="2976" width="32" height="32">
+  <object name="northern-forest1" x="5024" y="2976" width="32" height="32">
    <properties>
     <property name="age" value="4"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4416" y="3104" width="32" height="32">
+  <object name="northern-forest1" x="4416" y="3104" width="32" height="32">
    <properties>
     <property name="age" value="3.7"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="4704" y="2656" width="32" height="32">
+  <object name="northern-forest2" x="4704" y="2656" width="32" height="32">
    <properties>
     <property name="age" value="4"/>
     <property name="view" value="west"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4768" y="2656" width="32" height="32">
+  <object name="northern-forest1" x="4768" y="2656" width="32" height="32">
    <properties>
     <property name="age" value="2.2"/>
     <property name="view" value="west"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4416" y="2976" width="32" height="32">
+  <object name="northern-forest1" x="4416" y="2976" width="32" height="32">
    <properties>
     <property name="age" value="4"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="4864" y="2656" width="32" height="32">
+  <object name="northern-forest2" x="4864" y="2656" width="32" height="32">
    <properties>
     <property name="age" value="1.4"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="4672" y="2720" width="32" height="32">
+  <object name="northern-forest2" x="4672" y="2720" width="32" height="32">
    <properties>
     <property name="age" value="0.4"/>
     <property name="view" value="east"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="5056" y="2912" width="32" height="32">
+  <object name="northern-forest1" x="5056" y="2912" width="32" height="32">
    <properties>
     <property name="age" value="2.2"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="4768" y="2592" width="32" height="32">
+  <object name="northern-forest2" x="4768" y="2592" width="32" height="32">
    <properties>
     <property name="age" value="4"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="4864" y="3104" width="32" height="32">
+  <object name="northern-forest2" x="4864" y="3104" width="32" height="32">
    <properties>
     <property name="age" value="3.7"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="4960" y="2912" width="32" height="32">
+  <object name="northern-forest2" x="4960" y="2912" width="32" height="32">
    <properties>
     <property name="age" value="3.7"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4992" y="2912" width="32" height="32">
+  <object name="northern-forest1" x="4992" y="2912" width="32" height="32">
    <properties>
     <property name="age" value="1.4"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4640" y="2976" width="32" height="32">
+  <object name="northern-forest1" x="4640" y="2976" width="32" height="32">
    <properties>
     <property name="age" value="1.4"/>
     <property name="view" value="west"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4640" y="2912" width="32" height="32">
+  <object name="northern-forest1" x="4640" y="2912" width="32" height="32">
    <properties>
     <property name="age" value="0.4"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="5024" y="3104" width="32" height="32">
+  <object name="northern-forest2" x="5024" y="3104" width="32" height="32">
    <properties>
     <property name="age" value="1.4"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="5056" y="2880" width="32" height="32">
+  <object name="northern-forest1" x="5056" y="2880" width="32" height="32">
    <properties>
     <property name="age" value="3.7"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="4576" y="2944" width="32" height="32">
+  <object name="northern-forest2" x="4576" y="2944" width="32" height="32">
    <properties>
     <property name="age" value="4"/>
     <property name="view" value="east"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="4960" y="3104" width="32" height="32">
+  <object name="northern-forest2" x="4960" y="3104" width="32" height="32">
    <properties>
     <property name="age" value="2.2"/>
     <property name="view" value="east"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4832" y="2848" width="32" height="32">
+  <object name="northern-forest1" x="4832" y="2848" width="32" height="32">
    <properties>
     <property name="age" value="2.2"/>
     <property name="view" value="north"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="5120" y="3232" width="32" height="32">
+  <object name="northern-forest1" x="5120" y="3232" width="32" height="32">
    <properties>
     <property name="age" value="2.2"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4992" y="3008" width="32" height="32">
+  <object name="northern-forest1" x="4992" y="3008" width="32" height="32">
    <properties>
     <property name="age" value="0.4"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4736" y="3008" width="32" height="32">
+  <object name="northern-forest1" x="4736" y="3008" width="32" height="32">
    <properties>
     <property name="age" value="3.7"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="4864" y="3040" width="32" height="32">
+  <object name="northern-forest2" x="4864" y="3040" width="32" height="32">
    <properties>
     <property name="age" value="2.2"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="5152" y="3136" width="32" height="32">
+  <object name="northern-forest1" x="5152" y="3136" width="32" height="32">
    <properties>
     <property name="age" value="3.7"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4960" y="2720" width="32" height="32">
+  <object name="northern-forest1" x="4960" y="2720" width="32" height="32">
    <properties>
     <property name="age" value="0.4"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="4992" y="3168" width="32" height="32">
+  <object name="northern-forest2" x="4992" y="3168" width="32" height="32">
    <properties>
     <property name="age" value="4"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="5152" y="3200" width="32" height="32">
+  <object name="northern-forest1" x="5152" y="3200" width="32" height="32">
    <properties>
     <property name="age" value="1.4"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="5152" y="3264" width="32" height="32">
+  <object name="northern-forest1" x="5152" y="3264" width="32" height="32">
    <properties>
     <property name="age" value="4"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="4992" y="3072" width="32" height="32">
+  <object name="northern-forest2" x="4992" y="3072" width="32" height="32">
    <properties>
     <property name="age" value="2.2"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="5088" y="3264" width="32" height="32">
+  <object name="northern-forest1" x="5088" y="3264" width="32" height="32">
    <properties>
     <property name="age" value="2.2"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4352" y="3136" width="32" height="32">
+  <object name="northern-forest1" x="4352" y="3136" width="32" height="32">
    <properties>
     <property name="age" value="2.2"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="5216" y="3392" width="32" height="32">
+  <object name="northern-forest1" x="5216" y="3392" width="32" height="32">
    <properties>
     <property name="age" value="0.4"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="4704" y="2720" width="32" height="32">
+  <object name="northern-forest2" x="4704" y="2720" width="32" height="32">
    <properties>
     <property name="age" value="0.4"/>
     <property name="view" value="north"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="5024" y="3008" width="32" height="32">
+  <object name="northern-forest1" x="5024" y="3008" width="32" height="32">
    <properties>
     <property name="age" value="1.4"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4800" y="3040" width="32" height="32">
+  <object name="northern-forest1" x="4800" y="3040" width="32" height="32">
    <properties>
     <property name="age" value="0.4"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="4640" y="2752" width="32" height="32">
+  <object name="northern-forest2" x="4640" y="2752" width="32" height="32">
    <properties>
     <property name="age" value="1.4"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="5024" y="3232" width="32" height="32">
+  <object name="northern-forest1" x="5024" y="3232" width="32" height="32">
    <properties>
     <property name="age" value="0.4"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4608" y="2720" width="32" height="32">
+  <object name="northern-forest1" x="4608" y="2720" width="32" height="32">
    <properties>
     <property name="age" value="2.2"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4768" y="3040" width="32" height="32">
+  <object name="northern-forest1" x="4768" y="3040" width="32" height="32">
    <properties>
     <property name="age" value="0.4"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="4800" y="2880" width="32" height="32">
+  <object name="northern-forest2" x="4800" y="2880" width="32" height="32">
    <properties>
     <property name="age" value="1.4"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4608" y="2880" width="32" height="32">
+  <object name="northern-forest1" x="4608" y="2880" width="32" height="32">
    <properties>
     <property name="age" value="1.4"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4800" y="2592" width="32" height="32">
+  <object name="northern-forest1" x="4800" y="2592" width="32" height="32">
    <properties>
     <property name="age" value="2.2"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4640" y="2848" width="32" height="32">
+  <object name="northern-forest1" x="4640" y="2848" width="32" height="32">
    <properties>
     <property name="age" value="2.2"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="4576" y="2816" width="32" height="32">
+  <object name="northern-forest2" x="4576" y="2816" width="32" height="32">
    <properties>
     <property name="age" value="4"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4864" y="2816" width="32" height="32">
+  <object name="northern-forest1" x="4864" y="2816" width="32" height="32">
    <properties>
     <property name="age" value="0.4"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="4800" y="2912" width="32" height="32">
+  <object name="northern-forest2" x="4800" y="2912" width="32" height="32">
    <properties>
     <property name="age" value="3.7"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="5120" y="3072" width="32" height="32">
+  <object name="northern-forest2" x="5120" y="3072" width="32" height="32">
    <properties>
     <property name="age" value="1.4"/>
     <property name="view" value="east"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="4736" y="2976" width="32" height="32">
+  <object name="northern-forest2" x="4736" y="2976" width="32" height="32">
    <properties>
     <property name="age" value="4"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="5152" y="3104" width="32" height="32">
+  <object name="northern-forest1" x="5152" y="3104" width="32" height="32">
    <properties>
     <property name="age" value="1.4"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4800" y="3072" width="32" height="32">
+  <object name="northern-forest1" x="4800" y="3072" width="32" height="32">
    <properties>
     <property name="age" value="4"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="5184" y="3136" width="32" height="32">
+  <object name="northern-forest2" x="5184" y="3136" width="32" height="32">
    <properties>
     <property name="age" value="4"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4768" y="2944" width="32" height="32">
+  <object name="northern-forest1" x="4768" y="2944" width="32" height="32">
    <properties>
     <property name="age" value="0.4"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4832" y="2976" width="32" height="32">
+  <object name="northern-forest1" x="4832" y="2976" width="32" height="32">
    <properties>
     <property name="age" value="3.7"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="4672" y="2848" width="32" height="32">
+  <object name="northern-forest2" x="4672" y="2848" width="32" height="32">
    <properties>
     <property name="age" value="3.7"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4960" y="2976" width="32" height="32">
+  <object name="northern-forest1" x="4960" y="2976" width="32" height="32">
    <properties>
     <property name="age" value="0.4"/>
     <property name="view" value="west"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="5056" y="3104" width="32" height="32">
+  <object name="northern-forest1" x="5056" y="3104" width="32" height="32">
    <properties>
     <property name="age" value="3.7"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4384" y="2912" width="32" height="32">
+  <object name="northern-forest1" x="4384" y="2912" width="32" height="32">
    <properties>
     <property name="age" value="1.4"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="4704" y="2944" width="32" height="32">
+  <object name="northern-forest2" x="4704" y="2944" width="32" height="32">
    <properties>
     <property name="age" value="4"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4736" y="3072" width="32" height="32">
+  <object name="northern-forest1" x="4736" y="3072" width="32" height="32">
    <properties>
     <property name="age" value="0.4"/>
     <property name="view" value="west"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4768" y="2752" width="32" height="32">
+  <object name="northern-forest1" x="4768" y="2752" width="32" height="32">
    <properties>
     <property name="age" value="1.4"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="4640" y="2816" width="32" height="32">
+  <object name="northern-forest2" x="4640" y="2816" width="32" height="32">
    <properties>
     <property name="age" value="3.7"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4864" y="2688" width="32" height="32">
+  <object name="northern-forest1" x="4864" y="2688" width="32" height="32">
    <properties>
     <property name="age" value="3.7"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4768" y="3008" width="32" height="32">
+  <object name="northern-forest1" x="4768" y="3008" width="32" height="32">
    <properties>
     <property name="age" value="1.4"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4960" y="2848" width="32" height="32">
+  <object name="northern-forest1" x="4960" y="2848" width="32" height="32">
    <properties>
     <property name="age" value="4"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="4928" y="2784" width="32" height="32">
+  <object name="northern-forest2" x="4928" y="2784" width="32" height="32">
    <properties>
     <property name="age" value="0.4"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="5024" y="2880" width="32" height="32">
+  <object name="northern-forest2" x="5024" y="2880" width="32" height="32">
    <properties>
     <property name="age" value="2.2"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4864" y="3008" width="32" height="32">
+  <object name="northern-forest1" x="4864" y="3008" width="32" height="32">
    <properties>
     <property name="age" value="0.4"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4384" y="3104" width="32" height="32">
+  <object name="northern-forest1" x="4384" y="3104" width="32" height="32">
    <properties>
     <property name="age" value="2.2"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="4832" y="3008" width="32" height="32">
+  <object name="northern-forest2" x="4832" y="3008" width="32" height="32">
    <properties>
     <property name="age" value="2.2"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="5056" y="3168" width="32" height="32">
+  <object name="northern-forest2" x="5056" y="3168" width="32" height="32">
    <properties>
     <property name="age" value="0.4"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="4992" y="2784" width="32" height="32">
+  <object name="northern-forest2" x="4992" y="2784" width="32" height="32">
    <properties>
     <property name="age" value="0.4"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4896" y="3200" width="32" height="32">
+  <object name="northern-forest1" x="4896" y="3200" width="32" height="32">
    <properties>
     <property name="age" value="0.4"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4576" y="2880" width="32" height="32">
+  <object name="northern-forest1" x="4576" y="2880" width="32" height="32">
    <properties>
     <property name="age" value="3.7"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="4864" y="2720" width="32" height="32">
+  <object name="northern-forest2" x="4864" y="2720" width="32" height="32">
    <properties>
     <property name="age" value="3.7"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4928" y="2944" width="32" height="32">
+  <object name="northern-forest1" x="4928" y="2944" width="32" height="32">
    <properties>
     <property name="age" value="1.4"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4736" y="2688" width="32" height="32">
+  <object name="northern-forest1" x="4736" y="2688" width="32" height="32">
    <properties>
     <property name="age" value="3.7"/>
     <property name="view" value="north"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4800" y="2976" width="32" height="32">
+  <object name="northern-forest1" x="4800" y="2976" width="32" height="32">
    <properties>
     <property name="age" value="2.2"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="4768" y="2624" width="32" height="32">
+  <object name="northern-forest2" x="4768" y="2624" width="32" height="32">
    <properties>
     <property name="age" value="1.4"/>
     <property name="view" value="north"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4832" y="3040" width="32" height="32">
+  <object name="northern-forest1" x="4832" y="3040" width="32" height="32">
    <properties>
     <property name="age" value="4"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4864" y="2784" width="32" height="32">
+  <object name="northern-forest1" x="4864" y="2784" width="32" height="32">
    <properties>
     <property name="age" value="0.4"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="5024" y="2848" width="32" height="32">
+  <object name="northern-forest2" x="5024" y="2848" width="32" height="32">
    <properties>
     <property name="age" value="3.7"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="4672" y="3008" width="32" height="32">
+  <object name="northern-forest2" x="4672" y="3008" width="32" height="32">
    <properties>
     <property name="age" value="3.7"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4544" y="2912" width="32" height="32">
+  <object name="northern-forest1" x="4544" y="2912" width="32" height="32">
    <properties>
     <property name="age" value="1.4"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4608" y="3008" width="32" height="32">
+  <object name="northern-forest1" x="4608" y="3008" width="32" height="32">
    <properties>
     <property name="age" value="3.7"/>
     <property name="view" value="east"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="4736" y="2912" width="32" height="32">
+  <object name="northern-forest2" x="4736" y="2912" width="32" height="32">
    <properties>
     <property name="age" value="2.2"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="4672" y="2688" width="32" height="32">
+  <object name="northern-forest2" x="4672" y="2688" width="32" height="32">
    <properties>
     <property name="age" value="0.4"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4896" y="2752" width="32" height="32">
+  <object name="northern-forest1" x="4896" y="2752" width="32" height="32">
    <properties>
     <property name="age" value="3.7"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4928" y="2880" width="32" height="32">
+  <object name="northern-forest1" x="4928" y="2880" width="32" height="32">
    <properties>
     <property name="age" value="1.4"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="4608" y="2816" width="32" height="32">
+  <object name="northern-forest2" x="4608" y="2816" width="32" height="32">
    <properties>
     <property name="age" value="0.4"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="5056" y="3264" width="32" height="32">
+  <object name="northern-forest2" x="5056" y="3264" width="32" height="32">
    <properties>
     <property name="age" value="4"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="5088" y="3008" width="32" height="32">
+  <object name="northern-forest1" x="5088" y="3008" width="32" height="32">
    <properties>
     <property name="age" value="0.4"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4384" y="2976" width="32" height="32">
+  <object name="northern-forest1" x="4384" y="2976" width="32" height="32">
    <properties>
     <property name="age" value="1.4"/>
     <property name="view" value="east"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="4928" y="2752" width="32" height="32">
+  <object name="northern-forest2" x="4928" y="2752" width="32" height="32">
    <properties>
     <property name="age" value="3.7"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="4832" y="2656" width="32" height="32">
+  <object name="northern-forest2" x="4832" y="2656" width="32" height="32">
    <properties>
     <property name="age" value="0.4"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4544" y="2848" width="32" height="32">
+  <object name="northern-forest1" x="4544" y="2848" width="32" height="32">
    <properties>
     <property name="age" value="1.4"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4928" y="3072" width="32" height="32">
+  <object name="northern-forest1" x="4928" y="3072" width="32" height="32">
    <properties>
     <property name="age" value="4"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="4736" y="3040" width="32" height="32">
+  <object name="northern-forest2" x="4736" y="3040" width="32" height="32">
    <properties>
     <property name="age" value="2.2"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="4768" y="2976" width="32" height="32">
+  <object name="northern-forest2" x="4768" y="2976" width="32" height="32">
    <properties>
     <property name="age" value="3.7"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4704" y="3040" width="32" height="32">
+  <object name="northern-forest1" x="4704" y="3040" width="32" height="32">
    <properties>
     <property name="age" value="1.4"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4704" y="2816" width="32" height="32">
+  <object name="northern-forest1" x="4704" y="2816" width="32" height="32">
    <properties>
     <property name="age" value="2.2"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="4576" y="2752" width="32" height="32">
+  <object name="northern-forest2" x="4576" y="2752" width="32" height="32">
    <properties>
     <property name="age" value="1.4"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="5088" y="3200" width="32" height="32">
+  <object name="northern-forest2" x="5088" y="3200" width="32" height="32">
    <properties>
     <property name="age" value="4"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="5088" y="3136" width="32" height="32">
+  <object name="northern-forest1" x="5088" y="3136" width="32" height="32">
    <properties>
     <property name="age" value="2.2"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="5120" y="3296" width="32" height="32">
+  <object name="northern-forest1" x="5120" y="3296" width="32" height="32">
    <properties>
     <property name="age" value="1.4"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="4480" y="2912" width="32" height="32">
+  <object name="northern-forest2" x="4480" y="2912" width="32" height="32">
    <properties>
     <property name="age" value="2.2"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="5088" y="3104" width="32" height="32">
+  <object name="northern-forest1" x="5088" y="3104" width="32" height="32">
    <properties>
     <property name="age" value="1.4"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="5152" y="3008" width="32" height="32">
+  <object name="northern-forest1" x="5152" y="3008" width="32" height="32">
    <properties>
     <property name="age" value="2.2"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="4928" y="3168" width="32" height="32">
+  <object name="northern-forest2" x="4928" y="3168" width="32" height="32">
    <properties>
     <property name="age" value="4"/>
     <property name="view" value="east"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4704" y="2848" width="32" height="32">
+  <object name="northern-forest1" x="4704" y="2848" width="32" height="32">
    <properties>
     <property name="age" value="3.7"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4672" y="2976" width="32" height="32">
+  <object name="northern-forest1" x="4672" y="2976" width="32" height="32">
    <properties>
     <property name="age" value="1.4"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="4896" y="2816" width="32" height="32">
+  <object name="northern-forest2" x="4896" y="2816" width="32" height="32">
    <properties>
     <property name="age" value="4"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="4608" y="2752" width="32" height="32">
+  <object name="northern-forest2" x="4608" y="2752" width="32" height="32">
    <properties>
     <property name="age" value="0.4"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4512" y="2976" width="32" height="32">
+  <object name="northern-forest1" x="4512" y="2976" width="32" height="32">
    <properties>
     <property name="age" value="4"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="5248" y="3168" width="32" height="32">
+  <object name="northern-forest2" x="5248" y="3168" width="32" height="32">
    <properties>
     <property name="age" value="1.4"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="5248" y="3328" width="32" height="32">
+  <object name="northern-forest2" x="5248" y="3328" width="32" height="32">
    <properties>
     <property name="age" value="4"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="5216" y="3072" width="32" height="32">
+  <object name="northern-forest1" x="5216" y="3072" width="32" height="32">
    <properties>
     <property name="age" value="1.4"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="5248" y="3264" width="32" height="32">
+  <object name="northern-forest1" x="5248" y="3264" width="32" height="32">
    <properties>
     <property name="age" value="4"/>
     <property name="view" value="east"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="5280" y="3168" width="32" height="32">
+  <object name="northern-forest2" x="5280" y="3168" width="32" height="32">
    <properties>
     <property name="age" value="3.7"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="5312" y="3264" width="32" height="32">
+  <object name="northern-forest2" x="5312" y="3264" width="32" height="32">
    <properties>
     <property name="age" value="4"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="5120" y="2944" width="32" height="32">
+  <object name="northern-forest1" x="5120" y="2944" width="32" height="32">
    <properties>
     <property name="age" value="3.7"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="5184" y="3200" width="32" height="32">
+  <object name="northern-forest1" x="5184" y="3200" width="32" height="32">
    <properties>
     <property name="age" value="3.7"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="4928" y="3008" width="32" height="32">
+  <object name="northern-forest1" x="4928" y="3008" width="32" height="32">
    <properties>
     <property name="age" value="4"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="4832" y="2944" width="32" height="32">
+  <object name="northern-forest2" x="4832" y="2944" width="32" height="32">
    <properties>
     <property name="age" value="4"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="5280" y="2976" width="32" height="32">
+  <object name="northern-forest1" x="5280" y="2976" width="32" height="32">
    <properties>
     <property name="age" value="4"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="5312" y="3040" width="32" height="32">
+  <object name="northern-forest1" x="5312" y="3040" width="32" height="32">
    <properties>
     <property name="age" value="3.7"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="5280" y="2912" width="32" height="32">
+  <object name="northern-forest1" x="5280" y="2912" width="32" height="32">
    <properties>
     <property name="age" value="3.7"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="5312" y="2880" width="32" height="32">
+  <object name="northern-forest2" x="5312" y="2880" width="32" height="32">
    <properties>
     <property name="age" value="2.2"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="5376" y="3008" width="32" height="32">
+  <object name="northern-forest1" x="5376" y="3008" width="32" height="32">
    <properties>
     <property name="age" value="0.4"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="5312" y="2784" width="32" height="32">
+  <object name="northern-forest1" x="5312" y="2784" width="32" height="32">
    <properties>
     <property name="age" value="3.7"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="5376" y="2944" width="32" height="32">
+  <object name="northern-forest2" x="5376" y="2944" width="32" height="32">
    <properties>
     <property name="age" value="0.4"/>
     <property name="view" value="north"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="5248" y="2912" width="32" height="32">
+  <object name="northern-forest1" x="5248" y="2912" width="32" height="32">
    <properties>
     <property name="age" value="2.2"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="5216" y="2848" width="32" height="32">
+  <object name="northern-forest1" x="5216" y="2848" width="32" height="32">
    <properties>
     <property name="age" value="3.7"/>
     <property name="view" value="west"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="5312" y="2944" width="32" height="32">
+  <object name="northern-forest2" x="5312" y="2944" width="32" height="32">
    <properties>
     <property name="age" value="2.2"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="5376" y="2848" width="32" height="32">
+  <object name="northern-forest1" x="5376" y="2848" width="32" height="32">
    <properties>
     <property name="age" value="2.2"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="5408" y="3040" width="32" height="32">
+  <object name="northern-forest1" x="5408" y="3040" width="32" height="32">
    <properties>
     <property name="age" value="0.4"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="5120" y="2816" width="32" height="32">
+  <object name="northern-forest2" x="5120" y="2816" width="32" height="32">
    <properties>
     <property name="age" value="2.2"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="5184" y="2752" width="32" height="32">
+  <object name="northern-forest2" x="5184" y="2752" width="32" height="32">
    <properties>
     <property name="age" value="1.4"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="5376" y="3072" width="32" height="32">
+  <object name="northern-forest1" x="5376" y="3072" width="32" height="32">
    <properties>
     <property name="age" value="2.2"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="5344" y="3008" width="32" height="32">
+  <object name="northern-forest1" x="5344" y="3008" width="32" height="32">
    <properties>
     <property name="age" value="1.4"/>
     <property name="view" value="north"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="5248" y="3008" width="32" height="32">
+  <object name="northern-forest1" x="5248" y="3008" width="32" height="32">
    <properties>
     <property name="age" value="0.4"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="5152" y="2880" width="32" height="32">
+  <object name="northern-forest2" x="5152" y="2880" width="32" height="32">
    <properties>
     <property name="age" value="4"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="5280" y="2944" width="32" height="32">
+  <object name="northern-forest1" x="5280" y="2944" width="32" height="32">
    <properties>
     <property name="age" value="1.4"/>
     <property name="view" value="north"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="5216" y="2912" width="32" height="32">
+  <object name="northern-forest1" x="5216" y="2912" width="32" height="32">
    <properties>
     <property name="age" value="4"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="5248" y="2976" width="32" height="32">
+  <object name="northern-forest1" x="5248" y="2976" width="32" height="32">
    <properties>
     <property name="age" value="3.7"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="5184" y="2816" width="32" height="32">
+  <object name="northern-forest2" x="5184" y="2816" width="32" height="32">
    <properties>
     <property name="age" value="1.4"/>
     <property name="view" value="north"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="5120" y="2784" width="32" height="32">
+  <object name="northern-forest1" x="5120" y="2784" width="32" height="32">
    <properties>
     <property name="age" value="4"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="5152" y="2848" width="32" height="32">
+  <object name="northern-forest1" x="5152" y="2848" width="32" height="32">
    <properties>
     <property name="age" value="3.7"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="5088" y="2880" width="32" height="32">
+  <object name="northern-forest2" x="5088" y="2880" width="32" height="32">
    <properties>
     <property name="age" value="0.4"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="5152" y="2912" width="32" height="32">
+  <object name="northern-forest2" x="5152" y="2912" width="32" height="32">
    <properties>
     <property name="age" value="3.7"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="5088" y="2848" width="32" height="32">
+  <object name="northern-forest1" x="5088" y="2848" width="32" height="32">
    <properties>
     <property name="age" value="3.7"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="5248" y="3040" width="32" height="32">
+  <object name="northern-forest1" x="5248" y="3040" width="32" height="32">
    <properties>
     <property name="age" value="1.4"/>
    </properties>
   </object>
-  <object name="northern-forest2" type="harvestable" x="5280" y="3104" width="32" height="32">
+  <object name="northern-forest2" x="5280" y="3104" width="32" height="32">
    <properties>
     <property name="age" value="0.4"/>
    </properties>
   </object>
-  <object name="northern-forest1" type="harvestable" x="5216" y="3040" width="32" height="32">
+  <object name="northern-forest1" x="5216" y="3040" width="32" height="32">
    <properties>
     <property name="age" value="2.2"/>
     <property name="view" value="west"/>
    </properties>
   </object>
-  <object name="farm-road-straight0" type="structure" x="2112" y="1280" width="32" height="32">
+  <object name="farm-road" x="2112" y="1280" width="32" height="32">
+   <properties>
+    <property name="connections" value="0100"/>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object name="sugarcane-plantation" x="2048" y="1280" width="64" height="64">
    <properties>
     <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="sugarcane-plantation" type="building" x="2048" y="1280" width="64" height="64">
-   <properties>
-    <property name="player" value="1"/>
-   </properties>
-  </object>
-  <object name="sugarcane-field" type="harvestable" x="2112" y="1312" width="32" height="32">
+  <object name="sugarcane-field" x="2112" y="1312" width="32" height="32">
    <properties>
     <property name="age" value="1"/>
     <property name="view" value="east"/>
    </properties>
   </object>
-  <object name="sugarcane-field" type="harvestable" x="2048" y="1376" width="32" height="32">
+  <object name="sugarcane-field" x="2048" y="1376" width="32" height="32">
    <properties>
     <property name="age" value="1"/>
     <property name="view" value="east"/>
    </properties>
   </object>
-  <object name="sugarcane-field" type="harvestable" x="2016" y="1248" width="32" height="32">
+  <object name="sugarcane-field" x="2016" y="1248" width="32" height="32">
    <properties>
     <property name="age" value="1"/>
     <property name="view" value="west"/>
    </properties>
   </object>
-  <object name="sugarcane-field" type="harvestable" x="2080" y="1344" width="32" height="32">
+  <object name="sugarcane-field" x="2080" y="1344" width="32" height="32">
    <properties>
     <property name="age" value="2"/>
     <property name="view" value="south"/>
    </properties>
   </object>
-  <object name="sugarcane-field" type="harvestable" x="2048" y="1216" width="32" height="32">
+  <object name="sugarcane-field" x="2048" y="1216" width="32" height="32">
    <properties>
     <property name="age" value="3"/>
     <property name="view" value="south"/>
    </properties>
   </object>
-  <object name="sugarcane-field" type="harvestable" x="2016" y="1312" width="32" height="32">
+  <object name="sugarcane-field" x="2016" y="1312" width="32" height="32">
    <properties>
     <property name="age" value="4"/>
     <property name="view" value="south"/>
    </properties>
   </object>
-  <object name="sugarcane-field" type="harvestable" x="2016" y="1216" width="32" height="32">
+  <object name="sugarcane-field" x="2016" y="1216" width="32" height="32">
    <properties>
     <property name="age" value="4"/>
     <property name="view" value="west"/>
    </properties>
   </object>
-  <object name="sugarcane-field" type="harvestable" x="2080" y="1216" width="32" height="32">
+  <object name="sugarcane-field" x="2080" y="1216" width="32" height="32">
    <properties>
     <property name="age" value="2"/>
     <property name="view" value="south"/>
    </properties>
   </object>
-  <object name="sugarcane-field" type="harvestable" x="2112" y="1344" width="32" height="32">
+  <object name="sugarcane-field" x="2112" y="1344" width="32" height="32">
    <properties>
     <property name="age" value="2"/>
     <property name="view" value="east"/>
    </properties>
   </object>
-  <object name="sugarcane-field" type="harvestable" x="2144" y="1312" width="32" height="32">
+  <object name="sugarcane-field" x="2144" y="1312" width="32" height="32">
    <properties>
     <property name="age" value="1"/>
     <property name="view" value="east"/>
    </properties>
   </object>
-  <object name="sugarcane-field" type="harvestable" x="2016" y="1344" width="32" height="32">
+  <object name="sugarcane-field" x="2016" y="1344" width="32" height="32">
    <properties>
     <property name="age" value="1"/>
     <property name="view" value="south"/>
    </properties>
   </object>
-  <object name="sugarcane-field" type="harvestable" x="1984" y="1280" width="32" height="32">
+  <object name="sugarcane-field" x="1984" y="1280" width="32" height="32">
    <properties>
     <property name="age" value="3"/>
     <property name="view" value="south"/>
    </properties>
   </object>
-  <object name="sugarcane-field" type="harvestable" x="2016" y="1280" width="32" height="32">
+  <object name="sugarcane-field" x="2016" y="1280" width="32" height="32">
    <properties>
     <property name="age" value="3"/>
     <property name="view" value="west"/>
    </properties>
   </object>
-  <object name="sugarcane-field" type="harvestable" x="2080" y="1248" width="32" height="32">
+  <object name="sugarcane-field" x="2080" y="1248" width="32" height="32">
    <properties>
     <property name="age" value="3"/>
     <property name="view" value="west"/>
    </properties>
   </object>
-  <object name="sugarcane-field" type="harvestable" x="2048" y="1248" width="32" height="32">
+  <object name="sugarcane-field" x="2048" y="1248" width="32" height="32">
    <properties>
     <property name="age" value="2"/>
     <property name="view" value="west"/>
    </properties>
   </object>
-  <object name="sugarcane-field" type="harvestable" x="2112" y="1248" width="32" height="32">
+  <object name="sugarcane-field" x="2112" y="1248" width="32" height="32">
    <properties>
     <property name="age" value="4"/>
     <property name="view" value="north"/>
    </properties>
   </object>
-  <object name="sugarcane-field" type="harvestable" x="2048" y="1344" width="32" height="32">
+  <object name="sugarcane-field" x="2048" y="1344" width="32" height="32">
    <properties>
     <property name="age" value="2"/>
     <property name="view" value="north"/>
    </properties>
   </object>
-  <object name="sugarcane-field" type="harvestable" x="2112" y="1376" width="32" height="32">
+  <object name="sugarcane-field" x="2112" y="1376" width="32" height="32">
    <properties>
     <property name="age" value="1"/>
     <property name="view" value="north"/>
    </properties>
   </object>
-  <object name="sugarcane-field" type="harvestable" x="2080" y="1376" width="32" height="32">
+  <object name="sugarcane-field" x="2080" y="1376" width="32" height="32">
    <properties>
     <property name="age" value="2"/>
     <property name="view" value="east"/>
    </properties>
   </object>
-  <object name="sugarcane-field" type="harvestable" x="2016" y="1376" width="32" height="32">
+  <object name="sugarcane-field" x="2016" y="1376" width="32" height="32">
    <properties>
     <property name="age" value="3"/>
     <property name="view" value="east"/>
    </properties>
   </object>
-  <object name="sugarcane-field" type="harvestable" x="1984" y="1248" width="32" height="32">
+  <object name="sugarcane-field" x="1984" y="1248" width="32" height="32">
    <properties>
     <property name="age" value="2"/>
     <property name="view" value="west"/>
    </properties>
   </object>
-  <object name="sugarcane-field" type="harvestable" x="1984" y="1312" width="32" height="32">
+  <object name="sugarcane-field" x="1984" y="1312" width="32" height="32">
    <properties>
     <property name="age" value="3"/>
     <property name="view" value="west"/>
    </properties>
   </object>
-  <object name="sugarcane-field" type="harvestable" x="2144" y="1344" width="32" height="32">
+  <object name="sugarcane-field" x="2144" y="1344" width="32" height="32">
    <properties>
     <property name="age" value="2"/>
     <property name="view" value="east"/>
    </properties>
   </object>
-  <object name="sugarcane-field" type="harvestable" x="1984" y="1344" width="32" height="32">
+  <object name="sugarcane-field" x="1984" y="1344" width="32" height="32">
    <properties>
     <property name="age" value="4"/>
     <property name="view" value="north"/>
    </properties>
   </object>
-  <object name="sugarcane-field" type="harvestable" x="2112" y="1216" width="32" height="32">
+  <object name="sugarcane-field" x="2112" y="1216" width="32" height="32">
    <properties>
     <property name="age" value="4"/>
     <property name="view" value="south"/>
    </properties>
   </object>
-  <object name="tobacco-plantation" type="building" x="2048" y="1056" width="64" height="64">
+  <object name="tobacco-plantation" x="2048" y="1056" width="64" height="64">
    <properties>
     <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="tobacco-field" type="harvestable" x="2112" y="992" width="32" height="32">
+  <object name="tobacco-field" x="2112" y="992" width="32" height="32">
    <properties>
     <property name="age" value="4"/>
     <property name="view" value="south"/>
    </properties>
   </object>
-  <object name="tobacco-field" type="harvestable" x="2016" y="1056" width="32" height="32">
+  <object name="tobacco-field" x="2016" y="1056" width="32" height="32">
    <properties>
     <property name="age" value="3"/>
     <property name="view" value="west"/>
    </properties>
   </object>
-  <object name="tobacco-field" type="harvestable" x="2016" y="1120" width="32" height="32">
+  <object name="tobacco-field" x="2016" y="1120" width="32" height="32">
    <properties>
     <property name="age" value="1"/>
     <property name="view" value="south"/>
    </properties>
   </object>
-  <object name="tobacco-field" type="harvestable" x="2112" y="1120" width="32" height="32">
+  <object name="tobacco-field" x="2112" y="1120" width="32" height="32">
    <properties>
     <property name="age" value="2"/>
     <property name="view" value="east"/>
    </properties>
   </object>
-  <object name="tobacco-field" type="harvestable" x="1984" y="1120" width="32" height="32">
-   <properties>
-    <property name="age" value="4"/>
-    <property name="view" value="north"/>
-   </properties>
-  </object>
-  <object name="tobacco-field" type="harvestable" x="2016" y="992" width="32" height="32">
-   <properties>
-    <property name="age" value="4"/>
-    <property name="view" value="west"/>
-   </properties>
-  </object>
-  <object name="tobacco-field" type="harvestable" x="2048" y="992" width="32" height="32">
-   <properties>
-    <property name="age" value="3"/>
-    <property name="view" value="south"/>
-   </properties>
-  </object>
-  <object name="tobacco-field" type="harvestable" x="2144" y="1120" width="32" height="32">
-   <properties>
-    <property name="age" value="2"/>
-    <property name="view" value="east"/>
-   </properties>
-  </object>
-  <object name="tobacco-field" type="harvestable" x="2016" y="1024" width="32" height="32">
-   <properties>
-    <property name="age" value="1"/>
-    <property name="view" value="west"/>
-   </properties>
-  </object>
-  <object name="tobacco-field" type="harvestable" x="2112" y="1088" width="32" height="32">
-   <properties>
-    <property name="age" value="1"/>
-    <property name="view" value="east"/>
-   </properties>
-  </object>
-  <object name="tobacco-field" type="harvestable" x="1984" y="1088" width="32" height="32">
-   <properties>
-    <property name="age" value="3"/>
-    <property name="view" value="west"/>
-   </properties>
-  </object>
-  <object name="tobacco-field" type="harvestable" x="1984" y="1024" width="32" height="32">
-   <properties>
-    <property name="age" value="2"/>
-    <property name="view" value="west"/>
-   </properties>
-  </object>
-  <object name="tobacco-field" type="harvestable" x="2016" y="1152" width="32" height="32">
-   <properties>
-    <property name="age" value="3"/>
-    <property name="view" value="east"/>
-   </properties>
-  </object>
-  <object name="tobacco-field" type="harvestable" x="2144" y="1056" width="32" height="32">
-   <properties>
-    <property name="age" value="2"/>
-    <property name="view" value="east"/>
-   </properties>
-  </object>
-  <object name="tobacco-field" type="harvestable" x="2080" y="1024" width="32" height="32">
-   <properties>
-    <property name="age" value="3"/>
-    <property name="view" value="west"/>
-   </properties>
-  </object>
-  <object name="tobacco-field" type="harvestable" x="1984" y="1056" width="32" height="32">
-   <properties>
-    <property name="age" value="3"/>
-    <property name="view" value="south"/>
-   </properties>
-  </object>
-  <object name="tobacco-field" type="harvestable" x="2112" y="1152" width="32" height="32">
-   <properties>
-    <property name="age" value="1"/>
-    <property name="view" value="north"/>
-   </properties>
-  </object>
-  <object name="tobacco-field" type="harvestable" x="2144" y="1088" width="32" height="32">
-   <properties>
-    <property name="age" value="1"/>
-    <property name="view" value="east"/>
-   </properties>
-  </object>
-  <object name="tobacco-field" type="harvestable" x="2080" y="992" width="32" height="32">
-   <properties>
-    <property name="age" value="2"/>
-    <property name="view" value="south"/>
-   </properties>
-  </object>
-  <object name="tobacco-field" type="harvestable" x="2016" y="1088" width="32" height="32">
-   <properties>
-    <property name="age" value="4"/>
-    <property name="view" value="south"/>
-   </properties>
-  </object>
-  <object name="tobacco-field" type="harvestable" x="2144" y="1024" width="32" height="32">
-   <properties>
-    <property name="age" value="2"/>
-    <property name="view" value="south"/>
-   </properties>
-  </object>
-  <object name="tobacco-field" type="harvestable" x="2048" y="1120" width="32" height="32">
-   <properties>
-    <property name="age" value="2"/>
-    <property name="view" value="north"/>
-   </properties>
-  </object>
-  <object name="tobacco-field" type="harvestable" x="2048" y="1152" width="32" height="32">
-   <properties>
-    <property name="age" value="1"/>
-    <property name="view" value="east"/>
-   </properties>
-  </object>
-  <object name="tobacco-field" type="harvestable" x="2112" y="1024" width="32" height="32">
+  <object name="tobacco-field" x="1984" y="1120" width="32" height="32">
    <properties>
     <property name="age" value="4"/>
     <property name="view" value="north"/>
    </properties>
   </object>
-  <object name="tobacco-field" type="harvestable" x="2112" y="1056" width="32" height="32">
+  <object name="tobacco-field" x="2016" y="992" width="32" height="32">
    <properties>
-    <property name="age" value="3"/>
-    <property name="player" value="1"/>
+    <property name="age" value="4"/>
+    <property name="view" value="west"/>
    </properties>
   </object>
-  <object name="tobacco-field" type="harvestable" x="2048" y="1024" width="32" height="32">
+  <object name="tobacco-field" x="2048" y="992" width="32" height="32">
+   <properties>
+    <property name="age" value="3"/>
+    <property name="view" value="south"/>
+   </properties>
+  </object>
+  <object name="tobacco-field" x="2144" y="1120" width="32" height="32">
+   <properties>
+    <property name="age" value="2"/>
+    <property name="view" value="east"/>
+   </properties>
+  </object>
+  <object name="tobacco-field" x="2016" y="1024" width="32" height="32">
+   <properties>
+    <property name="age" value="1"/>
+    <property name="view" value="west"/>
+   </properties>
+  </object>
+  <object name="tobacco-field" x="2112" y="1088" width="32" height="32">
+   <properties>
+    <property name="age" value="1"/>
+    <property name="view" value="east"/>
+   </properties>
+  </object>
+  <object name="tobacco-field" x="1984" y="1088" width="32" height="32">
+   <properties>
+    <property name="age" value="3"/>
+    <property name="view" value="west"/>
+   </properties>
+  </object>
+  <object name="tobacco-field" x="1984" y="1024" width="32" height="32">
    <properties>
     <property name="age" value="2"/>
     <property name="view" value="west"/>
    </properties>
   </object>
-  <object name="farm-road-straight90" type="structure" x="2080" y="1120" width="32" height="32">
+  <object name="tobacco-field" x="2016" y="1152" width="32" height="32">
    <properties>
+    <property name="age" value="3"/>
+    <property name="view" value="east"/>
+   </properties>
+  </object>
+  <object name="tobacco-field" x="2144" y="1056" width="32" height="32">
+   <properties>
+    <property name="age" value="2"/>
+    <property name="view" value="east"/>
+   </properties>
+  </object>
+  <object name="tobacco-field" x="2080" y="1024" width="32" height="32">
+   <properties>
+    <property name="age" value="3"/>
+    <property name="view" value="west"/>
+   </properties>
+  </object>
+  <object name="tobacco-field" x="1984" y="1056" width="32" height="32">
+   <properties>
+    <property name="age" value="3"/>
+    <property name="view" value="south"/>
+   </properties>
+  </object>
+  <object name="tobacco-field" x="2112" y="1152" width="32" height="32">
+   <properties>
+    <property name="age" value="1"/>
+    <property name="view" value="north"/>
+   </properties>
+  </object>
+  <object name="tobacco-field" x="2144" y="1088" width="32" height="32">
+   <properties>
+    <property name="age" value="1"/>
+    <property name="view" value="east"/>
+   </properties>
+  </object>
+  <object name="tobacco-field" x="2080" y="992" width="32" height="32">
+   <properties>
+    <property name="age" value="2"/>
+    <property name="view" value="south"/>
+   </properties>
+  </object>
+  <object name="tobacco-field" x="2016" y="1088" width="32" height="32">
+   <properties>
+    <property name="age" value="4"/>
+    <property name="view" value="south"/>
+   </properties>
+  </object>
+  <object name="tobacco-field" x="2144" y="1024" width="32" height="32">
+   <properties>
+    <property name="age" value="2"/>
+    <property name="view" value="south"/>
+   </properties>
+  </object>
+  <object name="tobacco-field" x="2048" y="1120" width="32" height="32">
+   <properties>
+    <property name="age" value="2"/>
+    <property name="view" value="north"/>
+   </properties>
+  </object>
+  <object name="tobacco-field" x="2048" y="1152" width="32" height="32">
+   <properties>
+    <property name="age" value="1"/>
+    <property name="view" value="east"/>
+   </properties>
+  </object>
+  <object name="tobacco-field" x="2112" y="1024" width="32" height="32">
+   <properties>
+    <property name="age" value="4"/>
+    <property name="view" value="north"/>
+   </properties>
+  </object>
+  <object name="tobacco-field" x="2112" y="1056" width="32" height="32">
+   <properties>
+    <property name="age" value="3"/>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object name="tobacco-field" x="2048" y="1024" width="32" height="32">
+   <properties>
+    <property name="age" value="2"/>
+    <property name="view" value="west"/>
+   </properties>
+  </object>
+  <object name="farm-road" x="2080" y="1120" width="32" height="32">
+   <properties>
+    <property name="connections" value="0010"/>
     <property name="player" value="1"/>
     <property name="view" value="north"/>
    </properties>
   </object>
-  <object name="farm-road-straight90" type="structure" x="2080" y="1152" width="32" height="32">
+  <object name="farm-road" x="2080" y="1152" width="32" height="32">
+   <properties>
+    <property name="connections" value="1010"/>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object name="cobbled-street" x="1440" y="864" width="32" height="32">
+   <properties>
+    <property name="connections" value="0101"/>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object name="cobbled-street" x="1408" y="864" width="32" height="32">
+   <properties>
+    <property name="connections" value="0101"/>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object name="cobbled-street" x="1376" y="864" width="32" height="32">
+   <properties>
+    <property name="connections" value="0101"/>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object name="cobbled-street" x="1344" y="864" width="32" height="32">
+   <properties>
+    <property name="connections" value="0101"/>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object name="cobbled-street" x="1312" y="864" width="32" height="32">
+   <properties>
+    <property name="connections" value="0101"/>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object name="cobbled-street" x="1280" y="864" width="32" height="32">
+   <properties>
+    <property name="connections" value="0100"/>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object name="pier" x="1344" y="768" width="32" height="32">
    <properties>
     <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="cobbled-street-straight0" type="structure" x="1440" y="864" width="32" height="32">
+  <object name="pier" x="1312" y="768" width="32" height="32">
    <properties>
     <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="cobbled-street-straight0" type="structure" x="1408" y="864" width="32" height="32">
+  <object name="pier" x="1280" y="768" width="32" height="32">
    <properties>
     <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="cobbled-street-straight0" type="structure" x="1376" y="864" width="32" height="32">
-   <properties>
-    <property name="player" value="1"/>
-   </properties>
-  </object>
-  <object name="cobbled-street-straight0" type="structure" x="1344" y="864" width="32" height="32">
-   <properties>
-    <property name="player" value="1"/>
-   </properties>
-  </object>
-  <object name="cobbled-street-straight0" type="structure" x="1312" y="864" width="32" height="32">
-   <properties>
-    <property name="player" value="1"/>
-   </properties>
-  </object>
-  <object name="cobbled-street-straight0" type="structure" x="1280" y="864" width="32" height="32">
-   <properties>
-    <property name="player" value="1"/>
-   </properties>
-  </object>
-  <object name="pier" type="structure" x="1344" y="768" width="32" height="32">
-   <properties>
-    <property name="player" value="1"/>
-   </properties>
-  </object>
-  <object name="pier" type="structure" x="1312" y="768" width="32" height="32">
-   <properties>
-    <property name="player" value="1"/>
-   </properties>
-  </object>
-  <object name="pier" type="structure" x="1280" y="768" width="32" height="32">
-   <properties>
-    <property name="player" value="1"/>
-   </properties>
-  </object>
-  <object name="pier" type="structure" x="4192" y="3008" width="32" height="32">
+  <object name="pier" x="4192" y="3008" width="32" height="32">
    <properties>
     <property name="player" value="4"/>
    </properties>
   </object>
-  <object name="pier" type="structure" x="4192" y="3040" width="32" height="32">
+  <object name="pier" x="4192" y="3040" width="32" height="32">
    <properties>
     <property name="player" value="4"/>
    </properties>
   </object>
-  <object name="pier" type="structure" x="4192" y="3072" width="32" height="32">
+  <object name="pier" x="4192" y="3072" width="32" height="32">
    <properties>
     <property name="player" value="4"/>
    </properties>
   </object>
-  <object name="pier" type="structure" x="6464" y="2720" width="32" height="32">
+  <object name="pier" x="6464" y="2720" width="32" height="32">
    <properties>
     <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="pier" type="structure" x="6464" y="2784" width="32" height="32">
+  <object name="pier" x="6464" y="2784" width="32" height="32">
    <properties>
     <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="pier" type="structure" x="6464" y="2752" width="32" height="32">
+  <object name="pier" x="6464" y="2752" width="32" height="32">
    <properties>
     <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="pier" type="structure" x="7456" y="6688" width="32" height="32">
+  <object name="pier" x="7456" y="6688" width="32" height="32">
    <properties>
     <property name="player" value="2"/>
    </properties>
   </object>
-  <object name="pier" type="structure" x="7488" y="6688" width="32" height="32">
+  <object name="pier" x="7488" y="6688" width="32" height="32">
    <properties>
     <property name="player" value="2"/>
    </properties>
   </object>
-  <object name="pier" type="structure" x="7521" y="6688" width="32" height="32">
+  <object name="pier" x="7521" y="6688" width="32" height="32">
    <properties>
     <property name="player" value="2"/>
    </properties>
   </object>
-  <object name="pier" type="structure" x="1632" y="6688" width="32" height="32">
+  <object name="pier" x="1632" y="6688" width="32" height="32">
    <properties>
     <property name="player" value="3"/>
    </properties>
   </object>
-  <object name="pier" type="structure" x="1696" y="6688" width="32" height="32">
+  <object name="pier" x="1696" y="6688" width="32" height="32">
    <properties>
     <property name="player" value="3"/>
    </properties>
   </object>
-  <object name="pier" type="structure" x="1664" y="6688" width="32" height="32">
+  <object name="pier" x="1664" y="6688" width="32" height="32">
    <properties>
     <property name="player" value="3"/>
    </properties>

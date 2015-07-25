@@ -39,22 +39,22 @@
   </object>
  </objectgroup>
  <objectgroup name="map-objects" width="150" height="150">
-  <object name="marketplace" type="building" x="1120" y="768" width="128" height="96">
+  <object name="marketplace" x="1120" y="768" width="128" height="96">
    <properties>
     <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="marketplace" type="building" x="960" y="1280" width="128" height="96">
+  <object name="marketplace" x="960" y="1280" width="128" height="96">
    <properties>
     <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="office1" type="building" x="896" y="576" width="96" height="64">
+  <object name="office1" x="896" y="576" width="96" height="64">
    <properties>
     <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="marketplace" type="building" x="1536" y="1856" width="128" height="96">
+  <object name="marketplace" x="1536" y="1856" width="128" height="96">
    <properties>
     <property name="player" value="1"/>
    </properties>

@@ -21,8 +21,8 @@ std::string toString(double x) {
     return std::to_string(x);
 }
 
-int stringToInteger(std::string s) {
-    return std::stoi(s);
+int stringToInteger(std::string s, int base) {
+    return std::stoi(s, 0, base);
 }
 
 unsigned long stringToUnsignedLong(std::string s) {
@@ -35,6 +35,7 @@ double stringToDouble(std::string s) {
 #endif
 
 #ifdef WINDOWS
+#include <cassert>
 #include <cstdio>
 
 std::string toString(unsigned int x) {
@@ -67,7 +68,9 @@ std::string toString(double x) {
     return std::string(buffer);
 }
 
-int stringToInteger(std::string s) {
+int stringToInteger(std::string s, int base) {
+    assert(base == 10); // TODO unter Windows ausprobieren, wie man eine andere Basis hinkriegt
+
     int x;
     sscanf(s.c_str(), "%d", &x);
     return x;

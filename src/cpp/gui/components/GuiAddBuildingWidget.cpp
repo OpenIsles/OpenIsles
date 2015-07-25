@@ -6,6 +6,7 @@
 #include "graphics/mgr/IFontMgr.h"
 #include "gui/GuiMgr.h"
 #include "gui/components/GuiAddBuildingWidget.h"
+#include "map/Street.h"
 #include "utils/Color.h"
 #include "utils/StringFormat.h"
 
@@ -35,14 +36,20 @@ void GuiAddBuildingWidget::renderElement(IRenderer* renderer) {
     const std::string graphicsSetName = context->graphicsMgr->getGraphicSetNameForMapObject(mapObjectType);
     const GraphicSet* graphicSet = context->graphicsMgr->getGraphicSet(graphicsSetName);
 
+    // TODO duplicate code
     const IGraphic* graphic;
-    if (mapObjectType->type != MapObjectTypeClass::HARVESTABLE) {
-        graphic = graphicSet->getByView(view)->getGraphic();
-    } else {
+    if (mapObjectType->type == MapObjectTypeClass::HARVESTABLE) {
         // Harvestable? ausgewachsenen Zustand nehmen
         unsigned char maxAge = mapObjectType->maxAge;
         const std::string fullgrownState = "growth" + toString(maxAge);
         graphic = graphicSet->getByStateAndView(fullgrownState, view)->getGraphic();
+    }
+    else if (mapObjectType->type == MapObjectTypeClass::STREET) {
+        const std::string state = Street::STATE_NAME_EW;
+        graphic = graphicSet->getByStateAndView(state, view)->getGraphic();
+    }
+    else {
+        graphic = graphicSet->getByView(view)->getGraphic();
     }
 
     double scale; // ggf. verkleinert zeichnen, wenn das Gebäude zu groß is

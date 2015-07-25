@@ -137,7 +137,7 @@ Structure* Game::addStructure(
     }
 
     // Objekt anlegen
-    Structure* structure = (mapObjectType->type == MapObjectTypeClass::BUILDING) ? new Building() : new Structure();
+    Structure* structure = (Structure*) MapObjectFixed::instantiate(mapObjectType);
     structure->setMapCoords(mapCoords);
     structure->setMapWidth(mapWidth);
     structure->setMapHeight(mapHeight);
@@ -185,6 +185,28 @@ Structure* Game::addStructure(
     }
 
     return structure;
+}
+
+Street* Game::addStreet(const MapCoords& mapCoords, const MapObjectType* mapObjectType, const FourthDirection& view,
+                        Player* player, const StreetConnections& streetConnections) {
+
+    assert(mapObjectType->type == MapObjectTypeClass::STREET);
+    assert((mapObjectType->mapWidth == 1) && (mapObjectType->mapHeight == 1)); // Wir gehen davon aus, dass es nur 1x1-Straßen gibt
+
+    // Objekt anlegen
+    Street* street = new Street();
+    street->setMapCoords(mapCoords);
+    street->setMapWidth(1);
+    street->setMapHeight(1);
+    street->setMapObjectType(mapObjectType);
+    street->setPlayer(player);
+    street->setView(view);
+    street->streetConnections = streetConnections;
+
+    // Objekt in die Liste aufnehmen.
+    map->addMapObject(street);
+
+    return street;
 }
 
 void Game::addInhabitantsToBuilding(Building* building, char amount) {

@@ -14,6 +14,7 @@
 #include "map/coords/MapCoords.h"
 #include "map/coords/ScreenCoords.h"
 #include "map/Map.h"
+#include "map/Street.h"
 #include "pathfinding/AStar.h"
 #include "utils/Consts.h"
 #include "utils/Events.h"
@@ -203,6 +204,7 @@ void GuiMap::renderElement(IRenderer* renderer) {
 
             const MapCoords& moMapCoords = mapObjectToDrawHere->getMapCoords();
             const Structure* structure = dynamic_cast<const Structure*>(mapObjectToDrawHere);
+            const Street* street = dynamic_cast<const Street*>(mapObjectToDrawHere);
             const Harvestable* harvestable = dynamic_cast<const Harvestable*>(mapObjectToDrawHere);
 
             // Ausrechnen, welchen Schnibbel der Grafik wir anzeigen müssen
@@ -236,13 +238,18 @@ void GuiMap::renderElement(IRenderer* renderer) {
             const std::string& graphicSetName = context->graphicsMgr->getGraphicSetNameForMapObject(mapObjectType);
             const GraphicSet* mapObjectGraphicSet = context->graphicsMgr->getGraphicSet(graphicSetName);
 
+            // TODO duplicate code
             const IGraphic* graphicToDrawHere;
-            if (structure != nullptr) {
-                graphicToDrawHere = mapObjectGraphicSet->getByView(viewToRender)->getGraphic();
-            }
-            else if (harvestable != nullptr) {
+            if (harvestable != nullptr) {
                 const std::string stateToRender = "growth" + toString(int(harvestable->getAge()));
                 graphicToDrawHere = mapObjectGraphicSet->getByStateAndView(stateToRender, viewToRender)->getGraphic();
+            }
+            else if (street != nullptr) {
+                const std::string stateToRender = street->getStateToRender();
+                graphicToDrawHere = mapObjectGraphicSet->getByStateAndView(stateToRender, viewToRender)->getGraphic();
+            }
+            else if (structure != nullptr) {
+                graphicToDrawHere = mapObjectGraphicSet->getByView(viewToRender)->getGraphic();
             }
             else {
                 assert(false);
@@ -689,14 +696,21 @@ const MapObjectFixed* GuiMap::getMapObjectFixedUnderMouseCoords(int mouseX, int 
         const std::string graphicSetName =
             context->graphicsMgr->getGraphicSetNameForMapObject(mapObjectType);
         const GraphicSet* graphicSet = context->graphicsMgr->getGraphicSet(graphicSetName);
-        
+
+        // TODO duplicate code
         const IGraphic* graphic;
-        if (mapObjectType->type != MapObjectTypeClass::HARVESTABLE) {
-            graphic = graphicSet->getByView(viewToRender)->getGraphic();
-        } else {
+        if (mapObjectType->type == MapObjectTypeClass::HARVESTABLE) {
             const Harvestable* harvestable = dynamic_cast<const Harvestable*>(mapObjectFixed);
             const std::string state = "growth" + toString(int(harvestable->getAge()));
             graphic = graphicSet->getByStateAndView(state, viewToRender)->getGraphic();
+        }
+        else if (mapObjectType->type == MapObjectTypeClass::STREET) {
+            const Street* street = dynamic_cast<const Street*>(mapObjectFixed);
+            const std::string state = street->getStateToRender();
+            graphic = graphicSet->getByStateAndView(state, viewToRender)->getGraphic();
+        }
+        else {
+            graphic = graphicSet->getByView(viewToRender)->getGraphic();
         }
         
         graphic->getPixel(x, y, &r, &g, &b, &a);

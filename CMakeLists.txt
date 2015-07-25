@@ -60,6 +60,8 @@ set(COMMON_SOURCE_FILES
     src/cpp/map/MapObject.cpp
     src/cpp/map/MapObject.h
     src/cpp/map/MapObjectType.h
+    src/cpp/map/Street.h
+    src/cpp/map/Structure.cpp
     src/cpp/map/Structure.h
     src/cpp/pathfinding/AStar.cpp
     src/cpp/pathfinding/AStar.h
