@@ -7,6 +7,7 @@
 #include "map/buildqueue/BuildOperationResult.h"
 #include "map/buildqueue/MapObjectToBuild.h"
 #include "map/MapObject.h"
+#include "map/Street.h"
 #include "game/Colony.h"
 
 class BuildOperation : public ContextAware {
@@ -96,16 +97,42 @@ public:
 
 private:
     /**
+     * @brief Überprüft, ob ein geplantes Objekt in die Karte gesetzt werden kann oder was im Weg ist.
+     * @param mapObjectToBuild zu platzierendes Objekt
+     * @return `true`, wenn alles frei ist oder überbar ist; sonst `false`.
+     */
+    bool isSomethingInTheWayOnTheMap(const MapObjectToBuild& mapObjectToBuild) const;
+
+    /**
+     * @brief Überprüft, ob ein Map-Objekt über ein anderes Map-Objekt gebaut werden darf.
+     *
+     * "Überbauen erlaubt" gilt auch "Straße über Straße". Diese Art von Überbauen ist gratis, muss aber
+     * von dieser Methode explizit erlaubt werden, dass die Baulogik es erlaubt.
+     *
+     * @param mapObjectTypeThere Typ von Map-Objekt, was bereits da ist
+     * @param mapObjectTypeToBuildOver Typ von Map-Objekt, der drüber gebaut werden soll
+     * @return `true` wenn Überbauen erlaubt ist.
+     */
+    bool mayBuildOver(const MapObjectType* mapObjectTypeThere, const MapObjectType* mapObjectTypeToBuildOver) const;
+
+    /**
+     * @brief Berechnet ein StreetConnections-Objekt für ausgewählte Koordinaten
+     * @param mapCoords Map-Koordinaten, an dessen Stelle die Straße ist, für die das
+     *                  StreetConnections-Objekt berechnet werden soll
+     * @return befülltes StreetConnections-Objekt
+     */
+    StreetConnections calculateStreetConnections(const MapCoords& mapCoords) const;
+
+    /**
+     * @brief Fügt ggf. weitere Replacements ins BuildOperationResult hinzu, die Straßenersetzungen entsprechen.
+     * @param streetToAdeptAround Straße, um die herum ggf. Ersetzungen hinzugefügt werden sollen.
+     */
+    void adeptExistingStreets(const Street& streetToAdeptAround);
+
+    /**
      * @brief Aktualisiert `result` nach einer Änderung der Build-Queue
      */
     void rebuildResult();
-
-    /**
-     * @brief Überprüft, ob ein geplantes Objekt in die Karte gesetzt werden kann oder was im Weg ist.
-     * @param mapObjectToBuild zu platzierendes Objekt
-     * @return `true`, wenn alles frei ist (TODO BUILDOPERATION oder überbar ist); sonst `false`.
-     */
-    bool isSomethingInTheWayOnTheMap(const MapObjectToBuild& mapObjectToBuild);
 
 };
 

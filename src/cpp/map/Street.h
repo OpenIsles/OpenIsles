@@ -11,29 +11,30 @@
  *
  * Aufbau ist:
  * <pre>
- * ╔════════════════════════════════════════════════════════════════════╗
- * ║                               Bits                                 ║
- * ╠════════╦════════╦════════╦════════╦═══════╦════════╦═══════╦═══════╣
- * ║   7    ║   6    ║   5    ║   4    ║  3    ║   2    ║   1   ║   0   ║
- * ║ -leer- ║ -leer- ║ -leer- ║ -leer- ║ oben  ║ rechts ║ unten ║ links ║
- * ║        ║        ║        ║        ║ NORTH ║  EAST  ║ SOUTH ║ WEST  ║
- * ╚════════╩════════╩════════╩════════╩═══════╩════════╩═══════╩═══════╝
+ * ╔════════════════════════════════╗
+ * ║              Bits              ║
+ * ╠═══════╦════════╦═══════╦═══════╣
+ * ║  3    ║   2    ║   1   ║   0   ║
+ * ║ oben  ║ rechts ║ unten ║ links ║
+ * ║ NORTH ║  EAST  ║ SOUTH ║ WEST  ║
+ * ╚═══════╩════════╩═══════╩═══════╝
  * </pre>
  */
 class StreetConnections : public std::bitset<4> {
 
 public:
-    // Bit-Indexe der vier Richtungen, von denen andere Straßen anschließen können
-    constexpr static unsigned char BIT_POS_NORTH = 3;
-    constexpr static unsigned char BIT_POS_EAST  = 2;
-    constexpr static unsigned char BIT_POS_SOUTH = 1;
-    constexpr static unsigned char BIT_POS_WEST  = 0;
 
+    // Bit-Indexe der vier Richtungen, von denen andere Straßen anschließen können
+    static constexpr unsigned char BIT_POS_NORTH = 3;
+    static constexpr unsigned char BIT_POS_EAST  = 2;
+    static constexpr unsigned char BIT_POS_SOUTH = 1;
+    static constexpr unsigned char BIT_POS_WEST  = 0;
+    
     // Bitmasken der vier Richtungen, von denen andere Straßen anschließen können
-    constexpr static unsigned char BIT_MASK_NORTH = 1 << BIT_POS_NORTH;
-    constexpr static unsigned char BIT_MASK_EAST  = 1 << BIT_POS_EAST;
-    constexpr static unsigned char BIT_MASK_SOUTH = 1 << BIT_POS_SOUTH;
-    constexpr static unsigned char BIT_MASK_WEST  = 1 << BIT_POS_WEST;
+    static constexpr unsigned char BIT_MASK_NORTH = 1 << BIT_POS_NORTH;
+    static constexpr unsigned char BIT_MASK_EAST  = 1 << BIT_POS_EAST;
+    static constexpr unsigned char BIT_MASK_SOUTH = 1 << BIT_POS_SOUTH;
+    static constexpr unsigned char BIT_MASK_WEST  = 1 << BIT_POS_WEST;
 
 public:
     StreetConnections() : bitset(0) {
@@ -42,6 +43,16 @@ public:
     StreetConnections(const std::string& bitString) : bitset(bitString) {
         assert(to_ulong() >= 0 && to_ulong() < 16);
     }
+
+#ifdef IN_TESTS
+    /**
+     * @brief Cast-Operator auf `unsigned char`.
+     * @return Bitwert als `unsigned char`
+     */
+    operator unsigned char() const {
+        return (unsigned char) to_ulong();
+    }
+#endif
 };
 
 /**
@@ -49,6 +60,10 @@ public:
  *
  * Das ist eine Struktur, die verschiedene Ausprägungen haben kann, welche Grafik gezeigt wird, basierend
  * darauf, von welchen Seiten weitere Straßen anschließen.
+ *
+ * <b>Wichtig:</b> Straßen sind immer süd-ausgerichtet. Es gibt nur eine einzige Ausnahme zu dieser Regel.
+ * Eine Straße, die von KEINER anderen Straße umgeben ist, wird mittels `view` gedreht. Sobald allerdings
+ * eine andere Straße anschließt, wird die view auf `SOUTH` gesetzt.
  */
 class Street : public Structure {
 

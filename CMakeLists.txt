@@ -60,6 +60,7 @@ set(COMMON_SOURCE_FILES
     src/cpp/map/MapObject.cpp
     src/cpp/map/MapObject.h
     src/cpp/map/MapObjectType.h
+    src/cpp/map/Street.cpp
     src/cpp/map/Street.h
     src/cpp/map/Structure.cpp
     src/cpp/map/Structure.h
@@ -144,6 +145,8 @@ set(TEST_FILES
     test/cpp/economics/EconomicsMgrTest.cpp
     test/cpp/graphics/GraphicSetTest.cpp
     test/cpp/map/buildqueue/BuildOperationTest.cpp
+    test/cpp/map/buildqueue/BuildOperationTest.h
+    test/cpp/map/buildqueue/BuildOperationTest_Street.cpp
     test/cpp/map/coords/MapCoordsTest.cpp
     test/cpp/map/BuildingTest.cpp
     test/cpp/map/DirectionTest.cpp
@@ -247,7 +250,7 @@ if(GTEST_FOUND)
     file(COPY ${CMAKE_SOURCE_DIR}/test/data DESTINATION ${CMAKE_BINARY_DIR})
 
     target_include_directories(OpenIsles-Tests PUBLIC ${GTEST_INCLUDE_DIRS})
-    target_compile_definitions(OpenIsles-Tests PUBLIC "-DNO_SDL -DDEFINE_VIRTUAL_ONLY_IN_TESTS")
+    target_compile_definitions(OpenIsles-Tests PUBLIC "-DNO_SDL -DIN_TESTS")
     target_link_libraries(OpenIsles-Tests ${GTEST_BOTH_LIBRARIES} pthread) # BOTH-Variable benutzen, damit wir uns an jeder Testdatei die main()-Methode sparen
 
     add_test(OpenIslesTests OpenIsles-Tests)

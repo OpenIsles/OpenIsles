@@ -3,7 +3,7 @@
 
 // Bestimmte Methoden sind nur dann virtuell, wenn wir die Tests kompilieren. Wir sparen uns für die richtige
 // Anwendung den vtable-Overhead :-)
-#ifdef DEFINE_VIRTUAL_ONLY_IN_TESTS
+#ifdef IN_TESTS
     #define VIRTUAL_ONLY_IN_TESTS virtual
 #else
     #define VIRTUAL_ONLY_IN_TESTS

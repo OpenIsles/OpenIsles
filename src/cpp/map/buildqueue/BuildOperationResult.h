@@ -23,6 +23,16 @@ struct BuildOperationResultBit {
     bool resourcesEnoughToBuildThis;
 
     /**
+     * @brief `true`, wenn diese Kachel kein Baumaterial kostet, da ein bestehendes Objekt ersetzt wird.
+     *
+     * Dies ist z.&nbsp;B. der Fall, wenn ein gerades Straßenstück durch ein T-Stück ersetzt wird.
+     *
+     * Allerdings gilt das nicht für alle Ersetzungen. Wird ein Feldweg durch eine Pflasterstraße
+     * ersetzt, so kostet das den Spieler und dieses Flag ist `false` gesetzt.
+     */
+    bool costsNothingBecauseOfChange = false;
+
+    /**
      * @brief MapObject, das beim Abschluss der Bauoperation das bestehende Map-Objekt ersetzt
      * (bzw. hinzugefügt werden soll). `nullptr` bedeutet "keine Ersetzung". Um das Objekt zu
      * löschen, muss stattdessen `deleteMapObjectThere` auf `true` gesetzt werden.
@@ -59,7 +69,14 @@ public:
      * "Grundsätzlich erlaubt" kann auch bedeuten, dass die Rohstoffe nicht vollständig oder gar nicht reichen.
      */
     enum : unsigned char {
+        /**
+         * @brief Es kann gebaut werden (d.&nbsph. nichts im Weg oder kann überbaut werden).
+         */
         OK,
+
+        /**
+         * @brief Es ist was im Weg, was nicht überbaut werden kann.
+         */
         SOMETHING_IN_THE_WAY
     } result;
 

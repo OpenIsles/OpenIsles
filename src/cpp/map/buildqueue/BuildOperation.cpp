@@ -19,8 +19,18 @@ void BuildOperation::requestBuild(const MapCoords& mapCoords, const MapObjectTyp
 
     for (int y = 0, my = mapCoords.y(); y < mapHeight; y++, my++) {
         for (int x = 0, mx = mapCoords.x(); x < mapWidth; x++, mx++) {
-            if (result.find(MapCoords(mx, my)) != result.cend()) {
-                return; // Überlappung gefunden? Dann abbrechen, wir ignorieren den Aufruf.
+            auto iter = result.find(MapCoords(mx, my));
+            if (iter != result.cend()) {
+                if (!iter->second->costsNothingBecauseOfChange) {
+                    /*
+                     * Überlappung gefunden? Dann abbrechen, wir ignorieren den Aufruf.
+                     * Allerdings nur, wenn das ResultBit costsNothingBecauseOfChange==false hat,
+                     * da wir nur abbrechen, wenn ein bewusster Bau vorliegt.
+                     * Wenn ein Bauauftrag für Kachel A eine Ersetzung für Kachel B zur Folge hat,
+                     * dann darf natürlich nachträglich ein Bauauftrag für Kachel B vergeben werden.
+                     */
+                    return;
+                }
             }
         }
     }
@@ -58,8 +68,7 @@ void BuildOperation::requestBuildWhenNothingInTheWay(const MapCoords& mapCoords,
     requestBuild(mapCoords, mapObjectType, view);
 }
 
-
-bool BuildOperation::isSomethingInTheWayOnTheMap(const MapObjectToBuild& mapObjectToBuild) {
+bool BuildOperation::isSomethingInTheWayOnTheMap(const MapObjectToBuild& mapObjectToBuild) const {
     const MapObjectType* mapObjectType = mapObjectToBuild.mapObjectType;
 
     unsigned char mapWidth, mapHeight;
@@ -83,8 +92,10 @@ bool BuildOperation::isSomethingInTheWayOnTheMap(const MapObjectToBuild& mapObje
 
             MapObjectFixed* mapObjectFixedAlreadyThere = context->game->getMap()->getMapObjectFixedAt(mapCoords);
             if (mapObjectFixedAlreadyThere != nullptr) {
-                // TODO BUILDOPERATION Überbauen ermöglichen
-                return true;
+                // Überbauen erlaubt?
+                if (!(mayBuildOver(mapObjectFixedAlreadyThere->getMapObjectType(), mapObjectType))) {
+                    return true;
+                }
             }
         }
     }
@@ -92,8 +103,107 @@ bool BuildOperation::isSomethingInTheWayOnTheMap(const MapObjectToBuild& mapObje
     return false;
 }
 
+bool BuildOperation::mayBuildOver(const MapObjectType* mapObjectTypeThere,
+                                  const MapObjectType* mapObjectTypeToBuildOver) const {
 
-// TODO BUILDOPERATION noch ganz viel zu tun....
+    // TODO allgemeiner hinkriegen; ggf. notwendig, dass nur ein MapObjectType "Feldweg"/"Pflasterstraße" existiert
+    // TODO via Config steuerbar
+
+    // Ersetzung für Straßen erlauben
+    bool isStreetThere = (mapObjectTypeThere->type == MapObjectTypeClass::STREET);
+    bool isStreetToBuildOver = (mapObjectTypeToBuildOver->type == MapObjectTypeClass::STREET);
+
+    if (isStreetThere && isStreetToBuildOver) {
+        return true;
+    }
+
+    // TODO weitere Konstellationen (Plätze über Weg/Straße, Gebäude über Harvestables)
+
+    return false;
+}
+
+StreetConnections BuildOperation::calculateStreetConnections(const MapCoords& mapCoords) const {
+    // Angrenzende Straßen (auf der Karte und im BuildOperationResult) checken
+    const Map* map = context->game->getMap();
+    auto isStreetThere = [&](const MapCoords& mapCoordsInLamdba) {
+        if (map->isStreetAt(mapCoordsInLamdba)) {
+            return true;
+        }
+
+        auto iter = result.find(mapCoordsInLamdba);
+        if (iter != result.cend()) {
+            return (std::dynamic_pointer_cast<Street>(iter->second->mapObjectToReplaceWith) != nullptr);
+        }
+
+        return false;
+    };
+
+    bool isStreetNorth = isStreetThere(MapCoords(mapCoords.x(), mapCoords.y() - 1));
+    bool isStreetEast = isStreetThere(MapCoords(mapCoords.x() + 1, mapCoords.y()));
+    bool isStreetSouth = isStreetThere(MapCoords(mapCoords.x(), mapCoords.y() + 1));
+    bool isStreetWest = isStreetThere(MapCoords(mapCoords.x() - 1, mapCoords.y()));
+
+    StreetConnections streetConnections;
+    streetConnections.set(StreetConnections::BIT_POS_NORTH, isStreetNorth);
+    streetConnections.set(StreetConnections::BIT_POS_EAST, isStreetEast);
+    streetConnections.set(StreetConnections::BIT_POS_SOUTH, isStreetSouth);
+    streetConnections.set(StreetConnections::BIT_POS_WEST, isStreetWest);
+
+    return streetConnections;
+}
+
+void BuildOperation::adeptExistingStreets(const Street& streetToAdeptAround) {
+    Map* map = context->game->getMap();
+
+    auto adeptExistingStreet = [&](const MapCoords& mapCoords) {
+        // Ist hier eine bestehende Straße?
+        const Street* existingStreet = dynamic_cast<const Street*>(map->getMapObjectFixedAt(mapCoords));
+        if (existingStreet == nullptr) {
+            return;
+        }
+
+        // Nicht ersetzen, wenn dort im BuildOperationResult bereits was neue gebaut wird
+        auto iter = result.find(mapCoords);
+        if (iter != result.cend()) {
+            return;
+        }
+
+        // Prüfen, ob Ersetzung notwendig ist
+        StreetConnections streetConnectionsShouldBe = calculateStreetConnections(existingStreet->getMapCoords());
+        if (streetConnectionsShouldBe == existingStreet->streetConnections &&
+            existingStreet->getView() == Direction::SOUTH) {
+
+            return; // passt alles schon
+        }
+
+        // Ersetzung anlegen
+        assert((existingStreet->getMapWidth() == 1) && (existingStreet->getMapHeight() == 1));
+        assert((existingStreet->getMapWidth() == 1) && (existingStreet->getMapHeight() == 1));
+
+        Street* mapObjectToReplaceWith = (Street*) MapObjectFixed::instantiate(existingStreet->getMapObjectType());
+        mapObjectToReplaceWith->setMapCoords(mapCoords);
+        mapObjectToReplaceWith->setView(Direction::SOUTH);
+        mapObjectToReplaceWith->setMapWidth(existingStreet->getMapWidth());
+        mapObjectToReplaceWith->setMapHeight(existingStreet->getMapHeight());
+        mapObjectToReplaceWith->streetConnections = streetConnectionsShouldBe;
+
+        std::shared_ptr<BuildOperationResultBit> resultBit(new BuildOperationResultBit());
+        resultBit->somethingInTheWay = false;
+        resultBit->costsNothingBecauseOfChange = true;
+        resultBit->resourcesEnoughToBuildThis = true;
+        resultBit->mapObjectToReplaceWith.reset(mapObjectToReplaceWith);
+        resultBit->mapObjectToDraw = resultBit->mapObjectToReplaceWith;
+
+        result[mapCoords] = resultBit;
+    };
+
+    const MapCoords& mapCoords = streetToAdeptAround.getMapCoords();
+    adeptExistingStreet(MapCoords(mapCoords.x(), mapCoords.y() - 1));
+    adeptExistingStreet(MapCoords(mapCoords.x() + 1, mapCoords.y()));
+    adeptExistingStreet(MapCoords(mapCoords.x(), mapCoords.y() + 1));
+    adeptExistingStreet(MapCoords(mapCoords.x() - 1, mapCoords.y()));
+}
+
 void BuildOperation::rebuildResult() {
     result.clear();
     result.result = BuildOperationResult::OK;
@@ -122,12 +232,12 @@ void BuildOperation::rebuildResult() {
             mapHeight = mapObjectType->mapWidth;
         }
 
-        bool somethingInTheWay = isSomethingInTheWayOnTheMap(mapObjectToBuild);
-
-        // ResultBit anlegen
         std::shared_ptr<BuildOperationResultBit> resultBit(new BuildOperationResultBit());
 
+        // Was im Weg?
+        bool somethingInTheWay = isSomethingInTheWayOnTheMap(mapObjectToBuild);
         resultBit->somethingInTheWay = somethingInTheWay;
+
         if (!somethingInTheWay) {
             MapObjectFixed* mapObjectToReplaceWith = MapObjectFixed::instantiate(mapObjectType);
             mapObjectToReplaceWith->setMapCoords(mapObjectToBuild.mapCoords);
@@ -144,12 +254,33 @@ void BuildOperation::rebuildResult() {
             result.result = BuildOperationResult::SOMETHING_IN_THE_WAY;
         }
 
-        // Resourcen überprüfen (einmal false geworden, sparen wir uns die Differenz-Bildung)
-        if (enoughResources) {
-            resourcesAvailable -= mapObjectType->buildingCosts;
-            enoughResources = resourcesAvailable.isNonNegative();
+        bool costsNothingBecauseOfChange = false;
+        // Gratis-Überbauen geht sowieso nur mit Straßen, die immer 1x1 groß sind
+        if (mapObjectType->type == MapObjectTypeClass::STREET) {
+            assert(mapWidth == 1 && mapHeight == 1);
+
+            // Wurde mit demselben Map-Objekt-Typ überbaut, so ist das nur eine "Änderung" und kostet nix
+            MapObjectFixed* mapObjectFixedAlreadyThere =
+                context->game->getMap()->getMapObjectFixedAt(mapObjectToBuild.mapCoords);
+            if (mapObjectFixedAlreadyThere != nullptr) {
+                if (mapObjectFixedAlreadyThere->getMapObjectType() == mapObjectType) {
+                    costsNothingBecauseOfChange = true;
+                }
+            }
         }
-        resultBit->resourcesEnoughToBuildThis = enoughResources;
+        resultBit->costsNothingBecauseOfChange = costsNothingBecauseOfChange;
+
+        // Resourcen überprüfen (einmal false geworden, sparen wir uns die Differenz-Bildung)
+        if (!costsNothingBecauseOfChange) {
+            if (enoughResources) {
+                resourcesAvailable -= mapObjectType->buildingCosts;
+                enoughResources = resourcesAvailable.isNonNegative();
+            }
+            resultBit->resourcesEnoughToBuildThis = enoughResources;
+        } else {
+            // Wenns gratis is, reichen die Resourcen freilich :-)
+            resultBit->resourcesEnoughToBuildThis = true;
+        }
 
         // ResultBit den Koordinaten zuweisen
         for (int y = 0, my = mapObjectToBuild.mapCoords.y(); y < mapHeight; y++, my++) {
@@ -158,9 +289,38 @@ void BuildOperation::rebuildResult() {
             }
         }
     }
+
+    // Jetzt für Straßen streetConnections setzen, nachdem alles fertig is.
+    // Wichtig: Result abkopieren, der Iterator funktioniert nicht korrekt, wenn sich in der Schleife der
+    // Containerinhalt, den er iteriert, ändert
+    BuildOperationResult resultCopy = result;
+
+    for (auto iter : resultCopy) {
+        std::shared_ptr<BuildOperationResultBit>& resultBit = iter.second;
+
+        if (resultBit->mapObjectToReplaceWith) {
+            std::shared_ptr<Street> streetPtr = std::dynamic_pointer_cast<Street>(resultBit->mapObjectToReplaceWith);
+            if (streetPtr) {
+                Street& street = *streetPtr;
+
+                // streetConnections setzen
+                StreetConnections streetConnections = calculateStreetConnections(street.getMapCoords());
+                street.streetConnections = streetConnections;
+
+                // mindestens eine angrenzende Straße? Dann die View auf SOUTH stellen.
+                if (streetConnections.any()) {
+                    street.setView(Direction::SOUTH);
+                }
+
+                // Straßen außenrum ggf. ersetzen
+                // (für Ersetzungen können wir sparen, diese triggern niemals eine zweite Ersetzung)
+                if (!resultBit->costsNothingBecauseOfChange) {
+                    adeptExistingStreets(street);
+                }
+            }
+        }
+    }
 }
-
-
 
 void BuildOperation::doBuild() {
     // TODO BUILDOPERATION
