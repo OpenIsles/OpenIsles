@@ -24,23 +24,17 @@ public:
     static const int DRAWING_FLAG_RED      = (1 << 1);
 
     /**
-     * @brief zeichnet das Objekt blinkend, d.h. entweder wird die Grafik gezeichnet oder nicht
-     * @sa #draw()
-     */
-    static const int DRAWING_FLAG_BLINK    = (1 << 2);
-
-    /**
      * @brief zeichnet das Objekt abgedunkelt
      * Info: Rot und abgedunkelt schließen sich gegenseitig aus.
      * @sa #draw()
      */
-    static const int DRAWING_FLAG_DARKENED = (1 << 3);
+    static const int DRAWING_FLAG_DARKENED = (1 << 2);
 
     /**
      * @brief zeichnet das Objekt als grauen Schatten (kann nicht mit `DRAWING_FLAG_MASKED` kombiniert werden)
      * @sa #draw()
      */
-    static const int DRAWING_FLAG_SHADOW   = (1 << 4);
+    static const int DRAWING_FLAG_SHADOW   = (1 << 3);
 
 protected:
     /**
@@ -118,9 +112,8 @@ public:
      * @param rectSource Quell-Rechteck der Zeichenoperation oder nullptr, wenn die komplette Grafik verwendet werden soll
      * @param rectDestination Ziel-Rechteck der Zeichenoperation oder nullptr, wenn ganzflächig gemalt werden soll
      * @param drawingFlags Bitmaske aus DRAWING_FLAG_*-Konstanten, die angeben, wie die Grafik gezeichnet werden soll
-     * @param sdlTicks aktuelle Ticks aus `Context`, um den Blinke-Zustand zu kennen
      */
-    virtual void draw(Rect* rectSource, Rect* rectDestination, int drawingFlags, uint32_t sdlTicks) const = 0;
+    virtual void draw(Rect* rectSource, Rect* rectDestination, int drawingFlags) const = 0;
 
 };
 

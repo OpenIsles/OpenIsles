@@ -248,6 +248,12 @@ private:
     void updateHoverObject();
 
     /**
+     * @brief Hilfsfunktion von renderElement(), die eine einzelne Kachel rendert
+     * @param mapCoords Map-Koordinate, die zu rendern ist
+     */
+    void renderTile(const MapCoords& mapCoords);
+
+    /**
      * Fügt ggf. ein oder mehrere neue Bauaufträge zur `buildOperation` hinzu.
      * Wir tun das wenn,
      * - die linke Maustaste im Baumodus gerade heruntergedrückt wurde

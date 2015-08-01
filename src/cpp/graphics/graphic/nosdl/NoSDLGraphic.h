@@ -30,7 +30,7 @@ public:
     void drawScaledAt(int x, int y, double scale) const {}
 	void drawShadowAt(int x, int y) const {}
 	void drawShadowScaledAt(int x, int y, double scale) const {}
-	void draw(Rect* rectSource, Rect* rectDestination, int drawingFlags, uint32_t sdlTicks) const {}
+	void draw(Rect* rectSource, Rect* rectDestination, int drawingFlags) const {}
 };
 
 #endif

@@ -64,7 +64,7 @@ public:
     virtual void drawScaledAt(int x, int y, double scale) const;
 	virtual void drawShadowAt(int x, int y) const;
 	virtual void drawShadowScaledAt(int x, int y, double scale) const;
-	virtual void draw(Rect* rectSource, Rect* rectDestination, int drawingFlags, uint32_t sdlTicks) const;
+	virtual void draw(Rect* rectSource, Rect* rectDestination, int drawingFlags) const;
 
 private:
 	/**

@@ -211,13 +211,8 @@ void SDLGraphic::drawAt(const SDL_Rect& rectDestination) const {
     SDL_RenderCopy(sdlRealRenderer, texture, nullptr, &rectDestination);
 }
 
-void SDLGraphic::draw(Rect* rectSource, Rect* rectDestination, int drawingFlags, uint32_t sdlTicks) const {
-	// Blinkmodus? Grafik nur in der ersten Hälfte eines Intervalls zeichnen
-    if ((drawingFlags & DRAWING_FLAG_BLINK) && (sdlTicks % 800 < 400)) {
-        return;
-    }
-
-    // normale oder maskierte Textur?
+void SDLGraphic::draw(Rect* rectSource, Rect* rectDestination, int drawingFlags) const {
+	// normale oder maskierte Textur?
 	SDL_Texture* textureToDraw;
 
 	assert((drawingFlags & (DRAWING_FLAG_MASKED | DRAWING_FLAG_SHADOW)) != (DRAWING_FLAG_MASKED | DRAWING_FLAG_SHADOW));
