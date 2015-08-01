@@ -16,6 +16,8 @@ set(COMMON_SOURCE_FILES
     src/cpp/economics/EconomicsMgr.h
     src/cpp/economics/Carrier.cpp
     src/cpp/economics/Carrier.h
+    src/cpp/game/CatchmentArea.cpp
+    src/cpp/game/CatchmentArea.h
     src/cpp/game/Colony.cpp
     src/cpp/game/Colony.h
     src/cpp/game/Game.cpp
@@ -143,12 +145,12 @@ set(TEST_FILES
     test/cpp/GameTest.h
     test/cpp/config/ConfigMgrTest.cpp
     test/cpp/economics/EconomicsMgrTest.cpp
+    test/cpp/game/CatchmentAreaTest.cpp
     test/cpp/graphics/GraphicSetTest.cpp
     test/cpp/map/buildqueue/BuildOperationTest.cpp
     test/cpp/map/buildqueue/BuildOperationTest.h
     test/cpp/map/buildqueue/BuildOperationTest_Street.cpp
     test/cpp/map/coords/MapCoordsTest.cpp
-    test/cpp/map/BuildingTest.cpp
     test/cpp/map/DirectionTest.cpp
     test/cpp/map/HarvestableTest.cpp
     test/cpp/map/MapCoordUtilsTest.cpp

@@ -1,5 +1,6 @@
 #include <cassert>
 #include "config/ConfigMgr.h"
+#include "game/CatchmentArea.h"
 #include "game/Colony.h"
 #include "game/Game.h"
 #include "map/Map.h"
@@ -148,8 +149,8 @@ void Map::addOfficeCatchmentAreaToMap(const Building& building) {
     // TODO Sehr hässlich, aber tuts erstmal sicher, ohne Gefahr.
     for (int mapY = mapCoords.y() - catchmentAreaRadius; mapY <= mapCoords.y() + catchmentAreaRadius; mapY++) {
         for (int mapX = mapCoords.x() - catchmentAreaRadius; mapX <= mapCoords.x() + catchmentAreaRadius; mapX++) {
-            
-            if (!building.isInsideCatchmentArea(MapCoords(mapX, mapY))) {
+
+            if (!CatchmentArea::isInsideCatchmentArea(building, MapCoords(mapX, mapY))) {
                 continue;
             }
             

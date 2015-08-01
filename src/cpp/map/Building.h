@@ -54,22 +54,6 @@ public:
     }
 
     virtual bool updateObject(const Context& context) override;
-    
-    /**
-     * @brief Testet, ob eine bestimmte Kachel innerhalb des Einzugsgebiets des Gebäudes liegt
-     * @param mapCoords Map-Koordinaten, die getestet wird
-     * @return `true`, wenn die Kachel innerhalb des Einzugsgebiets liegt; sonst `false`
-     */
-    bool isInsideCatchmentArea(const MapCoords& mapCoords) const;
-    
-    /**
-     * @brief Testet, ob ein bestimmtes Map-Objekt innerhalb des Einzugsgebiets des Gebäudes liegt. Dies ist immer dann
-     * der Fall, wenn mindestens eine Kachel des Mapobjekts im Einzuggebiet liegt.
-     *
-     * @param otherMapObject Map-Objekt, was getestet wird
-     * @return `true`, wenn das Map-Objekt innerhalb des Einzugsgebiets liegt; sonst `false`
-     */
-    bool isInsideCatchmentArea(const MapObjectFixed& otherMapObject) const;
 
     /**
      * @brief Prüft, ob das Gebäude ein Lagergebäude (Kontor oder Marketplatz), von welchem ALLE Waren abgeholt und

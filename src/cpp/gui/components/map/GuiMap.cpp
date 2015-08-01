@@ -3,6 +3,7 @@
 #include <cassert>
 #include <string>
 #include "config/ConfigMgr.h"
+#include "game/CatchmentArea.h"
 #include "game/Colony.h"
 #include "game/Game.h"
 #include "graphics/graphic/IGraphic.h"
@@ -63,10 +64,6 @@ GuiMap::~GuiMap() {
 
 void GuiMap::renderElement(IRenderer* renderer) {
     Map* map = context->game->getMap();
-    const MapObject* selectedMapObject = map->getSelectedMapObject();
-    const Building* selectedBuilding = dynamic_cast<const Building*>(selectedMapObject);
-
-    int screenZoom = map->getScreenZoom();
 
     /*
      * Optimierung: Das Loopen über ALLE Kacheln ist teuer, weil wir jedes Mal die screenCoords ermitteln müssen,
@@ -142,6 +139,8 @@ void GuiMap::renderElement(IRenderer* renderer) {
     Route routeToDraw;
 
     // Wenn Gebäude ausgewählt -> Trägerroute anzeigen
+    const MapObject* selectedMapObject = map->getSelectedMapObject();
+    const Building* selectedBuilding = dynamic_cast<const Building*>(selectedMapObject);
     if (selectedBuilding != nullptr) {
         routeToDraw = (selectedBuilding->carrier != nullptr) ? selectedBuilding->carrier->route : Route();
     } else {
@@ -149,7 +148,7 @@ void GuiMap::renderElement(IRenderer* renderer) {
     }
 
     // A*-Route zeichnen (nur bei Maximalzoom, dann sparen wir uns Berechnungen und der Code wird einfacher)
-    if (screenZoom == 1 && routeToDraw.routeExists()) {
+    if (map->getScreenZoom() == 1 && routeToDraw.routeExists()) {
         renderer->setDrawBlendMode(IRenderer::BLENDMODE_BLEND);
 
         int lastPointX = -1;
@@ -257,7 +256,7 @@ void GuiMap::renderTile(const MapCoords& mapCoords) {
     int drawingFlags = 0;
     if (selectedMapObject != nullptr) {
         bool insideCatchmentArea =
-            (selectedBuilding != nullptr && selectedBuilding->isInsideCatchmentArea(mapCoords));
+            (selectedBuilding != nullptr && CatchmentArea::isInsideCatchmentArea(*selectedBuilding, mapCoords));
 
         if (!insideCatchmentArea) {
             drawingFlags |= IGraphic::DRAWING_FLAG_DARKENED;
@@ -454,7 +453,7 @@ void GuiMap::renderTile(const MapCoords& mapCoords) {
         if (selectedMapObject != nullptr) {
             bool insideCatchmentArea =
                 (selectedBuilding != nullptr &&
-                 selectedBuilding->isInsideCatchmentArea(*mapObjectToDrawHere));
+                 CatchmentArea::isInsideCatchmentArea(*selectedBuilding, *mapObjectToDrawHere));
 
             if (!insideCatchmentArea) {
                 drawingFlags |= IGraphic::DRAWING_FLAG_DARKENED;
@@ -840,29 +839,18 @@ void GuiMap::drawCatchmentArea(IRenderer* const renderer, const MapObjectToBuild
         screenCoordsOffset = ScreenCoords(-IGraphicsMgr::TILE_WIDTH_HALF, IGraphicsMgr::TILE_HEIGHT_HALF);
     }
 
-    // TODO BUILDOPERATION Refactoring - wir wollen keine Instanz von Building mehr brauchen
-    Building dummyBuilding;
-    dummyBuilding.setMapObjectType(mapObjectToBuild.mapObjectType);
-    dummyBuilding.setMapCoords(mapObjectToBuild.mapCoords);
-    dummyBuilding.setMapWidth(
-        (mapObjectToBuild.view == Direction::NORTH || mapObjectToBuild.view == Direction::SOUTH) ?
-             mapObjectToBuild.mapObjectType->mapWidth : mapObjectToBuild.mapObjectType->mapHeight);
-    dummyBuilding.setMapHeight(
-        (mapObjectToBuild.view == Direction::NORTH || mapObjectToBuild.view == Direction::SOUTH) ?
-             mapObjectToBuild.mapObjectType->mapHeight : mapObjectToBuild.mapObjectType->mapWidth);
-    dummyBuilding.setView(mapObjectToBuild.view);
-    // END TODO BUILDOPERATION
-
-
     for (int mapY = mapCoords.y() - catchmentAreaRadius; mapY <= mapCoords.y() + catchmentAreaRadius; mapY++) {
         for (int mapX = mapCoords.x() - catchmentAreaRadius; mapX <= mapCoords.x() + catchmentAreaRadius; mapX++) {
             MapCoords mapCoordsHere(mapX, mapY);
             MapCoords mapCoordsEast(mapX + 1, mapY);
             MapCoords mapCoordsSouth(mapX, mapY + 1);
 
-            bool mapCoordsHereInSideCatchmentArea = dummyBuilding.isInsideCatchmentArea(mapCoordsHere);
-            bool mapCoordsEastInSideCatchmentArea = dummyBuilding.isInsideCatchmentArea(mapCoordsEast);
-            bool mapCoordsSouthInSideCatchmentArea = dummyBuilding.isInsideCatchmentArea(mapCoordsSouth);
+            bool mapCoordsHereInSideCatchmentArea =
+                CatchmentArea::isInsideCatchmentArea(mapObjectToBuild, mapCoordsHere);
+            bool mapCoordsEastInSideCatchmentArea =
+                CatchmentArea::isInsideCatchmentArea(mapObjectToBuild, mapCoordsEast);
+            bool mapCoordsSouthInSideCatchmentArea =
+                CatchmentArea::isInsideCatchmentArea(mapObjectToBuild, mapCoordsSouth);
 
             auto drawLineBetweenMapCoords = [&](const MapCoords& mapCoords1, const MapCoords& mapCoords2) {
                 ScreenCoords screenCoords1 = MapCoordUtils::mapToScreenCoords(mapCoords1, screenView, *map);

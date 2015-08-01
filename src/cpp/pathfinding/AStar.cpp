@@ -3,6 +3,7 @@
 #include <map>
 #include <set>
 #include "config/ConfigMgr.h"
+#include "game/CatchmentArea.h"
 #include "game/Game.h"
 #include "map/Map.h"
 #include "pathfinding/AStar.h"
@@ -326,7 +327,7 @@ bool AStar::isTileWalkable(const MapCoords& mapCoords, Building* sourceBuilding,
 
     // Einschränkung durch Einzugsbereich?
     if (buildingToUseCatchmentArea != nullptr) {
-        if (!buildingToUseCatchmentArea->isInsideCatchmentArea(mapCoords)) {
+        if (!CatchmentArea::isInsideCatchmentArea(*buildingToUseCatchmentArea, mapCoords)) {
             return false;
         }
     }
