@@ -913,8 +913,7 @@ void GuiMap::onCancelAddingStructure() {
 }
 
 void GuiMap::onRotateAddingStructure() {
-    // TODO BUILDOPERATION
-    if (inBuildingMode /*&& buildQueue.empty()*/ && !(SDL_GetMouseState(nullptr, nullptr) & SDL_BUTTON_LEFT)) {
+    if (inBuildingMode && !(SDL_GetMouseState(nullptr, nullptr) & SDL_BUTTON_LEFT)) {
         updateHoverObject();
     }
 }
