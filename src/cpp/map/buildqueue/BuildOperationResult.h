@@ -80,6 +80,11 @@ public:
         SOMETHING_IN_THE_WAY
     } result;
 
+    /**
+     * @brief Resourcen-Kosten gesamt
+     */
+    BuildingCosts buildingCosts;
+
 };
 
 

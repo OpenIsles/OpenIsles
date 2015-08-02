@@ -226,6 +226,7 @@ void BuildOperation::adeptExistingStreets(const Street& streetToAdeptAround) {
 
 void BuildOperation::rebuildResult() {
     result.clear();
+    result.buildingCosts.reset();
     result.result = BuildOperationResult::OK;
 
     if (mapObjectsToBuild.empty()) {
@@ -300,6 +301,10 @@ void BuildOperation::rebuildResult() {
         } else {
             // Wenns gratis is, reichen die Resourcen freilich :-)
             resultBit->resourcesEnoughToBuildThis = true;
+        }
+
+        if (!resultBit->costsNothingBecauseOfChange) {
+            result.buildingCosts += mapObjectType->buildingCosts;
         }
 
         // ResultBit den Koordinaten zuweisen

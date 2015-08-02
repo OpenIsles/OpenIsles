@@ -930,11 +930,5 @@ void GuiMap::updateBuildingCosts() {
         return;
     }
 
-    // Wir nutzen die Tatsache aus, dass immer nur dieselben Gebäude in der Bauqueue sind.
-    const MapObjectType* mapObjectType = context->guiMgr->getPanelState().addingMapObject;
-    const BuildingCosts& buildingCostsOneTime = mapObjectType->buildingCosts;
-
-    long structuresCount = buildOperation->getMapObjectsToBuild().size();
-
-    guiResourcesBar->showBuildingCosts(buildingCostsOneTime * structuresCount);
+    guiResourcesBar->showBuildingCosts(buildOperation->getResult().buildingCosts);
 }

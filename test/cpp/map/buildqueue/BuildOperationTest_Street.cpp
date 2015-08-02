@@ -31,6 +31,7 @@ TEST_F(BuildOperationTest, buildStreets) {
 
     ASSERT_EQ(BuildOperationResult::OK, result.result);
     ASSERT_EQ(21, result.size());
+    ASSERT_EQ(BuildingCosts(100, 0, 0, 20), result.buildingCosts); // nur 20 der 21 Kacheln kosten was
 
     // Für alle Kacheln muss gelten...
     for (const MapCoords& mapCoords : mapCoordsToBuildThere) {
@@ -133,6 +134,8 @@ TEST_F(BuildOperationTest, costsNothingOverbuildResources) {
         ASSERT_EQ(true, resultBit.costsNothingBecauseOfChange);
         ASSERT_EQ(true, resultBit.resourcesEnoughToBuildThis);
     }
+
+    ASSERT_EQ(BuildingCosts(5, 0, 0, 1), result.buildingCosts);
 }
 
 /**
