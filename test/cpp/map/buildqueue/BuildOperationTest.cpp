@@ -1,3 +1,5 @@
+#include <forward_list>
+#include <numeric>
 #include "GameTest.h"
 #include "map/buildqueue/BuildOperation.h"
 #include "map/buildqueue/BuildOperationTest.h"
@@ -178,4 +180,117 @@ TEST_F(BuildOperationTest, emptyBuildQueue) {
     ASSERT_TRUE(buildOperation.getMapObjectsToBuild().empty());
     ASSERT_TRUE(buildOperation.getResult().empty());
     ASSERT_EQ(BuildOperationResult::OK, buildOperation.getResult().result);
+}
+
+/**
+ * @brief Überprüft, dass Häuser beim Enqueue in die BuildOperation zufällig gewählt werden.
+ * Wir bauen 2x dasselbe und wollen ein anderes Ergebnis haben.
+ */
+TEST_F(BuildOperationTest, randomizeWhenBuildingHouses) {
+    // Testaufbau
+
+    const unsigned char HOUSE_TYPES_COUNT = 5;
+    const MapObjectType* pioneersHouses[HOUSE_TYPES_COUNT] = {
+        configMgr->getMapObjectType("pioneers-house1"),
+        configMgr->getMapObjectType("pioneers-house2"),
+        configMgr->getMapObjectType("pioneers-house3"),
+        configMgr->getMapObjectType("pioneers-house4"),
+        configMgr->getMapObjectType("pioneers-house5")
+    };
+
+    const std::forward_list<MapCoords> mapCoordsToBuildThere = {
+        {38, 32}, {38, 34}, {38, 36}, {38, 38}, {38, 40}, {38, 42},
+        {36, 33}, {36, 35}, {36, 37}, {36, 39},
+        {45, 33}, {47, 34}, {49, 33}, {51, 35}, {51, 37}, {52, 39}, {54, 39}
+    };
+
+    Colony* colony = game->getColony({ 43, 34 });
+    colony->getGoods(configMgr->getGood("wood")).inventory = 60;
+
+    // Testdurchführung: Baue zweimal dasselbe und vergleiche das Ergebnis
+
+    auto doOneBuild = [&]() {
+        BuildOperation buildOperation(&context, *player);
+        for (const MapCoords& mapCoords : mapCoordsToBuildThere) {
+            buildOperation.requestBuildWhenNothingInTheWay(mapCoords, pioneersHouses[0], Direction::SOUTH);
+        }
+        return buildOperation.getResult();
+    };
+
+    BuildOperationResult result1 = doOneBuild();
+    BuildOperationResult result2 = doOneBuild();
+
+    // Testauswertung
+
+    ASSERT_EQ(68, result1.size()); // Beide Ergebnis müssen 17 Häuser haben
+    ASSERT_EQ(68, result2.size());
+
+    unsigned int differences = 0;
+    unsigned int pioneersHouse1CountInResult1 = 0;
+    unsigned int pioneersHouse1CountInResult2 = 0;
+    for (const MapCoords& mapCoords : mapCoordsToBuildThere) {
+        const MapObjectType* mapObjectType1 = result1.at(mapCoords)->mapObjectToReplaceWith->getMapObjectType();
+        const MapObjectType* mapObjectType2 = result2.at(mapCoords)->mapObjectToReplaceWith->getMapObjectType();
+
+        if (mapObjectType1 != mapObjectType2) {
+            differences++;
+        }
+        if (mapObjectType1 == pioneersHouses[0]) {
+            pioneersHouse1CountInResult1++;
+        }
+        if (mapObjectType2 == pioneersHouses[0]) {
+            pioneersHouse1CountInResult2++;
+        }
+    }
+
+    ASSERT_NE(pioneersHouse1CountInResult1, 68); // Die Häuser dürfen nicht alle pioneersHouse1 sein
+    ASSERT_NE(pioneersHouse1CountInResult2, 68);
+
+    ASSERT_GT(differences, 0); // Die Häuser dürfen nicht alle identisch sein
+}
+
+/**
+ * @brief Überprüft, dass beim Bau von Häusern sich bereits bestehende Häuser nicht ändern, wenn wir
+ * ein weiteres hinzufügen.
+ */
+TEST_F(BuildOperationTest, addingOneMoreHouse) {
+    // Testaufbau
+
+    const MapObjectType* pioneersHouse1 = configMgr->getMapObjectType("pioneers-house1");
+    const std::forward_list<MapCoords> mapCoordsToBuildThere = {
+        {38, 32}, {38, 34}, {38, 36}, {38, 38}, {38, 40}, {38, 42},
+        {36, 33}, {36, 35}, {36, 37}, {36, 39},
+        {45, 33}, {47, 34}, {49, 33}, {51, 35}, {51, 37}, {52, 39}, {54, 39}
+    };
+
+    Colony* colony = game->getColony({ 43, 34 });
+    colony->getGoods(configMgr->getGood("wood")).inventory = 65;
+
+    // Testdurchführung: Baue viele Häuser, baue danach ein weiteres. Es dürfen sich bestehende nicht ändern.
+
+    BuildOperation buildOperation(&context, *player);
+    for (const MapCoords& mapCoords : mapCoordsToBuildThere) {
+        buildOperation.requestBuildWhenNothingInTheWay(mapCoords, pioneersHouse1, Direction::SOUTH);
+    };
+    BuildOperationResult resultBefore = buildOperation.getResult();
+
+    const MapCoords mapCoordsToBuildAfter = {43, 29};
+    buildOperation.requestBuildWhenNothingInTheWay(mapCoordsToBuildAfter, pioneersHouse1, Direction::SOUTH);
+    BuildOperationResult resultAfter = buildOperation.getResult();
+
+    // Testauswertung
+
+    ASSERT_EQ(68, resultBefore.size());
+    ASSERT_EQ(72, resultAfter.size());
+
+    for (const MapCoords& mapCoords : mapCoordsToBuildThere) {
+        const MapObjectType* mapObjectTypeBefore =
+            resultBefore.at(mapCoords)->mapObjectToReplaceWith->getMapObjectType();
+        const MapObjectType* mapObjectTypeAfter =
+            resultAfter.at(mapCoords)->mapObjectToReplaceWith->getMapObjectType();
+
+        ASSERT_EQ(mapObjectTypeBefore, mapObjectTypeAfter) << "mapCoords = " << ::testing::PrintToString(mapCoords);
+    }
+
+    ASSERT_TRUE(resultAfter.at(mapCoordsToBuildAfter)->mapObjectToReplaceWith != nullptr);
 }
