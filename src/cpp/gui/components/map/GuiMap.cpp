@@ -919,7 +919,7 @@ void GuiMap::onRotateAddingStructure() {
 }
 
 void GuiMap::resetBuildOperation() {
-    const Player* player = context->game->getCurrentPlayer();
+    Player* player = context->game->getCurrentPlayer();
     buildOperation.reset(new BuildOperation(context, *player));
 }
 

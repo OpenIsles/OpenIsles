@@ -175,26 +175,16 @@ public:
     double getSecondsSinceLastUpdate(const MapObject* mapObject) const;
 
     /**
-     * @brief Fügt ein neues Map-Objekt der Karte hinzu.
-     * @param mapCoords Map-Koordinaten des Objekts
-     * @param mapObjectType Typ der Objekts
-     * @param age Alter der Kachel
-     * @param view Ansicht, mit der die Kachel positioniert werden soll
-     * @return Zeiger auf das neu angelegte Harvestable-Objekt
-     */
-    MapObjectFixed* addMapObjectFixed(
-        const MapCoords& mapCoords, const MapObjectType* mapObjectType, const FourthDirection& view, Player* player);
-
-    /**
      * @brief Fügt eine neue Landschaftkachel, die abgeerntet werden kann, der Karte hinzu.
+     * Das Startalter wird zufällig minimal bestimmt.
+     *
      * @param mapCoords Map-Koordinaten der Kachel
      * @param mapObjectType Typ der Landschaftkachel
-     * @param age Alter der Kachel
      * @param view Ansicht, mit der die Kachel positioniert werden soll
      * @return Zeiger auf das neu angelegte Harvestable-Objekt
      */
     Harvestable* addHarvestable(
-        const MapCoords& mapCoords, const MapObjectType* mapObjectType, double age, const FourthDirection& view);
+        const MapCoords& mapCoords, const MapObjectType* mapObjectType,const FourthDirection& view);
 
     /**
      * @brief Fügt eine neue Struktur der Karte hinzu.

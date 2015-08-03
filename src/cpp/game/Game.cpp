@@ -84,37 +84,25 @@ double Game::getSecondsSinceLastUpdate(const MapObject* mapObject) const {
     return (double) ticksPastSinceLastUpdate / oneSecondTicks;
 }
 
-MapObjectFixed* Game::addMapObjectFixed(
-    const MapCoords& mapCoords, const MapObjectType* mapObjectType, const FourthDirection& view, Player* player) {
-
-    // Harvestable
-    if (mapObjectType->type == MapObjectTypeClass::HARVESTABLE) {
-        // ein bisschen Zufall für das Startalter, damit die Felder nicht alle gleichzeitig wachsen
-        std::random_device randomDevice;
-        std::default_random_engine randomEngine(randomDevice());
-        std::uniform_real_distribution<double> randomInitAge(0.0, 0.25);
-        double initAge = randomInitAge(randomEngine);
-
-        return addHarvestable(mapCoords, mapObjectType, initAge, view);
-    }
-
-    // Structure/Building
-    return addStructure(mapCoords, mapObjectType, view, player);
-}
-
 Harvestable* Game::addHarvestable(
-    const MapCoords& mapCoords, const MapObjectType* mapObjectType, double age, const FourthDirection& view) {
+    const MapCoords& mapCoords, const MapObjectType* mapObjectType, const FourthDirection& view) {
 
     assert(mapObjectType->type == MapObjectTypeClass::HARVESTABLE);
 
     unsigned char maxAge = mapObjectType->maxAge;
+
+    // ein bisschen Zufall für das Startalter, damit die Felder nicht alle gleichzeitig wachsen
+    std::random_device randomDevice;
+    std::default_random_engine randomEngine(randomDevice());
+    std::uniform_real_distribution<double> randomInitAge(0.0, 0.25);
+    double initAge = randomInitAge(randomEngine);
 
     // Objekt anlegen
     Harvestable* harvestable = new Harvestable(maxAge);
     harvestable->setMapCoords(mapCoords);
     harvestable->setMapObjectType(mapObjectType);
     harvestable->setView(view);
-    harvestable->setAge(age);
+    harvestable->setAge(initAge);
 
     // Objekt in die Liste aufnehmen.
     map->addMapObject(harvestable);

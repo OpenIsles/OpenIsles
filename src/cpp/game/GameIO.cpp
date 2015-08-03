@@ -269,7 +269,8 @@ void GameIO::loadMapObjects(Game* game, const ConfigMgr* configMgr, rapidxml::xm
 
             double age = std::atof(getPropertyValueFromPropertiesNode(propertiesNode, "age"));
 
-            game->addHarvestable(mapCoords, mapObjectType, age, view);
+            Harvestable* harvestable = game->addHarvestable(mapCoords, mapObjectType, view);
+            harvestable->setAge(age);
         }
     }
 }

@@ -1,4 +1,5 @@
 #include <random>
+#include <set>
 #include "game/Game.h"
 #include "map/buildqueue/BuildOperation.h"
 
@@ -348,40 +349,100 @@ void BuildOperation::rebuildResult() {
 }
 
 void BuildOperation::doBuild() {
-    // TODO BUILDOPERATION
+    assert(result.result == BuildOperationResult::OK);
 
-    //    Player* currentPlayer = context->game->getCurrentPlayer();
-//
-//    // Der Reihe nach alle zu setzenden Gebäude durchgehen. Gehen die Resourcen aus, brechen wir ab.
-//    for (auto iter = buildQueue.cbegin(); iter != buildQueue.cend(); iter++) {
-//        const MapObjectFixed& mapObject = **iter;
-//
-//        const MapObjectType* mapObjectType = mapObject.getMapObjectType();
-//        const MapCoords& mapCoords = mapObject.getMapCoords();
-//
-//        const FourthDirection& view = mapObject.getView();
-//        unsigned char isAllowedToPlaceResult = isAllowedToPlaceMapObject(mapCoords, mapObjectType, view);
-//        if ((isAllowedToPlaceResult & ~PLACING_STRUCTURE_SOMETHING_IN_THE_WAY_TEMPORARILY) != PLACING_STRUCTURE_ALLOWED) {
-//            // Dürfen wir nicht mehr setzen (zwischenzeitlich was im Weg oder Resourcen ausgegangen), dann abbrechen
-//            break;
-//        }
-//
-//        // Ok, Gebäude nun wirklich setzen
-//        context->game->addMapObjectFixed(mapCoords, mapObjectType, view, currentPlayer);
-//
-//        // Resourcen bezahlen
-//        Colony* colony = context->game->getColony(
-//            currentPlayer, context->game->getMap()->getMapTileAt(mapCoords)->isle);
-//        const BuildingCosts& buildingCosts = mapObjectType->buildingCosts;
-//
-//        currentPlayer->coins -= buildingCosts.coins;
-//        colony->getGoods(toolsGood).inventory -= buildingCosts.tools;
-//        colony->getGoods(woodGood).inventory -= buildingCosts.wood;
-//        colony->getGoods(bricksGood).inventory -= buildingCosts.bricks;
-//    }
-//    buildQueue.clear();
-//
+    if (result.empty()) {
+        return;
+    }
 
+    Map* map = context->game->getMap();
+    assert(colony != nullptr);
+
+    // Merken, welche Objekte wir bereits bearbeiten haben. In der result-Map ist kachelweise alles drin.
+    // Wir wollen für ein 2x2-Gebäude nicht 4x das Ding bauen, sondern nur einmal.
+    std::set<MapCoords> mapCoordsDone;
+
+    BuildingCosts buildingCostsEffective;
+
+    for (auto iter : result) {
+        const MapCoords& mapCoords = iter.first;
+        const BuildOperationResultBit& resultBit = *iter.second;
+
+        assert(!resultBit.somethingInTheWay);
+
+        // Kachel schon abgearbeitet?
+        if (mapCoordsDone.count(mapCoords)) {
+            continue;
+        }
+
+        // Reichen die Resourcen nicht? Dann einfach überspringen.
+        if (!resultBit.resourcesEnoughToBuildThis) {
+            continue;
+        }
+
+        // Bestehenes Objekt soll entfernt werden?
+        if (resultBit.mapObjectToReplaceWith || resultBit.deleteMapObjectThere) {
+            MapObjectFixed* mapObjectFixedThere = map->getMapObjectFixedAt(mapCoords);
+            if (mapObjectFixedThere != nullptr) {
+                map->deleteMapObject(mapObjectFixedThere);
+            }
+        }
+
+        // Neues Objekt hinzufügen
+        if (resultBit.mapObjectToReplaceWith) {
+            const MapObjectFixed& mapObjectFixedToBuild = *resultBit.mapObjectToReplaceWith;
+            const MapObjectType* mapObjectTypeToBuild = mapObjectFixedToBuild.getMapObjectType();
+
+            if (mapObjectTypeToBuild->type == MapObjectTypeClass::HARVESTABLE) {
+                context->game->addHarvestable(
+                    mapObjectFixedToBuild.getMapCoords(), mapObjectTypeToBuild,
+                    mapObjectFixedToBuild.getView());
+            }
+            else if (mapObjectTypeToBuild->type == MapObjectTypeClass::STREET) {
+                context->game->addStreet(
+                    mapObjectFixedToBuild.getMapCoords(), mapObjectTypeToBuild,
+                    mapObjectFixedToBuild.getView(), &player,
+                    dynamic_cast<const Street&>(mapObjectFixedToBuild).streetConnections);
+            }
+            else {
+                context->game->addStructure(
+                    mapObjectFixedToBuild.getMapCoords(), mapObjectTypeToBuild,
+                    mapObjectFixedToBuild.getView(), &player);
+            }
+
+            // Kacheln als erledigt markieren
+            for (int my = mapObjectFixedToBuild.getMapCoords().y();
+                 my < mapObjectFixedToBuild.getMapCoords().y() + mapObjectFixedToBuild.getMapHeight(); my++) {
+
+                for (int mx = mapObjectFixedToBuild.getMapCoords().x();
+                     mx < mapObjectFixedToBuild.getMapCoords().x() + mapObjectFixedToBuild.getMapWidth(); mx++) {
+
+                    mapCoordsDone.insert(MapCoords(mx, my));
+                }
+            }
+
+            // Baukosten merken, wenn der Bau was kostet
+            if (!resultBit.costsNothingBecauseOfChange) {
+                buildingCostsEffective += mapObjectTypeToBuild->buildingCosts;
+            }
+        }
+
+    }
+
+    // Resourcen bezahlen
+    GoodsSlot& colonyGoodsSlotTools = colony->getGoods(context->configMgr->getGood("tools"));
+    GoodsSlot& colonyGoodsSlotWood = colony->getGoods(context->configMgr->getGood("wood"));
+    GoodsSlot& colonyGoodsSlotBricks = colony->getGoods(context->configMgr->getGood("bricks"));
+
+    player.coins -= buildingCostsEffective.coins;
+    colonyGoodsSlotTools.inventory -= buildingCostsEffective.tools;
+    colonyGoodsSlotWood.inventory -= buildingCostsEffective.wood;
+    colonyGoodsSlotBricks.inventory -= buildingCostsEffective.bricks;
+
+    assert((player.coins >= 0) &&
+           (colonyGoodsSlotTools.inventory >= 0) &&
+           (colonyGoodsSlotWood.inventory >= 0) &&
+           (colonyGoodsSlotBricks.inventory >= 0));
 }
 
 

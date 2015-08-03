@@ -16,7 +16,7 @@ private:
     /**
      * @brief Spieler der bauen will
      */
-    const Player& player;
+    Player& player;
 
 
     /**
@@ -30,7 +30,7 @@ private:
      * Es kann immer nur in einer Kolonie gebaut werden. Dieses Feld ist erst gesetzt, wenn
      * der erste Bauauftrag in der Queue ist.
      */
-    const Colony* colony = nullptr;
+    Colony* colony = nullptr;
 
     /**
      * @brief Berechnetes Ergebnis
@@ -38,7 +38,7 @@ private:
     BuildOperationResult result;
 
 public:
-    BuildOperation(const Context* const context, const Player& player) : ContextAware(context), player(player) {
+    BuildOperation(const Context* const context, Player& player) : ContextAware(context), player(player) {
     }
 
     const std::list<MapObjectToBuild>& getMapObjectsToBuild() const {
