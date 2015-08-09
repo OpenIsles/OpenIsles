@@ -19,8 +19,13 @@ struct BuildOperationResultBit {
 
     /**
      * @brief `false`, wenn die Resourcen nicht mehr reichen, ob dieses Objekt zu bauen.
+     * In diesem Fall blinkt das Objekt in der GUI.
+     *
+     * Ersetzungen (`costsNothingBecauseOfChange == true`) blinken aus Prinzip nicht. Dieses Flag
+     * hier kann aber trotzdem `false` gesetzt sein, wenn die Resourcen für die Straße bis zu dieser
+     * Kachel nicht mehr reichen, sodass die Ersetzung auch nicht gebaut wird.
      */
-    bool resourcesEnoughToBuildThis;
+    bool resourcesEnoughToBuildThis = false;
 
     /**
      * @brief `true`, wenn diese Kachel kein Baumaterial kostet, da ein bestehendes Objekt ersetzt wird.
@@ -34,8 +39,12 @@ struct BuildOperationResultBit {
 
     /**
      * @brief MapObject, das beim Abschluss der Bauoperation das bestehende Map-Objekt ersetzt
-     * (bzw. hinzugefügt werden soll). `nullptr` bedeutet "keine Ersetzung". Um das Objekt zu
-     * löschen, muss stattdessen `deleteMapObjectThere` auf `true` gesetzt werden.
+     * (bzw. hinzugefügt werden soll).
+     *
+     * `nullptr` bedeutet "keine Ersetzung". Z.&nbsp;B. wenn die Resourcen nicht reichen, ist nur
+     *  mapObjectToDraw gesetzt und `mapObjectToReplaceWith == nullptr`.
+     *
+     * Um das Objekt zu löschen, muss stattdessen `deleteMapObjectThere` auf `true` gesetzt werden.
      */
     std::shared_ptr<MapObjectFixed> mapObjectToReplaceWith = nullptr;
 

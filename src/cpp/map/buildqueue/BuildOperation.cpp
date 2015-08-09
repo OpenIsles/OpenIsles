@@ -143,7 +143,9 @@ bool BuildOperation::mayBuildOver(const MapObjectType* mapObjectTypeThere,
     return false;
 }
 
-StreetConnections BuildOperation::calculateStreetConnections(const MapCoords& mapCoords) const {
+StreetConnections BuildOperation::calculateStreetConnections(
+    const MapCoords& mapCoords, const ToDrawOrToReplaceWith& toDrawOrToReplaceWith) const {
+
     // Angrenzende Straßen (auf der Karte und im BuildOperationResult) checken
     const Map* map = context->game->getMap();
     auto isStreetThere = [&](const MapCoords& mapCoordsInLamdba) {
@@ -153,7 +155,9 @@ StreetConnections BuildOperation::calculateStreetConnections(const MapCoords& ma
 
         auto iter = result.find(mapCoordsInLamdba);
         if (iter != result.cend()) {
-            return (std::dynamic_pointer_cast<Street>(iter->second->mapObjectToReplaceWith) != nullptr);
+            std::shared_ptr<MapObjectFixed>& mapObjectToUse = (toDrawOrToReplaceWith == TO_DRAW) ?
+                iter->second->mapObjectToDraw : iter->second->mapObjectToReplaceWith;
+            return (std::dynamic_pointer_cast<Street>(mapObjectToUse) != nullptr);
         }
 
         return false;
@@ -173,7 +177,9 @@ StreetConnections BuildOperation::calculateStreetConnections(const MapCoords& ma
     return streetConnections;
 }
 
-void BuildOperation::adeptExistingStreets(const Street& streetToAdeptAround) {
+void BuildOperation::adeptExistingStreets(
+    const Street& streetToAdeptAround, bool resourcesEnoughToBuildThis) {
+
     Map* map = context->game->getMap();
 
     auto adeptExistingStreet = [&](const MapCoords& mapCoords) {
@@ -183,39 +189,72 @@ void BuildOperation::adeptExistingStreets(const Street& streetToAdeptAround) {
             return;
         }
 
-        // Nicht ersetzen, wenn dort im BuildOperationResult bereits was neue gebaut wird
+        /* Nicht ersetzen, wenn dort im BuildOperationResult bereits was neue gebaut wird
+         *
+         * Haben wir eine Ersetzung dort, dann nicht überspringen. Es kann sein, dass zwei Kacheln eine Ersetzung
+         * triggern, die erste mit resourcesEnoughToBuildThis==false, die zweite mit resourcesEnoughToBuildThis==true.
+         * Dann müssen wir natürlich reinlaufen, um die Ersetzung korrekt zu setzen.
+         */
         auto iter = result.find(mapCoords);
-        if (iter != result.cend()) {
+        if (iter != result.cend() && !iter->second->costsNothingBecauseOfChange) {
             return;
         }
 
         // Prüfen, ob Ersetzung notwendig ist
-        StreetConnections streetConnectionsShouldBe = calculateStreetConnections(existingStreet->getMapCoords());
-        if (streetConnectionsShouldBe == existingStreet->streetConnections &&
-            existingStreet->getView() == Direction::SOUTH) {
+        StreetConnections streetConnectionsShouldBeToDraw =
+            calculateStreetConnections(existingStreet->getMapCoords(), TO_DRAW);
+        StreetConnections streetConnectionsShouldBeToReplaceWith =
+            calculateStreetConnections(existingStreet->getMapCoords(), TO_REPLACE_WITH);
+
+        if ((streetConnectionsShouldBeToDraw == existingStreet->streetConnections) &&
+            (streetConnectionsShouldBeToDraw == streetConnectionsShouldBeToReplaceWith) &&
+            (existingStreet->getView() == Direction::SOUTH)) {
 
             return; // passt alles schon
         }
 
         // Ersetzung anlegen
-        assert((existingStreet->getMapWidth() == 1) && (existingStreet->getMapHeight() == 1));
-        assert((existingStreet->getMapWidth() == 1) && (existingStreet->getMapHeight() == 1));
+        std::shared_ptr<BuildOperationResultBit> resultBit;
+        if (iter == result.cend()) {
+            resultBit.reset(new BuildOperationResultBit());
+            result[mapCoords] = resultBit;
+        } else {
+            resultBit = iter->second;
+        }
 
-        Street* mapObjectToReplaceWith = (Street*) MapObjectFixed::instantiate(existingStreet->getMapObjectType());
-        mapObjectToReplaceWith->setMapCoords(mapCoords);
-        mapObjectToReplaceWith->setView(Direction::SOUTH);
-        mapObjectToReplaceWith->setMapWidth(existingStreet->getMapWidth());
-        mapObjectToReplaceWith->setMapHeight(existingStreet->getMapHeight());
-        mapObjectToReplaceWith->streetConnections = streetConnectionsShouldBe;
-
-        std::shared_ptr<BuildOperationResultBit> resultBit(new BuildOperationResultBit());
         resultBit->somethingInTheWay = false;
         resultBit->costsNothingBecauseOfChange = true;
-        resultBit->resourcesEnoughToBuildThis = true;
-        resultBit->mapObjectToReplaceWith.reset(mapObjectToReplaceWith);
-        resultBit->mapObjectToDraw = resultBit->mapObjectToReplaceWith;
+        if (resourcesEnoughToBuildThis) {
+            // wenn auch nur ein angrenzender Straßenneubau genug Baumaterial hat, hat es die Ersetzung natürlich auch
+            // und wir setzen auf true.
+            resultBit->resourcesEnoughToBuildThis = true;
+        }
 
-        result[mapCoords] = resultBit;
+        auto createReplacement = [&](const StreetConnections& streetConnectionsShouldBe) -> Street* {
+            assert((existingStreet->getMapWidth() == 1) && (existingStreet->getMapHeight() == 1));
+
+            Street* streetReplacement = (Street*) MapObjectFixed::instantiate(existingStreet->getMapObjectType());
+            streetReplacement->setMapCoords(mapCoords);
+            streetReplacement->setView(Direction::SOUTH);
+            streetReplacement->setMapWidth(existingStreet->getMapWidth());
+            streetReplacement->setMapHeight(existingStreet->getMapHeight());
+            streetReplacement->streetConnections = streetConnectionsShouldBe;
+
+            return streetReplacement;
+        };
+
+        if (streetConnectionsShouldBeToDraw != existingStreet->streetConnections) {
+            resultBit->mapObjectToDraw.reset(createReplacement(streetConnectionsShouldBeToDraw));
+
+            if (resultBit->resourcesEnoughToBuildThis) {
+                if (streetConnectionsShouldBeToReplaceWith != streetConnectionsShouldBeToDraw) {
+                    resultBit->mapObjectToReplaceWith.reset(
+                        createReplacement(streetConnectionsShouldBeToReplaceWith));
+                } else {
+                    resultBit->mapObjectToReplaceWith = resultBit->mapObjectToDraw;
+                }
+            }
+        }
     };
 
     const MapCoords& mapCoords = streetToAdeptAround.getMapCoords();
@@ -261,16 +300,12 @@ void BuildOperation::rebuildResult() {
         resultBit->somethingInTheWay = somethingInTheWay;
 
         if (!somethingInTheWay) {
-            MapObjectFixed* mapObjectToReplaceWith = MapObjectFixed::instantiate(mapObjectType);
-            mapObjectToReplaceWith->setMapCoords(mapObjectToBuild.mapCoords);
-            mapObjectToReplaceWith->setView(mapObjectToBuild.view);
-            mapObjectToReplaceWith->setMapWidth(mapWidth);
-            mapObjectToReplaceWith->setMapHeight(mapHeight);
-            resultBit->mapObjectToReplaceWith.reset(mapObjectToReplaceWith);
-
-            // TODO BUILDOPERATION Spezialfall Straßen: mapObjectToDraw = Kreuzung, aber wegen Resourcenmangel mapObjectToReplaceWith = T-Stück
-
-            resultBit->mapObjectToDraw = resultBit->mapObjectToReplaceWith;
+            MapObjectFixed* mapObjectToDraw = MapObjectFixed::instantiate(mapObjectType);
+            mapObjectToDraw->setMapCoords(mapObjectToBuild.mapCoords);
+            mapObjectToDraw->setView(mapObjectToBuild.view);
+            mapObjectToDraw->setMapWidth(mapWidth);
+            mapObjectToDraw->setMapHeight(mapHeight);
+            resultBit->mapObjectToDraw.reset(mapObjectToDraw);
         }
         else {
             result.result = BuildOperationResult::SOMETHING_IN_THE_WAY;
@@ -293,19 +328,20 @@ void BuildOperation::rebuildResult() {
         resultBit->costsNothingBecauseOfChange = costsNothingBecauseOfChange;
 
         // Resourcen überprüfen (einmal false geworden, sparen wir uns die Differenz-Bildung)
-        if (!costsNothingBecauseOfChange) {
-            if (enoughResources) {
-                resourcesAvailable -= mapObjectType->buildingCosts;
-                enoughResources = resourcesAvailable.isNonNegative();
-            }
-            resultBit->resourcesEnoughToBuildThis = enoughResources;
-        } else {
-            // Wenns gratis is, reichen die Resourcen freilich :-)
-            resultBit->resourcesEnoughToBuildThis = true;
+        if (enoughResources && !costsNothingBecauseOfChange) {
+            resourcesAvailable -= mapObjectType->buildingCosts;
+            enoughResources = resourcesAvailable.isNonNegative();
         }
+        resultBit->resourcesEnoughToBuildThis = enoughResources;
 
         if (!resultBit->costsNothingBecauseOfChange) {
             result.buildingCosts += mapObjectType->buildingCosts;
+        }
+
+        if (resultBit->resourcesEnoughToBuildThis) {
+            resultBit->mapObjectToReplaceWith = resultBit->mapObjectToDraw;
+        } else {
+            resultBit->mapObjectToReplaceWith = nullptr;
         }
 
         // ResultBit den Koordinaten zuweisen
@@ -323,27 +359,52 @@ void BuildOperation::rebuildResult() {
 
     for (auto iter : resultCopy) {
         std::shared_ptr<BuildOperationResultBit>& resultBit = iter.second;
+        std::shared_ptr<Street> streetPtr = std::dynamic_pointer_cast<Street>(resultBit->mapObjectToDraw);
+        if (!streetPtr) {
+            continue; // TODO beim Abreißen von Straßen dürfen wir nicht continue machen, sondern müssen Straßen anpassen
+        }
 
-        if (resultBit->mapObjectToReplaceWith) {
-            std::shared_ptr<Street> streetPtr = std::dynamic_pointer_cast<Street>(resultBit->mapObjectToReplaceWith);
-            if (streetPtr) {
-                Street& street = *streetPtr;
+        Street& streetToDraw = *streetPtr;
 
-                // streetConnections setzen
-                StreetConnections streetConnections = calculateStreetConnections(street.getMapCoords());
-                street.streetConnections = streetConnections;
+        // streetConnections ermitteln
+        StreetConnections streetConnectionsToDraw =
+            calculateStreetConnections(streetToDraw.getMapCoords(), TO_DRAW);
+        StreetConnections streetConnectionsToReplaceWith =
+            calculateStreetConnections(streetToDraw.getMapCoords(), TO_REPLACE_WITH);
 
-                // mindestens eine angrenzende Straße? Dann die View auf SOUTH stellen.
-                if (streetConnections.any()) {
-                    street.setView(Direction::SOUTH);
-                }
+        streetToDraw.streetConnections = streetConnectionsToDraw;
 
-                // Straßen außenrum ggf. ersetzen
-                // (für Ersetzungen können wir sparen, diese triggern niemals eine zweite Ersetzung)
-                if (!resultBit->costsNothingBecauseOfChange) {
-                    adeptExistingStreets(street);
-                }
+        // mindestens eine angrenzende Straße? Dann die View auf SOUTH stellen.
+        if (streetConnectionsToDraw.any()) {
+            streetToDraw.setView(Direction::SOUTH);
+        }
+
+        // Wenn für toDraw und toReplaceWith nicht gleich sind, müssen wir ein separates toReplaceWith-Objekt anlegen
+        if (resultBit->mapObjectToReplaceWith &&
+            (resultBit->mapObjectToDraw == resultBit->mapObjectToReplaceWith) &&
+            (streetConnectionsToDraw != streetConnectionsToReplaceWith)) {
+
+            MapObjectFixed* mapObjectToReplaceWith = MapObjectFixed::instantiate(streetToDraw.getMapObjectType());
+            mapObjectToReplaceWith->setMapCoords(streetToDraw.getMapCoords());
+            mapObjectToReplaceWith->setView(streetToDraw.getView());
+            mapObjectToReplaceWith->setMapWidth(streetToDraw.getMapWidth());
+            mapObjectToReplaceWith->setMapHeight(streetToDraw.getMapHeight());
+
+            Street* streetToReplaceWith = (Street*) mapObjectToReplaceWith;
+            streetToReplaceWith->streetConnections = streetConnectionsToReplaceWith;
+
+            // mindestens eine angrenzende Straße? Dann die View auf SOUTH stellen.
+            if (streetConnectionsToReplaceWith.any()) {
+                streetToReplaceWith->setView(Direction::SOUTH);
             }
+
+            resultBit->mapObjectToReplaceWith.reset(mapObjectToReplaceWith);
+        }
+
+        // Zum Schluss Straßen außenrum ggf. ersetzen
+        // (für Ersetzungen können wir sparen, diese triggern niemals eine zweite Ersetzung)
+        if (!resultBit->costsNothingBecauseOfChange) {
+            adeptExistingStreets(streetToDraw, resultBit->resourcesEnoughToBuildThis);
         }
     }
 }

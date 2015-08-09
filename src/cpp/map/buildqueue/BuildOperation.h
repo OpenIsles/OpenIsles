@@ -97,6 +97,16 @@ public:
 
 private:
     /**
+     * @brief Helper-Enum, um zwischen BuildOperationResultBit::mapObjectToReplaceWith und
+     * BuildOperationResultBit::mapObjectToDraw unterscheiden zu können.
+     */
+    enum ToDrawOrToReplaceWith {
+        TO_DRAW,
+        TO_REPLACE_WITH
+    };
+
+
+    /**
      * @brief Überprüft, ob ein geplantes Objekt in die Karte gesetzt werden kann oder was im Weg ist.
      * @param mapObjectToBuild zu platzierendes Objekt
      * @return `true`, wenn alles frei ist oder überbar ist; sonst `false`.
@@ -119,15 +129,25 @@ private:
      * @brief Berechnet ein StreetConnections-Objekt für ausgewählte Koordinaten
      * @param mapCoords Map-Koordinaten, an dessen Stelle die Straße ist, für die das
      *                  StreetConnections-Objekt berechnet werden soll
+     * @param toDrawOrToReplaceWith welche Property aus dem BuildOperationResultBit soll für die Betrachtung
+     *                              benutzt werden
      * @return befülltes StreetConnections-Objekt
      */
-    StreetConnections calculateStreetConnections(const MapCoords& mapCoords) const;
+    StreetConnections calculateStreetConnections(
+        const MapCoords& mapCoords, const ToDrawOrToReplaceWith& toDrawOrToReplaceWith) const;
 
     /**
      * @brief Fügt ggf. weitere Replacements ins BuildOperationResult hinzu, die Straßenersetzungen entsprechen.
+     *
+     * Mit resourcesEnoughToBuildThis wird gesteuert, welchen Wert das `resourcesEnoughToBuildThis`-Flag für
+     * Ersetzungen hat. Eine Ersetzung hat nur dann `resourcesEnoughToBuildThis == true`, wenn mindestens eine
+     * neu zu bauende angrenzende Straße auch `resourcesEnoughToBuildThis == true` hat.
+     *
      * @param streetToAdeptAround Straße, um die herum ggf. Ersetzungen hinzugefügt werden sollen.
+     * @param resourcesEnoughToBuildThis gibt an, ob die Resourcen reichen, um die Straße zu bauen, um die herum
+     *                                   ggf. Ersetzungen hinzugefügt werden sollen.
      */
-    void adeptExistingStreets(const Street& streetToAdeptAround);
+    void adeptExistingStreets(const Street& streetToAdeptAround, bool resourcesEnoughToBuildThis);
 
     /**
      * @brief Aktualisiert `result` nach einer Änderung der Build-Queue

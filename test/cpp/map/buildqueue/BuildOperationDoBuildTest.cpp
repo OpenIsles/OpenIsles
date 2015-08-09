@@ -114,7 +114,94 @@ TEST_F(BuildOperationDoBuildTest, partialBuildOutOfResources) {
 }
 
 // TODO BUILDOPERATION overbuildBuild: Förster in die 1x1 Felder bauen (vollständig und partial)
-// TODO BUILDOPERATION partialCrossroads: Straßenzug bauen, der eine Straße zur Kreuzung machen soll, Resourcen aber nur zum T-Stück reichen (aktuell wird die Kreuzung falsch übernommen).
+
+/**
+ * @brief Test, der Straßenanpassung testet, wenn die Resourcen nicht mehr reichen.
+ * Beim Bau dürfen nur Ersetzungen vorgenommen werden, die angrenzen an Straßen, wofür die Resourcen reichen.
+ *
+ * Wir bauen einen Feldweg von (43, 44) nach (47, 44).
+ * Allerdings reicht das Geld nur für zwei Kacheln.
+ */
+TEST_F(BuildOperationDoBuildTest, adeptStreetsOutOfResources) {
+    const Map* map = game->getMap();
+    const MapObjectType* farmRoad = configMgr->getMapObjectType("farm-road");
+    const MapObjectType* cobbledStreet = configMgr->getMapObjectType("cobbled-street");
+
+    // Testaufbau
+    player->coins = 10;
+
+    BuildOperation buildOperation(&context, *player);
+    for (int x = 43; x <= 47; x++) {
+        buildOperation.requestBuildWhenNothingInTheWay(MapCoords(x, 44), farmRoad, Direction::SOUTH);
+    }
+    buildOperation.doBuild();
+
+    // Testauswertung
+
+    // Resourcen korrekt nur für 2 Kacheln abgezogen
+    ASSERT_EQ(0, player->coins);
+
+    // Bau korrekt
+    assertCorrectBuild({43, 44}, farmRoad, Direction::SOUTH, 1, 1);
+    ASSERT_EQ(StreetConnections::BIT_MASK_EAST | StreetConnections::BIT_MASK_SOUTH,
+              dynamic_cast<const Street*>(map->getMapObjectFixedAt({43, 44}))->streetConnections);
+
+    assertCorrectBuild({44, 44}, farmRoad, Direction::SOUTH, 1, 1);
+
+    for (int x = 45; x <= 47; x++) {
+        ASSERT_TRUE(game->getMap()->getMapObjectFixedAt({x, 44}) == nullptr);
+    }
+
+    // partielle Anpassung an (44, 44): nur West! Für die Ost-Verbindung reichen die Resourcen nicht
+    ASSERT_EQ(StreetConnections::BIT_MASK_WEST,
+              dynamic_cast<const Street*>(map->getMapObjectFixedAt({44, 44}))->streetConnections);
+
+    // Anpassung an (43, 45)
+    assertCorrectBuild({43, 45}, cobbledStreet, Direction::SOUTH, 1, 1);
+    ASSERT_EQ(StreetConnections::BIT_MASK_NORTH,
+              dynamic_cast<const Street*>(map->getMapObjectFixedAt({43, 45}))->streetConnections);
+
+    // Keine Anpassungen an (45, 45), (47, 45), (47, 43), da die Resourcen nicht reichen
+    ASSERT_EQ(0, dynamic_cast<const Street*>(map->getMapObjectFixedAt({45, 45}))->streetConnections);
+    ASSERT_EQ(0, dynamic_cast<const Street*>(map->getMapObjectFixedAt({47, 45}))->streetConnections);
+    ASSERT_EQ(StreetConnections::BIT_MASK_NORTH,
+              dynamic_cast<const Street*>(map->getMapObjectFixedAt({47, 43}))->streetConnections);
+}
+
+/**
+ * @brief Spezialtest "halbe Kreuzung"
+ *
+ * Wir bauen einen Feldweg von (46, 31) nach (46, 33).
+ * Allerdings reicht das Geld nur für eine Kachel.
+ *
+ * Wir erwarten, dass beim Bau nur ein T-Stück entsteht, obwohl eine Kreuzung gezogen wurde.
+ */
+TEST_F(BuildOperationDoBuildTest, partialCrossroads) {
+    const Map* map = game->getMap();
+    const MapObjectType* farmRoad = configMgr->getMapObjectType("farm-road");
+
+    // Testaufbau
+    player->coins = 5;
+
+    BuildOperation buildOperation(&context, *player);
+    for (int y = 31; y <= 33; y++) {
+        buildOperation.requestBuildWhenNothingInTheWay(MapCoords(46, y), farmRoad, Direction::SOUTH);
+    }
+    buildOperation.doBuild();
+
+    // Testauswertung
+    ASSERT_EQ(0, player->coins);
+
+    assertCorrectBuild({46, 31}, farmRoad, Direction::SOUTH, 1, 1);
+    ASSERT_EQ(StreetConnections::BIT_MASK_SOUTH,
+              dynamic_cast<const Street*>(map->getMapObjectFixedAt({46, 31}))->streetConnections);
+
+    assertCorrectBuild({46, 32}, farmRoad, Direction::SOUTH, 1, 1);
+    ASSERT_EQ(StreetConnections::BIT_MASK_NORTH | StreetConnections::BIT_MASK_EAST | StreetConnections::BIT_MASK_WEST,
+              dynamic_cast<const Street*>(map->getMapObjectFixedAt({46, 32}))->streetConnections);
+
+    ASSERT_TRUE(map->getMapObjectFixedAt({46, 33}) == nullptr);
+}
 
 /**
  * @brief Testet das Ausführen einer Bauoperation, die Straßen überbaut bzw. anpasst

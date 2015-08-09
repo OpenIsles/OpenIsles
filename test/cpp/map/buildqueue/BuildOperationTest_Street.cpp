@@ -266,6 +266,199 @@ TEST_F(BuildOperationTest, adeptStreets) {
     }
 }
 
+/**
+ * @brief Test, der Straßenanpassung testet, wenn die Resourcen nicht mehr reichen.
+ * Ersetzungen dürfen nicht eingeplant werden, wenn die Resourcen bis dahin nicht mehr reichen.
+ *
+ * Testaufbau analog zu adeptStreets, allerdings reicht das Geld nur für fünf Kacheln.
+ * Wir bauen einen Feldweg von (43, 44) nach (49, 44).
+ *
+ * Die Kreuzung an (47, 44) wird eine "halbe Kreuzung", die als Kreuzung dargestellt wird, beim Bau
+ * aber nur ein T-Stück ist.
+ */
+TEST_F(BuildOperationTest, adeptStreetsOutOfResources) {
+    const MapObjectType* farmRoad = configMgr->getMapObjectType("farm-road");
+    const MapObjectType* cobbledStreet = configMgr->getMapObjectType("cobbled-street");
+
+    // Testaufbau
+    player->coins = 25;
+
+    BuildOperation buildOperation(&context, *player);
+    for (int x = 43; x <= 49; x++) {
+        buildOperation.requestBuildWhenNothingInTheWay(MapCoords(x, 44), farmRoad, Direction::SOUTH);
+    }
+
+    const BuildOperationResult& result = buildOperation.getResult();
+
+    // Testauswertung
+
+    ASSERT_EQ(BuildOperationResult::OK, result.result);
+    ASSERT_EQ(12, result.size()); // 7 neue + 5 vorhandene
+
+    // neu verlegte Kacheln, Resourcen reichen: Kurve links
+    {
+        const BuildOperationResultBit& resultBit = *result.at({43, 44});
+        ASSERT_EQ(farmRoad, resultBit.mapObjectToReplaceWith->getMapObjectType());
+        ASSERT_EQ(StreetConnections::BIT_MASK_EAST | StreetConnections::BIT_MASK_SOUTH,
+                  std::dynamic_pointer_cast<const Street>(resultBit.mapObjectToReplaceWith)->streetConnections);
+        ASSERT_EQ(false, resultBit.costsNothingBecauseOfChange);
+        ASSERT_EQ(true, resultBit.resourcesEnoughToBuildThis);
+        ASSERT_EQ(resultBit.mapObjectToReplaceWith, resultBit.mapObjectToDraw);
+    }
+
+    // neu verlegte Kacheln, Resourcen reichen: Geraden auf (44, 44) und (46, 44)
+    for (int x = 44; x <= 46; x += 2) {
+        const BuildOperationResultBit& resultBit = *result.at({x, 44});
+        ASSERT_EQ(farmRoad, resultBit.mapObjectToReplaceWith->getMapObjectType());
+        ASSERT_EQ(StreetConnections::BIT_MASK_EAST | StreetConnections::BIT_MASK_WEST,
+                  std::dynamic_pointer_cast<const Street>(resultBit.mapObjectToReplaceWith)->streetConnections);
+        ASSERT_EQ(false, resultBit.costsNothingBecauseOfChange);
+        ASSERT_EQ(true, resultBit.resourcesEnoughToBuildThis);
+        ASSERT_EQ(resultBit.mapObjectToReplaceWith, resultBit.mapObjectToDraw);
+    }
+
+    // neu verlegte Kacheln, Resourcen reichen: T-Stück
+    {
+        const BuildOperationResultBit& resultBit = *result.at({45, 44});
+        ASSERT_EQ(farmRoad, resultBit.mapObjectToReplaceWith->getMapObjectType());
+        ASSERT_EQ(StreetConnections::BIT_MASK_EAST | StreetConnections::BIT_MASK_SOUTH | StreetConnections::BIT_MASK_WEST,
+                  std::dynamic_pointer_cast<const Street>(resultBit.mapObjectToReplaceWith)->streetConnections);
+        ASSERT_EQ(false, resultBit.costsNothingBecauseOfChange);
+        ASSERT_EQ(true, resultBit.resourcesEnoughToBuildThis);
+        ASSERT_EQ(resultBit.mapObjectToReplaceWith, resultBit.mapObjectToDraw);
+    }
+
+    // neu verlegte Kacheln, Resourcen reichen bis hierhin: Kreuzung
+    {
+        const BuildOperationResultBit& resultBit = *result.at({47, 44});
+        ASSERT_EQ(farmRoad, resultBit.mapObjectToReplaceWith->getMapObjectType());
+        ASSERT_EQ(StreetConnections::BIT_MASK_NORTH | StreetConnections::BIT_MASK_SOUTH | StreetConnections::BIT_MASK_WEST,
+                  std::dynamic_pointer_cast<const Street>(resultBit.mapObjectToReplaceWith)->streetConnections);
+        ASSERT_EQ(false, resultBit.costsNothingBecauseOfChange);
+        ASSERT_EQ(true, resultBit.resourcesEnoughToBuildThis);
+        
+        ASSERT_NE(resultBit.mapObjectToReplaceWith, resultBit.mapObjectToDraw);
+        ASSERT_EQ(farmRoad, resultBit.mapObjectToDraw->getMapObjectType());
+        ASSERT_EQ(StreetConnections::BIT_MASK_NORTH | StreetConnections::BIT_MASK_EAST |
+                      StreetConnections::BIT_MASK_SOUTH | StreetConnections::BIT_MASK_WEST,
+                  std::dynamic_pointer_cast<const Street>(resultBit.mapObjectToDraw)->streetConnections);
+    }
+
+    // neu verlegte Kacheln, Resourcen reichen nicht: Gerade (48, 44)
+    {
+        const BuildOperationResultBit& resultBit = *result.at({48, 44});
+        ASSERT_EQ(nullptr, resultBit.mapObjectToReplaceWith);
+        ASSERT_EQ(false, resultBit.costsNothingBecauseOfChange);
+        ASSERT_EQ(false, resultBit.resourcesEnoughToBuildThis);
+
+        ASSERT_NE(resultBit.mapObjectToReplaceWith, resultBit.mapObjectToDraw);
+        ASSERT_EQ(farmRoad, resultBit.mapObjectToDraw->getMapObjectType());
+        ASSERT_EQ(StreetConnections::BIT_MASK_EAST | StreetConnections::BIT_MASK_WEST,
+                  std::dynamic_pointer_cast<const Street>(resultBit.mapObjectToDraw)->streetConnections);
+    }
+
+    // neu verlegte Kacheln, Resourcen reichen nicht: Kurve rechts
+    {
+        const BuildOperationResultBit& resultBit = *result.at({49, 44});
+        ASSERT_EQ(nullptr, resultBit.mapObjectToReplaceWith);
+        ASSERT_EQ(false, resultBit.costsNothingBecauseOfChange);
+        ASSERT_EQ(false, resultBit.resourcesEnoughToBuildThis);
+
+        ASSERT_NE(resultBit.mapObjectToReplaceWith, resultBit.mapObjectToDraw);
+        ASSERT_EQ(farmRoad, resultBit.mapObjectToDraw->getMapObjectType());
+        ASSERT_EQ(StreetConnections::BIT_MASK_SOUTH | StreetConnections::BIT_MASK_WEST,
+                  std::dynamic_pointer_cast<const Street>(resultBit.mapObjectToDraw)->streetConnections);
+    }
+
+    // bestehende Kacheln: muss allgemein gelten
+    const std::forward_list<MapCoords> mapCoordsToAdept = { {47, 43}, {43, 45}, {45, 45}, {47, 45}, {49, 45} };
+    for (const MapCoords& mapCoords : mapCoordsToAdept) {
+        const BuildOperationResultBit& resultBit = *result.at(mapCoords);
+        ASSERT_EQ(cobbledStreet, resultBit.mapObjectToDraw->getMapObjectType());
+        ASSERT_EQ(Direction::SOUTH, resultBit.mapObjectToDraw->getView());
+        ASSERT_EQ(true, resultBit.costsNothingBecauseOfChange);
+    }
+
+    // bestehende Kacheln: Ersetzungen, für die die Resourcen reichen
+    for (int x = 43; x <= 47; x += 2) {
+        const BuildOperationResultBit& resultBit = *result.at({x, 45});
+        ASSERT_EQ(cobbledStreet, resultBit.mapObjectToReplaceWith->getMapObjectType());
+        ASSERT_EQ(StreetConnections::BIT_MASK_NORTH,
+                  std::dynamic_pointer_cast<const Street>(resultBit.mapObjectToReplaceWith)->streetConnections);
+        ASSERT_EQ(true, resultBit.costsNothingBecauseOfChange);
+        ASSERT_EQ(true, resultBit.resourcesEnoughToBuildThis);
+        ASSERT_EQ(resultBit.mapObjectToReplaceWith, resultBit.mapObjectToDraw);
+    }
+    {
+        const BuildOperationResultBit& resultBit = *result.at({47, 43});
+        ASSERT_EQ(cobbledStreet, resultBit.mapObjectToReplaceWith->getMapObjectType());
+        ASSERT_EQ(StreetConnections::BIT_MASK_NORTH | StreetConnections::BIT_MASK_SOUTH,
+                  std::dynamic_pointer_cast<const Street>(resultBit.mapObjectToReplaceWith)->streetConnections);
+        ASSERT_EQ(true, resultBit.costsNothingBecauseOfChange);
+        ASSERT_EQ(true, resultBit.resourcesEnoughToBuildThis);
+        ASSERT_EQ(resultBit.mapObjectToReplaceWith, resultBit.mapObjectToDraw);
+    }
+
+    // bestehende Kacheln: Ersetzungen, für die die Resourcen nicht reichen
+    {
+        const BuildOperationResultBit& resultBit = *result.at({49, 45});
+        ASSERT_EQ(nullptr, resultBit.mapObjectToReplaceWith);
+        ASSERT_EQ(true, resultBit.costsNothingBecauseOfChange);
+        ASSERT_EQ(false, resultBit.resourcesEnoughToBuildThis);
+
+        ASSERT_NE(resultBit.mapObjectToReplaceWith, resultBit.mapObjectToDraw);
+        ASSERT_EQ(cobbledStreet, resultBit.mapObjectToDraw->getMapObjectType());
+        ASSERT_EQ(StreetConnections::BIT_MASK_NORTH,
+                  std::dynamic_pointer_cast<const Street>(resultBit.mapObjectToDraw)->streetConnections);
+    }
+}
+
+/**
+ * @brief Testcase "Ersetzung aufgrund von 2 Kacheln"
+ *
+ * Wir bauen Straßenzug (50, 45), (50, 46), (49, 46).
+ * Es ist aber nur Baumaterial für eine Kachel da.
+ *
+ * Es muss für Ersetzung (49, 45) `resourcesEnoughToBuildThis == true` sein, da (50, 45)
+ * `resourcesEnoughToBuildThis == true` hat; obwohl für (49, 46) `resourcesEnoughToBuildThis == false` gilt.
+ * Eine angrenzende Kachel muss reichen, um für die Ersetzung `resourcesEnoughToBuildThis == true` zu setzen.
+ */
+TEST_F(BuildOperationTest, adeptStreetsFromTwoBuildRequests) {
+    const MapObjectType* farmRoad = configMgr->getMapObjectType("farm-road");
+
+    // Testaufbau
+    player->coins = 5;
+
+    BuildOperation buildOperation(&context, *player);
+    buildOperation.requestBuildWhenNothingInTheWay({50, 45}, farmRoad, Direction::SOUTH);
+    buildOperation.requestBuildWhenNothingInTheWay({50, 46}, farmRoad, Direction::SOUTH);
+    buildOperation.requestBuildWhenNothingInTheWay({49, 46}, farmRoad, Direction::SOUTH);
+
+    const BuildOperationResult& result = buildOperation.getResult();
+
+    // Testauswertung
+
+    // neu gebaut
+    {
+        const BuildOperationResultBit& resultBit = *result.at({50, 45});
+        ASSERT_EQ(true, resultBit.resourcesEnoughToBuildThis);
+    }
+    {
+        const BuildOperationResultBit& resultBit = *result.at({50, 46});
+        ASSERT_EQ(false, resultBit.resourcesEnoughToBuildThis);
+    }
+    {
+        const BuildOperationResultBit& resultBit = *result.at({49, 46});
+        ASSERT_EQ(false, resultBit.resourcesEnoughToBuildThis);
+    }
+
+    // Ersetzung
+    {
+        const BuildOperationResultBit& resultBit = *result.at({49, 45});
+        ASSERT_EQ(true, resultBit.costsNothingBecauseOfChange);
+        ASSERT_EQ(true, resultBit.resourcesEnoughToBuildThis);
+    }
+}
 
 
 ///**
