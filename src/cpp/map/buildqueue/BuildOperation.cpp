@@ -127,18 +127,26 @@ bool BuildOperation::isSomethingInTheWayOnTheMap(const MapObjectToBuild& mapObje
 bool BuildOperation::mayBuildOver(const MapObjectType* mapObjectTypeThere,
                                   const MapObjectType* mapObjectTypeToBuildOver) const {
 
-    // TODO allgemeiner hinkriegen; ggf. notwendig, dass nur ein MapObjectType "Feldweg"/"Pflasterstraße" existiert
     // TODO via Config steuerbar
+
+    // Über Harvestables darf man immer bauen
+    bool isHarvestableThere = (mapObjectTypeThere->type == MapObjectTypeClass::HARVESTABLE);
+    if (isHarvestableThere) {
+        return true;
+    }
 
     // Ersetzung für Straßen erlauben
     bool isStreetThere = (mapObjectTypeThere->type == MapObjectTypeClass::STREET);
     bool isStreetToBuildOver = (mapObjectTypeToBuildOver->type == MapObjectTypeClass::STREET);
-
     if (isStreetThere && isStreetToBuildOver) {
         return true;
     }
 
-    // TODO weitere Konstellationen (Plätze über Weg/Straße, Gebäude über Harvestables)
+    // Plätze dürfen über Straßen gebaut werden
+    bool isSquareToBuildOver = (mapObjectTypeToBuildOver->name.substr(0, 6) == "square");
+    if (isStreetThere && isSquareToBuildOver) {
+        return true;
+    }
 
     return false;
 }
@@ -311,18 +319,14 @@ void BuildOperation::rebuildResult() {
             result.result = BuildOperationResult::SOMETHING_IN_THE_WAY;
         }
 
+        // Gratis-Überbauen: Wurde mit demselben Map-Objekt-Typ überbaut, so ist das nur eine "Änderung" und kostet nix
         bool costsNothingBecauseOfChange = false;
-        // Gratis-Überbauen geht sowieso nur mit Straßen, die immer 1x1 groß sind
-        if (mapObjectType->type == MapObjectTypeClass::STREET) {
-            assert(mapWidth == 1 && mapHeight == 1);
 
-            // Wurde mit demselben Map-Objekt-Typ überbaut, so ist das nur eine "Änderung" und kostet nix
-            MapObjectFixed* mapObjectFixedAlreadyThere =
-                context->game->getMap()->getMapObjectFixedAt(mapObjectToBuild.mapCoords);
-            if (mapObjectFixedAlreadyThere != nullptr) {
-                if (mapObjectFixedAlreadyThere->getMapObjectType() == mapObjectType) {
-                    costsNothingBecauseOfChange = true;
-                }
+        MapObjectFixed* mapObjectFixedAlreadyThere =
+            context->game->getMap()->getMapObjectFixedAt(mapObjectToBuild.mapCoords);
+        if (mapObjectFixedAlreadyThere != nullptr) {
+            if (mapObjectFixedAlreadyThere->getMapObjectType() == mapObjectType) {
+                costsNothingBecauseOfChange = true;
             }
         }
         resultBit->costsNothingBecauseOfChange = costsNothingBecauseOfChange;
@@ -443,9 +447,18 @@ void BuildOperation::doBuild() {
 
         // Bestehenes Objekt soll entfernt werden?
         if (resultBit.mapObjectToReplaceWith || resultBit.deleteMapObjectThere) {
-            MapObjectFixed* mapObjectFixedThere = map->getMapObjectFixedAt(mapCoords);
-            if (mapObjectFixedThere != nullptr) {
-                map->deleteMapObject(mapObjectFixedThere);
+            // Über alle Kacheln loopen. z.B. ein 2x2-Gebäude kann 4 1x1-Felder überschreiben
+            const int mapHeight = resultBit.mapObjectToReplaceWith->getMapHeight();
+            const int mapWidth = resultBit.mapObjectToReplaceWith->getMapWidth();
+            const MapCoords& mapCoordsToReplaceWith = resultBit.mapObjectToReplaceWith->getMapCoords();
+
+            for (int my = mapCoordsToReplaceWith.y(); my < mapCoordsToReplaceWith.y() + mapHeight; my++) {
+                for (int mx = mapCoordsToReplaceWith.x(); mx < mapCoordsToReplaceWith.x() + mapWidth; mx++) {
+                    MapObjectFixed* mapObjectFixedThere = map->getMapObjectFixedAt({mx, my});
+                    if (mapObjectFixedThere != nullptr) {
+                        map->deleteMapObject(mapObjectFixedThere);
+                    }
+                }
             }
         }
 

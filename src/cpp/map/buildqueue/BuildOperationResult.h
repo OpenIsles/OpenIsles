@@ -60,7 +60,7 @@ struct BuildOperationResultBit {
 
     /**
      * @brief auf `true` gesetzt wird beim Abschluss der Bauoperation das bestehende Map-Objekt gelöscht.
-     * Wird für Abreißen und Überbauen von kleineren Objekten durch größere benutzt benutzt.
+     * Wird für Abreißen benutzt.
      */
     bool deleteMapObjectThere = false;
 
@@ -87,7 +87,7 @@ public:
          * @brief Es ist was im Weg, was nicht überbaut werden kann.
          */
         SOMETHING_IN_THE_WAY
-    } result;
+    } result = OK;
 
     /**
      * @brief Resourcen-Kosten gesamt

@@ -6,50 +6,9 @@
 
 
 /**
- * @brief Test-Fixture für das Abtesten von BuildOperation::doBuild().
- *
- * Wir gehen davon aus, dass das BuildOperationResult immer korrekt ist.
- * Der Test prüft, ob die Objekte aus `mapObjectToReplaceWith` korrekt in die Map umgesetzt worden sind.
- */
-class BuildOperationDoBuildTest : public BuildOperationTest {
-
-protected:
-    Colony* colony;
-
-protected:
-    virtual void SetUp() {
-        BuildOperationTest::SetUp();
-
-        colony = game->getColony({ 43, 34 });
-    }
-
-    /**
-     * @brief Assert-Helper. Prüft, ob ein Map-Objekt korrekt in die Map übernommen wurde.
-     * @param mapCoords erwartete Map-Koordinaten
-     * @param mapObjectType erwarteter MapObjectType
-     * @param view erwartete View des MapObject
-     * @param mapWidth erwartete mapWidth des MapObject
-     * @param mapHeight erwartete mapHeight des MapObject
-     */
-    void assertCorrectBuild(const MapCoords& mapCoords, const MapObjectType* mapObjectType,
-                            const FourthDirection& view, unsigned char mapWidth, unsigned char mapHeight) const {
-
-        const MapObjectFixed* mapObjectFixed = game->getMap()->getMapObjectFixedAt(mapCoords);
-        ASSERT_TRUE(mapObjectFixed != nullptr);
-        ASSERT_EQ(mapCoords, mapObjectFixed->getMapCoords());
-        ASSERT_EQ(mapObjectType, mapObjectFixed->getMapObjectType());
-        ASSERT_EQ(view, mapObjectFixed->getView());
-        ASSERT_EQ(mapWidth, mapObjectFixed->getMapWidth());
-        ASSERT_EQ(mapHeight, mapObjectFixed->getMapHeight());
-    }
-
-};
-
-
-/**
  * @brief Testet das Ausführen einer einfachen Bauoperation.
  */
-TEST_F(BuildOperationDoBuildTest, regularBuild) {
+TEST_F(BuildOperationTest, regularBuild) {
     const MapObjectType* marketplace = configMgr->getMapObjectType("marketplace");
 
     // Testaufbau
@@ -82,7 +41,7 @@ TEST_F(BuildOperationDoBuildTest, regularBuild) {
  *
  * Baue 5 Rumbrennereien, wobei die Resourcen nur für 3 reichen
  */
-TEST_F(BuildOperationDoBuildTest, partialBuildOutOfResources) {
+TEST_F(BuildOperationTest, partialBuildOutOfResources) {
     const MapObjectType* distillery = configMgr->getMapObjectType("distillery");
 
     // Testaufbau
@@ -113,8 +72,6 @@ TEST_F(BuildOperationDoBuildTest, partialBuildOutOfResources) {
     ASSERT_TRUE(game->getMap()->getMapObjectFixedAt({37, 39}) == nullptr);
 }
 
-// TODO BUILDOPERATION overbuildBuild: Förster in die 1x1 Felder bauen (vollständig und partial)
-
 /**
  * @brief Test, der Straßenanpassung testet, wenn die Resourcen nicht mehr reichen.
  * Beim Bau dürfen nur Ersetzungen vorgenommen werden, die angrenzen an Straßen, wofür die Resourcen reichen.
@@ -122,7 +79,7 @@ TEST_F(BuildOperationDoBuildTest, partialBuildOutOfResources) {
  * Wir bauen einen Feldweg von (43, 44) nach (47, 44).
  * Allerdings reicht das Geld nur für zwei Kacheln.
  */
-TEST_F(BuildOperationDoBuildTest, adeptStreetsOutOfResources) {
+TEST_F(BuildOperationTest, adeptStreetsOutOfResources) {
     const Map* map = game->getMap();
     const MapObjectType* farmRoad = configMgr->getMapObjectType("farm-road");
     const MapObjectType* cobbledStreet = configMgr->getMapObjectType("cobbled-street");
@@ -176,7 +133,7 @@ TEST_F(BuildOperationDoBuildTest, adeptStreetsOutOfResources) {
  *
  * Wir erwarten, dass beim Bau nur ein T-Stück entsteht, obwohl eine Kreuzung gezogen wurde.
  */
-TEST_F(BuildOperationDoBuildTest, partialCrossroads) {
+TEST_F(BuildOperationTest, partialCrossroads) {
     const Map* map = game->getMap();
     const MapObjectType* farmRoad = configMgr->getMapObjectType("farm-road");
 
@@ -209,7 +166,7 @@ TEST_F(BuildOperationDoBuildTest, partialCrossroads) {
  * Ziehe Straßenzug von (46, 31) nach (46, 36).
  * 4 Kacheln kommen neu dazu, 2 werden überbaut (wovon nur eine was kostet).
  */
-TEST_F(BuildOperationDoBuildTest, overbuildAndAdeptStreet) {
+TEST_F(BuildOperationTest, overbuildAndAdeptStreet) {
     const Map* map = game->getMap();
 
     const MapObjectType* farmRoad = configMgr->getMapObjectType("farm-road");

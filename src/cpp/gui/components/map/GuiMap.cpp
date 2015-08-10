@@ -653,7 +653,7 @@ void GuiMap::addToBuildQueration(bool mustResetBefore) {
             route.push_back(mapCoordsUnderMouse);
         } else {
             AStar aStar(context, nullptr, false, false, true);
-            route = aStar.getRoute(mapCoordsClickStart, mapCoordsUnderMouse);
+            route = aStar.getRoute(mapCoordsClickStart, mapCoordsUnderMouse); // TODO Pathfinding muss berücksichtigen, dass Straße über Felder gebaut werden darf
         }
 
         resetBuildOperation(); // immer clearen, weil der neue Pfad alle vorher gesetzten Kacheln ersetzt

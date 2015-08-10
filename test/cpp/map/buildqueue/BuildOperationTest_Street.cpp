@@ -101,7 +101,7 @@ TEST_F(BuildOperationTest, buildStreets) {
  * Von (40, 36) nach (44, 36) gezogen.
  * Resourcen sind für 2 Straßen übrig. Die Resourcen müssen reichen (weil 4 Felder gratis sind).
  */
-TEST_F(BuildOperationTest, costsNothingOverbuildResources) {
+TEST_F(BuildOperationTest, buildCostsNothingOverbuildResources) {
 
     const MapObjectType* cobbledStreet = context.configMgr->getMapObjectType("cobbled-street");
 
@@ -181,7 +181,7 @@ TEST_F(BuildOperationTest, buildLonelyStreet) {
  *
  * Es wird ein Straßenzug von (43, 44) nach (49, 44) gezogen.
  */
-TEST_F(BuildOperationTest, adeptStreets) {
+TEST_F(BuildOperationTest, buildAdeptedStreets) {
 
     const MapObjectType* farmRoad = context.configMgr->getMapObjectType("farm-road");
     const MapObjectType* cobbledStreet = context.configMgr->getMapObjectType("cobbled-street");
@@ -276,7 +276,7 @@ TEST_F(BuildOperationTest, adeptStreets) {
  * Die Kreuzung an (47, 44) wird eine "halbe Kreuzung", die als Kreuzung dargestellt wird, beim Bau
  * aber nur ein T-Stück ist.
  */
-TEST_F(BuildOperationTest, adeptStreetsOutOfResources) {
+TEST_F(BuildOperationTest, buildAdeptedStreetsOutOfResources) {
     const MapObjectType* farmRoad = configMgr->getMapObjectType("farm-road");
     const MapObjectType* cobbledStreet = configMgr->getMapObjectType("cobbled-street");
 
@@ -423,7 +423,7 @@ TEST_F(BuildOperationTest, adeptStreetsOutOfResources) {
  * `resourcesEnoughToBuildThis == true` hat; obwohl für (49, 46) `resourcesEnoughToBuildThis == false` gilt.
  * Eine angrenzende Kachel muss reichen, um für die Ersetzung `resourcesEnoughToBuildThis == true` zu setzen.
  */
-TEST_F(BuildOperationTest, adeptStreetsFromTwoBuildRequests) {
+TEST_F(BuildOperationTest, buildAdeptedStreetsFromTwoBuildRequests) {
     const MapObjectType* farmRoad = configMgr->getMapObjectType("farm-road");
 
     // Testaufbau
@@ -459,15 +459,3 @@ TEST_F(BuildOperationTest, adeptStreetsFromTwoBuildRequests) {
         ASSERT_EQ(true, resultBit.resourcesEnoughToBuildThis);
     }
 }
-
-
-///**
-// * @brief Überprüft verschiedene Kombinationen mit Überbauen
-// * - Feldweg über Straße (muss gehen)
-// * - Straße über Feldweg (muss gehen)
-// * - Straße über Straße (muss ignoriert werden)
-// * - Straße über Platz (muss ignoriert werden)
-// */
-//TEST_F(BuildOperationTest, buildStreetOverStreet) {
-//
-//}

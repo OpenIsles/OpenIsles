@@ -147,9 +147,10 @@ set(TEST_FILES
     test/cpp/economics/EconomicsMgrTest.cpp
     test/cpp/game/CatchmentAreaTest.cpp
     test/cpp/graphics/GraphicSetTest.cpp
-    test/cpp/map/buildqueue/BuildOperationDoBuildTest.cpp
     test/cpp/map/buildqueue/BuildOperationTest.cpp
     test/cpp/map/buildqueue/BuildOperationTest.h
+    test/cpp/map/buildqueue/BuildOperationTest_DoBuild.cpp
+    test/cpp/map/buildqueue/BuildOperationTest_Overbuild.cpp
     test/cpp/map/buildqueue/BuildOperationTest_Street.cpp
     test/cpp/map/coords/MapCoordsTest.cpp
     test/cpp/map/DirectionTest.cpp
