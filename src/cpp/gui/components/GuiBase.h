@@ -134,14 +134,46 @@ public:
      *         `false` um anzudeuten, dass das Event bereits verarbeitet wurde. Es wird dann nicht weiter zugestellt.
      */
     bool onEvent(SDL_Event& event) {
+        // Unsichtbare Elemente kriegen keine Events
         if (!visible) {
             return true;
         }
-        
+
+        // Erst den allgemeinen Handler aufrufen
         if (!onEventElement(event)) {
             return false;
         }
-        
+
+        // Mausbewegung? Separate Event-Handler aufrufen
+        if (event.type == SDL_MOUSEMOTION) {
+            int x = event.motion.x;
+            int y = event.motion.y;
+
+            bool hit = hitTest(x, y);
+            if (hit) {
+                if (!onMouseMove(event.motion)) { //
+                    return false;
+                }
+            }
+
+            // Enter/Leave?
+            int oldX = x - event.motion.xrel;
+            int oldY = y - event.motion.yrel;
+            bool oldHit = hitTest(oldX, oldY);
+
+            if (hit && !oldHit) {
+                if (!onMouseEnter(event.motion)) {
+                    return false;
+                }
+            }
+            else if (!hit && oldHit) {
+                if (!onMouseLeave(event.motion)) {
+                    return false;
+                }
+            }
+        }
+
+        // Jetzt an die Kinder weitergeben
         for (auto iter = childElements.cbegin(); iter != childElements.cend(); iter++) {
             if (!(*iter)->onEvent(event)) {
                 return false;
@@ -156,12 +188,58 @@ public:
 	virtual void renderElement(IRenderer* renderer) = 0;
     
     /**
-     * @brief Callback, der ein Event handelt
+     * @brief Callback, der aufgerufen wird, wenn irgendein Event eingeht.
+     * 
+     * Unterklassen können diese Methode überschreiben und das Event verwenden.
+     * Default-Implementierung: Nichts tun und Event weitergeben.
+     * 
      * @param event SDL-Event
      * @return `true` um das Event an weitere GUI-Elemente zu reichen,
      *         `false` um anzudeuten, dass das Event bereits verarbeitet wurde. Es wird dann nicht weiter zugestellt.
      */
-    virtual bool onEventElement(SDL_Event& event) = 0;
+    virtual bool onEventElement(SDL_Event& event) {
+        return true;
+    }
+
+    /**
+     * @brief Callback, der aufgerufen wird, wenn der Mauszeiger in die GUI-Komponente hineinbewegt wird.
+     * 
+     * Unterklassen können diese Methode überschreiben und das Event verwenden.
+     * Default-Implementierung: Nichts tun und Event weitergeben.
+     * 
+     * @param event SDL-Event
+     * @return `true` um das Event an weitere GUI-Elemente zu reichen,
+     *         `false` um anzudeuten, dass das Event bereits verarbeitet wurde. Es wird dann nicht weiter zugestellt.
+     */
+    virtual bool onMouseEnter(SDL_MouseMotionEvent& event) { 
+        return true; 
+    }
+    
+    /**
+     * @brief Callback, der aufgerufen wird, wenn der Mauszeiger aus der GUI-Komponente herausbewegt wird.
+     * 
+     * Unterklassen können diese Methode überschreiben und das Event verwenden.
+     * Default-Implementierung: Nichts tun und Event weitergeben.
+     * 
+     * @param event SDL-Event
+     * @return `true` um das Event an weitere GUI-Elemente zu reichen,
+     *         `false` um anzudeuten, dass das Event bereits verarbeitet wurde. Es wird dann nicht weiter zugestellt.
+     */
+    virtual bool onMouseLeave(SDL_MouseMotionEvent& event) { return true; }
+    
+    /**
+     * @brief Callback, der aufgerufen wird, wenn der Mauszeiger in der GUI-Komponente bewegt wird.
+     * 
+     * Unterklassen können diese Methode überschreiben und das Event verwenden.
+     * Default-Implementierung: Nichts tun und Event weitergeben.
+     *
+     * Hinweis: Bei onMouseEnter() und onMouseLeave() wird zusätzlich immer vorher onMouseMove() gefeuert.
+     * 
+     * @param event SDL-Event
+     * @return `true` um das Event an weitere GUI-Elemente zu reichen,
+     *         `false` um anzudeuten, dass das Event bereits verarbeitet wurde. Es wird dann nicht weiter zugestellt.
+     */
+    virtual bool onMouseMove(SDL_MouseMotionEvent& event) { return true; }
     
 protected:
     /**

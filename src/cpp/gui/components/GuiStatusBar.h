@@ -34,17 +34,6 @@ public:
     virtual void renderElement(IRenderer* renderer) override;
 
     /**
-     * @brief Callback, der ein Event handelt
-     * @param event SDL-Event
-     * @return `true` um das Event an weitere GUI-Elemente zu reichen,
-     *         `false` um anzudeuten, dass das Event bereits verarbeitet wurde. Es wird dann nicht weiter zugestellt.
-     */
-    virtual bool onEventElement(SDL_Event& event) override {
-        // nix tun
-        return true;
-    }
-
-    /**
      * @brief Ändert den anzuzeigenden Text
      * @param text anzuzeigender Text
      */
