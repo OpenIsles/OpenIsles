@@ -17,11 +17,21 @@ protected:
      * @brief Grafik, wenn der Button grade runtergedrückt ist
      */
     const IGraphic* graphicPressed;
+
+    /**
+     * @brief gibt an, ob sich der Mauszeiger grade über dem Button befindet
+     */
+    bool hovered = false;
     
     /**
      * @brief gibt an, ob der Button grade im Zustand "runtergedrückt" steht
      */
     bool pressed = false;
+
+    /**
+     * @brief Text, der in der Statusleiste angezeigt wird, wenn mit der Maus über den Button gefahren wird.
+     */
+    std::string statusBarText;
     
     /**
      * @brief Funktion, die aufgerufen wird, wenn der Button gedrückt wird
@@ -30,7 +40,7 @@ protected:
 
 public:
 	GuiButton(const Context* const context);
-	virtual ~GuiButton();
+	virtual ~GuiButton() override;
 
     const IGraphic* getGraphicPressed() const {
         return graphicPressed;
@@ -43,11 +53,13 @@ public:
     void setGraphicPressed(const IGraphic* graphicPressed) {
         this->graphicPressed = graphicPressed;
     }
-    
+
+    void setStatusBarText(const std::string& statusBarText);
+
     void setOnClickFunction(std::function<void()> onClickFunction) {
         this->onClickFunction = onClickFunction;
     }
-    
+
     /**
      * @brief Ruft die onClick-Funktion auf
      */
@@ -58,7 +70,7 @@ public:
     /**
 	 * @brief Zeichnet das Element (ohne Kinder)
 	 */
-	virtual void renderElement(IRenderer* renderer);
+	virtual void renderElement(IRenderer* renderer) override;
     
     /**
      * @brief Callback, der ein Event handelt
@@ -66,7 +78,10 @@ public:
      * @return `true` um das Event an weitere GUI-Elemente zu reichen,
      *         `false` um anzudeuten, dass das Event bereits verarbeitet wurde. Es wird dann nicht weiter zugestellt.
      */
-    virtual bool onEventElement(SDL_Event& event);
+    virtual bool onEventElement(SDL_Event& event) override;
+
+    virtual bool onMouseEnter(SDL_MouseMotionEvent& event) override;
+    virtual bool onMouseLeave(SDL_MouseMotionEvent& event) override;
 
 };
 

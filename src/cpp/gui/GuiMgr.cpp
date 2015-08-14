@@ -95,6 +95,7 @@ void GuiMgr::initGui() {
 
     // Buttons zum Umschalten der Tabs und zugehörige UI-Gruppen
     static struct {
+        const char* statusBarText;
         const char* graphicFilename;
         const char* graphicPressedFilename;
         PanelButton panelButtonToActive;
@@ -102,21 +103,25 @@ void GuiMgr::initGui() {
 
     } tabGraphics[4][2] = {
         {
+            "Baumodus einschalten",
             "data/img/gui/button-build.png",
             "data/img/gui/button-build-pressed.png",
             PanelButton::ADD_BUILDING,
             (GuiPanelWidget*) findElement(GUI_ID_BUILD_MENU_PANEL_WIDGET)
         }, {
+            "TODO", // TODO wir wollen den Kampfmodus doch gar nicht ;-)
             "data/img/gui/button-dummy.png",
             "data/img/gui/button-dummy-pressed.png",
             PanelButton::MILITARY,
             (GuiPanelWidget*) findElement(GUI_ID_MILITARY_PANEL_WIDGET)
         }, {
+            "Infomodus einschalten",
             "data/img/gui/button-dummy.png",
             "data/img/gui/button-dummy-pressed.png",
             PanelButton::INFO,
             (GuiPanelWidget*) findElement(GUI_ID_PLAYER_STATUS_PANEL_WIDGET)
         }, {
+            "Einstellungen",
             "data/img/gui/button-dummy.png",
             "data/img/gui/button-dummy-pressed.png",
             PanelButton::OPTIONS,
@@ -130,6 +135,7 @@ void GuiMgr::initGui() {
         panelSwitchPushButton->setGraphic(new SDLGraphic(renderer, tabGraphics[i]->graphicFilename));
         panelSwitchPushButton->setGraphicPressed(new SDLGraphic(renderer, tabGraphics[i]->graphicPressedFilename));
         panelSwitchPushButton->setCoords(22 + i*55, 235, 48, 64);
+        panelSwitchPushButton->setStatusBarText(tabGraphics[i]->statusBarText);
         panelSwitchPushButton->setOnClickFunction([this, i]() {
             panelState.selectedPanelButton = tabGraphics[i]->panelButtonToActive;
             panelState.activeGuiPanelWidget = tabGraphics[i]->panelWidgetToActivate;
