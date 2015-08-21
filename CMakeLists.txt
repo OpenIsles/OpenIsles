@@ -95,6 +95,7 @@ set(GUI_SOURCE_FILES
     src/cpp/gui/components/map/GuiResourcesBar.h
     src/cpp/gui/components/GuiAddBuildingWidget.cpp
     src/cpp/gui/components/GuiAddBuildingWidget.h
+    src/cpp/gui/components/GuiBase.cpp
     src/cpp/gui/components/GuiBase.h
     src/cpp/gui/components/GuiButton.cpp
     src/cpp/gui/components/GuiButton.h

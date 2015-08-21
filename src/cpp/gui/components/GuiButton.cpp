@@ -10,16 +10,6 @@ GuiButton::GuiButton(const Context* const context) : GuiStaticElement(context) {
 GuiButton::~GuiButton() {
 }
 
-void GuiButton::setStatusBarText(const std::string& statusBarText) {
-    this->statusBarText = statusBarText;
-
-    // Wurde der Text geändert während der Mauszeiger grade über dem Button steht,
-    // müssen wir die Statuszeile sofort ändern.
-    if (hovered) {
-        context->guiMgr->setStatusBarText(statusBarText);
-    }
-}
-
 void GuiButton::renderElement(IRenderer* renderer) {
     int windowX, windowY;
     getWindowCoords(windowX, windowY);
@@ -49,13 +39,3 @@ bool GuiButton::onEventElement(SDL_Event& event) {
     return true;
 }
 
-bool GuiButton::onMouseEnter(SDL_MouseMotionEvent& event) {
-    hovered = true;
-    context->guiMgr->setStatusBarText(statusBarText);
-    return false;
-}
-
-bool GuiButton::onMouseLeave(SDL_MouseMotionEvent& event) {
-    hovered = false;
-    return false;
-}

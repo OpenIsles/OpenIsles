@@ -19,20 +19,10 @@ protected:
     const IGraphic* graphicPressed;
 
     /**
-     * @brief gibt an, ob sich der Mauszeiger grade über dem Button befindet
-     */
-    bool hovered = false;
-    
-    /**
      * @brief gibt an, ob der Button grade im Zustand "runtergedrückt" steht
      */
     bool pressed = false;
 
-    /**
-     * @brief Text, der in der Statusleiste angezeigt wird, wenn mit der Maus über den Button gefahren wird.
-     */
-    std::string statusBarText;
-    
     /**
      * @brief Funktion, die aufgerufen wird, wenn der Button gedrückt wird
      */
@@ -53,8 +43,6 @@ public:
     void setGraphicPressed(const IGraphic* graphicPressed) {
         this->graphicPressed = graphicPressed;
     }
-
-    void setStatusBarText(const std::string& statusBarText);
 
     void setOnClickFunction(std::function<void()> onClickFunction) {
         this->onClickFunction = onClickFunction;
@@ -79,9 +67,6 @@ public:
      *         `false` um anzudeuten, dass das Event bereits verarbeitet wurde. Es wird dann nicht weiter zugestellt.
      */
     virtual bool onEventElement(SDL_Event& event) override;
-
-    virtual bool onMouseEnter(SDL_MouseMotionEvent& event) override;
-    virtual bool onMouseLeave(SDL_MouseMotionEvent& event) override;
 
 };
 

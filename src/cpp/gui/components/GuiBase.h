@@ -1,7 +1,10 @@
 #ifndef _GUI_BASE_H
 #define _GUI_BASE_H
 
+#include <SDL.h>
 #include <list>
+#include <string>
+#include "graphics/renderer/IRenderer.h"
 #include "Context.h"
 
 union SDL_Event;
@@ -50,6 +53,16 @@ protected:
      * Diese Eigenschaft wird von addChildElement() gesetzt. Niemals von Hand umsetzen.
      */
     GuiBase* parentElement = nullptr;
+
+    /**
+     * @brief gibt an, ob sich der Mauszeiger grade über dem Element befindet
+     */
+    bool hovered = false;
+
+    /**
+     * @brief Text, der in der Statusleiste angezeigt wird, wenn mit der Maus über das Element gefahren wird.
+     */
+    std::string statusBarText;
 
 public:
 	GuiBase(const Context* const context) : ContextAware(context) {
@@ -111,6 +124,12 @@ public:
         childElement->parentElement = this;
         childElements.push_front(childElement);
     }
+
+    /**
+     * @brief Setzt den Text, der in der Statusleiste angezeigt wird, wenn mit der Maus über das Element gefahren wird.
+     * @param statusBarText anzuzeigender Text in der Statusleiste
+     */
+    void setStatusBarText(const std::string& statusBarText);
     
     /**
 	 * @brief Zeichnet das Element und rekursiv seine Kinder
@@ -128,59 +147,17 @@ public:
     }
 
     /**
-     * @brief Callback, der ein Event handelt. Das Event wird rekursiv an alle Kinder übertragen
+     * @brief Callback, der ein Event handelt. Das Event wird rekursiv an alle Kinder übertragen.
+     *
+     * Diese Implementierung erzeugt die Events onMouseMove, onMouseEnter und onMouseLeave.
+     * Außerdem setzt die Variable hovered und kümmert sich drum, den Statusleisten-Text zu setzen, wenn
+     * mit der Maus über das Element gefahren wird.
+     *
      * @param event SDL-Event
      * @return `true` um das Event an weitere GUI-Elemente zu reichen,
      *         `false` um anzudeuten, dass das Event bereits verarbeitet wurde. Es wird dann nicht weiter zugestellt.
      */
-    bool onEvent(SDL_Event& event) {
-        // Unsichtbare Elemente kriegen keine Events
-        if (!visible) {
-            return true;
-        }
-
-        // Erst den allgemeinen Handler aufrufen
-        if (!onEventElement(event)) {
-            return false;
-        }
-
-        // Mausbewegung? Separate Event-Handler aufrufen
-        if (event.type == SDL_MOUSEMOTION) {
-            int x = event.motion.x;
-            int y = event.motion.y;
-
-            bool hit = hitTest(x, y);
-            if (hit) {
-                if (!onMouseMove(event.motion)) { //
-                    return false;
-                }
-            }
-
-            // Enter/Leave?
-            int oldX = x - event.motion.xrel;
-            int oldY = y - event.motion.yrel;
-            bool oldHit = hitTest(oldX, oldY);
-
-            if (hit && !oldHit) {
-                if (!onMouseEnter(event.motion)) {
-                    return false;
-                }
-            }
-            else if (!hit && oldHit) {
-                if (!onMouseLeave(event.motion)) {
-                    return false;
-                }
-            }
-        }
-
-        // Jetzt an die Kinder weitergeben
-        for (auto iter = childElements.cbegin(); iter != childElements.cend(); iter++) {
-            if (!(*iter)->onEvent(event)) {
-                return false;
-            }
-        }
-        return true;
-    }
+    bool onEvent(SDL_Event& event);
     
 	/**
 	 * @brief Zeichnet das Element (ohne Kinder)
@@ -225,7 +202,9 @@ public:
      * @return `true` um das Event an weitere GUI-Elemente zu reichen,
      *         `false` um anzudeuten, dass das Event bereits verarbeitet wurde. Es wird dann nicht weiter zugestellt.
      */
-    virtual bool onMouseLeave(SDL_MouseMotionEvent& event) { return true; }
+    virtual bool onMouseLeave(SDL_MouseMotionEvent& event) {
+        return true;
+    }
     
     /**
      * @brief Callback, der aufgerufen wird, wenn der Mauszeiger in der GUI-Komponente bewegt wird.
@@ -239,8 +218,10 @@ public:
      * @return `true` um das Event an weitere GUI-Elemente zu reichen,
      *         `false` um anzudeuten, dass das Event bereits verarbeitet wurde. Es wird dann nicht weiter zugestellt.
      */
-    virtual bool onMouseMove(SDL_MouseMotionEvent& event) { return true; }
-    
+    virtual bool onMouseMove(SDL_MouseMotionEvent& event) {
+        return true;
+    }
+
 protected:
     /**
      * @brief Ermittelt die Fensterkoordinaten des Elements, d.h. die Position, wo das Element effektiv im Fenster
