@@ -22,11 +22,20 @@ private:
      */
     const GoodsSlot* goodsSlot;
 
+    /**
+     * @brief `true`, um den Zahlenwert anzuzeigen; `false` zeigt stattdessen den Balken auf der rechten Seite
+     */
+    bool displayValue;
+
 public:
 	GuiGoodsSlotElement(const Context* const context);
 	virtual ~GuiGoodsSlotElement() override;
 
     void setGoodsSlot(const GoodsSlot* goodsSlot);
+
+    void setDisplayValue(bool displayValue) {
+        this->displayValue = displayValue;
+    }
 
     /**
 	 * @brief Zeichnet das Element (ohne Kinder)

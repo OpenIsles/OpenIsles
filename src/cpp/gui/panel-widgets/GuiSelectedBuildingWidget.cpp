@@ -7,8 +7,13 @@
 
 GuiSelectedBuildingWidget::GuiSelectedBuildingWidget(const Context* const context) : GuiPanelWidget(context) {
     goodsSlotInput = new GuiGoodsSlotElement(context);
+    goodsSlotInput->setDisplayValue(true);
+
     goodsSlotInput2 = new GuiGoodsSlotElement(context);
+    goodsSlotInput2->setDisplayValue(true);
+
     goodsSlotOutput = new GuiGoodsSlotElement(context);
+    goodsSlotOutput->setDisplayValue(true);
     goodsSlotOutput->setStatusBarText("Abholfertige Waren in diesem Gebäude");
 
     productionPlus = new GuiStaticElement(context);

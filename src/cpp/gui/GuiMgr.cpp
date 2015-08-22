@@ -475,7 +475,12 @@ void GuiMgr::onSelectedMapObjectChanged(const MapObject* newSelectedMapObject) {
         const Building* newSelectedBuilding = dynamic_cast<const Building*>(newSelectedMapObject);
         if (newSelectedBuilding != nullptr) {
             if (newSelectedBuilding->isStorageBuilding()) {
-                panelState.activeGuiPanelWidget = (GuiPanelWidget*) findElement(GUI_ID_COLONY_GOODS_PANEL_WIDGET);
+                GuiColonyGoodsWidget* guiColonyGoodsWidget =
+                    (GuiColonyGoodsWidget*) findElement(GUI_ID_COLONY_GOODS_PANEL_WIDGET);
+
+                guiColonyGoodsWidget->onSelectedMapBuildingChanged(newSelectedBuilding);
+                panelState.activeGuiPanelWidget = guiColonyGoodsWidget;
+
             } else {
                 GuiSelectedBuildingWidget* guiSelectedBuildingWidget =
                     (GuiSelectedBuildingWidget*) findElement(GUI_ID_SELECTED_BUILDING_PANEL_WIDGET);

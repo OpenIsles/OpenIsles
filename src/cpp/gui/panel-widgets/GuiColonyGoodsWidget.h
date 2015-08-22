@@ -2,7 +2,9 @@
 #define _GUI_COLONY_GOODS_WIDGET_H
 
 #include <SDL.h>
+#include <unordered_map>
 #include "Context.h"
+#include "gui/components/GuiGoodsSlotElement.h"
 #include "gui/panel-widgets/GuiPanelWidget.h"
 
 
@@ -11,9 +13,28 @@
  */
 class GuiColonyGoodsWidget : public GuiPanelWidget {
 
+private:
+    /**
+     * @brief GUI-Elemente für die Güter als Map.
+     */
+    std::unordered_map<const Good*, GuiGoodsSlotElement*> guiGoodsSlotElements;
+
+    /**
+     * @brief Siedlung, deren Waren angezeigt werden
+     */
+    const Colony* colony;
+
 public:
     GuiColonyGoodsWidget(const Context* const context);
-    virtual ~GuiColonyGoodsWidget() {}
+    virtual ~GuiColonyGoodsWidget() override;
+
+    /**
+     * @brief Wird aufgerufen, wenn sich das markierte Map-Objekt ändert.
+     * Das Widget korrigiert daraufhin den Zeiger zur Siedlung.
+     *
+     * @param newSelectedBuilding neues Gebäude, was nun selektiert ist
+     */
+    void onSelectedMapBuildingChanged(const Building* newSelectedBuilding);
 
     /**
      * @brief Zeichnet das Element (ohne Kinder)
