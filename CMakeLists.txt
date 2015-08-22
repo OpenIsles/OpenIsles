@@ -27,6 +27,7 @@ set(COMMON_SOURCE_FILES
     src/cpp/game/GoodsSlot.h
     src/cpp/game/Player.cpp
     src/cpp/game/Player.h
+    src/cpp/game/ProductionSlot.h
     src/cpp/game/ProductionSlots.h
     src/cpp/graphics/graphic/Animation.h
     src/cpp/graphics/graphic/GraphicSet.h
@@ -103,6 +104,8 @@ set(GUI_SOURCE_FILES
     src/cpp/gui/components/GuiGoodsSlotElement.h
     src/cpp/gui/components/GuiMinimap.cpp
     src/cpp/gui/components/GuiMinimap.h
+    src/cpp/gui/components/GuiProductionSlotsElement.cpp
+    src/cpp/gui/components/GuiProductionSlotsElement.h
     src/cpp/gui/components/GuiPushButton.cpp
     src/cpp/gui/components/GuiPushButton.h
     src/cpp/gui/components/GuiStaticElement.cpp

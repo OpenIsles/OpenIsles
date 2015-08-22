@@ -4,7 +4,7 @@
 #include <SDL.h>
 #include <string>
 #include "Context.h"
-#include "gui/components/GuiGoodsSlotElement.h"
+#include "gui/components/GuiProductionSlotsElement.h"
 #include "gui/components/GuiStaticElement.h"
 #include "gui/panel-widgets/GuiPanelWidget.h"
 
@@ -15,12 +15,15 @@
 class GuiSelectedBuildingWidget : public GuiPanelWidget {
 
 private:
-    // childElements
+    /**
+     * @brief GUI-Element für produzierte Güter
+     */
+    GuiProductionSlotsElement guiProductionSlotsElement;
+
+    // childElements der guiProductionSlotsElement
     GuiGoodsSlotElement* goodsSlotInput;    ///< Gütersymbol: verbraute Güter
     GuiGoodsSlotElement* goodsSlotInput2;   ///< Gütersymbol: weitere verbraute Güter
     GuiGoodsSlotElement* goodsSlotOutput;   ///< Gütersymbol: produzierte Güter
-    GuiStaticElement* productionPlus;       ///< Symbol Pluszeichen
-    GuiStaticElement* productionArrow;      ///< Symbol Pfeil
 
 public:
     GuiSelectedBuildingWidget(const Context* const context);

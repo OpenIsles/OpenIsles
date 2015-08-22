@@ -1,7 +1,6 @@
 #ifndef _GUI_GOOD_ELEMENT_H
 #define _GUI_GOOD_ELEMENT_H
 
-#include <SDL.h>
 #include "config/Good.h"
 #include "game/GoodsSlot.h"
 #include "gui/components/GuiStaticElement.h"

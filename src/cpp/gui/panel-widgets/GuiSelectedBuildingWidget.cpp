@@ -1,34 +1,25 @@
 #include <cassert>
 #include "config/ConfigMgr.h"
 #include "game/Game.h"
+#include "gui/components/GuiGoodsSlotElement.h"
 #include "gui/panel-widgets/GuiSelectedBuildingWidget.h"
 #include "map/Map.h"
 
 
-GuiSelectedBuildingWidget::GuiSelectedBuildingWidget(const Context* const context) : GuiPanelWidget(context) {
-    goodsSlotInput = new GuiGoodsSlotElement(context);
+GuiSelectedBuildingWidget::GuiSelectedBuildingWidget(const Context* const context) :
+    GuiPanelWidget(context), guiProductionSlotsElement(context) {
+
+    guiProductionSlotsElement.setPosition(15, 60);
+    addChildElement(&guiProductionSlotsElement);
+
+    goodsSlotInput = guiProductionSlotsElement.getGoodsSlotElement(ProductionSlot::INPUT);
+    goodsSlotInput2 = guiProductionSlotsElement.getGoodsSlotElement(ProductionSlot::INPUT2);
+    goodsSlotOutput = guiProductionSlotsElement.getGoodsSlotElement(ProductionSlot::OUTPUT);
+
     goodsSlotInput->setDisplayValue(true);
-
-    goodsSlotInput2 = new GuiGoodsSlotElement(context);
     goodsSlotInput2->setDisplayValue(true);
-
-    goodsSlotOutput = new GuiGoodsSlotElement(context);
     goodsSlotOutput->setDisplayValue(true);
     goodsSlotOutput->setStatusBarText("Abholfertige Waren in diesem Gebäude");
-
-    productionPlus = new GuiStaticElement(context);
-    productionPlus->setGraphic(
-        context->graphicsMgr->getGraphicSet("production-plus")->getStatic()->getGraphic());
-
-    productionArrow = new GuiStaticElement(context);
-    productionArrow->setGraphic(
-        context->graphicsMgr->getGraphicSet("production-arrow")->getStatic()->getGraphic());
-
-    addChildElement(goodsSlotInput);
-    addChildElement(goodsSlotInput2);
-    addChildElement(goodsSlotOutput);
-    addChildElement(productionPlus);
-    addChildElement(productionArrow);
 
     // TODO Child-Buttons für Stilllegen und "Abholung verbieten"
 }
@@ -51,13 +42,15 @@ void GuiSelectedBuildingWidget::renderElement(IRenderer* renderer) {
         updateInputSlotStatusBarText(
             goodsSlotInput, mapObjectType->buildingProduction.input.rate,
             mapObjectType->buildingProduction.output.rate, selectedBuilding->productionSlots.input.inventory,
-            mapObjectType->buildingProduction.input.good->label, mapObjectType->buildingProduction.output.good->label);
+            mapObjectType->buildingProduction.input.good->label,
+            mapObjectType->buildingProduction.output.good->label);
     }
     if (goodsSlotInput2->isVisible()) {
         updateInputSlotStatusBarText(
             goodsSlotInput2, mapObjectType->buildingProduction.input2.rate,
             mapObjectType->buildingProduction.output.rate, selectedBuilding->productionSlots.input2.inventory,
-            mapObjectType->buildingProduction.input2.good->label, mapObjectType->buildingProduction.output.good->label);
+            mapObjectType->buildingProduction.input2.good->label,
+            mapObjectType->buildingProduction.output.good->label);
     }
 
     // TODO Gebäude, die nix produzieren, müssen auch was anzeigen (öffentliche Gebäude). Aktuell sind nur Produktionsgebäude berücksichtigt
@@ -85,69 +78,33 @@ void GuiSelectedBuildingWidget::onSelectedMapBuildingChanged(const Building* new
     assert(newSelectedBuilding != nullptr);
 
     const ProductionSlots* productionSlots = &newSelectedBuilding->productionSlots;
-    const int productionY = 58;
 
     // TODO Gebäude, die nix produzieren, müssen auch was anzeigen (öffentliche Gebäude). Aktuell sind nur Produktionsgebäude berücksichtigt
 
-    // Positionen und Sichtbarkeit anpassen. Zusätzlich den goodsSlot verzeigern.
-
+    // Positionen und Sichtbarkeit anpassen.
     if (productionSlots->input2.isUsed()) {
-        // input + input2 -> output
-
-        goodsSlotInput->setPosition(42, productionY);
-        goodsSlotInput->setGoodsSlot(&productionSlots->input);
-        goodsSlotInput->setVisible(true);
-
-        productionPlus->setPosition(88, productionY);
-        productionPlus->setVisible(true);
-
-        goodsSlotInput2->setPosition(103, productionY);
-        goodsSlotInput2->setGoodsSlot(&productionSlots->input2);
-        goodsSlotInput2->setVisible(true);
-
-        productionArrow->setPosition(149, productionY);
-        productionArrow->setVisible(true);
-
-        goodsSlotOutput->setPosition(163, productionY);
-        goodsSlotOutput->setGoodsSlot(&productionSlots->output);
-        goodsSlotOutput->setVisible(true);
+        guiProductionSlotsElement.setProductionSlots(
+            ProductionSlot::INPUT | ProductionSlot::INPUT2 | ProductionSlot::OUTPUT);
     }
     else if (productionSlots->input.isUsed()) {
-        // input -> output
-
-        goodsSlotInput->setPosition(73, productionY);
-        goodsSlotInput->setGoodsSlot(&productionSlots->input);
-        goodsSlotInput->setVisible(true);
-
-        productionPlus->setVisible(false);
-        goodsSlotInput2->setVisible(false);
-
-        productionArrow->setPosition(119, productionY);
-        productionArrow->setVisible(true);
-
-        goodsSlotOutput->setPosition(133, productionY);
-        goodsSlotOutput->setGoodsSlot(&productionSlots->output);
-        goodsSlotOutput->setVisible(true);
+        guiProductionSlotsElement.setProductionSlots(ProductionSlot::INPUT | ProductionSlot::OUTPUT);
     }
     else if (productionSlots->output.isUsed()) {
-        // output
-
-        goodsSlotInput->setVisible(false);
-        goodsSlotInput2->setVisible(false);
-        productionPlus->setVisible(false);
-        productionArrow->setVisible(false);
-
-        goodsSlotOutput->setPosition(103, productionY);
-        goodsSlotOutput->setGoodsSlot(&productionSlots->output);
-        goodsSlotOutput->setVisible(true);
+        guiProductionSlotsElement.setProductionSlots(ProductionSlot::OUTPUT);
     }
     else {
-        // öffentliche Gebäude; hat gar nix
+        // öffentliche Gebäude; hat gar nix, also ausblenden
+        guiProductionSlotsElement.setProductionSlots(0);
+    }
 
-        goodsSlotInput->setVisible(false);
-        goodsSlotInput2->setVisible(false);
-        goodsSlotOutput->setVisible(false);
-        productionPlus->setVisible(false);
-        productionArrow->setVisible(false);
+    // goodsSlots verzeigern
+    if (productionSlots->input.isUsed()) {
+        goodsSlotInput->setGoodsSlot(&productionSlots->input);
+    }
+    if (productionSlots->input2.isUsed()) {
+        goodsSlotInput2->setGoodsSlot(&productionSlots->input2);
+    }
+    if (productionSlots->output.isUsed()) {
+        goodsSlotOutput->setGoodsSlot(&productionSlots->output);
     }
 }
