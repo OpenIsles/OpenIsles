@@ -22,9 +22,14 @@ private:
     const GoodsSlot* goodsSlot;
 
     /**
-     * @brief `true`, um den Zahlenwert anzuzeigen; `false` zeigt stattdessen den Balken auf der rechten Seite
+     * @brief `true`, um den Zahlenwert anzuzeigen
      */
-    bool displayValue;
+    bool displayValue = false;
+
+    /**
+     * @brief `true`, um den Balken auf der rechten Seite anzuzeigen
+     */
+    bool displayBar = false;
 
 public:
 	GuiGoodsSlotElement(const Context* const context);
@@ -34,6 +39,10 @@ public:
 
     void setDisplayValue(bool displayValue) {
         this->displayValue = displayValue;
+    }
+
+    void setDisplayBar(bool displayBar) {
+        this->displayBar = displayBar;
     }
 
     /**

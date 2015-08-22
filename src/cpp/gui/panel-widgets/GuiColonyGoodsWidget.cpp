@@ -22,7 +22,7 @@ GuiColonyGoodsWidget::GuiColonyGoodsWidget(const Context* const context) : GuiPa
 
         GuiGoodsSlotElement* guiGoodsSlotElement = new GuiGoodsSlotElement(context);
         guiGoodsSlotElement->setPosition(x, y);
-        guiGoodsSlotElement->setDisplayValue(false);
+        guiGoodsSlotElement->setDisplayBar(true);
 
         guiGoodsSlotElements[good] = guiGoodsSlotElement;
 

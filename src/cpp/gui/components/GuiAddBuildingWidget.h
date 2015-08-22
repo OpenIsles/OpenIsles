@@ -4,6 +4,7 @@
 #include <SDL_render.h>
 #include "Context.h"
 #include "gui/components/GuiBase.h"
+#include "gui/components/GuiProductionSlotsElement.h"
 
 
 /**
@@ -11,6 +12,12 @@
  * zum Drehen (TODO), die Baukosten und die Infos, was es produziert.
  */
 class GuiAddBuildingWidget : public GuiBase {
+
+private:
+    /**
+     * @brief GUI-Element, was die produzierten Waren anzeigt
+     */
+    GuiProductionSlotsElement guiProductionSlotsElement;
 
 public:
     GuiAddBuildingWidget(const Context* const context);

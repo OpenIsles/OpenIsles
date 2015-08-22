@@ -16,8 +16,13 @@ static Color colorWhite = Color(255, 255, 255, 255);
 
 
 
-GuiAddBuildingWidget::GuiAddBuildingWidget(const Context* const context) : GuiBase(context) {
+GuiAddBuildingWidget::GuiAddBuildingWidget(const Context* const context) :
+    GuiBase(context), guiProductionSlotsElement(context) {
+
     setCoords(0, 0, 210, 320);
+
+    guiProductionSlotsElement.setPosition(15, 175);
+    addChildElement(&guiProductionSlotsElement);
 
     // TODO Child-Buttons zum Drehen hinzufügen
 }
@@ -68,34 +73,29 @@ void GuiAddBuildingWidget::renderElement(IRenderer* renderer) {
 
     // produzierte Waren
     const ProductionSlots& buildingProduction = mapObjectType->buildingProduction;
-    int productionY = windowY + 175;
-    if (buildingProduction.input2.isUsed()) {
-        // input + input2 -> output
 
-        context->guiMgr->drawGoodsBox(windowX + 36, productionY, buildingProduction.input.good, -1, -1);
-        context->graphicsMgr->getGraphicSet("production-plus")->getStatic()->getGraphic()->drawAt(
-            windowX + 82, productionY);
-        context->guiMgr->drawGoodsBox(windowX + 97, productionY, buildingProduction.input2.good, -1, -1);
-        context->graphicsMgr->getGraphicSet("production-arrow")->getStatic()->getGraphic()->drawAt(
-            windowX + 143, productionY);
-        context->guiMgr->drawGoodsBox(windowX + 157, productionY, buildingProduction.output.good, -1, -1);
+    if (buildingProduction.input2.isUsed()) {
+        guiProductionSlotsElement.setProductionSlots(
+            ProductionSlot::INPUT | ProductionSlot::INPUT2 | ProductionSlot::OUTPUT);
+        guiProductionSlotsElement.getGoodsSlotElement(ProductionSlot::INPUT)->setGoodsSlot(&buildingProduction.input);
+        guiProductionSlotsElement.getGoodsSlotElement(ProductionSlot::INPUT2)->setGoodsSlot(&buildingProduction.input2);
+        guiProductionSlotsElement.getGoodsSlotElement(ProductionSlot::OUTPUT)->setGoodsSlot(&buildingProduction.output);
     }
     else if (buildingProduction.input.isUsed()) {
-        // input -> output
-
-        context->guiMgr->drawGoodsBox(windowX + 67, productionY, buildingProduction.input.good, -1, -1);
-        context->graphicsMgr->getGraphicSet("production-arrow")->getStatic()->getGraphic()->drawAt(
-            windowX + 113, productionY);
-        context->guiMgr->drawGoodsBox(windowX + 127, productionY, buildingProduction.output.good, -1, -1);
+        guiProductionSlotsElement.setProductionSlots(ProductionSlot::INPUT |  ProductionSlot::OUTPUT);
+        guiProductionSlotsElement.getGoodsSlotElement(ProductionSlot::INPUT)->setGoodsSlot(&buildingProduction.input);
+        guiProductionSlotsElement.getGoodsSlotElement(ProductionSlot::OUTPUT)->setGoodsSlot(&buildingProduction.output);
     }
     else if (buildingProduction.output.isUsed()) {
-        // output
-
-        context->guiMgr->drawGoodsBox(windowX + 97, productionY, buildingProduction.output.good, -1, -1);
+        guiProductionSlotsElement.setProductionSlots(ProductionSlot::OUTPUT);
+        guiProductionSlotsElement.getGoodsSlotElement(ProductionSlot::OUTPUT)->setGoodsSlot(&buildingProduction.output);
+    }
+    else {
+        guiProductionSlotsElement.setProductionSlots(0);
     }
 
     // Baukosten
-    int costsY = productionY + 60;
+    int costsY = windowY + 235;
 
     context->graphicsMgr->getGraphicSet("coin")->getStatic()->getGraphic()->drawAt(windowX + 7, costsY);
     context->fontMgr->renderText(

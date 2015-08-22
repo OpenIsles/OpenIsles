@@ -43,7 +43,7 @@ void GuiGoodsSlotElement::renderElement(IRenderer* renderer) {
     }
 
     // Balken anzeigen
-    else {
+    else if (displayBar) {
         assert(goodsSlot->capacity > 0);
         int barHeight = (int) (goodsSlot->inventory / goodsSlot->capacity * height);
 
