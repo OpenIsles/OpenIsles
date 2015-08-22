@@ -1,13 +1,11 @@
 #include <SDL.h>
 #include <string>
-#include <gui/components/GuiStatusBar.h>
 #include "config/ConfigMgr.h"
 #include "game/Game.h"
 #include "graphics/graphic/sdl/SDLGraphic.h"
 #include "graphics/mgr/IFontMgr.h"
 #include "gui/components/map/GuiMap.h"
 #include "gui/components/GuiAddBuildingWidget.h"
-#include "gui/components/GuiButton.h"
 #include "gui/components/GuiPushButton.h"
 #include "gui/components/GuiMinimap.h"
 #include "gui/components/GuiStatusBar.h"
@@ -479,7 +477,11 @@ void GuiMgr::onSelectedMapObjectChanged(const MapObject* newSelectedMapObject) {
             if (newSelectedBuilding->isStorageBuilding()) {
                 panelState.activeGuiPanelWidget = (GuiPanelWidget*) findElement(GUI_ID_COLONY_GOODS_PANEL_WIDGET);
             } else {
-                panelState.activeGuiPanelWidget = (GuiPanelWidget*) findElement(GUI_ID_SELECTED_BUILDING_PANEL_WIDGET);
+                GuiSelectedBuildingWidget* guiSelectedBuildingWidget =
+                    (GuiSelectedBuildingWidget*) findElement(GUI_ID_SELECTED_BUILDING_PANEL_WIDGET);
+
+                guiSelectedBuildingWidget->onSelectedMapBuildingChanged(newSelectedBuilding);
+                panelState.activeGuiPanelWidget = guiSelectedBuildingWidget;
             }
         }
     }

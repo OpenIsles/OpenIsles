@@ -20,7 +20,7 @@ protected:
 
 public:
 	GuiStaticElement(const Context* const context);
-	virtual ~GuiStaticElement();
+	virtual ~GuiStaticElement() override;
 
     const IGraphic* getGraphic() const {
         return graphic;
@@ -37,7 +37,7 @@ public:
 	/**
 	 * @brief Zeichnet das Element (ohne Kinder)
 	 */
-	virtual void renderElement(IRenderer* renderer);
+	virtual void renderElement(IRenderer* renderer) override;
 
 };
 

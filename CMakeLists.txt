@@ -99,6 +99,8 @@ set(GUI_SOURCE_FILES
     src/cpp/gui/components/GuiBase.h
     src/cpp/gui/components/GuiButton.cpp
     src/cpp/gui/components/GuiButton.h
+    src/cpp/gui/components/GuiGoodsSlotElement.cpp
+    src/cpp/gui/components/GuiGoodsSlotElement.h
     src/cpp/gui/components/GuiMinimap.cpp
     src/cpp/gui/components/GuiMinimap.h
     src/cpp/gui/components/GuiPushButton.cpp

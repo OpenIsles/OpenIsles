@@ -87,6 +87,11 @@ public:
         this->width = width;
         this->height = height;
     }
+
+    void setPosition(int x, int y) {
+        this->x = x;
+        this->y = y;
+    }
     
     /**
      * @brief Prüft, ob die angegebenen Fenster-Koordinaten innerhalb des Elements liegen.
