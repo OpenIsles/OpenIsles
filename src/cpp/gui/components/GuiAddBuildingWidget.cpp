@@ -1,4 +1,3 @@
-#include <SDL.h>
 #include <string>
 #include "config/ConfigMgr.h"
 #include "game/Game.h"
@@ -6,23 +5,61 @@
 #include "graphics/mgr/IFontMgr.h"
 #include "gui/GuiMgr.h"
 #include "gui/components/GuiAddBuildingWidget.h"
+#include "gui/components/GuiIconWithStringElement.h"
 #include "map/Street.h"
-#include "utils/Color.h"
 #include "utils/StringFormat.h"
 
 
-static Color colorBlack = Color(0, 0, 0, 255);
-static Color colorWhite = Color(255, 255, 255, 255);
-
-
-
 GuiAddBuildingWidget::GuiAddBuildingWidget(const Context* const context) :
-    GuiBase(context), guiProductionSlotsElement(context) {
+    GuiBase(context), productionSlotsElement(context),
+    coinsElement(context), toolsElement(context), woodElement(context), bricksElement(context) {
 
     setCoords(0, 0, 210, 320);
 
-    guiProductionSlotsElement.setPosition(15, 175);
-    addChildElement(&guiProductionSlotsElement);
+    // Produktion
+
+    productionSlotsElement.setPosition(15, 175);
+    addChildElement(&productionSlotsElement);
+
+    // Baukosten: Münzen
+
+    const int elementsX = 7;
+    const int elementsXColumnWidth = 75;
+    const int elementsHeight = 30;
+    const int elementsY1 = 255;
+    const int elementsY2 = 290;
+
+    coinsElement.setCoords(elementsX, elementsY1, 85, elementsHeight);
+    coinsElement.setGraphic(context->graphicsMgr->getGraphicSet("coin")->getStatic()->getGraphic());
+    coinsElement.setStatusBarText("Errichtungskosten für dieses Bauwerk");
+    addChildElement(&coinsElement);
+
+    // Baukosten: Baumaterial
+
+    const Good* good;
+    std::string graphicSetName;
+
+    good = context->configMgr->getGood("tools");
+    graphicSetName = context->graphicsMgr->getGraphicSetNameForGoodIcons(good, false);
+    toolsElement.setCoords(elementsX, elementsY2, 50, elementsHeight);
+    toolsElement.setGraphic(context->graphicsMgr->getGraphicSet(graphicSetName)->getStatic()->getGraphic());
+    toolsElement.setStatusBarText("Werkzeugbedarf für dieses Bauwerk");
+
+    good = context->configMgr->getGood("wood");
+    graphicSetName = context->graphicsMgr->getGraphicSetNameForGoodIcons(good, false);
+    woodElement.setCoords(elementsX + elementsXColumnWidth, elementsY2, 50, elementsHeight);
+    woodElement.setGraphic(context->graphicsMgr->getGraphicSet(graphicSetName)->getStatic()->getGraphic());
+    woodElement.setStatusBarText("Holzbedarf für dieses Bauwerk");
+
+    good = context->configMgr->getGood("bricks");
+    graphicSetName = context->graphicsMgr->getGraphicSetNameForGoodIcons(good, false);
+    bricksElement.setCoords(elementsX + 2*elementsXColumnWidth, elementsY2, 50, elementsHeight);
+    bricksElement.setGraphic(context->graphicsMgr->getGraphicSet(graphicSetName)->getStatic()->getGraphic());
+    bricksElement.setStatusBarText("Ziegelbedarf für dieses Bauwerk");
+
+    addChildElement(&toolsElement);
+    addChildElement(&woodElement);
+    addChildElement(&bricksElement);
 
     // TODO Child-Buttons zum Drehen hinzufügen
 }
@@ -75,53 +112,28 @@ void GuiAddBuildingWidget::renderElement(IRenderer* renderer) {
     const ProductionSlots& buildingProduction = mapObjectType->buildingProduction;
 
     if (buildingProduction.input2.isUsed()) {
-        guiProductionSlotsElement.setProductionSlots(
+        productionSlotsElement.setProductionSlots(
             ProductionSlot::INPUT | ProductionSlot::INPUT2 | ProductionSlot::OUTPUT);
-        guiProductionSlotsElement.getGoodsSlotElement(ProductionSlot::INPUT)->setGoodsSlot(&buildingProduction.input);
-        guiProductionSlotsElement.getGoodsSlotElement(ProductionSlot::INPUT2)->setGoodsSlot(&buildingProduction.input2);
-        guiProductionSlotsElement.getGoodsSlotElement(ProductionSlot::OUTPUT)->setGoodsSlot(&buildingProduction.output);
+        productionSlotsElement.getGoodsSlotElement(ProductionSlot::INPUT)->setGoodsSlot(&buildingProduction.input);
+        productionSlotsElement.getGoodsSlotElement(ProductionSlot::INPUT2)->setGoodsSlot(&buildingProduction.input2);
+        productionSlotsElement.getGoodsSlotElement(ProductionSlot::OUTPUT)->setGoodsSlot(&buildingProduction.output);
     }
     else if (buildingProduction.input.isUsed()) {
-        guiProductionSlotsElement.setProductionSlots(ProductionSlot::INPUT |  ProductionSlot::OUTPUT);
-        guiProductionSlotsElement.getGoodsSlotElement(ProductionSlot::INPUT)->setGoodsSlot(&buildingProduction.input);
-        guiProductionSlotsElement.getGoodsSlotElement(ProductionSlot::OUTPUT)->setGoodsSlot(&buildingProduction.output);
+        productionSlotsElement.setProductionSlots(ProductionSlot::INPUT |  ProductionSlot::OUTPUT);
+        productionSlotsElement.getGoodsSlotElement(ProductionSlot::INPUT)->setGoodsSlot(&buildingProduction.input);
+        productionSlotsElement.getGoodsSlotElement(ProductionSlot::OUTPUT)->setGoodsSlot(&buildingProduction.output);
     }
     else if (buildingProduction.output.isUsed()) {
-        guiProductionSlotsElement.setProductionSlots(ProductionSlot::OUTPUT);
-        guiProductionSlotsElement.getGoodsSlotElement(ProductionSlot::OUTPUT)->setGoodsSlot(&buildingProduction.output);
+        productionSlotsElement.setProductionSlots(ProductionSlot::OUTPUT);
+        productionSlotsElement.getGoodsSlotElement(ProductionSlot::OUTPUT)->setGoodsSlot(&buildingProduction.output);
     }
     else {
-        guiProductionSlotsElement.setProductionSlots(0);
+        productionSlotsElement.setProductionSlots(0);
     }
 
     // Baukosten
-    int costsY = windowY + 235;
-
-    context->graphicsMgr->getGraphicSet("coin")->getStatic()->getGraphic()->drawAt(windowX + 7, costsY);
-    context->fontMgr->renderText(
-        renderer, toString(mapObjectType->buildingCosts.coins), windowX + 42, costsY + 12,
-        &colorWhite, &colorBlack, "DroidSans-Bold.ttf", 14, RENDERTEXT_HALIGN_LEFT | RENDERTEXT_VALIGN_MIDDLE);
-
-    costsY += 30;
-
-    const Good* good = context->configMgr->getGood("tools");
-    std::string graphicSetName = context->graphicsMgr->getGraphicSetNameForGoodIcons(good, false);
-    context->graphicsMgr->getGraphicSet(graphicSetName)->getStatic()->getGraphic()->drawAt(windowX + 7, costsY);
-    context->fontMgr->renderText(
-        renderer, toString(mapObjectType->buildingCosts.tools), windowX + 42, costsY + 16,
-        &colorWhite, &colorBlack, "DroidSans-Bold.ttf", 14, RENDERTEXT_HALIGN_LEFT | RENDERTEXT_VALIGN_MIDDLE);
-
-    good = context->configMgr->getGood("wood");
-    graphicSetName = context->graphicsMgr->getGraphicSetNameForGoodIcons(good, false);
-    context->graphicsMgr->getGraphicSet(graphicSetName)->getStatic()->getGraphic()->drawAt(windowX + 67, costsY);
-    context->fontMgr->renderText(
-        renderer, toString(mapObjectType->buildingCosts.wood), windowX + 102, costsY + 16,
-        &colorWhite, &colorBlack, "DroidSans-Bold.ttf", 14, RENDERTEXT_HALIGN_LEFT | RENDERTEXT_VALIGN_MIDDLE);
-
-    good = context->configMgr->getGood("bricks");
-    graphicSetName = context->graphicsMgr->getGraphicSetNameForGoodIcons(good, false);
-    context->graphicsMgr->getGraphicSet(graphicSetName)->getStatic()->getGraphic()->drawAt(windowX + 127, costsY);
-    context->fontMgr->renderText(
-        renderer, toString(mapObjectType->buildingCosts.bricks), windowX + 162, costsY + 16,
-        &colorWhite, &colorBlack, "DroidSans-Bold.ttf", 14, RENDERTEXT_HALIGN_LEFT | RENDERTEXT_VALIGN_MIDDLE);
+    coinsElement.setString(toString(mapObjectType->buildingCosts.coins));
+    toolsElement.setString(toString(mapObjectType->buildingCosts.tools));
+    woodElement.setString(toString(mapObjectType->buildingCosts.wood));
+    bricksElement.setString(toString(mapObjectType->buildingCosts.bricks));
 }

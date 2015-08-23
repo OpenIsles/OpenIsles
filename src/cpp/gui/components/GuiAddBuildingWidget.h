@@ -4,6 +4,7 @@
 #include <SDL_render.h>
 #include "Context.h"
 #include "gui/components/GuiBase.h"
+#include "gui/components/GuiIconWithStringElement.h"
 #include "gui/components/GuiProductionSlotsElement.h"
 
 
@@ -14,10 +15,13 @@
 class GuiAddBuildingWidget : public GuiBase {
 
 private:
-    /**
-     * @brief GUI-Element, was die produzierten Waren anzeigt
-     */
-    GuiProductionSlotsElement guiProductionSlotsElement;
+    // GUI-Elemente
+    GuiProductionSlotsElement productionSlotsElement; ///< produzierte Waren
+    GuiIconWithStringElement coinsElement;            ///< Münzkosten
+    // TODO Betriebskosten
+    GuiIconWithStringElement toolsElement;            ///< Werkzeugkosten
+    GuiIconWithStringElement woodElement;             ///< Holzkosten
+    GuiIconWithStringElement bricksElement;           ///< Ziegelkosten
 
 public:
     GuiAddBuildingWidget(const Context* const context);

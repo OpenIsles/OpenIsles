@@ -23,7 +23,7 @@ private:
      * ID mit welcher das GUI-Element registriert ist. Der GuiMgr setzt es einmalig, wenn guiMgr.registerElement()
      * aufgerufen wird. Es sollte nicht von Hand geändert werden
      */
-    int id;
+    int id = 0;
 
 protected:
     /**
