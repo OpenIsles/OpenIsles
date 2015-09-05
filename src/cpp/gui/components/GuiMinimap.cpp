@@ -8,7 +8,7 @@
 
 
 GuiMinimap::GuiMinimap(const Context* const context) : GuiBase(context) {
-    setCoords(28, 28, 200, 200);
+    setCoords(42, 13, 175, 175);
 }
 
 GuiMinimap::~GuiMinimap() {

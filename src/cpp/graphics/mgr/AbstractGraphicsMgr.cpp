@@ -74,6 +74,7 @@ void AbstractGraphicsMgr::loadGraphics() {
     loadStaticGraphicSet("panel", "data/img/gui/panel.png");
     loadStaticGraphicSet("statusbar", "data/img/gui/statusbar.png");
     loadStaticGraphicSet("panel-header", "data/img/gui/panel-header.png");
+    loadMapRotateGraphicSet();
 
     loadStaticGraphicSet("add-building-grid", "data/img/gui/add-building/add-building-grid.png");
 
@@ -312,5 +313,30 @@ void AbstractGraphicsMgr::loadHarvestablesGraphicSet(
     }
 
     graphicSets[graphicSetName] = graphicSet;
+    delete graphic;
+}
+
+void AbstractGraphicsMgr::loadMapRotateGraphicSet() {
+    IGraphic* graphic = loadGraphic("data/img/gui/map-rotate.png");
+    int tileWidth = graphic->getWidth() / 16;
+    int height = graphic->getHeight();
+
+    GraphicSet* graphicSet = new GraphicSet();
+    Rect tileRect(0, 0, tileWidth, height);
+
+    forEachFourthDirection(view) {
+        for (const char* stateName : {"left", "right"}) {
+            for (const char* stateSuffix : {"", "_pressed"}) {
+                std::string state = std::string(stateName) + stateSuffix;
+
+                IGraphic* tileGraphic = loadGraphic(*graphic, tileRect);
+                graphicSet->addByStateAndView(state, view, new Animation(tileGraphic));
+
+                tileRect.x += tileWidth;
+            }
+        }
+    }
+
+    graphicSets["map-rotate"] = graphicSet;
     delete graphic;
 }

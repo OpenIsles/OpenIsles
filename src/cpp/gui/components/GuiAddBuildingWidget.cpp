@@ -27,7 +27,7 @@ GuiAddBuildingWidget::GuiAddBuildingWidget(const Context* const context) :
     const int elementsXColumnWidth = 75;
     const int elementsHeight = 30;
     const int elementsY1 = 255;
-    const int elementsY2 = 290;
+    const int elementsY2 = elementsY1 + elementsHeight + 5;
 
     coinsElement.setCoords(elementsX, elementsY1, 85, elementsHeight);
     coinsElement.setGraphic(context->graphicsMgr->getGraphicSet("coin")->getStatic()->getGraphic());

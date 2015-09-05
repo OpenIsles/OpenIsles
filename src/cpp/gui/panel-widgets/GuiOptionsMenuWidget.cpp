@@ -14,7 +14,7 @@ GuiOptionsMenuWidget::GuiOptionsMenuWidget(const Context* const context) : GuiPa
     GuiPushButton* musicPushButton = new GuiPushButton(context);
     musicPushButton->setGraphic(context->graphicsMgr->getGraphicSet("button-music")->getStatic()->getGraphic());
     musicPushButton->setGraphicPressed(context->graphicsMgr->getGraphicSet("button-music-pressed")->getStatic()->getGraphic());
-    musicPushButton->setCoords(7, 378, 64, 64);
+    musicPushButton->setCoords(7, 345, 64, 64);
     musicPushButton->setStatusBarText(statusBarTextTurnMusicOn);
     musicPushButton->setOnClickFunction([musicPushButton, context]() {
         bool musicEnabled = musicPushButton->isActive();

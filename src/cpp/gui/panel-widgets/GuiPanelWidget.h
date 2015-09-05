@@ -20,7 +20,7 @@ class GuiPanelWidget : public GuiBase {
 
 public:
     GuiPanelWidget(const Context* const context) : GuiBase(context) {
-        setCoords(10, 312, 236, 446);
+        setCoords(10, 352, 236, 400);
     }
     virtual ~GuiPanelWidget() {}
 

@@ -7,6 +7,7 @@
 #include "gui/components/map/GuiMap.h"
 #include "gui/components/GuiAddBuildingWidget.h"
 #include "gui/components/GuiPushButton.h"
+#include "gui/components/GuiMapRotateWidget.h"
 #include "gui/components/GuiMinimap.h"
 #include "gui/components/GuiStatusBar.h"
 #include "gui/panel-widgets/GuiBuildMenuWidget.h"
@@ -81,6 +82,11 @@ void GuiMgr::initGui() {
     registerElement(GUI_ID_MINIMAP, guiMinimap);
     panel->addChildElement(guiMinimap);
 
+    // Karte drehen
+    GuiMapRotateWidget* guiMapRotateWidget = new GuiMapRotateWidget(context);
+    registerElement(GUI_ID_MAP_ROTATE_WIDGET, guiMapRotateWidget);
+    panel->addChildElement(guiMapRotateWidget);
+
     // Statusleiste
     graphic = new SDLGraphic(renderer, "data/img/gui/statusbar.png");
     GuiStatusBar* statusBar = new GuiStatusBar(context);
@@ -132,7 +138,7 @@ void GuiMgr::initGui() {
         GuiPushButton* panelSwitchPushButton = new GuiPushButton(context);
         panelSwitchPushButton->setGraphic(new SDLGraphic(renderer, tabGraphics[i]->graphicFilename));
         panelSwitchPushButton->setGraphicPressed(new SDLGraphic(renderer, tabGraphics[i]->graphicPressedFilename));
-        panelSwitchPushButton->setCoords(22 + i*55, 235, 48, 64);
+        panelSwitchPushButton->setCoords(22 + i*55, 285, 48, 64);
         panelSwitchPushButton->setStatusBarText(tabGraphics[i]->statusBarText);
         panelSwitchPushButton->setOnClickFunction([this, i]() {
             panelState.selectedPanelButton = tabGraphics[i]->panelButtonToActive;
@@ -370,9 +376,11 @@ void GuiMgr::onEvent(SDL_Event& event) {
         else if (event.key.keysym.scancode == SDL_SCANCODE_Z) {
             map->rotateViewCounterclockwise();
             ((GuiMinimap*) findElement(GUI_ID_MINIMAP))->onMapCoordsChanged();
+            ((GuiMapRotateWidget*) findElement(GUI_ID_MAP_ROTATE_WIDGET))->onMapRotated();
         } else if (event.key.keysym.scancode == SDL_SCANCODE_X) {
             map->rotateViewClockwise();
             ((GuiMinimap*) findElement(GUI_ID_MINIMAP))->onMapCoordsChanged();
+            ((GuiMapRotateWidget*) findElement(GUI_ID_MAP_ROTATE_WIDGET))->onMapRotated();
         }
 
         // Spielgeschwindigkeit
@@ -499,6 +507,7 @@ void GuiMgr::onNewGame() {
     ((GuiMap*) findElement(GUI_ID_MAP))->onNewGame();
     ((GuiMinimap*) findElement(GUI_ID_MINIMAP))->updateMinimapTexture();
     ((GuiMinimap*) findElement(GUI_ID_MINIMAP))->onMapCoordsChanged();
+    ((GuiMapRotateWidget*) findElement(GUI_ID_MAP_ROTATE_WIDGET))->onMapRotated();
 }
 
 void GuiMgr::onOfficeCatchmentAreaChanged() {

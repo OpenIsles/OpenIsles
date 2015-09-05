@@ -111,6 +111,11 @@ private:
      * @param tileStatesCount Anzahl der Wachstum-Zustände
      */
     void loadHarvestablesGraphicSet(const std::string& graphicSetName, const char* graphicFilename, int tileStatesCount);
+
+    /**
+     * @brief Lädt das Grafik-Set für das MapRotate-Widget
+     */
+    void loadMapRotateGraphicSet();
 };
 
 #endif

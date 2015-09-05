@@ -104,6 +104,8 @@ set(GUI_SOURCE_FILES
     src/cpp/gui/components/GuiGoodsSlotElement.h
     src/cpp/gui/components/GuiIconWithStringElement.cpp
     src/cpp/gui/components/GuiIconWithStringElement.h
+    src/cpp/gui/components/GuiMapRotateWidget.cpp
+    src/cpp/gui/components/GuiMapRotateWidget.h
     src/cpp/gui/components/GuiMinimap.cpp
     src/cpp/gui/components/GuiMinimap.h
     src/cpp/gui/components/GuiProductionSlotsElement.cpp

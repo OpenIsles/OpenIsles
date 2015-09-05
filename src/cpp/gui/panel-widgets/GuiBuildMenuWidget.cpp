@@ -160,7 +160,7 @@ GuiBuildMenuWidget::GuiBuildMenuWidget(const Context* const context) : GuiPanelW
             context->graphicsMgr->getGraphicSet(buildingGroups[groupIndex].graphicSetName)->getStatic()->getGraphic());
         addBuildingPushButton->setGraphicPressed(
             context->graphicsMgr->getGraphicSet(buildingGroups[groupIndex].graphicSetPressedName)->getStatic()->getGraphic());
-        addBuildingPushButton->setCoords(12 + groupIndex * 55, 378, 52, 64);
+        addBuildingPushButton->setCoords(12 + groupIndex * 55, 340, 52, 64);
         addBuildingPushButton->setStatusBarText(buildingGroups[groupIndex].name);
         addBuildingPushButton->setOnClickFunction([ this, context, groupIndex ]() {
             // Wenn man die Gruppe nochmal klickt, die bereits ausgewählt ist und das ausgewählte Gebäude nicht

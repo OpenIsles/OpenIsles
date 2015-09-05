@@ -50,12 +50,14 @@ clean-gui:
 	rm -f $(DATA_DIRECTORY)/img/gui/panel.png
 	rm -f $(DATA_DIRECTORY)/img/gui/statusbar.png
 	rm -f $(DATA_DIRECTORY)/img/gui/panel-header.png
+	rm -f $(DATA_DIRECTORY)/img/gui/map-rotate.png \
 	rm -f $(DATA_DIRECTORY)/img/gui/add-building/add-building-grid.png
 	
 build-gui: \
 	$(DATA_DIRECTORY)/img/gui/panel.png \
 	$(DATA_DIRECTORY)/img/gui/statusbar.png \
 	$(DATA_DIRECTORY)/img/gui/panel-header.png \
+	$(DATA_DIRECTORY)/img/gui/map-rotate.png \
 	$(DATA_DIRECTORY)/img/gui/add-building/add-building-grid.png
 
 $(DATA_DIRECTORY)/img/gui/panel.png: $(SRC_DIRECTORY)/psd/marble-panels.psd
@@ -90,6 +92,29 @@ $(DATA_DIRECTORY)/img/gui/statusbar.png: $(SRC_DIRECTORY)/psd/marble-panels.psd
 
 $(DATA_DIRECTORY)/img/gui/panel-header.png: $(SRC_DIRECTORY)/psd/panel-header.psd
 	convert -background transparent $< -flatten $@
+
+$(DATA_DIRECTORY)/img/gui/map-rotate.png: $(SRC_DIRECTORY)/blender/gui/map-rotate/map-rotate.blend
+	$(CREATE_TARGET_DIRECTORY)
+	cd $(SRC_DIRECTORY)/blender/gui/map-rotate; $(BLENDER) -b $(notdir $<) -P render.py
+	convert \
+		$(SRC_DIRECTORY)/blender/gui/map-rotate/render/map-rotate-south.png \
+		$(SRC_DIRECTORY)/blender/gui/map-rotate/render/map-rotate-south-highlight-left.png \
+		$(SRC_DIRECTORY)/blender/gui/map-rotate/render/map-rotate-south-highlight-right.png \
+		$(SRC_DIRECTORY)/blender/gui/map-rotate/render/map-rotate-east.png \
+		$(SRC_DIRECTORY)/blender/gui/map-rotate/render/map-rotate-east-highlight-left.png \
+		$(SRC_DIRECTORY)/blender/gui/map-rotate/render/map-rotate-east-highlight-right.png \
+		$(SRC_DIRECTORY)/blender/gui/map-rotate/render/map-rotate-north.png \
+		$(SRC_DIRECTORY)/blender/gui/map-rotate/render/map-rotate-north-highlight-left.png \
+		$(SRC_DIRECTORY)/blender/gui/map-rotate/render/map-rotate-north-highlight-right.png \
+		$(SRC_DIRECTORY)/blender/gui/map-rotate/render/map-rotate-west.png \
+		$(SRC_DIRECTORY)/blender/gui/map-rotate/render/map-rotate-west-highlight-left.png \
+		$(SRC_DIRECTORY)/blender/gui/map-rotate/render/map-rotate-west-highlight-right.png \
+		-crop 50%x100% \
+		-swap 1,2 -delete 3,4 \
+		-swap 5,6 -delete 7,8 \
+		-swap 9,10 -delete 11,12 \
+		-swap 13,14 -delete 15,16 \
+		+append $@
 
 $(DATA_DIRECTORY)/img/gui/add-building/add-building-grid.png: $(SRC_DIRECTORY)/blender/gui/add-building-grid/add-building-grid.blend
 	$(CREATE_TARGET_DIRECTORY)
