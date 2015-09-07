@@ -51,6 +51,7 @@ clean-gui:
 	rm -f $(DATA_DIRECTORY)/img/gui/statusbar.png
 	rm -f $(DATA_DIRECTORY)/img/gui/panel-header.png
 	rm -f $(DATA_DIRECTORY)/img/gui/map-rotate.png \
+	rm -f $(DATA_DIRECTORY)/img/gui/map-zoom.png \
 	rm -f $(DATA_DIRECTORY)/img/gui/add-building/add-building-grid.png
 	
 build-gui: \
@@ -58,6 +59,7 @@ build-gui: \
 	$(DATA_DIRECTORY)/img/gui/statusbar.png \
 	$(DATA_DIRECTORY)/img/gui/panel-header.png \
 	$(DATA_DIRECTORY)/img/gui/map-rotate.png \
+	$(DATA_DIRECTORY)/img/gui/map-zoom.png \
 	$(DATA_DIRECTORY)/img/gui/add-building/add-building-grid.png
 
 $(DATA_DIRECTORY)/img/gui/panel.png: $(SRC_DIRECTORY)/psd/marble-panels.psd
@@ -114,6 +116,17 @@ $(DATA_DIRECTORY)/img/gui/map-rotate.png: $(SRC_DIRECTORY)/blender/gui/map-rotat
 		-swap 5,6 -delete 7,8 \
 		-swap 9,10 -delete 11,12 \
 		-swap 13,14 -delete 15,16 \
+		+append $@
+
+$(DATA_DIRECTORY)/img/gui/map-zoom.png: $(SRC_DIRECTORY)/blender/gui/map-zoom/map-zoom.blend
+	$(CREATE_TARGET_DIRECTORY)
+	cd $(SRC_DIRECTORY)/blender/gui/map-zoom; $(BLENDER) -b $(notdir $<) -P render.py
+	convert \
+		$(SRC_DIRECTORY)/blender/gui/map-zoom/render/map-zoom.png \
+		$(SRC_DIRECTORY)/blender/gui/map-zoom/render/map-zoom-highlight-plus.png \
+		$(SRC_DIRECTORY)/blender/gui/map-zoom/render/map-zoom-highlight-minus.png \
+		-crop 50%x100% \
+		-swap 1,2 -delete 3,4 \
 		+append $@
 
 $(DATA_DIRECTORY)/img/gui/add-building/add-building-grid.png: $(SRC_DIRECTORY)/blender/gui/add-building-grid/add-building-grid.blend

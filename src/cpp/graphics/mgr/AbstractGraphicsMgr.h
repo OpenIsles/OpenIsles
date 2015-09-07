@@ -116,6 +116,11 @@ private:
      * @brief Lädt das Grafik-Set für das MapRotate-Widget
      */
     void loadMapRotateGraphicSet();
+
+    /**
+     * @brief Lädt das Grafik-Set für das MapZoom-Widget
+     */
+    void loadMapZoomGraphicSet();
 };
 
 #endif

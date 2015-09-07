@@ -242,15 +242,14 @@ public:
     }
 
     /**
-     * @brief Zeichnet ein Kasten mit einem Warensymbol. Optional mit Warenanzeige oder Lagerbestandsbalken
-     * @param x x-Koordinate, wo hingezeichnet werden soll
-     * @param y y-Koordinate, wo hingezeichnet werden soll
-     * @param good welches Gut
-     * @param inventory Lagerbestand, der ausgegeben werden soll (oder -1, wenn keine Anzeige erwünscht)
-     * @param capacity Lagerkapazität (-1, wenn keine Anzeige erwünscht). Wenn ungleich -1, wird statt des Bestand
-     *                 rechts in der Box ein Balken angezeigt
+     * @brief Zoomt die Karte eine Stufe rein. No-Op, wenn schon auf Anschlag reingezoomt.
      */
-    void drawGoodsBox(int x, int y, const Good* good, double inventory, double capacity);
+    void increaseMapZoom();
+
+    /**
+     * @brief Zoomt die Karte eine Stufe raus. No-Op, wenn schon auf Anschlag rausgezoomt.
+     */
+    void decreaseMapZoom();
 
     /**
      * @brief Zeichnet einen Panel-Kopf mit einem bestimmten Kopf

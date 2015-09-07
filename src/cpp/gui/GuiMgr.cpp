@@ -8,6 +8,7 @@
 #include "gui/components/GuiAddBuildingWidget.h"
 #include "gui/components/GuiPushButton.h"
 #include "gui/components/GuiMapRotateWidget.h"
+#include "gui/components/GuiMapZoomWidget.h"
 #include "gui/components/GuiMinimap.h"
 #include "gui/components/GuiStatusBar.h"
 #include "gui/panel-widgets/GuiBuildMenuWidget.h"
@@ -86,6 +87,11 @@ void GuiMgr::initGui() {
     GuiMapRotateWidget* guiMapRotateWidget = new GuiMapRotateWidget(context);
     registerElement(GUI_ID_MAP_ROTATE_WIDGET, guiMapRotateWidget);
     panel->addChildElement(guiMapRotateWidget);
+
+    // Karte zoomen
+    GuiMapZoomWidget* guiMapZoomWidget = new GuiMapZoomWidget(context);
+    registerElement(GUI_ID_MAP_ZOOM_WIDGET, guiMapZoomWidget);
+    panel->addChildElement(guiMapZoomWidget);
 
     // Statusleiste
     graphic = new SDLGraphic(renderer, "data/img/gui/statusbar.png");
@@ -557,34 +563,30 @@ void GuiMgr::updateGuiFromPanelState() {
     }
 }
 
-void GuiMgr::drawGoodsBox(int x, int y, const Good* good, double inventory, double capacity) {
-    const std::string graphicSetName = context->graphicsMgr->getGraphicSetNameForGoodIcons(good, true);
-    context->graphicsMgr->getGraphicSet(graphicSetName)->getStatic()->getGraphic()->drawAt(x, y);
-
-    if (inventory != -1) {
-        // Balken anzeigen
-        if (capacity != -1) {
-            int barHeight = (int) (inventory / capacity * 42);
-
-            renderer->setDrawColor(Color(255, 0, 0, 255));
-            Rect rect(x + 38, y + (42 - barHeight), 4, barHeight);
-            renderer->fillRect(rect);
-        }
-            // Bestand anzeigen
-        else {
-            char inventoryOutput[10];
-            sprintf(inventoryOutput, "%.0ft", floor(inventory));
-            context->fontMgr->renderText(renderer, inventoryOutput, x + 40, y + 42, &colorWhite, &colorBlack,
-                "DroidSans.ttf", 12, RENDERTEXT_HALIGN_RIGHT | RENDERTEXT_VALIGN_BOTTOM);
-        }
-
-#ifdef DEBUG_ECONOMICS
-        char inventoryOutput[10];
-        sprintf(inventoryOutput, "%.4ft", inventory);
-        context->fontMgr->renderText(renderer, inventoryOutput, x + 40, y + 55, &colorWhite, &colorBlack,
-            "DroidSans.ttf", 12, RENDERTEXT_HALIGN_RIGHT | RENDERTEXT_VALIGN_BOTTOM);
-#endif
+void GuiMgr::increaseMapZoom() {
+    Map* map = context->game->getMap();
+    int screenZoom = map->getScreenZoom();
+    if (screenZoom == 1) {
+        return;
     }
+
+    changeMapZoom(map, screenZoom >> 1);
+}
+
+#ifdef DEBUG
+static int maxScreenZoom = 32;
+#else
+static int maxScreenZoom = 4;
+#endif
+
+void GuiMgr::decreaseMapZoom() {
+    Map* map = context->game->getMap();
+    int screenZoom = map->getScreenZoom();
+    if (screenZoom == maxScreenZoom) {
+        return;
+    }
+
+    changeMapZoom(map, screenZoom << 1);
 }
 
 inline void GuiMgr::changeMapZoom(Map* map, int newScreenZoom) {
