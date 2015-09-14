@@ -74,6 +74,7 @@ void AbstractGraphicsMgr::loadGraphics() {
     loadStaticGraphicSet("panel", "data/img/gui/panel.png");
     loadStaticGraphicSet("statusbar", "data/img/gui/statusbar.png");
     loadStaticGraphicSet("panel-header", "data/img/gui/panel-header.png");
+    loadStaticGraphicSet("minimap", "data/img/gui/minimap.png");
     loadMapRotateGraphicSet();
     loadMapZoomGraphicSet();
 

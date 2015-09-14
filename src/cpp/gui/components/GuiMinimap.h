@@ -3,17 +3,28 @@
 
 #include <SDL_render.h>
 #include "Context.h"
-#include "gui/components/GuiBase.h"
+#include "gui/components/GuiStaticElement.h"
 #include "map/Structure.h"
-#include "utils/RectangleData.h"
+#include "utils/Rect.h"
 
 
 /**
  * @brief GUI-Element, was die Minimap darstellt.
  */
-class GuiMinimap : public GuiBase {
+class GuiMinimap : public GuiStaticElement {
 
 private:
+    /**
+     * @brief relative Koordinaten (zum GUI-Element) des Clip-Rechtecks der Minimap.
+     * 
+     * Das ist die Fläche im GUI-Element, in welchen
+     * - etwas über das Hintergrundbild gezeichnet wird
+     * - Klicks reagieren
+     * - geclippt wird (Wir wollen nicht, dass das Rechteck, was den aktuellen Kartenausschnitt markiert,
+     * zu weit raus geht)
+     */
+    Rect guiElementBasedClipRect;
+
     // Die folgenden Daten werden vorberechnet hier gespeichert, sodass nur gezeichnet werden müssen und keine
     // Berechnungszeit pro Frame anfällt.
 

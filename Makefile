@@ -50,6 +50,7 @@ clean-gui:
 	rm -f $(DATA_DIRECTORY)/img/gui/panel.png
 	rm -f $(DATA_DIRECTORY)/img/gui/statusbar.png
 	rm -f $(DATA_DIRECTORY)/img/gui/panel-header.png
+	rm -f $(DATA_DIRECTORY)/img/gui/minimap.png \
 	rm -f $(DATA_DIRECTORY)/img/gui/map-rotate.png \
 	rm -f $(DATA_DIRECTORY)/img/gui/map-zoom.png \
 	rm -f $(DATA_DIRECTORY)/img/gui/add-building/add-building-grid.png
@@ -58,6 +59,7 @@ build-gui: \
 	$(DATA_DIRECTORY)/img/gui/panel.png \
 	$(DATA_DIRECTORY)/img/gui/statusbar.png \
 	$(DATA_DIRECTORY)/img/gui/panel-header.png \
+	$(DATA_DIRECTORY)/img/gui/minimap.png \
 	$(DATA_DIRECTORY)/img/gui/map-rotate.png \
 	$(DATA_DIRECTORY)/img/gui/map-zoom.png \
 	$(DATA_DIRECTORY)/img/gui/add-building/add-building-grid.png
@@ -94,6 +96,11 @@ $(DATA_DIRECTORY)/img/gui/statusbar.png: $(SRC_DIRECTORY)/psd/marble-panels.psd
 
 $(DATA_DIRECTORY)/img/gui/panel-header.png: $(SRC_DIRECTORY)/psd/panel-header.psd
 	convert -background transparent $< -flatten $@
+
+$(DATA_DIRECTORY)/img/gui/minimap.png: $(SRC_DIRECTORY)/blender/gui/minimap/minimap.blend
+	$(CREATE_TARGET_DIRECTORY)
+	cd $(SRC_DIRECTORY)/blender/gui/minimap; $(BLENDER) -b $(notdir $<) -P render.py
+	mv $(SRC_DIRECTORY)/blender/gui/minimap/render/minimap.png $@
 
 $(DATA_DIRECTORY)/img/gui/map-rotate.png: $(SRC_DIRECTORY)/blender/gui/map-rotate/map-rotate.blend
 	$(CREATE_TARGET_DIRECTORY)

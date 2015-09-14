@@ -2,13 +2,24 @@
 #include "config/ConfigMgr.h"
 #include "game/Game.h"
 #include "graphics/renderer/sdl/SDLRenderer.h"
-#include "gui/GuiMgr.h"
 #include "gui/components/GuiMinimap.h"
 #include "map/coords/MapCoords.h"
 
+/**
+ * @brief Rahmenfarbe für den sichtbaren Ausschnitt in der Minimap
+ */
+static Color minimapViewBorderColor = Color(0, 0, 255, 96);
 
-GuiMinimap::GuiMinimap(const Context* const context) : GuiBase(context) {
-    setCoords(42, 13, 175, 175);
+
+// TODO nicht-quadratische Karten erlauben (Wir brauchen x/yScaleFactor).
+// Info: Anno-Karten sind 500x350 Kacheln groß
+// TODO Erlauben, guiElementBasedClipRect durch Methodenaufruf zu setzen (weil ein neues Spiel andere w/h-Map-Ratio hat)
+
+GuiMinimap::GuiMinimap(const Context* const context) :
+    GuiStaticElement(context), guiElementBasedClipRect(40, 13, 166, 166) {
+
+    setCoords(0, 0, 256, 200);
+    setGraphic(context->graphicsMgr->getGraphicSet("minimap")->getStatic()->getGraphic());
 }
 
 GuiMinimap::~GuiMinimap() {
@@ -20,20 +31,24 @@ GuiMinimap::~GuiMinimap() {
 }
 
 void GuiMinimap::renderElement(IRenderer* renderer) {
+    GuiStaticElement::renderElement(renderer);
+
     int windowX, windowY;
     getWindowCoords(windowX, windowY);
 
-    // Nur die Kartenfläche vollmalen
-    Rect minimapClipRect = Rect(windowX, windowY, width, height);
-    renderer->setClipRect(&minimapClipRect);
+    Rect clipRect = {
+        windowX + guiElementBasedClipRect.x, windowY + guiElementBasedClipRect.y,
+        guiElementBasedClipRect.w, guiElementBasedClipRect.h
+    };
+    renderer->setClipRect(&clipRect);
 
     // Karte zeichnen
-    SDL_Rect sdlMinimapClipRect = { windowX, windowY, width, height };
+    SDL_Rect sdlMinimapClipRect = { clipRect.x, clipRect.y, clipRect.w, clipRect.h };
     SDL_Renderer* sdlRealRenderer = (dynamic_cast<SDLRenderer*>(renderer))->getRealRenderer();
     SDL_RenderCopy(sdlRealRenderer, minimapTexture, nullptr, &sdlMinimapClipRect);
 
     // Aktuellen Ausschnitt markieren
-    renderer->setDrawColor(Color(192, 128, 0, 255));
+    renderer->setDrawColor(minimapViewBorderColor);
     renderer->setDrawBlendMode(IRenderer::BLENDMODE_BLEND);
     SDL_RenderDrawLines(sdlRealRenderer, pointsCurrentClipping, 5);
 
@@ -65,15 +80,23 @@ void GuiMinimap::onMapCoordsChanged() {
     MapCoordUtils::getMapCoordsInScreenEdges(
         *map, mapCoordsTopLeft, mapCoordsTopRight, mapCoordsBottomLeft, mapCoordsBottomRight);
 
-    float scaleFactor = (float) map->getWidth() / (float) width;
-    pointsCurrentClipping[0].x = windowX + (int) ((float) mapCoordsTopLeft.x() / scaleFactor);
-    pointsCurrentClipping[0].y = windowY + (int) ((float) mapCoordsTopLeft.y() / scaleFactor);
-    pointsCurrentClipping[1].x = windowX + (int) ((float) mapCoordsTopRight.x() / scaleFactor);
-    pointsCurrentClipping[1].y = windowY + (int) ((float) mapCoordsTopRight.y() / scaleFactor);
-    pointsCurrentClipping[2].x = windowX + (int) ((float) mapCoordsBottomRight.x() / scaleFactor);
-    pointsCurrentClipping[2].y = windowY + (int) ((float) mapCoordsBottomRight.y() / scaleFactor);
-    pointsCurrentClipping[3].x = windowX + (int) ((float) mapCoordsBottomLeft.x() / scaleFactor);
-    pointsCurrentClipping[3].y = windowY + (int) ((float) mapCoordsBottomLeft.y() / scaleFactor);
+    float scaleFactor = (float) map->getWidth() / (float) guiElementBasedClipRect.w;
+    pointsCurrentClipping[0].x =
+        windowX + guiElementBasedClipRect.x + (int) ((float) mapCoordsTopLeft.x() / scaleFactor);
+    pointsCurrentClipping[0].y =
+        windowY + guiElementBasedClipRect.y + (int) ((float) mapCoordsTopLeft.y() / scaleFactor);
+    pointsCurrentClipping[1].x =
+        windowX + guiElementBasedClipRect.x + (int) ((float) mapCoordsTopRight.x() / scaleFactor);
+    pointsCurrentClipping[1].y =
+        windowY + guiElementBasedClipRect.y + (int) ((float) mapCoordsTopRight.y() / scaleFactor);
+    pointsCurrentClipping[2].x =
+        windowX + guiElementBasedClipRect.x + (int) ((float) mapCoordsBottomRight.x() / scaleFactor);
+    pointsCurrentClipping[2].y =
+        windowY + guiElementBasedClipRect.y + (int) ((float) mapCoordsBottomRight.y() / scaleFactor);
+    pointsCurrentClipping[3].x =
+        windowX + guiElementBasedClipRect.x + (int) ((float) mapCoordsBottomLeft.x() / scaleFactor);
+    pointsCurrentClipping[3].y =
+        windowY + guiElementBasedClipRect.y + (int) ((float) mapCoordsBottomLeft.y() / scaleFactor);
     pointsCurrentClipping[4].x = pointsCurrentClipping[0].x;
     pointsCurrentClipping[4].y = pointsCurrentClipping[0].y;
 }
@@ -81,20 +104,17 @@ void GuiMinimap::onMapCoordsChanged() {
 void GuiMinimap::updateMinimapTexture() {
     Map* map = context->game->getMap();
 
-    int windowX, windowY;
-    getWindowCoords(windowX, windowY);
-
     if (minimapTexture != nullptr) {
         SDL_DestroyTexture(minimapTexture);
     }
 
-    float scaleFactor = (float) map->getWidth() / (float) width;
+    float scaleFactor = (float) map->getWidth() / (float) guiElementBasedClipRect.w;
 
     // Karte zeichnen
-    uint32_t* pixelData = new uint32_t[width * height];
+    uint32_t* pixelData = new uint32_t[guiElementBasedClipRect.w * guiElementBasedClipRect.h];
     uint32_t* pixelPtr = pixelData;
-    for (int yy = 0, screenY = windowY + y; yy < height; yy++, screenY++) {
-        for (int xx = 0, screenX = windowX + x; xx < width; xx++, screenX++) {
+    for (int yy = 0; yy < guiElementBasedClipRect.h; yy++) {
+        for (int xx = 0; xx < guiElementBasedClipRect.w; xx++) {
             int mapX = (int) ((float) xx * scaleFactor);
             int mapY = (int) ((float) yy * scaleFactor);
 
@@ -104,8 +124,8 @@ void GuiMinimap::updateMinimapTexture() {
             Player* player = mapTile->player;
 
             *(pixelPtr++) = (mapTileConfig->isOceanOnMinimap()) ?
-                            0x000090 : (player != nullptr ?
-                                        ((uint32_t) player->getColor()) : 0x008000);
+                            0x00000090 : (player != nullptr ?
+                                        ((uint32_t) player->getColor()) : 0xff886040);
         }
     }
 
@@ -113,7 +133,9 @@ void GuiMinimap::updateMinimapTexture() {
     IRenderer* const renderer = context->graphicsMgr->getRenderer();
     SDL_Renderer* sdlRealRenderer = (dynamic_cast<SDLRenderer*>(renderer))->getRealRenderer();
 
-    SDL_Surface* surface = SDL_CreateRGBSurfaceFrom(pixelData, width, height, 32, width * 4, 0, 0, 0, 0);
+    SDL_Surface* surface = SDL_CreateRGBSurfaceFrom(
+        pixelData, guiElementBasedClipRect.w, guiElementBasedClipRect.h, 32, guiElementBasedClipRect.w * 4,
+        0x00ff0000, 0x0000ff00, 0x000000ff, 0xff000000);
     minimapTexture = SDL_CreateTextureFromSurface(sdlRealRenderer, surface);
     SDL_FreeSurface(surface);
     delete[] pixelData;
@@ -125,13 +147,20 @@ void GuiMinimap::onClickInMinimap(int mouseX, int mouseY) {
     int windowX, windowY;
     getWindowCoords(windowX, windowY);
 
-    int xInMinimap = mouseX - windowX;
-    int yInMinimap = mouseY - windowY;
+    int xInClipRect = mouseX - (windowX + guiElementBasedClipRect.x);
+    int yInClipRect = mouseY - (windowY + guiElementBasedClipRect.y);
 
-    float scaleFactor = (float) map->getWidth() / (float) width;
+    // Außerhalb des ClipRects nicht reagieren
+    if (xInClipRect < 0 || yInClipRect < 0 ||
+        xInClipRect >= guiElementBasedClipRect.w || yInClipRect >= guiElementBasedClipRect.h) {
 
-    int mapX = (int) ((float) xInMinimap  * scaleFactor);
-    int mapY = (int) ((float) yInMinimap  * scaleFactor);
+        return;
+    }
+
+    float scaleFactor = (float) map->getWidth() / (float) guiElementBasedClipRect.w;
+
+    int mapX = (int) ((float) xInClipRect  * scaleFactor);
+    int mapY = (int) ((float) yInClipRect  * scaleFactor);
 
     map->setMapCoordsCentered(MapCoords(mapX, mapY));
     onMapCoordsChanged();
