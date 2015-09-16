@@ -47,8 +47,7 @@ void Carrier::updateCurrentMovingDirection() {
 }
 
 bool Carrier::updateObject(const Context& context) {
-    unsigned int ticksPastSinceLastUpdate = context.sdlTicks - lastUpdateTime;
-    double oneSecondTicks = (double) 1000 / context.game->getSpeed();
+    unsigned int ticksSinceLastUpdate = getTicksSinceLastUpdate(context);
 
     Map* map = context.game->getMap();
     bool deleteMe = false; // Flag, um den Träger zu löschen
@@ -56,15 +55,15 @@ bool Carrier::updateObject(const Context& context) {
     // Animieren
     const Animation* animation = getAnimations()[0]; // TODO wir brauchen nur fps und framesCount. Das sollte in allen Richtungen gleich sein.
 
-    animationFrame += (double) ticksPastSinceLastUpdate / oneSecondTicks * animation->getFps();
+    animationFrame += (double) ticksSinceLastUpdate / TICKS_PER_SECOND * animation->getFps();
     while (animationFrame >= animation->getFramesCount()) {
         animationFrame -= animation->getFramesCount();
     }
 
     // Bewegen
-    const double speed = 0.75; // Kacheln pro Sekunde (auf 1x Spielgeschwindigkeit), erstmal fix, die Animation muss man eh nochmal anpassen, weil das Männchen mehr schwebt, als läuft
+    const double speed = 0.75; // Kacheln pro Sekunde Spielzeit, erstmal fix, die Animation muss man eh nochmal anpassen, weil das Männchen mehr schwebt, als läuft
 
-    unsigned int ticksToProcess = ticksPastSinceLastUpdate;
+    unsigned int ticksToProcess = ticksSinceLastUpdate;
     do {
         /* Wir gehen kachelweise vor. Erst ausrechnen, wie viele Ticks notwendig sind, um den nächsten Hop fertig zu
          * machen. Dann gehen wir soweit wir kommen. Bestcase wir schaffen den Hop, dann loopen wir zum nächsten.
@@ -79,7 +78,7 @@ bool Carrier::updateObject(const Context& context) {
 
         //  Halbe Ticks gibts nicht! Wir müssen hier runden.
         unsigned int ticksToNextHop = (unsigned int)
-            (std::max(std::abs(mapDeltaXToNextHop), std::abs(mapDeltaYToNextHop)) * oneSecondTicks / speed);
+            (std::max(std::abs(mapDeltaXToNextHop), std::abs(mapDeltaYToNextHop)) * TICKS_PER_SECOND / speed);
 
         // Hop geschafft?
         if (ticksToNextHop <= ticksToProcess) {
@@ -131,7 +130,7 @@ bool Carrier::updateObject(const Context& context) {
                     }
 
                     goodsSlotToTakeFrom->inventory -= goodsWeCollect;
-                    targetBuilding->lastGoodsCollections = context.sdlTicks;
+                    targetBuilding->lastGoodsCollections = context.game->getTicks();
 
                     AStar aStar(&context, owningBuilding, true, owningBuilding->isStorageBuilding(), false);
                     Route returnRoute = aStar.getRoute(route.back(), route.front());
@@ -149,6 +148,7 @@ bool Carrier::updateObject(const Context& context) {
 
                         Carrier* returnCarrier = new Carrier(
                             owningBuilding, returnRoute, goodsSlotToTakeFrom->good, false);
+                        returnCarrier->setLastUpdateTicks(context.game->getTicks());
                         returnCarrier->setMapCoords((DoubleMapCoords) firstHopOnReturnRoute);
                         returnCarrier->updateCurrentMovingDirection();
                         returnCarrier->setAnimations(graphicSet);

@@ -12,6 +12,7 @@
 
 Game::Game(const Context* const context) : ContextAware(context) {
     speed = 1;
+    ticks = 0;
     map = new Map(context);
 
 #ifdef DEBUG
@@ -70,26 +71,10 @@ Colony* Game::getColony(const MapCoords& mapCoords) const {
     return getColony(mapTile->player, mapTile->isle);
 }
 
-double Game::getSecondsSinceLastUpdate(const MapObject* mapObject) const {
-    unsigned int ticksPastSinceLastUpdate;
-
-    // Sicherung, falls ein minimal-negativer Wert entsteht: dann nehmen wir 0
-    if (context->sdlTicks > mapObject->getLastUpdateTime()) {
-        ticksPastSinceLastUpdate = context->sdlTicks - mapObject->getLastUpdateTime();
-    } else {
-        ticksPastSinceLastUpdate = 0;
-    }
-    const double oneSecondTicks = (double) 1000 / context->game->getSpeed();
-
-    return (double) ticksPastSinceLastUpdate / oneSecondTicks;
-}
-
 Harvestable* Game::addHarvestable(
     const MapCoords& mapCoords, const MapObjectType* mapObjectType, const FourthDirection& view) {
 
     assert(mapObjectType->type == MapObjectTypeClass::HARVESTABLE);
-
-    unsigned char maxAge = mapObjectType->maxAge;
 
     // ein bisschen Zufall für das Startalter, damit die Felder nicht alle gleichzeitig wachsen
     std::random_device randomDevice;
@@ -98,7 +83,7 @@ Harvestable* Game::addHarvestable(
     double initAge = randomInitAge(randomEngine);
 
     // Objekt anlegen
-    Harvestable* harvestable = new Harvestable(maxAge);
+    Harvestable* harvestable = (Harvestable*) instantiateNewMapObjectFixed(mapObjectType);
     harvestable->setMapCoords(mapCoords);
     harvestable->setMapObjectType(mapObjectType);
     harvestable->setView(view);
@@ -125,7 +110,7 @@ Structure* Game::addStructure(
     }
 
     // Objekt anlegen
-    Structure* structure = (Structure*) MapObjectFixed::instantiate(mapObjectType);
+    Structure* structure = (Structure*) instantiateNewMapObjectFixed(mapObjectType);
     structure->setMapCoords(mapCoords);
     structure->setMapWidth(mapWidth);
     structure->setMapHeight(mapHeight);
@@ -182,7 +167,7 @@ Street* Game::addStreet(const MapCoords& mapCoords, const MapObjectType* mapObje
     assert((mapObjectType->mapWidth == 1) && (mapObjectType->mapHeight == 1)); // Wir gehen davon aus, dass es nur 1x1-Straßen gibt
 
     // Objekt anlegen
-    Street* street = new Street();
+    Street* street = (Street*) instantiateNewMapObjectFixed(mapObjectType);
     street->setMapCoords(mapCoords);
     street->setMapWidth(1);
     street->setMapHeight(1);
@@ -195,6 +180,12 @@ Street* Game::addStreet(const MapCoords& mapCoords, const MapObjectType* mapObje
     map->addMapObject(street);
 
     return street;
+}
+
+MapObjectFixed* Game::instantiateNewMapObjectFixed(const MapObjectType* mapObjectType) const {
+    MapObjectFixed* mapObjectFixed = MapObjectFixed::instantiate(mapObjectType);
+    mapObjectFixed->setLastUpdateTicks(ticks);
+    return mapObjectFixed;
 }
 
 void Game::addInhabitantsToBuilding(Building* building, char amount) {
@@ -222,4 +213,28 @@ void Game::loadGameFromTMX(const char* filename) {
 #ifndef NO_SDL
     context->guiMgr->onNewGame();
 #endif
+}
+
+void Game::update(unsigned long millisecondsElapsed) {
+    // Game-Ticks erhöhen
+    ticks += millisecondsElapsed * speed;
+
+    // Alle Map-Objekte updaten
+    std::list<MapObject*> mapObjectsToDelete;
+    std::list<MapObject*> mapObjects = map->getMapObjects();
+
+    for (auto iter = mapObjects.rbegin(); iter != mapObjects.rend(); iter++) {
+        MapObject* mapObject = *iter;
+
+        bool dontDeleteMe = mapObject->update(*context);
+        if (!dontDeleteMe) {
+            // Objekt zur Löschung vormerken. Wir dürfen nicht löschen, wenn wir noch iterieren
+            mapObjectsToDelete.push_back(mapObject);
+        }
+    }
+
+    for (auto iter = mapObjectsToDelete.rbegin(); iter != mapObjectsToDelete.rend(); iter++) {
+        MapObject* mapObject = *iter;
+        map->deleteMapObject(mapObject);
+    }
 }

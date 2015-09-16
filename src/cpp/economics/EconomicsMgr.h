@@ -31,9 +31,10 @@ struct FindBuildingToGetGoodsFromResult {
     GoodsSlot goodsSlot;
 
     /**
-     * @brief SDL_GetTicks-Wert, wann zuletzt eine Abholung der Waren bei diesem Gebäude stattgefunden hat
+     * @brief [Spielzeitpunkt](@ref gameTicks), wann zuletzt eine Abholung der Waren bei diesem Gebäude
+     * stattgefunden hat
      */
-    unsigned int lastGoodsCollections;
+    unsigned long lastGoodsCollections;
 
     /**
      * leerer Konstruktur, der ein "nix zu holen"-Ergebnis anlegt

@@ -47,6 +47,9 @@ void GameIO::loadGameFromTMX(
         }
     }
 
+    // TODO aus Savegame laden. Vorsicht: GameTest beachten. Tests laden auch Savegames und brauchen klare Zeitangaben (Game.ticks, MapObjects.lastUpdateTicks)
+    game->ticks = 0;
+
     // Spieler laden
     loadPlayers(game, mapNode);
 

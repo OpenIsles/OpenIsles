@@ -39,51 +39,31 @@ TEST_F(HarvestableTest, growHarvestable) {
 
     // Wachsum sollte 1.0 pro 40 Sekunden Spielzeit sein.
     // Test nach 20 Sekunden: Erwarte Wachsum von 0.5
-    context.sdlTicks = 20000;
-    setTicks(context.sdlTicks);
-
-    northernForest1->update(context);
-    northernForest2->update(context);
+    game->update(20000);
 
     ASSERT_NEAR(1.5, northernForest1->getAge(), allowedDoubleError);
     ASSERT_NEAR(1.8, northernForest2->getAge(), allowedDoubleError);
 
     // Test nach 40 Sekunden: Erwarte Wachsum von 1.0
-    context.sdlTicks = 40000;
-    setTicks(context.sdlTicks);
-
-    northernForest1->update(context);
-    northernForest2->update(context);
+    game->update(20000);
 
     ASSERT_NEAR(2.0, northernForest1->getAge(), allowedDoubleError);
     ASSERT_NEAR(2.3, northernForest2->getAge(), allowedDoubleError);
 
     // Test nach 108 Sekunden: Erwarte Wachsum von 2.7
-    context.sdlTicks = 108000;
-    setTicks(context.sdlTicks);
-
-    northernForest1->update(context);
-    northernForest2->update(context);
+    game->update(68000);
 
     ASSERT_NEAR(3.7, northernForest1->getAge(), allowedDoubleError);
     ASSERT_NEAR(4.0, northernForest2->getAge(), allowedDoubleError);
 
     // Maximalwert ist 4,0. northernForest2 sollte nicht weiterwachsen, northernForest1 aber schon
-    context.sdlTicks = 112000;
-    setTicks(context.sdlTicks);
-
-    northernForest1->update(context);
-    northernForest2->update(context);
+    game->update(4000);
 
     ASSERT_NEAR(3.8, northernForest1->getAge(), allowedDoubleError);
     ASSERT_NEAR(4.0, northernForest2->getAge(), allowedDoubleError);
 
     // Maximalwert ist 4,0. Wälder müssen nun vollgewachsen sein.
-    context.sdlTicks = 999999;
-    setTicks(context.sdlTicks);
-
-    northernForest1->update(context);
-    northernForest2->update(context);
+    game->update(999999);
 
     ASSERT_NEAR(4.0, northernForest1->getAge(), allowedDoubleError);
     ASSERT_NEAR(4.0, northernForest2->getAge(), allowedDoubleError);

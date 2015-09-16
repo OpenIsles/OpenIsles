@@ -2,9 +2,9 @@
 #include "map/Harvestable.h"
 
 /**
- * @brief Wachsumsgeschwindigkeit: 1 pro 40 Sekunden
+ * @brief Wachsumsgeschwindigkeit: 1 pro 40 Sekunden [Spielzeit](@ref gameTicks)
  */
-static const double growthPerSecond = 1.0 / 40.0; // TODO über Config steuern
+static const double growthPerMinute =  1.0 / 40.0 * 60.0; // TODO über Config steuern
 
 
 bool Harvestable::updateObject(const Context& context) {
@@ -13,7 +13,7 @@ bool Harvestable::updateObject(const Context& context) {
         return true; // bereits maximales Alter erreicht. Nix tun.
     }
 
-    double growth = context.game->getSecondsSinceLastUpdate(this) * growthPerSecond;
+    double growth = (double) getTicksSinceLastUpdate(context) / TICKS_PER_MINUTE * growthPerMinute;
 
     double newAge = age + growth;
 

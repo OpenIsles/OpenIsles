@@ -39,9 +39,9 @@ public:
     Carrier* carrier;
 
     /**
-     * @brief SDL_GetTicks-Wert, wann zuletzt die Waren bei diesem Gebäude abgeholt wurden
+     * @brief [Zeitpunkt](@ref gameTicks), wann zuletzt die Waren bei diesem Gebäude abgeholt wurden
      */
-    uint32_t lastGoodsCollections;
+    unsigned long lastGoodsCollections;
 
 public:
     Building() {

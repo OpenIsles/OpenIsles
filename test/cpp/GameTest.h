@@ -12,7 +12,6 @@
 #include "graphics/renderer/IRenderer.h"
 #include "graphics/renderer/nosdl/NoSDLRenderer.h"
 #include "map/Map.h"
-#include "utils/Ticks.h"
 
 /**
  * @brief Basisklasse für alle Test-Fixtures.
@@ -58,9 +57,6 @@ protected:
 
         economicsMgr = new EconomicsMgr(&context);
         context.economicsMgr = economicsMgr;
-
-        context.sdlTicks = 0;
-        setTicks(context.sdlTicks);
 
         std::string mapPath = "data/map/" + mapFilename;
         game->loadGameFromTMX(mapPath.c_str());

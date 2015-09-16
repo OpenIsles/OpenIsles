@@ -84,8 +84,6 @@ set(COMMON_SOURCE_FILES
     src/cpp/utils/PerformanceCounter.h
     src/cpp/utils/StringFormat.cpp
     src/cpp/utils/StringFormat.h
-    src/cpp/utils/Ticks.cpp
-    src/cpp/utils/Ticks.h
     src/cpp/Context.h
     src/cpp/defines.h
 )

@@ -186,7 +186,7 @@ int main(int argc, char** argv) {
 
 #ifdef DEBUG
     PerformanceCounter performanceCounterEvents(500);
-    PerformanceCounter performanceCounterUpdates(500);
+    PerformanceCounter performanceCounterGameUpdate(500);
     PerformanceCounter performanceCounterRendering(500);
 #endif
     
@@ -200,14 +200,12 @@ int main(int argc, char** argv) {
 	// Mainloop //////////////////////////////////////////////////////////////////////////////////////////////////////
 
     int benchmarkFramesToGo = cmdlineParams.benchmarkFrames;
-    Map* map = game->getMap();
+
+    uint32_t sdlTicks = SDL_GetTicks();
+    uint32_t lastSdlTicks = sdlTicks;
+
 	while (!guiMgr->hasToQuitGame()) {
 		fpsCounter.start();
-
-        // während eines Frames nur einmal auf die Uhr gucken, damit z.B. beim Blinkend-Zeichnen nicht ein Schnibbel
-        // eines Gebäude gezeichnet und ein anderer ne Millisekunde später nicht mehr
-        context.sdlTicks = SDL_GetTicks();
-
 
 		// Events handeln
 #ifdef DEBUG
@@ -232,28 +230,22 @@ int main(int argc, char** argv) {
 
         // Objekte aktualisieren
 #ifdef DEBUG
-        performanceCounterUpdates.start();
+        performanceCounterGameUpdate.start();
 #endif
 
-        std::list<MapObject*> mapObjectsToDelete;
-        std::list<MapObject*> mapObjects = map->getMapObjects();
-        for (auto iter = mapObjects.rbegin(); iter != mapObjects.rend(); iter++) {
-            MapObject* mapObject = *iter;
+        /* Vergangene Ticks berechnen
+         *
+         * Info: Wrapping tritt alle ~49,7 Tage physikalische Zeit auf.
+         * Die Differenz ist aber trotzdem richtig, da wir unsigned-Variablen haben.
+         */
+        sdlTicks = SDL_GetTicks();
+        uint32_t sdlTicksElapsed = sdlTicks - lastSdlTicks;
+        lastSdlTicks = sdlTicks;
 
-            bool dontDeleteMe = mapObject->update(context);
-            if (!dontDeleteMe) {
-                // Objekt zur Löschung vormerken. Wir dürfen nicht löschen, wenn wir noch iterieren
-                mapObjectsToDelete.push_back(mapObject);
-            }
-        }
-
-        for (auto iter = mapObjectsToDelete.rbegin(); iter != mapObjectsToDelete.rend(); iter++) {
-            MapObject* mapObject = *iter;
-            context.game->getMap()->deleteMapObject(mapObject);
-        }
+        game->update(sdlTicksElapsed);
 
 #ifdef DEBUG
-        performanceCounterUpdates.end();
+        performanceCounterGameUpdate.end();
 #endif
 
 
@@ -261,6 +253,7 @@ int main(int argc, char** argv) {
         SDL_GetMouseState(&context.mouseCurrentX, &context.mouseCurrentY);
 
 #ifdef DEBUG
+        Map* map = game->getMap();
         const MapCoords& mapCoordsCentered = map->getMapCoordsCentered();
         int screenZoom = map->getScreenZoom();
         const FourthDirection& screenView = map->getScreenView();
@@ -276,11 +269,11 @@ int main(int argc, char** argv) {
 
 		// Debug-Infos vorbereiten, damit wir sie später einfach nur ausgeben können
         debugOutput[0] = "PerfCounters: events avg " + toString(performanceCounterEvents.getMillisAvg()) +
-            ", current = " + toString(performanceCounterEvents.getMillisCurrent()) +
-            "; updates avg " + toString(performanceCounterUpdates.getMillisAvg()) +
-            ", current = " + toString(performanceCounterUpdates.getMillisCurrent()) +
-            "; rendering avg " + toString(performanceCounterRendering.getMillisAvg()) +
-            ", current = " + toString(performanceCounterRendering.getMillisCurrent());
+                         ", current = " + toString(performanceCounterEvents.getMillisCurrent()) +
+                         "; gameUpdate avg " + toString(performanceCounterGameUpdate.getMillisAvg()) +
+                         ", current = " + toString(performanceCounterGameUpdate.getMillisCurrent()) +
+                         "; rendering avg " + toString(performanceCounterRendering.getMillisAvg()) +
+                         ", current = " + toString(performanceCounterRendering.getMillisCurrent());
 
         debugOutput[1] = "Screen: mapCentered = (" +
             toString(mapCoordsCentered.x()) + ", " + toString(mapCoordsCentered.y()) + "), zoom = " +

@@ -34,4 +34,7 @@
     #define PERFORMANCE_END(name)
 #endif
 
+static const double TICKS_PER_SECOND = 1000;                  ///< Ticks pro Sekunde
+static const double TICKS_PER_MINUTE = 60 * TICKS_PER_SECOND; ///< Ticks pro Minute
+
 #endif

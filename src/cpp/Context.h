@@ -17,7 +17,7 @@ class ISoundMgr;
  */
 struct Context {
 
-    Context() : sdlTicks(0), mouseCurrentX(0), mouseCurrentY(0) {}
+    Context() : mouseCurrentX(0), mouseCurrentY(0) {}
 
 
     /**
@@ -54,11 +54,6 @@ struct Context {
      * @brief Zustand des Spiels
      */
     Game* game;
-
-    /**
-     * @brief pro Frame wird einmal auf die Uhr geguckt. In dieser Variable steht der SDL-Tickcount.
-     */
-    uint32_t sdlTicks;
 
     /**
      * @brief aktuelle Position des Mauszeigers in Fenster-Koordinaten

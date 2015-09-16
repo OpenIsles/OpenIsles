@@ -26,38 +26,37 @@ void EconomicsMgr::updateProduction(Building* building) {
         return;
     }
 
-    unsigned int ticksPastSinceLastUpdate = context->sdlTicks - building->getLastUpdateTime();
+    unsigned int ticksSinceLastUpdate = building->getTicksSinceLastUpdate(*context);
     unsigned int ticksInputConsumed = 0, ticksInput2Consumed = 0; // Zeiten, in denen wirklich verbraucht wurde
     double inputConsumed, input2Consumed, outputProduced;   // verbrauchte/produzierte Güter
-    double oneMinuteTicks = (double) 60000 / context->game->getSpeed();
 
     // Haben wir Eingabegüter, dann wird nur produziert, wie diese verfügbar sind
     if (mapObjectType->buildingProduction.input.isUsed()) {
         inputConsumed =
-            (double) ticksPastSinceLastUpdate / oneMinuteTicks * mapObjectType->buildingProduction.input.rate;
+            (double) ticksSinceLastUpdate / TICKS_PER_MINUTE * mapObjectType->buildingProduction.input.rate;
 
         // nur verbrauchen, was auch da is
         if (inputConsumed > building->productionSlots.input.inventory) {
             inputConsumed = building->productionSlots.input.inventory;
         }
         ticksInputConsumed =
-            (unsigned int) (inputConsumed * oneMinuteTicks / mapObjectType->buildingProduction.input.rate);
+            (unsigned int) (inputConsumed * TICKS_PER_MINUTE / mapObjectType->buildingProduction.input.rate);
 
         if (mapObjectType->buildingProduction.input2.isUsed()) {
             input2Consumed =
-                (double) ticksPastSinceLastUpdate / oneMinuteTicks * mapObjectType->buildingProduction.input2.rate;
+                (double) ticksSinceLastUpdate / TICKS_PER_MINUTE * mapObjectType->buildingProduction.input2.rate;
 
             // nur verbrauchen, was auch da is
             if (input2Consumed > building->productionSlots.input2.inventory) {
                 input2Consumed = building->productionSlots.input2.inventory;
             }
             ticksInput2Consumed =
-                (unsigned int) (input2Consumed * oneMinuteTicks / mapObjectType->buildingProduction.input2.rate);
+                (unsigned int) (input2Consumed * TICKS_PER_MINUTE / mapObjectType->buildingProduction.input2.rate);
         }
     }
 
     // Minimum-Ticks ermitteln, in denen wirklich produziert wurde
-    unsigned int ticksWeReallyProduced = ticksPastSinceLastUpdate;
+    unsigned int ticksWeReallyProduced = ticksSinceLastUpdate;
     if (mapObjectType->buildingProduction.input.isUsed()) {
         ticksWeReallyProduced = std::min(ticksWeReallyProduced, ticksInputConsumed);
 
@@ -68,16 +67,16 @@ void EconomicsMgr::updateProduction(Building* building) {
 
     // Jetzt die Produktion durchführen
     if (mapObjectType->buildingProduction.input.isUsed()) {
-        inputConsumed = (double) ticksWeReallyProduced / oneMinuteTicks * mapObjectType->buildingProduction.input.rate;
+        inputConsumed = (double) ticksWeReallyProduced / TICKS_PER_MINUTE * mapObjectType->buildingProduction.input.rate;
         building->productionSlots.input.decreaseInventory(inputConsumed);
 
         if (mapObjectType->buildingProduction.input2.isUsed()) {
             input2Consumed =
-                (double) ticksWeReallyProduced / oneMinuteTicks * mapObjectType->buildingProduction.input2.rate;
+                (double) ticksWeReallyProduced / TICKS_PER_MINUTE * mapObjectType->buildingProduction.input2.rate;
             building->productionSlots.input2.decreaseInventory(input2Consumed);
         }
     }
-    outputProduced = (double) ticksWeReallyProduced / oneMinuteTicks * mapObjectType->buildingProduction.output.rate;
+    outputProduced = (double) ticksWeReallyProduced / TICKS_PER_MINUTE * mapObjectType->buildingProduction.output.rate;
     building->productionSlots.output.increaseInventory(outputProduced);
 }
 
@@ -263,7 +262,7 @@ FindBuildingToGetGoodsFromResult EconomicsMgr::findBuildingToGetGoodsFrom(Buildi
                 potentialResult.goodsSlot.good = goodWeChoose;
                 potentialResult.goodsSlot.inventory = colony->getGoods(goodWeChoose).inventory;
                 potentialResult.goodsSlot.capacity = colony->getGoods(goodWeChoose).capacity;
-                potentialResult.lastGoodsCollections = context->sdlTicks + 1; // Zeit in der Zukunft nehmen, damit diese Route als letztes verwendet wird
+                potentialResult.lastGoodsCollections = context->game->getTicks() + 1; // Zeit in der Zukunft nehmen, damit diese Route als letztes verwendet wird
             }
             else {
                 potentialResult.goodsSlot.good = buildingThereType->buildingProduction.output.good;

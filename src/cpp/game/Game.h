@@ -4,6 +4,7 @@
 #include <map>
 #include <vector>
 #include "game/Colony.h"
+#include "game/GameIO.h"
 #include "game/Player.h"
 #include "map/coords/MapCoords.h"
 #include "map/Building.h"
@@ -17,13 +18,49 @@
 #include "Context.h"
 
 /**
+ * @page gameTicks Zeiteinheiten
+ *
+ * Alle Zeit im Spiel wird in `Game-Ticks` angegeben. Dies sind (spielgeschwindigkeit-abhängige) Millisekunden,
+ * seitdem das Spiel gestartet wurde. Wenn von "Spielzeit" oder kurz "Ticks" gesprochen wird, so sind immer Game-Ticks
+ * gemeint.
+ *
+ * Das Spiel beginnt bei `ticks = 0`. Danach erhöht sich dieser Wert um Vielfache der Spielgeschwindigkeit der
+ * vergangenen Zeit in Millisekunden. Die Aktualisierung läuft wiefolgt ab:
+ * - Die Hauptschleife misst die physikalisch vergangene Zeit in Millisekunden.
+ * - Sie ruft Game::update() auf und teilt ihr die vergangene Zeit mit.
+ * - Game::update() multipliziert die physikalisch vergangene Zeit mit der Spielgeschwindigkeit und erhöht den
+ *   internen Zähler Game#ticks
+ * - Game-Objekte orientieren sich ausschließlich an den Game-Ticks indem sie Game::getTicks() aufrufen.
+ *
+ * Beispiele:
+ * - `ticks = 5000`.
+ *   40 Millisekunden Zeit verstreichen. Spielgeschwindigkeit ist 1x.
+ *   Danach ist `ticks = 5040`.
+ * - `ticks = 5000`.
+ *   30 Millisekunden Zeit verstreichen.
+ *   Spielgeschwindigkeit ist 2x.
+ *   Danach ist `ticks = 5060`.
+ */
+
+/**
  * @brief Klasse, die den Zustand des Spiels beinhaltet und die zentrale Anlaufstelle ist, um Änderungen an diesem
  * durchzuführen. Sie benachrichtigt die anderen Klassen (z.B. GUI-Elemente oder die Map), um die nötigen Änderungen
  * an den Datenstrukturen durchzuführen.
  */
 class Game : public ContextAware {
 
+    // "Spiel laden" darf direkt auf die Interna zugreifen
+    friend class GameIO;
+
 private:
+    /**
+     * @brief Gibt den Zeitpunkt in Millisekunden an, in welchem sich das Spiel grade befindet.
+     * Jedes Spiel beginnt bei 0.
+     *
+     * @ref gameTicks
+     */
+    unsigned long ticks;
+
     /**
      * @brief die Karte. Enthält die Inseln und alles was drauf is
      */
@@ -47,7 +84,7 @@ private:
     /**
      * @brief Spielgeschwindigkeit in Vielfachen der Normalgeschwindigkeit
      */
-    double speed;
+    unsigned char speed;
 
     /**
      * @brief gibt an, ob die offizielle FPS-Anzeige sichtbar ist
@@ -57,6 +94,16 @@ private:
 public:
 	Game(const Context* const context);
 	~Game();
+
+    /**
+     * @brief Liefert die aktuelle [Spielzeit](@ref gameTicks) zurück.
+     * @ref gameTicks
+     *
+     * @return aktuelle Spielzeit
+     */
+    unsigned long getTicks() const {
+        return ticks;
+    }
 
     Map* getMap() const {
         return map;
@@ -132,18 +179,10 @@ public:
     Colony* getColony(const MapCoords& mapCoords) const;
 
     /**
-     * @brief Liefert die Spielgeschwindigkeit zurück.
-     * @return Spielgeschwindigkeit in Vielfachen der Normalgeschwindigkeit
-     */
-    double getSpeed() const {
-        return speed;
-    }
-
-    /**
      * @brief Ändert die Spielgeschwindigkeit
      * @param speed neue Spielgeschwindigkeit
      */
-    void setSpeed(double speed) {
+    void setSpeed(unsigned char speed) {
         this->speed = speed;
     }
 
@@ -161,18 +200,6 @@ public:
     void toggleFpsCounter() {
         this->fpsCounterEnabled = !this->fpsCounterEnabled;
     }
-
-    /**
-     * @brief Liefert die Anzahl Sekunden zurück, seitdem ein Map-Objekt nicht mehr aktualisiert worden ist.
-     *
-     * Die Zeitangabe ist normalisiert auf die Spielgeschwindigkeit.
-     * Beispiel: Ist eine Sekunde echte Zeit vergangen, die Spielgeschwindigkeit ist auf 4x eingestellt, liefert diese
-     * Methode "4 Sekunden" zurück.
-     *
-     * @param mapObject Map-Objekt
-     * @return normalisierte Sekundenanzahl seit dem letzten Update
-     */
-    double getSecondsSinceLastUpdate(const MapObject* mapObject) const;
 
     /**
      * @brief Fügt eine neue Landschaftkachel, die abgeerntet werden kann, der Karte hinzu.
@@ -224,7 +251,34 @@ public:
      */
     void loadGameFromTMX(char const* filename);
 
+    /**
+     * @brief Hauptschleife des Spiels. Sie führt die Spiellogik aus, indem sie alle Map-Objekte aktualisiert.
+     *
+     * Wichtig: Die auszuführende Spielzeit sollte nicht utopisch groß sein, da die Objekte alle nur einmalig
+     * aktualisiert werden. Wenn man also eine Spielzeit von einer ganzen Minute angibt, so hat das Spiel danach
+     * einen anderen Zustand, als hätte man 60x eine Sekunde oder 600x 100 Millisekunden angegeben.
+     * Das liegt daran, dass die Objekte nicht ewig in die Zukunft aktualisieren, sondern ihre Arbeit in kleinen
+     * Häppchen erledigen, z.&nbsp;B. wird ein Träger nur ein Stückchen weiterlaufen und Waren ein-/ausladen, aber
+     * nicht mehrere Aufträge hintereinander ausführen.
+     *
+     * Die auszuführende Spielzeit sollte sich immer im Millisekunden-Bereich abspielen.
+     * (Tests rufen diese Methode mehrfach hintereinander in einer Schleife auf, um einen großen Zeitfluss zu simulieren)
+     *
+     * @param millisecondsElapsed Millisekunden, die das Spiel fortschreiten soll
+     *                            (= Zeit, die seit dem letzten Aufruf vergangen ist)
+     */
+    void update(unsigned long millisecondsElapsed);
+
 private:
+    /**
+     * @brief Helper, der ein neues Map-Objekt instanziiert und dabei die `lastUpdateTicks` auf die aktuelle
+     * Spielzeit setzt.
+     *
+     * @param mapObjectType Typ von Map-Objekt, der angelegt werden soll.
+     * @return instanziiertes Map-Objekt
+     */
+    MapObjectFixed* instantiateNewMapObjectFixed(const MapObjectType* mapObjectType) const;
+
     /**
      * @brief Ändert die Einwohner innerhalb eines Gebäudes. Positive Werte fügen Bewohner hinzu, negative nehmen
      * welche weg.

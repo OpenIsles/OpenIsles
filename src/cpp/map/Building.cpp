@@ -26,6 +26,7 @@ void Building::sendNewCarrier(const Context& context) {
         const MapCoords& firstHopOnRoute = result.route.front();
 
         carrier = new Carrier(this, result.route, result.goodsSlot.good, true);
+        carrier->setLastUpdateTicks(context.game->getTicks());
         carrier->setMapCoords((DoubleMapCoords) firstHopOnRoute);
         carrier->updateCurrentMovingDirection();
         carrier->setAnimations(

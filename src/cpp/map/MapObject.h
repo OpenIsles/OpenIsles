@@ -11,19 +11,11 @@
 #include "map/coords/MapCoords.h"
 #include "map/Direction.h"
 #include "map/MapCoordUtils.h"
-#include "utils/Ticks.h"
 
 /**
  * @brief Basisklasse für alles, was sich auf der Karte befinden kann
  */
 class MapObject {
-
-#ifdef TESTS_ENABLED
-    // Tests sollen die Update-Zeit via setLastUpdateTime() manipulieren dürfen.
-    FRIEND_TEST(EconomicsMgrTest, updateCarrier);
-    FRIEND_TEST(HarvestableTest, growHarvestable);
-#endif
-
 protected:
 	/**
 	 * @brief Breite des Objekts in Map-Koordinaten.
@@ -55,14 +47,13 @@ protected:
     int drawingFlags = 0;
 
     /**
-     * @brief SDL_GetTicks-Wert, wann zuletzt dieses Objekt aktualisiert wurde
+     * @brief [Zeitpunkt](@ref gameTicks), wann dieses Objekt zuletzt aktualisiert wurde
      */
-    uint32_t lastUpdateTime;
+    unsigned long lastUpdateTicks;
 
 public:
     MapObject() {
-        // Bei Instanziierung sofort den Wert setzen, damit immer was Sinnvolles drinsteht.
-        lastUpdateTime = getTicks();
+        // TODO Alle Objekte müssen lastUpdateTicks ordentlich gesetzt (mit Game#ticks initialisiert) haben. Eine Factory wäre hübsch
     }
 
 	virtual ~MapObject() {
@@ -100,8 +91,19 @@ public:
         this->drawingFlags = drawingFlags;
     }
 
-    uint32_t getLastUpdateTime() const {
-        return lastUpdateTime;
+    /**
+     * @brief Liefert zurück, wie viele Game-Ticks seit dem letzten Update des Objekts vergangen sind.
+     * @return Game-Ticks seit letzten Update
+     */
+    unsigned int getTicksSinceLastUpdate(const Context& context) const;
+
+    // TODO Auf lastUpdateTicks sollte man eigentlich nicht von außen (maximal die Tests) zugreifen dürfen.
+    unsigned long getLastUpdateTicks() const {
+        return lastUpdateTicks;
+    }
+
+    void setLastUpdateTicks(unsigned long lastUpdateTicks) {
+        this->lastUpdateTicks = lastUpdateTicks;
     }
 
     /**
@@ -110,11 +112,7 @@ public:
      * @return `true` im Normalfall. Wird `false` zurückgegeben, bedeutet das, dass die Update-Logik entschieden hat,
      * das Objekt müsse gelöscht werden.
      */
-    bool update(const Context& context) {
-        bool notDeleteMe = updateObject(context);
-        setLastUpdateTime(context.sdlTicks);
-        return notDeleteMe;
-    }
+    bool update(const Context& context);
 
     /**
      * @brief Interne Update-Funktion, die von den Unterklassen implementiert werden muss und die klassen-spezifische
@@ -125,11 +123,6 @@ public:
      * das Objekt müsse gelöscht werden.
      */
     virtual bool updateObject(const Context& context) = 0;
-
-private:
-    void setLastUpdateTime(uint32_t lastUpdateTime) {
-        this->lastUpdateTime = lastUpdateTime;
-    }
 };
 
 

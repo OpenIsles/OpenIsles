@@ -316,7 +316,7 @@ void GuiMap::renderTile(const MapCoords& mapCoords) {
         if (!buildOperationResultBit->costsNothingBecauseOfChange &&
             !buildOperationResultBit->resourcesEnoughToBuildThis) {
 
-            drawWhat = (context->sdlTicks % 800 < 400) ? FROM_BUILD_OPERATION_RESULT : FROM_MAP;
+            drawWhat = (SDL_GetTicks() % 800 < 400) ? FROM_BUILD_OPERATION_RESULT : FROM_MAP;
         } else {
             drawWhat = FROM_BUILD_OPERATION_RESULT;
         }
