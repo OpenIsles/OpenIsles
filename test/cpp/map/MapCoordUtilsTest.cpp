@@ -150,11 +150,15 @@ TEST_F(MapCoordUtilsTest, getDrawCoordsForBuilding) {
 
     MapCoordUtilsTestGraphicsMgr graphicsMgr(&graphicSet);
 
+    MapObjectType mapObjectType;
+    mapObjectType.type = MapObjectTypeClass::BUILDING;
+
     Building building;
     building.setMapCoords(MapCoords(6, 6));
     building.setMapWidth(4);
     building.setMapHeight(3);
     building.setView(Direction::SOUTH);
+    building.setMapObjectType(&mapObjectType);
 
     // Testdurchführung
 
