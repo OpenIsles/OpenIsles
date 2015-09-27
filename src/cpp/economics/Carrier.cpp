@@ -95,7 +95,7 @@ bool Carrier::updateObject(const Context& context) {
                 // Der Träger verschwindet einfach
                 if (targetBuilding == nullptr) {
                     deleteMe = true;
-                    owningBuilding->carrier = nullptr;
+                    owningBuilding->carriers.erase(this);
                 }
 
                 // Das war Hinweg -> Waren aufladen und Träger auf Rückweg schicken
@@ -136,7 +136,7 @@ bool Carrier::updateObject(const Context& context) {
                     Route returnRoute = aStar.getRoute(route.back(), route.front());
 
                     deleteMe = true;
-                    owningBuilding->carrier = nullptr;
+                    owningBuilding->carriers.erase(this);
 
                     // Es kann sein, dass es keine Rückroute gibt, wenn der Nutzer inzwischen die Map verändert hat.
                     // In diesem Fall hat er Pech gehabt, die Waren verschwinden mit dem Träger
@@ -155,7 +155,7 @@ bool Carrier::updateObject(const Context& context) {
                         returnCarrier->carriedGoods.inventory = goodsWeCollect;
 
                         map->addMapObject(returnCarrier);
-                        owningBuilding->carrier = returnCarrier;
+                        owningBuilding->carriers.insert(returnCarrier);
 
                         // Slot wieder freimachen
                         if (goodsSlotToTakeFrom->markedForPickup) {
@@ -171,7 +171,7 @@ bool Carrier::updateObject(const Context& context) {
                     goodsSlotToUnloadTo->increaseInventory(carriedGoods.inventory);
 
                     deleteMe = true;
-                    owningBuilding->carrier = nullptr;
+                    owningBuilding->carriers.erase(this);
                 }
 
                 break; // Loop verlassen. Rückweg erst im nächsten Update, wir sind hier fertig.

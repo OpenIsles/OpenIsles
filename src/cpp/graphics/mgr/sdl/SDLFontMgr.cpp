@@ -15,7 +15,8 @@ SDLFontMgr::~SDLFontMgr() {
 }
 
 void SDLFontMgr::renderText(IRenderer* renderer, std::string string, int x, int y,
-                            Color* color, Color* shadowColor, std::string fontName, int fontSize, int align) {
+                            const Color* color, const Color* shadowColor,
+                            std::string fontName, int fontSize, int align) {
     
     TTF_Font* ttfFont = getFont(fontName, fontSize);
     SDL_Color sdlColor = { color->r, color->g, color->b, 255 };

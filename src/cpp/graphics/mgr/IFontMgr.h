@@ -39,7 +39,8 @@ public:
      * @param align Ausrichtung des Texts. Eine Kombination aus RENDERTEXT_?ALIGN_*-Konstanten
      */
     virtual void renderText(IRenderer* renderer, std::string string, int x, int y,
-        Color* color, Color* shadowColor, std::string fontName, int fontSize, int align) = 0;
+                            const Color* color, const Color* shadowColor,
+                            std::string fontName, int fontSize, int align) = 0;
 
 };
 

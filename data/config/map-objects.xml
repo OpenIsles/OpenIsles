@@ -37,6 +37,7 @@
             <output good="bricks" capacity="8" rate="2.9" />
         </production-slots>
         <inhabitants>2</inhabitants>
+        <max-carriers>1</max-carriers>
     </building>
 
     <building name="toolsmiths" width="2" height="2">
@@ -136,6 +137,7 @@
             <output good="tobacco-goods" capacity="4" rate="2.0" />
         </production-slots>
         <inhabitants>2</inhabitants>
+        <max-carriers>1</max-carriers>
     </building>
 
     <building name="distillery" width="2" height="2">
@@ -183,6 +185,7 @@
             <output good="alcohol" capacity="4" rate="2.5" />
         </production-slots>
         <inhabitants>3</inhabitants>
+        <max-carriers>1</max-carriers>
     </building>
 
     <building name="weaving-mill1" width="2" height="2">
@@ -236,6 +239,7 @@
             <output good="cloth" capacity="7" rate="1.95" />
         </production-slots>
         <inhabitants>2</inhabitants>
+        <max-carriers>1</max-carriers>
     </building>
 
     <building name="butchers" width="2" height="2">
@@ -279,6 +283,7 @@
             <output good="food" capacity="4" rate="2.4" />
         </production-slots>
         <inhabitants>2</inhabitants>
+        <max-carriers>1</max-carriers>
     </building>
 
     <!-- Farmen und Plantagen -->
@@ -307,6 +312,7 @@
             <output good="sugar" capacity="6" rate="2.3" />
         </production-slots>
         <inhabitants>4</inhabitants>
+        <max-carriers>1</max-carriers>
     </building>
 
     <harvestable name="sugarcane-field" width="1" height="1">
@@ -348,6 +354,7 @@
             <output good="tobacco" capacity="6" rate="1.9" />
         </production-slots>
         <inhabitants>4</inhabitants>
+        <max-carriers>1</max-carriers>
     </building>
 
     <harvestable name="tobacco-field" width="1" height="1">
@@ -389,6 +396,7 @@
             <output good="spices" capacity="4" rate="1.4" />
         </production-slots>
         <inhabitants>4</inhabitants>
+        <max-carriers>1</max-carriers>
     </building>
 
     <harvestable name="spices-field" width="1" height="1">
@@ -432,6 +440,7 @@
             <output good="wool" capacity="3" rate="1.95" />
         </production-slots>
         <inhabitants>2</inhabitants>
+        <max-carriers>3</max-carriers>
     </building>
 
     <building name="cattle-farm" width="2" height="2">
@@ -458,6 +467,7 @@
             <output good="cattle" capacity="4" rate="2.3" />
         </production-slots>
         <inhabitants>2</inhabitants>
+        <max-carriers>3</max-carriers>
     </building>
 
     <building name="hunters-hut" width="1" height="1">
@@ -495,6 +505,7 @@
             <output good="food" capacity="3" rate="2.0" />
         </production-slots>
         <inhabitants>1</inhabitants>
+        <max-carriers>1</max-carriers>
     </building>
 
     <building name="foresters" width="2" height="2">
@@ -523,6 +534,7 @@
             <output good="wood" capacity="10" rate="2.8" />
         </production-slots>
         <inhabitants>1</inhabitants>
+        <max-carriers>1</max-carriers>
     </building>
 
     <harvestable name="northern-forest1" width="1" height="1">
@@ -627,6 +639,7 @@
             00000000000000011111111000000000000000
         </catchment-area>
         <inhabitants>2</inhabitants>
+        <max-carriers>1</max-carriers>
     </building>
 
     <building name="office2" width="3" height="2">
@@ -682,6 +695,7 @@
             00000000000000011111111000000000000000
         </catchment-area>
         <inhabitants>3</inhabitants>
+        <max-carriers>2</max-carriers>
     </building>
 
     <!-- Öffentliche Gebäude -->
@@ -1148,6 +1162,7 @@
             00000000000000011111111000000000000000
         </catchment-area>
         <inhabitants>3</inhabitants>
+        <max-carriers>2</max-carriers>
     </building>
 
     <building name="chapel" width="2" height="1">

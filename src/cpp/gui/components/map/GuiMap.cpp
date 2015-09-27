@@ -27,6 +27,7 @@
 #endif
 
 #if defined(DEBUG_A_STAR) || defined(DEBUG_GUIMAP_COORDS)
+#include <vector>
 #include "graphics/mgr/IFontMgr.h"
 #endif
 
@@ -136,51 +137,69 @@ void GuiMap::renderElement(IRenderer* renderer) {
     }
 
 #ifdef DEBUG_A_STAR
-    Route routeToDraw;
+    std::vector<const Route*> routesToDraw;
 
     // Wenn Gebäude ausgewählt -> Trägerroute anzeigen
     const MapObject* selectedMapObject = map->getSelectedMapObject();
     const Building* selectedBuilding = dynamic_cast<const Building*>(selectedMapObject);
     if (selectedBuilding != nullptr) {
-        routeToDraw = (selectedBuilding->carrier != nullptr) ? selectedBuilding->carrier->route : Route();
+        for (const Carrier* carrier : selectedBuilding->carriers) {
+            if (carrier->route.routeExists()) {
+                routesToDraw.push_back(&carrier->route);
+            }
+        }
     } else {
-        routeToDraw = AStar::debugAStar_route;
+        if (AStar::debugAStar_route.routeExists()) {
+            routesToDraw.push_back(&AStar::debugAStar_route);
+        }
     }
 
-    // A*-Route zeichnen (nur bei Maximalzoom, dann sparen wir uns Berechnungen und der Code wird einfacher)
-    if (map->getScreenZoom() == 1 && routeToDraw.routeExists()) {
+    // A*-Routen zeichnen (nur bei Maximalzoom, dann sparen wir uns Berechnungen und der Code wird einfacher)
+    if (map->getScreenZoom() == 1 && !routesToDraw.empty()) {
         renderer->setDrawBlendMode(IRenderer::BLENDMODE_BLEND);
 
-        int lastPointX = -1;
-        int lastPointY = -1;
+        static const Color colorWhite = Color(255, 255, 255, 92);
+        static const Color colors[3] = {
+            Color(0, 0, 255, 92),
+            Color(0, 192, 0, 92),
+            Color(255, 0, 0, 92)
+        };
 
-        int i = 1;
-        for (auto iter = routeToDraw.cbegin(); iter != routeToDraw.cend(); iter++) {
-            const MapCoords& mapCoords = *iter;
+        int routeIndex = 0;
+        for (const Route* routeToDraw : routesToDraw) {
+            int lastPointX = -1;
+            int lastPointY = -1;
 
-            ScreenCoords screenCoords = MapCoordUtils::mapToScreenCoords(mapCoords, screenView, *map);
-            screenCoords.addY(IGraphicsMgr::TILE_HEIGHT_HALF);
-            screenCoords.subY(IGraphicsMgr::ELEVATION_HEIGHT);
+            const Color& color = colors[routeIndex++ % 3];
 
-            screenCoords.addX(Consts::mapClipRect.w / 2);
-            screenCoords.addY(Consts::mapClipRect.h / 2);
+            int hopIndex = 1;
+            for (auto iter = routeToDraw->cbegin(); iter != routeToDraw->cend(); iter++) {
+                const MapCoords& mapCoords = *iter;
 
-            // Verbindungslinie zuerst
-            if (lastPointX != -1) {
-                renderer->setDrawColor(Color(255, 0, 0, 128));
-                renderer->drawLine(lastPointX, lastPointY, screenCoords.x(), screenCoords.y());
+                ScreenCoords screenCoords = MapCoordUtils::mapToScreenCoords(mapCoords, screenView, *map);
+                screenCoords.addY(IGraphicsMgr::TILE_HEIGHT_HALF);
+                screenCoords.subY(IGraphicsMgr::ELEVATION_HEIGHT);
+
+                screenCoords.addX(Consts::mapClipRect.w / 2);
+                screenCoords.addY(Consts::mapClipRect.h / 2);
+
+                // Verbindungslinie zuerst
+                if (lastPointX != -1) {
+                    renderer->setDrawColor(color);
+                    renderer->drawLine(lastPointX, lastPointY, screenCoords.x(), screenCoords.y());
+                }
+                lastPointX = screenCoords.x();
+                lastPointY = screenCoords.y();
+
+                // dann Rechteck mit Zahl drin
+                Rect rect(screenCoords.x() - 8, screenCoords.y() - 8, 16, 16);
+                renderer->setDrawColor(color);
+                renderer->fillRect(rect);
+
+                context->fontMgr->renderText(renderer, toString(hopIndex++), screenCoords.x(), screenCoords.y(),
+                                             &colorWhite, nullptr,
+                                             "DroidSans.ttf", 9, RENDERTEXT_HALIGN_CENTER | RENDERTEXT_VALIGN_MIDDLE);
             }
-            lastPointX = screenCoords.x();
-            lastPointY = screenCoords.y();
-
-            // dann Rechteck mit Zahl drin
-            Rect rect(screenCoords.x() - 8, screenCoords.y() - 8, 16, 16);
-            renderer->setDrawColor(Color(0, 0, 255, 128));
-            renderer->fillRect(rect);
-
-            static Color colorWhite = Color(255, 255, 255, 255);
-            context->fontMgr->renderText(renderer, toString(i++), screenCoords.x(), screenCoords.y(), &colorWhite, nullptr,
-                "DroidSans.ttf", 9, RENDERTEXT_HALIGN_CENTER | RENDERTEXT_VALIGN_MIDDLE);
         }
     }
 #endif

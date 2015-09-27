@@ -146,6 +146,20 @@ struct MapObjectType {
     unsigned char inhabitants = 0;
 
     /**
+     * @brief gibt an, wie viele Träger das Gebäude maximal haben kann.
+     *
+     * Je nach Gebäude sind die Träger verschieden, z.&nbsp;B. hat
+     * - ein Fischer ein Fischerboot (="Produktionsträger"),
+     * - eine Schaffarm bis zu drei grasende Schafe (="Produktionsträger"),
+     * - eine Tabakplantage eine Erntnerin (="Produktionsträger"),
+     * - der Marktplatz bis zu zwei Marktkarren (=Warenträger),
+     * - eine Erzschmelze einen Träger (=Warenträger, der Erz und Holz holt),
+     * - eine Feuerwehr einen Feuerwehrmann (="Arbeits-Map-Objekt")
+     * als Träger.
+     */
+    unsigned char maxCarriers = 0;
+
+    /**
      * @brief (nur für `Harvestable`) gibt das maximale Alter an, das diese Landschaft erreichen kann.
      */
     unsigned char maxAge = 0;

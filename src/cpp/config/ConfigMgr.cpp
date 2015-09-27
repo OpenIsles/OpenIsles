@@ -155,6 +155,11 @@ void ConfigMgr::loadMapObjectTypes() {
             mapObjectType.inhabitants = (unsigned char) stringToUnsignedLong(inhabitantsNode->value());
         }
 
+        rapidxml::xml_node<>* maxCarriersNode = node->first_node("max-carriers", 12, true);
+        if (maxCarriersNode != nullptr) {
+            mapObjectType.maxCarriers = (unsigned char) stringToUnsignedLong(maxCarriersNode->value());
+        }
+
         rapidxml::xml_node<>* maxAgeNode = node->first_node("max-age", 7, true);
         if (maxAgeNode != nullptr) {
             mapObjectType.maxAge = (unsigned char) stringToUnsignedLong(maxAgeNode->value());

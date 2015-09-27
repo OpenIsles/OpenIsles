@@ -5,6 +5,7 @@
 #include <gtest/gtest.h>
 #endif
 
+#include <unordered_set>
 #include "economics/Carrier.h"
 #include "game/ProductionSlots.h"
 #include "map/Structure.h"
@@ -32,11 +33,10 @@ public:
      */
     unsigned char inhabitants;
 
-    // TODO Aktuell hat jedes Gebäude bis zu einem Träger. Das muss später dynamisch nach Gebäudetyp sein.
     /**
-     * @brief Referenz auf den Träger (owned durch Map.mapObjects), der zum Gebäude gehört
+     * @brief Referenzen auf die Träger (owned durch Map.mapObjects), die zum Gebäude gehören
      */
-    Carrier* carrier;
+    std::unordered_set<Carrier*> carriers;
 
     /**
      * @brief [Zeitpunkt](@ref gameTicks), wann zuletzt die Waren bei diesem Gebäude abgeholt wurden
@@ -45,7 +45,6 @@ public:
 
 public:
     Building() {
-        carrier = nullptr;
         lastGoodsCollections = 0;
         inhabitants = 0;
     }
@@ -82,8 +81,8 @@ public:
 
 private:
     /**
-     * @brief Schickt einen (TODO: (weiteren)) Träger vom Gebäude los.
-     * Wenn der (TODO: ein) Träger frei ist und ein Zielgebäude im Einzugsbereich ist, wird ein Träger losgeschickt,
+     * @brief Schickt einen weiteren Träger vom Gebäude los.
+     * Wenn ein Träger frei ist und ein Zielgebäude im Einzugsbereich ist, wird ein Träger losgeschickt,
      * um passende Waren abzuholen.
      *
      * @param context (Dependency)

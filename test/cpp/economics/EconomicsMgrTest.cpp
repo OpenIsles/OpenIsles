@@ -59,7 +59,7 @@ TEST_F(EconomicsMgrTest, updateCarrier) {
     // Anfangsbedingungen: kein Marktkarren da, Gebäudelager voll und bereit zur Abholung, 5t in der Kolonie
     ASSERT_EQ(5, colony->getGoods(cattleGood).inventory);
 
-    ASSERT_TRUE(office1->carrier == nullptr);
+    ASSERT_TRUE(office1->carriers.empty());
 
     ASSERT_TRUE(cattleFarm->productionSlots.output.isInventoryFull());
     ASSERT_FALSE(cattleFarm->productionSlots.output.markedForPickup);
@@ -68,16 +68,18 @@ TEST_F(EconomicsMgrTest, updateCarrier) {
     office1->setLastUpdateTicks(0);
     game->update(1);
 
-    ASSERT_TRUE(office1->carrier != nullptr);
+    ASSERT_EQ(1, office1->carriers.size());
+    const Carrier* carrier = *office1->carriers.cbegin();
+
     ASSERT_EQ(1, office1->getLastUpdateTicks());
-    ASSERT_EQ(1, office1->carrier->getLastUpdateTicks());
-    ASSERT_EQ(office1->carrier->owningBuilding, office1);
-    ASSERT_TRUE(office1->carrier->route.back() == MapCoords(26, 27));
-    ASSERT_TRUE(office1->carrier->onOutboundTrip);
-    ASSERT_EQ("cattle", office1->carrier->carriedGoods.good->name);
-    ASSERT_EQ(0, office1->carrier->carriedGoods.inventory);
-    ASSERT_TRUE(office1->carrier->getMapCoords() == DoubleMapCoords(28, 19));
-    ASSERT_TRUE(office1->carrier->getCurrentMovingDirection() == Direction::SOUTH);
+    ASSERT_EQ(1, carrier->getLastUpdateTicks());
+    ASSERT_EQ(carrier->owningBuilding, office1);
+    ASSERT_TRUE(carrier->route.back() == MapCoords(26, 27));
+    ASSERT_TRUE(carrier->onOutboundTrip);
+    ASSERT_EQ("cattle", carrier->carriedGoods.good->name);
+    ASSERT_EQ(0, carrier->carriedGoods.inventory);
+    ASSERT_TRUE(carrier->getMapCoords() == DoubleMapCoords(28, 19));
+    ASSERT_TRUE(carrier->getCurrentMovingDirection() == Direction::SOUTH);
 
     ASSERT_TRUE(cattleFarm->productionSlots.output.markedForPickup);
 
@@ -86,41 +88,43 @@ TEST_F(EconomicsMgrTest, updateCarrier) {
     game->update(1000); // Träger sollte sich (1000 * 0,75 =) 0,75 Kacheln fortbewegt haben
 
     ASSERT_EQ(1001, office1->getLastUpdateTicks());
-    ASSERT_EQ(1001, office1->carrier->getLastUpdateTicks());
-    ASSERT_NEAR(28, office1->carrier->getMapCoords().x(), allowedCoordsError);
-    ASSERT_NEAR(19.75, office1->carrier->getMapCoords().y(), allowedCoordsError);
-    ASSERT_TRUE(office1->carrier->getCurrentMovingDirection() == Direction::SOUTH);
+    ASSERT_EQ(1001, carrier->getLastUpdateTicks());
+    ASSERT_NEAR(28, carrier->getMapCoords().x(), allowedCoordsError);
+    ASSERT_NEAR(19.75, carrier->getMapCoords().y(), allowedCoordsError);
+    ASSERT_TRUE(carrier->getCurrentMovingDirection() == Direction::SOUTH);
 
     // "Step 2": Test, wenn eine Kachel geradlinig übersprungen wird
     game->update(2500); // Träger sollte sich (2500 * 0,75 =) 1,875 Kacheln fortbewegt haben
 
     ASSERT_EQ(3501, office1->getLastUpdateTicks());
-    ASSERT_EQ(3501, office1->carrier->getLastUpdateTicks());
-    ASSERT_NEAR(28, office1->carrier->getMapCoords().x(), allowedCoordsError);
-    ASSERT_NEAR(21.625, office1->carrier->getMapCoords().y(), allowedCoordsError);
-    ASSERT_TRUE(office1->carrier->getCurrentMovingDirection() == Direction::SOUTH);
+    ASSERT_EQ(3501, carrier->getLastUpdateTicks());
+    ASSERT_NEAR(28, carrier->getMapCoords().x(), allowedCoordsError);
+    ASSERT_NEAR(21.625, carrier->getMapCoords().y(), allowedCoordsError);
+    ASSERT_TRUE(carrier->getCurrentMovingDirection() == Direction::SOUTH);
 
     // "Step 3": Test, wenn mehrere Kacheln, auch über Ecken hinweg, übersprungen werden
     game->update(8000); // Träger sollte sich (8000 * 0,75 =) 6 Kacheln fortbewegt haben
 
     ASSERT_EQ(11501, office1->getLastUpdateTicks());
-    ASSERT_EQ(11501, office1->carrier->getLastUpdateTicks());
-    ASSERT_NEAR(26, office1->carrier->getMapCoords().x(), allowedCoordsError);
-    ASSERT_NEAR(25.625, office1->carrier->getMapCoords().y(), allowedCoordsError);
-    ASSERT_TRUE(office1->carrier->getCurrentMovingDirection() == Direction::SOUTH);
+    ASSERT_EQ(11501, carrier->getLastUpdateTicks());
+    ASSERT_NEAR(26, carrier->getMapCoords().x(), allowedCoordsError);
+    ASSERT_NEAR(25.625, carrier->getMapCoords().y(), allowedCoordsError);
+    ASSERT_TRUE(carrier->getCurrentMovingDirection() == Direction::SOUTH);
 
     // Am Gebäude ankommen, sollte den Rücktransport triggern
     game->update(2000); // Träger sollte sich (2000 * 0,75 =) 1,5 Kacheln fortbewegt haben. Ziel wurde bereits nach 1,375 Kacheln erreicht.
 
-    ASSERT_TRUE(office1->carrier != nullptr);
+    ASSERT_EQ(1, office1->carriers.size());
+    carrier = *office1->carriers.cbegin();
+
     ASSERT_EQ(13501, office1->getLastUpdateTicks());
-    ASSERT_EQ(13501, office1->carrier->getLastUpdateTicks());
-    ASSERT_TRUE(office1->carrier->route.back() == MapCoords(28, 19));
-    ASSERT_FALSE(office1->carrier->onOutboundTrip);
-    ASSERT_EQ("cattle", office1->carrier->carriedGoods.good->name);
-    ASSERT_EQ(4, office1->carrier->carriedGoods.inventory); // Rinderfarm kann nur 4 Tonnen halten
-    ASSERT_TRUE(office1->carrier->getMapCoords() == DoubleMapCoords(26, 27));
-    ASSERT_TRUE(office1->carrier->getCurrentMovingDirection() == Direction::NORTH);
+    ASSERT_EQ(13501, carrier->getLastUpdateTicks());
+    ASSERT_TRUE(carrier->route.back() == MapCoords(28, 19));
+    ASSERT_FALSE(carrier->onOutboundTrip);
+    ASSERT_EQ("cattle", carrier->carriedGoods.good->name);
+    ASSERT_EQ(4, carrier->carriedGoods.inventory); // Rinderfarm kann nur 4 Tonnen halten
+    ASSERT_TRUE(carrier->getMapCoords() == DoubleMapCoords(26, 27));
+    ASSERT_TRUE(carrier->getCurrentMovingDirection() == Direction::NORTH);
 
     ASSERT_EQ(0, cattleFarm->productionSlots.output.inventory);
     ASSERT_FALSE(cattleFarm->productionSlots.output.markedForPickup);
@@ -128,6 +132,6 @@ TEST_F(EconomicsMgrTest, updateCarrier) {
     // Ein großer Zeitsprung und der Rücktransport sollte längst erledigt sein.
     game->update(20000);
 
-    ASSERT_TRUE(office1->carrier == nullptr);
+    ASSERT_TRUE(office1->carriers.empty());
     ASSERT_EQ(9, colony->getGoods(cattleGood).inventory);
 }
