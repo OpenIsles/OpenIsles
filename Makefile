@@ -9,7 +9,7 @@ CREATE_TARGET_DIRECTORY = mkdir -p $(@D)
 MONTAGE := montage -background transparent
 BLENDER := /opt/blender-2.74/blender
 
-.PHONY: all clean build-gui clean-gui render-cart render-coat-of-arms render-blender clean-blender
+.PHONY: all clean build-gui clean-gui render-sheep render-cart render-coat-of-arms render-blender clean-blender
 
 all: build-gui render-blender
 
@@ -272,6 +272,29 @@ endef
 $(foreach ANIMATION,$(ANIMATIONS),$(eval $(call RENDER_ANIMATION,$(ANIMATION))))
 
 ########################################################################################################################
+# Animation: Schaf                                                                                                     #
+########################################################################################################################
+
+render-sheep: $(SRC_DIRECTORY)/blender/animations/sheep/sheep.blend
+	mkdir -p $(DATA_DIRECTORY)/img/animations
+	cd $(SRC_DIRECTORY)/blender/animations/sheep; $(BLENDER) -b $(notdir $<) -P render.py
+
+	# geometry muss angegeben werden, sonst greift der Default von 120x120
+	for i in `seq 0 2`; \
+	do \
+	    $(MONTAGE) \
+	        $(SRC_DIRECTORY)/blender/animations/sheep/render/angle0/sheep$$i-* \
+	        $(SRC_DIRECTORY)/blender/animations/sheep/render/angle45/sheep$$i-* \
+	        $(SRC_DIRECTORY)/blender/animations/sheep/render/angle90/sheep$$i-* \
+	        $(SRC_DIRECTORY)/blender/animations/sheep/render/angle135/sheep$$i-* \
+	        $(SRC_DIRECTORY)/blender/animations/sheep/render/angle180/sheep$$i-* \
+	        $(SRC_DIRECTORY)/blender/animations/sheep/render/angle225/sheep$$i-* \
+	        $(SRC_DIRECTORY)/blender/animations/sheep/render/angle270/sheep$$i-* \
+	        $(SRC_DIRECTORY)/blender/animations/sheep/render/angle315/sheep$$i-* \
+	        -geometry +0+0 -tile x8 $(DATA_DIRECTORY)/img/animations/sheep$$i.png; \
+	done
+
+########################################################################################################################
 # Marktkarren-Animation                                                                                                #
 ########################################################################################################################
 
@@ -376,6 +399,7 @@ render-blender: \
 	$(foreach HARVESTABLE,$(HARVESTABLES), \
 		$(DATA_DIRECTORY)/img/harvestables/$(HARVESTABLE).png \
 	) \
+	render-sheep \
 	render-cart \
 	$(DATA_DIRECTORY)/img/ships/little-ship.png \
 	render-coat-of-arms \
@@ -395,6 +419,7 @@ clean-blender:
 	rm -f $(foreach STREET_TILESET,$(STREET_TILESETS), $(DATA_DIRECTORY)/img/streets/$(STREET_TILESET).png)
 	rm -f $(foreach HARVESTABLE,$(HARVESTABLES), $(DATA_DIRECTORY)/img/harvestables/$(HARVESTABLE).png)
 	rm -rf $(foreach HARVESTABLE,$(HARVESTABLES), $(SRC_DIRECTORY)/blender/harvestables/$(HARVESTABLE)/render)
+	rm -rf $(SRC_DIRECTORY)/blender/animations/sheep/render
 	rm -f $(DATA_DIRECTORY)/img/animations/cart-without-cargo.png
 	rm -f $(DATA_DIRECTORY)/img/animations/cart-with-cargo.png
 	rm -rf $(SRC_DIRECTORY)/blender/ships/little-ship/render
