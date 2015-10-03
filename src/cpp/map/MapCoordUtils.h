@@ -18,32 +18,32 @@ class MapCoordUtils {
 
 public:
     /**
-	 * @brief Rechnet Map- in Screen-Koordinaten um. Die Screen-Koordinaten sind die der oberen linken Ecke der Kachel.
-	 * @param mapCoords Map-Koordinaten
+     * @brief Rechnet Map- in Screen-Koordinaten um. Die Screen-Koordinaten sind die der oberen linken Ecke der Kachel.
+     * @param mapCoords Map-Koordinaten
      * @param screenView Ansicht, die für die Umrechnung benutzt werden soll
      * @param map Karte für die Umrechnung (wird für Kartengröße benötigt)
-	 * @return Screen-Koordinaten
-	 */
+     * @return Screen-Koordinaten
+     */
     static ScreenCoords mapToScreenCoords(
         const MapCoords& mapCoords, const FourthDirection& screenView, const Map& map);
 
     /**
-	 * @brief Rechnet Map- in Screen-Koordinaten um. Die Screen-Koordinaten sind die der oberen linken Ecke der Kachel.
-	 * @param mapCoords Map-Koordinaten
+     * @brief Rechnet Map- in Screen-Koordinaten um. Die Screen-Koordinaten sind die der oberen linken Ecke der Kachel.
+     * @param mapCoords Map-Koordinaten
      * @param screenView Ansicht, die für die Umrechnung benutzt werden soll
      * @param map Karte für die Umrechnung (wird für Kartengröße benötigt)
-	 * @return Screen-Koordinaten
-	 */
+     * @return Screen-Koordinaten
+     */
     static ScreenCoords mapToScreenCoords(
         const DoubleMapCoords& mapCoords, const FourthDirection& screenView, const Map& map);
 
     /**
-	 * @brief Rechnet Screen- in Map-Koordinaten um.
-	 * @param screenCoords Screen-Koordinaten
+     * @brief Rechnet Screen- in Map-Koordinaten um.
+     * @param screenCoords Screen-Koordinaten
      * @param screenView Ansicht, die für die Umrechnung benutzt werden soll
      * @param map Karte für die Umrechnung (wird für Kartengröße benötigt)
-	 * @return Map-Koordinaten
-	 */
+     * @return Map-Koordinaten
+     */
     static MapCoords screenToMapCoords(
         const ScreenCoords& screenCoords, const FourthDirection& screenView, const Map& map);
 

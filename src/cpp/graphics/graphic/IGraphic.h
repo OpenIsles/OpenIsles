@@ -38,14 +38,14 @@ public:
 
 protected:
     /**
-	 * @brief Breite der Grafik
-	 */
-	int width;
+     * @brief Breite der Grafik
+     */
+    int width;
 
-	/**
-	 * @brief Höhe der Grafik
-	 */
-	int height;
+    /**
+     * @brief Höhe der Grafik
+     */
+    int height;
 
 public:
     virtual ~IGraphic() {}

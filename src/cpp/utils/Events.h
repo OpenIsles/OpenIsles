@@ -1,5 +1,5 @@
 #ifndef _EVENTS_H
-#define	_EVENTS_H
+#define _EVENTS_H
 
 #include "map/coords/MapCoords.h"
 

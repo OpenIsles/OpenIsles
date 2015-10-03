@@ -12,8 +12,8 @@
 class NoSDLFontMgr : public IFontMgr {
 
 public:
-	NoSDLFontMgr() {}
-	~NoSDLFontMgr() {}
+    NoSDLFontMgr() {}
+    ~NoSDLFontMgr() {}
 
     void renderText(IRenderer* renderer, std::string string, int x, int y,
                     const Color* color, const Color* shadowColor, std::string fontName, int fontSize, int align) {}

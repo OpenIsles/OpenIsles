@@ -22,7 +22,7 @@ public:
     virtual ~NoSDLGraphicsMgr() {}
 
 private:
-	virtual IGraphic* loadGraphic(const char* filename) {
+    virtual IGraphic* loadGraphic(const char* filename) {
         return new NoSDLGraphic(renderer, filename);
     }
 

@@ -29,8 +29,8 @@ protected:
     std::function<void()> onClickFunction = []{};
 
 public:
-	GuiButton(const Context* const context);
-	virtual ~GuiButton() override;
+    GuiButton(const Context* const context);
+    virtual ~GuiButton() override;
 
     const IGraphic* getGraphicPressed() const {
         return graphicPressed;
@@ -56,9 +56,9 @@ public:
     }
     
     /**
-	 * @brief Zeichnet das Element (ohne Kinder)
-	 */
-	virtual void renderElement(IRenderer* renderer) override;
+     * @brief Zeichnet das Element (ohne Kinder)
+     */
+    virtual void renderElement(IRenderer* renderer) override;
     
     /**
      * @brief Callback, der ein Event handelt

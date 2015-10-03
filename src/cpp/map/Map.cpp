@@ -18,7 +18,7 @@ Map::Map(const Context* const context) : ContextAware(context) {
 }
 
 Map::~Map() {
-	clearMap();
+    clearMap();
 }
 
 void Map::initNewMap(int newWidth, int newHeight) {
@@ -29,8 +29,8 @@ void Map::initNewMap(int newWidth, int newHeight) {
         throw std::runtime_error("Map has to be quadratically for now ;-p");
     }
     
-	// Karte erst leerräumen
-	clearMap();
+    // Karte erst leerräumen
+    clearMap();
     
     // Neue Größe setzen
     width = newWidth;
@@ -56,9 +56,9 @@ void Map::initNewMap(int newWidth, int newHeight) {
     }
 
     // Sonstiges Zeugs auf Anfangswerte stellen
-	selectedMapObject = nullptr;
+    selectedMapObject = nullptr;
 
-	mapCoordsCentered.setTo(0, 0);
+    mapCoordsCentered.setTo(0, 0);
     screenView = Direction::SOUTH;
 }
 

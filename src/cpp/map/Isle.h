@@ -19,25 +19,25 @@ private:
 
 public:
     /**
-	 * @brief Lädt eine Insel von einer tiled-TMX-Datei
-	 * @param filename Dateiname der zu ladenden Insel
-	 */
-	Isle(const char* filename);
-	~Isle();
+     * @brief Lädt eine Insel von einer tiled-TMX-Datei
+     * @param filename Dateiname der zu ladenden Insel
+     */
+    Isle(const char* filename);
+    ~Isle();
 
     virtual bool updateObject(const Context& context) override {
         return true;
     }
     
     int getWidth() const {
-		return tiles->width;
-	}
+        return tiles->width;
+    }
 
-	int getHeight() const {
-		return tiles->height;
-	}
+    int getHeight() const {
+        return tiles->height;
+    }
 
-	unsigned char getTileAt(int x, int y) const {
+    unsigned char getTileAt(int x, int y) const {
         if (x < 0 || y < 0 || x >= tiles->width || y >= tiles->height) {
             std::cerr << "mapCoords (" << toString(x) << ", " + toString(y) << ") out of bounds";
         }

@@ -106,15 +106,15 @@ void drawFrame(const Context& context, IRenderer* renderer) {
     }
 
 #ifdef DEBUG
-	// Debugging-Infos rendern
-	for (int i = 0; i < 7; i++) {
-		if (debugOutput[i].empty()) {
-			continue;
-		}
+    // Debugging-Infos rendern
+    for (int i = 0; i < 7; i++) {
+        if (debugOutput[i].empty()) {
+            continue;
+        }
 
         context.fontMgr->renderText(renderer, debugOutput[i], 10, 40 + 15 * i,
             &colorWhite, nullptr, "DroidSans-Bold.ttf", 14, RENDERTEXT_HALIGN_LEFT);
-	}
+    }
 #endif
 }
 
@@ -151,26 +151,26 @@ int main(int argc, char** argv) {
         return EXIT_FAILURE;
     }
 
-	// Library-Initialisierung ///////////////////////////////////////////////////////////////////////////////////////
+    // Library-Initialisierung ///////////////////////////////////////////////////////////////////////////////////////
     IRenderer* sdlRenderer = new SDLRenderer();
 
-	// Game-Initialisierung //////////////////////////////////////////////////////////////////////////////////////////
+    // Game-Initialisierung //////////////////////////////////////////////////////////////////////////////////////////
 
     Context context = Context();
 
     context.userEventBase = SDL_RegisterEvents(USER_EVENT_MAXEVENT + 1);
     if (context.userEventBase == (uint32_t) -1) {
         std::cerr << "Could not register events" << std::endl;
-		throw std::runtime_error("Could not register events");
+        throw std::runtime_error("Could not register events");
     }
 
-	ISoundMgr* sdlSoundMgr = new SDLSoundMgr();
+    ISoundMgr* sdlSoundMgr = new SDLSoundMgr();
     context.soundMgr = sdlSoundMgr;
 
     ConfigMgr* configMgr = new ConfigMgr();
     context.configMgr = configMgr;
 
-	IGraphicsMgr* sdlGraphicsMgr = new SDLGraphicsMgr(sdlRenderer, configMgr);
+    IGraphicsMgr* sdlGraphicsMgr = new SDLGraphicsMgr(sdlRenderer, configMgr);
     context.graphicsMgr = sdlGraphicsMgr;
     sdlGraphicsMgr->loadGraphics();
 
@@ -197,23 +197,23 @@ int main(int argc, char** argv) {
 
     sdlRenderer->showWindow();
 
-	// Mainloop //////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Mainloop //////////////////////////////////////////////////////////////////////////////////////////////////////
 
     int benchmarkFramesToGo = cmdlineParams.benchmarkFrames;
 
     uint32_t sdlTicks = SDL_GetTicks();
     uint32_t lastSdlTicks = sdlTicks;
 
-	while (!guiMgr->hasToQuitGame()) {
-		fpsCounter.start();
+    while (!guiMgr->hasToQuitGame()) {
+        fpsCounter.start();
 
-		// Events handeln
+        // Events handeln
 #ifdef DEBUG
         performanceCounterEvents.start();
 #endif
 
         SDL_Event event;
-		while (SDL_PollEvent(&event)) {
+        while (SDL_PollEvent(&event)) {
             guiMgr->onEvent(event);
 
             // Bei User-Defined-Events übernehmen wir hier das Freigeben des Speichers. Dann können auch mehrere
@@ -221,7 +221,7 @@ int main(int argc, char** argv) {
             if (event.type == context.userEventBase + USER_EVENT_MOUSEMOTION_MAPCOORDS) {
                 delete static_cast<MouseMotionMapCoordsEvent*>(event.user.data1);
             }
-		}
+        }
 
 #ifdef DEBUG
         performanceCounterEvents.end();
@@ -267,7 +267,7 @@ int main(int argc, char** argv) {
         MapCoordUtils::getMapCoordsInScreenEdges(
             *map, mapCoordsTopLeft, mapCoordsTopRight, mapCoordsBottomLeft, mapCoordsBottomRight);
 
-		// Debug-Infos vorbereiten, damit wir sie später einfach nur ausgeben können
+        // Debug-Infos vorbereiten, damit wir sie später einfach nur ausgeben können
         debugOutput[0] = "PerfCounters: events avg " + toString(performanceCounterEvents.getMillisAvg()) +
                          ", current = " + toString(performanceCounterEvents.getMillisCurrent()) +
                          "; gameUpdate avg " + toString(performanceCounterGameUpdate.getMillisAvg()) +
@@ -348,14 +348,14 @@ int main(int argc, char** argv) {
 #endif
 
         sdlRenderer->startFrame();
-		drawFrame(context, sdlRenderer);
+        drawFrame(context, sdlRenderer);
         sdlRenderer->endFrame();
 
 #ifdef DEBUG
         performanceCounterRendering.end();
 #endif
 
-		fpsCounter.end();
+        fpsCounter.end();
 
         // Benchmarking: nur x Frames, dann wird automatisch beendet
         if (benchmarkFramesToGo > 0) {
@@ -363,22 +363,22 @@ int main(int argc, char** argv) {
                 break;
             }
         }
-	}
+    }
 
-	// Game-Deinitialisierung ////////////////////////////////////////////////////////////////////////////////////////
+    // Game-Deinitialisierung ////////////////////////////////////////////////////////////////////////////////////////
     
     delete game;
 
     delete economicsMgr;
-	delete guiMgr;
+    delete guiMgr;
     delete sdlFontMgr;
-	delete sdlGraphicsMgr;
+    delete sdlGraphicsMgr;
     delete configMgr;
-	delete sdlSoundMgr;
+    delete sdlSoundMgr;
 
-	// Library-Deinitialisierung /////////////////////////////////////////////////////////////////////////////////////
+    // Library-Deinitialisierung /////////////////////////////////////////////////////////////////////////////////////
 
-	delete sdlRenderer;
+    delete sdlRenderer;
 
-	return EXIT_SUCCESS;
+    return EXIT_SUCCESS;
 }

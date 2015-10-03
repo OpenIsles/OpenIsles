@@ -23,8 +23,8 @@ private:
     std::map<std::pair<std::string, int>, TTF_Font*> ttfFonts;
 
 public:
-	SDLFontMgr();
-	~SDLFontMgr();
+    SDLFontMgr();
+    ~SDLFontMgr();
 
     /**
      * Rendert Text

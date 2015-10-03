@@ -20,8 +20,8 @@ private:
     bool active = false;
 
 public:
-	GuiPushButton(const Context* const context);
-	virtual ~GuiPushButton();
+    GuiPushButton(const Context* const context);
+    virtual ~GuiPushButton();
     
     /**
      * @return true, wenn der Button angeschaltet ist, sonst false
@@ -39,9 +39,9 @@ public:
     }
     
     /**
-	 * @brief Zeichnet das Element (ohne Kinder)
-	 */
-	virtual void renderElement(IRenderer* renderer);
+     * @brief Zeichnet das Element (ohne Kinder)
+     */
+    virtual void renderElement(IRenderer* renderer);
     
     /**
      * @brief Callback, der ein Event handelt

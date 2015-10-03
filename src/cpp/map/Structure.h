@@ -53,10 +53,10 @@ public:
     }
 
     /**
-	 * @brief Ermittelt, ob ein Marktkarren eine bestimmte Stelle befahren darf.
-	 * @return `true`, wenn ein Marktkarren dort fahren darf, d.&nbsp;h. eine Straße oder Platz da ist;
+     * @brief Ermittelt, ob ein Marktkarren eine bestimmte Stelle befahren darf.
+     * @return `true`, wenn ein Marktkarren dort fahren darf, d.&nbsp;h. eine Straße oder Platz da ist;
      * sonst `false`.
-	 */
+     */
     bool isWalkableForCart() const {
         return (isStreet() || isPlace());
     }

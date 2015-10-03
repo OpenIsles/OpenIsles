@@ -92,8 +92,8 @@ private:
     bool fpsCounterEnabled = false;
 
 public:
-	Game(const Context* const context);
-	~Game();
+    Game(const Context* const context);
+    ~Game();
 
     /**
      * @brief Liefert die aktuelle [Spielzeit](@ref gameTicks) zurück.

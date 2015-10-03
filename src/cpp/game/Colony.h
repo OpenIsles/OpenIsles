@@ -35,9 +35,9 @@ public:
      * @brief Legt eine neue Kolonie mit 30t Lagerkapazität in allen Slots an.
      * @param allGoods Map mit allen verfügbaren Gütern
      */
-	Colony(const std::unordered_map<std::string, Good>& allGoods);
+    Colony(const std::unordered_map<std::string, Good>& allGoods);
 
-	~Colony();
+    ~Colony();
 
     /**
      * @brief Liefert den Slot für einen bestimmten Warentyp zurück. Dieser enthält Lagerbestand und -Kapazität.

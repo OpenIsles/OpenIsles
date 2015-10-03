@@ -17,10 +17,10 @@ $tmxTileIndexShouldBe = 1;
 $cmdArgs = array();
 foreach($tiles->tile as $tile) {
     foreach($tile->{'tmx-tile'} as $tmxTile) {
-	    if ($tmxTile['tmx-tile-index'] != $tmxTileIndexShouldBe) {
-	        fprintf(STDERR, "Tile index should be $tmxTileIndexShouldBe\n");
-	        exit(1); // Fehlercode -> triggert Abbruch im Makefile
-	    }
+        if ($tmxTile['tmx-tile-index'] != $tmxTileIndexShouldBe) {
+            fprintf(STDERR, "Tile index should be $tmxTileIndexShouldBe\n");
+            exit(1); // Fehlercode -> triggert Abbruch im Makefile
+        }
 
         $x = $tmxTile['x'];
         $y = $tmxTile['y'];
@@ -59,7 +59,7 @@ foreach($tiles->tile as $tile) {
         }
 
 
-	    $tmxTileIndexShouldBe++;
+        $tmxTileIndexShouldBe++;
     }
 }
 

@@ -147,8 +147,8 @@ private:
     bool quitGame;
 
 public:
-	GuiMgr(const Context* const context, IRenderer* renderer);
-	~GuiMgr();
+    GuiMgr(const Context* const context, IRenderer* renderer);
+    ~GuiMgr();
 
     /**
      * @brief Legt alle GUI-Elemente an. Diese Methode muss direkt nach dem Konstrutor aufgerufen werden.
@@ -186,9 +186,9 @@ public:
     }
 
     /**
-	 * @brief Zeichnet die Benutzeroberfläche
-	 */
-	void render();
+     * @brief Zeichnet die Benutzeroberfläche
+     */
+    void render();
 
 #ifndef NO_SDL
     /**

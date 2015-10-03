@@ -1,5 +1,5 @@
 #ifndef _MAP_COORDS_ITERATOR_H
-#define	_MAP_COORDS_ITERATOR_H
+#define _MAP_COORDS_ITERATOR_H
 
 #include <functional>
 #include "map/coords/MapCoords.h"

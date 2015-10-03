@@ -70,14 +70,14 @@ void SDLFontMgr::renderText(IRenderer* renderer, std::string string, int x, int 
         SDL_DestroyTexture(textureTextShadow);
     }
     
-	SDL_Texture* textureText = SDL_CreateTextureFromSurface(sdlRealRenderer, surfaceText);
-	SDL_FreeSurface(surfaceText);
+    SDL_Texture* textureText = SDL_CreateTextureFromSurface(sdlRealRenderer, surfaceText);
+    SDL_FreeSurface(surfaceText);
 
     SDL_Rect sdlRectDestination = {
         rectDestination.x, rectDestination.y, rectDestination.w, rectDestination.h };
     SDL_SetTextureAlphaMod(textureText, color->a);
-	SDL_RenderCopy(sdlRealRenderer, textureText, nullptr, &sdlRectDestination);
-	SDL_DestroyTexture(textureText);
+    SDL_RenderCopy(sdlRealRenderer, textureText, nullptr, &sdlRectDestination);
+    SDL_DestroyTexture(textureText);
 }
 
 TTF_Font* SDLFontMgr::getFont(std::string fontName, int fontSize) {

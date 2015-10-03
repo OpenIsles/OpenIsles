@@ -29,8 +29,8 @@ private:
     GuiStaticElement* productionArrow;      ///< Symbol Pfeil
 
 public:
-	GuiProductionSlotsElement(const Context* const context);
-	virtual ~GuiProductionSlotsElement() override;
+    GuiProductionSlotsElement(const Context* const context);
+    virtual ~GuiProductionSlotsElement() override;
 
     /**
      * @brief Ändert das Layout der Komponente, indem Güter-Elemente hinzugefügt/entfernt werden.
@@ -48,9 +48,9 @@ public:
     GuiGoodsSlotElement* getGoodsSlotElement(const ProductionSlot& productionSlot);
 
     /**
-	 * @brief Zeichnet das Element (ohne Kinder)
-	 */
-	virtual void renderElement(IRenderer* renderer) override {
+     * @brief Zeichnet das Element (ohne Kinder)
+     */
+    virtual void renderElement(IRenderer* renderer) override {
         // nix zu tun; machen alles die Kinder
     }
 

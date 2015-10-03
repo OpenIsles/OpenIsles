@@ -1,5 +1,5 @@
 #ifndef _RECTANGLE_DATA_H
-#define	_RECTANGLE_DATA_H
+#define _RECTANGLE_DATA_H
 
 /**
  * @brief Hilfsklasse, die Daten innerhalb eines Rechtecks mit definierter Breite und Höhe hält.

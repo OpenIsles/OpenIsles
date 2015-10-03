@@ -22,8 +22,8 @@ void AbstractGraphicsMgr::loadGraphics() {
     // anisotropic filtering für die Gebäude aktivieren, damit beim Skalieren das Mask-Overlay ordentlich is
     renderer->setHintRenderScaleQuality("2");
 
-	loadStaticGraphicSetWith4Views("mapobjects/chapel", "data/img/buildings/chapel.png");
-	loadStaticGraphicSetWith4Views("mapobjects/pioneers-house1", "data/img/buildings/pioneers-house1.png");
+    loadStaticGraphicSetWith4Views("mapobjects/chapel", "data/img/buildings/chapel.png");
+    loadStaticGraphicSetWith4Views("mapobjects/pioneers-house1", "data/img/buildings/pioneers-house1.png");
     loadStaticGraphicSetWith4Views("mapobjects/pioneers-house2", "data/img/buildings/pioneers-house2.png");
     loadStaticGraphicSetWith4Views("mapobjects/pioneers-house3", "data/img/buildings/pioneers-house3.png");
     loadStaticGraphicSetWith4Views("mapobjects/pioneers-house4", "data/img/buildings/pioneers-house4.png");
@@ -33,7 +33,7 @@ void AbstractGraphicsMgr::loadGraphics() {
     loadStaticGraphicSetWith4Views("mapobjects/settlers-house3", "data/img/buildings/settlers-house3.png");
     loadStaticGraphicSetWith4Views("mapobjects/settlers-house4", "data/img/buildings/settlers-house4.png");
     loadStaticGraphicSetWith4Views("mapobjects/settlers-house5", "data/img/buildings/settlers-house5.png");
-	loadStaticGraphicSetWith4Views("mapobjects/stonemason", "data/img/buildings/stonemason.png");
+    loadStaticGraphicSetWith4Views("mapobjects/stonemason", "data/img/buildings/stonemason.png");
     loadStaticGraphicSetWith4Views("mapobjects/office1", "data/img/buildings/office1.png");
     loadStaticGraphicSetWith4Views("mapobjects/office2", "data/img/buildings/office2.png");
     loadStaticGraphicSetWith4Views("mapobjects/marketplace", "data/img/buildings/marketplace.png");

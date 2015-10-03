@@ -17,22 +17,22 @@
  */
 class MapObject {
 protected:
-	/**
-	 * @brief Breite des Objekts in Map-Koordinaten.
+    /**
+     * @brief Breite des Objekts in Map-Koordinaten.
      *
      * Info: Dies entspricht immer der Breite in der Ausrichtung des Gebäudes. Z.B. hat ein 3x2-Gebäude, was
      * auf Ost/West-Ansicht gedreht wurde, hat eine mapWidth von 2. Auf Süd/Nord-Ansicht hat es eine mapWidth von 3.
      * Dies ist analog der zugehörigen Grafik.
-	 */
-	int mapWidth;
+     */
+    int mapWidth;
 
     /**
-	 * @brief Höhe des Objekts in Map-Koordinaten
+     * @brief Höhe des Objekts in Map-Koordinaten
      *
      * Info: Dies entspricht immer der Höhe in der Ausrichtung des Gebäudes. Z.B. hat ein 3x2-Gebäude, was
      * auf Ost/West-Ansicht gedreht wurde, hat eine mapHeight von 3. Auf Süd/Nord-Ansicht hat es eine mapHeight von 2.
      * Dies ist analog der zugehörigen Grafik.
-	 */
+     */
     int mapHeight;
     
     /**
@@ -56,8 +56,8 @@ public:
         // TODO Alle Objekte müssen lastUpdateTicks ordentlich gesetzt (mit Game#ticks initialisiert) haben. Eine Factory wäre hübsch
     }
 
-	virtual ~MapObject() {
-	}
+    virtual ~MapObject() {
+    }
 
     int getMapWidth() const {
         return mapWidth;
@@ -133,15 +133,15 @@ public:
 class MapObjectFixed : public MapObject {
 
 protected:
-	/**
-	 * @brief Map-Koordinaten des Objekts
-	 */
-	MapCoords mapCoords;
+    /**
+     * @brief Map-Koordinaten des Objekts
+     */
+    MapCoords mapCoords;
 
     /**
-	 * @brief Objekt-Typ
-	 */
-	const MapObjectType* mapObjectType;
+     * @brief Objekt-Typ
+     */
+    const MapObjectType* mapObjectType;
 
     /**
      * @brief Ausrichtung des Objekts
@@ -157,20 +157,20 @@ public:
     static MapObjectFixed* instantiate(const MapObjectType* mapObjectType);
 
 public:
-	virtual ~MapObjectFixed() {
-	}
+    virtual ~MapObjectFixed() {
+    }
 
     void setMapCoords(const MapCoords& mapCoords) {
         this->mapCoords = mapCoords;
     }
 
     MapCoords& getMapCoords() {
-		return mapCoords;
-	}
+        return mapCoords;
+    }
 
-	const MapCoords& getMapCoords() const {
-		return mapCoords;
-	}
+    const MapCoords& getMapCoords() const {
+        return mapCoords;
+    }
 
     const MapObjectType* getMapObjectType() const {
         return mapObjectType;
@@ -201,26 +201,26 @@ class MapObjectMoving : public MapObject {
 #endif
 
 protected:
-	/**
-	 * @brief Map-Koordinaten des Objekts
-	 */
-	DoubleMapCoords mapCoords;
+    /**
+     * @brief Map-Koordinaten des Objekts
+     */
+    DoubleMapCoords mapCoords;
 
 public:
-	virtual ~MapObjectMoving() {
-	}
+    virtual ~MapObjectMoving() {
+    }
 
     void setMapCoords(const DoubleMapCoords& mapCoords) {
         this->mapCoords = mapCoords;
     }
 
     DoubleMapCoords& getMapCoords() {
-		return mapCoords;
-	}
+        return mapCoords;
+    }
 
-	const DoubleMapCoords& getMapCoords() const {
-		return mapCoords;
-	}
+    const DoubleMapCoords& getMapCoords() const {
+        return mapCoords;
+    }
 };
 
 #endif

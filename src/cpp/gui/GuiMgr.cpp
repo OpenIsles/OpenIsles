@@ -52,7 +52,7 @@ GuiMgr::~GuiMgr() {
 
     // GUI-Elemente wegräumen
     for (auto iter = identifierMap.cbegin(); iter != identifierMap.cend(); iter++) {
-		GuiBase* guiElement = iter->second;
+        GuiBase* guiElement = iter->second;
         delete guiElement;
     }
     identifierMap.clear();
@@ -233,7 +233,7 @@ GuiBase* GuiMgr::findElement(int identifier) {
 void GuiMgr::render() {
     // Alle GUI-Elemente rendern
     for (auto iter = identifierMap.cbegin(); iter != identifierMap.cend(); iter++) {
-		GuiBase* guiElement = iter->second;
+        GuiBase* guiElement = iter->second;
         
         // nur Toplevel-Element zeichnen
         if (guiElement->getParentElement() != nullptr) {
@@ -290,7 +290,7 @@ void GuiMgr::onEvent(SDL_Event& event) {
 
     // Erst alle GUI-Elemente durchgehen, dass die das Event zuerst kriegen
     for (auto iter = identifierMap.cbegin(); iter != identifierMap.cend(); iter++) {
-		GuiBase* guiElement = iter->second;
+        GuiBase* guiElement = iter->second;
 
         // nur an Toplevel-Elemente schicken
         if (guiElement->getParentElement() != nullptr) {

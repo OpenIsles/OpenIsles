@@ -1,5 +1,5 @@
 #ifndef _RECT_H
-#define	_RECT_H
+#define _RECT_H
 
 /**
  * @brief Hilfsklasse, die ein Rechteck darstellt

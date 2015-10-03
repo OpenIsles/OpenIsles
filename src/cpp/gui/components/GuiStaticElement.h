@@ -19,8 +19,8 @@ protected:
     const IGraphic* graphic = nullptr;
 
 public:
-	GuiStaticElement(const Context* const context);
-	virtual ~GuiStaticElement() override;
+    GuiStaticElement(const Context* const context);
+    virtual ~GuiStaticElement() override;
 
     const IGraphic* getGraphic() const {
         return graphic;
@@ -34,10 +34,10 @@ public:
         this->graphic = graphic;
     }
     
-	/**
-	 * @brief Zeichnet das Element (ohne Kinder)
-	 */
-	virtual void renderElement(IRenderer* renderer) override;
+    /**
+     * @brief Zeichnet das Element (ohne Kinder)
+     */
+    virtual void renderElement(IRenderer* renderer) override;
 
 };
 

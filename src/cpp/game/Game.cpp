@@ -22,16 +22,16 @@ Game::Game(const Context* const context) : ContextAware(context) {
 
 Game::~Game() {
     for (auto iter = players.cbegin(); iter != players.cend(); iter++) {
-		Player* player = *iter;
-		delete player;
-	}
-	players.clear();
+        Player* player = *iter;
+        delete player;
+    }
+    players.clear();
     
     for (auto iter = colonies.cbegin(); iter != colonies.cend(); iter++) {
-		Colony* colony = iter->second;
-		delete colony;
-	}
-	colonies.clear();
+        Colony* colony = iter->second;
+        delete colony;
+    }
+    colonies.clear();
 
     delete map;
 }

@@ -32,8 +32,8 @@ private:
     bool displayBar = false;
 
 public:
-	GuiGoodsSlotElement(const Context* const context);
-	virtual ~GuiGoodsSlotElement() override;
+    GuiGoodsSlotElement(const Context* const context);
+    virtual ~GuiGoodsSlotElement() override;
 
     void setGoodsSlot(const GoodsSlot* goodsSlot);
 
@@ -46,9 +46,9 @@ public:
     }
 
     /**
-	 * @brief Zeichnet das Element (ohne Kinder)
-	 */
-	virtual void renderElement(IRenderer* renderer) override;
+     * @brief Zeichnet das Element (ohne Kinder)
+     */
+    virtual void renderElement(IRenderer* renderer) override;
 
 };
 

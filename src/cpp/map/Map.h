@@ -32,10 +32,10 @@ private:
      */
     const MapTileConfig* mapTileConfig;
 
-	/**
-	 * @brief Animationen, die pro Ansicht für die Kachel gezeichnet werden muss.
+    /**
+     * @brief Animationen, die pro Ansicht für die Kachel gezeichnet werden muss.
      * Der Index entspricht EighthDirection/2.
-	 */
+     */
     std::array<const Animation*, 4> tileAnimations;
 
 public:
@@ -69,24 +69,24 @@ public:
 
     
     MapTile(const MapTileConfig* mapTileConfig, std::array<const Animation*, 4> tileAnimations) {
-		setTile(mapTileConfig, tileAnimations);
+        setTile(mapTileConfig, tileAnimations);
         isle = nullptr;
         player = nullptr;
         mapObjectFixed = nullptr;
     }
 
-	void setTile(const MapTileConfig* mapTileConfig, std::array<const Animation*, 4> tileAnimations) {
+    void setTile(const MapTileConfig* mapTileConfig, std::array<const Animation*, 4> tileAnimations) {
         this->mapTileConfig = mapTileConfig;
         this->tileAnimations = tileAnimations;
-	}
+    }
 
-	const MapTileConfig* getMapTileConfig() const {
-		return mapTileConfig;
-	}
+    const MapTileConfig* getMapTileConfig() const {
+        return mapTileConfig;
+    }
 
-	const Animation* getTileAnimationForView(int viewIndex) const {
-		return tileAnimations[viewIndex / 2];
-	}
+    const Animation* getTileAnimationForView(int viewIndex) const {
+        return tileAnimations[viewIndex / 2];
+    }
 };
 
 
@@ -103,17 +103,17 @@ class Map : public ContextAware {
     friend class GameIO; // GameIO soll zum Laden/Speichern einfach auf die Karte zugreifen können
 
 private:
-	/**
-	 * @brief Breite der Karte in Kacheln
+    /**
+     * @brief Breite der Karte in Kacheln
      * TODO Aktuell gehen wir davon aus, das immer gilt: width == height
-	 */
-	int width;
+     */
+    int width;
 
-	/**
-	 * @brief Höhe der Karte in Kacheln
+    /**
+     * @brief Höhe der Karte in Kacheln
      * TODO Aktuell gehen wir davon aus, das immer gilt: width == height
-	 */
-	int height;
+     */
+    int height;
     
     /**
      * @brief Daten aller Kacheln auf der Karte
@@ -121,24 +121,24 @@ private:
     RectangleData<MapTile*>* mapTiles = nullptr;
 
     /**
-	 * @brief Liste der Inseln auf der Karte
-	 */
-	std::list<Isle*> isles;
+     * @brief Liste der Inseln auf der Karte
+     */
+    std::list<Isle*> isles;
 
-	/**
-	 * @brief Liste von Objekten (z.B. Häusern) auf der Karte.
-	 */
-	std::list<MapObject*> mapObjects;
+    /**
+     * @brief Liste von Objekten (z.B. Häusern) auf der Karte.
+     */
+    std::list<MapObject*> mapObjects;
 
-	/**
-	 * @brief ausgewähltes Objekt oder @c nullptr, wenn nichts ausgewählt ist
-	 */
-	const MapObject* selectedMapObject = nullptr;
+    /**
+     * @brief ausgewähltes Objekt oder @c nullptr, wenn nichts ausgewählt ist
+     */
+    const MapObject* selectedMapObject = nullptr;
 
-	/**
-	 * @brief Map-Koordinaten, die sich aktuell in der Mitte befinden
-	 */
-	MapCoords mapCoordsCentered;
+    /**
+     * @brief Map-Koordinaten, die sich aktuell in der Mitte befinden
+     */
+    MapCoords mapCoordsCentered;
     
     /**
      * @brief Zoom-Level (1, 2, 4), entspricht Verkleinerungsfaktor
@@ -151,38 +151,38 @@ private:
     FourthDirection screenView;
 
 public:
-	Map(const Context* const context);
+    Map(const Context* const context);
 
-	VIRTUAL_ONLY_IN_TESTS
+    VIRTUAL_ONLY_IN_TESTS
     ~Map();
 
     VIRTUAL_ONLY_IN_TESTS
     int getHeight() const {
-		return height;
-	}
+        return height;
+    }
 
     VIRTUAL_ONLY_IN_TESTS
     int getWidth() const {
-		return width;
-	}
+        return width;
+    }
 
     /**
      * @brief Liefert das MapTile (Infos zu einer Kachel) an einer bestimmten Stelle zurück
      * @param mapCoords Map-Koordianten
      * @return Zeiger auf MapTile oder nullptr, wenn die Koordinaten außerhalb der Karte sind
      */
-	MapTile* getMapTileAt(const MapCoords& mapCoords) const;
+    MapTile* getMapTileAt(const MapCoords& mapCoords) const;
 
-	/**
-	 * @brief Liefert das Map-Objekt zurück, die sich an den angegebenen Koordinaten befindet.
-	 * @param mapCoords Map-Koordianten
-	 * @return Zeiger auf das Map-Objekt oder nullptr, wenn dort kein Map-Objekt ist
-	 */
-	MapObjectFixed* getMapObjectFixedAt(const MapCoords& mapCoords) const;
+    /**
+     * @brief Liefert das Map-Objekt zurück, die sich an den angegebenen Koordinaten befindet.
+     * @param mapCoords Map-Koordianten
+     * @return Zeiger auf das Map-Objekt oder nullptr, wenn dort kein Map-Objekt ist
+     */
+    MapObjectFixed* getMapObjectFixedAt(const MapCoords& mapCoords) const;
 
-	const std::list<MapObject*>& getMapObjects() const {
-		return mapObjects;
-	}
+    const std::list<MapObject*>& getMapObjects() const {
+        return mapObjects;
+    }
 
     const MapCoords& getMapCoordsCentered() const {
         return mapCoordsCentered;
@@ -217,36 +217,36 @@ public:
     }
 
     const MapObject* getSelectedMapObject() const {
-		return selectedMapObject;
-	}
+        return selectedMapObject;
+    }
 
     /**
      * @brief Setzt das aktuell gewählte MapObject um.
      *
      * @param selectedMapObject Das neue MapObject, was gewählt sein soll oder `nullptr`, um abzuwählen
      */
-	void setSelectedMapObject(const MapObject* selectedMapObject);
+    void setSelectedMapObject(const MapObject* selectedMapObject);
 
-	/**
-	 * @brief Scrollt die Karte.
+    /**
+     * @brief Scrollt die Karte.
      *
      * Die Koordinaten werden in Südansicht angegeben. Befindet sich die Karte in
      * einer anderen Ansicht, werden sie entsprechend konveriert.
      * D.h. Ein Scrollen um (1, 0) in Südansicht scrollt die Karte nach rechts,
      * während in Nordansicht die Karte nach links scrollt.
      *
-	 * @param xDelta X-Offset in Map-Koordinaten, in die gescrollt werden soll.
-	 *               Positive Werte scrollen nach rechts, negative nach links.
+     * @param xDelta X-Offset in Map-Koordinaten, in die gescrollt werden soll.
+     *               Positive Werte scrollen nach rechts, negative nach links.
      * @param yDelta Y-Offset in Map-Koordinaten, in die gescrollt werden soll.
-	 *               Positive Werte scrollen nach unten, negative nach oben.
-	 */
-	void scroll(int xDelta, int yDelta);
+     *               Positive Werte scrollen nach unten, negative nach oben.
+     */
+    void scroll(int xDelta, int yDelta);
 
-	/**
-	 * @brief Fügt ein neues Map-Objekt der Karte hinzu
-	 * @param mapObject Map-Objekt
-	 */
-	void addMapObject(MapObject* mapObject);
+    /**
+     * @brief Fügt ein neues Map-Objekt der Karte hinzu
+     * @param mapObject Map-Objekt
+     */
+    void addMapObject(MapObject* mapObject);
 
     /**
      * @brief Ändert die Position eines beleglichen Map-Objekts. Der Aufruf dieser Methode ist wichtig, um die MapTile-
@@ -258,9 +258,9 @@ public:
     void moveMapObject(MapObjectMoving* mapObject, const DoubleMapCoords newMapCoords);
 
     /**
-	 * @brief Entfernt ein Map-Objekt von der Karte
-	 * @param mapObject Map-Objekt
-	 */
+     * @brief Entfernt ein Map-Objekt von der Karte
+     * @param mapObject Map-Objekt
+     */
     void deleteMapObject(MapObject* mapObject);
     
     /**
@@ -269,35 +269,35 @@ public:
      */
     void addOfficeCatchmentAreaToMap(const Building& building);
 
-	/**
-	 * @brief Räumt alles weg und gibt Speicher wieder frei
-	 */
-	void clearMap();
-
-	/**
-	 * @brief Ermittelt, ob an einer bestimmten Stelle ein Weg liegt.
-	 * @param mapCoords Map-Koordianten
-	 * @return `true`, wenn ein Weg (Feldweg oder Pflasterstraße) da ist; sonst `false`.
-	 */
-	bool isStreetAt(const MapCoords& mapCoords) const;
+    /**
+     * @brief Räumt alles weg und gibt Speicher wieder frei
+     */
+    void clearMap();
 
     /**
-	 * @brief Ermittelt, ob ein Marktkarren eine bestimmte Stelle befahren darf.
-	 * @param mapCoords Map-Koordianten
-	 * @return `true`, wenn ein Marktkarren dort fahren darf, d.&nbsp;h. ein Feldweg, Pflasterstraße oder Platz da ist;
+     * @brief Ermittelt, ob an einer bestimmten Stelle ein Weg liegt.
+     * @param mapCoords Map-Koordianten
+     * @return `true`, wenn ein Weg (Feldweg oder Pflasterstraße) da ist; sonst `false`.
+     */
+    bool isStreetAt(const MapCoords& mapCoords) const;
+
+    /**
+     * @brief Ermittelt, ob ein Marktkarren eine bestimmte Stelle befahren darf.
+     * @param mapCoords Map-Koordianten
+     * @return `true`, wenn ein Marktkarren dort fahren darf, d.&nbsp;h. ein Feldweg, Pflasterstraße oder Platz da ist;
      * sonst `false`.
-	 */
+     */
     bool isWalkableForCartAt(const MapCoords& mapCoords) const;
 
 private:
     /**
-	 * @brief Initialisiert alles, wenn die Karte sich ändert.
-	 * Es werden alle Objekte von der Karte geräumt, der Speicher und die Map-Breite/Höhe (neu) initialisiert, 
+     * @brief Initialisiert alles, wenn die Karte sich ändert.
+     * Es werden alle Objekte von der Karte geräumt, der Speicher und die Map-Breite/Höhe (neu) initialisiert, 
      * sowie sonstige Zustände resettet.
-	 * @param newWidth neue Breite der Karte
-	 * @param height neue Höhe der Karte
-	 */
-	void initNewMap(int newWidth, int newHeight);
+     * @param newWidth neue Breite der Karte
+     * @param height neue Höhe der Karte
+     */
+    void initNewMap(int newWidth, int newHeight);
 
 };
 

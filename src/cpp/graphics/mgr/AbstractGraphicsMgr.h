@@ -83,9 +83,9 @@ protected:
 
 private:
     /**
-	 * @brief Lädt die Tile-Grafiken
+     * @brief Lädt die Tile-Grafiken
      */
-	void loadTiles();
+    void loadTiles();
 
     /**
      * @brief Lädt Grafiken für ein Tileset von Straßen.

@@ -105,7 +105,7 @@ Rect MapCoordUtils::getDrawCoordsForMapObjectFixed(
 
     const MapObjectType* mapObjectType = mapObjectFixed->getMapObjectType();
     const std::string graphicSetName = graphicsMgr->getGraphicSetNameForMapObject(mapObjectType);
-	const GraphicSet* graphicSet = graphicsMgr->getGraphicSet(graphicSetName);
+    const GraphicSet* graphicSet = graphicsMgr->getGraphicSet(graphicSetName);
 
     // TODO duplicate code
     const IGraphic* graphic;

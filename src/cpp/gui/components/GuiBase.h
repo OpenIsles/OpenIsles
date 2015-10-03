@@ -65,10 +65,10 @@ protected:
     std::string statusBarText;
 
 public:
-	GuiBase(const Context* const context) : ContextAware(context) {
+    GuiBase(const Context* const context) : ContextAware(context) {
         visible = true;
     }
-	virtual ~GuiBase() {}
+    virtual ~GuiBase() {}
 
     int getId() const {
         return id;
@@ -137,8 +137,8 @@ public:
     void setStatusBarText(const std::string& statusBarText);
     
     /**
-	 * @brief Zeichnet das Element und rekursiv seine Kinder
-	 */
+     * @brief Zeichnet das Element und rekursiv seine Kinder
+     */
     void render(IRenderer* renderer) {
         if (!visible) {
             return;
@@ -164,10 +164,10 @@ public:
      */
     bool onEvent(SDL_Event& event);
     
-	/**
-	 * @brief Zeichnet das Element (ohne Kinder)
-	 */
-	virtual void renderElement(IRenderer* renderer) = 0;
+    /**
+     * @brief Zeichnet das Element (ohne Kinder)
+     */
+    virtual void renderElement(IRenderer* renderer) = 0;
     
     /**
      * @brief Callback, der aufgerufen wird, wenn irgendein Event eingeht.

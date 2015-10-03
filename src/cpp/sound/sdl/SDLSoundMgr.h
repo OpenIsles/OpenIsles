@@ -8,31 +8,31 @@
 class SDLSoundMgr : public ISoundMgr {
 
 private:
-	Mix_Music* backgroundMusic = nullptr;
+    Mix_Music* backgroundMusic = nullptr;
 
-	// TODO wird später die Sounds alle verwalten
+    // TODO wird später die Sounds alle verwalten
 
 public:
-	SDLSoundMgr();
-	~SDLSoundMgr();
+    SDLSoundMgr();
+    ~SDLSoundMgr();
 
-	/**
-	 * @brief aktiviert die Hintergrundmusik
-	 */
-	virtual void enableMusic();
+    /**
+     * @brief aktiviert die Hintergrundmusik
+     */
+    virtual void enableMusic();
     
     /**
-	 * @brief deaktiviert die Hintergrundmusik
-	 */
-	virtual void disableMusic();
+     * @brief deaktiviert die Hintergrundmusik
+     */
+    virtual void disableMusic();
 
 private:
-	/**
-	 * @brief Lädt eine Musik-Datei
-	 * @param file Dateiname
-	 * @return Zeiger auf ein SDL-Mix_Music-Objekt
-	 */
-	Mix_Music* loadMusic(const char* file);
+    /**
+     * @brief Lädt eine Musik-Datei
+     * @param file Dateiname
+     * @return Zeiger auf ein SDL-Mix_Music-Objekt
+     */
+    Mix_Music* loadMusic(const char* file);
 };
 
 #endif

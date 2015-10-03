@@ -1,5 +1,5 @@
 #ifndef _STRING_FORMAT_H
-#define	_STRING_FORMAT_H
+#define _STRING_FORMAT_H
 
 #include <string>
 
