@@ -253,6 +253,19 @@ private:
      */
     void renderTile(const MapCoords& mapCoords);
 
+#ifdef DEBUG_GUIMAP_COORDS
+    /**
+     * @brief Hilfsfunktion von renderElement(), die die Kachelkoordinaten als Text rendert.
+     * Das Rendering sieht nur gut aus, wenn die Zoomstufe auf Maximum ist.
+     * (Nur zu Debugzwecken einkompiliert)
+     *
+     * @param renderer (Dependency)
+     * @param map (Dependency)
+     * @param mapCoords Map-Koordinate, deren Koordinate zu rendern ist
+     */
+    void debugRenderTextMapCoords(IRenderer* renderer, const Map& map, const MapCoords& mapCoords);
+#endif
+
     /**
      * Fügt ggf. ein oder mehrere neue Bauaufträge zur `buildOperation` hinzu.
      * Wir tun das wenn,

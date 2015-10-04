@@ -56,10 +56,10 @@ GuiMap::GuiMap(const Context* const context, GuiResourcesBar* guiResourcesBar) :
 GuiMap::~GuiMap() {
 #ifdef DEBUG_GUIMAP
     delete debugGridOverlayGraphics[0];
-    delete debugGridOverlayGraphics[1];
+    delete debugGridOverlayGraphics[2];
 #endif
 #ifdef DEBUG_GUIMAP_COORDS
-    delete debugGridOverlayGraphics[2];
+    delete debugGridOverlayGraphics[1];
 #endif
 }
 
@@ -122,8 +122,17 @@ void GuiMap::renderElement(IRenderer* renderer) {
     }
 
     // Jetzt rendern
+#ifdef DEBUG_GUIMAP_COORDS
+    int screenZoom = map->getScreenZoom();
+#endif
+
     mapCoordsIterator.iterate([&] (const MapCoords& mapCoords) {
         renderTile(mapCoords);
+#ifdef DEBUG_GUIMAP_COORDS
+        if (screenZoom == 1) {
+            debugRenderTextMapCoords(renderer, *map, mapCoords);
+        }
+#endif
     });
 
     // Einzugsbereich jetzt malen, damit er oben drauf is
@@ -504,25 +513,26 @@ void GuiMap::renderTile(const MapCoords& mapCoords) {
 
         animationCurrentFrame->drawScaledAt(rect.x, rect.y, (double) 1 / (double) screenZoom);
     }
+}
 
 #ifdef DEBUG_GUIMAP_COORDS
-    if (screenZoom == 1) {
-        ScreenCoords screenCoords = MapCoordUtils::mapToScreenCoords(mapCoords, screenView, *map);
-        screenCoords.addY(IGraphicsMgr::TILE_HEIGHT_HALF);
-        screenCoords.subY(IGraphicsMgr::ELEVATION_HEIGHT);
+void GuiMap::debugRenderTextMapCoords(IRenderer* renderer, const Map& map, const MapCoords& mapCoords) {
+    const FourthDirection& screenView = map.getScreenView();
+    ScreenCoords screenCoords = MapCoordUtils::mapToScreenCoords(mapCoords, screenView, map);
+    screenCoords.addY(IGraphicsMgr::TILE_HEIGHT_HALF);
+    screenCoords.subY(IGraphicsMgr::ELEVATION_HEIGHT);
 
-        screenCoords.addX(Consts::mapClipRect.w / 2);
-        screenCoords.addY(Consts::mapClipRect.h / 2);
+    screenCoords.addX(Consts::mapClipRect.w / 2);
+    screenCoords.addY(Consts::mapClipRect.h / 2);
 
-        std::stringstream stringstream;
-        stringstream << mapCoords;
+    std::stringstream stringstream;
+    stringstream << mapCoords;
 
-        static Color colorWhite = Color(255, 255, 255, 95);
-        context->fontMgr->renderText(renderer, stringstream.str(), screenCoords.x(), screenCoords.y(), &colorWhite,
-                                     nullptr, "DroidSans.ttf", 9, RENDERTEXT_HALIGN_CENTER | RENDERTEXT_VALIGN_MIDDLE);
-    }
-#endif
+    static Color colorWhite = Color(255, 255, 255, 95);
+    context->fontMgr->renderText(renderer, stringstream.str(), screenCoords.x(), screenCoords.y(), &colorWhite,
+                                 nullptr, "DroidSans.ttf", 9, RENDERTEXT_HALIGN_CENTER | RENDERTEXT_VALIGN_MIDDLE);
 }
+#endif
 
 bool GuiMap::onEventElement(SDL_Event& event) {
     const WindowCoords& startClickWindowCoords = context->guiMgr->getStartClickWindowCoords();
