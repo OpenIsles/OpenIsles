@@ -269,6 +269,50 @@ public:
      */
     void update(unsigned long millisecondsElapsed);
 
+
+#ifdef IN_TESTS
+    /**
+     * @brief Hilfsmethode für Tests, die große Zeitspannen Spiellogik auslöst
+     * und die Tests damit "realistischer" durchführt.
+     *
+     * Diese Methode löst das Problem, dass update() nicht mit zu großem Wert für `millisecondsElapsed`
+     * aufgerufen werden darf. Lösung hier ist, dass die große Zeitspanne durch mehrfache kleine update()-Aufrufe
+     * überbrückt wird.
+     * Die Aufrufe verwenden maximal `millisecondsIncrement` als `millisecondsElapsed`-Parameter.
+     *
+     * Beispiel: Ein Aufruf von `update(60500, 1000)` sorgt dafür, dass
+     * - 60x `update(1000)` und
+     * - zum Schluss `update(500)` aufgerufen wird.
+     *
+     * @param millisecondsElapsedSum Millisekunden, die das Spiel fortschreiten soll
+     * @param millisecondsIncrement größtes Zeitintervall in Millisekunden,
+     *                              das für den `update()`-Aufruf verwendet werden soll
+     */
+    void update(unsigned long millisecondsElapsedSum, unsigned long millisecondsIncrement) {
+        unsigned long millisecondsToDoRemaining = millisecondsElapsedSum;
+
+        while (millisecondsToDoRemaining > 0) {
+            unsigned long nextMillisecondsHopp =
+                (millisecondsToDoRemaining > millisecondsIncrement) ? millisecondsIncrement : millisecondsToDoRemaining;
+
+            update(nextMillisecondsHopp);
+
+            millisecondsToDoRemaining -= nextMillisecondsHopp;
+        }
+    }
+
+    /**
+     * @brief Shortcut für einheitlichen Aufruf von update(unsigned long, unsigned long) aus den Tests heraus.
+     * @param millisecondsElapsed Millisekunden, die das Spiel fortschreiten soll.
+     */
+    inline void updateRealistically(unsigned long millisecondsElapsed) {
+        constexpr unsigned int fps = 50;
+        constexpr unsigned long millisecondsIncrement = 1000 / fps;
+
+        update(millisecondsElapsed, millisecondsIncrement);
+    }
+#endif
+
 private:
     /**
      * @brief Helper, der ein neues Map-Objekt instanziiert und dabei die `lastUpdateTicks` auf die aktuelle
