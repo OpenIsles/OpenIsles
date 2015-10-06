@@ -37,7 +37,7 @@ public:
     }
 
     /**
-     * @brief Für das Iterieren durch. Als Parameter wird ein Callback erwartet, der pro Durchlauf aufgerufen wird.
+     * @brief Führt das Iterieren durch. Als Parameter wird ein Callback erwartet, der pro Durchlauf aufgerufen wird.
      * @param function Callback-Funktion, die pro Durchlauf mit den Map-Koordinaten aufgerufen wird.
      */
     void iterate(std::function<void(const MapCoords&)> function) {
@@ -54,7 +54,7 @@ public:
 
 private:
     /**
-     * @brief Für das Iterieren in Süd-Ansicht durch
+     * @brief Führt das Iterieren in Süd-Ansicht durch
      * @param function Callback-Funktion, die pro Durchlauf mit den Map-Koordinaten aufgerufen wird.
      */
     void iterateInSouthView(std::function<void(const MapCoords&)>& function) {
@@ -68,7 +68,7 @@ private:
     }
 
     /**
-     * @brief Für das Iterieren in Ost-Ansicht durch
+     * @brief Führt das Iterieren in Ost-Ansicht durch
      * @param function Callback-Funktion, die pro Durchlauf mit den Map-Koordinaten aufgerufen wird.
      */
     void iterateInEastView(std::function<void(const MapCoords&)>& function) {
@@ -82,7 +82,7 @@ private:
     }
 
     /**
-     * @brief Für das Iterieren in Nord-Ansicht durch
+     * @brief Führt das Iterieren in Nord-Ansicht durch
      * @param function Callback-Funktion, die pro Durchlauf mit den Map-Koordinaten aufgerufen wird.
      */
     void iterateInNorthView(std::function<void(const MapCoords&)>& function) {
@@ -96,7 +96,7 @@ private:
     }
 
     /**
-     * @brief Für das Iterieren in West-Ansicht durch
+     * @brief Führt das Iterieren in West-Ansicht durch
      * @param function Callback-Funktion, die pro Durchlauf mit den Map-Koordinaten aufgerufen wird.
      */
     void iterateInWestView(std::function<void(const MapCoords&)>& function) {

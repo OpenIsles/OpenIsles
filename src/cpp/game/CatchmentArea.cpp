@@ -52,7 +52,7 @@ bool CatchmentArea::isInsideCatchmentArea(
         y = (mapCoords.y() - buildingMapCoords.y()) + ((catchmentArea.height - buildingMapHeight) / 2);
         return (catchmentArea.getData(x, y, '0') == '1'); // TODO String-'1' durch echte 1 ersetzen, wenn wir das über die Config einlesen
 
-    } else if (view == Direction::EAST ) {
+    } else if (view == Direction::EAST) {
         x = (mapCoords.x() - buildingMapCoords.x()) + ((catchmentArea.height - buildingMapWidth) / 2);
         y = (mapCoords.y() - buildingMapCoords.y()) + ((catchmentArea.width - buildingMapHeight) / 2);
         return (catchmentArea.getData(y, (catchmentArea.height - 1) - x, '0') == '1'); // TODO String-'1' durch echte 1 ersetzen, wenn wir das über die Config einlesen

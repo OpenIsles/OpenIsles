@@ -8,6 +8,7 @@
 #include "game/Game.h"
 #include "map/coords/MapCoords.h"
 #include "map/Map.h"
+#include "utils/CatchmentAreaIterator.h"
 
 
 EconomicsMgr::EconomicsMgr(const Context* const context) : ContextAware(context) {
@@ -85,7 +86,6 @@ FindBuildingToGetGoodsFromResult EconomicsMgr::findBuildingToGetGoodsFrom(Buildi
     if (!mapObjectType->catchmentArea) {
         return FindBuildingToGetGoodsFromResult(); // kein Einzugsbereich
     }
-    const RectangleData<char>& catchmentArea = *mapObjectType->catchmentArea;
 
     /*
      * Anno 1602 macht es so: Ein Gebäude, was zwei Waren braucht, schickt den Träger hintereinander los für die Waren,
@@ -130,151 +130,147 @@ FindBuildingToGetGoodsFromResult EconomicsMgr::findBuildingToGetGoodsFrom(Buildi
                                          // Da wir kachelweise arbeiten, erhalten wir dasselbe Gebäude mehrfach.
 
     Map* map = context->game->getMap();
-    const MapCoords& mapCoords = building->getMapCoords();
-    int catchmentAreaRadius = std::max(catchmentArea.width, catchmentArea.height); // TODO sehr optimierungsbedürftig, dafür funktionierts erstmal in allen Ansichten
     AStar aStar(context, building, true, isStorageBuilding, false);
+    CatchmentAreaIterator catchmentAreaIterator(*building, true);
 
-    for (int mapY = mapCoords.y() - catchmentAreaRadius; mapY <= mapCoords.y() + catchmentAreaRadius; mapY++) {
-        for (int mapX = mapCoords.x() - catchmentAreaRadius; mapX <= mapCoords.x() + catchmentAreaRadius; mapX++) {
+    catchmentAreaIterator.iterate([&](const MapCoords& mapCoords) {
+        // Gebäude da?
+        MapTile* mapTile = map->getMapTileAt(mapCoords);
+        if (mapTile == nullptr) {
+            return;
+        }
 
-            // Gebäude da?
-            MapTile* mapTile = map->getMapTileAt(MapCoords(mapX, mapY));
-            if (mapTile == nullptr) {
-                continue;
+        Building* buildingThere = dynamic_cast<Building*>(mapTile->mapObjectFixed);
+        if (buildingThere == nullptr) {
+            return;
+        }
+
+        // Gebäude in Set einfügen bzw. gucken, ob wir das Gebäude schon haben
+        std::pair<std::set<Building*>::iterator, bool> setInsertionResult = buildingChecked.insert(buildingThere);
+        if (!setInsertionResult.second) {
+            return; // Dieses Gebäude hatten wir schon mal
+        }
+
+        // Von Lagergebäude zu Lagergebäude wird nix transportiert
+        bool isStorgeBuildingThere = buildingThere->isStorageBuilding();
+        if (isStorageBuilding && isStorgeBuildingThere) {
+            return;
+        }
+
+        // Gebäude, die gar nix produzieren, bringen uns nix, z.B. öffentliche Gebäude.
+        const MapObjectType* buildingThereType = buildingThere->getMapObjectType();
+        if (!isStorgeBuildingThere && !buildingThereType->buildingProduction.output.isUsed()) {
+            return;
+        }
+
+        // Liefert das Gebäude was passendes?
+        if (!isStorageBuilding && !isStorgeBuildingThere && (
+                buildingThereType->buildingProduction.output.good != goodRequired1 &&
+                buildingThereType->buildingProduction.output.good != goodRequired2)) {
+
+            return; // produziert nix passendes
+        }
+
+        // Von diesem Slot holt schon ein anderer Träger ab. Verhindern, dass zwei Träger zum selben Ziel
+        // unterwegs sind.
+        if (!isStorgeBuildingThere && buildingThere->productionSlots.output.markedForPickup) {
+            return;
+        }
+
+        // Waren zum Abholen da?
+        if (!isStorgeBuildingThere && buildingThere->productionSlots.output.inventory < 1) {
+            return;
+        }
+
+        // Bin ich ein Lagergebäude?
+        if (isStorageBuilding) {
+            Colony* colony = context->game->getColony(building);
+
+            GoodsSlot* buildingThereOutputProductionSlot = &buildingThere->productionSlots.output;
+
+            // Wir holen nur ab, wenn die Lager der Siedlung nicht schon voll sind
+            if (colony->getGoods(buildingThereOutputProductionSlot->good).getRemainingCapacity() < 1) {
+                return;
             }
 
-            Building* buildingThere = dynamic_cast<Building*>(mapTile->mapObjectFixed);
-            if (buildingThere == nullptr) {
-                continue;
+            // Gebäude, die Rohstoffe herstellen, werden grundsätzlich nur vom Marktkarren abgeholt,
+            // wenn die Lager voll sind
+            if (buildingThereOutputProductionSlot->isRawMaterial() &&
+                !buildingThereOutputProductionSlot->isInventoryFull()) {
+
+                return;
+            }
+        }
+
+        // Checken, ob eine Route dahin existiert
+        const MapCoords& mapCoordsSource = building->getMapCoords();
+        const MapCoords& mapCoordsDestination = buildingThere->getMapCoords();
+
+        Route route = aStar.getRoute(mapCoordsSource, mapCoordsDestination);
+        if (!route.routeExists()) {
+            return; // gibt keinen Weg dahin
+        }
+
+        FindBuildingToGetGoodsFromResult potentialResult;
+        potentialResult.building = buildingThere;
+        potentialResult.route = route;
+
+        // Ist das Zielgebäude ein Lagergebäude? Produktionsgebäuden können sich Waren auch von dort holen
+        if (isStorgeBuildingThere) {
+            Colony* colony = context->game->getColony(buildingThere); // TODO Es sollte getColony(buildingThere) == getColony(building) gelten, da Kolonie-übergreifend eh nix gehen darf.
+
+            bool goods1CanBePickedUpFromStorage = false;
+            bool goods2CanBePickedUpFromStorage = false;
+
+            if ((goodRequired1 != nullptr) && colony->getGoods(goodRequired1).inventory > 0) {
+                goods1CanBePickedUpFromStorage = true;
+            }
+            if ((goodRequired2 != nullptr) && colony->getGoods(goodRequired2).inventory > 0) {
+                goods2CanBePickedUpFromStorage = true;
             }
 
-            // Gebäude in Set einfügen bzw. gucken, ob wir das Gebäude schon haben
-            std::pair<std::set<Building*>::iterator, bool> setInsertionResult = buildingChecked.insert(buildingThere);
-            if (!setInsertionResult.second) {
-                continue; // Dieses Gebäude hatten wir schon mal
+            const Good* goodWeChoose;
+
+            // Nix passendes in der Kolonie?
+            if (!goods1CanBePickedUpFromStorage && !goods2CanBePickedUpFromStorage) {
+                return;
             }
 
-            // Von Lagergebäude zu Lagergebäude wird nix transportiert
-            bool isStorgeBuildingThere = buildingThere->isStorageBuilding();
-            if (isStorageBuilding && isStorgeBuildingThere) {
-                continue;
-            }
+            // Ein Lagerhaus bietet unter Umständen zwei Waren an, die wir brauchen. Falls ja, entscheiden wir
+            // uns hier bereits, welche wir haben wollen. Wir wählen die, wo wir prozentual weniger auf Lager
+            // haben.
+            else if (goods1CanBePickedUpFromStorage && goods2CanBePickedUpFromStorage) {
+                if ((building->productionSlots.input.inventory / building->productionSlots.input.capacity) <
+                    (building->productionSlots.input2.inventory / building->productionSlots.input2.capacity)) {
 
-            // Gebäude, die gar nix produzieren, bringen uns nix, z.B. öffentliche Gebäude.
-            const MapObjectType* buildingThereType = buildingThere->getMapObjectType();
-            if (!isStorgeBuildingThere && !buildingThereType->buildingProduction.output.isUsed()) {
-                continue;
-            }
-
-            // Liefert das Gebäude was passendes?
-            if (!isStorageBuilding && !isStorgeBuildingThere && (
-                    buildingThereType->buildingProduction.output.good != goodRequired1 &&
-                    buildingThereType->buildingProduction.output.good != goodRequired2)) {
-
-                continue; // produziert nix passendes
-            }
-
-            // Von diesem Slot holt schon ein anderer Träger ab. Verhindern, dass zwei Träger zum selben Ziel
-            // unterwegs sind.
-            if (!isStorgeBuildingThere && buildingThere->productionSlots.output.markedForPickup) {
-                continue;
-            }
-
-            // Waren zum Abholen da?
-            if (!isStorgeBuildingThere && buildingThere->productionSlots.output.inventory < 1) {
-                continue;
-            }
-
-            // Bin ich ein Lagergebäude?
-            if (isStorageBuilding) {
-                Colony* colony = context->game->getColony(building);
-
-                GoodsSlot* buildingThereOutputProductionSlot = &buildingThere->productionSlots.output;
-
-                // Wir holen nur ab, wenn die Lager der Siedlung nicht schon voll sind
-                if (colony->getGoods(buildingThereOutputProductionSlot->good).getRemainingCapacity() < 1) {
-                    continue;
-                }
-
-                // Gebäude, die Rohstoffe herstellen, werden grundsätzlich nur vom Marktkarren abgeholt,
-                // wenn die Lager voll sind
-                if (buildingThereOutputProductionSlot->isRawMaterial() &&
-                    !buildingThereOutputProductionSlot->isInventoryFull()) {
-
-                    continue;
-                }
-            }
-
-            // Checken, ob eine Route dahin existiert
-            const MapCoords& mapCoordsSource = building->getMapCoords();
-            const MapCoords& mapCoordsDestination = buildingThere->getMapCoords();
-
-            Route route = aStar.getRoute(mapCoordsSource, mapCoordsDestination);
-            if (!route.routeExists()) {
-                continue; // gibt keinen Weg dahin
-            }
-
-            FindBuildingToGetGoodsFromResult potentialResult;
-            potentialResult.building = buildingThere;
-            potentialResult.route = route;
-
-            // Ist das Zielgebäude ein Lagergebäude? Produktionsgebäuden können sich Waren auch von dort holen
-            if (isStorgeBuildingThere) {
-                Colony* colony = context->game->getColony(buildingThere); // TODO Es sollte getColony(buildingThere) == getColony(building) gelten, da Kolonie-übergreifend eh nix gehen darf.
-
-                bool goods1CanBePickedUpFromStorage = false;
-                bool goods2CanBePickedUpFromStorage = false;
-
-                if ((goodRequired1 != nullptr) && colony->getGoods(goodRequired1).inventory > 0) {
-                    goods1CanBePickedUpFromStorage = true;
-                }
-                if ((goodRequired2 != nullptr) && colony->getGoods(goodRequired2).inventory > 0) {
-                    goods2CanBePickedUpFromStorage = true;
-                }
-
-                const Good* goodWeChoose;
-
-                // Nix passendes in der Kolonie?
-                if (!goods1CanBePickedUpFromStorage && !goods2CanBePickedUpFromStorage) {
-                    continue;
-                }
-
-                // Ein Lagerhaus bietet unter Umständen zwei Waren an, die wir brauchen. Falls ja, entscheiden wir
-                // uns hier bereits, welche wir haben wollen. Wir wählen die, wo wir prozentual weniger auf Lager
-                // haben.
-                else if (goods1CanBePickedUpFromStorage && goods2CanBePickedUpFromStorage) {
-                    if ((building->productionSlots.input.inventory / building->productionSlots.input.capacity) <
-                        (building->productionSlots.input2.inventory / building->productionSlots.input2.capacity)) {
-
-                        goodWeChoose = goodRequired1;
-                    } else {
-                        goodWeChoose = goodRequired2;
-                    }
-                }
-
-                // Nur genaue eine Ware verfügbar?
-                else if (goods1CanBePickedUpFromStorage) {
-                    goodWeChoose = goodRequired1;
-                } else if (goods2CanBePickedUpFromStorage) {
+                       goodWeChoose = goodRequired1;
+                } else {
                     goodWeChoose = goodRequired2;
                 }
-
-                potentialResult.goodsSlot.good = goodWeChoose;
-                potentialResult.goodsSlot.inventory = colony->getGoods(goodWeChoose).inventory;
-                potentialResult.goodsSlot.capacity = colony->getGoods(goodWeChoose).capacity;
-                potentialResult.lastGoodsCollections = context->game->getTicks() + 1; // Zeit in der Zukunft nehmen, damit diese Route als letztes verwendet wird
-            }
-            else {
-                potentialResult.goodsSlot.good = buildingThereType->buildingProduction.output.good;
-                potentialResult.goodsSlot.inventory = buildingThere->productionSlots.output.inventory;
-                potentialResult.goodsSlot.capacity = buildingThere->productionSlots.output.capacity;
-                potentialResult.lastGoodsCollections = buildingThere->lastGoodsCollections;
             }
 
-            // Juhuu! Dieses Gebäude kommt in Frage
-            potentialResults.push_back(potentialResult);
+            // Nur genaue eine Ware verfügbar?
+            else if (goods1CanBePickedUpFromStorage) {
+                goodWeChoose = goodRequired1;
+            } else if (goods2CanBePickedUpFromStorage) {
+                goodWeChoose = goodRequired2;
+            }
+
+            potentialResult.goodsSlot.good = goodWeChoose;
+            potentialResult.goodsSlot.inventory = colony->getGoods(goodWeChoose).inventory;
+            potentialResult.goodsSlot.capacity = colony->getGoods(goodWeChoose).capacity;
+            potentialResult.lastGoodsCollections = context->game->getTicks() + 1; // Zeit in der Zukunft nehmen, damit diese Route als letztes verwendet wird
         }
-    }
+        else {
+            potentialResult.goodsSlot.good = buildingThereType->buildingProduction.output.good;
+            potentialResult.goodsSlot.inventory = buildingThere->productionSlots.output.inventory;
+            potentialResult.goodsSlot.capacity = buildingThere->productionSlots.output.capacity;
+            potentialResult.lastGoodsCollections = buildingThere->lastGoodsCollections;
+        }
+
+        // Juhuu! Dieses Gebäude kommt in Frage
+        potentialResults.push_back(potentialResult);
+    });
 
     // Keine Ziele? Ok, dann sind wir fertig
     if (potentialResults.empty()) {

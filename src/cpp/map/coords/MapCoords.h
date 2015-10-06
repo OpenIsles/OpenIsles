@@ -177,6 +177,19 @@ namespace std {
     }
 
     template<>
+    struct hash<MapCoords> {
+        /**
+         * @brief Generiert den Hashwert für eine Map-Koordinate
+         * @param mapCoords Map-Koordinate
+         * @return Hashwert
+         */
+        std::size_t operator()(const MapCoords& mapCoords) const {
+            std::hash<int> intHash;
+            return (3 * intHash(mapCoords.x())) ^ (5 * intHash(mapCoords.y()));
+        }
+    };
+
+    template<>
     struct hash<const MapCoords> {
         /**
          * @brief Generiert den Hashwert für eine Map-Koordinate

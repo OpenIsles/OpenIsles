@@ -5,6 +5,7 @@
 #include "game/Game.h"
 #include "map/Map.h"
 #include "map/Street.h"
+#include "utils/CatchmentAreaIterator.h"
 #include "utils/StringFormat.h"
 #include "utils/Rect.h"
 
@@ -142,27 +143,15 @@ void Map::addMapObject(MapObject* mapObject) {
 }
 
 void Map::addOfficeCatchmentAreaToMap(const Building& building) {
-    const MapCoords& mapCoords = building.getMapCoords();
-
-    RectangleData<char>& catchmentArea = *building.getMapObjectType()->catchmentArea;
-    int catchmentAreaRadius = std::max(catchmentArea.width, catchmentArea.height); // TODO sehr optimierungsbedürftig, dafür funktionierts erstmal in allen Ansichten
-    
-    // TODO Sehr hässlich, aber tuts erstmal sicher, ohne Gefahr.
-    for (int mapY = mapCoords.y() - catchmentAreaRadius; mapY <= mapCoords.y() + catchmentAreaRadius; mapY++) {
-        for (int mapX = mapCoords.x() - catchmentAreaRadius; mapX <= mapCoords.x() + catchmentAreaRadius; mapX++) {
-
-            if (!CatchmentArea::isInsideCatchmentArea(building, MapCoords(mapX, mapY))) {
-                continue;
-            }
-            
-            MapTile* mapTile = mapTiles->getData(mapX, mapY, nullptr);
-            if (mapTile == nullptr) {
-                continue;
-            }
-            
-            mapTile->player = building.getPlayer();
+    CatchmentAreaIterator catchmentAreaIterator(building, false);
+    catchmentAreaIterator.iterate([&](const MapCoords& mapCoords) {
+        MapTile* mapTile = mapTiles->getData(mapCoords.x(), mapCoords.y(), nullptr);
+        if (mapTile == nullptr) {
+            return;
         }
-    }
+
+        mapTile->player = building.getPlayer();
+    });
 }
 
 void Map::moveMapObject(MapObjectMoving* mapObject, const DoubleMapCoords newMapCoords) {
