@@ -1,12 +1,8 @@
 #ifndef _ECONOMICS_MGR_H
 #define _ECONOMICS_MGR_H
 
-#include <map>
-#include <iostream>
 #include "Context.h"
 #include "map/Building.h"
-
-struct Structure;
 
 /**
  * @brief Hilfsstruktur, die das Ergebnis von @ref findBuildingToGetGoodsFrom() enthält.
@@ -44,25 +40,6 @@ struct FindBuildingToGetGoodsFromResult {
         goodsSlot.good = nullptr;
         lastGoodsCollections = 0;
     }
-
-#ifdef DEBUG_ECONOMICS
-    /**
-     * @brief (nur zu Debugzwecken einkompiliert) Ausgabe-Operator, um diese Hilfsstruktur auszugeben
-     * @param outputStream Ausgabestream, auf den geschrieben wird
-     * @param result Objekt, was ausgegeben werden soll
-     * @return Ausgabestream, sodass das Chaining funktioniert
-     */
-    friend std::ostream& operator<<(std::ostream& outputStream, FindBuildingToGetGoodsFromResult const& result) {
-        const MapCoords& mapCoords = result.building->getMapCoords();
-
-        return outputStream << "{ building = (" << mapCoords.x() << ", " << mapCoords.y() << "), routeLen = " <<
-            result.route.size() << ", goods = ( goodName = " <<
-            ((result.goodsSlot.good != nullptr) ? result.goodsSlot.good->name : "(empty)") <<
-            ", inventory = " << result.goodsSlot.inventory << " of " << result.goodsSlot.capacity <<
-            ", ratio = " << (result.goodsSlot.inventory / result.goodsSlot.capacity) <<
-            " ), lastGoodsCollections = " << result.lastGoodsCollections << " }";
-    }
-#endif
 
 };
 

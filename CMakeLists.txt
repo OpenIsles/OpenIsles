@@ -177,7 +177,6 @@ include_directories(${CMAKE_SOURCE_DIR}/src/cpp)
 
 # Debuginfos für Debug-Buildconfig aktivieren - nicht vergessen, neue Variablen in die Doxyfile.in einzutragen
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DDEBUG")
-set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DDEBUG_ECONOMICS")
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DDEBUG_A_STAR")
 #set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DDEBUG_GUIMAP")
 #set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DDEBUG_GUIMAP_COORDS")

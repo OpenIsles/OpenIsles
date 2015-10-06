@@ -304,15 +304,5 @@ FindBuildingToGetGoodsFromResult EconomicsMgr::findBuildingToGetGoodsFrom(Buildi
     potentialResults.sort(FindBuildingToGetGoodsFromResultComparator());
     FindBuildingToGetGoodsFromResult bestResult = potentialResults.front();
 
-#ifdef DEBUG_ECONOMICS
-    std::cout << "potentialResults for (" << mapCoords.x() << ", " << mapCoords.y() << "):" << std::endl;
-
-    int i = 1;
-    for (auto iter = potentialResults.cbegin(); iter != potentialResults.cend(); iter++, i++) {
-        std::cout << i << ": " << *iter << std::endl;
-    }
-    std::cout << "-----------------------------" << std::endl;
-#endif
-
     return bestResult;
 }
