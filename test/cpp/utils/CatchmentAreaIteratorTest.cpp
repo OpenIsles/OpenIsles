@@ -23,11 +23,15 @@ TEST(CatchmentAreaIteratorTest, noCatchmentArea) {
     catchmentAreaIteratorFalse.iterate([](const MapCoords& mapCoords) {
         FAIL(); // leerer Einzugsbereich. iterate() darf kein Mal aufgerufen werden!
     });
+    ASSERT_FALSE(catchmentAreaIteratorFalse.contains({40, 50}));
+    ASSERT_FALSE(catchmentAreaIteratorFalse.contains({40, 52}));
 
     CatchmentAreaIterator catchmentAreaIteratorTrue(building, true);
     catchmentAreaIteratorTrue.iterate([](const MapCoords& mapCoords) {
         FAIL(); // leerer Einzugsbereich. iterate() darf kein Mal aufgerufen werden!
     });
+    ASSERT_FALSE(catchmentAreaIteratorTrue.contains({40, 50}));
+    ASSERT_FALSE(catchmentAreaIteratorTrue.contains({40, 52}));
 }
 
 
@@ -70,8 +74,12 @@ public:
         // Testauswertung
         ASSERT_EQ(expectedSize, mapCoordsIterated.size());
         for (unsigned int i = 0; i < expectedSize; i++) {
-            ASSERT_TRUE(mapCoordsIterated.find(mapCoordsExpected[i]) != mapCoordsIterated.cend());
+            const MapCoords& mapCoords = mapCoordsExpected[i];
+
+            ASSERT_TRUE(mapCoordsIterated.find(mapCoords) != mapCoordsIterated.cend());
+            ASSERT_TRUE(catchmentAreaIterator.contains(mapCoords));
         }
+        ASSERT_FALSE(catchmentAreaIterator.contains({4711, 42}));
     }
 };
 
