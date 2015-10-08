@@ -11,16 +11,16 @@
 #ifdef DEBUG_A_STAR
 MapCoords AStar::debugAStar_source = MapCoords(-1, -1);
 MapCoords AStar::debugAStar_destination = MapCoords(-1, -1);
-Building* AStar::debugAStar_buildingToUseCatchmentArea = nullptr;
+std::unique_ptr<CatchmentAreaIterator> AStar::debugAStar_catchmentAreaIterator;
 Route AStar::debugAStar_route;
 bool AStar::debugAStar_useStreetOnly = false;
 bool AStar::debugAStar_rightAnglesOnly = false;
 #endif
 
 
-AStar::AStar(const Context* const context, Building* buildingToUseCatchmentArea,
+AStar::AStar(const Context* const context, CatchmentAreaIterator* catchmentAreaIterator,
              bool cutRoute, bool useStreetOnly, bool rightAnglesOnly) :
-    ContextAware(context), buildingToUseCatchmentArea(buildingToUseCatchmentArea),
+    ContextAware(context), catchmentAreaIterator(catchmentAreaIterator),
     cutRoute(cutRoute), useStreetOnly(useStreetOnly), rightAnglesOnly(rightAnglesOnly) {
 }
 
@@ -93,7 +93,7 @@ Route AStar::getRoute(const MapCoords& source, const MapCoords& destination) con
                 // wird einfach ignoriert.
                 bool insideSourceOrDestinationBuilding;
                 if (!isTileWalkable(successorMapCoordinate, sourceBuilding,
-                                    destinationBuilding, buildingToUseCatchmentArea,
+                                    destinationBuilding, catchmentAreaIterator,
                                     useStreetOnly, insideSourceOrDestinationBuilding)) {
                     continue;
                 }
@@ -108,14 +108,14 @@ Route AStar::getRoute(const MapCoords& source, const MapCoords& destination) con
                     MapCoords mapCoordinateNextTo1(
                         currentNode.mapCoords.x(), currentNode.mapCoords.y() + mapYOffset);
                     if (!isTileWalkable(mapCoordinateNextTo1, sourceBuilding, destinationBuilding,
-                                        buildingToUseCatchmentArea, useStreetOnly, unusedVar)) {
+                                        catchmentAreaIterator, useStreetOnly, unusedVar)) {
                         continue;
                     }
 
                     MapCoords mapCoordinateNextTo2(
                         currentNode.mapCoords.x() + mapXOffset, currentNode.mapCoords.y());
                     if (!isTileWalkable(mapCoordinateNextTo2, sourceBuilding, destinationBuilding,
-                                        buildingToUseCatchmentArea, useStreetOnly, unusedVar)) {
+                                        catchmentAreaIterator, useStreetOnly, unusedVar)) {
                         continue;
                     }
                 }
@@ -283,7 +283,7 @@ void AStar::cutRouteInsideBuildings(Route& route) const {
 }
 
 bool AStar::isTileWalkable(const MapCoords& mapCoords, Building* sourceBuilding,
-                           Building* destinationBuilding, Building* buildingToUseCatchmentArea,
+                           Building* destinationBuilding, CatchmentAreaIterator* catchmentAreaIterator,
                            bool useStreetOnly, bool& insideSourceOrDestinationBuilding) const {
 
     Map* map = context->game->getMap();
@@ -326,8 +326,8 @@ bool AStar::isTileWalkable(const MapCoords& mapCoords, Building* sourceBuilding,
     }
 
     // Einschränkung durch Einzugsbereich?
-    if (buildingToUseCatchmentArea != nullptr) {
-        if (!CatchmentArea::isInsideCatchmentArea(*buildingToUseCatchmentArea, mapCoords)) {
+    if (catchmentAreaIterator != nullptr) {
+        if (!catchmentAreaIterator->contains(mapCoords)) {
             return false;
         }
     }

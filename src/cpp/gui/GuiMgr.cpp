@@ -29,6 +29,7 @@ static Color colorLightBrown = Color(223, 216, 183, 255);
 #ifdef DEBUG_A_STAR
 #include "map/coords/MapCoords.h"
 #include "pathfinding/AStar.h"
+#include "utils/CatchmentAreaIterator.h"
 #endif
 
 
@@ -458,7 +459,13 @@ void GuiMgr::onEvent(SDL_Event& event) {
             needToRecalculate = true;
         } else if (event.key.keysym.scancode == SDL_SCANCODE_D) {
             MapTile* mapTile = game->getMap()->getMapTileAt(mapCoordsUnderMouse);
-            AStar::debugAStar_buildingToUseCatchmentArea = dynamic_cast<Building*>(mapTile->mapObjectFixed);
+
+            Building* building = dynamic_cast<Building*>(mapTile->mapObjectFixed);
+            if (building != nullptr) {
+                AStar::debugAStar_catchmentAreaIterator.reset(new CatchmentAreaIterator(*building, false));
+            } else {
+                AStar::debugAStar_catchmentAreaIterator.reset();
+            }
             needToRecalculate = true;
         } else if (event.key.keysym.scancode == SDL_SCANCODE_F) {
             AStar::debugAStar_useStreetOnly = !AStar::debugAStar_useStreetOnly;
@@ -472,7 +479,7 @@ void GuiMgr::onEvent(SDL_Event& event) {
             if (AStar::debugAStar_source.x() > 0 && AStar::debugAStar_source.y() > 0 &&
                 AStar::debugAStar_destination.x() > 0 && AStar::debugAStar_destination.y() > 0) {
 
-                AStar aStar(context, AStar::debugAStar_buildingToUseCatchmentArea,
+                AStar aStar(context, AStar::debugAStar_catchmentAreaIterator.get(),
                             true, AStar::debugAStar_useStreetOnly, AStar::debugAStar_rightAnglesOnly);
                 AStar::debugAStar_route = aStar.getRoute(AStar::debugAStar_source, AStar::debugAStar_destination);
             }

@@ -130,8 +130,8 @@ FindBuildingToGetGoodsFromResult EconomicsMgr::findBuildingToGetGoodsFrom(Buildi
                                          // Da wir kachelweise arbeiten, erhalten wir dasselbe Gebäude mehrfach.
 
     Map* map = context->game->getMap();
-    AStar aStar(context, building, true, isStorageBuilding, false);
-    CatchmentAreaIterator catchmentAreaIterator(*building, true);
+    CatchmentAreaIterator catchmentAreaIterator(*building, false);
+    AStar aStar(context, &catchmentAreaIterator, true, isStorageBuilding, false);
 
     catchmentAreaIterator.iterate([&](const MapCoords& mapCoords) {
         // Gebäude da?

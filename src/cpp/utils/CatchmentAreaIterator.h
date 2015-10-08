@@ -3,8 +3,9 @@
 
 #include <algorithm>
 #include <functional>
-#include "map/Building.h"
 #include "map/coords/MapCoords.h"
+
+class Building;
 
 /**
  * @brief Iterator, der alle Kacheln iteriert, die in einem Einzugsbereich um ein Gebäude liegen.

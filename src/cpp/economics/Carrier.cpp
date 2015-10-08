@@ -132,7 +132,8 @@ bool Carrier::updateObject(const Context& context) {
                     goodsSlotToTakeFrom->inventory -= goodsWeCollect;
                     targetBuilding->lastGoodsCollections = context.game->getTicks();
 
-                    AStar aStar(&context, owningBuilding, true, owningBuilding->isStorageBuilding(), false);
+                    CatchmentAreaIterator catchmentAreaIterator(*owningBuilding, false);
+                    AStar aStar(&context, &catchmentAreaIterator, true, owningBuilding->isStorageBuilding(), false);
                     Route returnRoute = aStar.getRoute(route.back(), route.front());
 
                     deleteMe = true;

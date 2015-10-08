@@ -321,22 +321,19 @@ int main(int argc, char** argv) {
         }
 
 #ifdef DEBUG_A_STAR
-        std::string buildingToUseCatchmentAreaString;
-        if (AStar::debugAStar_buildingToUseCatchmentArea != nullptr) {
-            const MapCoords& mapCoords =
-                AStar::debugAStar_buildingToUseCatchmentArea->getMapCoords();
-
-            buildingToUseCatchmentAreaString = "(" + toString(mapCoords.x()) + ", " + toString(mapCoords.y()) + ")";
+        std::string catchmentAreaIteratorString;
+        if (AStar::debugAStar_catchmentAreaIterator) {
+            catchmentAreaIteratorString = "set";
         } else {
-            buildingToUseCatchmentAreaString = "nullptr";
+            catchmentAreaIteratorString = "nullptr";
         }
 
         debugOutput[5] = "debugAStar: source = (" +
             toString(AStar::debugAStar_source.x()) + ", " +
             toString(AStar::debugAStar_source.y()) + "), destination = (" +
             toString(AStar::debugAStar_destination.x()) + ", " +
-            toString(AStar::debugAStar_destination.y()) + "), catchmentAreaBuilding = " +
-            buildingToUseCatchmentAreaString + ", useStreetOnly = " +
+            toString(AStar::debugAStar_destination.y()) + "), catchmentAreaIterator = " +
+            catchmentAreaIteratorString + ", useStreetOnly = " +
             (AStar::debugAStar_useStreetOnly ? "true" : "false") + ", rightAnglesOnly = " +
             (AStar::debugAStar_rightAnglesOnly ? "true" : "false");
 #endif // DEBUG_A_STAR

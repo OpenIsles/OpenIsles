@@ -3,7 +3,12 @@
 
 #include <list>
 #include "map/coords/MapCoords.h"
+#include "utils/CatchmentAreaIterator.h"
 #include "Context.h"
+
+#ifdef DEBUG_A_STAR
+#include <memory>
+#endif
 
 class Building;
 
@@ -40,10 +45,10 @@ public:
     static MapCoords debugAStar_destination;
 
     /**
-     * @brief (nur zu Debugzwecken einkompiliert) Wenn gesetzt, wird die Route auf den Einzugsbereichs dieses Gebäudes
+     * @brief (nur zu Debugzwecken einkompiliert) Wenn gesetzt, wird die Route auf einen bestimmten Einzugsbereich
      * restringiert.
      */
-    static Building* debugAStar_buildingToUseCatchmentArea;
+    static std::unique_ptr<CatchmentAreaIterator> debugAStar_catchmentAreaIterator;
 
     /**
      * @brief (nur zu Debugzwecken einkompiliert) Route, die visualisiert werden soll
@@ -64,11 +69,11 @@ public:
 
 private:
     /**
-     * @brief Zeiger auf ein Gebäude. Wenn gesetzt, dürfen für die Route nur Kacheln benutzt werden, die sich im
-     * Einzugsbereich dieses Gebäudes befinden. Wird nullptr verwendet, so dürfen für die Route beliebige Felder benutzt
+     * @brief Zeiger auf einen Einzugsbereich. Wenn gesetzt, dürfen für die Route nur Kacheln benutzt werden, die sich
+     * in diesem Einzugsbereich befinden. Wird `nullptr` verwendet, so dürfen für die Route beliebige Felder benutzt
      * werden.
      */
-    Building* buildingToUseCatchmentArea;
+    CatchmentAreaIterator* catchmentAreaIterator;
 
     /**
      * @brief `true`, um die Route zu kürzen, wenn sie innerhalb von Gebäuden verläuft. Es genügt, die Route nur zum
@@ -90,14 +95,14 @@ public:
     /**
      * @brief Konstruiert einen A*-Algorithmus mit bestimmten Parametern
      * @param context Dependency
-     * @param buildingToUseCatchmentArea Zeiger auf ein Gebäude. Wenn gesetzt, dürfen für die Route nur Kacheln benutzt
-     *                                   werden, die sich im Einzugsbereich dieses Gebäudes befinden. Wird nullptr
-     *                                   verwendet, so dürfen für die Route beliebige Felder benutzt werden.
+     * @param catchmentAreaIterator Zeiger auf einen Einzugsbereich. Wenn gesetzt, dürfen für die Route nur Kacheln
+     *                              benutzt werden, die sich in diesem Einzugsbereich befinden. Wird `nullptr`
+     *                              verwendet, so dürfen für die Route beliebige Felder benutzt werden.
      * @param cutRoute `true`, um die Route zu kürzen, wenn sie innerhalb von Gebäuden verläuft
      * @param useStreetOnly `true`, um nur Straßen für die Route zu verwenden, `false` erlaubt auch über Gras zu laufen
      * @param rightAnglesOnly `true`, um ausschließlich rechte Winkel für die Route zu verwenden
      */
-    AStar(const Context* const context, Building* buildingToUseCatchmentArea,
+    AStar(const Context* const context, CatchmentAreaIterator* catchmentAreaIterator,
           bool cutRoute, bool useStreetOnly, bool rightAnglesOnly);
 
     /**
@@ -148,9 +153,9 @@ private:
      *                       oder nullptr, wenn kein Gebäude an dieser Stelle ist (IN)
      * @param destinationBuilding Zeiger auf das Gebäude, das im Zielpunkt der Route liegt
      *                            oder nullptr, wenn kein Gebäude an dieser Stelle ist (IN)
-     * @param buildingToUseCatchmentArea Zeiger auf ein Gebäude. Wenn gesetzt, dürfen für die Route nur Kacheln benutzt
-     *                                   werden, die sich im Einzugsbereich dieses Gebäudes befinden. Wird nullptr
-     *                                   verwendet, so dürfen für die Route beliebige Felder benutzt werden. (IN)
+     * @param catchmentAreaIterator Zeiger auf einen Einzugsbereich. Wenn gesetzt, dürfen für die Route nur Kacheln
+     *                              benutzt werden, die sich in diesem Einzugsbereich befinden. Wird `nullptr`
+     *                              verwendet, so dürfen für die Route beliebige Felder benutzt werden.
      * @param useStreetOnly `true`, um nur Straßen/Plätze für die Route zu verwenden,
      *                      `false` erlaubt auch über Gras zu laufen (IN)
      * @param insideSourceOrDestinationBuilding erhält die Info, ob sich die angefragte Kachel im Start- oder
@@ -158,7 +163,7 @@ private:
      * @return true wenn die Kachel betreten werden darf, sonst false
      */
     bool isTileWalkable(const MapCoords& mapCoords, Building* sourceBuilding,
-                        Building* destinationBuilding, Building* buildingToUseCatchmentArea,
+                        Building* destinationBuilding, CatchmentAreaIterator* catchmentAreaIterator,
                         bool useStreetOnly, bool& insideSourceOrDestinationBuilding) const;
 
 };
