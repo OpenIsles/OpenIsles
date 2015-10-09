@@ -56,12 +56,6 @@ Colony* Game::getColony(const Player* player, const Isle* isle) const {
     return iter->second;
 }
 
-Colony* Game::getColony(const MapObjectFixed* mapObject) const {
-    const MapTile* mapTile = map->getMapTileAt(mapObject->getMapCoords());
-
-    return getColony(mapTile->player, mapTile->isle);
-}
-
 Colony* Game::getColony(const MapCoords& mapCoords) const {
     const MapTile* mapTile = map->getMapTileAt(mapCoords);
     if (mapTile == nullptr) {
@@ -87,6 +81,7 @@ Harvestable* Game::addHarvestable(
     harvestable->setMapCoords(mapCoords);
     harvestable->setMapObjectType(mapObjectType);
     harvestable->setView(view);
+    harvestable->setColony(getColony(mapCoords));
     harvestable->setAge(initAge);
 
     // Objekt in die Liste aufnehmen.
@@ -138,7 +133,10 @@ Structure* Game::addStructure(
 #endif
     }
 
-    Colony* colony = context->game->getColony(structure); // Colony kann erst gefunden werden, wenn addOfficeCatchmentAreaToMap() aufgerufen wurde
+    // Colony kann erst gefunden werden, wenn addOfficeCatchmentAreaToMap() aufgerufen wurde
+    Colony* colony = getColony(mapCoords);
+    structure->setColony(colony);
+
     // TODO Lagerkapazitäterhöhung über Config lösen
     if (mapObjectType->name == "office1") {
         colony->increaseGoodsCapacity(30);
@@ -174,6 +172,7 @@ Street* Game::addStreet(const MapCoords& mapCoords, const MapObjectType* mapObje
     street->setMapObjectType(mapObjectType);
     street->setPlayer(player);
     street->setView(view);
+    street->setColony(getColony(mapCoords));
     street->streetConnections = streetConnections;
 
     // Objekt in die Liste aufnehmen.
@@ -195,7 +194,7 @@ void Game::addInhabitantsToBuilding(Building* building, char amount) {
 
     building->inhabitants += amount;
 
-    Colony* colony = getColony(building);
+    Colony* colony = building->getColony();
     colony->population += amount;
 }
 

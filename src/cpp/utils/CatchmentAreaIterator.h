@@ -3,6 +3,7 @@
 
 #include <algorithm>
 #include <functional>
+#include "game/Colony.h"
 #include "map/coords/MapCoords.h"
 
 class Building;
@@ -18,6 +19,20 @@ private:
      */
     std::vector<MapCoords> mapCoordsInCatchmentArea;
 
+    /**
+     * @brief Map-Koordinaten im Zentrum (= Map-Koordinaten des Gebäudes, um das der Einzugsbereich geht)
+     */
+    MapCoords mapCoordsCentered;
+
+    /**
+     * @brief Siedlung, die zum Einzugsbereich gehört.
+     *
+     * Achtung: Ein Einzugsbereich kann theoretisch über zwei oder noch mehr Siedlungen gehen, praktisch gehört
+     * er aber immer zur Siedlung, in der das Gebäude steht, um das er geht.
+     * TODO Einzugsbereich kann durch Inselgrenze oder gegnerische angrenzende Siedlung beschnitten sein.
+     */
+    const Colony* colony;
+
 public:
     /**
      * @brief Konstruktur.
@@ -26,6 +41,18 @@ public:
      * @param ignoreBuilding `true`, um die Kacheln, auf denen das Gebäude steht, auszunehmen
      */
     CatchmentAreaIterator(const Building& building, bool ignoreBuilding);
+
+    const std::vector<MapCoords>& getMapCoordsInCatchmentArea() const {
+        return mapCoordsInCatchmentArea;
+    }
+
+    const MapCoords& getMapCoordsCentered() const {
+        return mapCoordsCentered;
+    }
+
+    const Colony* getColony() const {
+        return colony;
+    }
 
     /**
      * @brief Führt das Iterieren durch. Als Parameter wird ein Callback erwartet, der pro Durchlauf aufgerufen wird.

@@ -1,5 +1,7 @@
 #include <gtest/gtest.h>
+#include <unordered_map>
 #include <unordered_set>
+#include "game/Colony.h"
 #include "map/Building.h"
 #include "utils/CatchmentAreaIterator.h"
 #include "utils/RectangleData.h"
@@ -13,25 +15,43 @@ TEST(CatchmentAreaIteratorTest, noCatchmentArea) {
     MapObjectType mapObjectType;
     mapObjectType.catchmentArea = nullptr;
 
+    std::unordered_map<std::string, Good> allGoods;
+    Colony colony(allGoods);
+
     Building building;
     building.setMapObjectType(&mapObjectType);
     building.setMapCoords({40, 50});
     building.setView(Direction::SOUTH);
+    building.setColony(&colony);
 
     // Testdurchführung
-    CatchmentAreaIterator catchmentAreaIteratorFalse(building, false);
-    catchmentAreaIteratorFalse.iterate([](const MapCoords& mapCoords) {
-        FAIL(); // leerer Einzugsbereich. iterate() darf kein Mal aufgerufen werden!
-    });
-    ASSERT_FALSE(catchmentAreaIteratorFalse.contains({40, 50}));
-    ASSERT_FALSE(catchmentAreaIteratorFalse.contains({40, 52}));
+    {
+        CatchmentAreaIterator catchmentAreaIteratorFalse(building, false);
 
-    CatchmentAreaIterator catchmentAreaIteratorTrue(building, true);
-    catchmentAreaIteratorTrue.iterate([](const MapCoords& mapCoords) {
-        FAIL(); // leerer Einzugsbereich. iterate() darf kein Mal aufgerufen werden!
-    });
-    ASSERT_FALSE(catchmentAreaIteratorTrue.contains({40, 50}));
-    ASSERT_FALSE(catchmentAreaIteratorTrue.contains({40, 52}));
+        ASSERT_EQ(MapCoords(40, 50), catchmentAreaIteratorFalse.getMapCoordsCentered());
+        ASSERT_EQ(&colony, catchmentAreaIteratorFalse.getColony());
+
+        catchmentAreaIteratorFalse.iterate([](const MapCoords& mapCoords) {
+            FAIL(); // leerer Einzugsbereich. iterate() darf kein Mal aufgerufen werden!
+        });
+
+        ASSERT_FALSE(catchmentAreaIteratorFalse.contains({40, 50}));
+        ASSERT_FALSE(catchmentAreaIteratorFalse.contains({40, 52}));
+    }
+
+    {
+        CatchmentAreaIterator catchmentAreaIteratorTrue(building, true);
+
+        ASSERT_EQ(MapCoords(40, 50), catchmentAreaIteratorTrue.getMapCoordsCentered());
+        ASSERT_EQ(&colony, catchmentAreaIteratorTrue.getColony());
+
+        catchmentAreaIteratorTrue.iterate([ ](const MapCoords& mapCoords) {
+            FAIL(); // leerer Einzugsbereich. iterate() darf kein Mal aufgerufen werden!
+        });
+
+        ASSERT_FALSE(catchmentAreaIteratorTrue.contains({40, 50}));
+        ASSERT_FALSE(catchmentAreaIteratorTrue.contains({40, 52}));
+    }
 }
 
 

@@ -111,12 +111,11 @@ private:
      * Handelt es sich bei dem Gebäude um ein Lagergebäude, wird der passende Slot in der Kolonie zurückgegeben,
      * ansonsten wird der passende Slot `input` oder `input2` vom Gebäude zurückgegeben.
      *
-     * @param context (Dependency)
      * @param building Gebäude, das das Ziel des Trägers ist
      * @param good Gut, das wir ausladen wollen
      * @return GoodsSlot, in welchen die Waren ausgeladen werden sollten
      */
-    GoodsSlot* findGoodsSlotToUnloadTo(const Context& context, Building* building, const Good* good);
+    GoodsSlot* findGoodsSlotToUnloadTo(Building* building, const Good* good);
 };
 
 #endif

@@ -184,7 +184,7 @@ FindBuildingToGetGoodsFromResult EconomicsMgr::findBuildingToGetGoodsFrom(Buildi
 
         // Bin ich ein Lagergebäude?
         if (isStorageBuilding) {
-            Colony* colony = context->game->getColony(building);
+            Colony* colony = building->getColony();
 
             GoodsSlot* buildingThereOutputProductionSlot = &buildingThere->productionSlots.output;
 
@@ -217,7 +217,7 @@ FindBuildingToGetGoodsFromResult EconomicsMgr::findBuildingToGetGoodsFrom(Buildi
 
         // Ist das Zielgebäude ein Lagergebäude? Produktionsgebäuden können sich Waren auch von dort holen
         if (isStorgeBuildingThere) {
-            Colony* colony = context->game->getColony(buildingThere); // TODO Es sollte getColony(buildingThere) == getColony(building) gelten, da Kolonie-übergreifend eh nix gehen darf.
+            Colony* colony = buildingThere->getColony(); // TODO Es sollte buildingThere->getColony() == building->getColony() gelten, da Kolonie-übergreifend eh nix gehen darf.
 
             bool goods1CanBePickedUpFromStorage = false;
             bool goods2CanBePickedUpFromStorage = false;

@@ -48,7 +48,7 @@ GuiColonyGoodsWidget::~GuiColonyGoodsWidget() {
 void GuiColonyGoodsWidget::onSelectedMapBuildingChanged(const Building* newSelectedBuilding) {
     assert(newSelectedBuilding != nullptr);
 
-    colony = context->game->getColony(newSelectedBuilding);
+    colony = newSelectedBuilding->getColony();
     assert(colony != nullptr);
 
     for (auto iter = guiGoodsSlotElements.cbegin(); iter != guiGoodsSlotElements.cend(); iter++) {
@@ -65,7 +65,7 @@ void GuiColonyGoodsWidget::renderElement(IRenderer* renderer) {
     getWindowCoords(windowX, windowY);
 
     const Building* selectedBuilding = reinterpret_cast<const Building*>(context->game->getMap()->getSelectedMapObject());
-    Colony* colony = context->game->getColony(selectedBuilding);
+    const Colony* colony = selectedBuilding->getColony();
     context->guiMgr->drawPanelHeader(windowX, windowY, colony->name, nullptr);
 
     // Waren

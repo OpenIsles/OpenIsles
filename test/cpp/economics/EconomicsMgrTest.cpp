@@ -50,7 +50,7 @@ TEST_F(EconomicsMgrTest, updateCarrier) {
     // errechneten Koordinaten auf. Dies ist der maximale Fehler, den die Tests erlauben.
     const double allowedCoordsError = 0.01;
 
-    Colony* colony = game->getColony(office1);
+    Colony* colony = office1->getColony();
     const Good* cattleGood = configMgr->getGood("cattle");
 
     // Lager voll machen

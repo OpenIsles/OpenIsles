@@ -6,6 +6,7 @@
 #endif
 
 #include "Context.h"
+#include "game/Colony.h"
 #include "game/Player.h"
 #include "graphics/mgr/IGraphicsMgr.h"
 #include "map/coords/MapCoords.h"
@@ -148,6 +149,11 @@ protected:
      */
     FourthDirection view;
 
+    /**
+     * @brief Kolonie, in der sich das Objekt befindet
+     */
+    Colony* colony;
+
 public:
     /**
      * @brief Helper, der je nach Map-Objekt-Typ eine konkrete Instanz von `MapObjectFixed` erstellt.
@@ -186,6 +192,18 @@ public:
 
     void setView(const FourthDirection& view) {
         this->view = view;
+    }
+
+    Colony* getColony() {
+        return colony;
+    }
+
+    const Colony* getColony() const {
+        return colony;
+    }
+
+    void setColony(Colony* colony) {
+        this->colony = colony;
     }
 };
 

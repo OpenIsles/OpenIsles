@@ -163,14 +163,6 @@ public:
     Colony* getColony(const Player* player, const Isle* isle) const;
 
     /**
-     * @brief Liefert die Siedlung zurück, in der ein bestimmtes MapObject sich befindet.
-     *
-     * @param mapObject MapObject
-     * @return Colony oder `nullptr`, wenn keine Siedlung da ist
-     */
-    Colony* getColony(const MapObjectFixed* mapObject) const;
-
-    /**
      * @brief Liefert die Siedlung an einer bestimmten Kachel zurück
      *
      * @param mapObject MapObject

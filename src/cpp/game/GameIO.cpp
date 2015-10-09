@@ -188,6 +188,15 @@ void GameIO::loadMap(
     map->screenView = Direction::SOUTH;
 }
 
+/* TODO Zugehörigkeit "Kolonie <-> Map-Kachel" ins Savegame legen!
+ *
+ * Hintergrund: Da mit MapObjectFixed.getColony() nun jedes Gebäude weiß, zu welcher Kolonie es gehört, muss beim
+ * Setzen eines neuen Objekts klar sein, welche Kolonie auf welcher Kachel ist.
+ * Wir haben aktuell kein Problem, weil in allen Savegames die Kontore und Marktplätze als erstes kommen.
+ * Doof wirds, wenn das mal nicht so ist, weil dann Gebäude eine nullptr-Colony im MapObjectFixed stehen haben,
+ * weil der zugehörige Marktplatz/Kontor erst später kommt und das Gebäude das nicht mehr mitkriegt!
+ */
+
 void GameIO::loadColonies(Game* game, const ConfigMgr* configMgr, rapidxml::xml_node<>* objectgroupColoniesNode) {
     Map* map = game->getMap();
 

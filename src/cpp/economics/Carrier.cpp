@@ -104,7 +104,7 @@ bool Carrier::updateObject(const Context& context) {
                     GoodsSlot* goodsSlotToTakeFrom;
                     if (targetBuilding->isStorageBuilding()) {
                         // Lagergebäude: Waren aus der Siedlung aufladen
-                        Colony* colony = context.game->getColony(targetBuilding);
+                        Colony* colony = targetBuilding->getColony();
                         goodsSlotToTakeFrom = &colony->getGoods(carriedGoods.good);
                     } else {
                         // Waren aus dem Gebäude aufladen
@@ -117,7 +117,7 @@ bool Carrier::updateObject(const Context& context) {
                     // verloren. Wir müssen hier in Ganzzahlen denken: Haben wir 2,999t Platz, dürfen wir nicht 3t
                     // aufladen, sondern nur 2t.
                     GoodsSlot* goodsSlotWeWillUnloadToLater =
-                        findGoodsSlotToUnloadTo(context, owningBuilding, carriedGoods.good);
+                        findGoodsSlotToUnloadTo(owningBuilding, carriedGoods.good);
                     int remainingCapacityToUnloadLater = (int) (
                         (double) goodsSlotWeWillUnloadToLater->capacity - goodsSlotWeWillUnloadToLater->inventory);
                     if (goodsWeCollect > remainingCapacityToUnloadLater) {
@@ -167,8 +167,7 @@ bool Carrier::updateObject(const Context& context) {
 
                 // Das war Rückweg -> Waren ausladen und Träger zerstören
                 else if (!onOutboundTrip) {
-                    GoodsSlot* goodsSlotToUnloadTo =
-                        findGoodsSlotToUnloadTo(context, owningBuilding, carriedGoods.good);
+                    GoodsSlot* goodsSlotToUnloadTo = findGoodsSlotToUnloadTo(owningBuilding, carriedGoods.good);
                     goodsSlotToUnloadTo->increaseInventory(carriedGoods.inventory);
 
                     deleteMe = true;
@@ -198,12 +197,12 @@ bool Carrier::updateObject(const Context& context) {
     return (!deleteMe);
 }
 
-GoodsSlot* Carrier::findGoodsSlotToUnloadTo(const Context& context, Building* building, const Good* good) {
+GoodsSlot* Carrier::findGoodsSlotToUnloadTo(Building* building, const Good* good) {
     bool isStorageBuilding = building->isStorageBuilding();
 
     // Lagergebäude: Waren der Siedlung gutschreiben
     if (isStorageBuilding) {
-        Colony* colony = context.game->getColony(building);
+        Colony* colony = building->getColony();
         return &colony->getGoods(good);
     }
         // Produktionsgebäude: Gucken, in welchen Slot die Waren müssen

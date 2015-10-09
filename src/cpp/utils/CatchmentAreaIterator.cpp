@@ -2,7 +2,11 @@
 #include "map/MapObjectType.h"
 #include "utils/CatchmentAreaIterator.h"
 
-CatchmentAreaIterator::CatchmentAreaIterator(const Building& building, bool ignoreBuilding) {
+CatchmentAreaIterator::CatchmentAreaIterator(const Building& building, bool ignoreBuilding) :
+    mapCoordsCentered(building.getMapCoords()),
+    colony(building.getColony())
+{
+    
     const MapObjectType* mapObjectType = building.getMapObjectType();
 
     // Kein Einzugsbereich. Is ja easy ;-)
@@ -14,15 +18,19 @@ CatchmentAreaIterator::CatchmentAreaIterator(const Building& building, bool igno
     int catchmentAreaRadius = std::max(catchmentArea.width, catchmentArea.height); // TODO sehr optimierungsbedürftig, dafür funktionierts erstmal in allen Ansichten
 
     // TODO Sehr hässlich, aber tuts erstmal sicher, ohne Gefahr.
-    const MapCoords& mapCoords = building.getMapCoords();
-    for (int mapY = mapCoords.y() - catchmentAreaRadius; mapY <= mapCoords.y() + catchmentAreaRadius; mapY++) {
-        for (int mapX = mapCoords.x() - catchmentAreaRadius; mapX <= mapCoords.x() + catchmentAreaRadius; mapX++) {
+    for (int mapY = mapCoordsCentered.y() - catchmentAreaRadius;
+         mapY <= mapCoordsCentered.y() + catchmentAreaRadius; 
+         mapY++) {
+        
+        for (int mapX = mapCoordsCentered.x() - catchmentAreaRadius;
+             mapX <= mapCoordsCentered.x() + catchmentAreaRadius; 
+             mapX++) {
 
             if (ignoreBuilding) {
-                if ((mapX >= building.getMapCoords().x()) &&
-                    (mapX < building.getMapCoords().x() + building.getMapWidth()) &&
-                    (mapY >= building.getMapCoords().y()) &&
-                    (mapY < building.getMapCoords().y() + building.getMapHeight())) {
+                if ((mapX >= mapCoordsCentered.x()) &&
+                    (mapX < mapCoordsCentered.x() + building.getMapWidth()) &&
+                    (mapY >= mapCoordsCentered.y()) &&
+                    (mapY < mapCoordsCentered.y() + building.getMapHeight())) {
 
                     continue;
                 }
