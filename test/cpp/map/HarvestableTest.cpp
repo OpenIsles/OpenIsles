@@ -20,9 +20,6 @@ protected:
         northernForest2 = game->addHarvestable(
             MapCoords(30, 31), configMgr->getMapObjectType("northern-forest2"), southView);
         northernForest2->setAge(1.3);
-
-        // Spielgeschwindigkeit auf 1x setzen. Die Tests hier sind genau getimt.
-        context.game->setSpeed(1);
     }
 };
 

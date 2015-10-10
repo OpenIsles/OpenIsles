@@ -30,9 +30,6 @@ protected:
         game->addStreet(MapCoords(26, 26), cobbledStreet, southView, player, StreetConnections("1000"));
         cattleFarm = dynamic_cast<Building*>(game->addStructure(
             MapCoords(26, 27), configMgr->getMapObjectType("cattle-farm"), southView, player));
-
-        // Spielgeschwindigkeit auf 1x setzen. Die Tests hier sind genau getimt.
-        context.game->setSpeed(1);
     }
 
 };
