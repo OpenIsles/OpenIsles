@@ -5,8 +5,10 @@
 #include <gtest/gtest.h>
 #endif
 
+#include <string>
 #include <unordered_set>
 #include "economics/Carrier.h"
+#include "economics/InCatchmentAreaFinder.h"
 #include "game/ProductionSlots.h"
 #include "map/Structure.h"
 
@@ -88,6 +90,17 @@ private:
      * @param context (Dependency)
      */
     void sendNewCarrier(const Context& context);
+
+    /**
+     * @brief Legt einen Träger auf der Map an und zuweist ihm dem Gebäude zu.
+     *
+     * @param context (Dependency)
+     * @param result Ergebnis-Struktur, die zu verwendende Route und zu holendes Gut enthält
+     * @param graphicSetForCarrierAnimation GraphicSet-Key, der für die Animation des Träger benutzt werden soll
+     */
+    void addCarrierMapObject(const Context& context,
+                             const InCatchmentAreaFinderResult& result,
+                             std::string graphicSetForCarrierAnimation);
 
 };
 

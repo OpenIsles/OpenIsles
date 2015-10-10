@@ -12,10 +12,12 @@ set(COMMON_SOURCE_FILES
     src/cpp/config/ConfigMgr.h
     src/cpp/config/Good.h
     src/cpp/config/MapTileType.h
-    src/cpp/economics/EconomicsMgr.cpp
-    src/cpp/economics/EconomicsMgr.h
     src/cpp/economics/Carrier.cpp
     src/cpp/economics/Carrier.h
+    src/cpp/economics/EconomicsMgr.cpp
+    src/cpp/economics/EconomicsMgr.h
+    src/cpp/economics/InCatchmentAreaFinder.cpp
+    src/cpp/economics/InCatchmentAreaFinder.h
     src/cpp/game/CatchmentArea.cpp
     src/cpp/game/CatchmentArea.h
     src/cpp/game/Colony.cpp

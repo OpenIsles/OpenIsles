@@ -8,6 +8,7 @@
 
 class Building;
 
+// TODO Gebäude an den Rändern korrekt behandeln
 /**
  * @brief Iterator, der alle Kacheln iteriert, die in einem Einzugsbereich um ein Gebäude liegen.
  */
