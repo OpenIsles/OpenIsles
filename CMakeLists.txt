@@ -158,7 +158,9 @@ set(TEST_FILES
     test/cpp/GameTest.cpp
     test/cpp/GameTest.h
     test/cpp/config/ConfigMgrTest.cpp
+    test/cpp/economics/CarrierTest.cpp
     test/cpp/economics/EconomicsMgrTest.cpp
+    test/cpp/economics/InCatchmentAreaFinderGoodsPriorityTest.cpp
     test/cpp/game/CatchmentAreaTest.cpp
     test/cpp/graphics/GraphicSetTest.cpp
     test/cpp/map/buildqueue/BuildOperationTest.cpp

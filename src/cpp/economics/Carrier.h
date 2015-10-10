@@ -21,6 +21,8 @@ class Carrier : public MapObjectMoving {
 
 #ifdef TESTS_ENABLED
     FRIEND_TEST(EconomicsMgrTest, updateCarrier);
+    FRIEND_TEST(CarrierTest, checkThatCarrierIsSentToFullerInventoryFirst);
+    FRIEND_TEST(CarrierTest, checkThatCarrierIsSentByLastCollectionWhenSameInventory);
 #endif
     friend class EconomicsMgr; // EconomicsMgr soll zum Aktualisieren des Trägers einfach zugreifen können
     friend class GuiMap; // GuiMap soll zum Rendern des Trägers einfach zugreifen können
