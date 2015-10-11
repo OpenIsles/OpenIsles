@@ -161,6 +161,7 @@ set(TEST_FILES
     test/cpp/economics/CarrierTest.cpp
     test/cpp/economics/EconomicsMgrTest.cpp
     test/cpp/economics/InCatchmentAreaFinderGoodsPriorityTest.cpp
+    test/cpp/economics/InCatchmentAreaFinderInvisibleGoodsTest.cpp
     test/cpp/game/CatchmentAreaTest.cpp
     test/cpp/graphics/GraphicSetTest.cpp
     test/cpp/map/buildqueue/BuildOperationTest.cpp

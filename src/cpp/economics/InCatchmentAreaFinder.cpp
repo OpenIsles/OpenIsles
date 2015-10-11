@@ -50,7 +50,7 @@ InCatchmentAreaFinderResult InCatchmentAreaFinder::findBuildingWithGoods(
      */
 
 
-    // Liste aller Gebäude innerhalb anfertigen, die als Ziel in Frage kommen
+    // Liste aller Gebäude innerhalb des Einzugsbereichs anfertigen, die als Ziel in Frage kommen
     std::list<PotentialInCatchmentAreaFinderResult> potentialResults;
 
     std::set<Building*> buildingChecked; // Gebäude in dieses Set aufnehmen, wenn wir es schon behandelt haben.
@@ -226,6 +226,87 @@ InCatchmentAreaFinderResult InCatchmentAreaFinder::findBuildingWithGoods(
     potentialResults.sort(resultComparator);
     PotentialInCatchmentAreaFinderResult bestResult = potentialResults.front();
     bestResult.good = bestResult.goodsSlot.good;
+
+    return bestResult;
+}
+
+InCatchmentAreaFinderResult InCatchmentAreaFinder::findMapTileWithInvisibleGood(const Good* invisibleGood) {
+    assert(invisibleGood->invisible == true);
+
+    // Liste aller Kacheln innerhalb des Einzugsbereichs anfertigen, die als Ziel in Frage kommen
+    std::list<PotentialInCatchmentAreaFinderResult> potentialResults;
+
+    Game* game = context->game;
+    Map* map = game->getMap();
+    AStar aStar(context, catchmentAreaIterator, true, false, false);
+
+    catchmentAreaIterator->iterate([&](const MapCoords& mapCoords) {
+        // Kachel frei?
+        MapTile* mapTile = map->getMapTileAt(mapCoords);
+        if (mapTile == nullptr) {
+            return;
+        }
+
+        if (mapTile->mapObjectFixed != nullptr) {
+            return;
+        }
+
+        // Checken, ob die Kachel das richtige Gut anbietet
+        if (mapTile->getMapTileConfig()->goodToHarvest == nullptr ||
+            mapTile->getMapTileConfig()->goodToHarvest != invisibleGood) {
+
+            return;
+        }
+
+        // Diese Kachel erntet schon ein anderer Träger ab. Verhindern, dass zwei Träger zum selben Ziel
+        // unterwegs sind.
+        if (mapTile->harvestBusy) {
+            return;
+        }
+
+        // Waren zum Abholen da?
+        if (game->getTicks() < mapTile->lastHarvestTicks + MapTile::HARVEST_REFRESH_TICKS) {
+            return;
+        }
+
+        // Checken, ob eine Route dahin existiert
+        const MapCoords& mapCoordsSource = catchmentAreaIterator->getMapCoordsCentered();
+        const MapCoords& mapCoordsDestination = mapCoords;
+
+        Route route = aStar.getRoute(mapCoordsSource, mapCoordsDestination);
+        if (!route.routeExists()) {
+            return; // gibt keinen Weg dahin
+        }
+
+        // Juhuu! Diese Kachel kommt in Frage
+
+        PotentialInCatchmentAreaFinderResult potentialResult;
+        potentialResult.foundSomething = true;
+        potentialResult.mapCoords = mapCoords;
+        potentialResult.route = route;
+        potentialResult.lastGoodsCollections = mapTile->lastHarvestTicks;
+
+        potentialResults.push_back(potentialResult);
+    });
+
+    // Keine Ziele? Ok, dann sind wir fertig
+    if (potentialResults.empty()) {
+        return InCatchmentAreaFinderResult();
+    }
+
+    // Liste sortieren und "besten" Treffer wählen:
+    auto resultComparator = [&](const PotentialInCatchmentAreaFinderResult& result1,
+                                const PotentialInCatchmentAreaFinderResult& result2) {
+
+        // Kachel, die länger nicht abgeerntet wurde, hat Vorrang
+        return result1.lastGoodsCollections < result2.lastGoodsCollections;
+
+        // TODO Bei Gleichheit eine Form von Zufall einbauen, sonst grasen alle Schafe von oben nach unten die Karte ab. Das sieht doof aus.
+        // Wichtig: Der "Zufall" muss vorhersehbar sein, sonst können wir nicht testen.
+    };
+
+    potentialResults.sort(resultComparator);
+    PotentialInCatchmentAreaFinderResult bestResult = potentialResults.front();
 
     return bestResult;
 }

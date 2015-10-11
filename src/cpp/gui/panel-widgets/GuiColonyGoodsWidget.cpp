@@ -20,6 +20,10 @@ GuiColonyGoodsWidget::GuiColonyGoodsWidget(const Context* const context) : GuiPa
     for (auto iter = allGoods.cbegin(); iter != allGoods.cend(); iter++, i++) {
         const Good* good = *iter;
 
+        if (good->invisible) {
+            continue;
+        }
+
         GuiGoodsSlotElement* guiGoodsSlotElement = new GuiGoodsSlotElement(context);
         guiGoodsSlotElement->setPosition(x, y);
         guiGoodsSlotElement->setDisplayBar(true);

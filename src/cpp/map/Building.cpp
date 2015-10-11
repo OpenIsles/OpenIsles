@@ -90,10 +90,35 @@ void Building::sendNewCarrier(const Context& context) {
     }
 
     else {
+        // TODO Träger über Config steuern
+        // TODO Rinderfarm sollte später Rinder haben, keine Schafe ;-)
+        if (mapObjectType->name == "sheep-farm" || mapObjectType->name == "cattle-farm") {
+            const Good* goodGrassland = context.configMgr->getGood("grassland");
+
+            result = inCatchmentAreaFinder.findMapTileWithInvisibleGood(goodGrassland);
+            if (!result) {
+                return;
+            }
+
+            const MapCoords& firstHopOnRoute = result.route.front();
+
+            Carrier* carrier = new Carrier(this, result.route, goodGrassland, true);
+            carrier->setLastUpdateTicks(context.game->getTicks());
+            carrier->setMapCoords((DoubleMapCoords) firstHopOnRoute);
+            carrier->updateCurrentMovingDirection();
+            carrier->setAnimations(*context.graphicsMgr->getGraphicSet("sheep"));
+
+            context.game->getMap()->addMapObject(carrier);
+            carriers.insert(carrier);
+
+            // Slot markieren, dass nicht ein zweiter Träger hinläuft.
+            context.game->getMap()->getMapTileAt(result.mapCoords)->harvestBusy = true;
+        }
+
         // TODO weitere Fälle kommen später mal...
 
         // TODO Arzt/Feuerwehr: suchen unsichtbare Güter "Pest" und "Feuer" an den Wohngebäuden (vermutl. brennen auch andere Gebäude)
-        // TODO Fischer/Schafe/Rinder: suchen Weideland bzw. Fischgründe
+        // TODO Fischer: suchen Fischgründe
         // TODO Jägerhütte: Jäger sucht Wildtiere
         // TODO Steinmetz: sucht einen Steinbruch
 

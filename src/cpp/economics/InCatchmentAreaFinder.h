@@ -80,6 +80,20 @@ public:
      */
     InCatchmentAreaFinderResult findBuildingWithGoods(std::list<const Good*> goods);
 
+    /**
+     * @brief Sucht im Einzugsbereich nach der "besten" Map-Kachel, die ein bestimmtes unsichtbares Gut
+     * zur Verfügung stellt.
+     *
+     * "bestes" bedeutet hierbei:
+     *  - Grundsätzlich kommen nur Kacheln in Frage, die seit einer bestimmten Zeit nicht abgeerntet wurden.
+     *  - Ansonsten wird die Kachel genommen, die am längsten nicht abgeerntet wurde.
+     *
+     * @param invisibleGood benötiges unsichtbares Gut
+     * @return Ergebnisstruktur.
+     * `mapCoords` enthält die Zielkachel und `route` die Route zur Zielkachel.
+     */
+    InCatchmentAreaFinderResult findMapTileWithInvisibleGood(const Good* invisibleGood);
+
 private:
     /**
      * @brief Interner Helper

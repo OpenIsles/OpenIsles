@@ -501,6 +501,9 @@ void GuiMap::renderTile(const MapCoords& mapCoords) {
             continue;
         }
 
+        // TODO Carrier können später MEHRERE Animationen haben ("stehen und ernten", "laufen").
+        // TODO Carrier sollte die untenstehende Logik als getCurrentAnimationFrame(const FourDirection& screenView) kapseln
+
         // Übersetzung von "Laufrichtung" + "aktuelle Ansicht" in korrekte Animation
         unsigned char animViewIndex = (10 - carrier->getCurrentMovingDirection() + screenView) % 8;
 

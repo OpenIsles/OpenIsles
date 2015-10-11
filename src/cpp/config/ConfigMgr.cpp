@@ -36,11 +36,13 @@ void ConfigMgr::loadGoods() {
         const char* name = goodNode->first_attribute("name", 4, true)->value();
         const char* label = goodNode->value();
         bool rawMaterial = xmlAttributeToBool(goodNode->first_attribute("raw-material", 12, true), false);
+        bool invisible = xmlAttributeToBool(goodNode->first_attribute("invisible", 9, true), false);
 
         Good& good = goodsMap[name];
         good.name = name;
         good.label = label;
         good.rawMaterial = rawMaterial;
+        good.invisible = invisible;
 
         goodsList.push_back(&good);
     }
@@ -193,6 +195,11 @@ void ConfigMgr::loadTilesConfig() {
         MapTileConfig& mapTileConfig = mapTileConfigs[tileName];
         mapTileConfig.tileName = std::string(tileName);
         mapTileConfig.mapTileType = mapTileType;
+
+        // TODO konfigurierbar machen
+        if (mapTileConfig.tileName == "grass") {
+            mapTileConfig.goodToHarvest = getGood("grassland");
+        }
 
         for (rapidxml::xml_node<>* tmxTileNode = tileNode->first_node("tmx-tile", 8, true); tmxTileNode != nullptr;
              tmxTileNode = tmxTileNode->next_sibling("tmx-tile", 8, true)) {

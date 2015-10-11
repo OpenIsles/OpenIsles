@@ -64,6 +64,10 @@ void AbstractGraphicsMgr::loadGraphics() {
     for (auto iter = allGoods.cbegin(); iter != allGoods.cend(); iter++) {
         const Good* good = *iter;
 
+        if (good->invisible) {
+            continue;
+        }
+
         loadStaticGraphicSet("goods-icon/" + good->name,
                              std::string("data/img/goods/icon/" + good->name + ".png").c_str());
         loadStaticGraphicSet("goods-marketplace-icon/" + good->name,
@@ -140,6 +144,8 @@ void AbstractGraphicsMgr::loadGraphics() {
     loadStaticAnimationGraphicSetWith8Views("carrier", "data/img/animations/carrier.png", 31);
     loadStaticAnimationGraphicSetWith8Views("cart-without-cargo", "data/img/animations/cart-without-cargo.png", 32);
     loadStaticAnimationGraphicSetWith8Views("cart-with-cargo", "data/img/animations/cart-with-cargo.png", 32);
+    loadStaticAnimationGraphicSetWith8Views("sheep", "data/img/animations/sheep0.png", 1);
+    // TODO weitere Schaf-Grafiken laden und als State im selben GraphicSet halten
 
     loadHarvestablesGraphicSet("mapobjects/northern-forest1", "data/img/harvestables/northern-forest1.png", 5);
     loadHarvestablesGraphicSet("mapobjects/northern-forest2", "data/img/harvestables/northern-forest2.png", 5);

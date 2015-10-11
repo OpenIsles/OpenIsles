@@ -263,10 +263,6 @@ int main(int argc, char** argv) {
         MapCoords mouseCurrentMapCoords =
             MapCoordUtils::getMapCoordsUnderMouse(*map, context.mouseCurrentX, context.mouseCurrentY);
 
-        MapCoords mapCoordsTopLeft, mapCoordsTopRight, mapCoordsBottomLeft, mapCoordsBottomRight;
-        MapCoordUtils::getMapCoordsInScreenEdges(
-            *map, mapCoordsTopLeft, mapCoordsTopRight, mapCoordsBottomLeft, mapCoordsBottomRight);
-
         // Debug-Infos vorbereiten, damit wir sie später einfach nur ausgeben können
         debugOutput[0] = "PerfCounters: events avg " + toString(performanceCounterEvents.getMillisAvg()) +
                          ", current = " + toString(performanceCounterEvents.getMillisCurrent()) +
@@ -279,11 +275,7 @@ int main(int argc, char** argv) {
             toString(mapCoordsCentered.x()) + ", " + toString(mapCoordsCentered.y()) + "), zoom = " +
             toString(screenZoom) + ", view = " + toString(screenView);
 
-        debugOutput[2] = "ScreenEdges: topLeft = (" +
-            toString(mapCoordsTopLeft.x()) + ", " + toString(mapCoordsTopLeft.y()) + "), topRight = (" +
-            toString(mapCoordsTopRight.x()) + ", " + toString(mapCoordsTopRight.y()) + "), bottomLeft = (" +
-            toString(mapCoordsBottomLeft.x()) + ", " + toString(mapCoordsBottomLeft.y()) + "), bottomRight = (" +
-            toString(mapCoordsBottomRight.x()) + ", " + toString(mapCoordsBottomRight.y()) + ")";
+        debugOutput[2] = "Game-Ticks: " + toString(game->getTicks());
 
         debugOutput[3] = "mouse = (" +
             toString(context.mouseCurrentX) + ", " + toString(context.mouseCurrentY) + "), screen = (" +

@@ -467,7 +467,7 @@
             <output good="cattle" capacity="4" rate="2.3" />
         </production-slots>
         <inhabitants>2</inhabitants>
-        <max-carriers>3</max-carriers>
+        <max-carriers>2</max-carriers>
     </building>
 
     <building name="hunters-hut" width="1" height="1">

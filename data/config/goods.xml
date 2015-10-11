@@ -17,4 +17,7 @@
     <good name="tools">Werkzeug</good>
     <good name="wood">Holz</good>
     <good name="bricks">Ziegel</good>
+
+    <!-- unsichtbare Güter, die für die Wirtschaft notwendig sind, aber der Nutzer nicht sehen soll -->
+    <good name="grassland" invisible="true">Weideland</good>
 </goods>

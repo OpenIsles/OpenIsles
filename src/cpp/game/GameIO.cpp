@@ -223,8 +223,12 @@ void GameIO::loadColonies(Game* game, const ConfigMgr* configMgr, rapidxml::xml_
         const std::unordered_map<std::string, Good>& allGoods = configMgr->getAllGoods();
         for (auto iter = allGoods.cbegin(); iter != allGoods.cend(); iter++) {
             const Good& good = iter->second;
-            std::string xmlAttributeName = "goods-" + good.name;
 
+            if (good.invisible) {
+                continue;
+            }
+
+            std::string xmlAttributeName = "goods-" + good.name;
             const char* xmlAttributeValue = getPropertyValueFromPropertiesNode(propertiesNode, xmlAttributeName.c_str());
             if (xmlAttributeValue != nullptr) {
                 colony->getGoods(&good).inventory = std::atoi(xmlAttributeValue);

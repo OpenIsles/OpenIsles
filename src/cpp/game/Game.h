@@ -1,6 +1,10 @@
 #ifndef _GAME_H
 #define _GAME_H
 
+#ifdef TESTS_ENABLED
+#include <gtest/gtest.h>
+#endif
+
 #include <map>
 #include <vector>
 #include "game/Colony.h"
@@ -51,6 +55,11 @@ class Game : public ContextAware {
 
     // "Spiel laden" darf direkt auf die Interna zugreifen
     friend class GameIO;
+
+#ifdef TESTS_ENABLED
+    FRIEND_TEST(InCatchmentAreaFinderInvisibleGoodsTest, checkThatRouteToGrasslandIsFound);
+    FRIEND_TEST(InCatchmentAreaFinderInvisibleGoodsTest, checkThatNoRouteIsFoundWhenAllWasHarvested);
+#endif
 
 private:
     /**

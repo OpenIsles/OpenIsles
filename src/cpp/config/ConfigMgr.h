@@ -78,6 +78,12 @@ struct MapTileConfig {
      */
     MapTileType mapTileType;
 
+    /**
+     * @brief optional kann eine Kachel ein unsichtbares Gut zur Verfügung stellen, was bestimmte Carrier abernten,
+     * z.&nbsp;B. Schafe fressen Weideland auf Gras-Kacheln, um in der Schaffarm Wolle herzustellen.
+     */
+    const Good* goodToHarvest; // TODO überprüfen, ob man das mit mapTileType koppeln kann/soll
+
 public:
     /**
      * @brief Liefert zurück, ob diese Kachel grundsätzlich für das Drauflaufen (Routing-Algorithmus) und

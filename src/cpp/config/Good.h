@@ -20,10 +20,17 @@ public:
     std::string label;
 
     /**
-     * `true`, wenn das Gut ein Rohstoff ist.
+     * @brief `true`, wenn das Gut ein Rohstoff ist.
      * Rohstoffe werden nur vom Marktkarren abgeholt, wenn das Gebäudelager voll ist.
      */
     bool rawMaterial;
+
+    /**
+     * @brief `true` für unsichtbares Gut.
+     * Unsichtbare Güter werden für die Spiellogik gebraucht, haben aber kein Gütersymbol und werden dem Benutzer
+     * auch nicht angezeigt.
+     */
+    bool invisible;
 };
 
 #endif
