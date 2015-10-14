@@ -220,7 +220,7 @@ void Game::update(unsigned long millisecondsElapsed) {
 
     // Alle Map-Objekte updaten
     std::list<MapObject*> mapObjectsToDelete;
-    std::list<MapObject*> mapObjects = map->getMapObjects();
+    const std::list<MapObject*>& mapObjects = map->getMapObjects();
 
     for (auto iter = mapObjects.rbegin(); iter != mapObjects.rend(); iter++) {
         MapObject* mapObject = *iter;
