@@ -265,7 +265,7 @@ InCatchmentAreaFinderResult InCatchmentAreaFinder::findMapTileWithInvisibleGood(
         }
 
         // Waren zum Abholen da?
-        if (game->getTicks() < mapTile->lastHarvestTicks + MapTile::HARVEST_REFRESH_TICKS) {
+        if (game->getTicks() < mapTile->nextHarvestTicks) {
             return;
         }
 
@@ -284,7 +284,11 @@ InCatchmentAreaFinderResult InCatchmentAreaFinder::findMapTileWithInvisibleGood(
         potentialResult.foundSomething = true;
         potentialResult.mapCoords = mapCoords;
         potentialResult.route = route;
-        potentialResult.lastGoodsCollections = mapTile->lastHarvestTicks;
+
+        // Als Zeitpunkt nehmen wir nextHarvestTicks. Das is nicht, wann zuletzt geerntet wurde, sondern wann das
+        // nächste Mal geerntet werden kann.
+        // - Is aber egal; spart uns ne sinnlose Subtraktion desselben Werts. Wir vergleichen ja nur.
+        potentialResult.lastGoodsCollections = mapTile->nextHarvestTicks;
 
         potentialResults.push_back(potentialResult);
     });

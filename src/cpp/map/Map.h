@@ -74,13 +74,13 @@ public:
     // TODO Bei Bewegung von Träger wird das noch nicht aktualisiert. Wir brauchen die Referenz dann von mehreren Kacheln aus, wenn sich ein Objekt "dazwischen" befindet.
 
     /**
-     * @brief [Zeitpunkt](@ref gameTicks), wann diese Map-Kachel zuletzt "abgeerntet" wurde.
+     * @brief [Zeitpunkt](@ref gameTicks), wann diese Map-Kachel das nächste Mal "abgeerntet" werden kann.
      *
-     * Map-Kacheln haben natürlich Resourcen, die von bestimmten Objekten abgeerntet werden können, z.&nbsp;B.
+     * Map-Kacheln haben natürliche Resourcen, die von bestimmten Objekten abgeerntet werden können, z.&nbsp;B.
      * - Rinder und Schafe fressen auf einer Gras-Kachel und produzieren damit Schlachtvieh und Wolle.
      * - Fischerboote fangen auf einer Wasser-Kachel Fische und produzieren damit Nahrung.
      */
-    unsigned long lastHarvestTicks;
+    unsigned long nextHarvestTicks;
 
     /**
      * @brief Flag, um zu markieren, dass bereits jemand auf dieser Kachel ist, der aberntet bzw. dorthin unterwegs
@@ -95,7 +95,7 @@ public:
         player = nullptr;
         mapObjectFixed = nullptr;
 
-        lastHarvestTicks = 0; // bedeutet hier "niemals"
+        nextHarvestTicks = 0; // am Anfang kann man immer sofort ernten
         harvestBusy = false;
     }
 

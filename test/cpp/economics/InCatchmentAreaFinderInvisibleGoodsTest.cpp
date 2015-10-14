@@ -21,18 +21,30 @@ protected:
 
 
 /**
+ * @brief Testet mit InCatchmentAreaFinder, ob direkt nach Spielstart Grassland verfügbar ist.
+ */
+TEST_F(InCatchmentAreaFinderInvisibleGoodsTest, checkThatAfterGameStartGrasslandCanBeHarvested) {
+    CatchmentAreaIterator catchmentAreaIterator(*sheepFarm, false);
+    InCatchmentAreaFinder inCatchmentAreaFinder(&context, &catchmentAreaIterator);
+
+    InCatchmentAreaFinderResult result = inCatchmentAreaFinder.findMapTileWithInvisibleGood(goodGrassland);
+
+    ASSERT_EQ(true, result.foundSomething);
+}
+
+
+/**
  * @brief Testet InCatchmentAreaFinder, ob die Schaffarm überhaupt eine Route für ein Schaf findet.
  * Wir grasen hierzu alle Felder bis auf eins ab.
  */
 TEST_F(InCatchmentAreaFinderInvisibleGoodsTest, checkThatRouteToGrasslandIsFound) {
     // Testaufbau
-    game->ticks = 500000;
     for (int mapY = 20; mapY <= 40; mapY++) {
         for (int mapX = 20; mapX <= 40; mapX++) {
-            game->getMap()->getMapTileAt({mapX, mapY})->lastHarvestTicks = game->ticks;
+            game->getMap()->getMapTileAt({mapX, mapY})->nextHarvestTicks = 5000;
         }
     }
-    game->getMap()->getMapTileAt({30, 34})->lastHarvestTicks = 0;
+    game->getMap()->getMapTileAt({30, 34})->nextHarvestTicks = 0;
 
     // Testdurchführung
     CatchmentAreaIterator catchmentAreaIterator(*sheepFarm, false);
@@ -53,7 +65,7 @@ TEST_F(InCatchmentAreaFinderInvisibleGoodsTest, checkThatNoRouteIsFoundWhenAllWa
     // Testaufbau
     for (int mapY = 20; mapY <= 40; mapY++) {
         for (int mapX = 20; mapX <= 40; mapX++) {
-            game->getMap()->getMapTileAt({mapX, mapY})->lastHarvestTicks = 0;
+            game->getMap()->getMapTileAt({mapX, mapY})->nextHarvestTicks = 50000;
         }
     }
 
