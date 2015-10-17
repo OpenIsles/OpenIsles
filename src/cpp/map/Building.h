@@ -26,6 +26,18 @@ class Building : public Structure {
 
 public:
     /**
+     * @brief Minimale Verzögerung in [Millisekunden](@ref gameTicks) zwischen Gebäude-Bau und dem Losschicken
+     * des ersten Trägers
+     */
+    static constexpr unsigned int CARRIER_INITIAL_DELAY = 2000;
+
+    /**
+     * @brief Minimale Verzögerung in [Millisekunden](@ref gameTicks) zwischen dem Losschicken von zwei Trägern.
+     */
+    static constexpr unsigned int CARRIER_DELAY = 10000;
+
+public:
+    /**
      * @brief Produktionsslots des Gebäudes
      */
     ProductionSlots productionSlots;
@@ -41,6 +53,12 @@ public:
     std::unordered_set<Carrier*> carriers;
 
     /**
+     * @brief [Zeitpunkt](@ref gameTicks), wann frühestens ein neuer Träger losgeschickt werden kann
+     * Wir nutzen das, um nicht alle Träger gleichzeitig loszuschicken.
+     */
+    unsigned long nextCarrierMinTicks;
+
+    /**
      * @brief [Zeitpunkt](@ref gameTicks), wann zuletzt die Waren bei diesem Gebäude abgeholt wurden
      */
     unsigned long lastGoodsCollections;
@@ -49,6 +67,7 @@ public:
     Building() {
         lastGoodsCollections = 0;
         inhabitants = 0;
+        nextCarrierMinTicks = 0;
     }
 
     virtual ~Building() {
@@ -100,6 +119,18 @@ private:
      */
     void addCarrierMapObject(const Context& context,
                              const InCatchmentAreaFinderResult& result,
+                             std::string graphicSetForCarrierAnimation);
+
+    /**
+     * @brief Legt einen Träger auf der Map an und zuweist ihm dem Gebäude zu.
+     *
+     * @param context (Dependency)
+     * @param route zu verwendende Route
+     * @param good zu holendes Gut
+     * @param graphicSetForCarrierAnimation GraphicSet-Key, der für die Animation des Träger benutzt werden soll
+     */
+    void addCarrierMapObject(const Context& context,
+                             const Route& route, const Good* good,
                              std::string graphicSetForCarrierAnimation);
 
 };

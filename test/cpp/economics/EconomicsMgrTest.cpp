@@ -18,6 +18,9 @@ protected:
 
         office1 = dynamic_cast<Building*>(game->getMap()->getMapObjectFixedAt(MapCoords(28, 18)));
 
+        // keine Wartezeit am Träger einstellen
+        office1->nextCarrierMinTicks = 0;
+
         // Rinderfarm bauen und Zick-Zack-Straße zum Kontor ziehen
         game->addStreet(MapCoords(28, 20), cobbledStreet, southView, player, StreetConnections("0010"));
         game->addStreet(MapCoords(28, 21), cobbledStreet, southView, player, StreetConnections("1010"));

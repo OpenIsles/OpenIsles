@@ -113,10 +113,14 @@ Structure* Game::addStructure(
     structure->setPlayer(player);
     structure->setView(view);
 
-    // Building? Defaults für Produktionsdaten setzen
+    // Building?
     Building* building = dynamic_cast<Building*>(structure);
     if (building != nullptr) {
+        // Defaults für Produktionsdaten setzen
         building->productionSlots = ProductionSlots(mapObjectType->buildingProduction);
+
+        // Initialen Delay bis zum ersten Träger einstellen
+        building->nextCarrierMinTicks = ticks + Building::CARRIER_INITIAL_DELAY;
     }
 
     // Objekt in die Liste aufnehmen.

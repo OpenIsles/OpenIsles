@@ -22,6 +22,9 @@ protected:
             MapCoords(30, 35), configMgr->getMapObjectType("sheep-farm"),
             Direction::SOUTH, game->getPlayer(0)));
 
+        // keine Wartezeit am Träger einstellen
+        weavingMill->nextCarrierMinTicks = 0;
+
         ASSERT_TRUE(weavingMill->carriers.empty());
     }
 };

@@ -17,8 +17,10 @@ void Building::sendNewCarrier(const Context& context) {
         return;
     }
 
-    // TODO Träger nicht alle gleichzeitig losschicken.
-    // Jeder Träger soll eine Wartezeit haben, dass er nach der Lieferung erstmal nix tut.
+    // Wartezeit einhalten, damit nicht alle Träger gleichzeitig losstürmen
+    if (context.game->getTicks() < nextCarrierMinTicks) {
+        return;
+    }
 
     CatchmentAreaIterator catchmentAreaIterator(*this, false);
     InCatchmentAreaFinder inCatchmentAreaFinder(&context, &catchmentAreaIterator);
@@ -100,16 +102,7 @@ void Building::sendNewCarrier(const Context& context) {
                 return;
             }
 
-            const MapCoords& firstHopOnRoute = result.route.front();
-
-            Carrier* carrier = new Carrier(this, result.route, goodGrassland, true);
-            carrier->setLastUpdateTicks(context.game->getTicks());
-            carrier->setMapCoords((DoubleMapCoords) firstHopOnRoute);
-            carrier->updateCurrentMovingDirection();
-            carrier->setAnimations(*context.graphicsMgr->getGraphicSet("sheep"));
-
-            context.game->getMap()->addMapObject(carrier);
-            carriers.insert(carrier);
+            addCarrierMapObject(context, result.route, goodGrassland, "sheep");
 
             // Slot markieren, dass nicht ein zweiter Träger hinläuft.
             context.game->getMap()->getMapTileAt(result.mapCoords)->harvestBusy = true;
@@ -130,16 +123,7 @@ void Building::addCarrierMapObject(const Context& context,
                                    const InCatchmentAreaFinderResult& result,
                                    std::string graphicSetForCarrierAnimation) {
 
-    const MapCoords& firstHopOnRoute = result.route.front();
-
-    Carrier* carrier = new Carrier(this, result.route, result.good, true);
-    carrier->setLastUpdateTicks(context.game->getTicks());
-    carrier->setMapCoords((DoubleMapCoords) firstHopOnRoute);
-    carrier->updateCurrentMovingDirection();
-    carrier->setAnimations(*context.graphicsMgr->getGraphicSet(graphicSetForCarrierAnimation));
-
-    context.game->getMap()->addMapObject(carrier);
-    carriers.insert(carrier);
+    addCarrierMapObject(context, result.route, result.good, graphicSetForCarrierAnimation);
 
     // Slot markieren, dass nicht ein zweiter Träger hinläuft.
     // Zu einem Lagergebäude dürfen natürlich mehrere hinlaufen und sich bedienen.
@@ -147,4 +131,24 @@ void Building::addCarrierMapObject(const Context& context,
     if (targetBuilding != nullptr && !targetBuilding->isStorageBuilding()) {
         targetBuilding->productionSlots.output.markedForPickup = true;
     }
+}
+
+void Building::addCarrierMapObject(const Context& context,
+                                   const Route& route, const Good* good,
+                                   std::string graphicSetForCarrierAnimation) {
+
+    const MapCoords& firstHopOnRoute = route.front();
+    const unsigned long gameTicks = context.game->getTicks();
+
+    Carrier* carrier = new Carrier(this, route, good, true);
+    carrier->setLastUpdateTicks(gameTicks);
+    carrier->setMapCoords((DoubleMapCoords) firstHopOnRoute);
+    carrier->updateCurrentMovingDirection();
+    carrier->setAnimations(*context.graphicsMgr->getGraphicSet(graphicSetForCarrierAnimation));
+
+    context.game->getMap()->addMapObject(carrier);
+    carriers.insert(carrier);
+
+    // Delay bis zum nächsten Träger einstellen
+    nextCarrierMinTicks = gameTicks + Building::CARRIER_DELAY;
 }
