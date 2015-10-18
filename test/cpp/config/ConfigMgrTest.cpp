@@ -34,6 +34,9 @@ TEST(ConfigMgrTest, loadMapObjectTypes) {
     ASSERT_EQ(false, cathedral->buildingProduction.input.isUsed());
     ASSERT_EQ(false, cathedral->buildingProduction.input2.isUsed());
     ASSERT_EQ(5, cathedral->inhabitants);
+    ASSERT_TRUE(cathedral->carrierType == nullptr);
+    ASSERT_EQ(0, cathedral->carrierCapacity);
+    ASSERT_TRUE(cathedral->carrierAnimations.empty());
     ASSERT_EQ(0, cathedral->maxAge);
     ASSERT_EQ(false, cathedral->isForest);
 
@@ -55,6 +58,9 @@ TEST(ConfigMgrTest, loadMapObjectTypes) {
     ASSERT_EQ(false, sugarcaneField->buildingProduction.input.isUsed());
     ASSERT_EQ(false, sugarcaneField->buildingProduction.input2.isUsed());
     ASSERT_EQ(0, sugarcaneField->inhabitants);
+    ASSERT_TRUE(cathedral->carrierType == nullptr);
+    ASSERT_EQ(0, cathedral->carrierCapacity);
+    ASSERT_TRUE(cathedral->carrierAnimations.empty());
     ASSERT_EQ(4, sugarcaneField->maxAge);
     ASSERT_EQ(false, sugarcaneField->isForest);
 
@@ -72,6 +78,9 @@ TEST(ConfigMgrTest, loadMapObjectTypes) {
     ASSERT_EQ(3, toolsmiths->buildingCosts.tools);
     ASSERT_EQ(2, toolsmiths->buildingCosts.wood);
     ASSERT_EQ(5, toolsmiths->buildingCosts.bricks);
+    ASSERT_TRUE(toolsmiths->carrierType == nullptr);
+    ASSERT_EQ(0, toolsmiths->carrierCapacity);
+    ASSERT_TRUE(toolsmiths->carrierAnimations.empty());
 
     const MapObjectType* tavern = configMgr.getMapObjectType("tavern");
     ASSERT_EQ(26, tavern->catchmentArea->width);
@@ -99,6 +108,24 @@ TEST(ConfigMgrTest, loadMapObjectTypes) {
     ASSERT_EQ(true, northernForest1->isForest);
 }
 
+/**
+ * @brief Test, ob die Konfiguration der Map-Objekt-Typen (speziell Träger) korrekt geladen wird.
+ */
+TEST(ConfigMgrTest, loadCarrierMapObjectTypes) {
+    ConfigMgr configMgr;
+
+    const MapObjectType* carrier = configMgr.getMapObjectType("carrier");
+    ASSERT_TRUE(carrier != nullptr);
+    ASSERT_EQ(MapObjectTypeClass::CARRIER, carrier->type);
+    ASSERT_EQ(4, carrier->carrierCapacity);
+    // TODO animations
+
+    const MapObjectType* cart = configMgr.getMapObjectType("cart");
+    ASSERT_TRUE(cart != nullptr);
+    ASSERT_EQ(MapObjectTypeClass::CARRIER, cart->type);
+    ASSERT_EQ(6, cart->carrierCapacity);
+    // TODO animations
+}
 
 /**
  * @brief Testet, ob das Parsen des Einzugsbereichs aus der XML korrekt funktioniert.

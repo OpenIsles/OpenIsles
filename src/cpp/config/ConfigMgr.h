@@ -250,9 +250,14 @@ private:
     void loadGoods();
 
     /**
-     * @brief Lädt die Konfiguration der verfügbaren Map-Objekt-Typen
+     * @brief Lädt die Konfiguration der verfügbaren Map-Objekt-Typen aus `map-objects.xml`.
      */
     void loadMapObjectTypes();
+
+    /**
+     * @brief Lädt die Konfiguration der verfügbaren Map-Objekt-Typen aus `carriers.xml`.
+     */
+    void loadCarrierMapObjectTypes();
 
     /**
      * @brief Lädt die Konfiguration der Gelände-Kacheln

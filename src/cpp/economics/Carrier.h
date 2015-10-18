@@ -74,18 +74,21 @@ private:
     double animationFrame;
 
 public:
+    Carrier() {}
+    ~Carrier() {}
+
+    virtual bool updateObject(const Context& context) override;
+
     /**
-     * @brief Konstruiert einen neuen Träger mit einem konkreten Abhol-/Lieferauftrag.
+     * @brief Initialisiert einen eben neu instanziierten Träger und weist ihm einen
+     * konkreten Abhol-/Lieferauftrag zu.
+     *
      * @param owningBuilding Gebäude, zu dem dieser Träger gehört.
      * @param route Route, die der Träger ablaufen soll
      * @param good Gut, das abzuholen bzw. zu liefern ist
      * @param onOutboundTrip `true` für Hinweg, `false` für Rückweg.
      */
-    Carrier(Building* owningBuilding, Route route, const Good* good, bool onOutboundTrip);
-
-    ~Carrier() {}
-
-    virtual bool updateObject(const Context& context) override;
+    void initRoute(Building* owningBuilding, Route route, const Good* good, bool onOutboundTrip);
 
     const EightDirectionsAnimation& getAnimations() const {
         return animations;

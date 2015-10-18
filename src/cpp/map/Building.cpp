@@ -33,7 +33,8 @@ void Building::sendNewCarrier(const Context& context) {
             return;
         }
 
-        addCarrierMapObject(context, result, "cart-without-cargo");
+        const MapObjectType* carrierType = mapObjectType->carrierType;
+        addCarrierMapObject(context, result, carrierType, "cart-without-cargo");
         return;
     }
 
@@ -87,7 +88,8 @@ void Building::sendNewCarrier(const Context& context) {
             return;
         }
 
-        addCarrierMapObject(context, result, "carrier");
+        const MapObjectType* carrierType = mapObjectType->carrierType;
+        addCarrierMapObject(context, result, carrierType, "carrier");
         return;
     }
 
@@ -102,7 +104,8 @@ void Building::sendNewCarrier(const Context& context) {
                 return;
             }
 
-            addCarrierMapObject(context, result.route, goodGrassland, "sheep");
+            const MapObjectType* carrierType = mapObjectType->carrierType;
+            addCarrierMapObject(context, result.route, goodGrassland, carrierType, "sheep");
 
             // Slot markieren, dass nicht ein zweiter Träger hinläuft.
             context.game->getMap()->getMapTileAt(result.mapCoords)->harvestBusy = true;
@@ -121,9 +124,10 @@ void Building::sendNewCarrier(const Context& context) {
 
 void Building::addCarrierMapObject(const Context& context,
                                    const InCatchmentAreaFinderResult& result,
+                                   const MapObjectType* carrierType,
                                    std::string graphicSetForCarrierAnimation) {
 
-    addCarrierMapObject(context, result.route, result.good, graphicSetForCarrierAnimation);
+    addCarrierMapObject(context, result.route, result.good, carrierType, graphicSetForCarrierAnimation);
 
     // Slot markieren, dass nicht ein zweiter Träger hinläuft.
     // Zu einem Lagergebäude dürfen natürlich mehrere hinlaufen und sich bedienen.
@@ -135,12 +139,14 @@ void Building::addCarrierMapObject(const Context& context,
 
 void Building::addCarrierMapObject(const Context& context,
                                    const Route& route, const Good* good,
+                                   const MapObjectType* carrierType,
                                    std::string graphicSetForCarrierAnimation) {
 
     const MapCoords& firstHopOnRoute = route.front();
     const unsigned long gameTicks = context.game->getTicks();
 
-    Carrier* carrier = new Carrier(this, route, good, true);
+    Carrier* carrier = (Carrier*) MapObject::instantiate(carrierType);
+    carrier->initRoute(this, route, good, true);
     carrier->setLastUpdateTicks(gameTicks);
     carrier->setMapCoords((DoubleMapCoords) firstHopOnRoute);
     carrier->updateCurrentMovingDirection();

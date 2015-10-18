@@ -4,8 +4,10 @@
 #include "game/Game.h"
 
 
-Carrier::Carrier(Building* owningBuilding, Route route, const Good* good, bool onOutboundTrip) :
-    owningBuilding(owningBuilding), route(route), onOutboundTrip(onOutboundTrip) {
+void Carrier::initRoute(Building* owningBuilding, Route route, const Good* good, bool onOutboundTrip) {
+    this->owningBuilding = owningBuilding;
+    this->route = route;
+    this->onOutboundTrip = onOutboundTrip;
 
     // TODO Bewegliche Map-Objekte dürfen aktuell nur 1 Kachel groß sein. Später, wenn Schiffe (speziell Fischerboot-Carrier) da sind, müssen wir das erweitern.
     // Träger fix als 1x1-groß markieren
@@ -46,6 +48,7 @@ void Carrier::updateCurrentMovingDirection() {
     }
 }
 
+// TODO Refactoren und carrierAnimation nutzen
 bool Carrier::updateObject(const Context& context) {
     unsigned int ticksSinceLastUpdate = getTicksSinceLastUpdate(context);
 
@@ -124,9 +127,9 @@ bool Carrier::updateObject(const Context& context) {
                         goodsWeCollect = remainingCapacityToUnloadLater;
                     }
 
-                    // Ein Träger kann maximal 6t Waren halten
-                    if (goodsWeCollect > 6) {
-                        goodsWeCollect = 6;
+                    // Mehr Waren als der Träger tragen kann?
+                    if (goodsWeCollect > mapObjectType->carrierCapacity) {
+                        goodsWeCollect = mapObjectType->carrierCapacity;
                     }
 
                     goodsSlotToTakeFrom->inventory -= goodsWeCollect;
@@ -147,8 +150,8 @@ bool Carrier::updateObject(const Context& context) {
                         const GraphicSet& graphicSet = *context.graphicsMgr->getGraphicSet(
                             owningBuilding->isStorageBuilding() ? "cart-with-cargo" : "carrier");
 
-                        Carrier* returnCarrier = new Carrier(
-                            owningBuilding, returnRoute, goodsSlotToTakeFrom->good, false);
+                        Carrier* returnCarrier = (Carrier*) MapObject::instantiate(mapObjectType);
+                        returnCarrier->initRoute(owningBuilding, returnRoute, goodsSlotToTakeFrom->good, false);
                         returnCarrier->setLastUpdateTicks(context.game->getTicks());
                         returnCarrier->setMapCoords((DoubleMapCoords) firstHopOnReturnRoute);
                         returnCarrier->updateCurrentMovingDirection();

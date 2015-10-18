@@ -241,7 +241,7 @@ void BuildOperation::adeptExistingStreets(
         auto createReplacement = [&](const StreetConnections& streetConnectionsShouldBe) -> Street* {
             assert((existingStreet->getMapWidth() == 1) && (existingStreet->getMapHeight() == 1));
 
-            Street* streetReplacement = (Street*) MapObjectFixed::instantiate(existingStreet->getMapObjectType());
+            Street* streetReplacement = (Street*) MapObject::instantiate(existingStreet->getMapObjectType());
             streetReplacement->setMapCoords(mapCoords);
             streetReplacement->setView(Direction::SOUTH);
             streetReplacement->setMapWidth(existingStreet->getMapWidth());
@@ -292,6 +292,11 @@ void BuildOperation::rebuildResult() {
     for (const MapObjectToBuild& mapObjectToBuild : mapObjectsToBuild) {
         const MapObjectType* mapObjectType = mapObjectToBuild.mapObjectType;
 
+        assert((mapObjectType->type == MapObjectTypeClass::HARVESTABLE) ||
+               (mapObjectType->type == MapObjectTypeClass::STRUCTURE) ||
+               (mapObjectType->type == MapObjectTypeClass::STREET) ||
+               (mapObjectType->type == MapObjectTypeClass::BUILDING));
+
         unsigned char mapWidth, mapHeight;
         if (mapObjectToBuild.view == Direction::NORTH || mapObjectToBuild.view == Direction::SOUTH) {
             mapWidth = mapObjectType->mapWidth;
@@ -308,7 +313,7 @@ void BuildOperation::rebuildResult() {
         resultBit->somethingInTheWay = somethingInTheWay;
 
         if (!somethingInTheWay) {
-            MapObjectFixed* mapObjectToDraw = MapObjectFixed::instantiate(mapObjectType);
+            MapObjectFixed* mapObjectToDraw = (MapObjectFixed*) MapObject::instantiate(mapObjectType);
             mapObjectToDraw->setMapCoords(mapObjectToBuild.mapCoords);
             mapObjectToDraw->setView(mapObjectToBuild.view);
             mapObjectToDraw->setMapWidth(mapWidth);
@@ -388,7 +393,7 @@ void BuildOperation::rebuildResult() {
             (resultBit->mapObjectToDraw == resultBit->mapObjectToReplaceWith) &&
             (streetConnectionsToDraw != streetConnectionsToReplaceWith)) {
 
-            MapObjectFixed* mapObjectToReplaceWith = MapObjectFixed::instantiate(streetToDraw.getMapObjectType());
+            MapObjectFixed* mapObjectToReplaceWith = (MapObjectFixed*) MapObject::instantiate(streetToDraw.getMapObjectType());
             mapObjectToReplaceWith->setMapCoords(streetToDraw.getMapCoords());
             mapObjectToReplaceWith->setView(streetToDraw.getView());
             mapObjectToReplaceWith->setMapWidth(streetToDraw.getMapWidth());

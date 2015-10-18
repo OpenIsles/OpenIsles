@@ -17,7 +17,13 @@
  * @brief Basisklasse für alles, was sich auf der Karte befinden kann
  */
 class MapObject {
+
 protected:
+    /**
+     * @brief Objekt-Typ
+     */
+    const MapObjectType* mapObjectType;
+
     /**
      * @brief Breite des Objekts in Map-Koordinaten.
      *
@@ -53,11 +59,28 @@ protected:
     unsigned long lastUpdateTicks;
 
 public:
+    /**
+     * @brief Helper, der je nach Map-Objekt-Typ eine konkrete Instanz von `MapObject` erstellt.
+     * @param mapObjectType Typ des zu erstellenden Map-Objekts
+     * @return neue Instanz eines `MapObject` mit `type` bereits gesetzt
+     */
+    static MapObject* instantiate(const MapObjectType* mapObjectType);
+
+protected:
     MapObject() {
         // TODO Alle Objekte müssen lastUpdateTicks ordentlich gesetzt (mit Game#ticks initialisiert) haben. Eine Factory wäre hübsch
     }
 
+public:
     virtual ~MapObject() {
+    }
+
+    const MapObjectType* getMapObjectType() const {
+        return mapObjectType;
+    }
+
+    void setMapObjectType(const MapObjectType* mapObjectType) {
+        this->mapObjectType = mapObjectType;
     }
 
     int getMapWidth() const {
@@ -140,11 +163,6 @@ protected:
     MapCoords mapCoords;
 
     /**
-     * @brief Objekt-Typ
-     */
-    const MapObjectType* mapObjectType;
-
-    /**
      * @brief Ausrichtung des Objekts
      */
     FourthDirection view;
@@ -153,14 +171,6 @@ protected:
      * @brief Kolonie, in der sich das Objekt befindet
      */
     Colony* colony;
-
-public:
-    /**
-     * @brief Helper, der je nach Map-Objekt-Typ eine konkrete Instanz von `MapObjectFixed` erstellt.
-     * @param mapObjectType Typ des zu erstellenden Map-Objekts
-     * @return neue Instanz eines `MapObjectFixed` mit `type` bereits gesetzt
-     */
-    static MapObjectFixed* instantiate(const MapObjectType* mapObjectType);
 
 public:
     virtual ~MapObjectFixed() {
@@ -176,14 +186,6 @@ public:
 
     const MapCoords& getMapCoords() const {
         return mapCoords;
-    }
-
-    const MapObjectType* getMapObjectType() const {
-        return mapObjectType;
-    }
-
-    void setMapObjectType(const MapObjectType* mapObjectType) {
-        this->mapObjectType = mapObjectType;
     }
 
     const FourthDirection& getView() const {

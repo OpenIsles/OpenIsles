@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<carriers>
+    <!-- einfacher Träger -->
+    <carrier name="carrier">
+        <capacity>4</capacity>
+        <animations>
+            <animation state="running" graphic-set="carrier" />
+        </animations>
+    </carrier>
+
+    <!-- Marktkarren -->
+    <carrier name="cart">
+        <capacity>6</capacity>
+        <animations>
+            <animation state="without-cargo" graphic-set="cart-without-cargo" />
+            <animation state="with-cargo" graphic-set="cart-with-cargo" />
+        </animations>
+    </carrier>
+
+    <!-- Schaf -->
+    <carrier name="sheep">
+        <capacity>1</capacity>
+        <animations>
+            <animation state="todo" graphic-set="sheep" />
+        </animations>
+    </carrier>
+</carriers>

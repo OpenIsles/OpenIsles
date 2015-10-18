@@ -53,7 +53,12 @@ enum MapObjectTypeClass {
     /**
      * @brief `Building`
      */
-    BUILDING
+    BUILDING,
+
+    /**
+     * @brief `Carrier`
+     */
+    CARRIER
 };
 
 
@@ -158,6 +163,21 @@ struct MapObjectType {
      * als Träger.
      */
     unsigned char maxCarriers = 0;
+
+    /**
+     * @brief (nur für `Building`, die Waren holen) Typ des Trägers, den dieses Gebäude losschickt
+     */
+    const MapObjectType* carrierType = nullptr;
+
+    /**
+     * @brief (nur für `Carrier`) gibt an, wie viel der Träger maximal tragen kann.
+     */
+    unsigned char carrierCapacity = 0;
+
+    /**
+     * @brief (nur für `Carrier`) ordnet Animations-Zustände einem GraphicSet-Keys zu
+     */
+    std::unordered_map<std::string, std::string> carrierAnimations;
 
     /**
      * @brief (nur für `Harvestable`) gibt das maximale Alter an, das diese Landschaft erreichen kann.

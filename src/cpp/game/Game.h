@@ -322,7 +322,7 @@ private:
      * @param mapObjectType Typ von Map-Objekt, der angelegt werden soll.
      * @return instanziiertes Map-Objekt
      */
-    MapObjectFixed* instantiateNewMapObjectFixed(const MapObjectType* mapObjectType) const;
+    MapObject* instantiateNewMapObject(const MapObjectType* mapObjectType) const;
 
     /**
      * @brief Ändert die Einwohner innerhalb eines Gebäudes. Positive Werte fügen Bewohner hinzu, negative nehmen

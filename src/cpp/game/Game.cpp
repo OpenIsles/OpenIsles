@@ -77,9 +77,8 @@ Harvestable* Game::addHarvestable(
     double initAge = randomInitAge(randomEngine);
 
     // Objekt anlegen
-    Harvestable* harvestable = (Harvestable*) instantiateNewMapObjectFixed(mapObjectType);
+    Harvestable* harvestable = (Harvestable*) instantiateNewMapObject(mapObjectType);
     harvestable->setMapCoords(mapCoords);
-    harvestable->setMapObjectType(mapObjectType);
     harvestable->setView(view);
     harvestable->setColony(getColony(mapCoords));
     harvestable->setAge(initAge);
@@ -105,11 +104,10 @@ Structure* Game::addStructure(
     }
 
     // Objekt anlegen
-    Structure* structure = (Structure*) instantiateNewMapObjectFixed(mapObjectType);
+    Structure* structure = (Structure*) instantiateNewMapObject(mapObjectType);
     structure->setMapCoords(mapCoords);
     structure->setMapWidth(mapWidth);
     structure->setMapHeight(mapHeight);
-    structure->setMapObjectType(mapObjectType);
     structure->setPlayer(player);
     structure->setView(view);
 
@@ -169,11 +167,10 @@ Street* Game::addStreet(const MapCoords& mapCoords, const MapObjectType* mapObje
     assert((mapObjectType->mapWidth == 1) && (mapObjectType->mapHeight == 1)); // Wir gehen davon aus, dass es nur 1x1-Straßen gibt
 
     // Objekt anlegen
-    Street* street = (Street*) instantiateNewMapObjectFixed(mapObjectType);
+    Street* street = (Street*) instantiateNewMapObject(mapObjectType);
     street->setMapCoords(mapCoords);
     street->setMapWidth(1);
     street->setMapHeight(1);
-    street->setMapObjectType(mapObjectType);
     street->setPlayer(player);
     street->setView(view);
     street->setColony(getColony(mapCoords));
@@ -185,10 +182,10 @@ Street* Game::addStreet(const MapCoords& mapCoords, const MapObjectType* mapObje
     return street;
 }
 
-MapObjectFixed* Game::instantiateNewMapObjectFixed(const MapObjectType* mapObjectType) const {
-    MapObjectFixed* mapObjectFixed = MapObjectFixed::instantiate(mapObjectType);
-    mapObjectFixed->setLastUpdateTicks(ticks);
-    return mapObjectFixed;
+MapObject* Game::instantiateNewMapObject(const MapObjectType* mapObjectType) const {
+    MapObject* mapObject = MapObject::instantiate(mapObjectType);
+    mapObject->setLastUpdateTicks(ticks);
+    return mapObject;
 }
 
 void Game::addInhabitantsToBuilding(Building* building, char amount) {

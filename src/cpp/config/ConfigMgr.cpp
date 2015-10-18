@@ -12,6 +12,9 @@ ConfigMgr::ConfigMgr() {
     loadGoods();
     std::cout << "Loaded goods." << std::endl;
 
+    loadCarrierMapObjectTypes();
+    std::cout << "Loaded carrier mapObjectTypes." << std::endl;
+
     loadMapObjectTypes();
     std::cout << "Loaded mapObjectTypes." << std::endl;
 
@@ -157,9 +160,14 @@ void ConfigMgr::loadMapObjectTypes() {
             mapObjectType.inhabitants = (unsigned char) stringToUnsignedLong(inhabitantsNode->value());
         }
 
-        rapidxml::xml_node<>* maxCarriersNode = node->first_node("max-carriers", 12, true);
-        if (maxCarriersNode != nullptr) {
-            mapObjectType.maxCarriers = (unsigned char) stringToUnsignedLong(maxCarriersNode->value());
+        rapidxml::xml_node<>* carriersNode = node->first_node("carriers", 8, true);
+        if (carriersNode != nullptr) {
+            std::string carrierMapObjectTypeName = carriersNode->first_attribute("name", 4, true)->value();
+            const MapObjectType* carrierType = &mapObjectTypesMap.at(carrierMapObjectTypeName);
+
+            mapObjectType.carrierType = carrierType;
+            mapObjectType.maxCarriers = (unsigned char) stringToUnsignedLong(
+                carriersNode->first_attribute("max-carriers", 12, true)->value());
         }
 
         rapidxml::xml_node<>* maxAgeNode = node->first_node("max-age", 7, true);
@@ -168,6 +176,40 @@ void ConfigMgr::loadMapObjectTypes() {
         }
 
         std::cout << "Loaded mapObjectType '" << mapObjectType.name << "'." << std::endl;
+    }
+
+    delete xmlDocument;
+}
+
+void ConfigMgr::loadCarrierMapObjectTypes() {
+    rapidxml::file<> xmlFile("data/config/carriers.xml");
+
+    rapidxml::xml_document<>* xmlDocument = new rapidxml::xml_document<>();
+    xmlDocument->parse<0>(xmlFile.data());
+
+    rapidxml::xml_node<>* carriersNode = xmlDocument->first_node("carriers", 8, true);
+
+    for (rapidxml::xml_node<>* node = carriersNode->first_node(); node != nullptr; node = node->next_sibling()) {
+        std::string name = std::string(node->first_attribute("name", 4, true)->value());
+        MapObjectType& mapObjectType = mapObjectTypesMap[name];
+        mapObjectType.name = name;
+
+        // Knoten-Typ
+        const char* nodeName = node->name();
+        if (strcmp(nodeName, "carrier") != 0) {
+            std::cerr << "Illegal node '" << nodeName << "'." << std::endl;
+            throw std::runtime_error("Illegal node");
+        }
+
+        mapObjectType.type = MapObjectTypeClass::CARRIER;
+
+        // Basics
+        rapidxml::xml_node<>* capacityNode = node->first_node("capacity", 8, true);
+        mapObjectType.carrierCapacity = (unsigned char) stringToUnsignedLong(capacityNode->value());
+
+        // TODO Animations
+
+        std::cout << "Loaded carrier mapObjectType '" << mapObjectType.name << "'." << std::endl;
     }
 
     delete xmlDocument;
