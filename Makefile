@@ -280,7 +280,7 @@ render-sheep: $(SRC_DIRECTORY)/blender/animations/sheep/sheep.blend
 	cd $(SRC_DIRECTORY)/blender/animations/sheep; $(BLENDER) -b $(notdir $<) -P render.py
 
 	# geometry muss angegeben werden, sonst greift der Default von 120x120
-	for i in `seq 0 2`; \
+	for i in `seq 0 1`; \
 	do \
 	    $(MONTAGE) \
 	        $(SRC_DIRECTORY)/blender/animations/sheep/render/angle0/sheep$$i-* \

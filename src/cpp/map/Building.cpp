@@ -105,7 +105,7 @@ void Building::sendNewCarrier(const Context& context) {
             }
 
             const MapObjectType* carrierType = mapObjectType->carrierType;
-            addCarrierMapObject(context, result.route, goodGrassland, carrierType, "sheep");
+            addCarrierMapObject(context, result.route, goodGrassland, carrierType, "sheep0");
 
             // Slot markieren, dass nicht ein zweiter Träger hinläuft.
             context.game->getMap()->getMapTileAt(result.mapCoords)->harvestBusy = true;

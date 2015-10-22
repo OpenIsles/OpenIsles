@@ -121,6 +121,11 @@ private:
      * @brief Lädt das Grafik-Set für das MapZoom-Widget
      */
     void loadMapZoomGraphicSet();
+
+    /**
+     * @brief Lädt die Grafik-Sets für die Schafe
+     */
+    void loadSheepGraphicSets();
 };
 
 #endif

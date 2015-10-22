@@ -20,27 +20,14 @@ def select_material_slot_by_name(material_name):
 render(1)
 
 
-# sheep2: alle Fell-Faces durch volles Fell ersetzen
+# sheep0: alle Fell-Faces durch "Fell (geschoren)" ersetzen
 
 bpy.context.scene.objects.active = bpy.data.objects["Sheep"]
 bpy.ops.object.mode_set(mode='EDIT')
 bpy.ops.mesh.select_all(action='DESELECT')
 
-select_material_slot_by_name("Fell (weiß)")
-bpy.ops.object.material_slot_select()
-
 select_material_slot_by_name("Fell (voll)")
-bpy.ops.object.material_slot_assign()
-
-# vor dem Rendern Edit-Mode verlassen, sonst werden die Änderungen nicht gerendert!
-bpy.ops.object.mode_set(mode='OBJECT')
-
-render(2)
-
-
-# sheep0: alle Fell-Faces durch "Fell (geschoren)" ersetzen
-
-bpy.ops.object.mode_set(mode='EDIT')
+bpy.ops.object.material_slot_select()
 
 select_material_slot_by_name("Fell (geschoren)")
 bpy.ops.object.material_slot_assign()
