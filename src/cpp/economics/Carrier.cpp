@@ -143,7 +143,9 @@ void Carrier::onRouteDone(const Context& context, bool& deleteMe) {
     if (mapObjectType->name == "sheep") {
         // Das war Hinweg zum Erntefeld -> Animation umstellen und mit Ernten anfangen
         if (onOutboundTrip) {
-            animations = context.graphicsMgr->getGraphicSet("sheep0")->getEightDirectionsAnimation("eating");
+            const std::string& graphicName = (carriedGoods.inventory > 0) ? "sheep1" : "sheep0";
+
+            animations = context.graphicsMgr->getGraphicSet(graphicName)->getEightDirectionsAnimation("eating");
             animationFrame = 0;
             state = HARVESTING;
             harvestingFinishedTicks =
@@ -275,7 +277,7 @@ void Carrier::onHarvestingFinished(const Context& context) {
             result = inCatchmentAreaFinder.findMapTileWithInvisibleGood(goodGrass, currentMapCoords);
             if (result) {
                 EightDirectionsAnimation animations =
-                    context.graphicsMgr->getGraphicSet("sheep0")->getEightDirectionsAnimation("walking"); // TODO sheep1 auch benutzen
+                    context.graphicsMgr->getGraphicSet("sheep1")->getEightDirectionsAnimation("walking");
 
                 initRoute(owningBuilding, result.route, goodGrass, carriedGoods.capacity,
                           true, animations, context.game->getTicks());
