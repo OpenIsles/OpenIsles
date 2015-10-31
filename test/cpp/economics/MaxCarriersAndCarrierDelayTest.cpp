@@ -1,3 +1,4 @@
+#include <map/MapObjectType.h>
 #include "GameTest.h"
 
 
@@ -18,8 +19,9 @@ protected:
             MapCoords(38, 28), configMgr->getMapObjectType("cattle-farm"),
             Direction::SOUTH, game->getPlayer(0)));
 
-        // TODO Schafe/Rinder so einstellen, dass sie ewig zum Grasfressen brauchen.
+        // Schafe/Rinder so einstellen, dass sie ewig zum Grasfressen brauchen.
         // Wir wollen nicht, dass während des Tests welche zurücklaufen.
+        configMgr->getMapObjectType("sheep")->carrier.secondsToProduce = 9999;
     }
 };
 
@@ -28,8 +30,7 @@ protected:
  * @brief Überprüft, dass jedes Gebäude seine Träger losschickt, die maximale Anzahl der Träger nicht
  * überschreitet und zwischen den einzelnen Trägern die Wartezeit einhält.
  */
-// TODO Test läuft aktuell nur halb durch, da die Träger noch verschwinden und nicht ewig grasen
-TEST_F(MaxCarriersAndCarrierDelayTest, DISABLED_checkThatCarriersAreSentCorrectly) {
+TEST_F(MaxCarriersAndCarrierDelayTest, checkThatCarriersAreSentCorrectly) {
     // Checke Konfiguration
     ASSERT_EQ(3, sheepFarm->getMapObjectType()->maxCarriers);
     ASSERT_EQ(2, cattleFarm->getMapObjectType()->maxCarriers);

@@ -57,7 +57,7 @@ class Game : public ContextAware {
     friend class GameIO;
 
 #ifdef TESTS_ENABLED
-    FRIEND_TEST(InCatchmentAreaFinderInvisibleGoodsTest, checkThatRouteToGrasslandIsFound);
+    FRIEND_TEST(InCatchmentAreaFinderInvisibleGoodsTest, checkThatRouteToGrassIsFound);
     FRIEND_TEST(InCatchmentAreaFinderInvisibleGoodsTest, checkThatNoRouteIsFoundWhenAllWasHarvested);
 #endif
 

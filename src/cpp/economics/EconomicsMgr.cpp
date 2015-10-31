@@ -34,25 +34,25 @@ void EconomicsMgr::updateProduction(Building* building) {
     // Haben wir Eingabegüter, dann wird nur produziert, wie diese verfügbar sind
     if (mapObjectType->buildingProduction.input.isUsed()) {
         inputConsumed =
-            (double) ticksSinceLastUpdate / TICKS_PER_MINUTE * mapObjectType->buildingProduction.input.rate;
+            (double) ticksSinceLastUpdate / (double) TICKS_PER_MINUTE * mapObjectType->buildingProduction.input.rate;
 
         // nur verbrauchen, was auch da is
         if (inputConsumed > building->productionSlots.input.inventory) {
             inputConsumed = building->productionSlots.input.inventory;
         }
         ticksInputConsumed =
-            (unsigned int) (inputConsumed * TICKS_PER_MINUTE / mapObjectType->buildingProduction.input.rate);
+            (unsigned int) (inputConsumed * (double) TICKS_PER_MINUTE / mapObjectType->buildingProduction.input.rate);
 
         if (mapObjectType->buildingProduction.input2.isUsed()) {
             input2Consumed =
-                (double) ticksSinceLastUpdate / TICKS_PER_MINUTE * mapObjectType->buildingProduction.input2.rate;
+                (double) ticksSinceLastUpdate / (double) TICKS_PER_MINUTE * mapObjectType->buildingProduction.input2.rate;
 
             // nur verbrauchen, was auch da is
             if (input2Consumed > building->productionSlots.input2.inventory) {
                 input2Consumed = building->productionSlots.input2.inventory;
             }
             ticksInput2Consumed =
-                (unsigned int) (input2Consumed * TICKS_PER_MINUTE / mapObjectType->buildingProduction.input2.rate);
+                (unsigned int) (input2Consumed * (double) TICKS_PER_MINUTE / mapObjectType->buildingProduction.input2.rate);
         }
     }
 
@@ -68,15 +68,15 @@ void EconomicsMgr::updateProduction(Building* building) {
 
     // Jetzt die Produktion durchführen
     if (mapObjectType->buildingProduction.input.isUsed()) {
-        inputConsumed = (double) ticksWeReallyProduced / TICKS_PER_MINUTE * mapObjectType->buildingProduction.input.rate;
+        inputConsumed = (double) ticksWeReallyProduced / (double) TICKS_PER_MINUTE * mapObjectType->buildingProduction.input.rate;
         building->productionSlots.input.decreaseInventory(inputConsumed);
 
         if (mapObjectType->buildingProduction.input2.isUsed()) {
             input2Consumed =
-                (double) ticksWeReallyProduced / TICKS_PER_MINUTE * mapObjectType->buildingProduction.input2.rate;
+                (double) ticksWeReallyProduced / (double) TICKS_PER_MINUTE * mapObjectType->buildingProduction.input2.rate;
             building->productionSlots.input2.decreaseInventory(input2Consumed);
         }
     }
-    outputProduced = (double) ticksWeReallyProduced / TICKS_PER_MINUTE * mapObjectType->buildingProduction.output.rate;
+    outputProduced = (double) ticksWeReallyProduced / (double) TICKS_PER_MINUTE * mapObjectType->buildingProduction.output.rate;
     building->productionSlots.output.increaseInventory(outputProduced);
 }

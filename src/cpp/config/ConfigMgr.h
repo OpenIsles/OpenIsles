@@ -209,6 +209,22 @@ public:
         }
     }
 
+#ifdef IN_TESTS
+    // Tests die Möglichkeit zu geben, MapObjectType zu verändern
+
+    /**
+     * @brief Analog const MapObjectType* getMapObjectType(const std::string&), nur mit Schreibzugriff.
+     */
+    MapObjectType* getMapObjectType(const std::string& name) {
+        auto iter = mapObjectTypesMap.find(name);
+        if (iter != mapObjectTypesMap.end()) {
+            return &iter->second;
+        } else {
+            return nullptr;
+        }
+    }
+#endif
+
     /**
      * @brief Liefert eine Referenz auf die Map mit den Tile-Konfigurationen zurück.
      * @return Map mit den Tile-Konfigurationen

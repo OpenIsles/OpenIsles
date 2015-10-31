@@ -158,6 +158,7 @@ set(TEST_FILES
     test/cpp/GameTest.cpp
     test/cpp/GameTest.h
     test/cpp/config/ConfigMgrTest.cpp
+    test/cpp/economics/CarrierSheepTest.cpp
     test/cpp/economics/CarrierTest.cpp
     test/cpp/economics/EconomicsMgrTest.cpp
     test/cpp/economics/InCatchmentAreaFinderGoodsPriorityTest.cpp

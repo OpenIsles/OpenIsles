@@ -13,7 +13,7 @@ bool Harvestable::updateObject(const Context& context) {
         return true; // bereits maximales Alter erreicht. Nix tun.
     }
 
-    double growth = (double) getTicksSinceLastUpdate(context) / TICKS_PER_MINUTE * growthPerMinute;
+    double growth = (double) getTicksSinceLastUpdate(context) / (double) TICKS_PER_MINUTE * growthPerMinute;
 
     double newAge = age + growth;
 

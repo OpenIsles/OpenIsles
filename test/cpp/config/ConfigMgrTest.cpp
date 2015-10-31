@@ -1,5 +1,6 @@
 #include <cstring>
 #include <gtest/gtest.h>
+#include <map/MapObjectType.h>
 #include "config/ConfigMgr.h"
 #include "config/MapTileType.h"
 #include "map/MapObjectType.h"
@@ -34,9 +35,9 @@ TEST(ConfigMgrTest, loadMapObjectTypes) {
     ASSERT_EQ(false, cathedral->buildingProduction.input.isUsed());
     ASSERT_EQ(false, cathedral->buildingProduction.input2.isUsed());
     ASSERT_EQ(5, cathedral->inhabitants);
-    ASSERT_TRUE(cathedral->carrierType == nullptr);
-    ASSERT_EQ(0, cathedral->carrierCapacity);
-    ASSERT_TRUE(cathedral->carrierAnimations.empty());
+    ASSERT_TRUE(cathedral->carrier.mapObjectType == nullptr);
+    ASSERT_EQ(0, cathedral->carrier.capacity);
+    ASSERT_TRUE(cathedral->carrier.animations.empty());
     ASSERT_EQ(0, cathedral->maxAge);
     ASSERT_EQ(false, cathedral->isForest);
 
@@ -58,9 +59,9 @@ TEST(ConfigMgrTest, loadMapObjectTypes) {
     ASSERT_EQ(false, sugarcaneField->buildingProduction.input.isUsed());
     ASSERT_EQ(false, sugarcaneField->buildingProduction.input2.isUsed());
     ASSERT_EQ(0, sugarcaneField->inhabitants);
-    ASSERT_TRUE(cathedral->carrierType == nullptr);
-    ASSERT_EQ(0, cathedral->carrierCapacity);
-    ASSERT_TRUE(cathedral->carrierAnimations.empty());
+    ASSERT_TRUE(cathedral->carrier.mapObjectType == nullptr);
+    ASSERT_EQ(0, cathedral->carrier.capacity);
+    ASSERT_TRUE(cathedral->carrier.animations.empty());
     ASSERT_EQ(4, sugarcaneField->maxAge);
     ASSERT_EQ(false, sugarcaneField->isForest);
 
@@ -78,9 +79,9 @@ TEST(ConfigMgrTest, loadMapObjectTypes) {
     ASSERT_EQ(3, toolsmiths->buildingCosts.tools);
     ASSERT_EQ(2, toolsmiths->buildingCosts.wood);
     ASSERT_EQ(5, toolsmiths->buildingCosts.bricks);
-    ASSERT_TRUE(toolsmiths->carrierType == nullptr);
-    ASSERT_EQ(0, toolsmiths->carrierCapacity);
-    ASSERT_TRUE(toolsmiths->carrierAnimations.empty());
+    ASSERT_TRUE(toolsmiths->carrier.mapObjectType == nullptr);
+    ASSERT_EQ(0, toolsmiths->carrier.capacity);
+    ASSERT_TRUE(toolsmiths->carrier.animations.empty());
 
     const MapObjectType* tavern = configMgr.getMapObjectType("tavern");
     ASSERT_EQ(26, tavern->catchmentArea->width);
@@ -117,14 +118,23 @@ TEST(ConfigMgrTest, loadCarrierMapObjectTypes) {
     const MapObjectType* carrier = configMgr.getMapObjectType("carrier");
     ASSERT_TRUE(carrier != nullptr);
     ASSERT_EQ(MapObjectTypeClass::CARRIER, carrier->type);
-    ASSERT_EQ(4, carrier->carrierCapacity);
+    ASSERT_EQ(4, carrier->carrier.capacity);
     // TODO animations
+    ASSERT_EQ(0, carrier->carrier.secondsToProduce);
 
     const MapObjectType* cart = configMgr.getMapObjectType("cart");
     ASSERT_TRUE(cart != nullptr);
     ASSERT_EQ(MapObjectTypeClass::CARRIER, cart->type);
-    ASSERT_EQ(6, cart->carrierCapacity);
+    ASSERT_EQ(6, cart->carrier.capacity);
     // TODO animations
+    ASSERT_EQ(0, cart->carrier.secondsToProduce);
+
+    const MapObjectType* sheep = configMgr.getMapObjectType("sheep");
+    ASSERT_TRUE(sheep != nullptr);
+    ASSERT_EQ(MapObjectTypeClass::CARRIER, sheep->type);
+    ASSERT_EQ(4, sheep->carrier.capacity);
+    // TODO animations
+    ASSERT_EQ(18, sheep->carrier.secondsToProduce);
 }
 
 /**

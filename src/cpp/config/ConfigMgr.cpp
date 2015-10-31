@@ -1,6 +1,7 @@
 #include <cstring>
 #include <iostream>
 #include <stdexcept>
+#include <map/MapObjectType.h>
 #include "config/ConfigMgr.h"
 #include "config/Good.h"
 #include "utils/StringFormat.h"
@@ -165,7 +166,7 @@ void ConfigMgr::loadMapObjectTypes() {
             std::string carrierMapObjectTypeName = carriersNode->first_attribute("name", 4, true)->value();
             const MapObjectType* carrierType = &mapObjectTypesMap.at(carrierMapObjectTypeName);
 
-            mapObjectType.carrierType = carrierType;
+            mapObjectType.carrier.mapObjectType = carrierType;
             mapObjectType.maxCarriers = (unsigned char) stringToUnsignedLong(
                 carriersNode->first_attribute("max-carriers", 12, true)->value());
         }
@@ -205,7 +206,12 @@ void ConfigMgr::loadCarrierMapObjectTypes() {
 
         // Basics
         rapidxml::xml_node<>* capacityNode = node->first_node("capacity", 8, true);
-        mapObjectType.carrierCapacity = (unsigned char) stringToUnsignedLong(capacityNode->value());
+        mapObjectType.carrier.capacity = (unsigned char) stringToUnsignedLong(capacityNode->value());
+
+        rapidxml::xml_node<>* secondsToProduceNode = node->first_node("seconds-to-produce", 18, true);
+        if (secondsToProduceNode != nullptr) {
+            mapObjectType.carrier.secondsToProduce = stringToDouble(secondsToProduceNode->value());
+        }
 
         // TODO Animations
 
@@ -240,7 +246,7 @@ void ConfigMgr::loadTilesConfig() {
 
         // TODO konfigurierbar machen
         if (mapTileConfig.tileName == "grass") {
-            mapTileConfig.goodToHarvest = getGood("grassland");
+            mapTileConfig.goodToHarvest = getGood("grass");
         }
 
         for (rapidxml::xml_node<>* tmxTileNode = tileNode->first_node("tmx-tile", 8, true); tmxTileNode != nullptr;

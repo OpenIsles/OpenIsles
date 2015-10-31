@@ -34,7 +34,23 @@
     #define PERFORMANCE_END(name)
 #endif
 
-static const double TICKS_PER_SECOND = 1000;                  ///< Ticks pro Sekunde
-static const double TICKS_PER_MINUTE = 60 * TICKS_PER_SECOND; ///< Ticks pro Minute
+// Test-Helper
+#ifdef IN_TESTS
+    /**
+     * @brief Assert-Helper, um Endlosschleifen im Spiel zu vermeiden.
+     * Überschreitet die Spielzeit einen bestimmten Zeitpunkt, wird der Test abgebrochen.
+     * Die Variable `game` muss verfügbar sein (automatisch in von GameTest abgeleiteten Tests).
+     *
+     * @param maxGameTicks Höchstspielzeit, die erreicht werden darf.
+     * @param additionalErrorInfo Zusätzliche Information, die in der Fehlermeldung ausgegeben wird
+     */
+    #define ASSERT_NO_ENDLESS_LOOP(maxGameTicks, additionalErrorInfo) \
+        if (game->getTicks() > (maxGameTicks)) { \
+            FAIL() << "Endless loop detected - " #additionalErrorInfo ; \
+        }
+#endif
+
+static const unsigned long TICKS_PER_SECOND = 1000;                  ///< Ticks pro Sekunde
+static const unsigned long TICKS_PER_MINUTE = 60 * TICKS_PER_SECOND; ///< Ticks pro Minute
 
 #endif

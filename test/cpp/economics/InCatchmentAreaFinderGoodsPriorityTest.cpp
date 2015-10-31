@@ -46,6 +46,7 @@ TEST_F(InCatchmentAreaFinderGoodsPriorityTest, checkThatFullerInventoryIsFetched
 
     ASSERT_EQ(true, result.foundSomething);
     ASSERT_EQ(sheepFarm2, result.mapObject);
+    ASSERT_EQ(MapCoords(31, 31), *result.route.cbegin());
     ASSERT_EQ(MapCoords(30, 35), *result.route.crbegin());
 }
 
@@ -70,5 +71,6 @@ TEST_F(InCatchmentAreaFinderGoodsPriorityTest, checkThatOnSameInventoryLastColle
 
     ASSERT_EQ(true, result.foundSomething);
     ASSERT_EQ(sheepFarm1, result.mapObject);
+    ASSERT_EQ(MapCoords(32, 31), *result.route.cbegin());
     ASSERT_EQ(MapCoords(35, 35), *result.route.crbegin());
 }

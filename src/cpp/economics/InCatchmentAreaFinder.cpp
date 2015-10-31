@@ -231,6 +231,14 @@ InCatchmentAreaFinderResult InCatchmentAreaFinder::findBuildingWithGoods(
 }
 
 InCatchmentAreaFinderResult InCatchmentAreaFinder::findMapTileWithInvisibleGood(const Good* invisibleGood) {
+    const MapCoords& mapCoordsSource = catchmentAreaIterator->getMapCoordsCentered();
+
+    return findMapTileWithInvisibleGood(invisibleGood, mapCoordsSource);
+}
+
+InCatchmentAreaFinderResult InCatchmentAreaFinder::findMapTileWithInvisibleGood(
+    const Good* invisibleGood, const MapCoords& mapCoordsSource) {
+
     assert(invisibleGood->invisible == true);
 
     // Liste aller Kacheln innerhalb des Einzugsbereichs anfertigen, die als Ziel in Frage kommen
@@ -270,10 +278,7 @@ InCatchmentAreaFinderResult InCatchmentAreaFinder::findMapTileWithInvisibleGood(
         }
 
         // Checken, ob eine Route dahin existiert
-        const MapCoords& mapCoordsSource = catchmentAreaIterator->getMapCoordsCentered();
-        const MapCoords& mapCoordsDestination = mapCoords;
-
-        Route route = aStar.getRoute(mapCoordsSource, mapCoordsDestination);
+        Route route = aStar.getRoute(mapCoordsSource, mapCoords);
         if (!route.routeExists()) {
             return; // gibt keinen Weg dahin
         }

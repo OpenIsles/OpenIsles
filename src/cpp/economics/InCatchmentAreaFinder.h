@@ -94,6 +94,18 @@ public:
      */
     InCatchmentAreaFinderResult findMapTileWithInvisibleGood(const Good* invisibleGood);
 
+    /**
+     * @brief Analog findMapTileWithInvisibleGood(const Good*).
+     * Diese Methode sucht die Route nicht vom Zentralpunkt ausgehend, sondern einer bestimmten anderen Koordinate.
+     *
+     * @param invisibleGood benötiges unsichtbares Gut
+     * @param mapCoordsSource Startkoordinate der Route
+     * @return Ergebnisstruktur.
+     * `mapCoords` enthält die Zielkachel und `route` die Route zur Zielkachel.
+     */
+    InCatchmentAreaFinderResult findMapTileWithInvisibleGood(
+        const Good* invisibleGood, const MapCoords& mapCoordsSource);
+
 private:
     /**
      * @brief Interner Helper

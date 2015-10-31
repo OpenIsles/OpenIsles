@@ -3,6 +3,7 @@
 
 #include <memory>
 #include <string>
+#include <unordered_map>
 #include "config/BuildingCosts.h"
 #include "config/MapTileType.h"
 #include "game/ProductionSlots.h"
@@ -164,20 +165,29 @@ struct MapObjectType {
      */
     unsigned char maxCarriers = 0;
 
-    /**
-     * @brief (nur für `Building`, die Waren holen) Typ des Trägers, den dieses Gebäude losschickt
-     */
-    const MapObjectType* carrierType = nullptr;
+    // TODO vermutlich sinnvoller, wenn Carrier einen eigenen CarrierConfig-Datentyp haben
+    struct {
+        /**
+         * @brief (nur für `Building`, die Waren holen) Typ des Trägers, den dieses Gebäude losschickt
+         */
+        const MapObjectType* mapObjectType = nullptr;
 
-    /**
-     * @brief (nur für `Carrier`) gibt an, wie viel der Träger maximal tragen kann.
-     */
-    unsigned char carrierCapacity = 0;
+        /**
+         * @brief (nur für `Carrier`) gibt an, wie viel der Träger maximal tragen kann.
+         */
+        unsigned char capacity = 0;
 
-    /**
-     * @brief (nur für `Carrier`) ordnet Animations-Zustände einem GraphicSet-Keys zu
-     */
-    std::unordered_map<std::string, std::string> carrierAnimations;
+        /**
+         * @brief (nur für `Carrier`) ordnet Animations-Zustände einem GraphicSet-Keys zu
+         */
+        std::unordered_map<std::string, std::string> animations;
+
+        /**
+         * @brief Sekunden, die der Träger braucht, um 1t zu ernten
+         */
+        double secondsToProduce = 0;
+
+    } carrier;
 
     /**
      * @brief (nur für `Harvestable`) gibt das maximale Alter an, das diese Landschaft erreichen kann.

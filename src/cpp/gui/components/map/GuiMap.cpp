@@ -619,7 +619,7 @@ bool GuiMap::onEventElement(SDL_Event& event) {
             const MapCoords& mapCoords = MapCoordUtils::getMapCoordsUnderMouse(*map, event.motion.x, event.motion.y);
             const MapTile* mapTile = map->getMapTileAt(mapCoords);
 
-            // Fruchtbarkeit nur auf Grassland anzeigen, nicht Küste, Flüsse etc.
+            // Fruchtbarkeit nur auf Gras anzeigen, nicht Küste, Flüsse etc.
             if (mapTile != nullptr && mapTile->getMapTileConfig()->mapTileType == MapTileType::GRASS) {
                 // TODO Fruchtbarkeit von mapTile->isle;
                 context->guiMgr->setStatusBarText("TODO - Fruchtbarkeit der Insel");

@@ -4,7 +4,7 @@
     <carrier name="carrier">
         <capacity>4</capacity>
         <animations>
-            <animation state="running" graphic-set="carrier" />
+            <animation carrier-state="running" graphic-set="carrier" />
         </animations>
     </carrier>
 
@@ -12,16 +12,17 @@
     <carrier name="cart">
         <capacity>6</capacity>
         <animations>
-            <animation state="without-cargo" graphic-set="cart-without-cargo" />
-            <animation state="with-cargo" graphic-set="cart-with-cargo" />
+            <animation carrier-state="without-cargo" graphic-set="cart-without-cargo" />
+            <animation carrier-state="with-cargo" graphic-set="cart-with-cargo" />
         </animations>
     </carrier>
 
     <!-- Schaf -->
     <carrier name="sheep">
-        <capacity>1</capacity>
+        <capacity>4</capacity>
+        <seconds-to-produce>18</seconds-to-produce>
         <animations>
-            <animation state="todo" graphic-set="sheep" />
+            <walking-animation carrier-state="walking" graphic-set="sheep" />
         </animations>
     </carrier>
 </carriers>

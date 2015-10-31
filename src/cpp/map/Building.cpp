@@ -6,7 +6,11 @@
 
 
 bool Building::updateObject(const Context& context) {
-    context.economicsMgr->updateProduction(this);
+    // TODO entfernen; Übergangslösung, dass Gebäude ohne Träger produzieren können
+    if (mapObjectType->name != "sheep-farm" && mapObjectType->name != "cattle-farm") {
+        context.economicsMgr->updateProduction(this);
+    }
+
     sendNewCarrier(context);
     return true;
 }
@@ -33,8 +37,10 @@ void Building::sendNewCarrier(const Context& context) {
             return;
         }
 
-        const MapObjectType* carrierType = mapObjectType->carrierType;
-        addCarrierMapObject(context, result, carrierType, "cart-without-cargo");
+        const MapObjectType* carrierType = mapObjectType->carrier.mapObjectType;
+        EightDirectionsAnimation animations =
+            context.graphicsMgr->getGraphicSet("cart-without-cargo")->getEightDirectionsAnimation();
+        addCarrierMapObject(context, result, carrierType, animations);
         return;
     }
 
@@ -88,8 +94,10 @@ void Building::sendNewCarrier(const Context& context) {
             return;
         }
 
-        const MapObjectType* carrierType = mapObjectType->carrierType;
-        addCarrierMapObject(context, result, carrierType, "carrier");
+        const MapObjectType* carrierType = mapObjectType->carrier.mapObjectType;
+        EightDirectionsAnimation animations =
+            context.graphicsMgr->getGraphicSet("carrier")->getEightDirectionsAnimation();
+        addCarrierMapObject(context, result, carrierType, animations);
         return;
     }
 
@@ -97,15 +105,17 @@ void Building::sendNewCarrier(const Context& context) {
         // TODO Träger über Config steuern
         // TODO Rinderfarm sollte später Rinder haben, keine Schafe ;-)
         if (mapObjectType->name == "sheep-farm" || mapObjectType->name == "cattle-farm") {
-            const Good* goodGrassland = context.configMgr->getGood("grassland");
+            const Good* goodGrass = context.configMgr->getGood("grass");
 
-            result = inCatchmentAreaFinder.findMapTileWithInvisibleGood(goodGrassland);
+            result = inCatchmentAreaFinder.findMapTileWithInvisibleGood(goodGrass);
             if (!result) {
                 return;
             }
 
-            const MapObjectType* carrierType = mapObjectType->carrierType;
-            addCarrierMapObject(context, result.route, goodGrassland, carrierType, "sheep0");
+            const MapObjectType* carrierType = mapObjectType->carrier.mapObjectType;
+            EightDirectionsAnimation animations =
+                context.graphicsMgr->getGraphicSet("sheep0")->getEightDirectionsAnimation("walking");
+            addCarrierMapObject(context, result.route, goodGrass, carrierType, animations);
 
             // Slot markieren, dass nicht ein zweiter Träger hinläuft.
             context.game->getMap()->getMapTileAt(result.mapCoords)->harvestBusy = true;
@@ -125,9 +135,9 @@ void Building::sendNewCarrier(const Context& context) {
 void Building::addCarrierMapObject(const Context& context,
                                    const InCatchmentAreaFinderResult& result,
                                    const MapObjectType* carrierType,
-                                   std::string graphicSetForCarrierAnimation) {
+                                   const EightDirectionsAnimation& animations) {
 
-    addCarrierMapObject(context, result.route, result.good, carrierType, graphicSetForCarrierAnimation);
+    addCarrierMapObject(context, result.route, result.good, carrierType, animations);
 
     // Slot markieren, dass nicht ein zweiter Träger hinläuft.
     // Zu einem Lagergebäude dürfen natürlich mehrere hinlaufen und sich bedienen.
@@ -140,17 +150,12 @@ void Building::addCarrierMapObject(const Context& context,
 void Building::addCarrierMapObject(const Context& context,
                                    const Route& route, const Good* good,
                                    const MapObjectType* carrierType,
-                                   std::string graphicSetForCarrierAnimation) {
+                                   const EightDirectionsAnimation& animations) {
 
-    const MapCoords& firstHopOnRoute = route.front();
     const unsigned long gameTicks = context.game->getTicks();
 
     Carrier* carrier = (Carrier*) MapObject::instantiate(carrierType);
-    carrier->initRoute(this, route, good, true);
-    carrier->setLastUpdateTicks(gameTicks);
-    carrier->setMapCoords((DoubleMapCoords) firstHopOnRoute);
-    carrier->updateCurrentMovingDirection();
-    carrier->setAnimations(*context.graphicsMgr->getGraphicSet(graphicSetForCarrierAnimation));
+    carrier->initRoute(this, route, good, carrierType->carrier.capacity, true, animations, gameTicks);
 
     context.game->getMap()->addMapObject(carrier);
     carriers.insert(carrier);

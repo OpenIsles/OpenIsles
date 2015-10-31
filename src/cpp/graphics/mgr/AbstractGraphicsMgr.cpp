@@ -378,34 +378,32 @@ void AbstractGraphicsMgr::loadSheepGraphicSets() {
 
         int frameWidth = graphic->getWidth() / 12;
         int frameHeight = graphic->getHeight() / 8;
-        int height = graphic->getHeight();
 
         GraphicSet* graphicSet = new GraphicSet();
-        Rect frameRect(0, 0, frameWidth, height);
+        Rect frameRect(0, 0, frameWidth, frameHeight);
 
-        int y = 0;
         forEachEighthDirection(view) {
-            int x = 0;
+            frameRect.x = 0;
 
-            Animation* animationRunning = new Animation(8);
-            for (int frameIndex = 0; frameIndex < 8; frameIndex++, x += frameWidth) {
+            Animation* animationWalking = new Animation(8);
+            for (int frameIndex = 0; frameIndex < 8; frameIndex++, frameRect.x += frameWidth) {
                 IGraphic* frameGraphic = loadGraphic(*graphic, frameRect);
-                animationRunning->addFrame(frameIndex, frameGraphic);
+                animationWalking->addFrame(frameIndex, frameGraphic);
             }
-            graphicSet->addByStateAndView("running", view, animationRunning);
+            graphicSet->addByStateAndView("walking", view, animationWalking);
 
             Animation* animationEating = new Animation(4);
-            for (int frameIndex = 0; frameIndex < 4; frameIndex++, x += frameWidth) {
+            for (int frameIndex = 0; frameIndex < 4; frameIndex++, frameRect.x += frameWidth) {
                 IGraphic* frameGraphic = loadGraphic(*graphic, frameRect);
-                animationRunning->addFrame(frameIndex, frameGraphic);
+                animationEating->addFrame(frameIndex, frameGraphic);
             }
             graphicSet->addByStateAndView("eating", view, animationEating);
 
             // TODO später entfernen; nur dazu da, dass der bisherige Code funktioniert.
-            IGraphic* firstFrameGraphic = loadGraphic(*graphic, Rect(0, y, frameWidth, frameHeight));
+            IGraphic* firstFrameGraphic = loadGraphic(*graphic, Rect(0, frameRect.y, frameWidth, frameHeight));
             graphicSet->addByView(view, new Animation(firstFrameGraphic));
 
-            y += frameHeight;
+            frameRect.y += frameHeight;
         }
 
         graphicSets["sheep" + toString(i)] = graphicSet;

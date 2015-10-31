@@ -175,6 +175,22 @@ public:
         return this->at(GraphicSetKey(state, view));
     }
 
+    EightDirectionsAnimation getEightDirectionsAnimation() const {
+        EightDirectionsAnimation animations;
+        forEachEighthDirection(view) {
+            animations[view] = getByView(view);
+        }
+        return animations;
+    }
+
+    EightDirectionsAnimation getEightDirectionsAnimation(GraphicSetKeyState& state) const {
+        EightDirectionsAnimation animations;
+        forEachEighthDirection(view) {
+            animations[view] = getByStateAndView(state, view);
+        }
+        return animations;
+    }
+
 };
 
 #endif

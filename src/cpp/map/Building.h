@@ -116,12 +116,12 @@ private:
      * @param context (Dependency)
      * @param result Ergebnis-Struktur, die zu verwendende Route und zu holendes Gut enthält
      * @param carrierType `MapObjectType` des zu erstellenden Trägers
-     * @param graphicSetForCarrierAnimation GraphicSet-Key, der für die Animation des Träger benutzt werden soll
+     * @param animations Animationen, die für den Träger benutzt werden sollen
      */
     void addCarrierMapObject(const Context& context,
                              const InCatchmentAreaFinderResult& result,
                              const MapObjectType* carrierType,
-                             std::string graphicSetForCarrierAnimation);
+                             const EightDirectionsAnimation& animations);
 
     /**
      * @brief Legt einen Träger auf der Map an und zuweist ihm dem Gebäude zu.
@@ -130,12 +130,12 @@ private:
      * @param route zu verwendende Route
      * @param good zu holendes Gut
      * @param carrierType `MapObjectType` des zu erstellenden Trägers
-     * @param graphicSetForCarrierAnimation GraphicSet-Key, der für die Animation des Träger benutzt werden soll
+     * @param animations Animationen, die für den Träger benutzt werden sollen
      */
     void addCarrierMapObject(const Context& context,
                              const Route& route, const Good* good,
                              const MapObjectType* carrierType,
-                             std::string graphicSetForCarrierAnimation);
+                             const EightDirectionsAnimation& animations);
 
 };
 

@@ -20,9 +20,10 @@ class Building;
 class Carrier : public MapObjectMoving {
 
 #ifdef TESTS_ENABLED
-    FRIEND_TEST(EconomicsMgrTest, updateCarrier);
+    FRIEND_TEST(CarrierSheepTest, checkThatSheepsHarvestMultipleTimesBeforeReturning);
     FRIEND_TEST(CarrierTest, checkThatCarrierIsSentToFullerInventoryFirst);
     FRIEND_TEST(CarrierTest, checkThatCarrierIsSentByLastCollectionWhenSameInventory);
+    FRIEND_TEST(EconomicsMgrTest, updateCarrier);
 #endif
     friend class EconomicsMgr; // EconomicsMgr soll zum Aktualisieren des Trägers einfach zugreifen können
     friend class GuiMap; // GuiMap soll zum Rendern des Trägers einfach zugreifen können
@@ -73,6 +74,20 @@ private:
      */
     double animationFrame;
 
+    /**
+     * @brief Zustand des Träger, um zwischen "laufen" und "ernten" zu unterscheiden
+     */
+    enum {
+        WALKING,
+        HARVESTING
+    } state = WALKING;
+
+    /**
+     * @brief [Zeitpunkt](@ref gameTicks), wann wir mit Ernten fertig sind.
+     * Nur gültig, wenn `state == HARVESTING`.
+     */
+    unsigned long harvestingFinishedTicks;
+
 public:
     Carrier() {}
     ~Carrier() {}
@@ -80,15 +95,20 @@ public:
     virtual bool updateObject(const Context& context) override;
 
     /**
-     * @brief Initialisiert einen eben neu instanziierten Träger und weist ihm einen
-     * konkreten Abhol-/Lieferauftrag zu.
+     * @brief Initialisiert einen eben neu instanziierten Träger und weist ihm einen konkreten Abhol-/Lieferauftrag zu.
+     * Der Träger wird an die Wegmarke der Route gesetzt, die Animation gesetzt,
+     * die Laufrichtung des Träger ausgerichtet, sowie der Status auf WALKING.
      *
      * @param owningBuilding Gebäude, zu dem dieser Träger gehört.
      * @param route Route, die der Träger ablaufen soll
      * @param good Gut, das abzuholen bzw. zu liefern ist
+     * @param capacity Menge, die der Träger halten kann
      * @param onOutboundTrip `true` für Hinweg, `false` für Rückweg.
+     * @param animations zu verwendende Animationen für den Träger
+     * @param gameTicks aktuelle [Spielzeit](@ref gameTicks). Wird verwendet, um die lastUpdateTicks-Zeit zu setzen
      */
-    void initRoute(Building* owningBuilding, Route route, const Good* good, bool onOutboundTrip);
+    void initRoute(Building* owningBuilding, Route route, const Good* good, unsigned int capacity,
+                   bool onOutboundTrip, const EightDirectionsAnimation& animations, unsigned long gameTicks);
 
     const EightDirectionsAnimation& getAnimations() const {
         return animations;
@@ -97,6 +117,12 @@ public:
     void setAnimations(const GraphicSet& graphicSet) {
         forEachEighthDirection(view) {
             animations[view] = graphicSet.getByView(view);
+        }
+    }
+
+    void setAnimations(const EightDirectionsAnimation& animations) {
+        forEachEighthDirection(view) {
+            this->animations[view] = animations[view];
         }
     }
 
@@ -111,6 +137,23 @@ public:
     void updateCurrentMovingDirection();
 
 private:
+    /**
+     * @brief Handelt die Situation, wenn der Route die Träger fertig gelaufen ist.
+     * Entweder wird der Träger zerstört, beginnt mit Ernten oder ihm wird eine neue Route generiert und zugewiesen.
+     *
+     * @param context (Dependency)
+     * @param deleteMe Flag, mit dem man die Zerstörung des Trägers anweisen kann
+     */
+    void onRouteDone(const Context& context, bool& deleteMe);
+
+    /**
+     * @brief Handelt die Situation, wenn der Träger mit Ernten fertig ist.
+     * Ihm wird eine neue Route zugewiesen.
+     *
+     * @param context (Dependency)
+     */
+    void onHarvestingFinished(const Context& context);
+
     /**
      * @brief Sucht für ein Gebäude einen GoodsSlot, in welchen ein Träger seine Waren laden soll.
      * Handelt es sich bei dem Gebäude um ein Lagergebäude, wird der passende Slot in der Kolonie zurückgegeben,

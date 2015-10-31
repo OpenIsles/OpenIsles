@@ -19,5 +19,5 @@
     <good name="bricks">Ziegel</good>
 
     <!-- unsichtbare Güter, die für die Wirtschaft notwendig sind, aber der Nutzer nicht sehen soll -->
-    <good name="grassland" invisible="true">Weideland</good>
+    <good name="grass" invisible="true">Gras</good>
 </goods>

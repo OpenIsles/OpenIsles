@@ -438,6 +438,9 @@
         </catchment-area>
         <production-slots>
             <output good="wool" capacity="3" rate="1.95" />
+            <!-- TODO so sollte das später mal aussehen: -->
+            <!-- <input good="grass" capacity="8" amount-for-production="4" /> -->
+            <!-- <output good="wool" capacity="8" seconds-to-produce="30" /> -->
         </production-slots>
         <inhabitants>2</inhabitants>
         <carriers name="sheep" max-carriers="3" />
