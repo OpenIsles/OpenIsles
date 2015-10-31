@@ -308,6 +308,8 @@ void Carrier::onHarvestingFinished(const Context& context) {
     }
 
     const Good* goodGrass = context.configMgr->getGood("grass");
+    EightDirectionsAnimation animations =
+                    context.graphicsMgr->getGraphicSet("sheep1")->getEightDirectionsAnimation("walking");
 
     initRoute(owningBuilding, routeBackToOwningBuilding, goodGrass, carriedGoods.capacity,
               false, animations, context.game->getTicks());
