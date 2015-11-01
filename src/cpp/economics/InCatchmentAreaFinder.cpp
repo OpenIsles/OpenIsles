@@ -1,5 +1,6 @@
 #include "economics/InCatchmentAreaFinder.h"
 #include "game/Game.h"
+#include "utils/RandomEngine.h"
 
 /**
  * @brief Hilfsstruktur, die ein potentielles Ergebnis enthält.
@@ -19,6 +20,12 @@ struct PotentialInCatchmentAreaFinderResult : public InCatchmentAreaFinderResult
      * stattgefunden hat
      */
     unsigned long lastGoodsCollections;
+
+    /*
+     * @brief Zufallszahl, die diesem Ergebnis zugeordnet ist.
+     * Wir verwenden sie, um bei mehreren möglichen Ergebnissen zufällig eins zu wählen
+     */
+    unsigned long randomNumber = 0;
 };
 
 
@@ -289,6 +296,7 @@ InCatchmentAreaFinderResult InCatchmentAreaFinder::findMapTileWithInvisibleGood(
         potentialResult.foundSomething = true;
         potentialResult.mapCoords = mapCoords;
         potentialResult.route = route;
+        potentialResult.randomNumber = (*context->randomEngine)();
 
         // Als Zeitpunkt nehmen wir nextHarvestTicks. Das is nicht, wann zuletzt geerntet wurde, sondern wann das
         // nächste Mal geerntet werden kann.
@@ -308,10 +316,16 @@ InCatchmentAreaFinderResult InCatchmentAreaFinder::findMapTileWithInvisibleGood(
                                 const PotentialInCatchmentAreaFinderResult& result2) {
 
         // Kachel, die länger nicht abgeerntet wurde, hat Vorrang
-        return result1.lastGoodsCollections < result2.lastGoodsCollections;
+        if (result1.lastGoodsCollections < result2.lastGoodsCollections) {
+            return true;
+        }
+        else if (result1.lastGoodsCollections > result2.lastGoodsCollections) {
+            return false;
+        }
 
-        // TODO Bei Gleichheit eine Form von Zufall einbauen, sonst grasen alle Schafe von oben nach unten die Karte ab. Das sieht doof aus.
-        // Wichtig: Der "Zufall" muss vorhersehbar sein, sonst können wir nicht testen.
+        // Bei Gleichheit mittels Zufall entscheiden, sonst grasen alle Schafe
+        // von oben nach unten die Karte ab. Das sieht doof aus.
+        return (result1.randomNumber < result2.randomNumber);
     };
 
     potentialResults.sort(resultComparator);
