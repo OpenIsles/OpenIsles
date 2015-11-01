@@ -2,6 +2,7 @@
 #include <set>
 #include "game/Game.h"
 #include "map/buildqueue/BuildOperation.h"
+#include "utils/RandomEngine.h"
 
 
 void BuildOperation::requestBuild(const MapCoords& mapCoords, const MapObjectType* mapObjectType,
@@ -56,17 +57,14 @@ void BuildOperation::requestBuild(const MapCoords& mapCoords, const MapObjectTyp
     // Sonderfälle, wo zufällig gewählt wird: Haus (= zufälliges Pionier-Haus) und Wald
     // TODO über Config steuern
     if (mapObjectType->name == "pioneers-house1" || mapObjectType->name == "northern-forest1") {
-        std::random_device randomDevice;
-        std::default_random_engine randomEngine(randomDevice());
-
         if (mapObjectType->name == "pioneers-house1") {
             std::uniform_int_distribution<int> randomPioneerHouse(1, 5);
-            std::string mapObjectTypeName = "pioneers-house" + toString(randomPioneerHouse(randomEngine));
+            std::string mapObjectTypeName = "pioneers-house" + toString(randomPioneerHouse(*context->randomEngine));
 
             mapObjectType = context->configMgr->getMapObjectType(mapObjectTypeName);
         } else if (mapObjectType->name == "northern-forest1") {
             std::uniform_int_distribution<int> randomNorthernForest(1, 2);
-            std::string mapObjectTypeName = "northern-forest" + toString(randomNorthernForest(randomEngine));
+            std::string mapObjectTypeName = "northern-forest" + toString(randomNorthernForest(*context->randomEngine));
 
             mapObjectType = context->configMgr->getMapObjectType(mapObjectTypeName);
         }

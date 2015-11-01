@@ -12,6 +12,7 @@
 #include "graphics/renderer/IRenderer.h"
 #include "graphics/renderer/nosdl/NoSDLRenderer.h"
 #include "map/Map.h"
+#include "utils/RandomEngine.h"
 
 /**
  * @brief Basisklasse für alle Test-Fixtures.
@@ -34,6 +35,7 @@ protected:
     IGraphicsMgr* noSdlGraphicsMgr;
     IFontMgr* noSdlFontMgr;
     Game* game;
+    IRandomEngine* randomEngine;
 
 protected:
     GameTest() : GameTest("test-map.tmx") {}
@@ -41,6 +43,9 @@ protected:
 
     virtual void SetUp() {
         noSdlRenderer = new NoSDLRenderer();
+
+        randomEngine = new RealRandomEngine();
+        context.randomEngine = randomEngine;
 
         configMgr = new ConfigMgr();
         context.configMgr = configMgr;
@@ -70,6 +75,7 @@ protected:
         delete noSdlFontMgr;
         delete noSdlGraphicsMgr;
         delete configMgr;
+        delete randomEngine;
 
         delete noSdlRenderer;
     }

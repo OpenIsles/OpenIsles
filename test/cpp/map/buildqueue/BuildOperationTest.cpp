@@ -243,8 +243,8 @@ TEST_F(BuildOperationTest, randomizeWhenBuildingHouses) {
         }
     }
 
-    ASSERT_NE(pioneersHouse1CountInResult1, 68); // Die Häuser dürfen nicht alle pioneersHouse1 sein
-    ASSERT_NE(pioneersHouse1CountInResult2, 68);
+    ASSERT_NE(pioneersHouse1CountInResult1, 17); // Die Häuser dürfen nicht alle pioneersHouse1 sein
+    ASSERT_NE(pioneersHouse1CountInResult2, 17);
 
     ASSERT_GT(differences, 0); // Die Häuser dürfen nicht alle identisch sein
 }

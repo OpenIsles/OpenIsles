@@ -9,6 +9,7 @@ class Game;
 class GuiMgr;
 class IFontMgr;
 class IGraphicsMgr;
+class IRandomEngine;
 class ISoundMgr;
 
 /**
@@ -54,6 +55,11 @@ struct Context {
      * @brief Zustand des Spiels
      */
     Game* game;
+
+    /**
+     * @brief Zufallsgenerator-Engine
+     */
+    IRandomEngine* randomEngine;
 
     /**
      * @brief aktuelle Position des Mauszeigers in Fenster-Koordinaten

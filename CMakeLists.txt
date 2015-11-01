@@ -83,6 +83,7 @@ set(COMMON_SOURCE_FILES
     src/cpp/utils/Consts.h
     src/cpp/utils/Events.h
     src/cpp/utils/MapCoordsIterator.h
+    src/cpp/utils/RandomEngine.h
     src/cpp/utils/Rect.h
     src/cpp/utils/RectangleData.h
     src/cpp/utils/PerformanceCounter.h

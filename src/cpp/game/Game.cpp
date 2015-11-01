@@ -8,6 +8,7 @@
 #include "game/Player.h"
 #include "gui/GuiMgr.h"
 #include "map/Map.h"
+#include "utils/RandomEngine.h"
 
 
 Game::Game(const Context* const context) : ContextAware(context) {
@@ -71,10 +72,8 @@ Harvestable* Game::addHarvestable(
     assert(mapObjectType->type == MapObjectTypeClass::HARVESTABLE);
 
     // ein bisschen Zufall für das Startalter, damit die Felder nicht alle gleichzeitig wachsen
-    std::random_device randomDevice;
-    std::default_random_engine randomEngine(randomDevice());
     std::uniform_real_distribution<double> randomInitAge(0.0, 0.25);
-    double initAge = randomInitAge(randomEngine);
+    double initAge = randomInitAge(*context->randomEngine);
 
     // Objekt anlegen
     Harvestable* harvestable = (Harvestable*) instantiateNewMapObject(mapObjectType);

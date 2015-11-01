@@ -21,6 +21,7 @@
 #include "utils/Color.h"
 #include "utils/Events.h"
 #include "utils/PerformanceCounter.h"
+#include "utils/RandomEngine.h"
 #include "utils/StringFormat.h"
 
 #ifdef DEBUG_A_STAR
@@ -163,6 +164,9 @@ int main(int argc, char** argv) {
         std::cerr << "Could not register events" << std::endl;
         throw std::runtime_error("Could not register events");
     }
+
+    IRandomEngine* randomEngine = new RealRandomEngine();
+    context.randomEngine = randomEngine;
 
     ISoundMgr* sdlSoundMgr = new SDLSoundMgr();
     context.soundMgr = sdlSoundMgr;
@@ -364,6 +368,7 @@ int main(int argc, char** argv) {
     delete sdlGraphicsMgr;
     delete configMgr;
     delete sdlSoundMgr;
+    delete randomEngine;
 
     // Library-Deinitialisierung /////////////////////////////////////////////////////////////////////////////////////
 
