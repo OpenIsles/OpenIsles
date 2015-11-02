@@ -1,14 +1,6 @@
-#include <algorithm>
-#include <cassert>
-#include <cmath>
-#include <set>
 #include "config/ConfigMgr.h"
 #include "economics/EconomicsMgr.h"
-#include "game/Colony.h"
 #include "game/Game.h"
-#include "map/coords/MapCoords.h"
-#include "map/Map.h"
-#include "utils/CatchmentAreaIterator.h"
 
 
 EconomicsMgr::EconomicsMgr(const Context* const context) : ContextAware(context) {
@@ -27,56 +19,39 @@ void EconomicsMgr::updateProduction(Building* building) {
         return;
     }
 
-    unsigned int ticksSinceLastUpdate = building->getTicksSinceLastUpdate(*context);
-    unsigned int ticksInputConsumed = 0, ticksInput2Consumed = 0; // Zeiten, in denen wirklich verbraucht wurde
-    double inputConsumed, input2Consumed, outputProduced;   // verbrauchte/produzierte Güter
+    // TODO Verzögerung berücksichtigen, wenn Input-Güter grade erst reingekommen sind. 
+    // Es darf danach nicht sofort Output da sein, sondern erst dann beginnt die Produktionszeit
 
-    // Haben wir Eingabegüter, dann wird nur produziert, wie diese verfügbar sind
+    // Prüfen, ob es Zeit ist, was zu produzieren
+    unsigned long ticksNextProduction = building->lastGoodsProduction +
+        (unsigned long) (mapObjectType->secondsToProduce * TICKS_PER_SECOND);
+
+    if (context->game->getTicks() < ticksNextProduction) {
+        return;
+    }
+
+    // Input-Güter reichen?
     if (mapObjectType->buildingProduction.input.isUsed()) {
-        inputConsumed =
-            (double) ticksSinceLastUpdate / (double) TICKS_PER_MINUTE * mapObjectType->buildingProduction.input.rate;
-
-        // nur verbrauchen, was auch da is
-        if (inputConsumed > building->productionSlots.input.inventory) {
-            inputConsumed = building->productionSlots.input.inventory;
+        if (building->productionSlots.input.inventory < mapObjectType->inputAmountForProduction) {
+            return;
         }
-        ticksInputConsumed =
-            (unsigned int) (inputConsumed * (double) TICKS_PER_MINUTE / mapObjectType->buildingProduction.input.rate);
 
         if (mapObjectType->buildingProduction.input2.isUsed()) {
-            input2Consumed =
-                (double) ticksSinceLastUpdate / (double) TICKS_PER_MINUTE * mapObjectType->buildingProduction.input2.rate;
-
-            // nur verbrauchen, was auch da is
-            if (input2Consumed > building->productionSlots.input2.inventory) {
-                input2Consumed = building->productionSlots.input2.inventory;
+            if (building->productionSlots.input2.inventory < mapObjectType->input2AmountForProduction) {
+                return;
             }
-            ticksInput2Consumed =
-                (unsigned int) (input2Consumed * (double) TICKS_PER_MINUTE / mapObjectType->buildingProduction.input2.rate);
         }
     }
 
-    // Minimum-Ticks ermitteln, in denen wirklich produziert wurde
-    unsigned int ticksWeReallyProduced = ticksSinceLastUpdate;
+    // Ja? Ok, dann produzieren
     if (mapObjectType->buildingProduction.input.isUsed()) {
-        ticksWeReallyProduced = std::min(ticksWeReallyProduced, ticksInputConsumed);
+        building->productionSlots.input.decreaseInventory(mapObjectType->inputAmountForProduction);
 
         if (mapObjectType->buildingProduction.input2.isUsed()) {
-            ticksWeReallyProduced = std::min(ticksWeReallyProduced, ticksInput2Consumed);
+            building->productionSlots.input2.decreaseInventory(mapObjectType->input2AmountForProduction);
         }
     }
 
-    // Jetzt die Produktion durchführen
-    if (mapObjectType->buildingProduction.input.isUsed()) {
-        inputConsumed = (double) ticksWeReallyProduced / (double) TICKS_PER_MINUTE * mapObjectType->buildingProduction.input.rate;
-        building->productionSlots.input.decreaseInventory(inputConsumed);
-
-        if (mapObjectType->buildingProduction.input2.isUsed()) {
-            input2Consumed =
-                (double) ticksWeReallyProduced / (double) TICKS_PER_MINUTE * mapObjectType->buildingProduction.input2.rate;
-            building->productionSlots.input2.decreaseInventory(input2Consumed);
-        }
-    }
-    outputProduced = (double) ticksWeReallyProduced / (double) TICKS_PER_MINUTE * mapObjectType->buildingProduction.output.rate;
-    building->productionSlots.output.increaseInventory(outputProduced);
+    building->productionSlots.output.increaseInventory(1);
+    building->lastGoodsProduction = context->game->getTicks();
 }

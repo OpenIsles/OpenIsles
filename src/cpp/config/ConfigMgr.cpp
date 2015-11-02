@@ -145,9 +145,17 @@ void ConfigMgr::loadMapObjectTypes() {
             rapidxml::xml_node<>* outputNode = productionSlotsNode->first_node("output", 6, true);
             readGoodSlotConfig(mapObjectType.buildingProduction.output, outputNode);
 
+            if (outputNode != nullptr) {
+                mapObjectType.secondsToProduce = (unsigned char) stringToUnsignedLong(
+                    outputNode->first_attribute("seconds-to-produce", 18, true)->value());
+            }
+
             rapidxml::xml_node<>* inputNode = productionSlotsNode->first_node("input", 5, true);
             if (inputNode != nullptr) {
                 readGoodSlotConfig(mapObjectType.buildingProduction.input, inputNode);
+
+                mapObjectType.inputAmountForProduction = (unsigned char) stringToUnsignedLong(
+                    inputNode->first_attribute("amount-for-production", 21, true)->value());
 
                 rapidxml::xml_node<>* input2Node = productionSlotsNode->first_node("input2", 6, true);
                 if (input2Node != nullptr) {
@@ -210,7 +218,7 @@ void ConfigMgr::loadCarrierMapObjectTypes() {
 
         rapidxml::xml_node<>* secondsToProduceNode = node->first_node("seconds-to-produce", 18, true);
         if (secondsToProduceNode != nullptr) {
-            mapObjectType.carrier.secondsToProduce = stringToDouble(secondsToProduceNode->value());
+            mapObjectType.secondsToProduce = stringToDouble(secondsToProduceNode->value());
         }
 
         // TODO Animations
@@ -397,5 +405,4 @@ void ConfigMgr::readGoodSlotConfig(GoodsSlot& goodSlot, rapidxml::xml_node<>* pr
     goodSlot.good = good;
     goodSlot.capacity = (unsigned int) stringToUnsignedLong(
         produtionSlotNode->first_attribute("capacity", 8, true)->value());
-    goodSlot.rate = stringToDouble(produtionSlotNode->first_attribute("rate", 4, true)->value());
 }

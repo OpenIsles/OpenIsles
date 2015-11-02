@@ -148,8 +148,7 @@ void Carrier::onRouteDone(const Context& context, bool& deleteMe) {
             animations = context.graphicsMgr->getGraphicSet(graphicName)->getEightDirectionsAnimation("eating");
             animationFrame = 0;
             state = HARVESTING;
-            harvestingFinishedTicks =
-                context.game->getTicks() + mapObjectType->carrier.secondsToProduce * TICKS_PER_SECOND;
+            harvestingFinishedTicks = context.game->getTicks() + mapObjectType->secondsToProduce * TICKS_PER_SECOND;
             return;
         }
     }
@@ -231,13 +230,7 @@ void Carrier::onRouteDone(const Context& context, bool& deleteMe) {
     // Das war Rückweg -> Waren ausladen und Träger zerstören
     else if (!onOutboundTrip) {
         GoodsSlot* goodsSlotToUnloadTo = findGoodsSlotToUnloadTo(owningBuilding, carriedGoods.good);
-
-        // TODO Verhältnis über Config steuern. Umwandlung von einem unsichtbaren Input-Gut in ein sichtbares Output-Gut.
-        if (mapObjectType->name == "sheep") {
-            goodsSlotToUnloadTo->increaseInventory(1);
-        } else {
-            goodsSlotToUnloadTo->increaseInventory(carriedGoods.inventory);
-        }
+        goodsSlotToUnloadTo->increaseInventory(carriedGoods.inventory);
 
         deleteMe = true;
         owningBuilding->carriers.erase(this);

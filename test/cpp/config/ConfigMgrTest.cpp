@@ -38,6 +38,9 @@ TEST(ConfigMgrTest, loadMapObjectTypes) {
     ASSERT_TRUE(cathedral->carrier.mapObjectType == nullptr);
     ASSERT_EQ(0, cathedral->carrier.capacity);
     ASSERT_TRUE(cathedral->carrier.animations.empty());
+    ASSERT_EQ(0, cathedral->secondsToProduce);
+    ASSERT_EQ(0, cathedral->inputAmountForProduction);
+    ASSERT_EQ(0, cathedral->input2AmountForProduction);
     ASSERT_EQ(0, cathedral->maxAge);
     ASSERT_EQ(false, cathedral->isForest);
 
@@ -59,9 +62,12 @@ TEST(ConfigMgrTest, loadMapObjectTypes) {
     ASSERT_EQ(false, sugarcaneField->buildingProduction.input.isUsed());
     ASSERT_EQ(false, sugarcaneField->buildingProduction.input2.isUsed());
     ASSERT_EQ(0, sugarcaneField->inhabitants);
-    ASSERT_TRUE(cathedral->carrier.mapObjectType == nullptr);
-    ASSERT_EQ(0, cathedral->carrier.capacity);
-    ASSERT_TRUE(cathedral->carrier.animations.empty());
+    ASSERT_TRUE(sugarcaneField->carrier.mapObjectType == nullptr);
+    ASSERT_EQ(0, sugarcaneField->carrier.capacity);
+    ASSERT_TRUE(sugarcaneField->carrier.animations.empty());
+    ASSERT_EQ(0, sugarcaneField->secondsToProduce);
+    ASSERT_EQ(0, sugarcaneField->inputAmountForProduction);
+    ASSERT_EQ(0, sugarcaneField->input2AmountForProduction);
     ASSERT_EQ(4, sugarcaneField->maxAge);
     ASSERT_EQ(false, sugarcaneField->isForest);
 
@@ -94,11 +100,12 @@ TEST(ConfigMgrTest, loadMapObjectTypes) {
     ASSERT_EQ(true, distillery->buildingProduction.input.isUsed());
     ASSERT_EQ("alcohol", distillery->buildingProduction.output.good->name);
     ASSERT_EQ(4, distillery->buildingProduction.output.capacity);
-    ASSERT_EQ(2.5, distillery->buildingProduction.output.rate);
+    ASSERT_EQ(23, distillery->secondsToProduce);
     ASSERT_EQ("sugar", distillery->buildingProduction.input.good->name);
-    ASSERT_EQ(6, distillery->buildingProduction.input.capacity);
-    ASSERT_EQ(5.0, distillery->buildingProduction.input.rate);
-    // TODO Testcase für output, input UND input2 gesetzt; aktuell haben wir kein solches Gebäude
+    ASSERT_EQ(5, distillery->buildingProduction.input.capacity);
+    ASSERT_EQ(2.0, distillery->inputAmountForProduction);
+    // TODO Testcase für output, input+inputAmountForProduction UND input2+input2AmountForProduction gesetzt;
+    // aktuell haben wir kein solches Gebäude
 
     const MapObjectType* pier = configMgr.getMapObjectType("pier");
     ASSERT_EQ(
@@ -107,6 +114,10 @@ TEST(ConfigMgrTest, loadMapObjectTypes) {
 
     const MapObjectType* northernForest1 = configMgr.getMapObjectType("northern-forest1");
     ASSERT_EQ(true, northernForest1->isForest);
+
+    const MapObjectType* sheepFarm = configMgr.getMapObjectType("sheep-farm");
+    ASSERT_EQ(30, sheepFarm->secondsToProduce);
+    ASSERT_EQ(4, sheepFarm->inputAmountForProduction);
 }
 
 /**
@@ -120,21 +131,21 @@ TEST(ConfigMgrTest, loadCarrierMapObjectTypes) {
     ASSERT_EQ(MapObjectTypeClass::CARRIER, carrier->type);
     ASSERT_EQ(4, carrier->carrier.capacity);
     // TODO animations
-    ASSERT_EQ(0, carrier->carrier.secondsToProduce);
+    ASSERT_EQ(0, carrier->secondsToProduce);
 
     const MapObjectType* cart = configMgr.getMapObjectType("cart");
     ASSERT_TRUE(cart != nullptr);
     ASSERT_EQ(MapObjectTypeClass::CARRIER, cart->type);
     ASSERT_EQ(6, cart->carrier.capacity);
     // TODO animations
-    ASSERT_EQ(0, cart->carrier.secondsToProduce);
+    ASSERT_EQ(0, cart->secondsToProduce);
 
     const MapObjectType* sheep = configMgr.getMapObjectType("sheep");
     ASSERT_TRUE(sheep != nullptr);
     ASSERT_EQ(MapObjectTypeClass::CARRIER, sheep->type);
     ASSERT_EQ(4, sheep->carrier.capacity);
     // TODO animations
-    ASSERT_EQ(18, sheep->carrier.secondsToProduce);
+    ASSERT_EQ(18, sheep->secondsToProduce);
 }
 
 /**

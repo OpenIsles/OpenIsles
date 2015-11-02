@@ -63,11 +63,17 @@ public:
      */
     unsigned long lastGoodsCollections;
 
+    /**
+     * @brief [Zeitpunkt](@ref gameTicks), wann zuletzt Waren von diesem Gebäude produziert worden sind
+     */
+    unsigned long lastGoodsProduction;
+
 public:
     Building() {
-        lastGoodsCollections = 0;
         inhabitants = 0;
         nextCarrierMinTicks = 0;
+        lastGoodsCollections = 0;
+        lastGoodsProduction = 0;
     }
 
     virtual ~Building() {

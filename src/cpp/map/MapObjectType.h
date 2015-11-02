@@ -182,12 +182,25 @@ struct MapObjectType {
          */
         std::unordered_map<std::string, std::string> animations;
 
-        /**
-         * @brief Sekunden, die der Träger braucht, um 1t zu ernten
-         */
-        double secondsToProduce = 0;
-
     } carrier;
+
+    /**
+     * @brief "Sekunden für 1t Produktion"
+     * Für Träger: Zeit, die der Träger braucht, um 1t zu ernten
+     * Für Produktionsgebäude: Zeit, die das Gebäude braucht, um 1t Output-Gut herzustellen
+     */
+    double secondsToProduce = 0;
+
+    /**
+     * @brief (nur für Gebäude) Anzahl Güter aus dem input-Slot, die verbraucht werden, um 1t zu produzieren
+     */
+    // TODO später für Goldschmiede explizit überprüfen. Das is das einzige Gebäude, was keine Ganzzahl hat
+    double inputAmountForProduction = 0;
+
+    /**
+     * @brief (nur für Gebäude) Anzahl Güter aus dem input2-Slot, die verbraucht werden, um 1t zu produzieren
+     */
+    double input2AmountForProduction = 0;
 
     /**
      * @brief (nur für `Harvestable`) gibt das maximale Alter an, das diese Landschaft erreichen kann.

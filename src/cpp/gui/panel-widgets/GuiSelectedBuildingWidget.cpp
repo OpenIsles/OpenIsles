@@ -40,15 +40,15 @@ void GuiSelectedBuildingWidget::renderElement(IRenderer* renderer) {
     // produzierte Waren: Statusleisten-Texte bei Bedarf anpassen
     if (goodsSlotInput->isVisible()) {
         updateInputSlotStatusBarText(
-            goodsSlotInput, mapObjectType->buildingProduction.input.rate,
-            mapObjectType->buildingProduction.output.rate, selectedBuilding->productionSlots.input.inventory,
+            goodsSlotInput, mapObjectType->inputAmountForProduction,
+            mapObjectType->secondsToProduce, selectedBuilding->productionSlots.input.inventory,
             mapObjectType->buildingProduction.input.good->label,
             mapObjectType->buildingProduction.output.good->label);
     }
     if (goodsSlotInput2->isVisible()) {
         updateInputSlotStatusBarText(
-            goodsSlotInput2, mapObjectType->buildingProduction.input2.rate,
-            mapObjectType->buildingProduction.output.rate, selectedBuilding->productionSlots.input2.inventory,
+            goodsSlotInput2, mapObjectType->input2AmountForProduction,
+            mapObjectType->secondsToProduce, selectedBuilding->productionSlots.input2.inventory,
             mapObjectType->buildingProduction.input2.good->label,
             mapObjectType->buildingProduction.output.good->label);
     }
@@ -60,14 +60,14 @@ void GuiSelectedBuildingWidget::renderElement(IRenderer* renderer) {
 }
 
 void GuiSelectedBuildingWidget::updateInputSlotStatusBarText(
-    GuiGoodsSlotElement* goodsSlotElement, double inputRate, double outputRate, double inputInventory,
+    GuiGoodsSlotElement* goodsSlotElement,
+    double inputAmountForProduction, double secondsToProduce, double inputInventory,
     const std::string& inputLabel, const std::string& outputLabel) {
 
     // Ausrechnen, für wie viel Output-Güter die Input-Güter reichen
-    double productionRate = outputRate / inputRate;
-    double input2EnoughForXOutputGoods = productionRate * inputInventory;
+    double inputEnoughForXOutputGoods = inputInventory / inputAmountForProduction;
     char enoughForGoodsString[10];
-    sprintf(enoughForGoodsString, "%.1f", input2EnoughForXOutputGoods);
+    sprintf(enoughForGoodsString, "%.1f", inputEnoughForXOutputGoods);
 
     std::string statusBarText =
         inputLabel + "vorrat (reicht für weitere " + enoughForGoodsString + "t " + outputLabel + ")";
@@ -79,17 +79,44 @@ void GuiSelectedBuildingWidget::onSelectedMapBuildingChanged(const Building* new
 
     const ProductionSlots* productionSlots = &newSelectedBuilding->productionSlots;
 
+    // Gucken, was wir anzeigen. Unsichtbare Güter werden nicht gezeigt
+    const GoodsSlot* inputGoodsSlotToShow = nullptr;
+    const GoodsSlot* input2GoodsSlotToShow = nullptr;
+    const GoodsSlot* outputGoodsSlotToShow = nullptr;
+
+    if (productionSlots->input2.isUsed()) {
+        if (!productionSlots->input.good->invisible && !productionSlots->input2.good->invisible) {
+            inputGoodsSlotToShow = &productionSlots->input;
+            input2GoodsSlotToShow = &productionSlots->input2;
+        } else if (!productionSlots->input.good->invisible && productionSlots->input2.good->invisible) {
+            inputGoodsSlotToShow = &productionSlots->input;
+            input2GoodsSlotToShow = nullptr;
+        } else if (productionSlots->input.good->invisible && !productionSlots->input2.good->invisible) {
+            inputGoodsSlotToShow = &productionSlots->input2;
+            input2GoodsSlotToShow = nullptr;
+        }
+    }
+    else if (productionSlots->input.isUsed()) {
+        if (!productionSlots->input.good->invisible) {
+            inputGoodsSlotToShow = &productionSlots->input;
+        }
+    }
+
+    if (productionSlots->output.isUsed() && !productionSlots->output.good->invisible) {
+        outputGoodsSlotToShow = &productionSlots->output;
+    }
+
     // TODO Gebäude, die nix produzieren, müssen auch was anzeigen (öffentliche Gebäude). Aktuell sind nur Produktionsgebäude berücksichtigt
 
     // Positionen und Sichtbarkeit anpassen.
-    if (productionSlots->input2.isUsed()) {
+    if (input2GoodsSlotToShow != nullptr) {
         guiProductionSlotsElement.setProductionSlots(
             ProductionSlot::INPUT | ProductionSlot::INPUT2 | ProductionSlot::OUTPUT);
     }
-    else if (productionSlots->input.isUsed()) {
+    else if (inputGoodsSlotToShow != nullptr) {
         guiProductionSlotsElement.setProductionSlots(ProductionSlot::INPUT | ProductionSlot::OUTPUT);
     }
-    else if (productionSlots->output.isUsed()) {
+    else if (outputGoodsSlotToShow != nullptr) {
         guiProductionSlotsElement.setProductionSlots(ProductionSlot::OUTPUT);
     }
     else {
@@ -98,13 +125,13 @@ void GuiSelectedBuildingWidget::onSelectedMapBuildingChanged(const Building* new
     }
 
     // goodsSlots verzeigern
-    if (productionSlots->input.isUsed()) {
-        goodsSlotInput->setGoodsSlot(&productionSlots->input);
+    if (inputGoodsSlotToShow != nullptr) {
+        goodsSlotInput->setGoodsSlot(inputGoodsSlotToShow);
     }
-    if (productionSlots->input2.isUsed()) {
-        goodsSlotInput2->setGoodsSlot(&productionSlots->input2);
+    if (input2GoodsSlotToShow != nullptr) {
+        goodsSlotInput2->setGoodsSlot(input2GoodsSlotToShow);
     }
-    if (productionSlots->output.isUsed()) {
-        goodsSlotOutput->setGoodsSlot(&productionSlots->output);
+    if (outputGoodsSlotToShow != nullptr) {
+        goodsSlotOutput->setGoodsSlot(outputGoodsSlotToShow);
     }
 }

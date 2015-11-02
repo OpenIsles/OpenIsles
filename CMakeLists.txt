@@ -162,6 +162,7 @@ set(TEST_FILES
     test/cpp/economics/CarrierSheepTest.cpp
     test/cpp/economics/CarrierTest.cpp
     test/cpp/economics/CarrierWalkingTest.cpp
+    test/cpp/economics/EconomicsMgrTest.cpp
     test/cpp/economics/InCatchmentAreaFinderGoodsPriorityTest.cpp
     test/cpp/economics/InCatchmentAreaFinderInvisibleGoodsTest.cpp
     test/cpp/economics/MaxCarriersAndCarrierDelayTest.cpp

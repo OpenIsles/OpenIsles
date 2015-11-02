@@ -103,6 +103,6 @@ TEST_F(CarrierSheepTest, checkThatSheepsHarvestMultipleTimesBeforeReturning) {
     } while(sheepFarm->carriers.size() == 1);
 
     ASSERT_EQ(0, sheepFarm->carriers.size());
-    ASSERT_EQ(1, sheepFarm->productionSlots.output.inventory); // TODO hier muss später wieder eine 2 kommen, wenn unsichtbare Güter verarbeitet werden
+    ASSERT_EQ(2, sheepFarm->productionSlots.input.inventory);
     ASSERT_EQ(3, game->getMap()->getMapObjects().size()); // Schaf wieder weg
 }

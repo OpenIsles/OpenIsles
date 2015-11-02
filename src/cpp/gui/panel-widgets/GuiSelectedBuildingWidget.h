@@ -48,14 +48,17 @@ private:
      * Es wird der Text "...vorrat (reicht für weitere ...t ...)" gesetzt.
      *
      * @param goodsSlotElement GUI-Element, dessen Statusbar-Text geändert wird
-     * @param inputRate Info aus der Gebäude-Konfiguration, wie viele Güter pro 60s verbraucht werden
-     * @param outputRate Info aus der Gebäude-Konfiguration, wie viele Güter pro 60s produziert werden
+     * @param inputAmountForProduction Info aus der Gebäude-Konfiguration,
+     *                                 wie viele Güter pro 1t Output verbraucht werden
+     * @param secondsToProduce Info aus der Gebäude-Konfiguration, wie viele Sekunden es dauert,
+     *                         um 1t Output herzustellen
      * @param inputInventory Info aus dem konkreten Gebäude, wie viele Güter zur Verfügung stehen
      * @param inputLabel Info aus der Gebäude-Konfiguration, wie das Input-Gut heißt
      * @param outputLabel Info aus der Gebäude-Konfiguration, wie das Output-Gut heißt
      */
     void updateInputSlotStatusBarText(
-        GuiGoodsSlotElement* goodsSlotElement, double inputRate, double outputRate, double inputInventory,
+        GuiGoodsSlotElement* goodsSlotElement,
+        double inputAmountForProduction, double secondsToProduce, double inputInventory,
         const std::string& inputLabel, const std::string& outputLabel);
 };
 

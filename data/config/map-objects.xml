@@ -34,7 +34,7 @@
             0000011111100000
         </catchment-area>
         <production-slots>
-            <output good="bricks" capacity="8" rate="2.9" />
+            <output good="bricks" capacity="8" seconds-to-produce="8" />
         </production-slots>
         <inhabitants>2</inhabitants>
         <max-carriers>1</max-carriers>
@@ -87,7 +87,7 @@
             00000000000011111111000000000000
         </catchment-area>
         <production-slots>
-            <output good="tools" capacity="5" rate="1.65" />
+            <output good="tools" capacity="4" seconds-to-produce="35" />
         </production-slots>
         <inhabitants>3</inhabitants>
     </building>
@@ -133,8 +133,8 @@
             00000000011111111000000000
         </catchment-area>
         <production-slots>
-            <input good="tobacco" capacity="6" rate="4.0" />
-            <output good="tobacco-goods" capacity="4" rate="2.0" />
+            <input good="tobacco" capacity="5" amount-for-production="2" />
+            <output good="tobacco-goods" capacity="4" seconds-to-produce="30" />
         </production-slots>
         <inhabitants>2</inhabitants>
         <carriers name="carrier" max-carriers="1" />
@@ -181,8 +181,8 @@
             00000000011111111000000000
         </catchment-area>
         <production-slots>
-            <input good="sugar" capacity="6" rate="5.0" />
-            <output good="alcohol" capacity="4" rate="2.5" />
+            <input good="sugar" capacity="5" amount-for-production="2" />
+            <output good="alcohol" capacity="4" seconds-to-produce="23" />
         </production-slots>
         <inhabitants>3</inhabitants>
         <carriers name="carrier" max-carriers="1" />
@@ -235,8 +235,8 @@
             00000000000011111111000000000000
         </catchment-area>
         <production-slots>
-            <input good="wool" capacity="7" rate="3.9" />
-            <output good="cloth" capacity="7" rate="1.95" />
+            <input good="wool" capacity="5" amount-for-production="2" />
+            <output good="cloth" capacity="4" seconds-to-produce="30" />
         </production-slots>
         <inhabitants>2</inhabitants>
         <carriers name="carrier" max-carriers="1" />
@@ -279,8 +279,8 @@
             0000000111111110000000
         </catchment-area>
         <production-slots>
-            <input good="cattle" capacity="4" rate="4.8" />
-            <output good="food" capacity="4" rate="2.4" />
+            <input good="cattle" capacity="5" amount-for-production="2" />
+            <output good="food" capacity="4" seconds-to-produce="25" />
         </production-slots>
         <inhabitants>2</inhabitants>
         <carriers name="carrier" max-carriers="1" />
@@ -309,7 +309,8 @@
             011110
         </catchment-area>
         <production-slots>
-            <output good="sugar" capacity="6" rate="2.3" />
+            <!-- TODO input-Träger -->
+            <output good="sugar" capacity="6" seconds-to-produce="8" />
         </production-slots>
         <inhabitants>4</inhabitants>
         <carriers name="carrier" max-carriers="1" />
@@ -351,7 +352,8 @@
             011110
         </catchment-area>
         <production-slots>
-            <output good="tobacco" capacity="6" rate="1.9" />
+            <!-- TODO input-Träger -->
+            <output good="tobacco" capacity="6" seconds-to-produce="15" />
         </production-slots>
         <inhabitants>4</inhabitants>
         <carriers name="carrier" max-carriers="1" />
@@ -393,7 +395,8 @@
             011110
         </catchment-area>
         <production-slots>
-            <output good="spices" capacity="4" rate="1.4" />
+            <!-- TODO input-Träger -->
+            <output good="spices" capacity="4" seconds-to-produce="15" />
         </production-slots>
         <inhabitants>4</inhabitants>
         <carriers name="carrier" max-carriers="1" />
@@ -437,10 +440,8 @@
             00111100
         </catchment-area>
         <production-slots>
-            <output good="wool" capacity="3" rate="1.95" />
-            <!-- TODO so sollte das später mal aussehen: -->
-            <!-- <input good="grass" capacity="8" amount-for-production="4" /> -->
-            <!-- <output good="wool" capacity="8" seconds-to-produce="30" /> -->
+            <input good="grass" capacity="8" amount-for-production="4" />
+            <output good="wool" capacity="8" seconds-to-produce="30" />
         </production-slots>
         <inhabitants>2</inhabitants>
         <carriers name="sheep" max-carriers="3" />
@@ -467,7 +468,8 @@
             011110
         </catchment-area>
         <production-slots>
-            <output good="cattle" capacity="4" rate="2.3" />
+            <input good="grass" capacity="6" amount-for-production="2" />
+            <output good="cattle" capacity="4" seconds-to-produce="25" />
         </production-slots>
         <inhabitants>2</inhabitants>
         <carriers name="sheep" max-carriers="2" />
@@ -505,7 +507,8 @@
             00000011111000000
         </catchment-area>
         <production-slots>
-            <output good="food" capacity="3" rate="2.0" />
+            <!-- TODO input-Träger -->
+            <output good="food" capacity="3" seconds-to-produce="15" />
         </production-slots>
         <inhabitants>1</inhabitants>
         <carriers name="carrier" max-carriers="1" />
@@ -534,7 +537,8 @@
             00111100
         </catchment-area>
         <production-slots>
-            <output good="wood" capacity="10" rate="2.8" />
+            <!-- TODO input-Träger -->
+            <output good="food" capacity="10" seconds-to-produce="8" />
         </production-slots>
         <inhabitants>1</inhabitants>
         <carriers name="carrier" max-carriers="1" />

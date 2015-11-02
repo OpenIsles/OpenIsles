@@ -21,7 +21,7 @@ protected:
 
         // Schafe/Rinder so einstellen, dass sie ewig zum Grasfressen brauchen.
         // Wir wollen nicht, dass während des Tests welche zurücklaufen.
-        configMgr->getMapObjectType("sheep")->carrier.secondsToProduce = 9999;
+        configMgr->getMapObjectType("sheep")->secondsToProduce = 9999;
     }
 };
 

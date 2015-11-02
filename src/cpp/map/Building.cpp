@@ -1,3 +1,4 @@
+#include <cassert>
 #include <list>
 #include "config/ConfigMgr.h"
 #include "economics/EconomicsMgr.h"
@@ -6,11 +7,7 @@
 
 
 bool Building::updateObject(const Context& context) {
-    // TODO entfernen; Übergangslösung, dass Gebäude ohne Träger produzieren können
-    if (mapObjectType->name != "sheep-farm" && mapObjectType->name != "cattle-farm") {
-        context.economicsMgr->updateProduction(this);
-    }
-
+    context.economicsMgr->updateProduction(this);
     sendNewCarrier(context);
     return true;
 }
@@ -88,26 +85,21 @@ void Building::sendNewCarrier(const Context& context) {
             }
         }
 
+        /* Fallunterscheidung:
+         * Der Code für unsichtbare Güter ist ein wenig anders.
+         * Der Fall, dass zwei Güter angefordert werden, ein sichtbares und ein unsichtbares, gibt es nicht!
+         */
+        assert(goods.size() != 2 ||
+               (!(*goods.cbegin())->invisible && !(*(++goods.cbegin()))->invisible)
+        );
 
-        result = inCatchmentAreaFinder.findBuildingWithGoods(goods);
-        if (!result) {
-            return;
-        }
+        const Good* firstGood = *goods.cbegin();
+        if (firstGood->invisible) {
+            // TODO Träger über Config steuern: Animations
+            // TODO Rinderfarm sollte später Rinder haben, keine Schafe ;-)
+            assert(mapObjectType->name == "sheep-farm" || mapObjectType->name == "cattle-farm");
 
-        const MapObjectType* carrierType = mapObjectType->carrier.mapObjectType;
-        EightDirectionsAnimation animations =
-            context.graphicsMgr->getGraphicSet("carrier")->getEightDirectionsAnimation();
-        addCarrierMapObject(context, result, carrierType, animations);
-        return;
-    }
-
-    else {
-        // TODO Träger über Config steuern
-        // TODO Rinderfarm sollte später Rinder haben, keine Schafe ;-)
-        if (mapObjectType->name == "sheep-farm" || mapObjectType->name == "cattle-farm") {
-            const Good* goodGrass = context.configMgr->getGood("grass");
-
-            result = inCatchmentAreaFinder.findMapTileWithInvisibleGood(goodGrass);
+            result = inCatchmentAreaFinder.findMapTileWithInvisibleGood(firstGood);
             if (!result) {
                 return;
             }
@@ -115,18 +107,29 @@ void Building::sendNewCarrier(const Context& context) {
             const MapObjectType* carrierType = mapObjectType->carrier.mapObjectType;
             EightDirectionsAnimation animations =
                 context.graphicsMgr->getGraphicSet("sheep0")->getEightDirectionsAnimation("walking");
-            addCarrierMapObject(context, result.route, goodGrass, carrierType, animations);
+            addCarrierMapObject(context, result.route, firstGood, carrierType, animations);
 
             // Slot markieren, dass nicht ein zweiter Träger hinläuft.
             context.game->getMap()->getMapTileAt(result.mapCoords)->harvestBusy = true;
+
+            // TODO weitere Fälle kommen später mal...
+
+            // TODO Arzt/Feuerwehr: suchen unsichtbare Güter "Pest" und "Feuer" an den Wohngebäuden (vermutl. brennen auch andere Gebäude)
+            // TODO Fischer: suchen Fischgründe
+            // TODO Jägerhütte: Jäger sucht Wildtiere
+            // TODO Steinmetz: sucht einen Steinbruch
         }
+        else {
+            result = inCatchmentAreaFinder.findBuildingWithGoods(goods);
+            if (!result) {
+                return;
+            }
 
-        // TODO weitere Fälle kommen später mal...
-
-        // TODO Arzt/Feuerwehr: suchen unsichtbare Güter "Pest" und "Feuer" an den Wohngebäuden (vermutl. brennen auch andere Gebäude)
-        // TODO Fischer: suchen Fischgründe
-        // TODO Jägerhütte: Jäger sucht Wildtiere
-        // TODO Steinmetz: sucht einen Steinbruch
+            const MapObjectType* carrierType = mapObjectType->carrier.mapObjectType;
+            EightDirectionsAnimation animations =
+                context.graphicsMgr->getGraphicSet("carrier")->getEightDirectionsAnimation();
+            addCarrierMapObject(context, result, carrierType, animations);
+        }
 
         return;
     }
