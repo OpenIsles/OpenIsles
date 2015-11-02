@@ -23,7 +23,7 @@ class Carrier : public MapObjectMoving {
     FRIEND_TEST(CarrierSheepTest, checkThatSheepsHarvestMultipleTimesBeforeReturning);
     FRIEND_TEST(CarrierTest, checkThatCarrierIsSentToFullerInventoryFirst);
     FRIEND_TEST(CarrierTest, checkThatCarrierIsSentByLastCollectionWhenSameInventory);
-    FRIEND_TEST(EconomicsMgrTest, updateCarrier);
+    FRIEND_TEST(CarrierWalkingTest, checkThatCarrierWalksCorrectlyOnTheStreet);
 #endif
     friend class EconomicsMgr; // EconomicsMgr soll zum Aktualisieren des Trägers einfach zugreifen können
     friend class GuiMap; // GuiMap soll zum Rendern des Trägers einfach zugreifen können

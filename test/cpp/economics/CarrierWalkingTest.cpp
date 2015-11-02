@@ -2,7 +2,7 @@
 #include "GameTest.h"
 
 
-class EconomicsMgrTest : public GameTest {
+class CarrierWalkingTest : public GameTest {
 
 protected:
     Building* cattleFarm;
@@ -43,9 +43,9 @@ protected:
  * Wir machen die Rinderfarm-Lager voll, damit das Kontor abholen muss und testen damit, ob der Marktkarren
  * ordnungsgemäß läuft.
  *
- * Siehe `doc/economics-mgr-test.xcf` für den Testaufbau und die einzelnen Schritte
+ * Siehe `doc/carrier-walking-test.xcf` für den Testaufbau und die einzelnen Schritte
  */
-TEST_F(EconomicsMgrTest, updateCarrier) {
+TEST_F(CarrierWalkingTest, checkThatCarrierWalksCorrectlyOnTheStreet) {
     // Da es keine halbe Ticks gibt, treten Rundungsfehler zwischen den echten Koordinaten und den theoretisch
     // errechneten Koordinaten auf. Dies ist der maximale Fehler, den die Tests erlauben.
     const double allowedCoordsError = 0.01;
