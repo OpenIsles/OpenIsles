@@ -538,7 +538,7 @@
         </catchment-area>
         <production-slots>
             <!-- TODO input-Träger -->
-            <output good="food" capacity="10" seconds-to-produce="8" />
+            <output good="wood" capacity="10" seconds-to-produce="8" />
         </production-slots>
         <inhabitants>1</inhabitants>
         <carriers name="carrier" max-carriers="1" />

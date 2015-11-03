@@ -40,6 +40,13 @@ public:
     void setProductionSlots(unsigned char productionsSlotsToShow);
 
     /**
+     * @brief Ändert das Layout der Komponente und verzeigert die anzuzeigenden GoodsSlots.
+     *
+     * @param productionSlots ProductionSlots-Struktur, welche die GoodsSlots enthält, die angezeigt werden sollen.
+     */
+    void setFromProductionSlots(const ProductionSlots& productionSlots);
+
+    /**
      * @brief Liefert das GuiGoodsSlotElement für einen Slot zurück.
      *
      * @param productionSlot welcher ProductionSlot soll zurückgeliefert werden

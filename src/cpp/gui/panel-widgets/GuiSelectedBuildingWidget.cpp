@@ -77,61 +77,6 @@ void GuiSelectedBuildingWidget::updateInputSlotStatusBarText(
 void GuiSelectedBuildingWidget::onSelectedMapBuildingChanged(const Building* newSelectedBuilding) {
     assert(newSelectedBuilding != nullptr);
 
-    const ProductionSlots* productionSlots = &newSelectedBuilding->productionSlots;
-
-    // Gucken, was wir anzeigen. Unsichtbare Güter werden nicht gezeigt
-    const GoodsSlot* inputGoodsSlotToShow = nullptr;
-    const GoodsSlot* input2GoodsSlotToShow = nullptr;
-    const GoodsSlot* outputGoodsSlotToShow = nullptr;
-
-    if (productionSlots->input2.isUsed()) {
-        if (!productionSlots->input.good->invisible && !productionSlots->input2.good->invisible) {
-            inputGoodsSlotToShow = &productionSlots->input;
-            input2GoodsSlotToShow = &productionSlots->input2;
-        } else if (!productionSlots->input.good->invisible && productionSlots->input2.good->invisible) {
-            inputGoodsSlotToShow = &productionSlots->input;
-            input2GoodsSlotToShow = nullptr;
-        } else if (productionSlots->input.good->invisible && !productionSlots->input2.good->invisible) {
-            inputGoodsSlotToShow = &productionSlots->input2;
-            input2GoodsSlotToShow = nullptr;
-        }
-    }
-    else if (productionSlots->input.isUsed()) {
-        if (!productionSlots->input.good->invisible) {
-            inputGoodsSlotToShow = &productionSlots->input;
-        }
-    }
-
-    if (productionSlots->output.isUsed() && !productionSlots->output.good->invisible) {
-        outputGoodsSlotToShow = &productionSlots->output;
-    }
-
-    // TODO Gebäude, die nix produzieren, müssen auch was anzeigen (öffentliche Gebäude). Aktuell sind nur Produktionsgebäude berücksichtigt
-
-    // Positionen und Sichtbarkeit anpassen.
-    if (input2GoodsSlotToShow != nullptr) {
-        guiProductionSlotsElement.setProductionSlots(
-            ProductionSlot::INPUT | ProductionSlot::INPUT2 | ProductionSlot::OUTPUT);
-    }
-    else if (inputGoodsSlotToShow != nullptr) {
-        guiProductionSlotsElement.setProductionSlots(ProductionSlot::INPUT | ProductionSlot::OUTPUT);
-    }
-    else if (outputGoodsSlotToShow != nullptr) {
-        guiProductionSlotsElement.setProductionSlots(ProductionSlot::OUTPUT);
-    }
-    else {
-        // öffentliche Gebäude; hat gar nix, also ausblenden
-        guiProductionSlotsElement.setProductionSlots(0);
-    }
-
-    // goodsSlots verzeigern
-    if (inputGoodsSlotToShow != nullptr) {
-        goodsSlotInput->setGoodsSlot(inputGoodsSlotToShow);
-    }
-    if (input2GoodsSlotToShow != nullptr) {
-        goodsSlotInput2->setGoodsSlot(input2GoodsSlotToShow);
-    }
-    if (outputGoodsSlotToShow != nullptr) {
-        goodsSlotOutput->setGoodsSlot(outputGoodsSlotToShow);
-    }
+    const ProductionSlots& productionSlots = newSelectedBuilding->productionSlots;
+    guiProductionSlotsElement.setFromProductionSlots(productionSlots);
 }

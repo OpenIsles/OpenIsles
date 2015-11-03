@@ -110,26 +110,7 @@ void GuiAddBuildingWidget::renderElement(IRenderer* renderer) {
 
     // produzierte Waren
     const ProductionSlots& buildingProduction = mapObjectType->buildingProduction;
-
-    if (buildingProduction.input2.isUsed()) {
-        productionSlotsElement.setProductionSlots(
-            ProductionSlot::INPUT | ProductionSlot::INPUT2 | ProductionSlot::OUTPUT);
-        productionSlotsElement.getGoodsSlotElement(ProductionSlot::INPUT)->setGoodsSlot(&buildingProduction.input);
-        productionSlotsElement.getGoodsSlotElement(ProductionSlot::INPUT2)->setGoodsSlot(&buildingProduction.input2);
-        productionSlotsElement.getGoodsSlotElement(ProductionSlot::OUTPUT)->setGoodsSlot(&buildingProduction.output);
-    }
-    else if (buildingProduction.input.isUsed()) {
-        productionSlotsElement.setProductionSlots(ProductionSlot::INPUT |  ProductionSlot::OUTPUT);
-        productionSlotsElement.getGoodsSlotElement(ProductionSlot::INPUT)->setGoodsSlot(&buildingProduction.input);
-        productionSlotsElement.getGoodsSlotElement(ProductionSlot::OUTPUT)->setGoodsSlot(&buildingProduction.output);
-    }
-    else if (buildingProduction.output.isUsed()) {
-        productionSlotsElement.setProductionSlots(ProductionSlot::OUTPUT);
-        productionSlotsElement.getGoodsSlotElement(ProductionSlot::OUTPUT)->setGoodsSlot(&buildingProduction.output);
-    }
-    else {
-        productionSlotsElement.setProductionSlots(0);
-    }
+    productionSlotsElement.setFromProductionSlots(buildingProduction);
 
     // Baukosten
     coinsElement.setString(toString(mapObjectType->buildingCosts.coins));
