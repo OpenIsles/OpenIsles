@@ -64,16 +64,23 @@ public:
     unsigned long lastGoodsCollections;
 
     /**
-     * @brief [Zeitpunkt](@ref gameTicks), wann zuletzt Waren von diesem Gebäude produziert worden sind
+     * @brief [Zeitpunkt](@ref gameTicks), wann frühestens Waren von diesem Gebäude produziert werden
+     * (keine Garantie, die Input-Güter müssen da sein)
      */
-    unsigned long lastGoodsProduction;
+    unsigned long nextGoodsProductionTicks;
+
+    /**
+     * @brief Helper-Flag für die Produktion, dass immer dann `true` gesetzt wird, wenn zwischen 2 `update()`-Calls
+     * die notwendigen Input-Güter geliefert wurden. Dieses Flag hilft uns, nextGoodsProductionTicks zu setzen.
+     */
+    bool hasRecievedAlInputGoodsSinceLastUpdate = false;
 
 public:
     Building() {
         inhabitants = 0;
         nextCarrierMinTicks = 0;
         lastGoodsCollections = 0;
-        lastGoodsProduction = 0;
+        nextGoodsProductionTicks = 0;
     }
 
     virtual ~Building() {

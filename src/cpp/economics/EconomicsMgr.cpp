@@ -19,28 +19,42 @@ void EconomicsMgr::updateProduction(Building* building) {
         return;
     }
 
-    // TODO Verzögerung berücksichtigen, wenn Input-Güter grade erst reingekommen sind. 
-    // Es darf danach nicht sofort Output da sein, sondern erst dann beginnt die Produktionszeit
+    // Input-Güter reichen?
+    auto areAllInputGoodsHere = [&]() {
+        if (mapObjectType->buildingProduction.input.isUsed()) {
+            if (building->productionSlots.input.inventory < mapObjectType->inputAmountForProduction) {
+                return false;
+            }
 
-    // Prüfen, ob es Zeit ist, was zu produzieren
-    unsigned long ticksNextProduction = building->lastGoodsProduction +
-        (unsigned long) (mapObjectType->secondsToProduce * TICKS_PER_SECOND);
+            if (mapObjectType->buildingProduction.input2.isUsed()) {
+                if (building->productionSlots.input2.inventory < mapObjectType->input2AmountForProduction) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    };
 
-    if (context->game->getTicks() < ticksNextProduction) {
+    if (!areAllInputGoodsHere()) {
         return;
     }
 
-    // Input-Güter reichen?
-    if (mapObjectType->buildingProduction.input.isUsed()) {
-        if (building->productionSlots.input.inventory < mapObjectType->inputAmountForProduction) {
-            return;
-        }
+    // Waren die Waren grade frisch angeliefert?
+    auto setNextGoodsProductionTicks = [&]() {
+        building->hasRecievedAlInputGoodsSinceLastUpdate = true;
+        building->nextGoodsProductionTicks = context->game->getTicks() +
+            (unsigned long) (mapObjectType->secondsToProduce * TICKS_PER_SECOND);
+    };
 
-        if (mapObjectType->buildingProduction.input2.isUsed()) {
-            if (building->productionSlots.input2.inventory < mapObjectType->input2AmountForProduction) {
-                return;
-            }
-        }
+    if (!building->hasRecievedAlInputGoodsSinceLastUpdate) {
+        // Ja. Dann beginnt ab jetzt die Produktionszeit.
+        setNextGoodsProductionTicks();
+        return;
+    }
+
+    // Prüfen, ob es Zeit ist, was zu produzieren
+    if (context->game->getTicks() < building->nextGoodsProductionTicks) {
+        return;
     }
 
     // Ja? Ok, dann produzieren
@@ -53,5 +67,11 @@ void EconomicsMgr::updateProduction(Building* building) {
     }
 
     building->productionSlots.output.increaseInventory(1);
-    building->lastGoodsProduction = context->game->getTicks();
+
+    // Sind noch genug Input-Güter da? Dann sofort das Helper-Flag setzen, damit sofort wieder die Uhr tickt
+    if (areAllInputGoodsHere()) {
+        setNextGoodsProductionTicks();
+    } else {
+        building->hasRecievedAlInputGoodsSinceLastUpdate = false;
+    }
 }
