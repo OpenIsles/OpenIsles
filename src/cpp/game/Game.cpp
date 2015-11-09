@@ -38,8 +38,11 @@ Game::~Game() {
 }
 
 Colony* Game::foundNewColony(const Player* player, const std::string& colonyName, const Isle* isle) {
-    const std::unordered_map<std::string, Good>& allGoods = context->configMgr->getAllGoods();
-    Colony* colony = new Colony(allGoods);
+    const ConfigMgr* configMgr = context->configMgr;
+    const std::unordered_map<std::string, Good>& allGoods = configMgr->getAllGoods();
+    const std::set<PopulationTier>& allPopulationTiers = configMgr->getAllPopulationTiers();
+
+    Colony* colony = new Colony(allGoods, allPopulationTiers);
     colony->name = colonyName;
     
     colonies.insert(std::pair<std::pair<const Player*, const Isle*>, Colony*>(

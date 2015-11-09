@@ -1,11 +1,13 @@
 #ifndef _COLONY_H
 #define _COLONY_H
 
+#include <set>
 #include <string>
 #include <unordered_map>
 #include <vector>
 #include "config/BuildingCosts.h"
 #include "game/GoodsSlot.h"
+#include "game/PopulationTier.h"
 
 
 /**
@@ -29,13 +31,20 @@ public:
      * @brief Einwohner der Siedlung
      */
     unsigned int population;
+
+    /**
+     * @brief Einwohner pro Bevölkerungsgruppe
+     */
+    std::unordered_map<const PopulationTier*, unsigned int> populationByTier;
     
 public:
     /**
      * @brief Legt eine neue Kolonie mit 30t Lagerkapazität in allen Slots an.
      * @param allGoods Map mit allen verfügbaren Gütern
+     * @param allPopulationTiers Set mit allen verfügbaren Bevölkerungsgruppen
      */
-    Colony(const std::unordered_map<std::string, Good>& allGoods);
+    Colony(const std::unordered_map<std::string, Good>& allGoods,
+           const std::set<PopulationTier>& allPopulationTiers);
 
     ~Colony();
 

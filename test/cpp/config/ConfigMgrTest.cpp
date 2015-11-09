@@ -1,6 +1,5 @@
 #include <cstring>
 #include <gtest/gtest.h>
-#include <map/MapObjectType.h>
 #include "config/ConfigMgr.h"
 #include "config/MapTileType.h"
 #include "map/MapObjectType.h"
@@ -216,4 +215,103 @@ TEST(ConfigMgrTest, parseCatchmentArea) {
     ASSERT_EQ(4, catchmentArea->height);
     ASSERT_EQ(0, memcmp("01001100010100101001", catchmentArea->data, 20));
     delete catchmentArea;
+}
+
+
+/**
+ * @brief Prüft, ob alle Bevölkerungsgruppen richtig konfiguriert sind.
+ */
+TEST(ConfigMgrTest, checkThatPopulationTiersAreFilledCorrectly) {
+    ConfigMgr configMgr;
+
+    {
+        const PopulationTier* populationTier = configMgr.getPopulationTier("pioneers");
+        ASSERT_EQ(1, populationTier->index);
+        ASSERT_EQ("pioneers", populationTier->name);
+        ASSERT_EQ("Pioniere", populationTier->title);
+        ASSERT_EQ(0, populationTier->advancementCosts.coins);
+        ASSERT_EQ(0, populationTier->advancementCosts.tools);
+        ASSERT_EQ(3, populationTier->advancementCosts.wood);
+        ASSERT_EQ(0, populationTier->advancementCosts.bricks);
+        ASSERT_EQ(2, populationTier->maxPopulationPerHouse);
+    }
+
+    {
+        const PopulationTier* populationTier = configMgr.getPopulationTier("settlers");
+        ASSERT_EQ(2, populationTier->index);
+        ASSERT_EQ("settlers", populationTier->name);
+        ASSERT_EQ("Siedler", populationTier->title);
+        ASSERT_EQ(0, populationTier->advancementCosts.coins);
+        ASSERT_EQ(1, populationTier->advancementCosts.tools);
+        ASSERT_EQ(3, populationTier->advancementCosts.wood);
+        ASSERT_EQ(0, populationTier->advancementCosts.bricks);
+        ASSERT_EQ(6, populationTier->maxPopulationPerHouse);
+    }
+
+    {
+        const PopulationTier* populationTier = configMgr.getPopulationTier("burghers");
+        ASSERT_EQ(3, populationTier->index);
+        ASSERT_EQ("burghers", populationTier->name);
+        ASSERT_EQ("Bürger", populationTier->title);
+        ASSERT_EQ(0, populationTier->advancementCosts.coins);
+        ASSERT_EQ(2, populationTier->advancementCosts.tools);
+        ASSERT_EQ(2, populationTier->advancementCosts.wood);
+        ASSERT_EQ(6, populationTier->advancementCosts.bricks);
+        ASSERT_EQ(15, populationTier->maxPopulationPerHouse);
+    }
+
+    {
+        const PopulationTier* populationTier = configMgr.getPopulationTier("merchants");
+        ASSERT_EQ(4, populationTier->index);
+        ASSERT_EQ("merchants", populationTier->name);
+        ASSERT_EQ("Kaufleute", populationTier->title);
+        ASSERT_EQ(0, populationTier->advancementCosts.coins);
+        ASSERT_EQ(3, populationTier->advancementCosts.tools);
+        ASSERT_EQ(3, populationTier->advancementCosts.wood);
+        ASSERT_EQ(9, populationTier->advancementCosts.bricks);
+        ASSERT_EQ(25, populationTier->maxPopulationPerHouse);
+    }
+
+    {
+        const PopulationTier* populationTier = configMgr.getPopulationTier("aristocrats");
+        ASSERT_EQ(5, populationTier->index);
+        ASSERT_EQ("aristocrats", populationTier->name);
+        ASSERT_EQ("Aristokraten", populationTier->title);
+        ASSERT_EQ(0, populationTier->advancementCosts.coins);
+        ASSERT_EQ(3, populationTier->advancementCosts.tools);
+        ASSERT_EQ(3, populationTier->advancementCosts.wood);
+        ASSERT_EQ(12, populationTier->advancementCosts.bricks);
+        ASSERT_EQ(40, populationTier->maxPopulationPerHouse);
+    }
+}
+
+/**
+ * @brief Prüft, ob alle Bevölkerungsgruppen im Set richtig sortiert sind
+ */
+TEST(ConfigMgrTest, checkThatPopulationTiersAreSortedInSet) {
+    ConfigMgr configMgr;
+    const std::set<PopulationTier>& allPopulationTiers = configMgr.getAllPopulationTiers();
+
+    // Größe des Sets überprüfen
+    ASSERT_EQ(5, allPopulationTiers.size());
+
+    // Reihenfolge überprüfen
+    auto iter = allPopulationTiers.cbegin();
+
+    ASSERT_EQ("pioneers", iter->name);
+    iter++;
+
+    ASSERT_EQ("settlers", iter->name);
+    iter++;
+
+    ASSERT_EQ("burghers", iter->name);
+    iter++;
+
+    ASSERT_EQ("merchants", iter->name);
+    iter++;
+
+    ASSERT_EQ("aristocrats", iter->name);
+    iter++;
+
+    ASSERT_TRUE(iter == allPopulationTiers.cend());
 }

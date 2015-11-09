@@ -29,6 +29,7 @@ set(COMMON_SOURCE_FILES
     src/cpp/game/GoodsSlot.h
     src/cpp/game/Player.cpp
     src/cpp/game/Player.h
+    src/cpp/game/PopulationTier.h
     src/cpp/game/ProductionSlot.h
     src/cpp/game/ProductionSlots.h
     src/cpp/graphics/graphic/Animation.h

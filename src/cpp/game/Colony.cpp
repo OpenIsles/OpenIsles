@@ -3,7 +3,9 @@
 
 typedef std::unordered_map<const Good*, GoodsSlot>::value_type GoodsSlotMapValueType;
 
-Colony::Colony(const std::unordered_map<std::string, Good>& allGoods) : goods() {
+Colony::Colony(const std::unordered_map<std::string, Good>& allGoods,
+               const std::set<PopulationTier>& allPopulationTiers) : goods() {
+
     for (auto iter = allGoods.cbegin(); iter != allGoods.cend(); iter++) {
         const Good* good = &iter->second;
         goods[good].good = good;
@@ -12,6 +14,11 @@ Colony::Colony(const std::unordered_map<std::string, Good>& allGoods) : goods() 
     }
 
     population = 0;
+
+    for (auto iter = allPopulationTiers.cbegin(); iter != allPopulationTiers.cend(); iter++) {
+        const PopulationTier* populationTier = &*iter;
+        populationByTier[populationTier] = 0;
+    }
 }
 
 Colony::~Colony() {

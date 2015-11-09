@@ -6,12 +6,14 @@
 #endif
 
 #include <list>
+#include <set>
 #include <string>
 #include <unordered_map>
 #include "defines.h"
 #include "config/Good.h"
 #include "config/MapTileType.h"
 #include "game/GoodsSlot.h"
+#include "game/PopulationTier.h"
 #include "map/Building.h"
 #include "map/Direction.h"
 #include "map/MapObjectType.h"
@@ -157,6 +159,11 @@ private:
      */
     MapTileConfig* mapTileConfigOcean;
 
+    /**
+     * @brief Set aller Bevölkerungsgruppen (geordnet aufsteigend).
+     */
+    std::set<PopulationTier> populationTiers;
+
 public:
     // TODO alles aus Datei einlesen
     /**
@@ -259,6 +266,31 @@ public:
         return mapTileConfigOcean;
     }
 
+    /**
+     * @brief Liefert alle Bevölkerungsgruppen als Set zurück.
+     * @return Set aller Bevölkerungsgruppen
+     */
+    const std::set<PopulationTier>& getAllPopulationTiers() const {
+        return populationTiers;
+    }
+
+    /**
+     * @brief Liefert eine `PopulationTier` ausgehend von ihrem Namen zurück.
+     * @param name Name der Bevölkerungsgruppe
+     * @return `PopulationTier`. `nullptr`, wenn es keinen solche Bevölkerungsgruppe gibt.
+     */
+    const PopulationTier* getPopulationTier(const std::string& name) const {
+        for (auto iter = populationTiers.cbegin(); iter != populationTiers.cend(); iter++) {
+            const PopulationTier& populationTier = *iter;
+
+            if (populationTier.name == name) {
+                return &populationTier;
+            }
+        }
+
+        return nullptr;
+    }
+
 private:
     /**
      * @brief Lädt die Waren
@@ -279,6 +311,11 @@ private:
      * @brief Lädt die Konfiguration der Gelände-Kacheln
      */
     void loadTilesConfig();
+
+    /**
+     * @brief Lädt die Bevölkerungsgruppen
+     */
+    void loadPopulationTiers();
 
     /**
      * @brief Helper, der aus einem String, der aus der XML ausgelesen wurde, den zugehörigen MapTileType findet.
@@ -316,6 +353,15 @@ private:
      * @param produtionSlotNode Zeiger auf den XML-Knoten. Darf nicht `nullptr` sein.
      */
     void readGoodSlotConfig(GoodsSlot& goodSlot, rapidxml::xml_node<>* produtionSlotNode);
+
+    /**
+     * @brief Liest aus einem `<building-costs>`-Unterknoten (`<coins>`, `<tools>`, `<wood>` oder `<bricks>`) die Daten
+     * und füllt damit die entsprechenden `BuildingCosts`.
+     *
+     * @param buildingCosts Datenstruktur, die gefüllt wird
+     * @param buildingCostsNode Zeiger auf den XML-Knoten. Darf nicht `nullptr` sein.
+     */
+    void readBuildingCosts(BuildingCosts& buildingCosts, rapidxml::xml_node<>* buildingCostsNode);
 };
 
 #endif

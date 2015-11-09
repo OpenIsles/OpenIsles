@@ -21,6 +21,9 @@ ConfigMgr::ConfigMgr() {
 
     loadTilesConfig();
     std::cout << "Loaded tiles." << std::endl;
+
+    loadPopulationTiers();
+    std::cout << "Loaded population tiers." << std::endl;
 }
 
 ConfigMgr::~ConfigMgr() {
@@ -123,15 +126,7 @@ void ConfigMgr::loadMapObjectTypes() {
 
         // Baukosten
         rapidxml::xml_node<>* buildingCostsNode = node->first_node("building-costs", 14, true);
-        BuildingCosts& buildingCosts = mapObjectType.buildingCosts;
-        buildingCosts.coins = (unsigned int) stringToUnsignedLong(
-            buildingCostsNode->first_node("coins", 5, true)->value());
-        buildingCosts.tools = (unsigned int) stringToUnsignedLong(
-            buildingCostsNode->first_node("tools", 5, true)->value());
-        buildingCosts.wood = (unsigned int) stringToUnsignedLong(
-            buildingCostsNode->first_node("wood", 4, true)->value());
-        buildingCosts.bricks = (unsigned int) stringToUnsignedLong(
-            buildingCostsNode->first_node("bricks", 6, true)->value());
+        readBuildingCosts(mapObjectType.buildingCosts, buildingCostsNode);
 
         // optionale Tags
         rapidxml::xml_node<>* catchmentAreaNode = node->first_node("catchment-area", 14, true);
@@ -405,4 +400,45 @@ void ConfigMgr::readGoodSlotConfig(GoodsSlot& goodSlot, rapidxml::xml_node<>* pr
     goodSlot.good = good;
     goodSlot.capacity = (unsigned int) stringToUnsignedLong(
         produtionSlotNode->first_attribute("capacity", 8, true)->value());
+}
+
+void ConfigMgr::loadPopulationTiers() {
+    rapidxml::file<> xmlFile("data/config/population-tiers.xml");
+
+    rapidxml::xml_document<>* xmlDocument = new rapidxml::xml_document<>();
+    xmlDocument->parse<0>(xmlFile.data());
+
+    rapidxml::xml_node<>* populationTiersNode = xmlDocument->first_node("population-tiers", 16, true);
+
+    unsigned char index = 1;
+    for (rapidxml::xml_node<>* node = populationTiersNode->first_node(); node != nullptr; node = node->next_sibling()) {
+        PopulationTier populationTier;
+
+        populationTier.index = index++;
+        populationTier.name = std::string(node->first_attribute("name", 4, true)->value());
+        populationTier.title = std::string(node->first_node("title", 5, true)->value());
+
+        rapidxml::xml_node<>* advancementCostsNode = node->first_node("advancement-costs", 17, true);
+        readBuildingCosts(populationTier.advancementCosts, advancementCostsNode);
+
+        populationTier.maxPopulationPerHouse = (unsigned char) stringToUnsignedLong(
+            node->first_node("max-population-per-house", 24, true)->value());
+
+        populationTiers.insert(populationTier);
+
+        std::cout << "Loaded populationTier '" << populationTier.name << "'." << std::endl;
+    }
+
+    delete xmlDocument;
+}
+
+void ConfigMgr::readBuildingCosts(BuildingCosts& buildingCosts, rapidxml::xml_node<>* buildingCostsNode) {
+    buildingCosts.coins = (unsigned int) stringToUnsignedLong(
+        buildingCostsNode->first_node("coins", 5, true)->value());
+    buildingCosts.tools = (unsigned int) stringToUnsignedLong(
+        buildingCostsNode->first_node("tools", 5, true)->value());
+    buildingCosts.wood = (unsigned int) stringToUnsignedLong(
+        buildingCostsNode->first_node("wood", 4, true)->value());
+    buildingCosts.bricks = (unsigned int) stringToUnsignedLong(
+        buildingCostsNode->first_node("bricks", 6, true)->value());
 }

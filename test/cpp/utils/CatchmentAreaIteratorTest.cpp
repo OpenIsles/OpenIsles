@@ -1,7 +1,9 @@
 #include <gtest/gtest.h>
+#include <set>
 #include <unordered_map>
 #include <unordered_set>
 #include "game/Colony.h"
+#include "game/PopulationTier.h"
 #include "map/Building.h"
 #include "utils/CatchmentAreaIterator.h"
 #include "utils/RectangleData.h"
@@ -16,7 +18,8 @@ TEST(CatchmentAreaIteratorTest, noCatchmentArea) {
     mapObjectType.catchmentArea = nullptr;
 
     std::unordered_map<std::string, Good> allGoods;
-    Colony colony(allGoods);
+    std::set<PopulationTier> allPopulationTiers;
+    Colony colony(allGoods, allPopulationTiers);
 
     Building building;
     building.setMapObjectType(&mapObjectType);

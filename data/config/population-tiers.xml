@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<population-tiers>
+    <population-tier name="pioneers">
+        <title>Pioniere</title>
+        <advancement-costs>
+            <coins>0</coins>
+            <tools>0</tools>
+            <wood>3</wood>
+            <bricks>0</bricks>
+        </advancement-costs>
+        <max-population-per-house>2</max-population-per-house>
+    </population-tier>
+
+    <population-tier name="settlers">
+        <title>Siedler</title>
+        <advancement-costs>
+            <coins>0</coins>
+            <tools>1</tools>
+            <wood>3</wood>
+            <bricks>0</bricks>
+        </advancement-costs>
+        <max-population-per-house>6</max-population-per-house>
+    </population-tier>
+
+    <population-tier name="burghers">
+        <title>Bürger</title>
+        <advancement-costs>
+            <coins>0</coins>
+            <tools>2</tools>
+            <wood>2</wood>
+            <bricks>6</bricks>
+        </advancement-costs>
+        <max-population-per-house>15</max-population-per-house>
+    </population-tier>
+
+    <population-tier name="merchants">
+        <title>Kaufleute</title>
+        <advancement-costs>
+            <coins>0</coins>
+            <tools>3</tools>
+            <wood>3</wood>
+            <bricks>9</bricks>
+        </advancement-costs>
+        <max-population-per-house>25</max-population-per-house>
+    </population-tier>
+
+    <population-tier name="aristocrats">
+        <title>Aristokraten</title>
+        <advancement-costs>
+            <coins>0</coins>
+            <tools>3</tools>
+            <wood>3</wood>
+            <bricks>12</bricks>
+        </advancement-costs>
+        <max-population-per-house>40</max-population-per-house>
+    </population-tier>
+</population-tiers>
