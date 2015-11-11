@@ -4,7 +4,7 @@
 #include "game/ProductionSlot.h"
 #include "graphics/renderer/IRenderer.h"
 #include "gui/components/GuiGoodsSlotElement.h"
-#include "gui/components/GuiStaticElement.h"
+#include "gui/components/GuiStaticGraphicElement.h"
 #include "Context.h"
 
 /**
@@ -18,15 +18,15 @@
  *
  * Auf die bis zu drei Güter-Elemente kann per getGoodsSlotElement() zugegriffen werden.
  */
-class GuiProductionSlotsElement : public GuiStaticElement {
+class GuiProductionSlotsElement : public GuiStaticGraphicElement {
 
 private:
     // childElements
-    GuiGoodsSlotElement* goodsSlotInput;    ///< Gütersymbol: verbraute Güter
-    GuiGoodsSlotElement* goodsSlotInput2;   ///< Gütersymbol: weitere verbraute Güter
-    GuiGoodsSlotElement* goodsSlotOutput;   ///< Gütersymbol: produzierte Güter
-    GuiStaticElement* productionPlus;       ///< Symbol Pluszeichen
-    GuiStaticElement* productionArrow;      ///< Symbol Pfeil
+    GuiGoodsSlotElement* goodsSlotInput;       ///< Gütersymbol: verbraute Güter
+    GuiGoodsSlotElement* goodsSlotInput2;      ///< Gütersymbol: weitere verbraute Güter
+    GuiGoodsSlotElement* goodsSlotOutput;      ///< Gütersymbol: produzierte Güter
+    GuiStaticGraphicElement* productionPlus;   ///< Symbol Pluszeichen
+    GuiStaticGraphicElement* productionArrow;  ///< Symbol Pfeil
 
 public:
     GuiProductionSlotsElement(const Context* const context);

@@ -3,7 +3,7 @@
 #include "gui/components/GuiProductionSlotsElement.h"
 
 
-GuiProductionSlotsElement::GuiProductionSlotsElement(const Context* const context) : GuiStaticElement(context) {
+GuiProductionSlotsElement::GuiProductionSlotsElement(const Context* const context) : GuiStaticGraphicElement(context) {
     // Größe ist fix
     width = 206;
     height = 42;
@@ -12,11 +12,11 @@ GuiProductionSlotsElement::GuiProductionSlotsElement(const Context* const contex
     goodsSlotInput2 = new GuiGoodsSlotElement(context);
     goodsSlotOutput = new GuiGoodsSlotElement(context);
 
-    productionPlus = new GuiStaticElement(context);
+    productionPlus = new GuiStaticGraphicElement(context);
     productionPlus->setGraphic(
         context->graphicsMgr->getGraphicSet("production-plus")->getStatic()->getGraphic());
 
-    productionArrow = new GuiStaticElement(context);
+    productionArrow = new GuiStaticGraphicElement(context);
     productionArrow->setGraphic(
         context->graphicsMgr->getGraphicSet("production-arrow")->getStatic()->getGraphic());
 

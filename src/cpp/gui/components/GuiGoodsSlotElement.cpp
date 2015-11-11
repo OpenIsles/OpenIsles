@@ -11,7 +11,7 @@ static Color colorBlack = Color(0, 0, 0, 255);
 static Color colorRedBar = Color(255, 0, 0, 255);
 
 
-GuiGoodsSlotElement::GuiGoodsSlotElement(const Context* const context) : GuiStaticElement(context) {
+GuiGoodsSlotElement::GuiGoodsSlotElement(const Context* const context) : GuiStaticGraphicElement(context) {
     // Größe ist fix
     width = 42;
     height = 42;
@@ -29,7 +29,7 @@ void GuiGoodsSlotElement::setGoodsSlot(const GoodsSlot* goodsSlot) {
 }
 
 void GuiGoodsSlotElement::renderElement(IRenderer* renderer) {
-    GuiStaticElement::renderElement(renderer);
+    GuiStaticGraphicElement::renderElement(renderer);
 
     int windowX, windowY;
     getWindowCoords(windowX, windowY);

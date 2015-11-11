@@ -5,12 +5,12 @@
 #include <functional>
 #include "Context.h"
 #include "graphics/graphic/IGraphic.h"
-#include "gui/components/GuiStaticElement.h"
+#include "gui/components/GuiStaticGraphicElement.h"
 
 /**
  * Grafischer Button, den man einfach nur drücken kann
  */
-class GuiButton : public GuiStaticElement {
+class GuiButton : public GuiStaticGraphicElement {
 
 protected:
     /**

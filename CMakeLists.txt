@@ -118,8 +118,10 @@ set(GUI_SOURCE_FILES
     src/cpp/gui/components/GuiProductionSlotsElement.h
     src/cpp/gui/components/GuiPushButton.cpp
     src/cpp/gui/components/GuiPushButton.h
-    src/cpp/gui/components/GuiStaticElement.cpp
-    src/cpp/gui/components/GuiStaticElement.h
+    src/cpp/gui/components/GuiStaticGraphicElement.cpp
+    src/cpp/gui/components/GuiStaticGraphicElement.h
+    src/cpp/gui/components/GuiStaticTextElement.cpp
+    src/cpp/gui/components/GuiStaticTextElement.h
     src/cpp/gui/components/GuiStatusBar.cpp
     src/cpp/gui/components/GuiStatusBar.h
     src/cpp/gui/panel-widgets/GuiSelectedBuildingWidget.cpp

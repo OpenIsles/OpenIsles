@@ -4,7 +4,7 @@
 #include <string>
 #include "graphics/graphic/IGraphic.h"
 #include "graphics/renderer/IRenderer.h"
-#include "gui/components/GuiStaticElement.h"
+#include "gui/components/GuiStaticGraphicElement.h"
 #include "Context.h"
 
 
@@ -12,9 +12,9 @@
  * @brief Hilfs-Komponente, die ein Symbol und einen String daneben anzeigt.
  * Wir verwenden sie für die Baumaterialen, Münzkosten und (TODO) Betriebskosten
  *
- * Als Symbol wird GuiStaticElement#graphic verwendet.
+ * Als Symbol wird GuiStaticGraphicElement#graphic verwendet.
  */
-class GuiIconWithStringElement : public GuiStaticElement {
+class GuiIconWithStringElement : public GuiStaticGraphicElement {
 
 private:
     /**
@@ -23,7 +23,7 @@ private:
     std::string string;
 
 public:
-    GuiIconWithStringElement(const Context* const context) : GuiStaticElement(context) {
+    GuiIconWithStringElement(const Context* const context) : GuiStaticGraphicElement(context) {
     }
     virtual ~GuiIconWithStringElement() override {}
 

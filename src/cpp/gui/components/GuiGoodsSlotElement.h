@@ -3,13 +3,13 @@
 
 #include "config/Good.h"
 #include "game/GoodsSlot.h"
-#include "gui/components/GuiStaticElement.h"
+#include "gui/components/GuiStaticGraphicElement.h"
 #include "Context.h"
 
 /**
  * Statisches Element, was einen GoodsSlot visualisiert.
  */
-class GuiGoodsSlotElement : public GuiStaticElement {
+class GuiGoodsSlotElement : public GuiStaticGraphicElement {
 
 private:
     /**

@@ -43,8 +43,7 @@ GuiMgr::GuiMgr(const Context* const context, IRenderer* renderer) :
 GuiMgr::~GuiMgr() {
     // Grafiken wieder wegräumen. Der Konstruktur hat sie alle direkt geladen.
     // TODO Die Grafiken könnte man alle schön in den GraphicsMgr packen, dann muss man hier den Aufwand nicht betreiben
-    delete ((GuiStaticElement*) findElement(GUI_ID_PANEL))->getGraphic();
-    delete ((GuiStatusBar*) findElement(GUI_ID_STATUS_BAR))->getGraphic();
+    delete ((GuiStaticGraphicElement*) findElement(GUI_ID_PANEL))->getGraphic();
 
     for (int i = 0; i < 4; i++) {
         delete ((GuiPushButton*) findElement(GUI_ID_PANEL_SWITCH_PUSH_BUTTON_BASE + i))->getGraphic();
@@ -74,7 +73,7 @@ void GuiMgr::initGui() {
 
     // Panel
     IGraphic* graphic = new SDLGraphic(renderer, "data/img/gui/panel.png");
-    GuiStaticElement* panel = new GuiStaticElement(context);
+    GuiStaticGraphicElement* panel = new GuiStaticGraphicElement(context);
     panel->setCoords(768, 0, graphic->getWidth(), graphic->getHeight());
     panel->setGraphic(graphic);
     registerElement(GUI_ID_PANEL, panel);
@@ -95,10 +94,7 @@ void GuiMgr::initGui() {
     panel->addChildElement(guiMapZoomWidget);
 
     // Statusleiste
-    graphic = new SDLGraphic(renderer, "data/img/gui/statusbar.png");
     GuiStatusBar* statusBar = new GuiStatusBar(context);
-    statusBar->setCoords(0, 734, graphic->getWidth(), graphic->getHeight());
-    statusBar->setGraphic(graphic);
     registerElement(GUI_ID_STATUS_BAR, statusBar);
 
     // Panel-Widgets

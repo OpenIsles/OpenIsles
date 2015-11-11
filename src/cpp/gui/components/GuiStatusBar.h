@@ -2,22 +2,29 @@
 #define _GUI_STATUS_BAR_H
 
 #include <SDL_events.h>
-#include <cstring>
+#include <string>
 #include "Context.h"
+#include "graphics/graphic/sdl/SDLGraphic.h"
 #include "graphics/renderer/IRenderer.h"
-#include "gui/components/GuiStaticElement.h"
+#include "gui/components/GuiStaticGraphicElement.h"
+#include "gui/components/GuiStaticTextElement.h"
 
 
 /**
  * @brief GUI-Element, was die Statusleiste darstellt.
  */
-class GuiStatusBar : public GuiStaticElement {
+class GuiStatusBar : public GuiStaticGraphicElement {
 
 private:
     /**
-     * @brief anzuzeigender Text
+     * @brief Hintergrund-Grafik
      */
-    std::string text;
+    IGraphic* backgroundGraphic;
+
+    /**
+     * @brief Textelement, dass den Statusleisten-Text darstellt
+     */
+    GuiStaticTextElement textElement;
 
 public:
     /**
@@ -29,17 +36,10 @@ public:
     virtual ~GuiStatusBar() override;
 
     /**
-     * @brief Zeichnet das Element (ohne Kinder)
-     */
-    virtual void renderElement(IRenderer* renderer) override;
-
-    /**
      * @brief Ändert den anzuzeigenden Text
      * @param text anzuzeigender Text
      */
-    void setText(const std::string& text) {
-        this->text = text;
-    }
+    void setText(const std::string& text);
 };
 
 #endif

@@ -1,5 +1,5 @@
-#ifndef _GUI_STATIC_ELEMENT_H
-#define _GUI_STATIC_ELEMENT_H
+#ifndef _GUI_STATIC_GRAPHIC_ELEMENT_H
+#define _GUI_STATIC_GRAPHIC_ELEMENT_H
 
 #include <SDL.h>
 #include "Context.h"
@@ -10,17 +10,17 @@
 /**
  * Einfaches GUI-Element, was nur aus einer Grafik besteht und nix tut
  */
-class GuiStaticElement : public GuiBase {
+class GuiStaticGraphicElement : public GuiBase {
 
-protected: 
+protected:
     /**
      * @brief Grafik, die für das Element gerendert wird. Kann nullptr sein, wenn keine Grafik gezeichnet werden soll.
      */
     const IGraphic* graphic = nullptr;
 
 public:
-    GuiStaticElement(const Context* const context);
-    virtual ~GuiStaticElement() override;
+    GuiStaticGraphicElement(const Context* const context);
+    virtual ~GuiStaticGraphicElement() override;
 
     const IGraphic* getGraphic() const {
         return graphic;

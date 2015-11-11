@@ -1,26 +1,30 @@
 #include "graphics/mgr/IFontMgr.h"
+#include "graphics/mgr/IGraphicsMgr.h"
 #include "gui/components/GuiStatusBar.h"
 #include "utils/Color.h"
 
 static Color colorWhite = Color(255, 255, 255, 255);
 
 
-GuiStatusBar::GuiStatusBar(const Context* const context) : GuiStaticElement(context) {
+GuiStatusBar::GuiStatusBar(const Context* const context) : GuiStaticGraphicElement(context), textElement(context) {
+    backgroundGraphic = new SDLGraphic(context->graphicsMgr->getRenderer(), "data/img/gui/statusbar.png");
+    setCoords(0, 734, backgroundGraphic->getWidth(), backgroundGraphic->getHeight());
+    setGraphic(backgroundGraphic);
+
+    constexpr int paddingX = 15;
+    textElement.setCoords(paddingX, 0, backgroundGraphic->getWidth() - 2*paddingX, backgroundGraphic->getHeight());
+    textElement.setColor(&colorWhite);
+    textElement.setFontName("DroidSans-Bold.ttf");
+    textElement.setFontSize(14);
+    textElement.setAlign(RENDERTEXT_HALIGN_RIGHT | RENDERTEXT_VALIGN_MIDDLE);
+
+    addChildElement(&textElement);
 }
 
 GuiStatusBar::~GuiStatusBar() {
+    delete backgroundGraphic;
 }
 
-void GuiStatusBar::renderElement(IRenderer* renderer) {
-    GuiStaticElement::renderElement(renderer);
-
-    if (text.empty()) {
-        return;
-    }
-
-    int windowX, windowY;
-    getWindowCoords(windowX, windowY);
-
-    context->fontMgr->renderText(renderer, text, windowX + width - 15, windowY + (height / 2), &colorWhite, nullptr,
-                                 "DroidSans-Bold.ttf", 14, RENDERTEXT_HALIGN_RIGHT | RENDERTEXT_VALIGN_MIDDLE);
+void GuiStatusBar::setText(const std::string& text) {
+    textElement.setText(text);
 }

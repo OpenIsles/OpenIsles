@@ -17,9 +17,9 @@
 
 class GuiBase;
 class GuiButton;
-class GuiStaticElement;
 class GuiPushButton;
 class GuiPanelWidget;
+class GuiStaticGraphicElement;
 class MapObject;
 class SDL_Renderer;
 

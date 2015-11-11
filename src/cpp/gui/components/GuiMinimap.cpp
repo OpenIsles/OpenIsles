@@ -16,7 +16,7 @@ static Color minimapViewBorderColor = Color(0, 0, 255, 96);
 // TODO Erlauben, guiElementBasedClipRect durch Methodenaufruf zu setzen (weil ein neues Spiel andere w/h-Map-Ratio hat)
 
 GuiMinimap::GuiMinimap(const Context* const context) :
-    GuiStaticElement(context), guiElementBasedClipRect(40, 13, 166, 166) {
+    GuiStaticGraphicElement(context), guiElementBasedClipRect(40, 13, 166, 166) {
 
     setCoords(0, 0, 256, 200);
     setGraphic(context->graphicsMgr->getGraphicSet("minimap")->getStatic()->getGraphic());
@@ -31,7 +31,7 @@ GuiMinimap::~GuiMinimap() {
 }
 
 void GuiMinimap::renderElement(IRenderer* renderer) {
-    GuiStaticElement::renderElement(renderer);
+    GuiStaticGraphicElement::renderElement(renderer);
 
     int windowX, windowY;
     getWindowCoords(windowX, windowY);

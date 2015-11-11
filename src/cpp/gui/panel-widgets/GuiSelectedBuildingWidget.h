@@ -5,7 +5,7 @@
 #include <string>
 #include "Context.h"
 #include "gui/components/GuiProductionSlotsElement.h"
-#include "gui/components/GuiStaticElement.h"
+#include "gui/components/GuiStaticGraphicElement.h"
 #include "gui/panel-widgets/GuiPanelWidget.h"
 
 

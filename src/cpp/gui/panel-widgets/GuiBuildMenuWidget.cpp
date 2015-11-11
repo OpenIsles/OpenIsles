@@ -4,7 +4,7 @@
 #include "gui/components/GuiAddBuildingWidget.h"
 #include "gui/components/GuiButton.h"
 #include "gui/components/GuiPushButton.h"
-#include "gui/components/GuiStaticElement.h"
+#include "gui/components/GuiStaticGraphicElement.h"
 #include "gui/panel-widgets/GuiBuildMenuWidget.h"
 
 
@@ -112,7 +112,7 @@ GuiBuildMenuWidget::GuiBuildMenuWidget(const Context* const context) : GuiPanelW
 
     for (int groupIndex = 0; groupIndex < 4; groupIndex++) {
         // Grid
-        GuiStaticElement* addBuildingGrid = new GuiStaticElement(context);
+        GuiStaticGraphicElement* addBuildingGrid = new GuiStaticGraphicElement(context);
         const IGraphic* graphicAddBuildingGrid = context->graphicsMgr->getGraphicSet("add-building-grid")->getStatic()->getGraphic();
         addBuildingGrid->setCoords(775, 450, graphicAddBuildingGrid->getWidth(), graphicAddBuildingGrid->getHeight());
         addBuildingGrid->setGraphic(graphicAddBuildingGrid);

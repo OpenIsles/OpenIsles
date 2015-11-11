@@ -3,7 +3,7 @@
 
 #include <SDL_render.h>
 #include "Context.h"
-#include "gui/components/GuiStaticElement.h"
+#include "gui/components/GuiStaticGraphicElement.h"
 #include "map/Structure.h"
 #include "utils/Rect.h"
 
@@ -11,7 +11,7 @@
 /**
  * @brief GUI-Element, was die Minimap darstellt.
  */
-class GuiMinimap : public GuiStaticElement {
+class GuiMinimap : public GuiStaticGraphicElement {
 
 private:
     /**

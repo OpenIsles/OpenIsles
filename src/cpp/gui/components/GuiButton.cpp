@@ -4,7 +4,7 @@
 #include "gui/components/GuiButton.h"
 
 
-GuiButton::GuiButton(const Context* const context) : GuiStaticElement(context) {
+GuiButton::GuiButton(const Context* const context) : GuiStaticGraphicElement(context) {
 }
 
 GuiButton::~GuiButton() {
