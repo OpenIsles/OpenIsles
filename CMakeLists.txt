@@ -124,8 +124,6 @@ set(GUI_SOURCE_FILES
     src/cpp/gui/components/GuiStaticTextElement.h
     src/cpp/gui/components/GuiStatusBar.cpp
     src/cpp/gui/components/GuiStatusBar.h
-    src/cpp/gui/panel-widgets/GuiSelectedBuildingWidget.cpp
-    src/cpp/gui/panel-widgets/GuiSelectedBuildingWidget.h
     src/cpp/gui/panel-widgets/GuiBuildMenuWidget.cpp
     src/cpp/gui/panel-widgets/GuiBuildMenuWidget.h
     src/cpp/gui/panel-widgets/GuiColonyGoodsWidget.cpp
@@ -134,6 +132,10 @@ set(GUI_SOURCE_FILES
     src/cpp/gui/panel-widgets/GuiDummyWidget.h
     src/cpp/gui/panel-widgets/GuiOptionsMenuWidget.cpp
     src/cpp/gui/panel-widgets/GuiOptionsMenuWidget.h
+    src/cpp/gui/panel-widgets/GuiSelectedHouseBuildingWidget.cpp
+    src/cpp/gui/panel-widgets/GuiSelectedHouseBuildingWidget.h
+    src/cpp/gui/panel-widgets/GuiSelectedProductionBuildingWidget.cpp
+    src/cpp/gui/panel-widgets/GuiSelectedProductionBuildingWidget.h
     src/cpp/gui/GuiMgr.cpp
     src/cpp/gui/GuiMgr.h
     src/cpp/gui/Identifiers.h

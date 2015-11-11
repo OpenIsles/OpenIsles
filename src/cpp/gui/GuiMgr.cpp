@@ -15,7 +15,8 @@
 #include "gui/panel-widgets/GuiColonyGoodsWidget.h"
 #include "gui/panel-widgets/GuiDummyWidget.h"
 #include "gui/panel-widgets/GuiOptionsMenuWidget.h"
-#include "gui/panel-widgets/GuiSelectedBuildingWidget.h"
+#include "gui/panel-widgets/GuiSelectedHouseBuildingWidget.h"
+#include "gui/panel-widgets/GuiSelectedProductionBuildingWidget.h"
 #include "gui/Identifiers.h"
 #include "map/Map.h"
 #include "utils/Color.h"
@@ -177,10 +178,16 @@ void GuiMgr::initGui() {
 void GuiMgr::initPanelWidgets() {
     GuiBase* panel = findElement(GUI_ID_PANEL);
 
-    // ausgewähltes Gebäude (Infos über Produktion und intere Lagerbestände des Gebäudes)
-    GuiSelectedBuildingWidget* selectedBuildingWidget = new GuiSelectedBuildingWidget(context);
-    registerElement(GUI_ID_SELECTED_BUILDING_PANEL_WIDGET, selectedBuildingWidget);
-    panel->addChildElement(selectedBuildingWidget);
+    // ausgewähltes Produktionsgebäude (Infos über Produktion und intere Lagerbestände des Gebäudes)
+    GuiSelectedProductionBuildingWidget* selectedProductionBuildingWidget =
+        new GuiSelectedProductionBuildingWidget(context);
+    registerElement(GUI_ID_SELECTED_PRODUCTION_BUILDING_PANEL_WIDGET, selectedProductionBuildingWidget);
+    panel->addChildElement(selectedProductionBuildingWidget);
+
+    // ausgewähltes Haus
+    GuiSelectedHouseBuildingWidget* selectedHouseBuildingWidget = new GuiSelectedHouseBuildingWidget(context);
+    registerElement(GUI_ID_SELECTED_HOUSE_BUILDING_PANEL_WIDGET, selectedHouseBuildingWidget);
+    panel->addChildElement(selectedHouseBuildingWidget);
 
     // Kolonie-Warenübersicht
     GuiColonyGoodsWidget* colonyGoodsWidget = new GuiColonyGoodsWidget(context);
@@ -497,14 +504,24 @@ void GuiMgr::onSelectedMapObjectChanged(const MapObject* newSelectedMapObject) {
 
                 guiColonyGoodsWidget->onSelectedMapBuildingChanged(newSelectedBuilding);
                 panelState.activeGuiPanelWidget = guiColonyGoodsWidget;
-
-            } else {
-                GuiSelectedBuildingWidget* guiSelectedBuildingWidget =
-                    (GuiSelectedBuildingWidget*) findElement(GUI_ID_SELECTED_BUILDING_PANEL_WIDGET);
-
-                guiSelectedBuildingWidget->onSelectedMapBuildingChanged(newSelectedBuilding);
-                panelState.activeGuiPanelWidget = guiSelectedBuildingWidget;
             }
+            else if (newSelectedBuilding->isHouse()) {
+                GuiSelectedHouseBuildingWidget* guiSelectedHouseBuildingWidget =
+                    (GuiSelectedHouseBuildingWidget*) findElement(GUI_ID_SELECTED_HOUSE_BUILDING_PANEL_WIDGET);
+
+                guiSelectedHouseBuildingWidget->onSelectedMapBuildingChanged(newSelectedBuilding);
+                panelState.activeGuiPanelWidget = guiSelectedHouseBuildingWidget;
+            }
+            else {
+                GuiSelectedProductionBuildingWidget* guiSelectedProductionBuildingWidget =
+                    (GuiSelectedProductionBuildingWidget*) findElement(GUI_ID_SELECTED_PRODUCTION_BUILDING_PANEL_WIDGET);
+
+                guiSelectedProductionBuildingWidget->onSelectedMapBuildingChanged(newSelectedBuilding);
+                panelState.activeGuiPanelWidget = guiSelectedProductionBuildingWidget;
+            }
+
+            // TODO gemeinsames Interface mit onSelectedMapBuildingChanged() an den verschiedenen Widgets
+            // TODO Gebäude, die nix produzieren, müssen auch was anzeigen (öffentliche Gebäude). Aktuell sind nur Produktionsgebäude berücksichtigt
         }
     }
 

@@ -1,5 +1,5 @@
-#ifndef _GUI_SELECTED_BUILDING_WIDGET_H
-#define _GUI_SELECTED_BUILDING_WIDGET_H
+#ifndef _GUI_SELECTED_PRODUCTION_BUILDING_WIDGET_H
+#define _GUI_SELECTED_PRODUCTION_BUILDING_WIDGET_H
 
 #include <SDL.h>
 #include <string>
@@ -10,9 +10,9 @@
 
 
 /**
- * @brief GUI-Widget mit den Informationen des aktuell ausgewählten Gebäudes.
+ * @brief GUI-Widget mit den Informationen des aktuell ausgewählten Produktionsgebäudes.
  */
-class GuiSelectedBuildingWidget : public GuiPanelWidget {
+class GuiSelectedProductionBuildingWidget : public GuiPanelWidget {
 
 private:
     /**
@@ -26,8 +26,8 @@ private:
     GuiGoodsSlotElement* goodsSlotOutput;   ///< Gütersymbol: produzierte Güter
 
 public:
-    GuiSelectedBuildingWidget(const Context* const context);
-    virtual ~GuiSelectedBuildingWidget() override {}
+    GuiSelectedProductionBuildingWidget(const Context* const context);
+    virtual ~GuiSelectedProductionBuildingWidget() override {}
 
     /**
      * @brief Zeichnet das Element (ohne Kinder)

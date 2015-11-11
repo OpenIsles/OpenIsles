@@ -2,11 +2,11 @@
 #include "config/ConfigMgr.h"
 #include "game/Game.h"
 #include "gui/components/GuiGoodsSlotElement.h"
-#include "gui/panel-widgets/GuiSelectedBuildingWidget.h"
+#include "gui/panel-widgets/GuiSelectedProductionBuildingWidget.h"
 #include "map/Map.h"
 
 
-GuiSelectedBuildingWidget::GuiSelectedBuildingWidget(const Context* const context) :
+GuiSelectedProductionBuildingWidget::GuiSelectedProductionBuildingWidget(const Context* const context) :
     GuiPanelWidget(context), guiProductionSlotsElement(context) {
 
     guiProductionSlotsElement.setPosition(15, 60);
@@ -24,7 +24,7 @@ GuiSelectedBuildingWidget::GuiSelectedBuildingWidget(const Context* const contex
     // TODO Child-Buttons für Stilllegen und "Abholung verbieten"
 }
 
-void GuiSelectedBuildingWidget::renderElement(IRenderer* renderer) {
+void GuiSelectedProductionBuildingWidget::renderElement(IRenderer* renderer) {
     const Building* selectedBuilding =
         reinterpret_cast<const Building*>(context->game->getMap()->getSelectedMapObject());
     assert(selectedBuilding != nullptr);
@@ -53,13 +53,11 @@ void GuiSelectedBuildingWidget::renderElement(IRenderer* renderer) {
             mapObjectType->buildingProduction.output.good->label);
     }
 
-    // TODO Gebäude, die nix produzieren, müssen auch was anzeigen (öffentliche Gebäude). Aktuell sind nur Produktionsgebäude berücksichtigt
-
     // TODO Auslastung
     // TODO Betriebskosten
 }
 
-void GuiSelectedBuildingWidget::updateInputSlotStatusBarText(
+void GuiSelectedProductionBuildingWidget::updateInputSlotStatusBarText(
     GuiGoodsSlotElement* goodsSlotElement,
     double inputAmountForProduction, double secondsToProduce, double inputInventory,
     const std::string& inputLabel, const std::string& outputLabel) {
@@ -74,7 +72,7 @@ void GuiSelectedBuildingWidget::updateInputSlotStatusBarText(
     goodsSlotElement->setStatusBarText(statusBarText);
 }
 
-void GuiSelectedBuildingWidget::onSelectedMapBuildingChanged(const Building* newSelectedBuilding) {
+void GuiSelectedProductionBuildingWidget::onSelectedMapBuildingChanged(const Building* newSelectedBuilding) {
     assert(newSelectedBuilding != nullptr);
 
     const ProductionSlots& productionSlots = newSelectedBuilding->productionSlots;
