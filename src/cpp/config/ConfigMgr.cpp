@@ -13,6 +13,9 @@ ConfigMgr::ConfigMgr() {
     loadGoods();
     std::cout << "Loaded goods." << std::endl;
 
+    loadPopulationTiers();
+    std::cout << "Loaded population tiers." << std::endl;
+
     loadCarrierMapObjectTypes();
     std::cout << "Loaded carrier mapObjectTypes." << std::endl;
 
@@ -21,9 +24,6 @@ ConfigMgr::ConfigMgr() {
 
     loadTilesConfig();
     std::cout << "Loaded tiles." << std::endl;
-
-    loadPopulationTiers();
-    std::cout << "Loaded population tiers." << std::endl;
 }
 
 ConfigMgr::~ConfigMgr() {
@@ -162,6 +162,18 @@ void ConfigMgr::loadMapObjectTypes() {
         rapidxml::xml_node<>* inhabitantsNode = node->first_node("inhabitants", 11, true);
         if (inhabitantsNode != nullptr) {
             mapObjectType.inhabitants = (unsigned char) stringToUnsignedLong(inhabitantsNode->value());
+        }
+
+        rapidxml::xml_node<>* populationTierNode = node->first_node("population-tier", 15, true);
+        if (populationTierNode != nullptr) {
+            const char* populationTierString = populationTierNode->value();
+            const PopulationTier* populationTier = getPopulationTier(populationTierString);
+            if (populationTier == nullptr) {
+                std::cerr << "Illegal value '" << populationTierString << "' for populationTier." << std::endl;
+                throw std::runtime_error("Illegal value for populationTier");
+            }
+
+            mapObjectType.populationTier = populationTier;
         }
 
         rapidxml::xml_node<>* carriersNode = node->first_node("carriers", 8, true);

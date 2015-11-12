@@ -104,13 +104,7 @@ public:
      * @return `true` wenn Haus, sonst `false`
      */
     bool isHouse() const {
-        // TODO Flag über die Config steuern
-        return (mapObjectType->name == "pioneers-house1" || mapObjectType->name == "pioneers-house2" ||
-                mapObjectType->name == "pioneers-house3" || mapObjectType->name == "pioneers-house4" ||
-                mapObjectType->name == "pioneers-house5" ||
-                mapObjectType->name == "settlers-house1" || mapObjectType->name == "settlers-house2" ||
-                mapObjectType->name == "settlers-house3" || mapObjectType->name == "settlers-house4" ||
-                mapObjectType->name == "settlers-house5");
+        return (mapObjectType->populationTier != nullptr);
     }
 
 private:

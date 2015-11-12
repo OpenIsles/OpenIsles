@@ -6,6 +6,7 @@
 #include <unordered_map>
 #include "config/BuildingCosts.h"
 #include "config/MapTileType.h"
+#include "game/PopulationTier.h"
 #include "game/ProductionSlots.h"
 #include "utils/RectangleData.h"
 
@@ -150,6 +151,11 @@ struct MapObjectType {
      * jeder Produktionsbetrieb, wie auch öffentliche Gebäude haben diese fixe Einwohnerzahl pro Gebäude.
      */
     unsigned char inhabitants = 0;
+
+    /**
+     * @brief (nur für Häuser) zugeordnete Bevölkerungsgruppe
+     */
+    const PopulationTier* populationTier;
 
     /**
      * @brief gibt an, wie viele Träger das Gebäude maximal haben kann.

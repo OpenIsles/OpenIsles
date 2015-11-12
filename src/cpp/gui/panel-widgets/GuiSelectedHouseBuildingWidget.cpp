@@ -78,12 +78,12 @@ void GuiSelectedHouseBuildingWidget::renderElement(IRenderer* renderer) {
 void GuiSelectedHouseBuildingWidget::onSelectedMapBuildingChanged(const Building* newSelectedBuilding) {
     assert((newSelectedBuilding != nullptr) && (newSelectedBuilding->isHouse()));
 
+    // TODO Zufriedenheit
     int populationSatisfactionIndex = 0;
     populationSatisfaction.setGraphic(populationSatisfactionGraphics[populationSatisfactionIndex]);
     populationSatisfaction.setStatusBarText(populationSatisfactionGui[populationSatisfactionIndex].statusBarText);
 
-    inhabitants.setText(toString(4711));
-    populationTier.setText("Foobaranten");
-
-    // TODO echte Daten rein
+    // Bevölkerungsdaten
+    inhabitants.setText(toString(newSelectedBuilding->inhabitants));
+    populationTier.setText(newSelectedBuilding->getMapObjectType()->populationTier->title);
 }

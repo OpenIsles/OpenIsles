@@ -844,6 +844,7 @@
             00011111111000
             00001111110000
         </catchment-area>
+        <population-tier>pioneers</population-tier>
     </building>
 
     <building name="pioneers-house2" width="2" height="2">
@@ -874,6 +875,7 @@
             00011111111000
             00001111110000
         </catchment-area>
+        <population-tier>pioneers</population-tier>
     </building>
 
     <building name="pioneers-house3" width="2" height="2">
@@ -904,6 +906,7 @@
             00011111111000
             00001111110000
         </catchment-area>
+        <population-tier>pioneers</population-tier>
     </building>
 
     <building name="pioneers-house4" width="2" height="2">
@@ -934,6 +937,7 @@
             00011111111000
             00001111110000
         </catchment-area>
+        <population-tier>pioneers</population-tier>
     </building>
 
     <building name="pioneers-house5" width="2" height="2">
@@ -964,6 +968,7 @@
             00011111111000
             00001111110000
         </catchment-area>
+        <population-tier>pioneers</population-tier>
     </building>
 
     <building name="settlers-house1" width="2" height="2">
@@ -994,6 +999,7 @@
             00011111111000
             00001111110000
         </catchment-area>
+        <population-tier>settlers</population-tier>
     </building>
 
     <building name="settlers-house2" width="2" height="2">
@@ -1024,6 +1030,7 @@
             00011111111000
             00001111110000
         </catchment-area>
+        <population-tier>settlers</population-tier>
     </building>
 
     <building name="settlers-house3" width="2" height="2">
@@ -1054,6 +1061,7 @@
             00011111111000
             00001111110000
         </catchment-area>
+        <population-tier>settlers</population-tier>
     </building>
 
     <building name="settlers-house4" width="2" height="2">
@@ -1084,6 +1092,7 @@
             00011111111000
             00001111110000
         </catchment-area>
+        <population-tier>settlers</population-tier>
     </building>
 
     <building name="settlers-house5" width="2" height="2">
@@ -1114,7 +1123,8 @@
             00011111111000
             00001111110000
         </catchment-area>
-    -straight0</building>
+        <population-tier>settlers</population-tier>
+    </building>
 
     <building name="marketplace" width="4" height="3">
         <title>Marktplatz</title>

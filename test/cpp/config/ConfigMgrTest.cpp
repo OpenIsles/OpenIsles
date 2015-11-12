@@ -34,6 +34,7 @@ TEST(ConfigMgrTest, loadMapObjectTypes) {
     ASSERT_EQ(false, cathedral->buildingProduction.input.isUsed());
     ASSERT_EQ(false, cathedral->buildingProduction.input2.isUsed());
     ASSERT_EQ(5, cathedral->inhabitants);
+    ASSERT_EQ(nullptr, cathedral->populationTier);
     ASSERT_TRUE(cathedral->carrier.mapObjectType == nullptr);
     ASSERT_EQ(0, cathedral->carrier.capacity);
     ASSERT_TRUE(cathedral->carrier.animations.empty());
@@ -61,6 +62,7 @@ TEST(ConfigMgrTest, loadMapObjectTypes) {
     ASSERT_EQ(false, sugarcaneField->buildingProduction.input.isUsed());
     ASSERT_EQ(false, sugarcaneField->buildingProduction.input2.isUsed());
     ASSERT_EQ(0, sugarcaneField->inhabitants);
+    ASSERT_EQ(nullptr, sugarcaneField->populationTier);
     ASSERT_TRUE(sugarcaneField->carrier.mapObjectType == nullptr);
     ASSERT_EQ(0, sugarcaneField->carrier.capacity);
     ASSERT_TRUE(sugarcaneField->carrier.animations.empty());
@@ -117,6 +119,10 @@ TEST(ConfigMgrTest, loadMapObjectTypes) {
     const MapObjectType* sheepFarm = configMgr.getMapObjectType("sheep-farm");
     ASSERT_EQ(30, sheepFarm->secondsToProduce);
     ASSERT_EQ(4, sheepFarm->inputAmountForProduction);
+
+    const MapObjectType* settlersHouse3 = configMgr.getMapObjectType("settlers-house3");
+    const PopulationTier* settlers = configMgr.getPopulationTier("settlers");
+    ASSERT_EQ(settlers, settlersHouse3->populationTier);
 }
 
 /**
