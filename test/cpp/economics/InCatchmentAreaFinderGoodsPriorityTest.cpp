@@ -23,8 +23,11 @@ protected:
             MapCoords(30, 35), configMgr->getMapObjectType("sheep-farm"),
             Direction::SOUTH, game->getPlayer(0)));
 
-        const Good* wool = context.configMgr->getGood("wool");
+        const Good* wool = configMgr->getGood("wool");
         goodsWoolOnly.push_back(wool);
+
+        // Kolonie leermachen, damit nix vom Marktplatz geholt wird
+        game->getColony({31, 30})->getGoods(wool).inventory = 0;
     }
 };
 

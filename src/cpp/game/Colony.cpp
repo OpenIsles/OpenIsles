@@ -10,7 +10,7 @@ Colony::Colony(const std::unordered_map<std::string, Good>& allGoods,
         const Good* good = &iter->second;
         goods[good].good = good;
         goods[good].inventory = 0;
-        goods[good].capacity = 30;
+        goods[good].capacity = 0;
     }
 
     population = 0;
