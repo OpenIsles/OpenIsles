@@ -25,7 +25,7 @@ GuiSelectedHouseBuildingWidget::GuiSelectedHouseBuildingWidget(const Context* co
 
     // Grafiken laden
     IRenderer* const renderer = context->graphicsMgr->getRenderer();
-    for (int i = 0; i < 4; i++) {
+    for (unsigned char i = 0; i < 4; i++) {
         std::string filename =
             std::string("data/img/gui/population-satisfaction/") + populationSatisfactionGui[i].filename;
         populationSatisfactionGraphics[i] = new SDLGraphic(renderer, filename.c_str());
@@ -56,7 +56,7 @@ GuiSelectedHouseBuildingWidget::GuiSelectedHouseBuildingWidget(const Context* co
 }
 
 GuiSelectedHouseBuildingWidget::~GuiSelectedHouseBuildingWidget() {
-    for (int i = 0; i < 4; i++) {
+    for (unsigned char i = 0; i < 4; i++) {
         delete populationSatisfactionGraphics[i];
     }
 }
@@ -77,13 +77,25 @@ void GuiSelectedHouseBuildingWidget::renderElement(IRenderer* renderer) {
 
 void GuiSelectedHouseBuildingWidget::onSelectedMapBuildingChanged(const Building* newSelectedBuilding) {
     assert((newSelectedBuilding != nullptr) && (newSelectedBuilding->isHouse()));
+    
+    const Colony* colony = newSelectedBuilding->getColony();
+    const MapObjectType* mapObjectType = newSelectedBuilding->getMapObjectType();
+    const ColonyPopulationTier& colonyPopulationTier = colony->populationTiers.at(mapObjectType->populationTier);
 
-    // TODO Zufriedenheit
-    int populationSatisfactionIndex = 0;
+    // Zufriedenheit
+    unsigned char populationSatisfactionIndex = colonyPopulationTier.populationSatisfaction;
     populationSatisfaction.setGraphic(populationSatisfactionGraphics[populationSatisfactionIndex]);
     populationSatisfaction.setStatusBarText(populationSatisfactionGui[populationSatisfactionIndex].statusBarText);
 
     // Bevölkerungsdaten
-    inhabitants.setText(toString(newSelectedBuilding->inhabitants));
-    populationTier.setText(newSelectedBuilding->getMapObjectType()->populationTier->title);
+    inhabitants.setText(toString(colonyPopulationTier.population));
+
+#ifdef DEBUG
+    // Im Debug-Modus zeigen wir zusätzlich noch die Einwohnerzahl im Gebäude selber an
+    std::string debugTitle =
+        "(" + toString(newSelectedBuilding->inhabitants) + ") " + mapObjectType->populationTier->title;
+    populationTier.setText(debugTitle);
+#else
+    populationTier.setText(mapObjectType->populationTier->title);
+#endif
 }

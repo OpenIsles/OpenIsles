@@ -17,7 +17,8 @@ Colony::Colony(const std::unordered_map<std::string, Good>& allGoods,
 
     for (auto iter = allPopulationTiers.cbegin(); iter != allPopulationTiers.cend(); iter++) {
         const PopulationTier* populationTier = &*iter;
-        populationByTier[populationTier] = 0;
+        populationTiers[populationTier].population = 0;
+        populationTiers[populationTier].populationSatisfaction = PopulationSatisfaction::GOOD;
     }
 }
 

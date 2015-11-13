@@ -153,7 +153,8 @@ Structure* Game::addStructure(
     // Einwohner setzen
     if (building != nullptr) {
         if (building->isHouse()) {
-            // TODO Start-Einwohnerzahl setzen
+            // Häuser beginnen immer mit genau einem Einwohner
+            context->game->addInhabitantsToBuilding(building, 1);
         } else {
             context->game->addInhabitantsToBuilding(building, mapObjectType->inhabitants);
         }
@@ -199,6 +200,12 @@ void Game::addInhabitantsToBuilding(Building* building, char amount) {
 
     Colony* colony = building->getColony();
     colony->population += amount;
+
+    // Bei Häusern die Bevölkerungsgruppe anpassen
+    if (building->isHouse()) {
+        const PopulationTier* populationTier = building->getMapObjectType()->populationTier;
+        colony->populationTiers[populationTier].population += amount;
+    }
 }
 
 void Game::setSelectedMapObject(const MapObject* selectedMapObject) {

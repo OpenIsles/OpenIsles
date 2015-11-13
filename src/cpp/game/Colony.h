@@ -6,6 +6,7 @@
 #include <unordered_map>
 #include <vector>
 #include "config/BuildingCosts.h"
+#include "game/ColonyPopulationTier.h"
 #include "game/GoodsSlot.h"
 #include "game/PopulationTier.h"
 
@@ -33,9 +34,9 @@ public:
     unsigned int population;
 
     /**
-     * @brief Einwohner pro Bevölkerungsgruppe
+     * @brief Infos pro Bevölkerungsgruppe
      */
-    std::unordered_map<const PopulationTier*, unsigned int> populationByTier;
+    std::unordered_map<const PopulationTier*, ColonyPopulationTier> populationTiers;
     
 public:
     /**

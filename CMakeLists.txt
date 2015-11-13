@@ -22,6 +22,7 @@ set(COMMON_SOURCE_FILES
     src/cpp/game/CatchmentArea.h
     src/cpp/game/Colony.cpp
     src/cpp/game/Colony.h
+    src/cpp/game/ColonyPopulationTier.h
     src/cpp/game/Game.cpp
     src/cpp/game/Game.h
     src/cpp/game/GameIO.cpp
@@ -29,6 +30,7 @@ set(COMMON_SOURCE_FILES
     src/cpp/game/GoodsSlot.h
     src/cpp/game/Player.cpp
     src/cpp/game/Player.h
+    src/cpp/game/PopulationSatisfaction.h
     src/cpp/game/PopulationTier.h
     src/cpp/game/ProductionSlot.h
     src/cpp/game/ProductionSlots.h
@@ -168,6 +170,7 @@ set(TEST_FILES
     test/cpp/economics/CarrierTest.cpp
     test/cpp/economics/CarrierWalkingTest.cpp
     test/cpp/economics/EconomicsMgrTest.cpp
+    test/cpp/economics/HousesTest.cpp
     test/cpp/economics/InCatchmentAreaFinderGoodsPriorityTest.cpp
     test/cpp/economics/InCatchmentAreaFinderInvisibleGoodsTest.cpp
     test/cpp/economics/MaxCarriersAndCarrierDelayTest.cpp
