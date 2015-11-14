@@ -436,6 +436,9 @@ void ConfigMgr::loadPopulationTiers() {
         populationTier.maxPopulationPerHouse = (unsigned char) stringToUnsignedLong(
             node->first_node("max-population-per-house", 24, true)->value());
 
+        populationTier.taxesPerInhabitant = stringToDouble(
+            node->first_node("taxes-per-inhabitant", 20, true)->value());
+
         populationTiers.insert(populationTier);
 
         std::cout << "Loaded populationTier '" << populationTier.name << "'." << std::endl;

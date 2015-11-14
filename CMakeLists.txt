@@ -170,6 +170,7 @@ set(TEST_FILES
     test/cpp/economics/CarrierTest.cpp
     test/cpp/economics/CarrierWalkingTest.cpp
     test/cpp/economics/EconomicsMgrTest.cpp
+    test/cpp/economics/FinancesTest.cpp
     test/cpp/economics/HousesTest.cpp
     test/cpp/economics/InCatchmentAreaFinderGoodsPriorityTest.cpp
     test/cpp/economics/InCatchmentAreaFinderInvisibleGoodsTest.cpp

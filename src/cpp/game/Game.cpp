@@ -10,11 +10,17 @@
 #include "map/Map.h"
 #include "utils/RandomEngine.h"
 
+/**
+ * @brief Finanzen alle x Ticks aktualisieren (10 Sekunden)
+ */
+static constexpr unsigned long updateFinancesEveryTicks = 10000;
+
 
 Game::Game(const Context* const context) : ContextAware(context) {
     speed = 1;
     ticks = 0;
     map = new Map(context);
+    nextFinancesTicks = updateFinancesEveryTicks;
 
 #ifdef DEBUG
     fpsCounterEnabled = true;
@@ -51,7 +57,7 @@ Colony* Game::foundNewColony(const Player* player, const std::string& colonyName
     return colony;
 }
 
-Colony* Game::getColony(const Player* player, const Isle* isle) const {
+Colony* Game::getColony(const Player* player, const Isle* isle) {
     auto iter = colonies.find(std::pair<const Player*, const Isle*>(player, isle));
     if (iter == colonies.end()) {
         return nullptr;
@@ -60,7 +66,7 @@ Colony* Game::getColony(const Player* player, const Isle* isle) const {
     return iter->second;
 }
 
-Colony* Game::getColony(const MapCoords& mapCoords) const {
+Colony* Game::getColony(const MapCoords& mapCoords) {
     const MapTile* mapTile = map->getMapTileAt(mapCoords);
     if (mapTile == nullptr) {
         return nullptr;
@@ -245,5 +251,11 @@ void Game::update(unsigned long millisecondsElapsed) {
     for (auto iter = mapObjectsToDelete.rbegin(); iter != mapObjectsToDelete.rend(); iter++) {
         MapObject* mapObject = *iter;
         map->deleteMapObject(mapObject);
+    }
+
+    // Finanzen
+    if (ticks >= nextFinancesTicks) {
+        context->economicsMgr->updateFinances();
+        nextFinancesTicks += updateFinancesEveryTicks;
     }
 }

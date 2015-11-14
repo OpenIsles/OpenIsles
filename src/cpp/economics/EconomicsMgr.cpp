@@ -75,3 +75,80 @@ void EconomicsMgr::updateProduction(Building* building) {
         building->hasRecievedAlInputGoodsSinceLastUpdate = false;
     }
 }
+
+void EconomicsMgr::updateFinances() {
+    doTaxesIncome();
+    // TODO Betriebskosten
+}
+
+/**
+ * @page finances Finanzen-Berechnung
+ *
+ * Nomenklatur
+ * ===========
+ *
+ * - "Steuersatz" = Dezimalbruch aus Config-XML (bzw. Anno&nbsp;1602-COD-File)
+ * - "Steuerprozent" = angezeigte Steuer-Prozentzahl im Spiel
+ *
+ * Überblick Formeln
+ * =================
+ *
+ * Um die Berechnung der Finanzen möglichst genauso wie bei Anno&nbsp;1602 zu machen, würden zwei Formeln
+ * untersucht:
+ * - a) Um mit dem Steuersatz aus dem COD-File hinzukommen, muss man die Basis auf "34% Steuer" (im Spiel angezeigt)
+ *      setzen.
+ * - b) Die Formel aus <a href="http://www.annozone.de/Charlie/Cod/numerik.html]">AnnoZone</a>
+ *
+ * Beide Formeln können mittels einer Hilfstabelle (`doc/taxes-helper.ods`) verglichen werden.
+ * Variante b) ist zwar genauer, aber komplizierter zu verstehen. Es wird deshalb Variante a) implementiert.
+ *
+ * Implementierung
+ * ===============
+ *
+ * Die Formel ist einfach:
+ * Der Steuersatz wird mit der Einwohnerzahl multipliziert und ergibt damit genau die Steuern für die Einstellung
+ * "34% Steuern". Andere Einstellungen im Spiel werden darauf basierend gemacht. Mit 17% kommt genau die Hälfte raus,
+ * bei 68% würde das doppelte rauskommen. Das Ergebnis wird ggf. abgerundet.
+ *
+ * Pro Bevölkerungsgruppe werden die Steuern wie obig berechnet. Am Ende werden alle (abgerundeten) Teilergebnisse
+ * zusammengezählt.
+ */
+
+void EconomicsMgr::doTaxesIncome() {
+    const std::set<PopulationTier>& allPopulationTiers = context->configMgr->getAllPopulationTiers();
+
+    unsigned long taxesIncomeSumPerPlayer[4] = { 0, 0, 0, 0 };
+
+    // Alle Kolonien durchgehen
+    for (auto iter : context->game->getColonies()) {
+        const Player* player = iter.first.first;
+        const Colony* colony = iter.second;
+        int playerIndex = player->getColorIndex();
+
+        unsigned long taxesIncomeColony = 0;
+
+        // Alle Bevölkerungsgruppen einzeln betrachten
+        for (const PopulationTier& populationTier : allPopulationTiers) {
+            const ColonyPopulationTier& colonyPopulationTier = colony->populationTiers.at(&populationTier);
+
+            // double -> ulong-Cast zum Abschneiden der Dezimalstellen
+            unsigned long taxesIncomeFromPopulationTier = (unsigned long) (
+                (double) colonyPopulationTier.population *
+                (double) populationTier.taxesPerInhabitant *
+                    ((double) colonyPopulationTier.taxesPercent / (double) 34)
+            );
+
+            taxesIncomeColony += taxesIncomeFromPopulationTier;
+        }
+
+        taxesIncomeSumPerPlayer[playerIndex] += taxesIncomeColony;
+        // TODO für Info-Panel die Einnahmen-Summe pro Spieler zwischenspeichern
+    }
+
+    // Nun jedem Spieler seine Bilanz gutschreiben/abziehen
+    for (int playerIndex = 0; playerIndex < 4; playerIndex++) {
+        Player* player = context->game->getPlayer(playerIndex);
+
+        player->coins += taxesIncomeSumPerPlayer[playerIndex];
+    }
+}

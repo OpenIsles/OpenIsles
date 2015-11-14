@@ -38,7 +38,13 @@ struct PopulationTier {
      */
     unsigned char maxPopulationPerHouse;
 
-    // TODO Steuern
+    /**
+     * @brief Steuersatz (Münzen pro Einwohner - bei "34% Steuer")
+     *
+     * Siehe @ref finances
+     */
+    double taxesPerInhabitant;
+
     // TODO Bedürfnisse (Waren)
     // TODO Bedürfnisse (öffentliche Gebäude)
 

@@ -57,6 +57,7 @@ class Game : public ContextAware {
     friend class GameIO;
 
 #ifdef TESTS_ENABLED
+    FRIEND_TEST(FinancesTest, checkThatTaxesIncomeWorksWithDifferentPopulationTiers);
     FRIEND_TEST(InCatchmentAreaFinderInvisibleGoodsTest, checkThatRouteToGrassIsFound);
     FRIEND_TEST(InCatchmentAreaFinderInvisibleGoodsTest, checkThatNoRouteIsFoundWhenAllWasHarvested);
 #endif
@@ -99,6 +100,11 @@ private:
      * @brief gibt an, ob die offizielle FPS-Anzeige sichtbar ist
      */
     bool fpsCounterEnabled = false;
+
+    /**
+     * @brief [Zeitpunkt](@ref gameTicks), wann das nächste Mal die Finanzen aktualisiert werden
+     */
+    unsigned long nextFinancesTicks;
 
 public:
     Game(const Context* const context);
@@ -169,7 +175,7 @@ public:
      * @param isle Insel
      * @return Colony oder `nullptr`, wenn keine Siedlung da ist
      */
-    Colony* getColony(const Player* player, const Isle* isle) const;
+    Colony* getColony(const Player* player, const Isle* isle);
 
     /**
      * @brief Liefert die Siedlung an einer bestimmten Kachel zurück
@@ -177,7 +183,15 @@ public:
      * @param mapObject MapObject
      * @return Colony oder `nullptr`, wenn keine Siedlung da ist
      */
-    Colony* getColony(const MapCoords& mapCoords) const;
+    Colony* getColony(const MapCoords& mapCoords);
+
+    /**
+     * @brief Liefert die Map mit allen Kolonien zurück
+     * @return alle Kolonien als Map, die Spieler-Insel-Paar auf Kolonie abbildet
+     */
+    const std::map<std::pair<const Player*, const Isle*>, Colony*>& getColonies() {
+        return colonies;
+    };
 
     /**
      * @brief Ändert die Spielgeschwindigkeit
@@ -253,7 +267,9 @@ public:
     void loadGameFromTMX(char const* filename);
 
     /**
-     * @brief Hauptschleife des Spiels. Sie führt die Spiellogik aus, indem sie alle Map-Objekte aktualisiert.
+     * @brief Hauptschleife des Spiels. Sie führt die Spiellogik aus, indem sie
+     * - alle Map-Objekte aktualisiert
+     * - alle 10 Sekunden die Finanzen aktualisiert.
      *
      * Wichtig: Die auszuführende Spielzeit sollte nicht utopisch groß sein, da die Objekte alle nur einmalig
      * aktualisiert werden. Wenn man also eine Spielzeit von einer ganzen Minute angibt, so hat das Spiel danach

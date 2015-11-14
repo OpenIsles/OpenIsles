@@ -18,6 +18,15 @@ struct ColonyPopulationTier {
      */
     PopulationSatisfaction populationSatisfaction;
 
+    /**
+     * @brief Steuerprozente
+     *
+     * Info: In Anno&nbsp;1602 ist das eine Fließkommazahl, wenn auch nicht sichtbar. Der Schieberegler kann
+     * pixelgenau eingestellt werden. Steuereinnahmen ändern sich, aber die Prozentzahl nicht, weil der Nachkomma-Teil
+     * nicht angezeigt wird.
+     */
+    unsigned char taxesPercent;
+
 };
 
 #endif

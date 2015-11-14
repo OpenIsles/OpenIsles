@@ -240,6 +240,7 @@ TEST(ConfigMgrTest, checkThatPopulationTiersAreFilledCorrectly) {
         ASSERT_EQ(3, populationTier->advancementCosts.wood);
         ASSERT_EQ(0, populationTier->advancementCosts.bricks);
         ASSERT_EQ(2, populationTier->maxPopulationPerHouse);
+        ASSERT_EQ(1.4, populationTier->taxesPerInhabitant);
     }
 
     {
@@ -252,6 +253,7 @@ TEST(ConfigMgrTest, checkThatPopulationTiersAreFilledCorrectly) {
         ASSERT_EQ(3, populationTier->advancementCosts.wood);
         ASSERT_EQ(0, populationTier->advancementCosts.bricks);
         ASSERT_EQ(6, populationTier->maxPopulationPerHouse);
+        ASSERT_EQ(1.6, populationTier->taxesPerInhabitant);
     }
 
     {
@@ -264,6 +266,7 @@ TEST(ConfigMgrTest, checkThatPopulationTiersAreFilledCorrectly) {
         ASSERT_EQ(2, populationTier->advancementCosts.wood);
         ASSERT_EQ(6, populationTier->advancementCosts.bricks);
         ASSERT_EQ(15, populationTier->maxPopulationPerHouse);
+        ASSERT_EQ(2.1, populationTier->taxesPerInhabitant);
     }
 
     {
@@ -276,6 +279,7 @@ TEST(ConfigMgrTest, checkThatPopulationTiersAreFilledCorrectly) {
         ASSERT_EQ(3, populationTier->advancementCosts.wood);
         ASSERT_EQ(9, populationTier->advancementCosts.bricks);
         ASSERT_EQ(25, populationTier->maxPopulationPerHouse);
+        ASSERT_EQ(2.4, populationTier->taxesPerInhabitant);
     }
 
     {
@@ -288,6 +292,7 @@ TEST(ConfigMgrTest, checkThatPopulationTiersAreFilledCorrectly) {
         ASSERT_EQ(3, populationTier->advancementCosts.wood);
         ASSERT_EQ(12, populationTier->advancementCosts.bricks);
         ASSERT_EQ(40, populationTier->maxPopulationPerHouse);
+        ASSERT_EQ(2.6, populationTier->taxesPerInhabitant);
     }
 }
 

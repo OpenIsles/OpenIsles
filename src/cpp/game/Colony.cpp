@@ -19,6 +19,7 @@ Colony::Colony(const std::unordered_map<std::string, Good>& allGoods,
         const PopulationTier* populationTier = &*iter;
         populationTiers[populationTier].population = 0;
         populationTiers[populationTier].populationSatisfaction = PopulationSatisfaction::GOOD;
+        populationTiers[populationTier].taxesPercent = 32;
     }
 }
 
