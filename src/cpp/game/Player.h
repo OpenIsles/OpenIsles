@@ -3,6 +3,7 @@
 
 #include <cstring>
 #include <stdexcept>
+#include "game/PlayerStatus.h"
 
 /**
  * @brief Enum für die verschiedenen Spielerfarben.
@@ -35,6 +36,11 @@ public:
      * @brief Guthaben an Münzen
      */
     long coins;
+
+    /**
+     * @brief "Spielerstatus"-Informationen
+     */
+    PlayerStatus playerStatus;
     
 private:
     /**

@@ -15,6 +15,7 @@
 #include "gui/panel-widgets/GuiColonyGoodsWidget.h"
 #include "gui/panel-widgets/GuiDummyWidget.h"
 #include "gui/panel-widgets/GuiOptionsMenuWidget.h"
+#include "gui/panel-widgets/GuiPlayerStatusWidget.h"
 #include "gui/panel-widgets/GuiSelectedHouseBuildingWidget.h"
 #include "gui/panel-widgets/GuiSelectedProductionBuildingWidget.h"
 #include "gui/Identifiers.h"
@@ -124,8 +125,8 @@ void GuiMgr::initGui() {
             (GuiPanelWidget*) findElement(GUI_ID_MILITARY_PANEL_WIDGET)
         }, {
             "Infomodus einschalten",
-            "data/img/gui/button-dummy.png",
-            "data/img/gui/button-dummy-pressed.png",
+            "data/img/gui/button-player-status.png",
+            "data/img/gui/button-player-status-pressed.png",
             PanelButton::INFO,
             (GuiPanelWidget*) findElement(GUI_ID_PLAYER_STATUS_PANEL_WIDGET)
         }, {
@@ -200,14 +201,14 @@ void GuiMgr::initPanelWidgets() {
     panel->addChildElement(buildMenuWidget);
 
     // Kampfmenü
-    GuiDummyWidget* dummyWidget1 = new GuiDummyWidget(context);
-    registerElement(GUI_ID_MILITARY_PANEL_WIDGET, dummyWidget1);
-    panel->addChildElement(dummyWidget1);
+    GuiDummyWidget* dummyWidget = new GuiDummyWidget(context);
+    registerElement(GUI_ID_MILITARY_PANEL_WIDGET, dummyWidget);
+    panel->addChildElement(dummyWidget);
 
     // Spielerstatus (Infomenü)
-    GuiDummyWidget* dummyWidget2 = new GuiDummyWidget(context);
-    registerElement(GUI_ID_PLAYER_STATUS_PANEL_WIDGET, dummyWidget2);
-    panel->addChildElement(dummyWidget2);
+    GuiPlayerStatusWidget* playerStatusWidget = new GuiPlayerStatusWidget(context);
+    registerElement(GUI_ID_PLAYER_STATUS_PANEL_WIDGET, playerStatusWidget);
+    panel->addChildElement(playerStatusWidget);
 
     // Optionen-Menü
     GuiOptionsMenuWidget* optionsMenuWidget = new GuiOptionsMenuWidget(context);
@@ -534,6 +535,8 @@ void GuiMgr::onNewGame() {
     ((GuiMinimap*) findElement(GUI_ID_MINIMAP))->updateMinimapTexture();
     ((GuiMinimap*) findElement(GUI_ID_MINIMAP))->onMapCoordsChanged();
     ((GuiMapRotateWidget*) findElement(GUI_ID_MAP_ROTATE_WIDGET))->onMapRotated();
+    ((GuiPlayerStatusWidget*) findElement(GUI_ID_PLAYER_STATUS_PANEL_WIDGET))->setPlayer(
+        context->game->getCurrentPlayer());
 }
 
 void GuiMgr::onOfficeCatchmentAreaChanged() {

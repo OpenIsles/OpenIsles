@@ -76,11 +76,6 @@ void EconomicsMgr::updateProduction(Building* building) {
     }
 }
 
-void EconomicsMgr::updateFinances() {
-    doTaxesIncome();
-    // TODO Betriebskosten
-}
-
 /**
  * @page finances Finanzen-Berechnung
  *
@@ -89,6 +84,7 @@ void EconomicsMgr::updateFinances() {
  *
  * - "Steuersatz" = Dezimalbruch aus Config-XML (bzw. Anno&nbsp;1602-COD-File)
  * - "Steuerprozent" = angezeigte Steuer-Prozentzahl im Spiel
+ * - "Zyklus" = 10 Sekunden Spielzeit. Das ist das Intervall, in welchem Finanzenaktualisiert werden.
  *
  * Überblick Formeln
  * =================
@@ -114,10 +110,11 @@ void EconomicsMgr::updateFinances() {
  * zusammengezählt.
  */
 
-void EconomicsMgr::doTaxesIncome() {
+void EconomicsMgr::updatePlayerStatus() {
     const std::set<PopulationTier>& allPopulationTiers = context->configMgr->getAllPopulationTiers();
 
     unsigned long taxesIncomeSumPerPlayer[4] = { 0, 0, 0, 0 };
+    unsigned long populationSumPerPlayer[4] = { 0, 0, 0, 0 };
 
     // Alle Kolonien durchgehen
     for (auto iter : context->game->getColonies()) {
@@ -125,9 +122,9 @@ void EconomicsMgr::doTaxesIncome() {
         const Colony* colony = iter.second;
         int playerIndex = player->getColorIndex();
 
+        // Steuern: alle Bevölkerungsgruppen einzeln betrachten
         unsigned long taxesIncomeColony = 0;
 
-        // Alle Bevölkerungsgruppen einzeln betrachten
         for (const PopulationTier& populationTier : allPopulationTiers) {
             const ColonyPopulationTier& colonyPopulationTier = colony->populationTiers.at(&populationTier);
 
@@ -142,13 +139,27 @@ void EconomicsMgr::doTaxesIncome() {
         }
 
         taxesIncomeSumPerPlayer[playerIndex] += taxesIncomeColony;
-        // TODO für Info-Panel die Einnahmen-Summe pro Spieler zwischenspeichern
+
+        // Einwohner
+        populationSumPerPlayer[playerIndex] += colony->population;
     }
 
-    // Nun jedem Spieler seine Bilanz gutschreiben/abziehen
+    // TODO Betriebskosten
+
+    for (int playerIndex = 0; playerIndex < 4; playerIndex++) {
+        PlayerStatus& playerStatus = context->game->getPlayer(playerIndex)->playerStatus;
+        playerStatus.population = populationSumPerPlayer[playerIndex];
+        playerStatus.taxesIncome = taxesIncomeSumPerPlayer[playerIndex];
+    }
+}
+
+void EconomicsMgr::updateFinances() {
     for (int playerIndex = 0; playerIndex < 4; playerIndex++) {
         Player* player = context->game->getPlayer(playerIndex);
 
-        player->coins += taxesIncomeSumPerPlayer[playerIndex];
+        unsigned long income = (player->playerStatus.taxesIncome / 6); // abrunden
+        player->coins += income;
     }
+
+    // TODO Betriebskosten
 }

@@ -212,6 +212,8 @@ void Game::addInhabitantsToBuilding(Building* building, char amount) {
         const PopulationTier* populationTier = building->getMapObjectType()->populationTier;
         colony->populationTiers[populationTier].population += amount;
     }
+
+    context->economicsMgr->updatePlayerStatus();
 }
 
 void Game::setSelectedMapObject(const MapObject* selectedMapObject) {

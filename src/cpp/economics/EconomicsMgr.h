@@ -1,10 +1,6 @@
 #ifndef _ECONOMICS_MGR_H
 #define _ECONOMICS_MGR_H
 
-#ifdef TESTS_ENABLED
-#include <gtest/gtest.h>
-#endif
-
 #include "Context.h"
 #include "map/Building.h"
 
@@ -13,10 +9,6 @@
  * @brief Manager, der die Wirtschaft übernimmt
  */
 class EconomicsMgr : public ContextAware {
-
-#ifdef TESTS_ENABLED
-    FRIEND_TEST(FinancesTest, checkThatTaxesIncomeWorks);
-#endif
 
 public:
     EconomicsMgr(const Context* const context);
@@ -36,17 +28,19 @@ public:
     void updateProduction(Building* building);
 
     /**
+     * @brief Aktualisiert die PlayerStatus-Strukturen
+     *
+     * Diese Methode muss immer dann aufgerufen werden, wenn sich was an Einwohnern oder Finanzen ändert.
+     */
+    void updatePlayerStatus();
+
+    /**
      * @brief Aktualisiert die Finanzen.
+     * Es werden die Zahlen aus den PlayerStatus-Strukturen verwendet.
      *
      * Diese Methode wird alle 10 Sekunden von Game::update() aufgerufen
      */
     void updateFinances();
-
-private:
-    /**
-     * @brief Schreibt jedem Spieler Steuereinnahmen gut
-     */
-    void doTaxesIncome();
 };
 
 #endif

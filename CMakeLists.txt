@@ -30,6 +30,7 @@ set(COMMON_SOURCE_FILES
     src/cpp/game/GoodsSlot.h
     src/cpp/game/Player.cpp
     src/cpp/game/Player.h
+    src/cpp/game/PlayerStatus.h
     src/cpp/game/PopulationSatisfaction.h
     src/cpp/game/PopulationTier.h
     src/cpp/game/ProductionSlot.h
@@ -134,6 +135,9 @@ set(GUI_SOURCE_FILES
     src/cpp/gui/panel-widgets/GuiDummyWidget.h
     src/cpp/gui/panel-widgets/GuiOptionsMenuWidget.cpp
     src/cpp/gui/panel-widgets/GuiOptionsMenuWidget.h
+    src/cpp/gui/panel-widgets/GuiPanelWidget.h
+    src/cpp/gui/panel-widgets/GuiPlayerStatusWidget.cpp
+    src/cpp/gui/panel-widgets/GuiPlayerStatusWidget.h
     src/cpp/gui/panel-widgets/GuiSelectedHouseBuildingWidget.cpp
     src/cpp/gui/panel-widgets/GuiSelectedHouseBuildingWidget.h
     src/cpp/gui/panel-widgets/GuiSelectedProductionBuildingWidget.cpp
@@ -176,6 +180,7 @@ set(TEST_FILES
     test/cpp/economics/InCatchmentAreaFinderInvisibleGoodsTest.cpp
     test/cpp/economics/MaxCarriersAndCarrierDelayTest.cpp
     test/cpp/game/CatchmentAreaTest.cpp
+    test/cpp/game/PlayerStatusTest.cpp
     test/cpp/graphics/GraphicSetTest.cpp
     test/cpp/map/buildqueue/BuildOperationTest.cpp
     test/cpp/map/buildqueue/BuildOperationTest.h

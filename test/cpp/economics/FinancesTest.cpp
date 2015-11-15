@@ -51,8 +51,13 @@ TEST_F(FinancesTest, checkThatInitialTaxesAreSetTo32) {
  * @brief Testet, dass Steuereinnahmen zum richtigen Zeitpunkt gutgeschrieben werden
  */
 TEST_F(FinancesTest, checkThatTaxesIncomeWorksAtRightTimings) {
-    // Testaufbau: 10 Wohnhäuser setzen
     Player* player = game->getPlayer(0);
+    ASSERT_EQ(0, player->playerStatus.taxesIncome);
+
+    // 40% Steuern bei den Pionieren einstellen
+    colony->populationTiers.at(pioneers).taxesPercent = 38;
+
+    // Testaufbau: 10 Wohnhäuser setzen
     for (int x = 22; x < 32; x += 2) {
         game->addStructure({x, 22}, pioneersHouse1, Direction::SOUTH, player);
         game->addStructure({x, 24}, pioneersHouse2, Direction::SOUTH, player);
@@ -60,11 +65,11 @@ TEST_F(FinancesTest, checkThatTaxesIncomeWorksAtRightTimings) {
     ASSERT_EQ(10, colony->populationTiers.at(pioneers).population);
     ASSERT_EQ(0, colony->populationTiers.at(settlers).population);
 
-    // 40% Steuern bei den Pionieren einstellen
-    colony->populationTiers.at(pioneers).taxesPercent = 38;
-
     // Testdurchführung
     long coinsAtStart = player->coins;
+
+    // PlayerStatus muss sofort verfügbar sein
+    ASSERT_EQ(15, player->playerStatus.taxesIncome);
 
     // 9 Sekunden später darf nix passiert sein. Steuereinnahmen kommen nur alle 10s
     game->update(9000, 1000);
@@ -72,19 +77,20 @@ TEST_F(FinancesTest, checkThatTaxesIncomeWorksAtRightTimings) {
 
     // Eine Sekunde später müssen die Steuern dazugekommen sein:
     // 10 Pioniere (Satz 1,4) mit 38% Steuern -> 10 * 1,4 * (40%/38%) = 15,647058824 --FLOOR--> 15
+    // 15 Münzen pro Minute -> /6 -> 2 Münzen pro Zyklus
     game->update(1000);
-    ASSERT_EQ(coinsAtStart + 15, player->coins);
+    ASSERT_EQ(coinsAtStart + 2, player->coins);
 
     // Nochmal ein Interval testen
     game->update(9000, 1000);
-    ASSERT_EQ(coinsAtStart + 15, player->coins);
+    ASSERT_EQ(coinsAtStart + 2, player->coins);
 
     game->update(1000);
-    ASSERT_EQ(coinsAtStart + 30, player->coins);
+    ASSERT_EQ(coinsAtStart + 4, player->coins);
 
     // Eine ganze Minute verstreichen lassen
     game->update(60000, 5000);
-    ASSERT_EQ(coinsAtStart + 120, player->coins);
+    ASSERT_EQ(coinsAtStart + 16, player->coins);
 }
 
 /**
@@ -93,6 +99,10 @@ TEST_F(FinancesTest, checkThatTaxesIncomeWorksAtRightTimings) {
 TEST_F(FinancesTest, checkThatTaxesIncomeWorksWithDifferentPopulationTiers) {
     Player* player = game->getPlayer(0);
     Building* house;
+
+    // Unterschiedliche Steuersätze einstellen: 47% bei den Pionieren, 36% bei den Siedlern
+    colony->populationTiers.at(pioneers).taxesPercent = 47;
+    colony->populationTiers.at(settlers).taxesPercent = 36;
 
     // Testaufbau: 10 Wohnhäuser setzen - 4 Pioniere, 6 Siedler mit jeweils verschiedenen Einwohnerzahlen
     // Pioniere: 2, 1, 1, 2 - Siedler: 3, 6, 4, 1, 5, 2
@@ -118,18 +128,16 @@ TEST_F(FinancesTest, checkThatTaxesIncomeWorksWithDifferentPopulationTiers) {
     ASSERT_EQ(6, colony->populationTiers.at(pioneers).population);
     ASSERT_EQ(21, colony->populationTiers.at(settlers).population);
 
-    // Unterschiedliche Steuersätze einstellen: 47% bei den Pionieren, 36% bei den Siedlern
-    colony->populationTiers.at(pioneers).taxesPercent = 47;
-    colony->populationTiers.at(settlers).taxesPercent = 36;
-
     // Testdurchführung
     long coinsAtStart = player->coins;
 
+    ASSERT_EQ(46, player->playerStatus.taxesIncome);
+
     // 6 Pioniere (Satz 1,4) mit 47% Steuer -> 6 * 1,4 * (47%/34%) = 11,611764706 --FLOOR--> 11
     // 21 Pioniere (Satz 1,6) mit 36% Steuer -> 21 * 1,6 * (36%/34%) = 35,576470588 --FLOOR--> 35
-    // Erwarte 11+35 = 46 Münzen Einnahmen
+    // Erwarte 11+35 = 46 Münzen Einnahmen, d.h. 7 pro Zyklus
     game->update(10000, 1000);
-    ASSERT_EQ(coinsAtStart + 46, player->coins);
+    ASSERT_EQ(coinsAtStart + 7, player->coins);
 }
 
 // TODO später noch einen Test mit mehreren Spielern hinzufügen

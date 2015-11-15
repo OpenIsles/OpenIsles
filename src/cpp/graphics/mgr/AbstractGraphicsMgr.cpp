@@ -75,6 +75,7 @@ void AbstractGraphicsMgr::loadGraphics() {
     }
 
     loadStaticGraphicSet("coin", "data/img/gui/coin.png");
+    loadStaticGraphicSet("population-man", "data/img/gui/population-man.png");
     loadStaticGraphicSet("panel", "data/img/gui/panel.png");
     loadStaticGraphicSet("statusbar", "data/img/gui/statusbar.png");
     loadStaticGraphicSet("panel-header", "data/img/gui/panel-header.png");
