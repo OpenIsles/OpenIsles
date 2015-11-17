@@ -28,8 +28,7 @@ void GuiPlayerStatusWidget::renderElement(IRenderer* renderer) {
     constexpr int flagsRight = RENDERTEXT_HALIGN_RIGHT | RENDERTEXT_VALIGN_TOP;
 
     const int xLeft = windowX + 5;
-    const int xRight = windowX + 196;
-    const int xIcon = windowX + 205;
+    const int xRight = windowX + 202;
 
     // Einwohner
     int y = windowY + 60;
@@ -39,7 +38,7 @@ void GuiPlayerStatusWidget::renderElement(IRenderer* renderer) {
     context->fontMgr->renderText(renderer, toString(playerStatus.population), xRight, y,
                                  &colorWhite, &colorBlack, "DroidSans.ttf", 17, flagsRight);
 
-    context->graphicsMgr->getGraphicSet("population-man")->getStatic()->getGraphic()->drawAt(xIcon, y);
+    context->graphicsMgr->getGraphicSet("population-man")->getStatic()->getGraphic()->drawAt(windowX + 209, y - 5);
 
     // Steuererträge
     y += 34;
@@ -49,5 +48,13 @@ void GuiPlayerStatusWidget::renderElement(IRenderer* renderer) {
     context->fontMgr->renderText(renderer, toString(playerStatus.taxesIncome), xRight, y,
                                  &colorWhite, &colorBlack, "DroidSans.ttf", 17, flagsRight);
 
-    context->graphicsMgr->getGraphicSet("coin")->getStatic()->getGraphic()->drawAt(xIcon, y);
+    context->graphicsMgr->getGraphicSet("coin/coin")->getStatic()->getGraphic()->drawAt(windowX + 206, y - 5);
+
+    // TODO Betriebskosten
+    // TODO Bilanz
+
+    y += 34;
+    context->graphicsMgr->getGraphicSet("coin/coin-green-arrow")->getStatic()->getGraphic()->drawAt(windowX + 206, y - 5);
+    y += 34;
+    context->graphicsMgr->getGraphicSet("coin/coin-red-arrow")->getStatic()->getGraphic()->drawAt(windowX + 206, y - 5);
 }

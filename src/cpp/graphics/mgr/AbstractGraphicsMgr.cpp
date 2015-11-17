@@ -74,7 +74,9 @@ void AbstractGraphicsMgr::loadGraphics() {
                              std::string("data/img/goods/marketplace-icon/" + good->name + ".png").c_str());
     }
 
-    loadStaticGraphicSet("coin", "data/img/gui/coin.png");
+    loadStaticGraphicSet("coin/coin", "data/img/gui/coin/coin.png");
+    loadStaticGraphicSet("coin/coin-green-arrow", "data/img/gui/coin/coin-green-arrow.png");
+    loadStaticGraphicSet("coin/coin-red-arrow", "data/img/gui/coin/coin-red-arrow.png");
     loadStaticGraphicSet("population-man", "data/img/gui/population-man.png");
     loadStaticGraphicSet("panel", "data/img/gui/panel.png");
     loadStaticGraphicSet("statusbar", "data/img/gui/statusbar.png");

@@ -9,7 +9,8 @@ CREATE_TARGET_DIRECTORY = mkdir -p $(@D)
 MONTAGE := montage -background transparent
 BLENDER := /opt/blender-2.74/blender
 
-.PHONY: all clean build-gui clean-gui render-sheep render-cart render-coat-of-arms render-blender clean-blender
+.PHONY: all clean build-gui clean-gui render-sheep render-cart \
+        render-coat-of-arms render-coin render-blender clean-blender
 
 all: build-gui render-blender
 
@@ -367,10 +368,10 @@ render-coat-of-arms: $(SRC_DIRECTORY)/blender/gui/coat-of-arms/coat-of-arms.blen
 # Sonstige Blender-Sachen                                                                                              #
 ########################################################################################################################
 
-$(DATA_DIRECTORY)/img/gui/coin.png: $(SRC_DIRECTORY)/blender/gui/coin/coin.blend
-	$(CREATE_TARGET_DIRECTORY)
-	blender -b $< -o //coin\#.png -f 1
-	mv $(SRC_DIRECTORY)/blender/gui/coin/coin1.png $@
+render-coin: $(SRC_DIRECTORY)/blender/gui/coin/coin.blend
+	mkdir -p $(DATA_DIRECTORY)/img/gui/coin
+	cd $(SRC_DIRECTORY)/blender/gui/coin; $(BLENDER) -b coin.blend -P render.py
+	mv $(SRC_DIRECTORY)/blender/gui/coin/render/coin*.png $(DATA_DIRECTORY)/img/gui/coin
 	
 $(DATA_DIRECTORY)/img/gui/population-man.png: $(SRC_DIRECTORY)/blender/gui/population-man/population-man.blend
 	$(CREATE_TARGET_DIRECTORY)
@@ -403,7 +404,7 @@ render-blender: \
 	render-cart \
 	$(DATA_DIRECTORY)/img/ships/little-ship.png \
 	render-coat-of-arms \
-	$(DATA_DIRECTORY)/img/gui/coin.png \
+	render-coin \
 	$(DATA_DIRECTORY)/img/gui/population-man.png
 	
 clean-blender:
@@ -425,7 +426,8 @@ clean-blender:
 	rm -rf $(SRC_DIRECTORY)/blender/ships/little-ship/render
 	rm -f $(DATA_DIRECTORY)/img/ships/little-ship.png
 	rm -rf $(DATA_DIRECTORY)/img/gui/coat-of-arms
-	rm -f $(DATA_DIRECTORY)/img/gui/coin.png
+	rm -rf $(SRC_DIRECTORY)/blender/gui/coins/render
+	rm -rf $(DATA_DIRECTORY)/img/gui/coin
 	rm -f $(DATA_DIRECTORY)/img/gui/population-man.png
 	rm -rf $(DATA_DIRECTORY)/img/animations
 	rm -rf $(DATA_DIRECTORY)/img/buildings

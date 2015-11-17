@@ -30,7 +30,7 @@ GuiAddBuildingWidget::GuiAddBuildingWidget(const Context* const context) :
     const int elementsY2 = elementsY1 + elementsHeight + 5;
 
     coinsElement.setCoords(elementsX, elementsY1, 85, elementsHeight);
-    coinsElement.setGraphic(context->graphicsMgr->getGraphicSet("coin")->getStatic()->getGraphic());
+    coinsElement.setGraphic(context->graphicsMgr->getGraphicSet("coin/coin")->getStatic()->getGraphic());
     coinsElement.setStatusBarText("Errichtungskosten für dieses Bauwerk");
     addChildElement(&coinsElement);
 

@@ -18,7 +18,7 @@ GuiResourcesBar::~GuiResourcesBar() {
 
 void GuiResourcesBar::renderElement(IRenderer* renderer) {
     // Münzenguthaben
-    context->graphicsMgr->getGraphicSet("coin")->getStatic()->getGraphic()->drawAt(15, 8);
+    context->graphicsMgr->getGraphicSet("coin/coin")->getStatic()->getGraphic()->drawAt(13, 6);
 
     Player* currentPlayer = context->game->getCurrentPlayer();
     std::string outputString = toString(currentPlayer->coins);
