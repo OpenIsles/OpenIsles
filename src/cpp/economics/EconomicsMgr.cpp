@@ -1,3 +1,4 @@
+#include <map/MapObjectType.h>
 #include "config/ConfigMgr.h"
 #include "economics/EconomicsMgr.h"
 #include "game/Game.h"
@@ -112,12 +113,16 @@ void EconomicsMgr::updateProduction(Building* building) {
 
 void EconomicsMgr::updatePlayerStatus() {
     const std::set<PopulationTier>& allPopulationTiers = context->configMgr->getAllPopulationTiers();
+    const Game* game = context->game;
 
-    unsigned long taxesIncomeSumPerPlayer[4] = { 0, 0, 0, 0 };
     unsigned long populationSumPerPlayer[4] = { 0, 0, 0, 0 };
+    unsigned long taxesIncomeSumPerPlayer[4] = { 0, 0, 0, 0 };
+    unsigned long operatingCostsSumPerPlayer[4] = { 0, 0, 0, 0 };
 
-    // Alle Kolonien durchgehen
-    for (auto iter : context->game->getColonies()) {
+    // TODO überarbeiten: Wir brauchen später die Zahlen pro Kolonie zusätzlich zum Gesamt
+
+    // Steuereinnahmen
+    for (auto iter : game->getColonies()) {
         const Player* player = iter.first.first;
         const Colony* colony = iter.second;
         int playerIndex = player->getColorIndex();
@@ -144,12 +149,27 @@ void EconomicsMgr::updatePlayerStatus() {
         populationSumPerPlayer[playerIndex] += colony->population;
     }
 
-    // TODO Betriebskosten
+    // Betriebskosten
+    for (const MapObject* mapObject : game->getMap()->getMapObjects()) {
+        const MapObjectType* mapObjectType = mapObject->getMapObjectType();
 
+        unsigned char operatingCosts;
+        operatingCosts = mapObjectType->operatingCosts.running;
+        // TODO Stillgelegt-Status
+
+        if (operatingCosts > 0) {
+            int playerIndex = mapObject->getPlayer()->getColorIndex();
+            operatingCostsSumPerPlayer[playerIndex] += operatingCosts;
+        }
+    }
+
+    /// PlayerStatus aktualisieren
     for (int playerIndex = 0; playerIndex < 4; playerIndex++) {
-        PlayerStatus& playerStatus = context->game->getPlayer(playerIndex)->playerStatus;
+        PlayerStatus& playerStatus = game->getPlayer(playerIndex)->playerStatus;
         playerStatus.population = populationSumPerPlayer[playerIndex];
         playerStatus.taxesIncome = taxesIncomeSumPerPlayer[playerIndex];
+        playerStatus.operatingCosts = operatingCostsSumPerPlayer[playerIndex];
+        playerStatus.balance = playerStatus.taxesIncome - playerStatus.operatingCosts;
     }
 }
 
@@ -157,9 +177,12 @@ void EconomicsMgr::updateFinances() {
     for (int playerIndex = 0; playerIndex < 4; playerIndex++) {
         Player* player = context->game->getPlayer(playerIndex);
 
-        unsigned long income = (player->playerStatus.taxesIncome / 6); // abrunden
-        player->coins += income;
-    }
+        // Steuereinnahmen
+        unsigned long taxesIncome = (player->playerStatus.taxesIncome / 6); // abrunden
+        player->coins += taxesIncome;
 
-    // TODO Betriebskosten
+        // Betriebskosten
+        unsigned long operatingCosts = (player->playerStatus.operatingCosts / 6); // abrunden
+        player->coins -= operatingCosts;
+    }
 }

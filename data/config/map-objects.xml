@@ -15,6 +15,10 @@
             <wood>5</wood>
             <bricks>0</bricks>
         </building-costs>
+        <operating-costs>
+            <running>5</running>
+            <decommissioned>0</decommissioned>
+        </operating-costs>
         <catchment-area>
             0000011111100000
             0001111111111000
@@ -52,6 +56,10 @@
             <wood>2</wood>
             <bricks>5</bricks>
         </building-costs>
+        <operating-costs>
+            <running>25</running>
+            <decommissioned>10</decommissioned>
+        </operating-costs>
         <catchment-area>
             00000000000011111111000000000000
             00000000011111111111111000000000
@@ -104,6 +112,10 @@
             <wood>2</wood>
             <bricks>5</bricks>
         </building-costs>
+        <operating-costs>
+            <running>20</running>
+            <decommissioned>10</decommissioned>
+        </operating-costs>
         <catchment-area>
             00000000011111111000000000
             00000001111111111110000000
@@ -152,6 +164,10 @@
             <wood>2</wood>
             <bricks>5</bricks>
         </building-costs>
+        <operating-costs>
+            <running>15</running>
+            <decommissioned>7</decommissioned>
+        </operating-costs>
         <catchment-area>
             00000000011111111000000000
             00000001111111111110000000
@@ -200,6 +216,10 @@
             <wood>6</wood>
             <bricks>0</bricks>
         </building-costs>
+        <operating-costs>
+            <running>10</running>
+            <decommissioned>5</decommissioned>
+        </operating-costs>
         <catchment-area>
             00000000000011111111000000000000
             00000000011111111111111000000000
@@ -254,6 +274,10 @@
             <wood>6</wood>
             <bricks>0</bricks>
         </building-costs>
+        <operating-costs>
+            <running>5</running>
+            <decommissioned>0</decommissioned>
+        </operating-costs>
         <catchment-area>
             0000000111111110000000
             0000011111111111100000
@@ -300,6 +324,10 @@
             <wood>3</wood>
             <bricks>8</bricks>
         </building-costs>
+        <operating-costs>
+            <running>25</running>
+            <decommissioned>10</decommissioned>
+        </operating-costs>
         <catchment-area>
             011110
             111111
@@ -343,6 +371,10 @@
             <wood>3</wood>
             <bricks>8</bricks>
         </building-costs>
+        <operating-costs>
+            <running>35</running>
+            <decommissioned>15</decommissioned>
+        </operating-costs>
         <catchment-area>
             011110
             111111
@@ -386,6 +418,10 @@
             <wood>3</wood>
             <bricks>8</bricks>
         </building-costs>
+        <operating-costs>
+            <running>35</running>
+            <decommissioned>15</decommissioned>
+        </operating-costs>
         <catchment-area>
             011110
             111111
@@ -429,6 +465,10 @@
             <wood>4</wood>
             <bricks>0</bricks>
         </building-costs>
+        <operating-costs>
+            <running>5</running>
+            <decommissioned>0</decommissioned>
+        </operating-costs>
         <catchment-area>
             00111100
             01111110
@@ -459,6 +499,10 @@
             <wood>4</wood>
             <bricks>0</bricks>
         </building-costs>
+        <operating-costs>
+            <running>5</running>
+            <decommissioned>0</decommissioned>
+        </operating-costs>
         <catchment-area>
             011110
             111111
@@ -487,6 +531,10 @@
             <wood>2</wood>
             <bricks>0</bricks>
         </building-costs>
+        <operating-costs>
+            <running>5</running>
+            <decommissioned>0</decommissioned>
+        </operating-costs>
         <catchment-area>
             00000011111000000
             00001111111110000
@@ -526,6 +574,10 @@
             <wood>0</wood>
             <bricks>0</bricks>
         </building-costs>
+        <operating-costs>
+            <running>5</running>
+            <decommissioned>0</decommissioned>
+        </operating-costs>
         <catchment-area>
             00111100
             01111110
@@ -605,6 +657,9 @@
             <wood>6</wood>
             <bricks>0</bricks>
         </building-costs>
+        <operating-costs>
+            <running>15</running>
+        </operating-costs>
         <catchment-area>
             00000000000000011111111000000000000000
             00000000000111111111111111100000000000
@@ -661,6 +716,9 @@
             <wood>7</wood>
             <bricks>0</bricks>
         </building-costs>
+        <operating-costs>
+            <running>15</running>
+        </operating-costs>
         <catchment-area>
             00000000000000011111111000000000000000
             00000000000111111111111111100000000000
@@ -719,6 +777,9 @@
             <wood>25</wood>
             <bricks>70</bricks>
         </building-costs>
+        <operating-costs>
+            <running>90</running>
+        </operating-costs>
         <catchment-area>
             00000000000000000000111111111100000000000000000000
             00000000000000001111111111111111110000000000000000
@@ -786,6 +847,9 @@
             <wood>4</wood>
             <bricks>6</bricks>
         </building-costs>
+        <operating-costs>
+            <running>15</running>
+        </operating-costs>
         <catchment-area>
             00000000011111111000000000
             00000001111111111110000000
@@ -1138,6 +1202,9 @@
             <wood>10</wood>
             <bricks>0</bricks>
         </building-costs>
+        <operating-costs>
+            <running>10</running>
+        </operating-costs>
         <catchment-area>
             00000000000000011111111000000000000000
             00000000000111111111111111100000000000
@@ -1194,6 +1261,9 @@
             <wood>5</wood>
             <bricks>0</bricks>
         </building-costs>
+        <operating-costs>
+            <running>5</running>
+        </operating-costs>
         <catchment-area>
             000000111111000000
             000011111111110000

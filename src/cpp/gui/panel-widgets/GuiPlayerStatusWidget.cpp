@@ -50,11 +50,24 @@ void GuiPlayerStatusWidget::renderElement(IRenderer* renderer) {
 
     context->graphicsMgr->getGraphicSet("coin/coin")->getStatic()->getGraphic()->drawAt(windowX + 206, y - 5);
 
-    // TODO Betriebskosten
-    // TODO Bilanz
+    // Betriebskosten
+    y += 22;
+    context->fontMgr->renderText(renderer, "Betriebskosten:", xLeft, y,
+                                 &colorWhite, &colorBlack, "DroidSans.ttf", 17, flagsLeft);
 
+    context->fontMgr->renderText(renderer, toString(playerStatus.operatingCosts), xRight, y,
+                                 &colorWhite, &colorBlack, "DroidSans.ttf", 17, flagsRight);
+
+    context->graphicsMgr->getGraphicSet("coin/coin")->getStatic()->getGraphic()->drawAt(windowX + 206, y - 5);
+
+    // Bilanz
     y += 34;
-    context->graphicsMgr->getGraphicSet("coin/coin-green-arrow")->getStatic()->getGraphic()->drawAt(windowX + 206, y - 5);
-    y += 34;
-    context->graphicsMgr->getGraphicSet("coin/coin-red-arrow")->getStatic()->getGraphic()->drawAt(windowX + 206, y - 5);
+    context->fontMgr->renderText(renderer, "Bilanz:", xLeft, y,
+                                 &colorWhite, &colorBlack, "DroidSans.ttf", 17, flagsLeft);
+
+    context->fontMgr->renderText(renderer, toString(playerStatus.balance), xRight, y,
+                                 &colorWhite, &colorBlack, "DroidSans.ttf", 17, flagsRight);
+
+    const std::string graphicBalance = (playerStatus.balance >= 0) ? "coin/coin-green-arrow" : "coin/coin-red-arrow";
+    context->graphicsMgr->getGraphicSet(graphicBalance)->getStatic()->getGraphic()->drawAt(windowX + 206, y - 5);
 }

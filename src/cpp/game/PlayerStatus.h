@@ -6,12 +6,16 @@
  */
 struct PlayerStatus {
 
-    unsigned long population;  ///< Einwohner
-    unsigned long taxesIncome; ///< Steuererträge (je 6 Zyklen * 10 Sekunden)
+    unsigned long population;     ///< Einwohner
+    unsigned long taxesIncome;    ///< Steuererträge (je 6 Zyklen * 10 Sekunden)
+    unsigned long operatingCosts; ///< Betriebskosten (je 6 Zyklen * 10 Sekunden)
+    long balance;                 ///< Bilanz (je 6 Zyklen * 10 Sekunden)
 
     PlayerStatus() {
         population = 0;
         taxesIncome = 0;
+        operatingCosts = 0;
+        balance = 0;
     }
 };
 

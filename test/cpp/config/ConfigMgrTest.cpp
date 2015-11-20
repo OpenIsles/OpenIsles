@@ -1,5 +1,6 @@
 #include <cstring>
 #include <gtest/gtest.h>
+#include <map/MapObjectType.h>
 #include "config/ConfigMgr.h"
 #include "config/MapTileType.h"
 #include "map/MapObjectType.h"
@@ -30,6 +31,8 @@ TEST(ConfigMgrTest, loadMapObjectTypes) {
     ASSERT_EQ(25, cathedral->buildingCosts.tools);
     ASSERT_EQ(25, cathedral->buildingCosts.wood);
     ASSERT_EQ(70, cathedral->buildingCosts.bricks);
+    ASSERT_EQ(90, cathedral->operatingCosts.running);
+    ASSERT_EQ(cathedral->operatingCosts.running, cathedral->operatingCosts.decommissioned);
     ASSERT_EQ(false, cathedral->buildingProduction.output.isUsed());
     ASSERT_EQ(false, cathedral->buildingProduction.input.isUsed());
     ASSERT_EQ(false, cathedral->buildingProduction.input2.isUsed());
@@ -58,6 +61,8 @@ TEST(ConfigMgrTest, loadMapObjectTypes) {
     ASSERT_EQ(0, sugarcaneField->buildingCosts.tools);
     ASSERT_EQ(0, sugarcaneField->buildingCosts.wood);
     ASSERT_EQ(0, sugarcaneField->buildingCosts.bricks);
+    ASSERT_EQ(0, sugarcaneField->operatingCosts.running);
+    ASSERT_EQ(sugarcaneField->operatingCosts.running, sugarcaneField->operatingCosts.decommissioned);
     ASSERT_EQ(false, sugarcaneField->buildingProduction.output.isUsed());
     ASSERT_EQ(false, sugarcaneField->buildingProduction.input.isUsed());
     ASSERT_EQ(false, sugarcaneField->buildingProduction.input2.isUsed());
@@ -86,6 +91,8 @@ TEST(ConfigMgrTest, loadMapObjectTypes) {
     ASSERT_EQ(3, toolsmiths->buildingCosts.tools);
     ASSERT_EQ(2, toolsmiths->buildingCosts.wood);
     ASSERT_EQ(5, toolsmiths->buildingCosts.bricks);
+    ASSERT_EQ(25, toolsmiths->operatingCosts.running);
+    ASSERT_EQ(10, toolsmiths->operatingCosts.decommissioned);
     ASSERT_TRUE(toolsmiths->carrier.mapObjectType == nullptr);
     ASSERT_EQ(0, toolsmiths->carrier.capacity);
     ASSERT_TRUE(toolsmiths->carrier.animations.empty());

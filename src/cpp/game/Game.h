@@ -57,7 +57,7 @@ class Game : public ContextAware {
     friend class GameIO;
 
 #ifdef TESTS_ENABLED
-    FRIEND_TEST(FinancesTest, checkThatTaxesIncomeWorksWithDifferentPopulationTiers);
+    FRIEND_TEST(TaxesOnlyFinancesTest, checkThatTaxesIncomeWorksWithDifferentPopulationTiers);
     FRIEND_TEST(InCatchmentAreaFinderInvisibleGoodsTest, checkThatRouteToGrassIsFound);
     FRIEND_TEST(InCatchmentAreaFinderInvisibleGoodsTest, checkThatNoRouteIsFoundWhenAllWasHarvested);
 #endif
@@ -189,7 +189,7 @@ public:
      * @brief Liefert die Map mit allen Kolonien zurück
      * @return alle Kolonien als Map, die Spieler-Insel-Paar auf Kolonie abbildet
      */
-    const std::map<std::pair<const Player*, const Isle*>, Colony*>& getColonies() {
+    const std::map<std::pair<const Player*, const Isle*>, Colony*>& getColonies() const {
         return colonies;
     };
 

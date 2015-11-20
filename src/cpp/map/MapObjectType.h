@@ -142,6 +142,14 @@ struct MapObjectType {
     BuildingCosts buildingCosts;
 
     /**
+     * @brief Betriebskosten
+     */
+    struct {
+        unsigned char running = 0;        ///< laufender Betrieb
+        unsigned char decommissioned = 0; ///< stillgelegt
+    } operatingCosts;
+
+    /**
      * @brief Güter, die verbraucht und hergestellt werden.
      */
     ProductionSlots buildingProduction;

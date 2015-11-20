@@ -128,13 +128,31 @@ void ConfigMgr::loadMapObjectTypes() {
         rapidxml::xml_node<>* buildingCostsNode = node->first_node("building-costs", 14, true);
         readBuildingCosts(mapObjectType.buildingCosts, buildingCostsNode);
 
-        // optionale Tags
+        // optionale Tags...
+
+        // Betriebskosten
+        rapidxml::xml_node<>* operatingCostsNode = node->first_node("operating-costs", 15, true);
+        if (operatingCostsNode != nullptr) {
+            rapidxml::xml_node<>* runningNode = operatingCostsNode->first_node("running", 7, true);
+            mapObjectType.operatingCosts.running = (unsigned char) stringToUnsignedLong(runningNode->value());
+
+            rapidxml::xml_node<>* decommissionedNode = operatingCostsNode->first_node("decommissioned", 14, true);
+            if (decommissionedNode != nullptr) {
+                mapObjectType.operatingCosts.decommissioned =
+                    (unsigned char) stringToUnsignedLong(decommissionedNode->value());
+            } else {
+                mapObjectType.operatingCosts.decommissioned = mapObjectType.operatingCosts.running;
+            }
+        }
+
+        // Einzugsbereich
         rapidxml::xml_node<>* catchmentAreaNode = node->first_node("catchment-area", 14, true);
         if (catchmentAreaNode != nullptr) {
             const char* catchmentAreaValue = catchmentAreaNode->value();
             mapObjectType.catchmentArea.reset(parseCatchmentArea(catchmentAreaValue));
         }
 
+        // produzierte und verbrauchte Waren
         rapidxml::xml_node<>* productionSlotsNode = node->first_node("production-slots", 16, true);
         if (productionSlotsNode != nullptr) {
             rapidxml::xml_node<>* outputNode = productionSlotsNode->first_node("output", 6, true);
@@ -159,11 +177,13 @@ void ConfigMgr::loadMapObjectTypes() {
             }
         }
 
+        // Einwohner
         rapidxml::xml_node<>* inhabitantsNode = node->first_node("inhabitants", 11, true);
         if (inhabitantsNode != nullptr) {
             mapObjectType.inhabitants = (unsigned char) stringToUnsignedLong(inhabitantsNode->value());
         }
 
+        // Häuser: Bevölkerungsgruppe
         rapidxml::xml_node<>* populationTierNode = node->first_node("population-tier", 15, true);
         if (populationTierNode != nullptr) {
             const char* populationTierString = populationTierNode->value();
@@ -176,6 +196,7 @@ void ConfigMgr::loadMapObjectTypes() {
             mapObjectType.populationTier = populationTier;
         }
 
+        // Träger
         rapidxml::xml_node<>* carriersNode = node->first_node("carriers", 8, true);
         if (carriersNode != nullptr) {
             std::string carrierMapObjectTypeName = carriersNode->first_attribute("name", 4, true)->value();
@@ -186,6 +207,7 @@ void ConfigMgr::loadMapObjectTypes() {
                 carriersNode->first_attribute("max-carriers", 12, true)->value());
         }
 
+        // Harvestables: maximales Alter
         rapidxml::xml_node<>* maxAgeNode = node->first_node("max-age", 7, true);
         if (maxAgeNode != nullptr) {
             mapObjectType.maxAge = (unsigned char) stringToUnsignedLong(maxAgeNode->value());
