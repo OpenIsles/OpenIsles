@@ -1,15 +1,28 @@
 #include <cassert>
 #include "config/ConfigMgr.h"
 #include "game/Game.h"
+#include "graphics/mgr/IFontMgr.h"
 #include "gui/components/GuiGoodsSlotElement.h"
 #include "gui/panel-widgets/GuiSelectedProductionBuildingWidget.h"
 #include "map/Map.h"
+#include "utils/Color.h"
+
+static Color colorWhite = Color(255, 255, 255, 255);
+static Color colorBlack = Color(0, 0, 0, 255);
 
 
 GuiSelectedProductionBuildingWidget::GuiSelectedProductionBuildingWidget(const Context* const context) :
-    GuiPanelWidget(context), guiProductionSlotsElement(context) {
+    GuiSelectedBuildingWidget(context), buildingName(context), guiProductionSlotsElement(context) {
 
-    guiProductionSlotsElement.setPosition(15, 60);
+    buildingName.setCoords(0, 55, 236, 15);
+    buildingName.setColor(&colorWhite);
+    buildingName.setShadowColor(&colorBlack);
+    buildingName.setFontName("DroidSans-Bold.ttf");
+    buildingName.setFontSize(14);
+    buildingName.setAlign(RENDERTEXT_HALIGN_CENTER | RENDERTEXT_VALIGN_TOP);
+    addChildElement(&buildingName);
+
+    guiProductionSlotsElement.setPosition(15, 80);
     addChildElement(&guiProductionSlotsElement);
 
     goodsSlotInput = guiProductionSlotsElement.getGoodsSlotElement(ProductionSlot::INPUT);
@@ -24,18 +37,21 @@ GuiSelectedProductionBuildingWidget::GuiSelectedProductionBuildingWidget(const C
     // TODO Child-Buttons für Stilllegen und "Abholung verbieten"
 }
 
+void GuiSelectedProductionBuildingWidget::onSelectedMapBuildingChanged(const Building* newSelectedBuilding) {
+    GuiSelectedBuildingWidget::onSelectedMapBuildingChanged(newSelectedBuilding);
+
+    buildingName.setText(newSelectedBuilding->getMapObjectType()->title);
+
+    const ProductionSlots& productionSlots = newSelectedBuilding->productionSlots;
+    guiProductionSlotsElement.setFromProductionSlots(productionSlots);
+}
+
 void GuiSelectedProductionBuildingWidget::renderElement(IRenderer* renderer) {
     const Building* selectedBuilding =
         reinterpret_cast<const Building*>(context->game->getMap()->getSelectedMapObject());
     assert(selectedBuilding != nullptr);
 
-    int windowX, windowY;
-    getWindowCoords(windowX, windowY);
-
     const MapObjectType* mapObjectType = selectedBuilding->getMapObjectType();
-
-    // Gebäudename
-    context->guiMgr->drawPanelHeader(windowX, windowY, mapObjectType->title, nullptr);
 
     // produzierte Waren: Statusleisten-Texte bei Bedarf anpassen
     if (goodsSlotInput->isVisible()) {
@@ -70,11 +86,4 @@ void GuiSelectedProductionBuildingWidget::updateInputSlotStatusBarText(
     std::string statusBarText =
         inputLabel + "vorrat (reicht für weitere " + enoughForGoodsString + "t " + outputLabel + ")";
     goodsSlotElement->setStatusBarText(statusBarText);
-}
-
-void GuiSelectedProductionBuildingWidget::onSelectedMapBuildingChanged(const Building* newSelectedBuilding) {
-    assert(newSelectedBuilding != nullptr);
-
-    const ProductionSlots& productionSlots = newSelectedBuilding->productionSlots;
-    guiProductionSlotsElement.setFromProductionSlots(productionSlots);
 }

@@ -7,18 +7,27 @@ static Color colorWhite = Color(255, 255, 255, 255);
 static Color colorBlack = Color(0, 0, 0, 255);
 
 
-GuiPlayerStatusWidget::GuiPlayerStatusWidget(const Context* const context) : GuiPanelWidget(context) {
+GuiPlayerStatusWidget::GuiPlayerStatusWidget(const Context* const context) :
+    GuiPanelWidget(context), panelHeader(context) {
+
+    panelHeader.setPosition(0, 0);
+    panelHeader.setText("Spielerstatus");
+    addChildElement(&panelHeader);
 }
 
 GuiPlayerStatusWidget::~GuiPlayerStatusWidget() {
+    childElements.clear();
+}
+
+void GuiPlayerStatusWidget::setPlayer(const Player* player) {
+    this->player = player;
+
+    panelHeader.setCoatOfArmsIcon(player);
 }
 
 void GuiPlayerStatusWidget::renderElement(IRenderer* renderer) {
     int windowX, windowY;
     getWindowCoords(windowX, windowY);
-
-    context->guiMgr->drawPanelHeader(windowX, windowY, "Spielerstatus", player);
-
 
     // Da die Texte alle keinen Statusleisten-Text haben, rendern wir direkt, statt über weitere GUI-Elemente zu gehen.
     // Geht schneller :-)

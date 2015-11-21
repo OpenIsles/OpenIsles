@@ -9,13 +9,21 @@ static Color colorYellow = Color(255, 255, 0, 255);
 
 
 GuiDummyWidget::GuiDummyWidget(const Context* const context) : GuiPanelWidget(context) {
+    panelHeader = new GuiPanelHeader(context);
+    panelHeader->setPosition(0, 0);
+    panelHeader->setText("Dummy-Widget");
+    addChildElement(panelHeader);
+}
+
+GuiDummyWidget::~GuiDummyWidget() {
+    childElements.clear();
+
+    delete panelHeader;
 }
 
 void GuiDummyWidget::renderElement(IRenderer* renderer) {
     int windowX, windowY;
     getWindowCoords(windowX, windowY);
-
-    context->guiMgr->drawPanelHeader(windowX, windowY, "Dummy-Widget", context->game->getCurrentPlayer());
 
     context->fontMgr->renderText(renderer, "Dummy-Widget", windowX + width/2, windowY + height/2,
         &colorYellow, &colorRed, "DroidSans.ttf", 15, RENDERTEXT_HALIGN_CENTER | RENDERTEXT_VALIGN_MIDDLE);

@@ -8,7 +8,7 @@
 #include "utils/StringFormat.h"
 
 
-GuiColonyGoodsWidget::GuiColonyGoodsWidget(const Context* const context) : GuiPanelWidget(context) {
+GuiColonyGoodsWidget::GuiColonyGoodsWidget(const Context* const context) : GuiSelectedBuildingWidget(context) {
     // GUI-Elemente für die Güter anlegen
     const int xStart = 22;
 
@@ -50,7 +50,7 @@ GuiColonyGoodsWidget::~GuiColonyGoodsWidget() {
 }
 
 void GuiColonyGoodsWidget::onSelectedMapBuildingChanged(const Building* newSelectedBuilding) {
-    assert(newSelectedBuilding != nullptr);
+    GuiSelectedBuildingWidget::onSelectedMapBuildingChanged(newSelectedBuilding);
 
     colony = newSelectedBuilding->getColony();
     assert(colony != nullptr);
@@ -64,15 +64,6 @@ void GuiColonyGoodsWidget::onSelectedMapBuildingChanged(const Building* newSelec
 }
 
 void GuiColonyGoodsWidget::renderElement(IRenderer* renderer) {
-    // Name der Siedlung
-    int windowX, windowY;
-    getWindowCoords(windowX, windowY);
-
-    const Building* selectedBuilding = reinterpret_cast<const Building*>(context->game->getMap()->getSelectedMapObject());
-    const Colony* colony = selectedBuilding->getColony();
-    context->guiMgr->drawPanelHeader(windowX, windowY, colony->name, nullptr);
-
-    // Waren
     for (auto iter = guiGoodsSlotElements.cbegin(); iter != guiGoodsSlotElements.cend(); iter++) {
         const Good* good = iter->first;
         GuiGoodsSlotElement* guiGoodsSlotElement = iter->second;

@@ -3,6 +3,7 @@
 
 #include "Context.h"
 #include "game/Player.h"
+#include "gui/components/GuiPanelHeader.h"
 #include "gui/panel-widgets/GuiPanelWidget.h"
 
 
@@ -12,6 +13,8 @@
 class GuiPlayerStatusWidget : public GuiPanelWidget {
 
 private:
+    GuiPanelHeader panelHeader;
+
     /**
      * @brief Spieler, dessen Status angezeigt wird
      */
@@ -21,9 +24,7 @@ public:
     GuiPlayerStatusWidget(const Context* const context);
     virtual ~GuiPlayerStatusWidget() override;
 
-    void setPlayer(const Player* player) {
-        this->player = player;
-    }
+    void setPlayer(const Player* player);
 
     /**
      * @brief Zeichnet das Element (ohne Kinder)

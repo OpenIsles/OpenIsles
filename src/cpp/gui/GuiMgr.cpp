@@ -3,7 +3,6 @@
 #include "config/ConfigMgr.h"
 #include "game/Game.h"
 #include "graphics/graphic/sdl/SDLGraphic.h"
-#include "graphics/mgr/IFontMgr.h"
 #include "gui/components/map/GuiMap.h"
 #include "gui/components/GuiAddBuildingWidget.h"
 #include "gui/components/GuiPushButton.h"
@@ -25,8 +24,6 @@
 #include "utils/Rect.h"
 
 static Color colorWhite = Color(255, 255, 255, 255);
-static Color colorBlack = Color(0, 0, 0, 255);
-static Color colorLightBrown = Color(223, 216, 183, 255);
 
 #ifdef DEBUG_A_STAR
 #include "map/coords/MapCoords.h"
@@ -499,29 +496,24 @@ void GuiMgr::onSelectedMapObjectChanged(const MapObject* newSelectedMapObject) {
     } else {
         const Building* newSelectedBuilding = dynamic_cast<const Building*>(newSelectedMapObject);
         if (newSelectedBuilding != nullptr) {
-            if (newSelectedBuilding->isStorageBuilding()) {
-                GuiColonyGoodsWidget* guiColonyGoodsWidget =
-                    (GuiColonyGoodsWidget*) findElement(GUI_ID_COLONY_GOODS_PANEL_WIDGET);
+            GuiSelectedBuildingWidget* guiSelectedBuildingWidget;
 
-                guiColonyGoodsWidget->onSelectedMapBuildingChanged(newSelectedBuilding);
-                panelState.activeGuiPanelWidget = guiColonyGoodsWidget;
+            if (newSelectedBuilding->isStorageBuilding()) {
+                guiSelectedBuildingWidget =
+                    (GuiColonyGoodsWidget*) findElement(GUI_ID_COLONY_GOODS_PANEL_WIDGET);
             }
             else if (newSelectedBuilding->isHouse()) {
-                GuiSelectedHouseBuildingWidget* guiSelectedHouseBuildingWidget =
+                guiSelectedBuildingWidget =
                     (GuiSelectedHouseBuildingWidget*) findElement(GUI_ID_SELECTED_HOUSE_BUILDING_PANEL_WIDGET);
-
-                guiSelectedHouseBuildingWidget->onSelectedMapBuildingChanged(newSelectedBuilding);
-                panelState.activeGuiPanelWidget = guiSelectedHouseBuildingWidget;
             }
             else {
-                GuiSelectedProductionBuildingWidget* guiSelectedProductionBuildingWidget =
+                guiSelectedBuildingWidget =
                     (GuiSelectedProductionBuildingWidget*) findElement(GUI_ID_SELECTED_PRODUCTION_BUILDING_PANEL_WIDGET);
-
-                guiSelectedProductionBuildingWidget->onSelectedMapBuildingChanged(newSelectedBuilding);
-                panelState.activeGuiPanelWidget = guiSelectedProductionBuildingWidget;
             }
 
-            // TODO gemeinsames Interface mit onSelectedMapBuildingChanged() an den verschiedenen Widgets
+            guiSelectedBuildingWidget->onSelectedMapBuildingChanged(newSelectedBuilding);
+            panelState.activeGuiPanelWidget = guiSelectedBuildingWidget;
+
             // TODO Gebäude, die nix produzieren, müssen auch was anzeigen (öffentliche Gebäude). Aktuell sind nur Produktionsgebäude berücksichtigt
         }
     }
@@ -584,6 +576,14 @@ void GuiMgr::updateGuiFromPanelState() {
     } else {
         guiResourcesBar->hideBuildingCosts();
     }
+
+    // Baumenü: Infos zum bauenden Gebäude
+    if (panelState.selectedPanelButton == PanelButton::ADD_BUILDING) {
+        const MapObjectType* mapObjectType = context->guiMgr->getPanelState().addingMapObject;
+
+        GuiAddBuildingWidget* guiAddBuildingWidget = (GuiAddBuildingWidget*) findElement(GUI_ID_ADD_BUILDING_WIDGET);
+        guiAddBuildingWidget->onAddingMapObjectChanged(mapObjectType);
+    }
 }
 
 void GuiMgr::increaseMapZoom() {
@@ -620,20 +620,4 @@ inline void GuiMgr::changeMapZoom(Map* map, int newScreenZoom) {
 inline void GuiMgr::scrollMap(Map* map, int xDelta, int yDelta) {
     map->scroll(xDelta, yDelta);
     ((GuiMinimap*) findElement(GUI_ID_MINIMAP))->onMapCoordsChanged();
-}
-
-void GuiMgr::drawPanelHeader(int x, int y, const std::string& string, const Player* drawPlayersCoatOfArms) {
-    context->graphicsMgr->getGraphicSet("panel-header")->getStatic()->getGraphic()->drawAt(x, y);
-    context->fontMgr->renderText(renderer, string, x + 118, y + 19,
-        &colorLightBrown, &colorBlack, "DroidSans-Bold.ttf", 15, RENDERTEXT_HALIGN_CENTER | RENDERTEXT_VALIGN_MIDDLE);
-
-    if (drawPlayersCoatOfArms != nullptr) {
-        const std::string graphicSetName =
-            context->graphicsMgr->getGraphicSetNameForCoatOfArms("large", drawPlayersCoatOfArms->getColor());
-        const IGraphic* coatOfArmsGraphic =
-            context->graphicsMgr->getGraphicSet(graphicSetName)->getStatic()->getGraphic();
-
-        coatOfArmsGraphic->drawShadowAt(x + 209, y + 6);
-        coatOfArmsGraphic->drawAt(x + 203, y);
-    }
 }

@@ -5,6 +5,7 @@
 #include "Context.h"
 #include "gui/components/GuiBase.h"
 #include "gui/components/GuiIconWithStringElement.h"
+#include "gui/components/GuiPanelHeader.h"
 #include "gui/components/GuiProductionSlotsElement.h"
 
 
@@ -16,6 +17,7 @@ class GuiAddBuildingWidget : public GuiBase {
 
 private:
     // GUI-Elemente
+    GuiPanelHeader panelHeader;                       ///< Panel-Header mit dem Namen des neuen Gebäudes
     GuiProductionSlotsElement productionSlotsElement; ///< produzierte Waren
     GuiIconWithStringElement coinsElement;            ///< Münzkosten
     // TODO Betriebskosten
@@ -31,6 +33,13 @@ public:
      * @brief Zeichnet das Element (ohne Kinder)
      */
     virtual void renderElement(IRenderer* renderer);
+
+    /**
+     * @brief Wird aufgerufen, wenn der Nutzer ein anderes Map-Objekt auswählt, was gebaut werden soll
+     *
+     * @param newAddingMapObject Map-Objekt-Typ, der grade ausgewählt wurde
+     */
+    void onAddingMapObjectChanged(const MapObjectType* newAddingMapObject);
 
 };
 

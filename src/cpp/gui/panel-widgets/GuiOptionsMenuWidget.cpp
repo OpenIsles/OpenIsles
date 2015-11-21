@@ -2,6 +2,7 @@
 #include "map/Structure.h"
 #include "gui/Identifiers.h"
 #include "gui/components/GuiPushButton.h"
+#include "gui/components/GuiPanelHeader.h"
 #include "gui/panel-widgets/GuiOptionsMenuWidget.h"
 #include "sound/sdl/SDLSoundMgr.h"
 
@@ -11,6 +12,15 @@ static const char* statusBarTextTurnMusicOff = "Musik ausschalten";
 
 
 GuiOptionsMenuWidget::GuiOptionsMenuWidget(const Context* const context) : GuiPanelWidget(context) {
+    // TODO höchstwahrscheinlich sind die GUI-Komponenten lost-memory, da sie am Ende nicht zerstört werden
+    // Idee untersuchen, dass ~GuiMgr() von jeder Komponente rekursiv die Kinder beseitigt.
+
+    GuiPanelHeader* panelHeader = new GuiPanelHeader(context);
+    panelHeader->setPosition(0, 0);
+    panelHeader->setText("Einstellungen");
+    panelHeader->setIconGraphic(nullptr);
+    addChildElement(panelHeader);
+
     GuiPushButton* musicPushButton = new GuiPushButton(context);
     musicPushButton->setGraphic(context->graphicsMgr->getGraphicSet("button-music")->getStatic()->getGraphic());
     musicPushButton->setGraphicPressed(context->graphicsMgr->getGraphicSet("button-music-pressed")->getStatic()->getGraphic());
@@ -32,8 +42,4 @@ GuiOptionsMenuWidget::GuiOptionsMenuWidget(const Context* const context) : GuiPa
 }
 
 void GuiOptionsMenuWidget::renderElement(IRenderer* renderer) {
-    int windowX, windowY;
-    getWindowCoords(windowX, windowY);
-
-    context->guiMgr->drawPanelHeader(windowX, windowY, "Einstellungen", nullptr);
 }

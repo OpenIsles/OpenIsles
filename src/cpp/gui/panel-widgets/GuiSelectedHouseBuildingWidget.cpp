@@ -21,7 +21,7 @@ static struct {
 
 
 GuiSelectedHouseBuildingWidget::GuiSelectedHouseBuildingWidget(const Context* const context) :
-    GuiPanelWidget(context), populationSatisfaction(context), inhabitants(context), populationTier(context) {
+    GuiSelectedBuildingWidget(context), populationSatisfaction(context), inhabitants(context), populationTier(context) {
 
     // Grafiken laden
     IRenderer* const renderer = context->graphicsMgr->getRenderer();
@@ -62,21 +62,12 @@ GuiSelectedHouseBuildingWidget::~GuiSelectedHouseBuildingWidget() {
 }
 
 void GuiSelectedHouseBuildingWidget::renderElement(IRenderer* renderer) {
-    const Building* selectedBuilding =
-        reinterpret_cast<const Building*>(context->game->getMap()->getSelectedMapObject());
-    assert((selectedBuilding != nullptr) && (selectedBuilding->isHouse()));
-
-    int windowX, windowY;
-    getWindowCoords(windowX, windowY);
-
-    const Colony* colony = selectedBuilding->getColony();
-
-    // Name der Siedlung
-    context->guiMgr->drawPanelHeader(windowX, windowY, colony->name, nullptr);
 }
 
 void GuiSelectedHouseBuildingWidget::onSelectedMapBuildingChanged(const Building* newSelectedBuilding) {
-    assert((newSelectedBuilding != nullptr) && (newSelectedBuilding->isHouse()));
+    assert(newSelectedBuilding->isHouse());
+
+    GuiSelectedBuildingWidget::onSelectedMapBuildingChanged(newSelectedBuilding);
     
     const Colony* colony = newSelectedBuilding->getColony();
     const MapObjectType* mapObjectType = newSelectedBuilding->getMapObjectType();

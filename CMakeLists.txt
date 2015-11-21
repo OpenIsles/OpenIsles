@@ -117,6 +117,8 @@ set(GUI_SOURCE_FILES
     src/cpp/gui/components/GuiMapZoomWidget.h
     src/cpp/gui/components/GuiMinimap.cpp
     src/cpp/gui/components/GuiMinimap.h
+    src/cpp/gui/components/GuiPanelHeader.cpp
+    src/cpp/gui/components/GuiPanelHeader.h
     src/cpp/gui/components/GuiProductionSlotsElement.cpp
     src/cpp/gui/components/GuiProductionSlotsElement.h
     src/cpp/gui/components/GuiPushButton.cpp
@@ -138,6 +140,8 @@ set(GUI_SOURCE_FILES
     src/cpp/gui/panel-widgets/GuiPanelWidget.h
     src/cpp/gui/panel-widgets/GuiPlayerStatusWidget.cpp
     src/cpp/gui/panel-widgets/GuiPlayerStatusWidget.h
+    src/cpp/gui/panel-widgets/GuiSelectedBuildingWidget.cpp
+    src/cpp/gui/panel-widgets/GuiSelectedBuildingWidget.h
     src/cpp/gui/panel-widgets/GuiSelectedHouseBuildingWidget.cpp
     src/cpp/gui/panel-widgets/GuiSelectedHouseBuildingWidget.h
     src/cpp/gui/panel-widgets/GuiSelectedProductionBuildingWidget.cpp

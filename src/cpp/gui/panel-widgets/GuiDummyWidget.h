@@ -3,6 +3,7 @@
 
 #include <SDL_render.h>
 #include "Context.h"
+#include "gui/components/GuiPanelHeader.h"
 #include "gui/panel-widgets/GuiPanelWidget.h"
 
 
@@ -12,9 +13,12 @@
  */
 class GuiDummyWidget : public GuiPanelWidget {
 
+private:
+    GuiPanelHeader* panelHeader;
+
 public:
     GuiDummyWidget(const Context* const context);
-    virtual ~GuiDummyWidget() {}
+    virtual ~GuiDummyWidget();
 
     /**
      * @brief Zeichnet das Element (ohne Kinder)

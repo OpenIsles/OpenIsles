@@ -7,13 +7,13 @@
 #include "graphics/graphic/sdl/SDLGraphic.h"
 #include "gui/components/GuiStaticGraphicElement.h"
 #include "gui/components/GuiStaticTextElement.h"
-#include "gui/panel-widgets/GuiPanelWidget.h"
+#include "gui/panel-widgets/GuiSelectedBuildingWidget.h"
 
 
 /**
  * @brief GUI-Widget mit den Informationen des aktuell ausgewählten Hauses.
  */
-class GuiSelectedHouseBuildingWidget : public GuiPanelWidget {
+class GuiSelectedHouseBuildingWidget : public GuiSelectedBuildingWidget {
 
 private:
     // Child-Elemente
@@ -41,7 +41,7 @@ public:
      *
      * @param newSelectedBuilding neues Gebäude, was nun selektiert ist
      */
-    void onSelectedMapBuildingChanged(const Building* newSelectedBuilding);
+    virtual void onSelectedMapBuildingChanged(const Building* newSelectedBuilding);
 };
 
 #endif

@@ -11,10 +11,14 @@
 
 
 GuiAddBuildingWidget::GuiAddBuildingWidget(const Context* const context) :
-    GuiBase(context), productionSlotsElement(context),
+    GuiBase(context), panelHeader(context), productionSlotsElement(context),
     coinsElement(context), toolsElement(context), woodElement(context), bricksElement(context) {
 
     setCoords(0, 0, 210, 320);
+
+    // Gebäudename
+    panelHeader.setPosition(0, 0);
+    addChildElement(&panelHeader);
 
     // Produktion
 
@@ -70,9 +74,6 @@ void GuiAddBuildingWidget::renderElement(IRenderer* renderer) {
 
     const MapObjectType* mapObjectType = context->guiMgr->getPanelState().addingMapObject;
 
-    // Name des Map-Objekts
-    context->guiMgr->drawPanelHeader(windowX, windowY, mapObjectType->title, nullptr);
-
     // Grafik
     const FourthDirection& view = context->guiMgr->getPanelState().addingMapObjectView;
     const std::string graphicsSetName = context->graphicsMgr->getGraphicSetNameForMapObject(mapObjectType);
@@ -107,14 +108,20 @@ void GuiAddBuildingWidget::renderElement(IRenderer* renderer) {
     int y = windowY + 48;
     graphic->drawShadowScaledAt(x, y + 12, scale);
     graphic->drawScaledAt(x, y, scale);
+}
+
+void GuiAddBuildingWidget::onAddingMapObjectChanged(const MapObjectType* newAddingMapObject) {
+    // Name des Map-Objekts
+    panelHeader.setText(newAddingMapObject->title);
 
     // produzierte Waren
-    const ProductionSlots& buildingProduction = mapObjectType->buildingProduction;
+    const ProductionSlots& buildingProduction = newAddingMapObject->buildingProduction;
     productionSlotsElement.setFromProductionSlots(buildingProduction);
 
     // Baukosten
-    coinsElement.setString(toString(mapObjectType->buildingCosts.coins));
-    toolsElement.setString(toString(mapObjectType->buildingCosts.tools));
-    woodElement.setString(toString(mapObjectType->buildingCosts.wood));
-    bricksElement.setString(toString(mapObjectType->buildingCosts.bricks));
+    const BuildingCosts& buildingCosts = newAddingMapObject->buildingCosts;
+    coinsElement.setString(toString(buildingCosts.coins));
+    toolsElement.setString(toString(buildingCosts.tools));
+    woodElement.setString(toString(buildingCosts.wood));
+    bricksElement.setString(toString(buildingCosts.bricks));
 }

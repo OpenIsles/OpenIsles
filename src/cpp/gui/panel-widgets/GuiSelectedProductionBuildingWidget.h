@@ -6,19 +6,17 @@
 #include "Context.h"
 #include "gui/components/GuiProductionSlotsElement.h"
 #include "gui/components/GuiStaticGraphicElement.h"
-#include "gui/panel-widgets/GuiPanelWidget.h"
+#include "gui/panel-widgets/GuiSelectedBuildingWidget.h"
 
 
 /**
  * @brief GUI-Widget mit den Informationen des aktuell ausgewählten Produktionsgebäudes.
  */
-class GuiSelectedProductionBuildingWidget : public GuiPanelWidget {
+class GuiSelectedProductionBuildingWidget : public GuiSelectedBuildingWidget {
 
 private:
-    /**
-     * @brief GUI-Element für produzierte Güter
-     */
-    GuiProductionSlotsElement guiProductionSlotsElement;
+    GuiStaticTextElement buildingName;                   ///< Gebäudename
+    GuiProductionSlotsElement guiProductionSlotsElement; ///< GUI-Element für produzierte Güter
 
     // childElements der guiProductionSlotsElement
     GuiGoodsSlotElement* goodsSlotInput;    ///< Gütersymbol: verbraute Güter
@@ -40,7 +38,7 @@ public:
      *
      * @param newSelectedBuilding neues Gebäude, was nun selektiert ist
      */
-    void onSelectedMapBuildingChanged(const Building* newSelectedBuilding);
+    virtual void onSelectedMapBuildingChanged(const Building* newSelectedBuilding);
 
 private:
     /**

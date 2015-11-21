@@ -251,15 +251,6 @@ public:
      */
     void decreaseMapZoom();
 
-    /**
-     * @brief Zeichnet einen Panel-Kopf mit einem bestimmten Kopf
-     * @param x x-Koordinate, wo hingezeichnet werden soll
-     * @param y y-Koordinate, wo hingezeichnet werden soll
-     * @param string Text, der im Panel-Kopf ausgegeben werden soll
-     * @param drawPlayersCoatOfArms wenn gesetzt, wird für diesen Spieler das Wappen hinzugefügt
-     */
-    void drawPanelHeader(int x, int y, const std::string& string, const Player* drawPlayersCoatOfArms);
-
 private:
     /**
      * @brief Legt alle Panel-Widgets an

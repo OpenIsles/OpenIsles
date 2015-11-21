@@ -5,13 +5,13 @@
 #include <unordered_map>
 #include "Context.h"
 #include "gui/components/GuiGoodsSlotElement.h"
-#include "gui/panel-widgets/GuiPanelWidget.h"
+#include "gui/panel-widgets/GuiSelectedBuildingWidget.h"
 
 
 /**
  * @brief GUI-Panel-Widget, dass den aktuellen Lagerbestand der Siedlung anzeigt
  */
-class GuiColonyGoodsWidget : public GuiPanelWidget {
+class GuiColonyGoodsWidget : public GuiSelectedBuildingWidget {
 
 private:
     /**
@@ -34,7 +34,7 @@ public:
      *
      * @param newSelectedBuilding neues Gebäude, was nun selektiert ist
      */
-    void onSelectedMapBuildingChanged(const Building* newSelectedBuilding);
+    virtual void onSelectedMapBuildingChanged(const Building* newSelectedBuilding);
 
     /**
      * @brief Zeichnet das Element (ohne Kinder)
