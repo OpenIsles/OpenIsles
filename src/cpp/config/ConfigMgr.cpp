@@ -364,7 +364,27 @@ bool ConfigMgr::xmlAttributeToBool(rapidxml::xml_attribute<>* attribute, bool de
 }
 
 RectangleData<char>* ConfigMgr::parseCatchmentArea(const char* catchmentAreaValue) {
-    // Step 1: Durchgehen und width/height des Einzugsbereichs prüfen und ob alles zusammenpasst ///////////////////////
+    // Ersetzt alle Vorkommen von `search` in `string` durch `replace`
+    auto replaceString = [](std::string& string, const std::string& search, const std::string& replace) {
+        std::string::size_type pos = 0;
+        for (;;) {
+            pos = string.find(search, pos);
+            if (pos == std::string::npos) {
+                return;
+            }
+
+            string.replace(pos, search.length(), replace);
+            pos += replace.length();
+        }
+    };
+
+    // Step 1: Line-Endings normalisieren, damit nur einheitlich \n da sind
+    std::string temp = std::string(catchmentAreaValue);
+    replaceString(temp, "\r\n", "\n");
+    replaceString(temp, "\r", "\n");
+    catchmentAreaValue = temp.c_str();
+
+    // Step 2: Durchgehen und width/height des Einzugsbereichs prüfen und ob alles zusammenpasst ///////////////////////
     bool notReachedFirstLine = true;
     int x = 0, y = 0; // 0-based Koordinaten, die wir grade vor uns haben
     int catchmentAreaWidth = 0;
@@ -414,7 +434,7 @@ RectangleData<char>* ConfigMgr::parseCatchmentArea(const char* catchmentAreaValu
     }
     int catchmentAreaHeight = y;
 
-    // Step 2: Nun nur durchgehen und die '1'/'0'-Zeichen aufnehmen
+    // Step 3: Nun nur durchgehen und die '1'/'0'-Zeichen aufnehmen
     RectangleData<char>* catchmentArea = new RectangleData<char>(catchmentAreaWidth, catchmentAreaHeight);
 
     int i = 0;

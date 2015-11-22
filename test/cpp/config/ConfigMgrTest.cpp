@@ -230,6 +230,49 @@ TEST(ConfigMgrTest, parseCatchmentArea) {
     delete catchmentArea;
 }
 
+/**
+ * @brief Testet, ob das Parsen des Einzugsbereichs aus der XML mit unterschiedlichen Newline-Endings funktioniert
+ */
+TEST(ConfigMgrTest, parseCatchmentAreaDifferentLineEndings) {
+    // Linux
+    RectangleData<char>* catchmentArea = ConfigMgr::parseCatchmentArea(
+        "     \n"
+        "   00111100\n"
+        "   11111111\n"
+        "   00000000\n"
+        " "
+    );
+    ASSERT_EQ(8, catchmentArea->width);
+    ASSERT_EQ(3, catchmentArea->height);
+    ASSERT_EQ(0, memcmp("001111001111111100000000", catchmentArea->data, 24));
+    delete catchmentArea;
+
+    // Windows
+    catchmentArea = ConfigMgr::parseCatchmentArea(
+        "     \r\n"
+        "   00111100\r\n"
+        "   11111111\r\n"
+        "   00000000\r\n"
+        " "
+    );
+    ASSERT_EQ(8, catchmentArea->width);
+    ASSERT_EQ(3, catchmentArea->height);
+    ASSERT_EQ(0, memcmp("001111001111111100000000", catchmentArea->data, 24));
+    delete catchmentArea;
+
+    // Mac
+    catchmentArea = ConfigMgr::parseCatchmentArea(
+        "     \r"
+        "   00111100\r"
+        "   11111111\r"
+        "   00000000\r"
+        " "
+    );
+    ASSERT_EQ(8, catchmentArea->width);
+    ASSERT_EQ(3, catchmentArea->height);
+    ASSERT_EQ(0, memcmp("001111001111111100000000", catchmentArea->data, 24));
+    delete catchmentArea;
+}
 
 /**
  * @brief Prüft, ob alle Bevölkerungsgruppen richtig konfiguriert sind.

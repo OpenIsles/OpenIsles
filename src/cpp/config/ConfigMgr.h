@@ -117,6 +117,7 @@ class ConfigMgr {
 
 #ifdef TESTS_ENABLED
     FRIEND_TEST(ConfigMgrTest, parseCatchmentArea);
+    FRIEND_TEST(ConfigMgrTest, parseCatchmentAreaDifferentLineEndings);
 #endif
     
 private:
