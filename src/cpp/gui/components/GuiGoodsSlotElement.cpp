@@ -1,4 +1,6 @@
 #include <cassert>
+#include <cmath>
+#include <cstdio>
 #include "gui/components/GuiGoodsSlotElement.h"
 #include "graphics/mgr/IFontMgr.h"
 #include "graphics/mgr/IGraphicsMgr.h"
@@ -37,7 +39,7 @@ void GuiGoodsSlotElement::renderElement(IRenderer* renderer) {
     // Wert anzeigen
     if (displayValue) {
         char inventoryOutput[10];
-        sprintf(inventoryOutput, "%.0ft", floor(goodsSlot->inventory));
+        std::sprintf(inventoryOutput, "%.0ft", std::floor(goodsSlot->inventory));
         context->fontMgr->renderText(renderer, inventoryOutput, windowX + 40, windowY + 42, &colorWhite, &colorBlack,
             "DroidSans.ttf", 12, RENDERTEXT_HALIGN_RIGHT | RENDERTEXT_VALIGN_BOTTOM);
     }

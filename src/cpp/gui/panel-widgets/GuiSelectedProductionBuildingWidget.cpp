@@ -1,4 +1,5 @@
 #include <cassert>
+#include <cstdio>
 #include "config/ConfigMgr.h"
 #include "game/Game.h"
 #include "graphics/mgr/IFontMgr.h"
@@ -81,7 +82,7 @@ void GuiSelectedProductionBuildingWidget::updateInputSlotStatusBarText(
     // Ausrechnen, für wie viel Output-Güter die Input-Güter reichen
     double inputEnoughForXOutputGoods = inputInventory / inputAmountForProduction;
     char enoughForGoodsString[10];
-    sprintf(enoughForGoodsString, "%.1f", inputEnoughForXOutputGoods);
+    std::sprintf(enoughForGoodsString, "%.1f", inputEnoughForXOutputGoods);
 
     std::string statusBarText =
         inputLabel + "vorrat (reicht für weitere " + enoughForGoodsString + "t " + outputLabel + ")";
