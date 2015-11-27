@@ -71,6 +71,10 @@ public:
         return graphicSetNamePrefix + "/" + good->name;
     }
 
+    std::string getGraphicSetNameForAddBuildingButton(const MapObjectType* mapObjectType) const {
+        return "add-building-button/" + mapObjectType->name;
+    }
+
     std::string getGraphicSetNameForCoatOfArms(const std::string& prefix, PlayerColor playerColor) const {
         std::string graphicSetNameSuffix;
 

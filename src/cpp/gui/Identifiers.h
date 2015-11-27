@@ -41,12 +41,13 @@
 #define GUI_ID_SELECTED_PRODUCTION_BUILDING_PANEL_WIDGET 401     // ausgewähltes Produktionsgebäude (Infos über
                                                                  // Produktion und intere Lagerbestände des Gebäudes)
 #define GUI_ID_SELECTED_HOUSE_BUILDING_PANEL_WIDGET 402          // ausgewähltes Haus
-#define GUI_ID_COLONY_GOODS_PANEL_WIDGET 403                     // Kolonie-Warenübersicht
-#define GUI_ID_BUILD_MENU_PANEL_WIDGET 404                       // Baumenü
-#define GUI_ID_MILITARY_PANEL_WIDGET 405                         // Kampfmenü
-#define GUI_ID_PLAYER_STATUS_PANEL_WIDGET 406                    // Spielerstatus (Infomenü)
-#define GUI_ID_OPTIONS_MENU_PANEL_WIDGET 407                     // Optionen-Menü
+#define GUI_ID_SELECTED_PUBLIC_BUILDING_PANEL_WIDGET 403         // ausgewähltes öffentliches Gebäude
+#define GUI_ID_COLONY_GOODS_PANEL_WIDGET 404                     // Kolonie-Warenübersicht
+#define GUI_ID_BUILD_MENU_PANEL_WIDGET 405                       // Baumenü
+#define GUI_ID_MILITARY_PANEL_WIDGET 406                         // Kampfmenü
+#define GUI_ID_PLAYER_STATUS_PANEL_WIDGET 407                    // Spielerstatus (Infomenü)
+#define GUI_ID_OPTIONS_MENU_PANEL_WIDGET 408                     // Optionen-Menü
 
-#define GUI_ID_PANEL_WIDGET_END 407                              // Marker für das letzte Panel-Widget
+#define GUI_ID_PANEL_WIDGET_END 408                              // Marker für das letzte Panel-Widget
 
 #endif

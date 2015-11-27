@@ -129,7 +129,7 @@ GuiBuildMenuWidget::GuiBuildMenuWidget(const Context* const context) : GuiPanelW
                     continue;
                 }
 
-                std::string graphicSetName = std::string("add-building-button/") + mapObjectType->name;
+                std::string graphicSetName = context->graphicsMgr->getGraphicSetNameForAddBuildingButton(mapObjectType);
                 const IGraphic* graphicAddBuildingButton =
                     context->graphicsMgr->getGraphicSet(graphicSetName)->getStatic()->getGraphic();
 

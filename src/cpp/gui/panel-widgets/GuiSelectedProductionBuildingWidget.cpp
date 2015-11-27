@@ -7,13 +7,15 @@
 #include "gui/panel-widgets/GuiSelectedProductionBuildingWidget.h"
 #include "map/Map.h"
 #include "utils/Color.h"
+#include "utils/StringFormat.h"
 
 static Color colorWhite = Color(255, 255, 255, 255);
 static Color colorBlack = Color(0, 0, 0, 255);
 
 
 GuiSelectedProductionBuildingWidget::GuiSelectedProductionBuildingWidget(const Context* const context) :
-    GuiSelectedBuildingWidget(context), buildingName(context), guiProductionSlotsElement(context) {
+    GuiSelectedBuildingWidget(context), buildingName(context), guiProductionSlotsElement(context),
+    operatingCostsLabel(context), operatingCosts(context), operatingCostsIcon(context) {
 
     buildingName.setCoords(0, 55, 236, 15);
     buildingName.setColor(&colorWhite);
@@ -35,16 +37,48 @@ GuiSelectedProductionBuildingWidget::GuiSelectedProductionBuildingWidget(const C
     goodsSlotOutput->setDisplayValue(true);
     goodsSlotOutput->setStatusBarText("Abholfertige Waren in diesem Gebäude");
 
+    // TODO Auslastung
+
+    // Betriebskosten
+    int y = 143;
+
+    operatingCostsLabel.setCoords(10, y, 150, 15);
+    operatingCostsLabel.setText("Betriebskosten:");
+    operatingCostsLabel.setColor(&colorWhite);
+    operatingCostsLabel.setShadowColor(&colorBlack);
+    operatingCostsLabel.setFontName("DroidSans-Bold.ttf");
+    operatingCostsLabel.setFontSize(14);
+    operatingCostsLabel.setAlign(RENDERTEXT_HALIGN_LEFT | RENDERTEXT_VALIGN_TOP);
+    addChildElement(&operatingCostsLabel);
+
+    operatingCosts.setCoords(165, y, 30, 15);
+    operatingCosts.setColor(&colorWhite);
+    operatingCosts.setShadowColor(&colorBlack);
+    operatingCosts.setFontName("DroidSans-Bold.ttf");
+    operatingCosts.setFontSize(14);
+    operatingCosts.setAlign(RENDERTEXT_HALIGN_RIGHT | RENDERTEXT_VALIGN_TOP);
+    addChildElement(&operatingCosts);
+
+    const IGraphic* graphicIcon = context->graphicsMgr->getGraphicSet("coin/coin")->getStatic()->getGraphic();
+    operatingCostsIcon.setCoords(195, y - 7, graphicIcon->getWidth(), graphicIcon->getHeight());
+    operatingCostsIcon.setGraphic(graphicIcon);
+    addChildElement(&operatingCostsIcon);
+
     // TODO Child-Buttons für Stilllegen und "Abholung verbieten"
 }
 
 void GuiSelectedProductionBuildingWidget::onSelectedMapBuildingChanged(const Building* newSelectedBuilding) {
     GuiSelectedBuildingWidget::onSelectedMapBuildingChanged(newSelectedBuilding);
 
-    buildingName.setText(newSelectedBuilding->getMapObjectType()->title);
+    const MapObjectType* mapObjectType = newSelectedBuilding->getMapObjectType();
+
+    buildingName.setText(mapObjectType->title);
 
     const ProductionSlots& productionSlots = newSelectedBuilding->productionSlots;
     guiProductionSlotsElement.setFromProductionSlots(productionSlots);
+    
+    operatingCosts.setText(toString(mapObjectType->operatingCosts.running));
+    // TODO stillgelegt (Code mit EconomicsMgr refactoren, der die Finanzberechnung macht)
 }
 
 void GuiSelectedProductionBuildingWidget::renderElement(IRenderer* renderer) {

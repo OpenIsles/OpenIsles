@@ -17,6 +17,7 @@
 #include "gui/panel-widgets/GuiPlayerStatusWidget.h"
 #include "gui/panel-widgets/GuiSelectedHouseBuildingWidget.h"
 #include "gui/panel-widgets/GuiSelectedProductionBuildingWidget.h"
+#include "gui/panel-widgets/GuiSelectedPublicBuildingWidget.h"
 #include "gui/Identifiers.h"
 #include "map/Map.h"
 #include "utils/Color.h"
@@ -186,6 +187,11 @@ void GuiMgr::initPanelWidgets() {
     GuiSelectedHouseBuildingWidget* selectedHouseBuildingWidget = new GuiSelectedHouseBuildingWidget(context);
     registerElement(GUI_ID_SELECTED_HOUSE_BUILDING_PANEL_WIDGET, selectedHouseBuildingWidget);
     panel->addChildElement(selectedHouseBuildingWidget);
+
+    // ausgewähltes öffentliches Gebäude
+    GuiSelectedPublicBuildingWidget* selectedPublicBuildingWidget = new GuiSelectedPublicBuildingWidget(context);
+    registerElement(GUI_ID_SELECTED_PUBLIC_BUILDING_PANEL_WIDGET, selectedPublicBuildingWidget);
+    panel->addChildElement(selectedPublicBuildingWidget);
 
     // Kolonie-Warenübersicht
     GuiColonyGoodsWidget* colonyGoodsWidget = new GuiColonyGoodsWidget(context);
@@ -506,6 +512,10 @@ void GuiMgr::onSelectedMapObjectChanged(const MapObject* newSelectedMapObject) {
                 guiSelectedBuildingWidget =
                     (GuiSelectedHouseBuildingWidget*) findElement(GUI_ID_SELECTED_HOUSE_BUILDING_PANEL_WIDGET);
             }
+            else if (newSelectedBuilding->isPublicBuilding()) {
+                guiSelectedBuildingWidget =
+                    (GuiSelectedHouseBuildingWidget*) findElement(GUI_ID_SELECTED_PUBLIC_BUILDING_PANEL_WIDGET);
+            }
             else {
                 guiSelectedBuildingWidget =
                     (GuiSelectedProductionBuildingWidget*) findElement(GUI_ID_SELECTED_PRODUCTION_BUILDING_PANEL_WIDGET);
@@ -513,8 +523,6 @@ void GuiMgr::onSelectedMapObjectChanged(const MapObject* newSelectedMapObject) {
 
             guiSelectedBuildingWidget->onSelectedMapBuildingChanged(newSelectedBuilding);
             panelState.activeGuiPanelWidget = guiSelectedBuildingWidget;
-
-            // TODO Gebäude, die nix produzieren, müssen auch was anzeigen (öffentliche Gebäude). Aktuell sind nur Produktionsgebäude berücksichtigt
         }
     }
 

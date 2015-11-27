@@ -10,6 +10,7 @@
 #include "economics/Carrier.h"
 #include "economics/InCatchmentAreaFinder.h"
 #include "game/ProductionSlots.h"
+#include "map/MapObjectType.h"
 #include "map/Structure.h"
 
 
@@ -105,6 +106,15 @@ public:
      */
     bool isHouse() const {
         return (mapObjectType->populationTier != nullptr);
+    }
+
+    /**
+     * @brief Prüft, ob das Gebäude ein öffentliches Gebäude ist (produziert nix, hat aber Betriebskosten)
+     * @return `true` wenn öffentlichess Gebäude, sonst `false`
+     */
+    bool isPublicBuilding() const {
+        return (!mapObjectType->buildingProduction.output.isUsed() &&
+                mapObjectType->operatingCosts.running > 0);
     }
 
 private:

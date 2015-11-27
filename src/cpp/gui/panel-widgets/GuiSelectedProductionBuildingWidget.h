@@ -6,6 +6,7 @@
 #include "Context.h"
 #include "gui/components/GuiProductionSlotsElement.h"
 #include "gui/components/GuiStaticGraphicElement.h"
+#include "gui/components/GuiStaticTextElement.h"
 #include "gui/panel-widgets/GuiSelectedBuildingWidget.h"
 
 
@@ -22,6 +23,10 @@ private:
     GuiGoodsSlotElement* goodsSlotInput;    ///< Gütersymbol: verbraute Güter
     GuiGoodsSlotElement* goodsSlotInput2;   ///< Gütersymbol: weitere verbraute Güter
     GuiGoodsSlotElement* goodsSlotOutput;   ///< Gütersymbol: produzierte Güter
+
+    GuiStaticTextElement operatingCostsLabel;    ///< Betriebskosten-Label
+    GuiStaticTextElement operatingCosts;         ///< variables Textfeld mit die Betriebskosten
+    GuiStaticGraphicElement operatingCostsIcon;  ///< Symbol für Betriebskosten
 
 public:
     GuiSelectedProductionBuildingWidget(const Context* const context);
