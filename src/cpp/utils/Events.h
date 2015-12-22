@@ -16,7 +16,7 @@
 
 
 /**
- * @brief Hilfsklasse, die Konstanten über die ganze Anwendung hält
+ * @brief enthält Informationen über das Event "Maus über andere Map-Koordinate bewegt"
  */
 struct MouseMotionMapCoordsEvent {
 
