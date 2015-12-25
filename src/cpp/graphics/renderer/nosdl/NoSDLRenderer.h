@@ -28,6 +28,7 @@ public:
     virtual void setDrawColor(const Color& color) {}
     virtual void setDrawBlendMode(int blendMode) {}
     virtual void drawLine(int x1, int y1, int x2, int y2) {}
+    virtual void drawRect(const Rect& rect) {}
     virtual void fillRect(const Rect& rect) {}
     virtual void setHintRenderScaleQuality(const char* scaleQuality) {}
     virtual void startFrame() {}

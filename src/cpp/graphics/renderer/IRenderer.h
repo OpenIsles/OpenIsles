@@ -66,6 +66,12 @@ public:
     virtual void drawLine(int x1, int y1, int x2, int y2) = 0;
 
     /**
+     * @brief Zeichnet ein Rechteck
+     * @param rect Rechteck
+     */
+    virtual void drawRect(const Rect& rect) = 0;
+
+    /**
      * @brief Zeichnet ein ausgemaltes Rechteck
      * @param rect Rechteck
      */

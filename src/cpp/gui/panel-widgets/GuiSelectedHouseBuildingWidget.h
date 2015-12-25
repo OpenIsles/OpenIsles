@@ -5,6 +5,7 @@
 #include <string>
 #include "Context.h"
 #include "graphics/graphic/sdl/SDLGraphic.h"
+#include "gui/components/GuiFoodSupplyElement.h"
 #include "gui/components/GuiStaticGraphicElement.h"
 #include "gui/components/GuiStaticTextElement.h"
 #include "gui/panel-widgets/GuiSelectedBuildingWidget.h"
@@ -20,6 +21,8 @@ private:
     GuiStaticGraphicElement populationSatisfaction; ///< Zufriedenheit der Bevölkerung
     GuiStaticTextElement inhabitants;               ///< Anzahl Einwohner
     GuiStaticTextElement populationTier;            ///< Bevölkerungsgruppe
+
+    GuiFoodSupplyElement foodSupplyElement;         ///< Nahrungsversorgung
 
     /**
      * @brief Grafiken der Zufriedenheit

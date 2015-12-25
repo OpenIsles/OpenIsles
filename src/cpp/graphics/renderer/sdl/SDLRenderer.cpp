@@ -115,6 +115,11 @@ void SDLRenderer::drawLine(int x1, int y1, int x2, int y2) {
     SDL_RenderDrawLine(renderer, x1, y1, x2, y2);
 }
 
+void SDLRenderer::drawRect(const Rect& rect) {
+    SDL_Rect sdlRect = { rect.x, rect.y, rect.w, rect.h };
+    SDL_RenderDrawRect(renderer, &sdlRect);
+}
+
 void SDLRenderer::fillRect(const Rect& rect) {
     SDL_Rect sdlRect = { rect.x, rect.y, rect.w, rect.h };
     SDL_RenderFillRect(renderer, &sdlRect);

@@ -21,7 +21,8 @@ static struct {
 
 
 GuiSelectedHouseBuildingWidget::GuiSelectedHouseBuildingWidget(const Context* const context) :
-    GuiSelectedBuildingWidget(context), populationSatisfaction(context), inhabitants(context), populationTier(context) {
+    GuiSelectedBuildingWidget(context), populationSatisfaction(context), inhabitants(context), populationTier(context),
+    foodSupplyElement(context) {
 
     // Grafiken laden
     IRenderer* const renderer = context->graphicsMgr->getRenderer();
@@ -53,6 +54,10 @@ GuiSelectedHouseBuildingWidget::GuiSelectedHouseBuildingWidget(const Context* co
     populationTier.setAlign(RENDERTEXT_HALIGN_LEFT | RENDERTEXT_VALIGN_MIDDLE);
     populationTier.setStatusBarText("Bezeichnung für diese Bevölkerung");
     addChildElement(&populationTier);
+
+    // Nahrungsversorgung
+    foodSupplyElement.setPosition(15, 370);
+    addChildElement(&foodSupplyElement);
 }
 
 GuiSelectedHouseBuildingWidget::~GuiSelectedHouseBuildingWidget() {
@@ -89,4 +94,8 @@ void GuiSelectedHouseBuildingWidget::onSelectedMapBuildingChanged(const Building
 #else
     populationTier.setText(mapObjectType->populationTier->title);
 #endif
+
+    // Nahrungsversorgung
+    double foodSupply = 1.0; // TODO im Moment können wir den Fall "verhungern" noch nicht handlen, drum is die Versorgung immer 100%
+    foodSupplyElement.setFoodSupply(foodSupply);
 }
