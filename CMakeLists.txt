@@ -85,6 +85,7 @@ set(COMMON_SOURCE_FILES
     src/cpp/utils/Color.h
     src/cpp/utils/Consts.cpp
     src/cpp/utils/Consts.h
+    src/cpp/utils/DoubleToIntSequence.h
     src/cpp/utils/Events.h
     src/cpp/utils/MapCoordsIterator.h
     src/cpp/utils/RandomEngine.h
@@ -198,6 +199,7 @@ set(TEST_FILES
     test/cpp/map/HarvestableTest.cpp
     test/cpp/map/MapCoordUtilsTest.cpp
     test/cpp/utils/CatchmentAreaIteratorTest.cpp
+    test/cpp/utils/DoubleToIntSequenceTest.cpp
     test/cpp/utils/MapCoordsIteratorTest.cpp
 )
 
