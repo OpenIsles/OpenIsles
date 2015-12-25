@@ -20,7 +20,7 @@ private:
     GuiPanelHeader panelHeader;                       ///< Panel-Header mit dem Namen des neuen Gebäudes
     GuiProductionSlotsElement productionSlotsElement; ///< produzierte Waren
     GuiIconWithStringElement coinsElement;            ///< Münzkosten
-    // TODO Betriebskosten
+    GuiIconWithStringElement operatingCostsElement;   ///< Betriebskosten
     GuiIconWithStringElement toolsElement;            ///< Werkzeugkosten
     GuiIconWithStringElement woodElement;             ///< Holzkosten
     GuiIconWithStringElement bricksElement;           ///< Ziegelkosten

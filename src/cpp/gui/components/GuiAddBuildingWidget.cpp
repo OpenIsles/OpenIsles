@@ -12,7 +12,8 @@
 
 GuiAddBuildingWidget::GuiAddBuildingWidget(const Context* const context) :
     GuiBase(context), panelHeader(context), productionSlotsElement(context),
-    coinsElement(context), toolsElement(context), woodElement(context), bricksElement(context) {
+    coinsElement(context), operatingCostsElement(context),
+    toolsElement(context), woodElement(context), bricksElement(context) {
 
     setCoords(0, 0, 210, 320);
 
@@ -25,7 +26,7 @@ GuiAddBuildingWidget::GuiAddBuildingWidget(const Context* const context) :
     productionSlotsElement.setPosition(15, 175);
     addChildElement(&productionSlotsElement);
 
-    // Baukosten: Münzen
+    // Baukosten: Münzen und Betriebskosten
 
     const int elementsX = 7;
     const int elementsXColumnWidth = 75;
@@ -37,6 +38,12 @@ GuiAddBuildingWidget::GuiAddBuildingWidget(const Context* const context) :
     coinsElement.setGraphic(context->graphicsMgr->getGraphicSet("coin/coin")->getStatic()->getGraphic());
     coinsElement.setStatusBarText("Errichtungskosten für dieses Bauwerk");
     addChildElement(&coinsElement);
+
+    operatingCostsElement.setCoords(elementsX + 2*elementsXColumnWidth, elementsY1, 85, elementsHeight);
+    operatingCostsElement.setGraphic(
+        context->graphicsMgr->getGraphicSet("coin/coin-red-arrow")->getStatic()->getGraphic());
+    operatingCostsElement.setStatusBarText("Betriebskosten für dieses Bauwerk");
+    addChildElement(&operatingCostsElement);
 
     // Baukosten: Baumaterial
 
@@ -121,6 +128,7 @@ void GuiAddBuildingWidget::onAddingMapObjectChanged(const MapObjectType* newAddi
     // Baukosten
     const BuildingCosts& buildingCosts = newAddingMapObject->buildingCosts;
     coinsElement.setString(toString(buildingCosts.coins));
+    operatingCostsElement.setString(toString(newAddingMapObject->operatingCosts.running));
     toolsElement.setString(toString(buildingCosts.tools));
     woodElement.setString(toString(buildingCosts.wood));
     bricksElement.setString(toString(buildingCosts.bricks));
