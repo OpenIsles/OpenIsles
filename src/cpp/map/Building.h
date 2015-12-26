@@ -110,7 +110,7 @@ public:
 
     /**
      * @brief Prüft, ob das Gebäude ein öffentliches Gebäude ist (produziert nix, hat aber Betriebskosten)
-     * @return `true` wenn öffentlichess Gebäude, sonst `false`
+     * @return `true` wenn öffentliches Gebäude, sonst `false`
      */
     bool isPublicBuilding() const {
         return (!mapObjectType->buildingProduction.output.isUsed() &&
