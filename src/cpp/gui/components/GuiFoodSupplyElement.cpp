@@ -1,3 +1,4 @@
+#include "defines.h"
 #include "graphics/mgr/IFontMgr.h"
 #include "gui/components/GuiFoodSupplyElement.h"
 #include "utils/Color.h"
@@ -13,13 +14,13 @@ GuiFoodSupplyElement::GuiFoodSupplyElement(const Context* const context) : GuiSt
     width = 210;
     height = 20;
 
-    setText("Nahrung");
+    setText(_("Nahrung"));
     setColor(&colorLightBrown);
     setShadowColor(&colorBlack);
     setFontName("DroidSans-Bold.ttf");
     setFontSize(14);
     setAlign(RENDERTEXT_HALIGN_LEFT | RENDERTEXT_VALIGN_MIDDLE);
-    setStatusBarText("Nahrungsversorgung (Status für alle Gruppen gleich)");
+    setStatusBarText(_("Nahrungsversorgung (Status für alle Gruppen gleich)"));
 }
 
 GuiFoodSupplyElement::~GuiFoodSupplyElement() {

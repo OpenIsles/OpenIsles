@@ -1,7 +1,6 @@
 #ifndef _NOSDL_RENDERER_H
 #define _NOSDL_RENDERER_H
 
-#include <iostream>
 #include "graphics/renderer/IRenderer.h"
 #include "utils/Color.h"
 #include "utils/Rect.h"

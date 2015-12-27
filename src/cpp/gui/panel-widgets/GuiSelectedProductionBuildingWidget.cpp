@@ -1,5 +1,6 @@
 #include <cassert>
 #include <cstdio>
+#include "defines.h"
 #include "config/ConfigMgr.h"
 #include "game/Game.h"
 #include "graphics/mgr/IFontMgr.h"
@@ -35,7 +36,7 @@ GuiSelectedProductionBuildingWidget::GuiSelectedProductionBuildingWidget(const C
     goodsSlotInput->setDisplayValue(true);
     goodsSlotInput2->setDisplayValue(true);
     goodsSlotOutput->setDisplayValue(true);
-    goodsSlotOutput->setStatusBarText("Abholfertige Waren in diesem Gebäude");
+    goodsSlotOutput->setStatusBarText(_("Abholfertige Waren in diesem Gebäude"));
 
     // TODO Auslastung
 
@@ -43,7 +44,7 @@ GuiSelectedProductionBuildingWidget::GuiSelectedProductionBuildingWidget(const C
     int y = 143;
 
     operatingCostsLabel.setCoords(10, y, 150, 15);
-    operatingCostsLabel.setText("Betriebskosten:");
+    operatingCostsLabel.setText(_("Betriebskosten:"));
     operatingCostsLabel.setColor(&colorWhite);
     operatingCostsLabel.setShadowColor(&colorBlack);
     operatingCostsLabel.setFontName("DroidSans-Bold.ttf");
@@ -115,10 +116,10 @@ void GuiSelectedProductionBuildingWidget::updateInputSlotStatusBarText(
 
     // Ausrechnen, für wie viel Output-Güter die Input-Güter reichen
     double inputEnoughForXOutputGoods = inputInventory / inputAmountForProduction;
-    char enoughForGoodsString[10];
-    std::sprintf(enoughForGoodsString, "%.1f", inputEnoughForXOutputGoods);
 
-    std::string statusBarText =
-        inputLabel + "vorrat (reicht für weitere " + enoughForGoodsString + "t " + outputLabel + ")";
-    goodsSlotElement->setStatusBarText(statusBarText);
+    char buffer[128];
+    std::snprintf(buffer, 128, _("%svorrat (reicht für weitere %.1ft %s)"),
+                  inputLabel.c_str(), inputEnoughForXOutputGoods, outputLabel.c_str());
+
+    goodsSlotElement->setStatusBarText(buffer);
 }

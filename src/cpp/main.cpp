@@ -1,8 +1,8 @@
 #ifdef WINDOWS
 #define SDL_MAIN_HANDLED
 #endif
+#include <cstdio>
 #include <cstdlib>
-#include <iostream>
 #include <stdexcept>
 #include <unistd.h>
 #include "Context.h"
@@ -29,6 +29,13 @@
 #endif
 
 static Color colorWhite = Color(255, 255, 255, 255);
+
+/* Globale TODOs
+ * --------------
+ *
+ * - TODO Fehlerhandling verbessern. Aktuell geben die meisten Fehlerfälle eine lokalisierte Meldung auf stderr aus,
+ * werfen danach eine nicht-lokalisierte Exception, die niemand fängt.
+ */
 
 
 /*********************************************************************************************************************
@@ -92,15 +99,15 @@ void drawFrame(const Context& context, IRenderer* renderer) {
 
     // FPS-Anzeige
     if (context.game->isFpsCounterEnabled()) {
-        context.fontMgr->renderText(renderer, "FPS:",
+        context.fontMgr->renderText(renderer, _("FPS:"),
                                     10, 686, &colorWhite, nullptr, "DroidSans-Bold.ttf", 14, RENDERTEXT_HALIGN_LEFT);
 
-        context.fontMgr->renderText(renderer, "current:",
+        context.fontMgr->renderText(renderer, _("current:"),
                                     77, 698, &colorWhite, nullptr, "DroidSans-Bold.ttf", 14, RENDERTEXT_HALIGN_RIGHT);
         context.fontMgr->renderText(renderer, toString((int) fpsCounter.getFpsCurrent()),
                                     80, 698, &colorWhite, nullptr, "DroidSans.ttf", 14, RENDERTEXT_HALIGN_LEFT);
 
-        context.fontMgr->renderText(renderer, "average:",
+        context.fontMgr->renderText(renderer, _("average:"),
                                     77, 711, &colorWhite, nullptr, "DroidSans-Bold.ttf", 14, RENDERTEXT_HALIGN_RIGHT);
         context.fontMgr->renderText(renderer, toString(fpsCounter.getFpsAvg()),
                                     80, 711, &colorWhite, nullptr, "DroidSans.ttf", 14, RENDERTEXT_HALIGN_LEFT);
@@ -132,13 +139,13 @@ bool parseCmdlineParams(int argc, char** argv) {
                 break;
 
             default:
-                std::cerr << "Aufruf: " << argv[0] << " -m mapFileToLoad [-b benchmarkFrames]" << std::endl;
+                std::fprintf(stderr, _("Usage: %s -m mapFileToLoad [-b benchmarkFrames]\n"), argv[0]);
                 return false;
         }
     }
 
     if (cmdlineParams.mapFileToLoad == nullptr) {
-        std::cerr << "Fehler: Es wurde keine Map-Datei angegeben." << std::endl;
+        std::fprintf(stderr, _("Error: No map file specified.\n"));
         return false;
     }
 
@@ -161,7 +168,7 @@ int main(int argc, char** argv) {
 
     context.userEventBase = SDL_RegisterEvents(USER_EVENT_MAXEVENT + 1);
     if (context.userEventBase == (uint32_t) -1) {
-        std::cerr << "Could not register events" << std::endl;
+        std::fprintf(stderr, _("Could not register events\n"));
         throw std::runtime_error("Could not register events");
     }
 
@@ -257,6 +264,9 @@ int main(int argc, char** argv) {
         SDL_GetMouseState(&context.mouseCurrentX, &context.mouseCurrentY);
 
 #ifdef DEBUG
+        const int bufferSize = 1024;
+        char buffer[bufferSize];
+
         Map* map = game->getMap();
         const MapCoords& mapCoordsCentered = map->getMapCoordsCentered();
         int screenZoom = map->getScreenZoom();
@@ -268,23 +278,37 @@ int main(int argc, char** argv) {
             MapCoordUtils::getMapCoordsUnderMouse(*map, context.mouseCurrentX, context.mouseCurrentY);
 
         // Debug-Infos vorbereiten, damit wir sie später einfach nur ausgeben können
-        debugOutput[0] = "PerfCounters: events avg " + toString(performanceCounterEvents.getMillisAvg()) +
-                         ", current = " + toString(performanceCounterEvents.getMillisCurrent()) +
-                         "; gameUpdate avg " + toString(performanceCounterGameUpdate.getMillisAvg()) +
-                         ", current = " + toString(performanceCounterGameUpdate.getMillisCurrent()) +
-                         "; rendering avg " + toString(performanceCounterRendering.getMillisAvg()) +
-                         ", current = " + toString(performanceCounterRendering.getMillisCurrent());
+        std::snprintf(buffer, bufferSize,
+            _("PerfCounters: events avg %.3f, current = %.1f; "
+              "gameUpdate avg %.3f, current = %.1f; rendering avg %.3f, current = %.1f"),
+            performanceCounterEvents.getMillisAvg(),
+            performanceCounterEvents.getMillisCurrent(),
+            performanceCounterGameUpdate.getMillisAvg(),
+            performanceCounterGameUpdate.getMillisCurrent(),
+            performanceCounterRendering.getMillisAvg(),
+            performanceCounterRendering.getMillisCurrent()
+        );
+        debugOutput[0] = buffer;
 
-        debugOutput[1] = "Screen: mapCentered = (" +
-            toString(mapCoordsCentered.x()) + ", " + toString(mapCoordsCentered.y()) + "), zoom = " +
-            toString(screenZoom) + ", view = " + toString(screenView);
+        std::snprintf(buffer, bufferSize,
+            _("Screen: mapCentered = (%d, %d), zoom = %d, view = %d"),
+            mapCoordsCentered.x(), mapCoordsCentered.y(), screenZoom, screenView
+        );
+        debugOutput[1] = buffer;
 
-        debugOutput[2] = "Game-Ticks: " + toString(game->getTicks());
+        std::snprintf(buffer, bufferSize, _("Game-Ticks: %lu"), game->getTicks());
+        debugOutput[2] = buffer;
 
-        debugOutput[3] = "mouse = (" +
-            toString(context.mouseCurrentX) + ", " + toString(context.mouseCurrentY) + "), screen = (" +
-            toString(mouseCurrentScreenCoords.x()) + ", " + toString(mouseCurrentScreenCoords.y()) + "), mapElevated = (" +
-            toString(mouseCurrentMapCoords.x()) + ", " + toString(mouseCurrentMapCoords.y()) + "), ";
+        std::snprintf(buffer, bufferSize,
+            _("mouse = (%d, %d), screen = (%d, %d), mapElevated = (%d, %d)"),
+            context.mouseCurrentX,
+            context.mouseCurrentY,
+            mouseCurrentScreenCoords.x(),
+            mouseCurrentScreenCoords.y(),
+            mouseCurrentMapCoords.x(),
+            mouseCurrentMapCoords.y()
+        );
+        debugOutput[3] = buffer;
 
         const MapObject* selectedMapObject = map->getSelectedMapObject();
         if (selectedMapObject != nullptr) {
@@ -294,21 +318,29 @@ int main(int argc, char** argv) {
             const MapObjectFixed* smoFixed = dynamic_cast<const MapObjectFixed*>(selectedMapObject);
             if (smoFixed != nullptr) {
                 const MapCoords& mapCoords = smoFixed->getMapCoords();
-                debugOutput[4] = "selectedMapObject(Fixed) on mapCoords (" +
-                    toString(mapCoords.x()) + ", " + toString(mapCoords.y()) + "), size = (" +
-                    toString(mapWidth) + ", " + toString(mapHeight) + ")";
+
+                std::snprintf(buffer, bufferSize,
+                    _("selectedMapObject(Fixed) on mapCoords (%d, %d), size = (%d, %d)"),
+                    mapCoords.x(), mapCoords.y(), mapWidth, mapHeight
+                );
+                debugOutput[4] = buffer;
             }
             else {
                 const MapObjectMoving* smoMoving = dynamic_cast<const MapObjectMoving*>(selectedMapObject);
                 if (smoMoving != nullptr) {
                     const DoubleMapCoords& mapCoords = smoMoving->getMapCoords();
-                    debugOutput[4] = "selectedMapObject(Moving) on mapCoords (" +
-                        toString(mapCoords.x()) + ", " + toString(mapCoords.y()) + "), size = (" +
-                        toString(mapWidth) + ", " + toString(mapHeight) + ")";
+                    std::snprintf(buffer, bufferSize,
+                        _("selectedMapObject(Moving) on mapCoords (%f, %f), size = (%d, %d)"),
+                        mapCoords.x(), mapCoords.y(), mapWidth, mapHeight
+                    );
+                    debugOutput[4] = buffer;
                 }
                 else {
-                    debugOutput[4] = "selectedMapObject(UNKNOWN!?) size = (" +
-                        toString(mapWidth) + ", " + toString(mapHeight) + ")";
+                    std::snprintf(buffer, bufferSize,
+                        _("selectedMapObject(UNKNOWN!?) size = (%d, %d)"),
+                        mapWidth, mapHeight
+                    );
+                    debugOutput[4] = buffer;
                 }
             }
 
@@ -317,21 +349,25 @@ int main(int argc, char** argv) {
         }
 
 #ifdef DEBUG_A_STAR
-        std::string catchmentAreaIteratorString;
+        const char* catchmentAreaIteratorString;
         if (AStar::debugAStar_catchmentAreaIterator) {
-            catchmentAreaIteratorString = "set";
+            catchmentAreaIteratorString = _("catchmentAreaIterator set");
         } else {
-            catchmentAreaIteratorString = "nullptr";
+            catchmentAreaIteratorString = _("catchmentAreaIterator nullptr");
         }
 
-        debugOutput[5] = "debugAStar: source = (" +
-            toString(AStar::debugAStar_source.x()) + ", " +
-            toString(AStar::debugAStar_source.y()) + "), destination = (" +
-            toString(AStar::debugAStar_destination.x()) + ", " +
-            toString(AStar::debugAStar_destination.y()) + "), catchmentAreaIterator = " +
-            catchmentAreaIteratorString + ", useStreetOnly = " +
-            (AStar::debugAStar_useStreetOnly ? "true" : "false") + ", rightAnglesOnly = " +
-            (AStar::debugAStar_rightAnglesOnly ? "true" : "false");
+        std::snprintf(buffer, bufferSize,
+            _("debugAStar: source = (%d, %d), destination = (%d, %d), "
+              "%s, useStreetOnly = %s, rightAnglesOnly = %s"),
+            AStar::debugAStar_source.x(),
+            AStar::debugAStar_source.y(),
+            AStar::debugAStar_destination.x(),
+            AStar::debugAStar_destination.y(),
+            catchmentAreaIteratorString,
+            (AStar::debugAStar_useStreetOnly ? _("true") : _("false")),
+            (AStar::debugAStar_rightAnglesOnly ? _("true") : _("false"))
+        );
+        debugOutput[5] = buffer;
 #endif // DEBUG_A_STAR
 #endif // DEBUG
 

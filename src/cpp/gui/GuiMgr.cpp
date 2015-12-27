@@ -1,5 +1,6 @@
 #include <SDL.h>
 #include <string>
+#include "defines.h"
 #include "config/ConfigMgr.h"
 #include "game/Game.h"
 #include "graphics/graphic/sdl/SDLGraphic.h"
@@ -110,25 +111,25 @@ void GuiMgr::initGui() {
 
     } tabGraphics[4][2] = {
         {
-            "Baumodus einschalten",
+            _("Baumodus einschalten"),
             "data/img/gui/button-build.png",
             "data/img/gui/button-build-pressed.png",
             PanelButton::ADD_BUILDING,
             (GuiPanelWidget*) findElement(GUI_ID_BUILD_MENU_PANEL_WIDGET)
         }, {
-            "TODO", // TODO wir wollen den Kampfmodus doch gar nicht ;-)
+            _("TODO"), // TODO wir wollen den Kampfmodus doch gar nicht ;-)
             "data/img/gui/button-dummy.png",
             "data/img/gui/button-dummy-pressed.png",
             PanelButton::MILITARY,
             (GuiPanelWidget*) findElement(GUI_ID_MILITARY_PANEL_WIDGET)
         }, {
-            "Infomodus einschalten",
+            _("Infomodus einschalten"),
             "data/img/gui/button-player-status.png",
             "data/img/gui/button-player-status-pressed.png",
             PanelButton::INFO,
             (GuiPanelWidget*) findElement(GUI_ID_PLAYER_STATUS_PANEL_WIDGET)
         }, {
-            "Einstellungen",
+            _("Einstellungen"),
             "data/img/gui/button-dummy.png",
             "data/img/gui/button-dummy-pressed.png",
             PanelButton::OPTIONS,
@@ -221,6 +222,7 @@ void GuiMgr::initPanelWidgets() {
 
 void GuiMgr::registerElement(int identifier, GuiBase* guiElement) {
     if (identifierMap.count(identifier) > 0) {
+        std::fprintf(stderr, _("Identifier %d is already registered\n"), identifier);
         throw std::runtime_error("Identifier already registered");
     }
     
@@ -232,6 +234,7 @@ GuiBase* GuiMgr::findElement(int identifier) {
     auto iter = identifierMap.find(identifier);
     
     if (iter == identifierMap.end()) {
+        std::fprintf(stderr, _("Identifier %d is not registered\n"), identifier);
         throw std::runtime_error("Identifier not registered");
     }
     

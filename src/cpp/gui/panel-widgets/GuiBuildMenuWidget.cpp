@@ -1,3 +1,4 @@
+#include "defines.h"
 #include "map/Structure.h"
 #include "gui/Identifiers.h"
 #include "gui/components/map/GuiMap.h"
@@ -21,7 +22,7 @@ GuiBuildMenuWidget::GuiBuildMenuWidget(const Context* const context) : GuiPanelW
     } buildingGroups[4] = {
         {
             BuildingGroup::CRAFTSMAN,
-            "Handwerksbetriebe",
+            _("Handwerksbetriebe"),
             "add-building-group/craftsman",
             "add-building-group/craftsman-pressed", {
                 nullptr,
@@ -43,7 +44,7 @@ GuiBuildMenuWidget::GuiBuildMenuWidget(const Context* const context) : GuiPanelW
             }
         }, {
             BuildingGroup::FARM,
-            "Farmen & Plantagen",
+            _("Farmen & Plantagen"),
             "add-building-group/farm",
             "add-building-group/farm-pressed", {
                 nullptr,
@@ -65,7 +66,7 @@ GuiBuildMenuWidget::GuiBuildMenuWidget(const Context* const context) : GuiPanelW
             }
         }, {
             BuildingGroup::PORT,
-            "Hafenanlagen",
+            _("Hafenanlagen"),
             "add-building-group/port",
             "add-building-group/port-pressed", {
                 nullptr,
@@ -87,7 +88,7 @@ GuiBuildMenuWidget::GuiBuildMenuWidget(const Context* const context) : GuiPanelW
             }
         }, {
             BuildingGroup::PUBLIC,
-            "Öffentliche Gebäude",
+            _("Öffentliche Gebäude"),
             "add-building-group/public",
             "add-building-group/public-pressed", {
                 context->configMgr->getMapObjectType("square1"),

@@ -2,7 +2,7 @@
 #define _I_FONT_MGR_H
 
 #include <map>
-#include <iostream>
+#include <string>
 #include "graphics/renderer/IRenderer.h"
 #include "utils/Color.h"
 

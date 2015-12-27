@@ -1,3 +1,4 @@
+#include "defines.h"
 #include "game/Game.h"
 #include "graphics/mgr/IGraphicsMgr.h"
 #include "gui/components/GuiMapZoomWidget.h"
@@ -11,7 +12,7 @@ GuiMapZoomWidget::GuiMapZoomWidget(const Context* const context) :
     const GraphicSet* graphicSet = context->graphicsMgr->getGraphicSet("map-zoom");
 
     buttonPlus.setCoords(0, 0, 45, 90);
-    buttonPlus.setStatusBarText("Ansicht vergrößern");
+    buttonPlus.setStatusBarText(_("Ansicht vergrößern"));
     buttonPlus.setGraphic(graphicSet->getByState("plus")->getGraphic());
     buttonPlus.setGraphicPressed(graphicSet->getByState("plus_pressed")->getGraphic());
     buttonPlus.setOnClickFunction([this, context]() {
@@ -19,7 +20,7 @@ GuiMapZoomWidget::GuiMapZoomWidget(const Context* const context) :
     });
 
     buttonMinus.setCoords(45, 0, 45, 90);
-    buttonMinus.setStatusBarText("Ansicht verkleinern");
+    buttonMinus.setStatusBarText(_("Ansicht verkleinern"));
     buttonMinus.setGraphic(graphicSet->getByState("minus")->getGraphic());
     buttonMinus.setGraphicPressed(graphicSet->getByState("minus_pressed")->getGraphic());
     buttonMinus.setOnClickFunction([this, context]() {

@@ -1,3 +1,4 @@
+#include "defines.h"
 #include "game/Game.h"
 #include "graphics/mgr/IGraphicsMgr.h"
 #include "gui/components/GuiMapRotateWidget.h"
@@ -10,14 +11,14 @@ GuiMapRotateWidget::GuiMapRotateWidget(const Context* const context) :
     setCoords(28, 190, 90, 90);
 
     buttonLeft.setCoords(0, 0, 45, 90);
-    buttonLeft.setStatusBarText("Karte linksherum drehen");
+    buttonLeft.setStatusBarText(_("Karte linksherum drehen"));
     buttonLeft.setOnClickFunction([this, context]() {
         context->game->getMap()->rotateViewCounterclockwise();
         updateButtonGraphics();
     });
 
     buttonRight.setCoords(45, 0, 45, 90);
-    buttonRight.setStatusBarText("Karte rechtsherum drehen");
+    buttonRight.setStatusBarText(_("Karte rechtsherum drehen"));
     buttonRight.setOnClickFunction([this, context]() {
         context->game->getMap()->rotateViewClockwise();
         updateButtonGraphics();

@@ -1,9 +1,10 @@
+#include <cstdio>
 #include <cstring>
-#include <iostream>
 #include <stdexcept>
-#include <map/MapObjectType.h>
+#include "defines.h"
 #include "config/ConfigMgr.h"
 #include "config/Good.h"
+#include "map/MapObjectType.h"
 #include "utils/StringFormat.h"
 
 
@@ -11,19 +12,19 @@
 
 ConfigMgr::ConfigMgr() {
     loadGoods();
-    std::cout << "Loaded goods." << std::endl;
+    std::printf(_("Loaded goods.\n"));
 
     loadPopulationTiers();
-    std::cout << "Loaded population tiers." << std::endl;
+    std::printf(_("Loaded population tiers.\n"));
 
     loadCarrierMapObjectTypes();
-    std::cout << "Loaded carrier mapObjectTypes." << std::endl;
+    std::printf(_("Loaded carrier mapObjectTypes.\n"));
 
     loadMapObjectTypes();
-    std::cout << "Loaded mapObjectTypes." << std::endl;
+    std::printf(_("Loaded mapObjectTypes.\n"));
 
     loadTilesConfig();
-    std::cout << "Loaded tiles." << std::endl;
+    std::printf(_("Loaded tiles.\n"));
 }
 
 ConfigMgr::~ConfigMgr() {
@@ -81,7 +82,7 @@ void ConfigMgr::loadMapObjectTypes() {
         } else if (strcmp(nodeName, "building") == 0) {
             mapObjectType.type = MapObjectTypeClass::BUILDING;
         } else {
-            std::cerr << "Illegal node '" << nodeName << "'." << std::endl;
+            std::fprintf(stderr, _("Illegal node '%s'.\n"), nodeName);
             throw std::runtime_error("Illegal node");
         }
 
@@ -101,7 +102,7 @@ void ConfigMgr::loadMapObjectTypes() {
         } else if (strcmp(structurePlacing, "path") == 0) {
             mapObjectType.structurePlacing = StructurePlacing::PATH;
         } else {
-            std::cerr << "Illegal value '" << structurePlacing << "' for structurePlacing." << std::endl;
+            std::fprintf(stderr, _("Illegal value '%s' for structurePlacing.\n"), structurePlacing);
             throw std::runtime_error("Illegal value for structurePlacing");
         }
 
@@ -189,7 +190,7 @@ void ConfigMgr::loadMapObjectTypes() {
             const char* populationTierString = populationTierNode->value();
             const PopulationTier* populationTier = getPopulationTier(populationTierString);
             if (populationTier == nullptr) {
-                std::cerr << "Illegal value '" << populationTierString << "' for populationTier." << std::endl;
+                std::fprintf(stderr, _("Illegal value '%s' for populationTier.\n"), populationTierString);
                 throw std::runtime_error("Illegal value for populationTier");
             }
 
@@ -213,7 +214,7 @@ void ConfigMgr::loadMapObjectTypes() {
             mapObjectType.maxAge = (unsigned char) stringToUnsignedLong(maxAgeNode->value());
         }
 
-        std::cout << "Loaded mapObjectType '" << mapObjectType.name << "'." << std::endl;
+        std::printf(_("Loaded mapObjectType '%s'.\n"), mapObjectType.name.c_str());
     }
 
     delete xmlDocument;
@@ -235,7 +236,7 @@ void ConfigMgr::loadCarrierMapObjectTypes() {
         // Knoten-Typ
         const char* nodeName = node->name();
         if (strcmp(nodeName, "carrier") != 0) {
-            std::cerr << "Illegal node '" << nodeName << "'." << std::endl;
+            std::fprintf(stderr, _("Illegal node '%s'.\n"), nodeName);
             throw std::runtime_error("Illegal node");
         }
 
@@ -252,7 +253,7 @@ void ConfigMgr::loadCarrierMapObjectTypes() {
 
         // TODO Animations
 
-        std::cout << "Loaded carrier mapObjectType '" << mapObjectType.name << "'." << std::endl;
+        std::printf(_("Loaded carrier mapObjectType '%s'.\n"), mapObjectType.name.c_str());
     }
 
     delete xmlDocument;
@@ -339,7 +340,7 @@ MapTileType ConfigMgr::getMapTileTypeByName(const std::string& mapTileTypeName) 
         return MapTileType::GRASS;
     }
     else {
-        std::cerr << "Illegal mapTileTypeName '" << mapTileTypeName << "'." << std::endl;
+        std::fprintf(stderr, _("Illegal mapTileTypeName '%s'.\n"), mapTileTypeName.c_str());
         throw std::runtime_error("Illegal mapTileTypeName");
     }
 }
@@ -358,7 +359,7 @@ bool ConfigMgr::xmlAttributeToBool(rapidxml::xml_attribute<>* attribute, bool de
         return true;
     }
     else {
-        std::cerr << "Illegal bool value '" << value << "'." << std::endl;
+        std::fprintf(stderr, _("Illegal bool value '%s'.\n"), value);
         throw std::runtime_error("Illegal bool value");
     }
 }
@@ -395,6 +396,7 @@ RectangleData<char>* ConfigMgr::parseCatchmentArea(const char* catchmentAreaValu
             } else if (*ptr == ' ') {
                 // Zeichen ok, ignorieren
             } else {
+                std::fprintf(stderr, _("Could not parse catchmentArea: Illegal char before first line\n"));
                 throw std::runtime_error("Could not parse catchmentArea: Illegal char before first line");
             }
             continue;
@@ -404,6 +406,7 @@ RectangleData<char>* ConfigMgr::parseCatchmentArea(const char* catchmentAreaValu
             if (x == 0) {
                 continue; // Leerzeichen am Zeilenanfang ok
             } else {
+                std::fprintf(stderr, _("Could not parse catchmentArea: Illegal space inside line\n"));
                 throw std::runtime_error("Could not parse catchmentArea: Illegal space inside line");
             }
         }
@@ -419,6 +422,7 @@ RectangleData<char>* ConfigMgr::parseCatchmentArea(const char* catchmentAreaValu
                 catchmentAreaWidth = x;
             } else {
                 if (x != catchmentAreaWidth) {
+                    std::fprintf(stderr, _("Could not parse catchmentArea: widths are not equal\n"));
                     throw std::runtime_error("Could not parse catchmentArea: widths are not equal");
                 }
             }
@@ -430,6 +434,7 @@ RectangleData<char>* ConfigMgr::parseCatchmentArea(const char* catchmentAreaValu
 
     // Letzte Zeile muss leer sein.
     if (x != 0) {
+        std::fprintf(stderr, _("Could not parse catchmentArea: Last line was not completly empty.\n"));
         throw std::runtime_error("Could not parse catchmentArea: Last line was not completly empty.");
     }
     int catchmentAreaHeight = y;
@@ -483,7 +488,7 @@ void ConfigMgr::loadPopulationTiers() {
 
         populationTiers.insert(populationTier);
 
-        std::cout << "Loaded populationTier '" << populationTier.name << "'." << std::endl;
+        std::printf(_("Loaded populationTier '%s'.\n"), populationTier.name.c_str());
     }
 
     delete xmlDocument;

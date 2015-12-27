@@ -1,4 +1,5 @@
 #include "Context.h"
+#include "defines.h"
 #include "map/Structure.h"
 #include "gui/Identifiers.h"
 #include "gui/components/GuiPushButton.h"
@@ -7,8 +8,8 @@
 #include "sound/sdl/SDLSoundMgr.h"
 
 
-static const char* statusBarTextTurnMusicOn = "Musik einschalten";
-static const char* statusBarTextTurnMusicOff = "Musik ausschalten";
+static const char* statusBarTextTurnMusicOn = _("Musik einschalten");
+static const char* statusBarTextTurnMusicOff = _("Musik ausschalten");
 
 
 GuiOptionsMenuWidget::GuiOptionsMenuWidget(const Context* const context) : GuiPanelWidget(context) {
@@ -17,7 +18,7 @@ GuiOptionsMenuWidget::GuiOptionsMenuWidget(const Context* const context) : GuiPa
 
     GuiPanelHeader* panelHeader = new GuiPanelHeader(context);
     panelHeader->setPosition(0, 0);
-    panelHeader->setText("Einstellungen");
+    panelHeader->setText(_("Einstellungen"));
     panelHeader->setIconGraphic(nullptr);
     addChildElement(panelHeader);
 

@@ -1,4 +1,6 @@
+#include <cstdio>
 #include <cstdlib>
+#include "defines.h"
 #include "graphics/renderer/sdl/SDLRenderer.h"
 
 // Fenster-Größe
@@ -8,23 +10,23 @@ static const int WINDOW_HEIGHT = 768;
 
 SDLRenderer::SDLRenderer() {
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_EVENTS) != 0) {
-        std::cerr << "SDL could not be initialized: " << SDL_GetError() << std::endl;
+        std::fprintf(stderr, _("SDL could not be initialized: %s\n"), SDL_GetError());
         return;
     }
 
     atexit(SDL_Quit);
-    std::cout << "SDL initialisert" << std::endl;
+    std::printf(_("SDL initialisert\n"));
 
     SDL_Surface* surfaceAppIcon = IMG_Load("data/img/appicon.png");
     if (surfaceAppIcon == nullptr) {
-        std::cerr << "Could not load graphic 'data/img/appicon.png': " << IMG_GetError() << std::endl;
+        std::fprintf(stderr, _("Could not load graphic 'data/img/appicon.png': %s\n"), SDL_GetError());
         return;
     }
 
     window = SDL_CreateWindow(
          "OpenIsles", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_HIDDEN);
     if (window == nullptr) {
-        std::cerr << "SDL could not create window: " << SDL_GetError() << std::endl;
+        std::fprintf(stderr, _("SDL could not create window: %s\n"), SDL_GetError());
         return;
     }
 
@@ -33,7 +35,7 @@ SDLRenderer::SDLRenderer() {
 
     renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_TARGETTEXTURE);
     if (renderer == nullptr) {
-        std::cerr << "SDL could not create renderer: " << SDL_GetError() << std::endl;
+        std::fprintf(stderr, _("SDL could not create renderer: %s\n"), SDL_GetError());
         SDL_DestroyWindow(window);
         return;
     }
@@ -42,13 +44,13 @@ SDLRenderer::SDLRenderer() {
          renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, WINDOW_WIDTH, WINDOW_HEIGHT);
 
     if ((IMG_Init(IMG_INIT_PNG) & IMG_INIT_PNG) != IMG_INIT_PNG) {
-        std::cerr << "Could not init SDL-image: " << IMG_GetError() << std::endl;
+        std::fprintf(stderr, _("Could not init SDL-image: %s\n"), IMG_GetError());
         return;
     }
     atexit(IMG_Quit);
 
     if (TTF_Init() != 0) {
-        std::cerr << "Could not init SDL-TTF: " << TTF_GetError() << std::endl;
+        std::fprintf(stderr, _("Could not init SDL-TTF: %s\n"), TTF_GetError());
         return;
     }
     atexit(TTF_Quit);

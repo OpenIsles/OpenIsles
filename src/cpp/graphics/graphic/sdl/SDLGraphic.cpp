@@ -1,7 +1,8 @@
 #include <cassert>
+#include <cstdio>
 #include <cstring>
-#include <iostream>
 #include <stdexcept>
+#include "defines.h"
 #include "graphics/graphic/sdl/SDLGraphic.h"
 #include "graphics/renderer/sdl/SDLRenderer.h"
 #include "utils/StringFormat.h"
@@ -10,7 +11,7 @@
 SDLGraphic::SDLGraphic(IRenderer* const renderer, const char* filename) : renderer(renderer) {
     SDL_Surface* surface = IMG_Load(filename);
     if (surface == nullptr) {
-        std::cerr << "Could not load graphic '" << filename << "': " << IMG_GetError() << std::endl;
+        std::fprintf(stderr, _("Could not load graphic '%s': %s\n"), filename, IMG_GetError());
         throw std::runtime_error("Could not load graphic");
     }
     this->width = surface->w;
@@ -19,8 +20,7 @@ SDLGraphic::SDLGraphic(IRenderer* const renderer, const char* filename) : render
 
     createTextures();
 
-    std::cout << "Loaded graphic '" << filename << "': size = (" << toString(width) << ", "
-            << toString(height) << ")" << std::endl;
+    std::printf(_("Loaded graphic '%s': size = (%d, %d)\n"), filename, width, height);
 }
 
 SDLGraphic::SDLGraphic(
@@ -30,7 +30,7 @@ SDLGraphic::SDLGraphic(
     if (srcRect.x + srcRect.w > srcGraphic.width ||
         srcRect.y + srcRect.h > srcGraphic.height) {
 
-        std::cerr << "Illegal srcRect" << std::endl;
+        std::fprintf(stderr, _("Illegal srcRect\n"));
         throw std::runtime_error("Illegal srcRect");
     }
 
@@ -44,7 +44,7 @@ SDLGraphic::SDLGraphic(
         srcSurface->format->Gmask, srcSurface->format->Bmask, srcSurface->format->Amask);
 
     if (surface == nullptr) {
-        std::cerr << "Could not create surface: " << IMG_GetError() << std::endl;
+        std::fprintf(stderr, _("Could not create surface: %s\n"), IMG_GetError());
         throw std::runtime_error("Could not create surface");
     }
 
@@ -62,15 +62,14 @@ SDLGraphic::SDLGraphic(
 
     createTextures();
 
-    std::cout << "Extracted graphic: srcRect = (" << toString(srcRect.x) << ", " << toString(srcRect.y) << "), " <<
-        toString(width) << ", " << toString(height) << ")" << std::endl;
+    std::printf(_("Extracted graphic: srcRect = (%d, %d), %d, %d\n"), srcRect.x, srcRect.y, width, height);
 }
 
 void SDLGraphic::createTextures() {
     SDL_Renderer* sdlRealRenderer = (dynamic_cast<SDLRenderer*>(renderer))->getRealRenderer();
     SDL_Texture* texture = SDL_CreateTextureFromSurface(sdlRealRenderer, surface);
     if (texture == nullptr) {
-        std::cerr << "Could not create texture" << SDL_GetError() << std::endl;
+        std::fprintf(stderr, _("Could not create texture: %s\n"), IMG_GetError());
         throw std::runtime_error("Could not create texture");
     }
     this->texture = texture;
@@ -177,6 +176,7 @@ void SDLGraphic::getPixel(int x, int y, uint8_t* r, uint8_t* g, uint8_t* b, uint
             pixelValue = *(uint32_t*) ptrToPixel;
             break;
         default:
+            std::fprintf(stderr, _("Illegal bytesPerPixel\n"));
             throw std::runtime_error("Illegal bytesPerPixel");
     }
 

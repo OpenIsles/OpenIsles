@@ -1,4 +1,5 @@
 #include <cassert>
+#include "defines.h"
 #include "config/ConfigMgr.h"
 #include "game/Game.h"
 #include "graphics/mgr/IFontMgr.h"
@@ -13,10 +14,10 @@ static struct {
     const char* filename;
     std::string statusBarText;
 } populationSatisfactionGui[4] = {
-    { "good.png"   , "Zuwächse in dieser Bevölkerungsgruppe" },
-    { "neutral.png", "Keine Zuwächse in dieser Bevölkerungsgruppe" },
-    { "bad.png"    , "Leichte Rückgänge in dieser Bevölkerungsgruppe" },
-    { "worst.png"  , "Starke Rückgänge in dieser Bevölkerungsgruppe" }
+    { "good.png"   , _("Zuwächse in dieser Bevölkerungsgruppe") },
+    { "neutral.png", _("Keine Zuwächse in dieser Bevölkerungsgruppe") },
+    { "bad.png"    , _("Leichte Rückgänge in dieser Bevölkerungsgruppe") },
+    { "worst.png"  , _("Starke Rückgänge in dieser Bevölkerungsgruppe") }
 };
 
 
@@ -43,7 +44,7 @@ GuiSelectedHouseBuildingWidget::GuiSelectedHouseBuildingWidget(const Context* co
     inhabitants.setFontName("DroidSans-Bold.ttf");
     inhabitants.setFontSize(14);
     inhabitants.setAlign(RENDERTEXT_HALIGN_RIGHT | RENDERTEXT_VALIGN_MIDDLE);
-    inhabitants.setStatusBarText("Anzahl dieser Bevölkerungsgruppe");
+    inhabitants.setStatusBarText(_("Anzahl dieser Bevölkerungsgruppe"));
     addChildElement(&inhabitants);
 
     populationTier.setCoords(115, 85, 120, 14);
@@ -52,7 +53,7 @@ GuiSelectedHouseBuildingWidget::GuiSelectedHouseBuildingWidget(const Context* co
     populationTier.setFontName("DroidSans-Bold.ttf");
     populationTier.setFontSize(14);
     populationTier.setAlign(RENDERTEXT_HALIGN_LEFT | RENDERTEXT_VALIGN_MIDDLE);
-    populationTier.setStatusBarText("Bezeichnung für diese Bevölkerung");
+    populationTier.setStatusBarText(_("Bezeichnung für diese Bevölkerung"));
     addChildElement(&populationTier);
 
     // Nahrungsversorgung

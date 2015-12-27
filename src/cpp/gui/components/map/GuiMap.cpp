@@ -2,6 +2,7 @@
 #include <algorithm>
 #include <cassert>
 #include <string>
+#include "defines.h"
 #include "config/ConfigMgr.h"
 #include "game/CatchmentArea.h"
 #include "game/Colony.h"
@@ -622,7 +623,7 @@ bool GuiMap::onEventElement(SDL_Event& event) {
             // Fruchtbarkeit nur auf Gras anzeigen, nicht Küste, Flüsse etc.
             if (mapTile != nullptr && mapTile->getMapTileConfig()->mapTileType == MapTileType::GRASS) {
                 // TODO Fruchtbarkeit von mapTile->isle;
-                context->guiMgr->setStatusBarText("TODO - Fruchtbarkeit der Insel");
+                context->guiMgr->setStatusBarText(_("TODO - Fruchtbarkeit der Insel"));
             } else {
                 context->guiMgr->setStatusBarText("");
             }

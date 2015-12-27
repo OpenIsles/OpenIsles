@@ -4,7 +4,7 @@
 #include <SDL.h>
 #include <SDL_ttf.h>
 #include <map>
-#include <iostream>
+#include <string>
 #include "graphics/mgr/IFontMgr.h"
 #include "graphics/renderer/IRenderer.h"
 #include "utils/Color.h"

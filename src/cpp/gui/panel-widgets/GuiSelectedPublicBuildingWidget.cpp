@@ -1,6 +1,7 @@
-#include <map/MapObjectType.h>
+#include "defines.h"
 #include "graphics/mgr/IFontMgr.h"
 #include "gui/panel-widgets/GuiSelectedPublicBuildingWidget.h"
+#include "map/MapObjectType.h"
 #include "utils/Color.h"
 #include "utils/StringFormat.h"
 
@@ -27,7 +28,7 @@ GuiSelectedPublicBuildingWidget::GuiSelectedPublicBuildingWidget(const Context* 
     int y = 143;
 
     operatingCostsLabel.setCoords(10, y, 150, 15);
-    operatingCostsLabel.setText("Betriebskosten:");
+    operatingCostsLabel.setText(_("Betriebskosten:"));
     operatingCostsLabel.setColor(&colorWhite);
     operatingCostsLabel.setShadowColor(&colorBlack);
     operatingCostsLabel.setFontName("DroidSans-Bold.ttf");

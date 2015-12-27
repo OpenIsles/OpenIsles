@@ -1,8 +1,10 @@
 #ifndef _DIRECTIONS_H
 #define _DIRECTIONS_H
 
+#include <cstdio>
 #include <stdexcept>
 #include <string>
+#include "defines.h"
 
 
 /**
@@ -138,6 +140,7 @@ public:
         } else if (dirName == "southwest") {
             return Direction::SOUTHWEST;
         } else {
+            std::fprintf(stderr, _("Illegal dirName '%s'\n"), dirName.c_str());
             throw std::runtime_error("Illegal dirName");
         }
     }

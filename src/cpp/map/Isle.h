@@ -1,7 +1,8 @@
 #ifndef _ISLE_H
 #define _ISLE_H
 
-#include <iostream>
+#include <cstdio>
+#include "defines.h"
 #include "map/MapObject.h"
 #include "utils/RectangleData.h"
 #include "utils/StringFormat.h"
@@ -39,7 +40,7 @@ public:
 
     unsigned char getTileAt(int x, int y) const {
         if (x < 0 || y < 0 || x >= tiles->width || y >= tiles->height) {
-            std::cerr << "mapCoords (" << toString(x) << ", " + toString(y) << ") out of bounds";
+            std::fprintf(stderr, _("mapCoords (%d, %d) out of bounds\n"), x, y);
         }
 
         return tiles->getData(x, y, 0);
