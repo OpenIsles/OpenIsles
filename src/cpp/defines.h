@@ -51,9 +51,12 @@
 #endif
 
 // i18n-Helper
-#define _(X) (X) // TODO später mit gettext() ersetzen
+#include <libintl.h>
+
+#define _(X) gettext(X)
 #define _NOOP(X) (X)
 
+// Konstanten für Zeiteinheiten
 static const unsigned long TICKS_PER_SECOND = 1000;                  ///< Ticks pro Sekunde
 static const unsigned long TICKS_PER_MINUTE = 60 * TICKS_PER_SECOND; ///< Ticks pro Minute
 

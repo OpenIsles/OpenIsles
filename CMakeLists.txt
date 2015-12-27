@@ -1,7 +1,13 @@
-project(OpenIsles)
-#set(CMAKE_VERBOSE_MAKEFILE on)
+# CMake-Einstellungen
 
 cmake_minimum_required(VERSION 2.8.12) #  target_compile_options() gibts erst seit v2.8.12
+cmake_policy(SET CMP0048 NEW) # Angabe der Projektversion aktivieren
+#set(CMAKE_VERBOSE_MAKEFILE on)
+
+
+## Projektdefinition ###################################################################################################
+
+project(OpenIsles VERSION 0.1)
 
 
 ## Quelldateien ########################################################################################################
@@ -280,86 +286,9 @@ endif(MINGW)
 file(COPY ${CMAKE_SOURCE_DIR}/data DESTINATION ${CMAKE_BINARY_DIR})
 
 
-## Target: update-i18n-files - Übersetzungsdateien erzeugen und aktualisieren ##########################################
+## Internationalisierung ###############################################################################################
 
-find_package(Gettext REQUIRED)
-
-# xgettext finden
-find_program(XGETTEXT_EXECUTABLE NAMES xgettext)
-if(NOT XGETTEXT_EXECUTABLE)
-    message(FATAL_ERROR "xgettext was not found. It is needed to generate the .pot file.")
-endif(NOT XGETTEXT_EXECUTABLE)
-
-# msginit finden
-find_program(MSGINIT_EXECUTABLE NAMES msginit)
-if(NOT MSGINIT_EXECUTABLE)
-    message(FATAL_ERROR "msginit was not found. It is needed to generate the .po files.")
-endif(NOT MSGINIT_EXECUTABLE)
-
-# Quelldateien zusammensuchen
-foreach(source_file IN LISTS
-        COMMON_SOURCE_FILES
-        GUI_SOURCE_FILES
-        GRAPHICS_SOURCE_FILES
-        SOUND_SOURCE_FILES)
-
-    SET(I18N_SOURCE_FILES ${I18N_SOURCE_FILES} ${CMAKE_SOURCE_DIR}/${source_file})
-endforeach()
-
-SET(I18N_LANGS
-    de
-    en
-)
-SET(SOURCE_PO_DIR ${CMAKE_SOURCE_DIR}/src/po)
-
-# .pot-Datei erzeugen
-add_custom_command(OUTPUT ${SOURCE_PO_DIR}/OpenIsles.pot
-    COMMAND
-        ${XGETTEXT_EXECUTABLE}
-        --from-code=UTF-8
-        --package-name OpenIsles
-        --package-version 0.1
-        -o ${SOURCE_PO_DIR}/OpenIsles.pot
-        -k_
-        ${I18N_SOURCE_FILES}
-    VERBATIM
-)
-
-# .po-Dateien anlegen, falls noch nicht vorhanden
-foreach(lang IN LISTS I18N_LANGS)
-    add_custom_command(OUTPUT ${SOURCE_PO_DIR}/${lang}.po
-        COMMAND
-            ${MSGINIT_EXECUTABLE}
-            -i ${SOURCE_PO_DIR}/OpenIsles.pot
-            -o ${SOURCE_PO_DIR}/${lang}.po
-            -l ${lang}
-            --no-translator
-        DEPENDS
-            ${SOURCE_PO_DIR}/OpenIsles.pot
-        VERBATIM
-    )
-endforeach(lang IN LISTS I18N_LANGS)
-
-# .mo-Dateien kompilieren
-foreach(lang IN LISTS I18N_LANGS)
-    add_custom_command(OUTPUT ${CMAKE_BINARY_DIR}/data/locale/${lang}.mo
-        COMMAND
-            ${CMAKE_COMMAND} -E make_directory ${CMAKE_BINARY_DIR}/data/locale
-        COMMAND
-            ${GETTEXT_MSGFMT_EXECUTABLE}
-            ${SOURCE_PO_DIR}/${lang}.po
-            -o ${CMAKE_BINARY_DIR}/data/locale/${lang}.mo
-        DEPENDS
-            ${SOURCE_PO_DIR}/${lang}.po
-        VERBATIM
-    )
-
-    SET(GENERATED_MO_FILES ${GENERATED_MO_FILES} ${CMAKE_BINARY_DIR}/data/locale/${lang}.mo)
-endforeach(lang IN LISTS I18N_LANGS)
-
-add_custom_target(update-i18n-files
-    DEPENDS ${GENERATED_MO_FILES}
-)
+add_subdirectory(src/po)
 
 
 ## Target: OpenIsles-Tests - die Tests #################################################################################

@@ -3,8 +3,10 @@
 #endif
 #include <cstdio>
 #include <cstdlib>
+#include <libintl.h>
 #include <stdexcept>
 #include <unistd.h>
+#include "defines.h"
 #include "Context.h"
 #include "config/ConfigMgr.h"
 #include "economics/EconomicsMgr.h"
@@ -159,7 +161,19 @@ int main(int argc, char** argv) {
         return EXIT_FAILURE;
     }
 
+    // Internationalisierung aktivieren //////////////////////////////////////////////////////////////////////////////
+
+    const char* newLocale = setlocale(LC_ALL, "");
+    if (newLocale != nullptr) {
+        std::printf(_("Using locale '%s'.\n"), newLocale);
+    }
+
+    bindtextdomain("OpenIsles", "data/locale"); // TODO CMake ${PROJECT_NAME} und eine Variable für das Locale-Dir nutzen
+    bind_textdomain_codeset("OpenIsles", "UTF-8");
+    textdomain("OpenIsles");
+
     // Library-Initialisierung ///////////////////////////////////////////////////////////////////////////////////////
+
     IRenderer* sdlRenderer = new SDLRenderer();
 
     // Game-Initialisierung //////////////////////////////////////////////////////////////////////////////////////////
