@@ -88,7 +88,7 @@ public:
             return PLAYER_WHITE;
         }
 
-        std::fprintf(stderr, _("Illegal player color\n"));
+        std::fprintf(stderr, _("Illegal player color: %u\n"), (unsigned int) color);
         throw std::runtime_error("Illegal player color");
     }
 };

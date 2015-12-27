@@ -90,7 +90,7 @@ void GameIO::loadPlayers(Game* game, rapidxml::xml_node<>* mapNode) {
         } else if (strcmp(playerColorAttrValue, "white") == 0) {
             playerColor = PlayerColor::WHITE;
         } else {
-            std::fprintf(stderr, _("Illegal player color\n"));
+            std::fprintf(stderr, _("Illegal player color '%s'\n"), playerColorAttrValue);
             throw std::runtime_error("Illegal player color");
         }
 

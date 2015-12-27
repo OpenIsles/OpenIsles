@@ -147,7 +147,7 @@ bool parseCmdlineParams(int argc, char** argv) {
     }
 
     if (cmdlineParams.mapFileToLoad == nullptr) {
-        std::fprintf(stderr, _("Error: No map file specified.\n"));
+        std::fputs(_("Error: No map file specified.\n"), stderr);
         return false;
     }
 
@@ -182,7 +182,7 @@ int main(int argc, char** argv) {
 
     context.userEventBase = SDL_RegisterEvents(USER_EVENT_MAXEVENT + 1);
     if (context.userEventBase == (uint32_t) -1) {
-        std::fprintf(stderr, _("Could not register events\n"));
+        std::fputs(_("Could not register events\n"), stderr);
         throw std::runtime_error("Could not register events");
     }
 

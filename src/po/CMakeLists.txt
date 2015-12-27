@@ -19,6 +19,7 @@ endif(NOT MSGINIT_EXECUTABLE)
 
 # Quelldateien zusammensuchen
 foreach(source_file IN LISTS
+        MAIN_SOURCE_FILE
         COMMON_SOURCE_FILES
         GUI_SOURCE_FILES
         GRAPHICS_SOURCE_FILES

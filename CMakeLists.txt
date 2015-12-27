@@ -12,6 +12,9 @@ project(OpenIsles VERSION 0.1)
 
 ## Quelldateien ########################################################################################################
 
+set(MAIN_SOURCE_FILE
+    src/cpp/main.cpp
+)
 set(COMMON_SOURCE_FILES
     src/cpp/config/BuildingCosts.h
     src/cpp/config/ConfigMgr.cpp
@@ -228,7 +231,7 @@ set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -DNDEBUG")
 ## Target: OpenIsles - das Spiel selber ################################################################################
 
 add_executable(OpenIsles
-    src/cpp/main.cpp
+    ${MAIN_SOURCE_FILE}
     ${COMMON_SOURCE_FILES}
     ${GUI_SOURCE_FILES}
     ${GRAPHICS_SOURCE_FILES}

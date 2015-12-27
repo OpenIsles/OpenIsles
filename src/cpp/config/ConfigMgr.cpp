@@ -12,19 +12,19 @@
 
 ConfigMgr::ConfigMgr() {
     loadGoods();
-    std::printf(_("Loaded goods.\n"));
+    std::puts(_("Loaded goods.\n"));
 
     loadPopulationTiers();
-    std::printf(_("Loaded population tiers.\n"));
+    std::puts(_("Loaded population tiers.\n"));
 
     loadCarrierMapObjectTypes();
-    std::printf(_("Loaded carrier mapObjectTypes.\n"));
+    std::puts(_("Loaded carrier mapObjectTypes.\n"));
 
     loadMapObjectTypes();
-    std::printf(_("Loaded mapObjectTypes.\n"));
+    std::puts(_("Loaded mapObjectTypes.\n"));
 
     loadTilesConfig();
-    std::printf(_("Loaded tiles.\n"));
+    std::puts(_("Loaded tiles.\n"));
 }
 
 ConfigMgr::~ConfigMgr() {
@@ -396,7 +396,7 @@ RectangleData<char>* ConfigMgr::parseCatchmentArea(const char* catchmentAreaValu
             } else if (*ptr == ' ') {
                 // Zeichen ok, ignorieren
             } else {
-                std::fprintf(stderr, _("Could not parse catchmentArea: Illegal char before first line\n"));
+                std::fputs(_("Could not parse catchmentArea: Illegal char before first line\n"), stderr);
                 throw std::runtime_error("Could not parse catchmentArea: Illegal char before first line");
             }
             continue;
@@ -406,7 +406,7 @@ RectangleData<char>* ConfigMgr::parseCatchmentArea(const char* catchmentAreaValu
             if (x == 0) {
                 continue; // Leerzeichen am Zeilenanfang ok
             } else {
-                std::fprintf(stderr, _("Could not parse catchmentArea: Illegal space inside line\n"));
+                std::fputs(_("Could not parse catchmentArea: Illegal space inside line\n"), stderr);
                 throw std::runtime_error("Could not parse catchmentArea: Illegal space inside line");
             }
         }
@@ -422,7 +422,7 @@ RectangleData<char>* ConfigMgr::parseCatchmentArea(const char* catchmentAreaValu
                 catchmentAreaWidth = x;
             } else {
                 if (x != catchmentAreaWidth) {
-                    std::fprintf(stderr, _("Could not parse catchmentArea: widths are not equal\n"));
+                    std::fputs(_("Could not parse catchmentArea: widths are not equal\n"), stderr);
                     throw std::runtime_error("Could not parse catchmentArea: widths are not equal");
                 }
             }
@@ -434,7 +434,7 @@ RectangleData<char>* ConfigMgr::parseCatchmentArea(const char* catchmentAreaValu
 
     // Letzte Zeile muss leer sein.
     if (x != 0) {
-        std::fprintf(stderr, _("Could not parse catchmentArea: Last line was not completly empty.\n"));
+        std::fputs(_("Could not parse catchmentArea: Last line was not completly empty.\n"), stderr);
         throw std::runtime_error("Could not parse catchmentArea: Last line was not completly empty.");
     }
     int catchmentAreaHeight = y;

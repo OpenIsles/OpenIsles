@@ -29,7 +29,7 @@ void Map::initNewMap(int newWidth, int newHeight) {
     // Damit spar ich mir erstmal Hirnschmalz mit der Minimap und anderem Zeug, was noch kommen wird.
     // Info: Anno-Karten sind 500x350 Kacheln groß (damit passt auch die Minimap besser)
     if (newWidth != newHeight) {
-        std::fprintf(stderr, _("Map has to be quadratically for now ;-p\n"));
+        std::fputs(_("Map has to be quadratically for now ;-p\n"), stderr);
         throw std::runtime_error("Map has to be quadratically for now ;-p");
     }
     

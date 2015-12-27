@@ -75,7 +75,7 @@ public:
      */
     const IGraphic* getGraphic() const {
         if (framesCount != 1) {
-            std::fprintf(stderr, _("Animation does not have only frame\n"));
+            std::fputs(_("Animation does not have only frame\n"), stderr);
             throw std::runtime_error("Animation does not have only frame");
         }
 
@@ -90,7 +90,7 @@ public:
      */
     const IGraphic* getFrame(unsigned int frameIndex) const {
         if (frameIndex >= framesCount) {
-            std::fprintf(stderr, _("Animation does not have this many frames\n"));
+            std::fputs(_("Animation does not have this many frames\n"), stderr);
             throw std::runtime_error("Animation does not have this many frames");
         }
 

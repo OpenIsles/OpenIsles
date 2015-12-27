@@ -15,7 +15,7 @@ SDLRenderer::SDLRenderer() {
     }
 
     atexit(SDL_Quit);
-    std::printf(_("SDL initialisert\n"));
+    std::puts(_("SDL initialisert\n"));
 
     SDL_Surface* surfaceAppIcon = IMG_Load("data/img/appicon.png");
     if (surfaceAppIcon == nullptr) {

@@ -30,7 +30,8 @@ SDLGraphic::SDLGraphic(
     if (srcRect.x + srcRect.w > srcGraphic.width ||
         srcRect.y + srcRect.h > srcGraphic.height) {
 
-        std::fprintf(stderr, _("Illegal srcRect\n"));
+        std::fprintf(stderr, _("Illegal srcRect: (%d, %d), %d, %d\n"),
+                     srcRect.x, srcRect.y, srcGraphic.width, srcGraphic.height);
         throw std::runtime_error("Illegal srcRect");
     }
 
@@ -176,7 +177,7 @@ void SDLGraphic::getPixel(int x, int y, uint8_t* r, uint8_t* g, uint8_t* b, uint
             pixelValue = *(uint32_t*) ptrToPixel;
             break;
         default:
-            std::fprintf(stderr, _("Illegal bytesPerPixel\n"));
+            std::fprintf(stderr, _("Illegal bytesPerPixel: %d\n"), bytesPerPixel);
             throw std::runtime_error("Illegal bytesPerPixel");
     }
 
