@@ -1,7 +1,4 @@
-# Target: update-i18n-files
-#
-# Erzeugt die Übersetzungsdateien bzw. aktualisiert sie
-
+## Erzeugt die Übersetzungsdateien bzw. aktualisiert sie ###############################################################
 
 find_package(Gettext REQUIRED)
 

@@ -1,4 +1,4 @@
-# CMake-Einstellungen
+## CMake-Einstellungen #################################################################################################
 
 cmake_minimum_required(VERSION 2.8.12) #  target_compile_options() gibts erst seit v2.8.12
 cmake_policy(SET CMP0048 NEW) # Angabe der Projektversion aktivieren
