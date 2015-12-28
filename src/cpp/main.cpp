@@ -155,12 +155,6 @@ bool parseCmdlineParams(int argc, char** argv) {
 }
 
 int main(int argc, char** argv) {
-    // Befehlszeilen-Analyse /////////////////////////////////////////////////////////////////////////////////////////
-
-    if (!parseCmdlineParams(argc, argv)) {
-        return EXIT_FAILURE;
-    }
-
     // Internationalisierung aktivieren //////////////////////////////////////////////////////////////////////////////
 
     const char* newLocale = setlocale(LC_ALL, "");
@@ -171,6 +165,12 @@ int main(int argc, char** argv) {
     bindtextdomain("OpenIsles", "data/locale"); // TODO CMake ${PROJECT_NAME} und eine Variable für das Locale-Dir nutzen
     bind_textdomain_codeset("OpenIsles", "UTF-8");
     textdomain("OpenIsles");
+
+    // Befehlszeilen-Analyse /////////////////////////////////////////////////////////////////////////////////////////
+
+    if (!parseCmdlineParams(argc, argv)) {
+        return EXIT_FAILURE;
+    }
 
     // Library-Initialisierung ///////////////////////////////////////////////////////////////////////////////////////
 
