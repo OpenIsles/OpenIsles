@@ -18,7 +18,7 @@ TEST(ConfigMgrTest, loadMapObjectTypes) {
     ASSERT_TRUE(cathedral != nullptr);
     ASSERT_EQ(MapObjectTypeClass::BUILDING, cathedral->type);
     ASSERT_EQ("cathedral", cathedral->name);
-    ASSERT_EQ("Kathedrale", cathedral->title);
+    ASSERT_EQ("mapObjectType|cathedral", cathedral->title);
     ASSERT_EQ(6, cathedral->mapWidth);
     ASSERT_EQ(4, cathedral->mapHeight);
     ASSERT_EQ(StructurePlacing::INDIVIDUALLY, cathedral->structurePlacing);
@@ -51,7 +51,7 @@ TEST(ConfigMgrTest, loadMapObjectTypes) {
     ASSERT_TRUE(sugarcaneField != nullptr);
     ASSERT_EQ(MapObjectTypeClass::HARVESTABLE, sugarcaneField->type);
     ASSERT_EQ("sugarcane-field", sugarcaneField->name);
-    ASSERT_EQ("Zuckerrohrfeld", sugarcaneField->title);
+    ASSERT_EQ("mapObjectType|sugarcane-field", sugarcaneField->title);
     ASSERT_EQ(1, sugarcaneField->mapWidth);
     ASSERT_EQ(1, sugarcaneField->mapHeight);
     ASSERT_EQ(StructurePlacing::RECTANGLE, sugarcaneField->structurePlacing);
@@ -284,7 +284,7 @@ TEST(ConfigMgrTest, checkThatPopulationTiersAreFilledCorrectly) {
         const PopulationTier* populationTier = configMgr.getPopulationTier("pioneers");
         ASSERT_EQ(1, populationTier->index);
         ASSERT_EQ("pioneers", populationTier->name);
-        ASSERT_EQ("Pioniere", populationTier->title);
+        ASSERT_EQ("populationTier|pioneers", populationTier->title);
         ASSERT_EQ(0, populationTier->advancementCosts.coins);
         ASSERT_EQ(0, populationTier->advancementCosts.tools);
         ASSERT_EQ(3, populationTier->advancementCosts.wood);
@@ -297,7 +297,7 @@ TEST(ConfigMgrTest, checkThatPopulationTiersAreFilledCorrectly) {
         const PopulationTier* populationTier = configMgr.getPopulationTier("settlers");
         ASSERT_EQ(2, populationTier->index);
         ASSERT_EQ("settlers", populationTier->name);
-        ASSERT_EQ("Siedler", populationTier->title);
+        ASSERT_EQ("populationTier|settlers", populationTier->title);
         ASSERT_EQ(0, populationTier->advancementCosts.coins);
         ASSERT_EQ(1, populationTier->advancementCosts.tools);
         ASSERT_EQ(3, populationTier->advancementCosts.wood);
@@ -310,7 +310,7 @@ TEST(ConfigMgrTest, checkThatPopulationTiersAreFilledCorrectly) {
         const PopulationTier* populationTier = configMgr.getPopulationTier("burghers");
         ASSERT_EQ(3, populationTier->index);
         ASSERT_EQ("burghers", populationTier->name);
-        ASSERT_EQ("Bürger", populationTier->title);
+        ASSERT_EQ("populationTier|burghers", populationTier->title);
         ASSERT_EQ(0, populationTier->advancementCosts.coins);
         ASSERT_EQ(2, populationTier->advancementCosts.tools);
         ASSERT_EQ(2, populationTier->advancementCosts.wood);
@@ -323,7 +323,7 @@ TEST(ConfigMgrTest, checkThatPopulationTiersAreFilledCorrectly) {
         const PopulationTier* populationTier = configMgr.getPopulationTier("merchants");
         ASSERT_EQ(4, populationTier->index);
         ASSERT_EQ("merchants", populationTier->name);
-        ASSERT_EQ("Kaufleute", populationTier->title);
+        ASSERT_EQ("populationTier|merchants", populationTier->title);
         ASSERT_EQ(0, populationTier->advancementCosts.coins);
         ASSERT_EQ(3, populationTier->advancementCosts.tools);
         ASSERT_EQ(3, populationTier->advancementCosts.wood);
@@ -336,7 +336,7 @@ TEST(ConfigMgrTest, checkThatPopulationTiersAreFilledCorrectly) {
         const PopulationTier* populationTier = configMgr.getPopulationTier("aristocrats");
         ASSERT_EQ(5, populationTier->index);
         ASSERT_EQ("aristocrats", populationTier->name);
-        ASSERT_EQ("Aristokraten", populationTier->title);
+        ASSERT_EQ("populationTier|aristocrats", populationTier->title);
         ASSERT_EQ(0, populationTier->advancementCosts.coins);
         ASSERT_EQ(3, populationTier->advancementCosts.tools);
         ASSERT_EQ(3, populationTier->advancementCosts.wood);

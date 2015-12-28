@@ -41,8 +41,8 @@ void ConfigMgr::loadGoods() {
     for (rapidxml::xml_node<>* goodNode = goodsNode->first_node("good", 4, true); goodNode != nullptr;
          goodNode = goodNode->next_sibling("good", 4, true)) {
 
-        const char* name = goodNode->first_attribute("name", 4, true)->value();
-        const char* label = goodNode->value();
+        std::string name = goodNode->first_attribute("name", 4, true)->value();
+        std::string label = _(std::string("good|" + name).c_str());
         bool rawMaterial = xmlAttributeToBool(goodNode->first_attribute("raw-material", 12, true), false);
         bool invisible = xmlAttributeToBool(goodNode->first_attribute("invisible", 9, true), false);
 
@@ -91,7 +91,7 @@ void ConfigMgr::loadMapObjectTypes() {
             node->first_attribute("width", 5, true)->value());
         mapObjectType.mapHeight = (unsigned char) stringToUnsignedLong(
             node->first_attribute("height", 6, true)->value());
-        mapObjectType.title = std::string(node->first_node("title", 5, true)->value());
+        mapObjectType.title = _(std::string("mapObjectType|" + mapObjectType.name).c_str());
 
         // Structure-Placing
         const char* structurePlacing = node->first_node("structure-placing", 17, true)->value();
@@ -475,7 +475,7 @@ void ConfigMgr::loadPopulationTiers() {
 
         populationTier.index = index++;
         populationTier.name = std::string(node->first_attribute("name", 4, true)->value());
-        populationTier.title = std::string(node->first_node("title", 5, true)->value());
+        populationTier.title = _(std::string("populationTier|" + populationTier.name).c_str());
 
         rapidxml::xml_node<>* advancementCostsNode = node->first_node("advancement-costs", 17, true);
         readBuildingCosts(populationTier.advancementCosts, advancementCostsNode);

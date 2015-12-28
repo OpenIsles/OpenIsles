@@ -3,17 +3,30 @@
 find_package(Gettext REQUIRED)
 
 # xgettext finden
-find_program(GETTEXT_XGETTEXT_EXECUTABLE NAMES xgettext)
+find_program(GETTEXT_XGETTEXT_EXECUTABLE xgettext)
 if(NOT GETTEXT_XGETTEXT_EXECUTABLE)
     message(FATAL_ERROR "xgettext was not found. It is needed to generate the .pot file.")
 endif(NOT GETTEXT_XGETTEXT_EXECUTABLE)
 
 # msginit finden
-find_program(GETTEXT_MSGINIT_EXECUTABLE NAMES msginit)
+find_program(GETTEXT_MSGINIT_EXECUTABLE msginit)
 if(NOT GETTEXT_MSGINIT_EXECUTABLE)
     message(INFO "msginit was not found. It is needed to generate new .po files. "
                  "We don't use it in the Makefile but you will need it to create new languages.")
 endif(NOT GETTEXT_MSGINIT_EXECUTABLE)
+
+# msgcat finden
+find_program(GETTEXT_MSGCAT_EXECUTABLE msgcat)
+if(NOT GETTEXT_MSGCAT_EXECUTABLE)
+    message(FATAL_ERROR "msgcat was not found. It is needed to generate the .pot file.")
+endif(NOT GETTEXT_MSGCAT_EXECUTABLE)
+
+# PHP finden
+find_program(PHP_EXECUTABLE php)
+if(NOT PHP_EXECUTABLE)
+    message(FATAL_ERROR "PHP not found. We need this script interpreter for extracting phrases "
+                        "out of the data XML files.")
+endif(NOT PHP_EXECUTABLE)
 
 # Quelldateien zusammensuchen
 foreach(source_file IN LISTS
@@ -27,12 +40,14 @@ foreach(source_file IN LISTS
 endforeach()
 
 SET(I18N_LANGS
+    en
     de
 )
 SET(SOURCE_PO_DIR ${CMAKE_SOURCE_DIR}/src/po)
 
 # .pot-Datei erzeugen
 add_custom_target(update-pot-file
+    # .pot-Datei OpenIsles.sources.pot aus den Sourcen generieren
     COMMAND
         ${GETTEXT_XGETTEXT_EXECUTABLE}
         --directory=${CMAKE_SOURCE_DIR}
@@ -44,10 +59,28 @@ add_custom_target(update-pot-file
         --package-version=${PROJECT_VERSION}
         --msgid-bugs-address=http://www.openisles.org
         --copyright-holder=theHacker
-        -o ${SOURCE_PO_DIR}/OpenIsles.pot
+        -o ${SOURCE_PO_DIR}/OpenIsles.sources.pot
         -k_
         -k_NOOP
         ${I18N_SOURCE_FILES}
+    # .pot-Datei OpenIsles.data.pot aus den Data-XMLs generieren
+    COMMAND
+        ${PHP_EXECUTABLE}
+        ${SOURCE_PO_DIR}/data-xmls-to-pot.php
+        ${CMAKE_SOURCE_DIR}/data
+        ${SOURCE_PO_DIR}/OpenIsles.data.pot
+    # Die beiden Dateien zur Zieldatei zusammensetzen
+    COMMAND
+        ${GETTEXT_MSGCAT_EXECUTABLE}
+        -o ${SOURCE_PO_DIR}/OpenIsles.pot
+        ${SOURCE_PO_DIR}/OpenIsles.sources.pot
+        ${SOURCE_PO_DIR}/OpenIsles.data.pot
+    # Die beiden Dateien weglöschen
+    COMMAND
+        ${CMAKE_COMMAND}
+        -E remove
+        ${SOURCE_PO_DIR}/OpenIsles.sources.pot
+        ${SOURCE_PO_DIR}/OpenIsles.data.pot
     VERBATIM
 )
 

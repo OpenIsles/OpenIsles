@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <population-tiers>
     <population-tier name="pioneers">
-        <title>Pioniere</title>
         <advancement-costs>
             <coins>0</coins>
             <tools>0</tools>
@@ -13,7 +12,6 @@
     </population-tier>
 
     <population-tier name="settlers">
-        <title>Siedler</title>
         <advancement-costs>
             <coins>0</coins>
             <tools>1</tools>
@@ -25,7 +23,6 @@
     </population-tier>
 
     <population-tier name="burghers">
-        <title>Bürger</title>
         <advancement-costs>
             <coins>0</coins>
             <tools>2</tools>
@@ -37,7 +34,6 @@
     </population-tier>
 
     <population-tier name="merchants">
-        <title>Kaufleute</title>
         <advancement-costs>
             <coins>0</coins>
             <tools>3</tools>
@@ -49,7 +45,6 @@
     </population-tier>
 
     <population-tier name="aristocrats">
-        <title>Aristokraten</title>
         <advancement-costs>
             <coins>0</coins>
             <tools>3</tools>

@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <goods>
     <!-- Rohstoffe -->
-    <good name="wool" raw-material="true">Wolle</good>
-    <good name="sugar" raw-material="true">Zucker</good>
-    <good name="tobacco" raw-material="true">Tabak</good>
-    <good name="cattle" raw-material="true">Schlachtvieh</good>
+    <good name="wool" raw-material="true" />
+    <good name="sugar" raw-material="true" />
+    <good name="tobacco" raw-material="true" />
+    <good name="cattle" raw-material="true" />
 
     <!-- Verbrauchsgüter -->
-    <good name="food">Nahrung</good>
-    <good name="tobacco-goods">Tabakwaren</good>
-    <good name="spices">Gewürze</good>
-    <good name="alcohol">Alkohol</good>
-    <good name="cloth">Stoffe</good>
+    <good name="food" />
+    <good name="tobacco-goods" />
+    <good name="spices" />
+    <good name="alcohol" />
+    <good name="cloth" />
 
     <!-- Baumaterialen -->
-    <good name="tools">Werkzeug</good>
-    <good name="wood">Holz</good>
-    <good name="bricks">Ziegel</good>
+    <good name="tools" />
+    <good name="wood" />
+    <good name="bricks" />
 
     <!-- unsichtbare Güter, die für die Wirtschaft notwendig sind, aber der Nutzer nicht sehen soll -->
-    <good name="grass" invisible="true">Gras</good>
+    <good name="grass" invisible="true" />
 </goods>

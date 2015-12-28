@@ -4,7 +4,6 @@
     <!-- Handwerksbetriebe -->
 
     <building name="stonemason" width="2" height="2">
-        <title>Steinbruch</title>
         <structure-placing>individually</structure-placing>
         <placeable-on>
             <map-tile-type>grass</map-tile-type>
@@ -45,7 +44,6 @@
     </building>
 
     <building name="toolsmiths" width="2" height="2">
-        <title>Werkzeugschmiede</title>
         <structure-placing>individually</structure-placing>
         <placeable-on>
             <map-tile-type>grass</map-tile-type>
@@ -101,7 +99,6 @@
     </building>
 
     <building name="tobacco-goods" width="2" height="2">
-        <title>Tabakwaren</title>
         <structure-placing>individually</structure-placing>
         <placeable-on>
             <map-tile-type>grass</map-tile-type>
@@ -153,7 +150,6 @@
     </building>
 
     <building name="distillery" width="2" height="2">
-        <title>Rumbrennerei</title>
         <structure-placing>individually</structure-placing>
         <placeable-on>
             <map-tile-type>grass</map-tile-type>
@@ -205,7 +201,6 @@
     </building>
 
     <building name="weaving-mill1" width="2" height="2">
-        <title>Webstube</title>
         <structure-placing>individually</structure-placing>
         <placeable-on>
             <map-tile-type>grass</map-tile-type>
@@ -263,7 +258,6 @@
     </building>
 
     <building name="butchers" width="2" height="2">
-        <title>Fleischerei</title>
         <structure-placing>individually</structure-placing>
         <placeable-on>
             <map-tile-type>grass</map-tile-type>
@@ -313,7 +307,6 @@
     <!-- Farmen und Plantagen -->
 
     <building name="sugarcane-plantation" width="2" height="2">
-        <title>Zuckerrohrplantage</title>
         <structure-placing>individually</structure-placing>
         <placeable-on>
             <map-tile-type>grass</map-tile-type>
@@ -345,7 +338,6 @@
     </building>
 
     <harvestable name="sugarcane-field" width="1" height="1">
-        <title>Zuckerrohrfeld</title>
         <structure-placing>rectangle</structure-placing>
         <placeable-on>
             <map-tile-type>grass</map-tile-type>
@@ -360,7 +352,6 @@
     </harvestable>
 
     <building name="tobacco-plantation" width="2" height="2">
-        <title>Tabakplantage</title>
         <structure-placing>individually</structure-placing>
         <placeable-on>
             <map-tile-type>grass</map-tile-type>
@@ -392,7 +383,6 @@
     </building>
 
     <harvestable name="tobacco-field" width="1" height="1">
-        <title>Tabakfeld</title>
         <structure-placing>rectangle</structure-placing>
         <placeable-on>
             <map-tile-type>grass</map-tile-type>
@@ -407,7 +397,6 @@
     </harvestable>
 
     <building name="spices-plantation" width="2" height="2">
-        <title>Gewürzplantage</title>
         <structure-placing>individually</structure-placing>
         <placeable-on>
             <map-tile-type>grass</map-tile-type>
@@ -439,7 +428,6 @@
     </building>
 
     <harvestable name="spices-field" width="1" height="1">
-        <title>Gewürzfeld</title>
         <structure-placing>rectangle</structure-placing>
         <placeable-on>
             <map-tile-type>grass</map-tile-type>
@@ -454,7 +442,6 @@
     </harvestable>
 
     <building name="sheep-farm" width="2" height="2">
-        <title>Schaffarm</title>
         <structure-placing>individually</structure-placing>
         <placeable-on>
             <map-tile-type>grass</map-tile-type>
@@ -488,7 +475,6 @@
     </building>
 
     <building name="cattle-farm" width="2" height="2">
-        <title>Rinderfarm</title>
         <structure-placing>individually</structure-placing>
         <placeable-on>
             <map-tile-type>grass</map-tile-type>
@@ -520,7 +506,6 @@
     </building>
 
     <building name="hunters-hut" width="1" height="1">
-        <title>Jägerhütte</title>
         <structure-placing>individually</structure-placing>
         <placeable-on>
             <map-tile-type>grass</map-tile-type>
@@ -563,7 +548,6 @@
     </building>
 
     <building name="foresters" width="2" height="2">
-        <title>Forsthaus</title>
         <structure-placing>individually</structure-placing>
         <placeable-on>
             <map-tile-type>grass</map-tile-type>
@@ -597,7 +581,6 @@
     </building>
 
     <harvestable name="northern-forest1" width="1" height="1">
-        <title>Wald</title>
         <structure-placing>rectangle</structure-placing>
         <placeable-on>
             <map-tile-type>grass</map-tile-type>
@@ -613,7 +596,6 @@
     </harvestable>
 
     <harvestable name="northern-forest2" width="1" height="1">
-        <title>Wald</title>
         <structure-placing>rectangle</structure-placing>
         <placeable-on>
             <map-tile-type>grass</map-tile-type>
@@ -631,7 +613,6 @@
     <!-- Hafenanlagen -->
 
     <structure name="pier" width="1" height="1">
-        <title>Anlegestelle</title>
         <structure-placing>individually</structure-placing>
         <placeable-on>
             <map-tile-type>shore-ocean</map-tile-type>
@@ -646,7 +627,6 @@
     </structure>
 
     <building name="office1" width="3" height="2">
-        <title>Kontor I</title>
         <structure-placing>individually</structure-placing>
         <placeable-on>
             <map-tile-type>grass</map-tile-type>
@@ -705,7 +685,6 @@
     </building>
 
     <building name="office2" width="3" height="2">
-        <title>Kontor II</title>
         <structure-placing>individually</structure-placing>
         <placeable-on>
             <map-tile-type>grass</map-tile-type>
@@ -766,7 +745,6 @@
     <!-- Öffentliche Gebäude -->
 
     <building name="cathedral" width="6" height="4">
-        <title>Kathedrale</title>
         <structure-placing>individually</structure-placing>
         <placeable-on>
             <map-tile-type>grass</map-tile-type>
@@ -836,7 +814,6 @@
     </building>
 
     <building name="tavern" width="2" height="3">
-        <title>Wirtshaus</title>
         <structure-placing>individually</structure-placing>
         <placeable-on>
             <map-tile-type>grass</map-tile-type>
@@ -881,7 +858,6 @@
     </building>
 
     <building name="pioneers-house1" width="2" height="2">
-        <title>Haus</title>
         <structure-placing>individually</structure-placing>
         <placeable-on>
             <map-tile-type>grass</map-tile-type>
@@ -912,7 +888,6 @@
     </building>
 
     <building name="pioneers-house2" width="2" height="2">
-        <title>Haus</title>
         <structure-placing>individually</structure-placing>
         <placeable-on>
             <map-tile-type>grass</map-tile-type>
@@ -943,7 +918,6 @@
     </building>
 
     <building name="pioneers-house3" width="2" height="2">
-        <title>Haus</title>
         <structure-placing>individually</structure-placing>
         <placeable-on>
             <map-tile-type>grass</map-tile-type>
@@ -974,7 +948,6 @@
     </building>
 
     <building name="pioneers-house4" width="2" height="2">
-        <title>Haus</title>
         <structure-placing>individually</structure-placing>
         <placeable-on>
             <map-tile-type>grass</map-tile-type>
@@ -1005,7 +978,6 @@
     </building>
 
     <building name="pioneers-house5" width="2" height="2">
-        <title>Haus</title>
         <structure-placing>individually</structure-placing>
         <placeable-on>
             <map-tile-type>grass</map-tile-type>
@@ -1036,7 +1008,6 @@
     </building>
 
     <building name="settlers-house1" width="2" height="2">
-        <title>Haus</title>
         <structure-placing>individually</structure-placing>
         <placeable-on>
             <map-tile-type>grass</map-tile-type>
@@ -1067,7 +1038,6 @@
     </building>
 
     <building name="settlers-house2" width="2" height="2">
-        <title>Haus</title>
         <structure-placing>individually</structure-placing>
         <placeable-on>
             <map-tile-type>grass</map-tile-type>
@@ -1098,7 +1068,6 @@
     </building>
 
     <building name="settlers-house3" width="2" height="2">
-        <title>Haus</title>
         <structure-placing>individually</structure-placing>
         <placeable-on>
             <map-tile-type>grass</map-tile-type>
@@ -1129,7 +1098,6 @@
     </building>
 
     <building name="settlers-house4" width="2" height="2">
-        <title>Haus</title>
         <structure-placing>individually</structure-placing>
         <placeable-on>
             <map-tile-type>grass</map-tile-type>
@@ -1160,7 +1128,6 @@
     </building>
 
     <building name="settlers-house5" width="2" height="2">
-        <title>Haus</title>
         <structure-placing>individually</structure-placing>
         <placeable-on>
             <map-tile-type>grass</map-tile-type>
@@ -1191,7 +1158,6 @@
     </building>
 
     <building name="marketplace" width="4" height="3">
-        <title>Marktplatz</title>
         <structure-placing>individually</structure-placing>
         <placeable-on>
             <map-tile-type>grass</map-tile-type>
@@ -1250,7 +1216,6 @@
     </building>
 
     <building name="chapel" width="2" height="1">
-        <title>Kapelle</title>
         <structure-placing>individually</structure-placing>
         <placeable-on>
             <map-tile-type>grass</map-tile-type>
@@ -1289,7 +1254,6 @@
     <!-- Straßen und Plätze -->
 
     <structure name="square1" width="1" height="1">
-        <title>Platz I</title>
         <structure-placing>rectangle</structure-placing>
         <placeable-on>
             <map-tile-type>grass</map-tile-type>
@@ -1303,7 +1267,6 @@
     </structure>
 
     <structure name="square2" width="1" height="1">
-        <title>Platz II</title>
         <structure-placing>rectangle</structure-placing>
         <placeable-on>
             <map-tile-type>grass</map-tile-type>
@@ -1317,7 +1280,6 @@
     </structure>
 
     <structure name="square3" width="1" height="1">
-        <title>Platz III</title>
         <structure-placing>rectangle</structure-placing>
         <placeable-on>
             <map-tile-type>grass</map-tile-type>
@@ -1331,7 +1293,6 @@
     </structure>
 
     <street name="farm-road" width="1" height="1">
-        <title>Feldweg</title>
         <structure-placing>path</structure-placing>
         <placeable-on>
             <map-tile-type>grass</map-tile-type>
@@ -1345,7 +1306,6 @@
     </street>
 
     <street name="cobbled-street" width="1" height="1">
-        <title>Pflasterstraße</title>
         <structure-placing>path</structure-placing>
         <placeable-on>
             <map-tile-type>grass</map-tile-type>
