@@ -40,7 +40,7 @@ public:
 
     unsigned char getTileAt(int x, int y) const {
         if (x < 0 || y < 0 || x >= tiles->width || y >= tiles->height) {
-            std::fprintf(stderr, _("mapCoords (%d, %d) out of bounds\n"), x, y);
+            std::fprintf(stderr, _("mapCoords (%d, %d) out of bounds.\n"), x, y);
         }
 
         return tiles->getData(x, y, 0);

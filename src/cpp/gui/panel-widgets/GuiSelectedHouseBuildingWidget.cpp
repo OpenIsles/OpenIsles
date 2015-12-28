@@ -12,12 +12,12 @@ static Color colorBlack = Color(0, 0, 0, 255);
 
 static struct {
     const char* filename;
-    std::string statusBarText;
+    const char* statusBarText;
 } populationSatisfactionGui[4] = {
-    { "good.png"   , _("Zuwächse in dieser Bevölkerungsgruppe") },
-    { "neutral.png", _("Keine Zuwächse in dieser Bevölkerungsgruppe") },
-    { "bad.png"    , _("Leichte Rückgänge in dieser Bevölkerungsgruppe") },
-    { "worst.png"  , _("Starke Rückgänge in dieser Bevölkerungsgruppe") }
+    { "good.png"   , _NOOP("Population growth in this population tier") },
+    { "neutral.png", _NOOP("No population growth in this population tier") },
+    { "bad.png"    , _NOOP("Slight population loss in this population tier") },
+    { "worst.png"  , _NOOP("Severe population loss in this population tier") }
 };
 
 
@@ -44,7 +44,7 @@ GuiSelectedHouseBuildingWidget::GuiSelectedHouseBuildingWidget(const Context* co
     inhabitants.setFontName("DroidSans-Bold.ttf");
     inhabitants.setFontSize(14);
     inhabitants.setAlign(RENDERTEXT_HALIGN_RIGHT | RENDERTEXT_VALIGN_MIDDLE);
-    inhabitants.setStatusBarText(_("Anzahl dieser Bevölkerungsgruppe"));
+    inhabitants.setStatusBarText(_("Population in this population tier"));
     addChildElement(&inhabitants);
 
     populationTier.setCoords(115, 85, 120, 14);
@@ -53,7 +53,7 @@ GuiSelectedHouseBuildingWidget::GuiSelectedHouseBuildingWidget(const Context* co
     populationTier.setFontName("DroidSans-Bold.ttf");
     populationTier.setFontSize(14);
     populationTier.setAlign(RENDERTEXT_HALIGN_LEFT | RENDERTEXT_VALIGN_MIDDLE);
-    populationTier.setStatusBarText(_("Bezeichnung für diese Bevölkerung"));
+    populationTier.setStatusBarText(_("Population tier's name"));
     addChildElement(&populationTier);
 
     // Nahrungsversorgung
@@ -82,7 +82,7 @@ void GuiSelectedHouseBuildingWidget::onSelectedMapBuildingChanged(const Building
     // Zufriedenheit
     unsigned char populationSatisfactionIndex = colonyPopulationTier.populationSatisfaction;
     populationSatisfaction.setGraphic(populationSatisfactionGraphics[populationSatisfactionIndex]);
-    populationSatisfaction.setStatusBarText(populationSatisfactionGui[populationSatisfactionIndex].statusBarText);
+    populationSatisfaction.setStatusBarText(_(populationSatisfactionGui[populationSatisfactionIndex].statusBarText));
 
     // Bevölkerungsdaten
     inhabitants.setText(toString(colonyPopulationTier.population));

@@ -12,7 +12,7 @@ GuiMapZoomWidget::GuiMapZoomWidget(const Context* const context) :
     const GraphicSet* graphicSet = context->graphicsMgr->getGraphicSet("map-zoom");
 
     buttonPlus.setCoords(0, 0, 45, 90);
-    buttonPlus.setStatusBarText(_("Ansicht vergrößern"));
+    buttonPlus.setStatusBarText(_("Zoom in"));
     buttonPlus.setGraphic(graphicSet->getByState("plus")->getGraphic());
     buttonPlus.setGraphicPressed(graphicSet->getByState("plus_pressed")->getGraphic());
     buttonPlus.setOnClickFunction([this, context]() {
@@ -20,7 +20,7 @@ GuiMapZoomWidget::GuiMapZoomWidget(const Context* const context) :
     });
 
     buttonMinus.setCoords(45, 0, 45, 90);
-    buttonMinus.setStatusBarText(_("Ansicht verkleinern"));
+    buttonMinus.setStatusBarText(_("Zoom out"));
     buttonMinus.setGraphic(graphicSet->getByState("minus")->getGraphic());
     buttonMinus.setGraphicPressed(graphicSet->getByState("minus_pressed")->getGraphic());
     buttonMinus.setOnClickFunction([this, context]() {

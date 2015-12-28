@@ -27,7 +27,6 @@ foreach(source_file IN LISTS
 endforeach()
 
 SET(I18N_LANGS
-    en
     de
 )
 SET(SOURCE_PO_DIR ${CMAKE_SOURCE_DIR}/src/po)

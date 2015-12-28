@@ -1,0 +1,516 @@
+# German translations for OpenIsles package.
+# Copyright (C) 2015 theHacker
+# This file is distributed under the same license as the OpenIsles package.
+# theHacker <openisles@openisles.org>, 2015.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: OpenIsles 0.1\n"
+"Report-Msgid-Bugs-To: http://www.openisles.org\n"
+"POT-Creation-Date: 2015-12-28 13:25+0100\n"
+"PO-Revision-Date: 2015-12-28 13:27+0100\n"
+"Last-Translator: theHacker <openisles@openisles.org>\n"
+"Language-Team: theHacker <openisles@openisles.org>\n"
+"Language: de\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"X-Poedit-Basepath: ..\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: src/cpp/config/ConfigMgr.cpp:15
+msgid "Loaded goods.\n"
+msgstr "Waren geladen.\n"
+
+#: src/cpp/config/ConfigMgr.cpp:18
+msgid "Loaded population tiers.\n"
+msgstr "Bevölkerungsgruppen geladen.\n"
+
+#: src/cpp/config/ConfigMgr.cpp:21
+msgid "Loaded carrier mapObjectTypes.\n"
+msgstr "Träger-Mapobjekt-Typen geladen.\n"
+
+#: src/cpp/config/ConfigMgr.cpp:24
+msgid "Loaded mapObjectTypes.\n"
+msgstr "Mapobjekt-Typen geladen.\n"
+
+#: src/cpp/config/ConfigMgr.cpp:27
+msgid "Loaded tiles.\n"
+msgstr "Kacheln geladen.\n"
+
+#: src/cpp/config/ConfigMgr.cpp:85 src/cpp/config/ConfigMgr.cpp:239
+#, c-format
+msgid "Illegal node '%s'.\n"
+msgstr "Ungültiger Knoten: '%s'.\n"
+
+#: src/cpp/config/ConfigMgr.cpp:105
+#, c-format
+msgid "Illegal value '%s' for structurePlacing.\n"
+msgstr "Ungültiger Wert '%s' für structurePlacing.\n"
+
+#: src/cpp/config/ConfigMgr.cpp:193
+#, c-format
+msgid "Illegal value '%s' for populationTier.\n"
+msgstr "Ungültiger Wert '%s' für populationTier.\n"
+
+#: src/cpp/config/ConfigMgr.cpp:217
+#, c-format
+msgid "Loaded mapObjectType '%s'.\n"
+msgstr "Mapobjekt-Typ '%s' geladen.\n"
+
+#: src/cpp/config/ConfigMgr.cpp:256
+#, c-format
+msgid "Loaded carrier mapObjectType '%s'.\n"
+msgstr "Träger-Mapobjekt-Typ '%s' geladen.\n"
+
+#: src/cpp/config/ConfigMgr.cpp:343
+#, c-format
+msgid "Illegal mapTileTypeName '%s'.\n"
+msgstr "Ungültiger mapTileTypeName '%s'.\n"
+
+#: src/cpp/config/ConfigMgr.cpp:362
+#, c-format
+msgid "Illegal bool value '%s'.\n"
+msgstr "Ungültiger boolescher Wert '%s'.\n"
+
+#: src/cpp/config/ConfigMgr.cpp:399
+msgid "Could not parse catchmentArea: Illegal char before first line.\n"
+msgstr ""
+"Konnte catchmentArea nicht parsen: Ungültiges Zeichen vor der ersten "
+"Zeile.\n"
+
+#: src/cpp/config/ConfigMgr.cpp:409
+msgid "Could not parse catchmentArea: Illegal space inside line.\n"
+msgstr ""
+"Konnte catchmentArea nicht parsen: Ungültiges Leerzeichen innerhalb einer "
+"Zeile.\n"
+
+#: src/cpp/config/ConfigMgr.cpp:425
+msgid "Could not parse catchmentArea: widths are not equal.\n"
+msgstr "Konnte catchmentArea nicht parsen: Breiten sind nicht gleich.\n"
+
+#: src/cpp/config/ConfigMgr.cpp:437
+msgid "Could not parse catchmentArea: Last line was not completly empty.\n"
+msgstr ""
+"Konnte catchmentArea nicht parsen: Letzte Zeile war nicht komplett leer.\n"
+
+#: src/cpp/config/ConfigMgr.cpp:491
+#, c-format
+msgid "Loaded populationTier '%s'.\n"
+msgstr "Bevölkerungsgruppe '%s' geladen.\n"
+
+#: src/cpp/game/Game.cpp:204
+msgid "Cannot have negative inhabitants.\n"
+msgstr "Negative Bewohnerzahl nicht möglich.\n"
+
+#: src/cpp/game/GameIO.cpp:93
+#, c-format
+msgid "Illegal player color '%s'.\n"
+msgstr "Ungültige Spielerfarbe: '%s'.\n"
+
+#: src/cpp/game/GameIO.cpp:145
+#, c-format
+msgid "Isle '%s' (%dx%d) does not match size on map (%dx%d).\n"
+msgstr ""
+"Insel '%s' (%dx%d) stimmt nicht mit der Größe auf der Karte überein (%dx"
+"%d).\n"
+
+#: src/cpp/game/GameIO.cpp:237
+#, c-format
+msgid "Warning: Did not find Good '%s' in savefile.\n"
+msgstr "Warnung: Gut '%s' nicht in der Spieldatei gefunden.\n"
+
+#: src/cpp/game/GameIO.cpp:252
+#, c-format
+msgid "Illegal mapObjectType '%s'.\n"
+msgstr "Ungültiger Mapobjekt-Typ '%s'.\n"
+
+#: src/cpp/game/Player.h:91
+#, c-format
+msgid "Illegal player color: %u\n"
+msgstr "Ungültige Spielerfarbe: %u\n"
+
+#: src/cpp/graphics/graphic/Animation.h:78
+msgid "Animation does not have only frame.\n"
+msgstr "Animation hat nicht nur ein Frame.\n"
+
+#: src/cpp/graphics/graphic/Animation.h:93
+msgid "Animation does not have this many frames.\n"
+msgstr "Animation hat nicht so viele Frames.\n"
+
+#: src/cpp/graphics/graphic/sdl/SDLGraphic.cpp:14
+#, c-format
+msgid "Could not load graphic '%s': %s\n"
+msgstr "Konnte Grafik '%s' nicht geladen: %s\n"
+
+#: src/cpp/graphics/graphic/sdl/SDLGraphic.cpp:23
+#, c-format
+msgid "Loaded graphic '%s': size = (%d, %d)\n"
+msgstr "Grafik '%s' geladen. Größe = (%d, %d)\n"
+
+#: src/cpp/graphics/graphic/sdl/SDLGraphic.cpp:33
+#, c-format
+msgid "Illegal srcRect: (%d, %d), %d, %d\n"
+msgstr "Ungültiges srcRect: (%d, %d), %d, %d\n"
+
+#: src/cpp/graphics/graphic/sdl/SDLGraphic.cpp:48
+#, c-format
+msgid "Could not create surface: %s\n"
+msgstr "Konnte Surface nicht erzeugen: %s\n"
+
+#: src/cpp/graphics/graphic/sdl/SDLGraphic.cpp:66
+#, c-format
+msgid "Extracted graphic: srcRect = (%d, %d), %d, %d\n"
+msgstr "Grafik extrahiert: srcRect = (%d, %d), %d, %d\n"
+
+#: src/cpp/graphics/graphic/sdl/SDLGraphic.cpp:73
+#, c-format
+msgid "Could not create texture: %s\n"
+msgstr "Konnte Textur nicht erzeugen: %s\n"
+
+#: src/cpp/graphics/graphic/sdl/SDLGraphic.cpp:180
+#, c-format
+msgid "Illegal bytesPerPixel: %d\n"
+msgstr "Ungültige bytesPerPixel: %d\n"
+
+#: src/cpp/graphics/mgr/AbstractGraphicsMgr.cpp:206
+#, c-format
+msgid "Could not divide the frames equally: '%s'\n"
+msgstr "Konnte die Frames nicht gleichmäßig aufteilen: '%s'\n"
+
+#: src/cpp/graphics/mgr/AbstractGraphicsMgr.cpp:213
+#, c-format
+msgid "Could not divide the views equally: '%s'\n"
+msgstr "Konnte die Ansichten nicht gleichmaßig aufteilen: '%s'\n"
+
+#: src/cpp/graphics/renderer/sdl/SDLRenderer.cpp:13
+#, c-format
+msgid "SDL could not be initialized: %s\n"
+msgstr "SDL konnte nicht initialisiert werden: %s\n"
+
+#: src/cpp/graphics/renderer/sdl/SDLRenderer.cpp:18
+msgid "SDL initialized.\n"
+msgstr "SDL initialisiert.\n"
+
+#: src/cpp/graphics/renderer/sdl/SDLRenderer.cpp:22
+#, c-format
+msgid "Could not load graphic 'data/img/appicon.png': %s\n"
+msgstr "Konnte Grafik 'data/img/appicon.png' nicht laden: %s\n"
+
+#: src/cpp/graphics/renderer/sdl/SDLRenderer.cpp:29
+#, c-format
+msgid "SDL could not create window: %s\n"
+msgstr "SDL konnte das Fenster nicht erstellen: %s\n"
+
+#: src/cpp/graphics/renderer/sdl/SDLRenderer.cpp:38
+#, c-format
+msgid "SDL could not create renderer: %s\n"
+msgstr "SDL konnte den Renderer nicht erzeugen: %s\n"
+
+#: src/cpp/graphics/renderer/sdl/SDLRenderer.cpp:47
+#, c-format
+msgid "Could not init SDL-image: %s\n"
+msgstr "Konnte SDL-image nicht initialisieren: %s\n"
+
+#: src/cpp/graphics/renderer/sdl/SDLRenderer.cpp:53
+#, c-format
+msgid "Could not init SDL-TTF: %s\n"
+msgstr ""
+"Konnte SDL-TTF nicht initialisieren: %s\n"
+"\n"
+
+#: src/cpp/gui/GuiMgr.cpp:114
+msgid "Switch to building mode"
+msgstr "Baumodus einschalten"
+
+#: src/cpp/gui/GuiMgr.cpp:120
+msgid "Switch to combat mode"
+msgstr "Kampfmodus einschalten"
+
+#: src/cpp/gui/GuiMgr.cpp:126
+msgid "Switch to info mode"
+msgstr "Infomodus einschalten"
+
+#: src/cpp/gui/GuiMgr.cpp:132
+#: src/cpp/gui/panel-widgets/GuiOptionsMenuWidget.cpp:21
+msgid "Options"
+msgstr "Einstellungen"
+
+#: src/cpp/gui/GuiMgr.cpp:225
+#, c-format
+msgid "Identifier %d is already registered.\n"
+msgstr "Bezeichner %d ist bereits registriert.\n"
+
+#: src/cpp/gui/GuiMgr.cpp:237
+#, c-format
+msgid "Identifier %d is not registered.\n"
+msgstr "Bezeichner %d ist nicht registriert.\n"
+
+#: src/cpp/gui/components/GuiAddBuildingWidget.cpp:40
+msgid "Costs for this structure"
+msgstr "Errichtungskosten für dieses Bauwerk"
+
+#: src/cpp/gui/components/GuiAddBuildingWidget.cpp:46
+msgid "Operating costs for this structure"
+msgstr "Betriebskosten für dieses Bauwerk"
+
+#: src/cpp/gui/components/GuiAddBuildingWidget.cpp:58
+msgid "Tools requirement for this structure"
+msgstr "Werkzeugbedarf für dieses Bauwerk"
+
+#: src/cpp/gui/components/GuiAddBuildingWidget.cpp:64
+msgid "Wood requirement for this structure"
+msgstr "Holzbedarf für dieses Bauwerk"
+
+#: src/cpp/gui/components/GuiAddBuildingWidget.cpp:70
+msgid "Bricks requirement for this structure"
+msgstr "Ziegelbedarf für dieses Bauwerk"
+
+#: src/cpp/gui/components/GuiFoodSupplyElement.cpp:17
+msgid "Food"
+msgstr "Nahrung"
+
+#: src/cpp/gui/components/GuiFoodSupplyElement.cpp:23
+msgid "Food supply (State equal over all tiers)"
+msgstr "Nahrungsversorgung (Status für alle Gruppen gleich)"
+
+#: src/cpp/gui/components/GuiMapRotateWidget.cpp:14
+msgid "Rotate map counterclockwise"
+msgstr "Karte linksherum drehen"
+
+#: src/cpp/gui/components/GuiMapRotateWidget.cpp:21
+msgid "Rotate map clockwise"
+msgstr "Karte rechtsherum drehen"
+
+#: src/cpp/gui/components/GuiMapZoomWidget.cpp:15
+msgid "Zoom in"
+msgstr "Ansicht vergrößern"
+
+#: src/cpp/gui/components/GuiMapZoomWidget.cpp:23
+msgid "Zoom out"
+msgstr "Ansicht verkleinern"
+
+#: src/cpp/gui/components/map/GuiMap.cpp:626
+msgid "TODO - Island's richness of soil"
+msgstr "TODO - Fruchtbarkeit der Insel"
+
+#: src/cpp/gui/panel-widgets/GuiBuildMenuWidget.cpp:25
+msgid "Craftsmanship"
+msgstr "Handwerksbetriebe"
+
+#: src/cpp/gui/panel-widgets/GuiBuildMenuWidget.cpp:47
+msgid "Farms & plantations"
+msgstr "Farmen & Plantagen"
+
+#: src/cpp/gui/panel-widgets/GuiBuildMenuWidget.cpp:69
+msgid "Port facilities"
+msgstr "Hafenanlagen"
+
+#: src/cpp/gui/panel-widgets/GuiBuildMenuWidget.cpp:91
+msgid "Public buildings"
+msgstr "Öffentliche Gebäude"
+
+#: src/cpp/gui/panel-widgets/GuiDummyWidget.cpp:15
+#: src/cpp/gui/panel-widgets/GuiDummyWidget.cpp:29
+msgid "Dummy widget"
+msgstr "Dummy-Widget"
+
+#: src/cpp/gui/panel-widgets/GuiOptionsMenuWidget.cpp:11
+msgid "Turn music on"
+msgstr "Musik einschalten"
+
+#: src/cpp/gui/panel-widgets/GuiOptionsMenuWidget.cpp:12
+msgid "Turn music off"
+msgstr "Musik ausschalten"
+
+#: src/cpp/gui/panel-widgets/GuiPlayerStatusWidget.cpp:15
+msgid "Player's status"
+msgstr "Spielerstatus"
+
+#: src/cpp/gui/panel-widgets/GuiPlayerStatusWidget.cpp:45
+msgid "Population:"
+msgstr "Einwohner:"
+
+#: src/cpp/gui/panel-widgets/GuiPlayerStatusWidget.cpp:55
+msgid "Tax incomings:"
+msgstr "Steuererträge:"
+
+#: src/cpp/gui/panel-widgets/GuiPlayerStatusWidget.cpp:65
+#: src/cpp/gui/panel-widgets/GuiSelectedProductionBuildingWidget.cpp:47
+#: src/cpp/gui/panel-widgets/GuiSelectedPublicBuildingWidget.cpp:31
+msgid "Operating costs:"
+msgstr "Betriebskosten:"
+
+#: src/cpp/gui/panel-widgets/GuiPlayerStatusWidget.cpp:75
+msgid "Balance:"
+msgstr "Bilanz:"
+
+#: src/cpp/gui/panel-widgets/GuiSelectedHouseBuildingWidget.cpp:17
+msgid "Population growth in this population tier"
+msgstr "Zuwächse in dieser Bevölkerungsgruppe"
+
+#: src/cpp/gui/panel-widgets/GuiSelectedHouseBuildingWidget.cpp:18
+msgid "No population growth in this population tier"
+msgstr "Keine Zuwächse in dieser Bevölkerungsgruppe"
+
+#: src/cpp/gui/panel-widgets/GuiSelectedHouseBuildingWidget.cpp:19
+msgid "Slight population loss in this population tier"
+msgstr "Leichte Rückgänge in dieser Bevölkerungsgruppe"
+
+#: src/cpp/gui/panel-widgets/GuiSelectedHouseBuildingWidget.cpp:20
+msgid "Severe population loss in this population tier"
+msgstr "Starke Rückgänge in dieser Bevölkerungsgruppe"
+
+#: src/cpp/gui/panel-widgets/GuiSelectedHouseBuildingWidget.cpp:47
+msgid "Population in this population tier"
+msgstr "Anzahl dieser Bevölkerungsgruppe"
+
+#: src/cpp/gui/panel-widgets/GuiSelectedHouseBuildingWidget.cpp:56
+msgid "Population tier's name"
+msgstr "Bezeichnung für diese Bevölkerung"
+
+#: src/cpp/gui/panel-widgets/GuiSelectedProductionBuildingWidget.cpp:39
+msgid "Goods in this building ready for pickup"
+msgstr "Abholfertige Waren in diesem Gebäude"
+
+#: src/cpp/gui/panel-widgets/GuiSelectedProductionBuildingWidget.cpp:121
+#, c-format
+msgid "Supply of %s (enough for another %.1ft of %s)"
+msgstr "%svorrat (reicht für weitere %.1ft %s)"
+
+#: src/cpp/main.cpp:104
+msgid "FPS:"
+msgstr "FPS:"
+
+#: src/cpp/main.cpp:107
+msgid "current:"
+msgstr "Aktuell:"
+
+#: src/cpp/main.cpp:112
+msgid "average:"
+msgstr "Durchs.:"
+
+#: src/cpp/main.cpp:144
+#, c-format
+msgid "Usage: %s -m mapFileToLoad [-b benchmarkFrames]\n"
+msgstr "Aufruf: %s -m zuLadendeMapDatei [-b anzahlFramesFürBenchmark]\n"
+
+#: src/cpp/main.cpp:150
+msgid "Error: No map file specified.\n"
+msgstr "Fehler: Keine Map-Datei angegeben.\n"
+
+#: src/cpp/main.cpp:168
+#, c-format
+msgid "Using locale '%s'.\n"
+msgstr "Benutze Locale '%s'.\n"
+
+#: src/cpp/main.cpp:185
+msgid "Could not register events.\n"
+msgstr "Konnte Events nicht registrieren.\n"
+
+#: src/cpp/main.cpp:296
+#, c-format
+msgid ""
+"PerfCounters: events avg %.3f, current = %.1f; gameUpdate avg %.3f, current "
+"= %.1f; rendering avg %.3f, current = %.1f"
+msgstr ""
+"PerfCounters: events avg %.3f, current = %.1f; gameUpdate avg %.3f, current "
+"= %.1f; rendering avg %.3f, current = %.1f"
+
+#: src/cpp/main.cpp:308
+#, c-format
+msgid "Screen: mapCentered = (%d, %d), zoom = %d, view = %d"
+msgstr "Screen: mapCentered = (%d, %d), zoom = %d, view = %d"
+
+#: src/cpp/main.cpp:313
+#, c-format
+msgid "Game ticks: %lu"
+msgstr "Game-Ticks: %lu"
+
+#: src/cpp/main.cpp:317
+#, c-format
+msgid "mouse = (%d, %d), screen = (%d, %d), mapElevated = (%d, %d)"
+msgstr "mouse = (%d, %d), screen = (%d, %d), mapElevated = (%d, %d)"
+
+#: src/cpp/main.cpp:337
+#, c-format
+msgid "selectedMapObject(Fixed) on mapCoords (%d, %d), size = (%d, %d)"
+msgstr "selectedMapObject(Fixed) auf mapCoords (%d, %d), size = (%d, %d)"
+
+#: src/cpp/main.cpp:347
+#, c-format
+msgid "selectedMapObject(Moving) on mapCoords (%f, %f), size = (%d, %d)"
+msgstr "selectedMapObject(Moving) auf mapCoords (%f, %f), size = (%d, %d)"
+
+#: src/cpp/main.cpp:354
+#, c-format
+msgid "selectedMapObject(UNKNOWN!?) size = (%d, %d)"
+msgstr "selectedMapObject(UNBEKANNT!?) size = (%d, %d)"
+
+#: src/cpp/main.cpp:368
+msgid "catchmentAreaIterator set"
+msgstr "catchmentAreaIterator gesetzt"
+
+#: src/cpp/main.cpp:370
+msgid "catchmentAreaIterator nullptr"
+msgstr "catchmentAreaIterator nullptr"
+
+#: src/cpp/main.cpp:374
+#, c-format
+msgid ""
+"debugAStar: source = (%d, %d), destination = (%d, %d), %s, useStreetOnly = "
+"%s, rightAnglesOnly = %s"
+msgstr ""
+"debugAStar: source = (%d, %d), destination = (%d, %d), %s, useStreetOnly = "
+"%s, rightAnglesOnly = %s"
+
+#: src/cpp/main.cpp:381 src/cpp/main.cpp:382
+msgid "false"
+msgstr "false"
+
+#: src/cpp/main.cpp:381 src/cpp/main.cpp:382
+msgid "true"
+msgstr "true"
+
+#: src/cpp/map/Direction.h:143
+#, c-format
+msgid "Illegal dirName '%s'.\n"
+msgstr "Ungültiger dirName: '%s'.\n"
+
+#: src/cpp/map/Isle.cpp:26
+#, c-format
+msgid "Data is not csv encoded. Encoding = %s\n"
+msgstr "Daten sind nicht CSV-kodiert. Encoding = %s\n"
+
+#: src/cpp/map/Isle.h:43
+#, c-format
+msgid "mapCoords (%d, %d) out of bounds.\n"
+msgstr "mapCoords (%d, %d) außerhalb des Begrenzung.\n"
+
+#: src/cpp/map/Map.cpp:32
+msgid "Map has to be quadratically for now. ;-p\n"
+msgstr "Die Karte muss aktuell noch quadratisch sein. ;-p\n"
+
+#: src/cpp/sound/sdl/SDLSoundMgr.cpp:9
+#, c-format
+msgid "Could not init SDL-mixer: %s\n"
+msgstr ""
+"Konnte SDL-mixer nicht initialisieren: %s\n"
+"\n"
+
+#: src/cpp/sound/sdl/SDLSoundMgr.cpp:16
+#, c-format
+msgid "Could not open audio device: %s\n"
+msgstr "Konnte Audio-Gerät nicht öffnen: %s\n"
+
+#: src/cpp/sound/sdl/SDLSoundMgr.cpp:39
+#, c-format
+msgid "Could not load music '%s': %s\n"
+msgstr "Konnte Musik '%s' nicht laden: %s\n"
+
+#: src/cpp/sound/sdl/SDLSoundMgr.cpp:43
+#, c-format
+msgid "Loaded music '%s'.\n"
+msgstr "Musik '%s' geladen.\n"

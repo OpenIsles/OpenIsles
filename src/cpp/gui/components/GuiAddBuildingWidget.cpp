@@ -37,13 +37,13 @@ GuiAddBuildingWidget::GuiAddBuildingWidget(const Context* const context) :
 
     coinsElement.setCoords(elementsX, elementsY1, 85, elementsHeight);
     coinsElement.setGraphic(context->graphicsMgr->getGraphicSet("coin/coin")->getStatic()->getGraphic());
-    coinsElement.setStatusBarText(_("Errichtungskosten für dieses Bauwerk"));
+    coinsElement.setStatusBarText(_("Costs for this structure"));
     addChildElement(&coinsElement);
 
     operatingCostsElement.setCoords(elementsX + 2*elementsXColumnWidth, elementsY1, 85, elementsHeight);
     operatingCostsElement.setGraphic(
         context->graphicsMgr->getGraphicSet("coin/coin-red-arrow")->getStatic()->getGraphic());
-    operatingCostsElement.setStatusBarText(_("Betriebskosten für dieses Bauwerk"));
+    operatingCostsElement.setStatusBarText(_("Operating costs for this structure"));
     addChildElement(&operatingCostsElement);
 
     // Baukosten: Baumaterial
@@ -55,19 +55,19 @@ GuiAddBuildingWidget::GuiAddBuildingWidget(const Context* const context) :
     graphicSetName = context->graphicsMgr->getGraphicSetNameForGoodIcons(good, false);
     toolsElement.setCoords(elementsX, elementsY2, 50, elementsHeight);
     toolsElement.setGraphic(context->graphicsMgr->getGraphicSet(graphicSetName)->getStatic()->getGraphic());
-    toolsElement.setStatusBarText(_("Werkzeugbedarf für dieses Bauwerk"));
+    toolsElement.setStatusBarText(_("Tools requirement for this structure"));
 
     good = context->configMgr->getGood("wood");
     graphicSetName = context->graphicsMgr->getGraphicSetNameForGoodIcons(good, false);
     woodElement.setCoords(elementsX + elementsXColumnWidth, elementsY2, 50, elementsHeight);
     woodElement.setGraphic(context->graphicsMgr->getGraphicSet(graphicSetName)->getStatic()->getGraphic());
-    woodElement.setStatusBarText(_("Holzbedarf für dieses Bauwerk"));
+    woodElement.setStatusBarText(_("Wood requirement for this structure"));
 
     good = context->configMgr->getGood("bricks");
     graphicSetName = context->graphicsMgr->getGraphicSetNameForGoodIcons(good, false);
     bricksElement.setCoords(elementsX + 2*elementsXColumnWidth, elementsY2, 50, elementsHeight);
     bricksElement.setGraphic(context->graphicsMgr->getGraphicSet(graphicSetName)->getStatic()->getGraphic());
-    bricksElement.setStatusBarText(_("Ziegelbedarf für dieses Bauwerk"));
+    bricksElement.setStatusBarText(_("Bricks requirement for this structure"));
 
     addChildElement(&toolsElement);
     addChildElement(&woodElement);

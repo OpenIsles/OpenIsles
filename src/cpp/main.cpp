@@ -182,7 +182,7 @@ int main(int argc, char** argv) {
 
     context.userEventBase = SDL_RegisterEvents(USER_EVENT_MAXEVENT + 1);
     if (context.userEventBase == (uint32_t) -1) {
-        std::fputs(_("Could not register events\n"), stderr);
+        std::fputs(_("Could not register events.\n"), stderr);
         throw std::runtime_error("Could not register events");
     }
 
@@ -310,7 +310,7 @@ int main(int argc, char** argv) {
         );
         debugOutput[1] = buffer;
 
-        std::snprintf(buffer, bufferSize, _("Game-Ticks: %lu"), game->getTicks());
+        std::snprintf(buffer, bufferSize, _("Game ticks: %lu"), game->getTicks());
         debugOutput[2] = buffer;
 
         std::snprintf(buffer, bufferSize,

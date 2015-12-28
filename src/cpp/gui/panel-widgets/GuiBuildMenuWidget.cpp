@@ -22,7 +22,7 @@ GuiBuildMenuWidget::GuiBuildMenuWidget(const Context* const context) : GuiPanelW
     } buildingGroups[4] = {
         {
             BuildingGroup::CRAFTSMAN,
-            _("Handwerksbetriebe"),
+            _("Craftsmanship"),
             "add-building-group/craftsman",
             "add-building-group/craftsman-pressed", {
                 nullptr,
@@ -44,7 +44,7 @@ GuiBuildMenuWidget::GuiBuildMenuWidget(const Context* const context) : GuiPanelW
             }
         }, {
             BuildingGroup::FARM,
-            _("Farmen & Plantagen"),
+            _("Farms & plantations"),
             "add-building-group/farm",
             "add-building-group/farm-pressed", {
                 nullptr,
@@ -66,7 +66,7 @@ GuiBuildMenuWidget::GuiBuildMenuWidget(const Context* const context) : GuiPanelW
             }
         }, {
             BuildingGroup::PORT,
-            _("Hafenanlagen"),
+            _("Port facilities"),
             "add-building-group/port",
             "add-building-group/port-pressed", {
                 nullptr,
@@ -88,7 +88,7 @@ GuiBuildMenuWidget::GuiBuildMenuWidget(const Context* const context) : GuiPanelW
             }
         }, {
             BuildingGroup::PUBLIC,
-            _("Öffentliche Gebäude"),
+            _("Public buildings"),
             "add-building-group/public",
             "add-building-group/public-pressed", {
                 context->configMgr->getMapObjectType("square1"),

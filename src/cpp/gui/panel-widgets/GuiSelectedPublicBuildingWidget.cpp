@@ -28,7 +28,7 @@ GuiSelectedPublicBuildingWidget::GuiSelectedPublicBuildingWidget(const Context* 
     int y = 143;
 
     operatingCostsLabel.setCoords(10, y, 150, 15);
-    operatingCostsLabel.setText(_("Betriebskosten:"));
+    operatingCostsLabel.setText(_("Operating costs:"));
     operatingCostsLabel.setColor(&colorWhite);
     operatingCostsLabel.setShadowColor(&colorBlack);
     operatingCostsLabel.setFontName("DroidSans-Bold.ttf");

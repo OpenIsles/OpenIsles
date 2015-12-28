@@ -14,13 +14,13 @@ GuiFoodSupplyElement::GuiFoodSupplyElement(const Context* const context) : GuiSt
     width = 210;
     height = 20;
 
-    setText(_("Nahrung"));
+    setText(_("Food"));
     setColor(&colorLightBrown);
     setShadowColor(&colorBlack);
     setFontName("DroidSans-Bold.ttf");
     setFontSize(14);
     setAlign(RENDERTEXT_HALIGN_LEFT | RENDERTEXT_VALIGN_MIDDLE);
-    setStatusBarText(_("Nahrungsversorgung (Status für alle Gruppen gleich)"));
+    setStatusBarText(_("Food supply (State equal over all tiers)"));
 }
 
 GuiFoodSupplyElement::~GuiFoodSupplyElement() {

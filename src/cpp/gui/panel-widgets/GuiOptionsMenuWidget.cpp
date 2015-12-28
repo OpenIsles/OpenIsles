@@ -8,17 +8,16 @@
 #include "sound/sdl/SDLSoundMgr.h"
 
 
-static const char* statusBarTextTurnMusicOn = _("Musik einschalten");
-static const char* statusBarTextTurnMusicOff = _("Musik ausschalten");
-
-
 GuiOptionsMenuWidget::GuiOptionsMenuWidget(const Context* const context) : GuiPanelWidget(context) {
     // TODO höchstwahrscheinlich sind die GUI-Komponenten lost-memory, da sie am Ende nicht zerstört werden
     // Idee untersuchen, dass ~GuiMgr() von jeder Komponente rekursiv die Kinder beseitigt.
 
+    const char* statusBarTextTurnMusicOn = _("Turn music on");
+    const char* statusBarTextTurnMusicOff = _("Turn music off");
+
     GuiPanelHeader* panelHeader = new GuiPanelHeader(context);
     panelHeader->setPosition(0, 0);
-    panelHeader->setText(_("Einstellungen"));
+    panelHeader->setText(_("Options"));
     panelHeader->setIconGraphic(nullptr);
     addChildElement(panelHeader);
 
@@ -27,7 +26,7 @@ GuiOptionsMenuWidget::GuiOptionsMenuWidget(const Context* const context) : GuiPa
     musicPushButton->setGraphicPressed(context->graphicsMgr->getGraphicSet("button-music-pressed")->getStatic()->getGraphic());
     musicPushButton->setCoords(7, 345, 64, 64);
     musicPushButton->setStatusBarText(statusBarTextTurnMusicOn);
-    musicPushButton->setOnClickFunction([musicPushButton, context]() {
+    musicPushButton->setOnClickFunction([musicPushButton, context, statusBarTextTurnMusicOff, statusBarTextTurnMusicOn]() {
         bool musicEnabled = musicPushButton->isActive();
 
         if (musicEnabled) {

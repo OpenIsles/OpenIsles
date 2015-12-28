@@ -36,7 +36,7 @@ GuiSelectedProductionBuildingWidget::GuiSelectedProductionBuildingWidget(const C
     goodsSlotInput->setDisplayValue(true);
     goodsSlotInput2->setDisplayValue(true);
     goodsSlotOutput->setDisplayValue(true);
-    goodsSlotOutput->setStatusBarText(_("Abholfertige Waren in diesem Gebäude"));
+    goodsSlotOutput->setStatusBarText(_("Goods in this building ready for pickup"));
 
     // TODO Auslastung
 
@@ -44,7 +44,7 @@ GuiSelectedProductionBuildingWidget::GuiSelectedProductionBuildingWidget(const C
     int y = 143;
 
     operatingCostsLabel.setCoords(10, y, 150, 15);
-    operatingCostsLabel.setText(_("Betriebskosten:"));
+    operatingCostsLabel.setText(_("Operating costs:"));
     operatingCostsLabel.setColor(&colorWhite);
     operatingCostsLabel.setShadowColor(&colorBlack);
     operatingCostsLabel.setFontName("DroidSans-Bold.ttf");
@@ -118,7 +118,7 @@ void GuiSelectedProductionBuildingWidget::updateInputSlotStatusBarText(
     double inputEnoughForXOutputGoods = inputInventory / inputAmountForProduction;
 
     char buffer[128];
-    std::snprintf(buffer, 128, _("%svorrat (reicht für weitere %.1ft %s)"),
+    std::snprintf(buffer, 128, _("Supply of %s (enough for another %.1ft of %s)"),
                   inputLabel.c_str(), inputEnoughForXOutputGoods, outputLabel.c_str());
 
     goodsSlotElement->setStatusBarText(buffer);

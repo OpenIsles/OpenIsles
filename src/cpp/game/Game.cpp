@@ -201,7 +201,7 @@ MapObject* Game::instantiateNewMapObject(const MapObjectType* mapObjectType) con
 
 void Game::addInhabitantsToBuilding(Building* building, char amount) {
     if ((int) building->inhabitants + amount < 0) {
-        std::fputs(_("Cannot have negative inhabitants\n"), stderr);
+        std::fputs(_("Cannot have negative inhabitants.\n"), stderr);
         throw std::runtime_error("Cannot have negative inhabitants");
     }
 

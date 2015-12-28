@@ -12,7 +12,7 @@ GuiPlayerStatusWidget::GuiPlayerStatusWidget(const Context* const context) :
     GuiPanelWidget(context), panelHeader(context) {
 
     panelHeader.setPosition(0, 0);
-    panelHeader.setText(_("Spielerstatus"));
+    panelHeader.setText(_("Player's status"));
     addChildElement(&panelHeader);
 }
 
@@ -42,7 +42,7 @@ void GuiPlayerStatusWidget::renderElement(IRenderer* renderer) {
 
     // Einwohner
     int y = windowY + 60;
-    context->fontMgr->renderText(renderer, _("Einwohner:"), xLeft, y,
+    context->fontMgr->renderText(renderer, _("Population:"), xLeft, y,
                                  &colorWhite, &colorBlack, "DroidSans.ttf", 17, flagsLeft);
 
     context->fontMgr->renderText(renderer, toString(playerStatus.population), xRight, y,
@@ -52,7 +52,7 @@ void GuiPlayerStatusWidget::renderElement(IRenderer* renderer) {
 
     // Steuererträge
     y += 34;
-    context->fontMgr->renderText(renderer, _("Steuererträge:"), xLeft, y,
+    context->fontMgr->renderText(renderer, _("Tax incomings:"), xLeft, y,
                                  &colorWhite, &colorBlack, "DroidSans.ttf", 17, flagsLeft);
 
     context->fontMgr->renderText(renderer, toString(playerStatus.taxesIncome), xRight, y,
@@ -62,7 +62,7 @@ void GuiPlayerStatusWidget::renderElement(IRenderer* renderer) {
 
     // Betriebskosten
     y += 22;
-    context->fontMgr->renderText(renderer, _("Betriebskosten:"), xLeft, y,
+    context->fontMgr->renderText(renderer, _("Operating costs:"), xLeft, y,
                                  &colorWhite, &colorBlack, "DroidSans.ttf", 17, flagsLeft);
 
     context->fontMgr->renderText(renderer, toString(playerStatus.operatingCosts), xRight, y,
@@ -72,7 +72,7 @@ void GuiPlayerStatusWidget::renderElement(IRenderer* renderer) {
 
     // Bilanz
     y += 34;
-    context->fontMgr->renderText(renderer, _("Bilanz:"), xLeft, y,
+    context->fontMgr->renderText(renderer, _("Balance:"), xLeft, y,
                                  &colorWhite, &colorBlack, "DroidSans.ttf", 17, flagsLeft);
 
     context->fontMgr->renderText(renderer, toString(playerStatus.balance), xRight, y,

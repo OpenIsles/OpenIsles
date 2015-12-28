@@ -140,7 +140,7 @@ public:
         } else if (dirName == "southwest") {
             return Direction::SOUTHWEST;
         } else {
-            std::fprintf(stderr, _("Illegal dirName '%s'\n"), dirName.c_str());
+            std::fprintf(stderr, _("Illegal dirName '%s'.\n"), dirName.c_str());
             throw std::runtime_error("Illegal dirName");
         }
     }
