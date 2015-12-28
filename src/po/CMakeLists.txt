@@ -6,16 +6,17 @@
 find_package(Gettext REQUIRED)
 
 # xgettext finden
-find_program(XGETTEXT_EXECUTABLE NAMES xgettext)
-if(NOT XGETTEXT_EXECUTABLE)
+find_program(GETTEXT_XGETTEXT_EXECUTABLE NAMES xgettext)
+if(NOT GETTEXT_XGETTEXT_EXECUTABLE)
     message(FATAL_ERROR "xgettext was not found. It is needed to generate the .pot file.")
-endif(NOT XGETTEXT_EXECUTABLE)
+endif(NOT GETTEXT_XGETTEXT_EXECUTABLE)
 
 # msginit finden
-find_program(MSGINIT_EXECUTABLE NAMES msginit)
-if(NOT MSGINIT_EXECUTABLE)
-    message(FATAL_ERROR "msginit was not found. It is needed to generate the .po files.")
-endif(NOT MSGINIT_EXECUTABLE)
+find_program(GETTEXT_MSGINIT_EXECUTABLE NAMES msginit)
+if(NOT GETTEXT_MSGINIT_EXECUTABLE)
+    message(INFO "msginit was not found. It is needed to generate new .po files. "
+                 "We don't use it in the Makefile but you will need it to create new languages.")
+endif(NOT GETTEXT_MSGINIT_EXECUTABLE)
 
 # Quelldateien zusammensuchen
 foreach(source_file IN LISTS
@@ -35,9 +36,9 @@ SET(I18N_LANGS
 SET(SOURCE_PO_DIR ${CMAKE_SOURCE_DIR}/src/po)
 
 # .pot-Datei erzeugen
-add_custom_command(OUTPUT ${SOURCE_PO_DIR}/OpenIsles.pot
+add_custom_target(update-pot-file
     COMMAND
-        ${XGETTEXT_EXECUTABLE}
+        ${GETTEXT_XGETTEXT_EXECUTABLE}
         --directory=${CMAKE_SOURCE_DIR}
         --c++
         --from-code=UTF-8
@@ -53,20 +54,31 @@ add_custom_command(OUTPUT ${SOURCE_PO_DIR}/OpenIsles.pot
     VERBATIM
 )
 
-# .po-Dateien anlegen, falls noch nicht vorhanden
 foreach(lang IN LISTS I18N_LANGS)
-    add_custom_command(OUTPUT ${SOURCE_PO_DIR}/${lang}.po
+    set(PO_FILE ${SOURCE_PO_DIR}/${lang}.po)
+
+    # .po-Datei mit der .pot-Datei mergen, um dem geänderten Code zu entsprechen
+    add_custom_command(OUTPUT ${PO_FILE}
         COMMAND
-            ${MSGINIT_EXECUTABLE}
-            -i ${SOURCE_PO_DIR}/OpenIsles.pot
-            -o ${SOURCE_PO_DIR}/${lang}.po
-            -l ${lang}
-            --no-translator
+            ${GETTEXT_MSGMERGE_EXECUTABLE}
+            --update
+            --backup=off
+            --add-location=full
+            --sort-by-file
+            ${PO_FILE}
+            ${SOURCE_PO_DIR}/OpenIsles.pot
         DEPENDS
+            update-pot-file
             ${SOURCE_PO_DIR}/OpenIsles.pot
         VERBATIM
     )
+
+    SET(GENERATED_PO_FILES ${GENERATED_PO_FILES} ${PO_FILE})
 endforeach(lang IN LISTS I18N_LANGS)
+
+add_custom_target(update-po-files
+    DEPENDS ${GENERATED_PO_FILES}
+)
 
 # .mo-Dateien kompilieren
 foreach(lang IN LISTS I18N_LANGS)
@@ -87,6 +99,6 @@ foreach(lang IN LISTS I18N_LANGS)
     SET(GENERATED_MO_FILES ${GENERATED_MO_FILES} ${MO_FILE})
 endforeach(lang IN LISTS I18N_LANGS)
 
-add_custom_target(update-i18n-files
+add_custom_target(update-mo-files
     DEPENDS ${GENERATED_MO_FILES}
 )
