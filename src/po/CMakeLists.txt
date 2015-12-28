@@ -46,6 +46,7 @@ add_custom_target(update-pot-file
         --copyright-holder=theHacker
         -o ${SOURCE_PO_DIR}/OpenIsles.pot
         -k_
+        -k_NOOP
         ${I18N_SOURCE_FILES}
     VERBATIM
 )

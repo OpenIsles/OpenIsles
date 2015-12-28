@@ -12,19 +12,19 @@
 
 ConfigMgr::ConfigMgr() {
     loadGoods();
-    std::puts(_("Loaded goods.\n"));
+    std::puts(_("Loaded goods."));
 
     loadPopulationTiers();
-    std::puts(_("Loaded population tiers.\n"));
+    std::puts(_("Loaded population tiers."));
 
     loadCarrierMapObjectTypes();
-    std::puts(_("Loaded carrier mapObjectTypes.\n"));
+    std::puts(_("Loaded carrier mapObjectTypes."));
 
     loadMapObjectTypes();
-    std::puts(_("Loaded mapObjectTypes.\n"));
+    std::puts(_("Loaded mapObjectTypes."));
 
     loadTilesConfig();
-    std::puts(_("Loaded tiles.\n"));
+    std::puts(_("Loaded tiles."));
 }
 
 ConfigMgr::~ConfigMgr() {

@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenIsles 0.1\n"
 "Report-Msgid-Bugs-To: http://www.openisles.org\n"
-"POT-Creation-Date: 2015-12-28 13:25+0100\n"
-"PO-Revision-Date: 2015-12-28 13:27+0100\n"
+"POT-Creation-Date: 2015-12-28 18:03+0100\n"
+"PO-Revision-Date: 2015-12-28 14:03+0100\n"
 "Last-Translator: theHacker <openisles@openisles.org>\n"
 "Language-Team: theHacker <openisles@openisles.org>\n"
 "Language: de\n"
@@ -21,24 +21,24 @@ msgstr ""
 "X-Poedit-SearchPath-0: .\n"
 
 #: src/cpp/config/ConfigMgr.cpp:15
-msgid "Loaded goods.\n"
-msgstr "Waren geladen.\n"
+msgid "Loaded goods."
+msgstr "Waren geladen."
 
 #: src/cpp/config/ConfigMgr.cpp:18
-msgid "Loaded population tiers.\n"
-msgstr "Bevölkerungsgruppen geladen.\n"
+msgid "Loaded population tiers."
+msgstr "Bevölkerungsgruppen geladen."
 
 #: src/cpp/config/ConfigMgr.cpp:21
-msgid "Loaded carrier mapObjectTypes.\n"
-msgstr "Träger-Mapobjekt-Typen geladen.\n"
+msgid "Loaded carrier mapObjectTypes."
+msgstr "Träger-Mapobjekt-Typen geladen."
 
 #: src/cpp/config/ConfigMgr.cpp:24
-msgid "Loaded mapObjectTypes.\n"
-msgstr "Mapobjekt-Typen geladen.\n"
+msgid "Loaded mapObjectTypes."
+msgstr "Mapobjekt-Typen geladen."
 
 #: src/cpp/config/ConfigMgr.cpp:27
-msgid "Loaded tiles.\n"
-msgstr "Kacheln geladen.\n"
+msgid "Loaded tiles."
+msgstr "Kacheln geladen."
 
 #: src/cpp/config/ConfigMgr.cpp:85 src/cpp/config/ConfigMgr.cpp:239
 #, c-format
@@ -191,8 +191,8 @@ msgid "SDL could not be initialized: %s\n"
 msgstr "SDL konnte nicht initialisiert werden: %s\n"
 
 #: src/cpp/graphics/renderer/sdl/SDLRenderer.cpp:18
-msgid "SDL initialized.\n"
-msgstr "SDL initialisiert.\n"
+msgid "SDL initialized."
+msgstr "SDL initialisiert."
 
 #: src/cpp/graphics/renderer/sdl/SDLRenderer.cpp:22
 #, c-format
@@ -234,7 +234,7 @@ msgid "Switch to info mode"
 msgstr "Infomodus einschalten"
 
 #: src/cpp/gui/GuiMgr.cpp:132
-#: src/cpp/gui/panel-widgets/GuiOptionsMenuWidget.cpp:21
+#: src/cpp/gui/panel-widgets/GuiOptionsMenuWidget.cpp:20
 msgid "Options"
 msgstr "Einstellungen"
 
@@ -317,11 +317,11 @@ msgstr "Öffentliche Gebäude"
 msgid "Dummy widget"
 msgstr "Dummy-Widget"
 
-#: src/cpp/gui/panel-widgets/GuiOptionsMenuWidget.cpp:11
+#: src/cpp/gui/panel-widgets/GuiOptionsMenuWidget.cpp:15
 msgid "Turn music on"
 msgstr "Musik einschalten"
 
-#: src/cpp/gui/panel-widgets/GuiOptionsMenuWidget.cpp:12
+#: src/cpp/gui/panel-widgets/GuiOptionsMenuWidget.cpp:16
 msgid "Turn music off"
 msgstr "Musik ausschalten"
 
@@ -401,7 +401,7 @@ msgstr "Aufruf: %s -m zuLadendeMapDatei [-b anzahlFramesFürBenchmark]\n"
 msgid "Error: No map file specified.\n"
 msgstr "Fehler: Keine Map-Datei angegeben.\n"
 
-#: src/cpp/main.cpp:168
+#: src/cpp/main.cpp:162
 #, c-format
 msgid "Using locale '%s'.\n"
 msgstr "Benutze Locale '%s'.\n"
