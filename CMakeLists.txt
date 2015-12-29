@@ -21,6 +21,7 @@ set(COMMON_SOURCE_FILES
     src/cpp/config/ConfigMgr.h
     src/cpp/config/Good.h
     src/cpp/config/MapTileType.h
+    src/cpp/config/NeededGood.h
     src/cpp/economics/Carrier.cpp
     src/cpp/economics/Carrier.h
     src/cpp/economics/EconomicsMgr.cpp

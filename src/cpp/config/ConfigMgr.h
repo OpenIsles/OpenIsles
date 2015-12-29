@@ -12,6 +12,7 @@
 #include "defines.h"
 #include "config/Good.h"
 #include "config/MapTileType.h"
+#include "config/NeededGood.h"
 #include "game/GoodsSlot.h"
 #include "game/PopulationTier.h"
 #include "map/Building.h"
@@ -165,6 +166,11 @@ private:
      */
     std::set<PopulationTier> populationTiers;
 
+    /**
+     * @brief Spezielles Bedürfnis "Nahrung", was über alle Bevölkerungsgruppen geht
+     */
+    NeededGood foodGood;
+
 public:
     // TODO alles aus Datei einlesen
     /**
@@ -290,6 +296,14 @@ public:
         }
 
         return nullptr;
+    }
+
+    /**
+     * @brief Liefert das spezielle Bedürfnis zur Nahrungsversorgung zurück.
+     * @return `NeededGood` für Nahrung.
+     */
+    const NeededGood& getFoodGood() const {
+        return foodGood;
     }
 
 private:

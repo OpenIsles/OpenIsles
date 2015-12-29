@@ -744,7 +744,9 @@
 
     <!-- Öffentliche Gebäude -->
 
-    <building name="cathedral" width="6" height="4">
+    <!-- TODO "supersedes" verarbeiten. Zeigt an, dass diese öffentliche Gebäude dasselbe Bedürfnis befriedigt,
+         wie das Gebäude, dass es supersedet. Transitiv, d.h. cathedrale ⊃ church ⊃ chapel -->
+    <building name="cathedral" width="6" height="4" supersedes="church">
         <structure-placing>individually</structure-placing>
         <placeable-on>
             <map-tile-type>grass</map-tile-type>

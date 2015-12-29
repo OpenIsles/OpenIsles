@@ -285,10 +285,16 @@ TEST(ConfigMgrTest, checkThatPopulationTiersAreFilledCorrectly) {
         ASSERT_EQ(1, populationTier->index);
         ASSERT_EQ("pioneers", populationTier->name);
         ASSERT_EQ("populationTier|pioneers", populationTier->title);
+
+        ASSERT_EQ(0, populationTier->advancementMissingGoodsOk);
         ASSERT_EQ(0, populationTier->advancementCosts.coins);
         ASSERT_EQ(0, populationTier->advancementCosts.tools);
         ASSERT_EQ(3, populationTier->advancementCosts.wood);
         ASSERT_EQ(0, populationTier->advancementCosts.bricks);
+
+        ASSERT_TRUE(populationTier->needsGoods.empty());
+        ASSERT_TRUE(populationTier->needsPublicBuildings.empty());
+
         ASSERT_EQ(2, populationTier->maxPopulationPerHouse);
         ASSERT_EQ(1.4, populationTier->taxesPerInhabitant);
     }
@@ -298,10 +304,33 @@ TEST(ConfigMgrTest, checkThatPopulationTiersAreFilledCorrectly) {
         ASSERT_EQ(2, populationTier->index);
         ASSERT_EQ("settlers", populationTier->name);
         ASSERT_EQ("populationTier|settlers", populationTier->title);
+
+        ASSERT_EQ(1, populationTier->advancementMissingGoodsOk);
         ASSERT_EQ(0, populationTier->advancementCosts.coins);
         ASSERT_EQ(1, populationTier->advancementCosts.tools);
         ASSERT_EQ(3, populationTier->advancementCosts.wood);
         ASSERT_EQ(0, populationTier->advancementCosts.bricks);
+
+        {
+            auto iter = populationTier->needsGoods.cbegin();
+            ASSERT_EQ("cloth", iter->good->name);
+            ASSERT_EQ(0.6, iter->consumePerCycle);
+            iter++;
+            ASSERT_EQ("alcohol", iter->good->name);
+            ASSERT_EQ(0.5, iter->consumePerCycle);
+            iter++;
+            ASSERT_EQ(populationTier->needsGoods.cend(), iter);
+        }
+
+        {
+            auto iter = populationTier->needsPublicBuildings.cbegin();
+            ASSERT_EQ("marketplace", (*iter)->name);
+            iter++;
+            ASSERT_EQ("chapel", (*iter)->name);
+            iter++;
+            ASSERT_EQ(populationTier->needsPublicBuildings.cend(), iter);
+        }
+
         ASSERT_EQ(6, populationTier->maxPopulationPerHouse);
         ASSERT_EQ(1.6, populationTier->taxesPerInhabitant);
     }
@@ -311,10 +340,43 @@ TEST(ConfigMgrTest, checkThatPopulationTiersAreFilledCorrectly) {
         ASSERT_EQ(3, populationTier->index);
         ASSERT_EQ("burghers", populationTier->name);
         ASSERT_EQ("populationTier|burghers", populationTier->title);
+
+        ASSERT_EQ(1, populationTier->advancementMissingGoodsOk);
         ASSERT_EQ(0, populationTier->advancementCosts.coins);
         ASSERT_EQ(2, populationTier->advancementCosts.tools);
         ASSERT_EQ(2, populationTier->advancementCosts.wood);
         ASSERT_EQ(6, populationTier->advancementCosts.bricks);
+
+        {
+            auto iter = populationTier->needsGoods.cbegin();
+            ASSERT_EQ("cloth", iter->good->name);
+            ASSERT_EQ(0.7, iter->consumePerCycle);
+            iter++;
+            ASSERT_EQ("alcohol", iter->good->name);
+            ASSERT_EQ(0.6, iter->consumePerCycle);
+            iter++;
+            ASSERT_EQ("tobacco-goods", iter->good->name);
+            ASSERT_EQ(0.6, iter->consumePerCycle);
+            iter++;
+            ASSERT_EQ("spices", iter->good->name);
+            ASSERT_EQ(0.6, iter->consumePerCycle);
+            iter++;
+            ASSERT_EQ(populationTier->needsGoods.cend(), iter);
+        }
+
+        {
+            auto iter = populationTier->needsPublicBuildings.cbegin();
+            ASSERT_EQ("marketplace", (*iter)->name);
+            iter++;
+            ASSERT_EQ("chapel", (*iter)->name);
+            iter++;
+            ASSERT_EQ("tavern", (*iter)->name);
+            iter++;
+//            ASSERT_EQ("school", (*iter)->name);
+//            iter++;
+            ASSERT_EQ(populationTier->needsPublicBuildings.cend(), iter);
+        }
+
         ASSERT_EQ(15, populationTier->maxPopulationPerHouse);
         ASSERT_EQ(2.1, populationTier->taxesPerInhabitant);
     }
@@ -324,10 +386,48 @@ TEST(ConfigMgrTest, checkThatPopulationTiersAreFilledCorrectly) {
         ASSERT_EQ(4, populationTier->index);
         ASSERT_EQ("merchants", populationTier->name);
         ASSERT_EQ("populationTier|merchants", populationTier->title);
+
+        ASSERT_EQ(1, populationTier->advancementMissingGoodsOk);
         ASSERT_EQ(0, populationTier->advancementCosts.coins);
         ASSERT_EQ(3, populationTier->advancementCosts.tools);
         ASSERT_EQ(3, populationTier->advancementCosts.wood);
         ASSERT_EQ(9, populationTier->advancementCosts.bricks);
+
+        {
+            auto iter = populationTier->needsGoods.cbegin();
+            ASSERT_EQ("cloth", iter->good->name);
+            ASSERT_EQ(0.8, iter->consumePerCycle);
+            iter++;
+            ASSERT_EQ("alcohol", iter->good->name);
+            ASSERT_EQ(0.7, iter->consumePerCycle);
+            iter++;
+//            ASSERT_EQ("cocoa", iter->good->name);
+//            ASSERT_EQ(0.7, iter->consumePerCycle);
+//            iter++;
+            ASSERT_EQ("tobacco-goods", iter->good->name);
+            ASSERT_EQ(0.6, iter->consumePerCycle);
+            iter++;
+            ASSERT_EQ("spices", iter->good->name);
+            ASSERT_EQ(0.6, iter->consumePerCycle);
+            iter++;
+            ASSERT_EQ(populationTier->needsGoods.cend(), iter);
+        }
+
+        {
+            auto iter = populationTier->needsPublicBuildings.cbegin();
+            ASSERT_EQ("marketplace", (*iter)->name);
+            iter++;
+            ASSERT_EQ("tavern", (*iter)->name);
+            iter++;
+//            ASSERT_EQ("school", (*iter)->name);
+//            iter++;
+//            ASSERT_EQ("church", (*iter)->name);
+//            iter++;
+//            ASSERT_EQ("bathhouse", (*iter)->name);
+//            iter++;
+            ASSERT_EQ(populationTier->needsPublicBuildings.cend(), iter);
+        }
+
         ASSERT_EQ(25, populationTier->maxPopulationPerHouse);
         ASSERT_EQ(2.4, populationTier->taxesPerInhabitant);
     }
@@ -337,13 +437,70 @@ TEST(ConfigMgrTest, checkThatPopulationTiersAreFilledCorrectly) {
         ASSERT_EQ(5, populationTier->index);
         ASSERT_EQ("aristocrats", populationTier->name);
         ASSERT_EQ("populationTier|aristocrats", populationTier->title);
+
+        ASSERT_EQ(0, populationTier->advancementMissingGoodsOk);
         ASSERT_EQ(0, populationTier->advancementCosts.coins);
         ASSERT_EQ(3, populationTier->advancementCosts.tools);
         ASSERT_EQ(3, populationTier->advancementCosts.wood);
         ASSERT_EQ(12, populationTier->advancementCosts.bricks);
+
+        {
+            auto iter = populationTier->needsGoods.cbegin();
+            ASSERT_EQ("alcohol", iter->good->name);
+            ASSERT_EQ(0.8, iter->consumePerCycle);
+            iter++;
+//            ASSERT_EQ("cocoa", iter->good->name);
+//            ASSERT_EQ(0.6, iter->consumePerCycle);
+//            iter++;
+            ASSERT_EQ("tobacco-goods", iter->good->name);
+            ASSERT_EQ(0.5, iter->consumePerCycle);
+            iter++;
+            ASSERT_EQ("spices", iter->good->name);
+            ASSERT_EQ(0.5, iter->consumePerCycle);
+            iter++;
+//            ASSERT_EQ("clothing", iter->good->name);
+//            ASSERT_EQ(0.5, iter->consumePerCycle);
+//            iter++;
+//            ASSERT_EQ("jewelry", iter->good->name);
+//            ASSERT_EQ(0.2, iter->consumePerCycle);
+//            iter++;
+            ASSERT_EQ(populationTier->needsGoods.cend(), iter);
+        }
+
+        {
+            auto iter = populationTier->needsPublicBuildings.cbegin();
+            ASSERT_EQ("marketplace", (*iter)->name);
+            iter++;
+            ASSERT_EQ("tavern", (*iter)->name);
+            iter++;
+//            ASSERT_EQ("church", (*iter)->name);
+//            iter++;
+//            ASSERT_EQ("bathhouse", (*iter)->name);
+//            iter++;
+//            ASSERT_EQ("high-school", (*iter)->name);
+//            iter++;
+//            ASSERT_EQ("theater", (*iter)->name);
+//            iter++;
+            ASSERT_EQ(populationTier->needsPublicBuildings.cend(), iter);
+        }
+
         ASSERT_EQ(40, populationTier->maxPopulationPerHouse);
         ASSERT_EQ(2.6, populationTier->taxesPerInhabitant);
     }
+}
+
+/**
+ * @brief Prüft, ob die Nahrungsbedürfnisse korrekt geladen wurden.
+ */
+TEST(ConfigMgrTest, checkThatFoodNeedsIsFilledCorrectly) {
+    ConfigMgr configMgr;
+
+    const Good* food = configMgr.getGood("food");
+    ASSERT_TRUE(food != nullptr);
+
+    const NeededGood& foodGood = configMgr.getFoodGood();
+    ASSERT_EQ(food, foodGood.good);
+    ASSERT_EQ(1.3, foodGood.consumePerCycle);
 }
 
 /**

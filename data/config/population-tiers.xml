@@ -1,56 +1,114 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <population-tiers>
+    <food-good name="food" consume-per-cycle="1.3" />
+
     <population-tier name="pioneers">
-        <advancement-costs>
-            <coins>0</coins>
-            <tools>0</tools>
-            <wood>3</wood>
-            <bricks>0</bricks>
-        </advancement-costs>
+        <advancement>
+            <costs>
+                <coins>0</coins>
+                <tools>0</tools>
+                <wood>3</wood>
+                <bricks>0</bricks>
+            </costs>
+        </advancement>
         <max-population-per-house>2</max-population-per-house>
         <taxes-per-inhabitant>1.4</taxes-per-inhabitant>
     </population-tier>
 
     <population-tier name="settlers">
-        <advancement-costs>
-            <coins>0</coins>
-            <tools>1</tools>
-            <wood>3</wood>
-            <bricks>0</bricks>
-        </advancement-costs>
+        <advancement>
+            <missing-goods-ok>1</missing-goods-ok>
+            <costs>
+                <coins>0</coins>
+                <tools>1</tools>
+                <wood>3</wood>
+                <bricks>0</bricks>
+            </costs>
+        </advancement>
+        <needs>
+            <good name="cloth" consume-per-cycle="0.6" />
+            <good name="alcohol" consume-per-cycle="0.5" />
+            <public-building name="marketplace" />
+            <public-building name="chapel" />
+        </needs>
         <max-population-per-house>6</max-population-per-house>
         <taxes-per-inhabitant>1.6</taxes-per-inhabitant>
     </population-tier>
 
     <population-tier name="burghers">
-        <advancement-costs>
-            <coins>0</coins>
-            <tools>2</tools>
-            <wood>2</wood>
-            <bricks>6</bricks>
-        </advancement-costs>
+        <advancement>
+            <missing-goods-ok>1</missing-goods-ok>
+            <costs>
+                <coins>0</coins>
+                <tools>2</tools>
+                <wood>2</wood>
+                <bricks>6</bricks>
+            </costs>
+        </advancement>
+        <needs>
+            <good name="cloth" consume-per-cycle="0.7" />
+            <good name="alcohol" consume-per-cycle="0.6" />
+            <good name="tobacco-goods" consume-per-cycle="0.6" />
+            <good name="spices" consume-per-cycle="0.6" />
+            <public-building name="marketplace" />
+            <public-building name="chapel" />
+            <public-building name="tavern" />
+            <!--<public-building name="school" />-->
+        </needs>
         <max-population-per-house>15</max-population-per-house>
         <taxes-per-inhabitant>2.1</taxes-per-inhabitant>
     </population-tier>
 
     <population-tier name="merchants">
-        <advancement-costs>
-            <coins>0</coins>
-            <tools>3</tools>
-            <wood>3</wood>
-            <bricks>9</bricks>
-        </advancement-costs>
+        <advancement>
+            <missing-goods-ok>1</missing-goods-ok>
+            <costs>
+                <coins>0</coins>
+                <tools>3</tools>
+                <wood>3</wood>
+                <bricks>9</bricks>
+            </costs>
+        </advancement>
+        <needs>
+            <good name="cloth" consume-per-cycle="0.8" />
+            <good name="alcohol" consume-per-cycle="0.7" />
+            <!--<good name="cocoa" consume-per-cycle="0.7" />-->
+            <good name="tobacco-goods" consume-per-cycle="0.6" />
+            <good name="spices" consume-per-cycle="0.6" />
+            <public-building name="marketplace" />
+            <public-building name="tavern" />
+            <!--<public-building name="school" />-->
+            <!--<public-building name="church" />-->
+            <!--<public-building name="bathhouse" />-->
+        </needs>
         <max-population-per-house>25</max-population-per-house>
         <taxes-per-inhabitant>2.4</taxes-per-inhabitant>
     </population-tier>
 
     <population-tier name="aristocrats">
-        <advancement-costs>
-            <coins>0</coins>
-            <tools>3</tools>
-            <wood>3</wood>
-            <bricks>12</bricks>
-        </advancement-costs>
+        <advancement>
+            <missing-goods-ok>0</missing-goods-ok>
+            <costs>
+                <coins>0</coins>
+                <tools>3</tools>
+                <wood>3</wood>
+                <bricks>12</bricks>
+            </costs>
+        </advancement>
+        <needs>
+            <good name="alcohol" consume-per-cycle="0.8" />
+            <!--<good name="cocoa" consume-per-cycle="0.6" />-->
+            <good name="tobacco-goods" consume-per-cycle="0.5"/>
+            <good name="spices" consume-per-cycle="0.5" />
+            <!--<good name="clothing" consume-per-cycle="0.5" />-->
+            <!--<good name="jewelry" consume-per-cycle="0.2" />-->
+            <public-building name="marketplace" />
+            <public-building name="tavern" />
+            <!--<public-building name="church" />-->
+            <!--<public-building name="bathhouse" />-->
+            <!--<public-building name="high-school" />-->
+            <!--<public-building name="theater" />-->
+        </needs>
         <max-population-per-house>40</max-population-per-house>
         <taxes-per-inhabitant>2.6</taxes-per-inhabitant>
     </population-tier>

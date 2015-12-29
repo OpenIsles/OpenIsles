@@ -8,20 +8,29 @@
 #include "utils/StringFormat.h"
 
 
+/**
+ * @brief Da sich MapObjectType und PopulationTier gegenseitig referenzieren, müssen wir uns beim Laden
+ * für eine Reihenfolge entscheiden und die endgültige Zuordnung später machen. Diese Map speichert zwischen,
+ * welcher MapObjectType (Key der Map) später welchen PopulationTier (Value der Map = populationTier.name)
+ * zugeordnet kriegt.
+ */
+static std::unordered_map<MapObjectType*, std::string> mapObjectTypeToPopulationTierName;
+
+
 // TODO Fehlermanagement, wenn die XML-Dateien mal nicht so hübsch aussiehen, dass alle Tags da sind
 
 ConfigMgr::ConfigMgr() {
     loadGoods();
     std::puts(_("Loaded goods."));
 
-    loadPopulationTiers();
-    std::puts(_("Loaded population tiers."));
-
     loadCarrierMapObjectTypes();
     std::puts(_("Loaded carrier mapObjectTypes."));
 
     loadMapObjectTypes();
     std::puts(_("Loaded mapObjectTypes."));
+
+    loadPopulationTiers();
+    std::puts(_("Loaded population tiers."));
 
     loadTilesConfig();
     std::puts(_("Loaded tiles."));
@@ -188,13 +197,10 @@ void ConfigMgr::loadMapObjectTypes() {
         rapidxml::xml_node<>* populationTierNode = node->first_node("population-tier", 15, true);
         if (populationTierNode != nullptr) {
             const char* populationTierString = populationTierNode->value();
-            const PopulationTier* populationTier = getPopulationTier(populationTierString);
-            if (populationTier == nullptr) {
-                std::fprintf(stderr, _("Illegal value '%s' for populationTier.\n"), populationTierString);
-                throw std::runtime_error("Illegal value for populationTier");
-            }
 
-            mapObjectType.populationTier = populationTier;
+            // für später den String zwischenspeichern. Zuordnung kann erst gemacht werden,
+            // nachdem die PopulationTiers geladen sind.
+            mapObjectTypeToPopulationTierName[&mapObjectType] = populationTierString;
         }
 
         // Träger
@@ -469,17 +475,62 @@ void ConfigMgr::loadPopulationTiers() {
 
     rapidxml::xml_node<>* populationTiersNode = xmlDocument->first_node("population-tiers", 16, true);
 
+    // Bevölkerungsgruppen
     unsigned char index = 1;
-    for (rapidxml::xml_node<>* node = populationTiersNode->first_node(); node != nullptr; node = node->next_sibling()) {
+    for (rapidxml::xml_node<>* node = populationTiersNode->first_node("population-tier", 15, true);
+         node != nullptr;
+         node = node->next_sibling("population-tier", 15, true)) {
+
         PopulationTier populationTier;
 
         populationTier.index = index++;
         populationTier.name = std::string(node->first_attribute("name", 4, true)->value());
         populationTier.title = _(std::string("populationTier|" + populationTier.name).c_str());
 
-        rapidxml::xml_node<>* advancementCostsNode = node->first_node("advancement-costs", 17, true);
+        // <advancement>
+        rapidxml::xml_node<>* advancementNode = node->first_node("advancement", 11, true);
+
+        rapidxml::xml_node<>* advancementMissingGoodsOkNode = advancementNode->first_node("missing-goods-ok", 16, true);
+        if (advancementMissingGoodsOkNode != nullptr) {
+            populationTier.advancementMissingGoodsOk = (unsigned char)
+                stringToUnsignedLong(advancementMissingGoodsOkNode->value());
+        }
+
+        rapidxml::xml_node<>* advancementCostsNode = advancementNode->first_node("costs", 5, true);
         readBuildingCosts(populationTier.advancementCosts, advancementCostsNode);
 
+        // <needs>
+        rapidxml::xml_node<>* needsNode = node->first_node("needs", 5, true);
+        if (needsNode != nullptr) {
+            // <good>
+            for (rapidxml::xml_node<>* goodNode = needsNode->first_node("good", 4, true);
+                 goodNode != nullptr;
+                 goodNode = goodNode->next_sibling("good", 4, true)) {
+
+                std::string goodName = std::string(goodNode->first_attribute("name", 4, true)->value());
+
+                NeededGood neededGood;
+                neededGood.good = getGood(goodName);
+                neededGood.consumePerCycle = stringToDouble(
+                    goodNode->first_attribute("consume-per-cycle", 17, true)->value());
+
+                populationTier.needsGoods.push_back(neededGood);
+            }
+
+            // <public-building>
+            for (rapidxml::xml_node<>* publicBuildingNode = needsNode->first_node("public-building", 15, true);
+                 publicBuildingNode != nullptr;
+                 publicBuildingNode = publicBuildingNode->next_sibling("public-building", 15, true)) {
+
+                std::string mapObjectTypeName =
+                    std::string(publicBuildingNode->first_attribute("name", 4, true)->value());
+                const MapObjectType* mapObjectType = getMapObjectType(mapObjectTypeName);
+
+                populationTier.needsPublicBuildings.push_back(mapObjectType);
+            }
+        }
+
+        // sonstige Tags
         populationTier.maxPopulationPerHouse = (unsigned char) stringToUnsignedLong(
             node->first_node("max-population-per-house", 24, true)->value());
 
@@ -491,7 +542,36 @@ void ConfigMgr::loadPopulationTiers() {
         std::printf(_("Loaded populationTier '%s'.\n"), populationTier.name.c_str());
     }
 
+    // Nahrungsbedürfnis
+    rapidxml::xml_node<>* foodGoodNode = populationTiersNode->first_node("food-good", 9, true);
+
+    std::string foodGoodName = std::string(foodGoodNode->first_attribute("name", 4, true)->value());
+
+    foodGood.good = getGood(foodGoodName);
+    foodGood.consumePerCycle = stringToDouble(
+        foodGoodNode->first_attribute("consume-per-cycle", 17, true)->value());
+
+    // XML-Datei schließen
     delete xmlDocument;
+
+    // Jetzt sind alle PopulationTiers geladen. Wir ordnen diese nun den MapObjectTypes zu.
+    for (auto iter = mapObjectTypeToPopulationTierName.cbegin();
+         iter != mapObjectTypeToPopulationTierName.cend();
+         iter++) {
+
+        MapObjectType* mapObjectType = iter->first;
+        const std::string& populationTierString = iter->second;
+
+        const PopulationTier* populationTier = getPopulationTier(populationTierString);
+        if (populationTier == nullptr) {
+            std::fprintf(stderr, _("Illegal value '%s' for populationTier.\n"), populationTierString.c_str());
+            throw std::runtime_error("Illegal value for populationTier");
+        }
+
+        mapObjectType->populationTier = populationTier;
+    }
+
+    mapObjectTypeToPopulationTierName.clear(); // Daten wegräumen, brauchen wir nicht mehr
 }
 
 void ConfigMgr::readBuildingCosts(BuildingCosts& buildingCosts, rapidxml::xml_node<>* buildingCostsNode) {

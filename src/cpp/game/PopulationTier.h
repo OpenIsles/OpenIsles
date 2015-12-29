@@ -1,8 +1,14 @@
 #ifndef _POPULATION_TIER_H
 #define _POPULATION_TIER_H
 
+#include <list>
 #include <string>
 #include "config/BuildingCosts.h"
+#include "config/Good.h"
+#include "config/NeededGood.h"
+
+class MapObjectType;
+
 
 /**
  * @brief Bevölkerungsgruppe
@@ -29,9 +35,26 @@ struct PopulationTier {
     std::string title;
 
     /**
+     * @brief Anzahl der Güter, die komplett fehlen dürfen, aber trotzdem einen Aufstieg erlauben
+     */
+    unsigned char advancementMissingGoodsOk = 0;
+
+    /**
      * @brief Baukosten für den Aufstieg in diese Bevölkerungsgruppe
      */
     BuildingCosts advancementCosts;
+
+    /**
+     * @brief verlangte Waren
+     * (Die Reihenfolge ist wie in Config-Datei angegeben und wird auch so im Spiel dargestellt)
+     */
+    std::list<NeededGood> needsGoods;
+
+    /**
+     * @brief verlangte öffentliche Gebäude
+     * (Die Reihenfolge ist wie in Config-Datei angegeben und wird auch so im Spiel dargestellt)
+     */
+    std::list<const MapObjectType*> needsPublicBuildings;
 
     /**
      * @brief maximale Einwohnerzahl pro Haus
@@ -44,9 +67,6 @@ struct PopulationTier {
      * Siehe @ref finances
      */
     double taxesPerInhabitant;
-
-    // TODO Bedürfnisse (Waren)
-    // TODO Bedürfnisse (öffentliche Gebäude)
 
 
     /**
