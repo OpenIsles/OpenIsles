@@ -1,6 +1,10 @@
+#include <cassert>
+#include <cstdio>
+#include "defines.h"
 #include "config/ConfigMgr.h"
 #include "economics/EconomicsMgr.h"
 #include "game/Game.h"
+#include "utils/DoubleToIntSequence.h"
 
 
 EconomicsMgr::EconomicsMgr(const Context* const context) : ContextAware(context) {
@@ -189,4 +193,59 @@ void EconomicsMgr::updateFinances() {
         unsigned long operatingCosts = (player->playerStatus.operatingCosts / 6); // abrunden
         player->coins -= operatingCosts;
     }
+}
+
+void EconomicsMgr::doGoodsConsumptionAndUpdatePopulationSatisfaction() {
+    const ConfigMgr* configMgr = context->configMgr;
+
+    // Nahrungsverbrauch
+    const NeededGood& foodNeededGood = configMgr->getFoodGood();
+    
+    for (auto iter : context->game->getColonies()) {
+        Colony* colony = iter.second;
+        
+        unsigned int sumHousesPopulation = 0;
+        for (const PopulationTier& populationTier : configMgr->getAllPopulationTiers()) {
+            sumHousesPopulation += colony->populationTiers.at(&populationTier).population;
+        }
+
+        // Verbrauch ermitteln (double in diskreten Integer ausgehend von der Spielzeit umrechnen)
+        double foodConsumption = foodNeededGood.consumePerCycle * (double) sumHousesPopulation / (double) 100;
+        std::array<int, 6> intSequence = DoubleToIntSequence::toIntSequence(foodConsumption);
+        int cycleNr = (context->game->getTicks() / TICKS_PER_CYCLE) % 6;
+        int foodConsumptionThisCycle = intSequence[cycleNr];
+
+        // Verbrauchen
+        GoodsSlot& foodGoodsSlot = colony->getGoods(foodNeededGood.good);
+
+        assert(foodConsumptionThisCycle >= 0);
+        int theoreticalInventoryAfter = foodGoodsSlot.inventory - foodConsumptionThisCycle;
+        foodGoodsSlot.decreaseInventory((unsigned int) foodConsumptionThisCycle);
+
+        if (theoreticalInventoryAfter >= 0) {
+            for (const PopulationTier& populationTier : configMgr->getAllPopulationTiers()) {
+                colony->populationTiers.at(&populationTier).populationSatisfaction = PopulationSatisfaction::GOOD;
+            }
+        }
+        else {
+            // Nahrung hat nicht gereicht!
+            assert(foodGoodsSlot.inventory == 0);
+
+            for (const PopulationTier& populationTier : configMgr->getAllPopulationTiers()) {
+                colony->populationTiers.at(&populationTier).populationSatisfaction = PopulationSatisfaction::BAD;
+            }
+
+            // TODO Log-Meldung entfernen, wenn wir alles implementiert haben.
+            std::fprintf(stderr, "Houses got %ut to less food. TODO starving\n", -theoreticalInventoryAfter);
+
+            // TODO der Balken in der GUI muss nun abnehmen, Bevölkerungsrückgang bzw. Verhungern einsetzen
+        }
+    }
+
+    // TODO Verbrauchsgüter
+    // TODO öffentliche Gebäude
+    // TODO vermutlich hier auch bevölkerungsverändernde Sachen machen (Zuzug, Auszug, Aufstieg, Abstieg, Verhungern)
+
+    // TODO Wenn sich an der Zufriedenheit oder des Versorgungszustands was geändert hat, muss dem GuiMgr Bescheid
+    // gegeben werden, damit er das Panel aktualisiert, wenn grade die Infos zu einem Haus gezeigt werden.
 }

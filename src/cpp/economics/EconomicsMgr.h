@@ -38,6 +38,15 @@ public:
      * Diese Methode wird pro [Zyklus](@ref gameTicks) von Game::update() aufgerufen
      */
     void updateFinances();
+
+    /**
+     * @brief FÜhrt die Verbrauchs- und Zufriedenheitslogik durch.
+     * Es werden Nahrung und Verbrauchsgüter verbraucht. Je nach Stand und Verhandensein der geforderten
+     * öffentlichen Gebäude, wird die Zufriedenheit der Einwohner aktualisiert.
+     *
+     * Diese Methode wird pro [Zyklus](@ref gameTicks) von Game::update() aufgerufen
+     */
+    void doGoodsConsumptionAndUpdatePopulationSatisfaction();
 };
 
 #endif

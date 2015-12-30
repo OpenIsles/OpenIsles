@@ -12,17 +12,12 @@
 #include "map/Map.h"
 #include "utils/RandomEngine.h"
 
-/**
- * @brief Ein Zyklus findet alle x Ticks statt (das sind fix 10 Sekunden)
- */
-static constexpr unsigned long doCycleEveryTicks = 10000;
-
 
 Game::Game(const Context* const context) : ContextAware(context) {
     speed = 1;
     ticks = 0;
     map = new Map(context);
-    nextCycleTicks = doCycleEveryTicks;
+    nextCycleTicks = TICKS_PER_CYCLE;
 
 #ifdef DEBUG
     fpsCounterEnabled = true;
@@ -260,9 +255,14 @@ void Game::update(unsigned long millisecondsElapsed) {
 
     // bestimmte Spiellogiken finden einmal pro Zyklus statt
     if (ticks >= nextCycleTicks) {
-        // Finanzen
-        context->economicsMgr->updateFinances();
+        EconomicsMgr* economicsMgr = context->economicsMgr;
 
-        nextCycleTicks += doCycleEveryTicks;
+        // Finanzen
+        economicsMgr->updateFinances();
+        
+        // Güterverbrauch und Bevölkerungszufriedenheit
+        economicsMgr->doGoodsConsumptionAndUpdatePopulationSatisfaction();
+
+        nextCycleTicks += TICKS_PER_CYCLE;
     }
 }

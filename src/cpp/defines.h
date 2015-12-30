@@ -59,5 +59,6 @@
 // Konstanten für Zeiteinheiten
 static const unsigned long TICKS_PER_SECOND = 1000;                  ///< Ticks pro Sekunde
 static const unsigned long TICKS_PER_MINUTE = 60 * TICKS_PER_SECOND; ///< Ticks pro Minute
+static const unsigned long TICKS_PER_CYCLE = 10 * TICKS_PER_SECOND;  ///< Ticks pro Zyklus
 
 #endif

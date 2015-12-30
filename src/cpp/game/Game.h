@@ -69,9 +69,11 @@ class Game : public ContextAware {
     friend class GameIO;
 
 #ifdef TESTS_ENABLED
-    FRIEND_TEST(TaxesOnlyFinancesTest, checkThatTaxesIncomeWorksWithDifferentPopulationTiers);
+    FRIEND_TEST(FoodConsumptionTest, checkThatFoodInConsumed);
+    FRIEND_TEST(FoodConsumptionTest, checkThatFoodInConsumedOverAllPopulationTiers);
     FRIEND_TEST(InCatchmentAreaFinderInvisibleGoodsTest, checkThatRouteToGrassIsFound);
     FRIEND_TEST(InCatchmentAreaFinderInvisibleGoodsTest, checkThatNoRouteIsFoundWhenAllWasHarvested);
+    FRIEND_TEST(TaxesOnlyFinancesTest, checkThatTaxesIncomeWorksWithDifferentPopulationTiers);
 #endif
 
 private:
