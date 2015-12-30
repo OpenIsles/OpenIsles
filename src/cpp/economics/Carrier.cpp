@@ -176,15 +176,13 @@ void Carrier::onRouteDone(const Context& context, bool& deleteMe) {
             goodsSlotToTakeFrom = &targetBuilding->productionSlots.output;
         }
 
-        int goodsWeCollect = (int) goodsSlotToTakeFrom->inventory;
+        unsigned int goodsWeCollect = goodsSlotToTakeFrom->inventory;
 
         // Wir dürfen nicht mehr aufladen, als im Ziellager abgeladen werden kann, sonst gehen die Waren
-        // verloren. Wir müssen hier in Ganzzahlen denken: Haben wir 2,999t Platz, dürfen wir nicht 3t
-        // aufladen, sondern nur 2t.
-        GoodsSlot* goodsSlotWeWillUnloadToLater =
-            findGoodsSlotToUnloadTo(owningBuilding, carriedGoods.good);
-        int remainingCapacityToUnloadLater = (int) (
-            (double) goodsSlotWeWillUnloadToLater->capacity - goodsSlotWeWillUnloadToLater->inventory);
+        // verloren.
+        GoodsSlot* goodsSlotWeWillUnloadToLater = findGoodsSlotToUnloadTo(owningBuilding, carriedGoods.good);
+        unsigned int remainingCapacityToUnloadLater =
+            goodsSlotWeWillUnloadToLater->capacity - goodsSlotWeWillUnloadToLater->inventory;
         if (goodsWeCollect > remainingCapacityToUnloadLater) {
             goodsWeCollect = remainingCapacityToUnloadLater;
         }

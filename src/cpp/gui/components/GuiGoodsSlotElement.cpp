@@ -39,7 +39,7 @@ void GuiGoodsSlotElement::renderElement(IRenderer* renderer) {
     // Wert anzeigen
     if (displayValue) {
         char inventoryOutput[10];
-        std::snprintf(inventoryOutput, 10, "%.0ft", std::floor(goodsSlot->inventory));
+        std::snprintf(inventoryOutput, 10, "%ut", goodsSlot->inventory);
         context->fontMgr->renderText(renderer, inventoryOutput, windowX + 40, windowY + 42, &colorWhite, &colorBlack,
             "DroidSans.ttf", 12, RENDERTEXT_HALIGN_RIGHT | RENDERTEXT_VALIGN_BOTTOM);
     }
@@ -47,7 +47,7 @@ void GuiGoodsSlotElement::renderElement(IRenderer* renderer) {
     // Balken anzeigen
     else if (displayBar) {
         assert(goodsSlot->capacity > 0);
-        int barHeight = (int) (goodsSlot->inventory / goodsSlot->capacity * height);
+        int barHeight = (int) ((double) goodsSlot->inventory / (double) goodsSlot->capacity * (double) height);
 
         renderer->setDrawColor(colorRedBar);
 

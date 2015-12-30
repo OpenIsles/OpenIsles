@@ -74,8 +74,8 @@ void Building::sendNewCarrier(const Context& context) {
         // Wenn wir zwei Güter brauchen, ermitteln, welches wir "dringender" brauchen.
         // Das ist jenes Gut, wo wir prozentual weniger auf Lager haben.
         else {
-            if ((productionSlots.input.inventory / productionSlots.input.capacity) <
-                (productionSlots.input2.inventory / productionSlots.input2.capacity)) {
+            if (((double) productionSlots.input.inventory / (double) productionSlots.input.capacity) <
+                ((double) productionSlots.input2.inventory / (double) productionSlots.input2.capacity)) {
 
                 goods.push_back(good1);
                 goods.push_back(good2);

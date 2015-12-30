@@ -217,8 +217,8 @@ InCatchmentAreaFinderResult InCatchmentAreaFinder::findBuildingWithGoods(
         }
 
         // höherer Lagerbestand hat Vorrang
-        double inventoryRatio1 = result1.goodsSlot.inventory / (double) result1.goodsSlot.capacity;
-        double inventoryRatio2 = result2.goodsSlot.inventory / (double) result2.goodsSlot.capacity;
+        double inventoryRatio1 = (double) result1.goodsSlot.inventory / (double) result1.goodsSlot.capacity;
+        double inventoryRatio2 = (double) result2.goodsSlot.inventory / (double) result2.goodsSlot.capacity;
 
         if (inventoryRatio1 > inventoryRatio2) {
             return true;

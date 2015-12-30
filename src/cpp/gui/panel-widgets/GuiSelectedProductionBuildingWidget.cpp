@@ -111,11 +111,11 @@ void GuiSelectedProductionBuildingWidget::renderElement(IRenderer* renderer) {
 
 void GuiSelectedProductionBuildingWidget::updateInputSlotStatusBarText(
     GuiGoodsSlotElement* goodsSlotElement,
-    double inputAmountForProduction, double secondsToProduce, double inputInventory,
+    double inputAmountForProduction, double secondsToProduce, unsigned int inputInventory,
     const std::string& inputLabel, const std::string& outputLabel) {
 
     // Ausrechnen, für wie viel Output-Güter die Input-Güter reichen
-    double inputEnoughForXOutputGoods = inputInventory / inputAmountForProduction;
+    double inputEnoughForXOutputGoods = (double) inputInventory / inputAmountForProduction;
 
     char buffer[128];
     std::snprintf(buffer, 128, _("Supply of %s (enough for another %.1ft of %s)"),

@@ -57,7 +57,7 @@ void GuiResourcesBar::renderElement(IRenderer* renderer) {
             const std::string graphicSetName = context->graphicsMgr->getGraphicSetNameForGoodIcons(good, false);
             context->graphicsMgr->getGraphicSet(graphicSetName)->getStatic()->getGraphic()->drawAt(x, 5);
 
-            int goodsInventory = (int) colony->getGoods(good).inventory;
+            unsigned int goodsInventory = colony->getGoods(good).inventory;
             outputString = toString(goodsInventory);
             if (drawBuildingCosts) {
                 outputString += " (";

@@ -59,6 +59,11 @@ void EconomicsMgr::updateProduction(Building* building) {
 
     // Ja? Ok, dann produzieren
     if (mapObjectType->buildingProduction.input.isUsed()) {
+        // TODO später für Goldschmiede explizit überprüfen. Das is das einzige Gebäude, was keine Ganzzahl hat
+        // vermutlich muss man das eh mit DoubleToIntSequence lösen.
+        assert(mapObjectType->inputAmountForProduction == int(mapObjectType->inputAmountForProduction));
+        assert(mapObjectType->input2AmountForProduction == int(mapObjectType->input2AmountForProduction));
+
         building->productionSlots.input.decreaseInventory(mapObjectType->inputAmountForProduction);
 
         if (mapObjectType->buildingProduction.input2.isUsed()) {

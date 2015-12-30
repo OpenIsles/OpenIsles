@@ -1,6 +1,7 @@
 #ifndef _GOODS_SLOT_H
 #define _GOODS_SLOT_H
 
+#include <cassert>
 #include "config/Good.h"
 
 /**
@@ -17,10 +18,9 @@ public:
     const Good* good;
 
     /**
-     * @brief Lagerbestand als exakter Wert. Der Benutzer wird immer nur die ganzen Waren zu Gesicht bekommen. Intern
-     * müssen wir aber auch Bruchteile von Waren verwalten.
+     * @brief Lagerbestand
      */
-    double inventory;
+    unsigned int inventory;
 
     /**
      * @brief Lagerkapazität
@@ -73,7 +73,7 @@ public:
      * wird soviel wie möglich als Lagerbestand gesetzt.
      * @param amount Anzahl, um wie viel erhöht werden soll
      */
-    void increaseInventory(double amount) {
+    void increaseInventory(unsigned int amount) {
         inventory += amount;
         if (inventory > capacity) {
             inventory = capacity;
@@ -85,9 +85,10 @@ public:
      * wird der Lagerbestand auf 0 gesetzt.
      * @param amount Anzahl, um wie viel erniedrigt werden soll
      */
-    void decreaseInventory(double amount) {
-        inventory -= amount;
-        if (inventory < 0) {
+    void decreaseInventory(unsigned int amount) {
+        if (amount <= inventory) {
+            inventory -= amount;
+        } else {
             inventory = 0;
         }
     }
@@ -132,8 +133,9 @@ public:
      * @brief Liefert die Rest-Lagerkapazität für diesen Slot.
      * @return Rest-Lagerkapazität für diesen Slot
      */
-    inline double getRemainingCapacity() const {
-        return (double) capacity - inventory;
+    inline unsigned int getRemainingCapacity() const {
+        assert (capacity >= inventory);
+        return capacity - inventory;
     }
 
 };

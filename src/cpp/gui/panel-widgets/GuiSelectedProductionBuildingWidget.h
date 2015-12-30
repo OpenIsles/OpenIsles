@@ -61,7 +61,7 @@ private:
      */
     void updateInputSlotStatusBarText(
         GuiGoodsSlotElement* goodsSlotElement,
-        double inputAmountForProduction, double secondsToProduce, double inputInventory,
+        double inputAmountForProduction, double secondsToProduce, unsigned int inputInventory,
         const std::string& inputLabel, const std::string& outputLabel);
 };
 

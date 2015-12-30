@@ -511,15 +511,15 @@ void BuildOperation::doBuild() {
     GoodsSlot& colonyGoodsSlotWood = colony->getGoods(context->configMgr->getGood("wood"));
     GoodsSlot& colonyGoodsSlotBricks = colony->getGoods(context->configMgr->getGood("bricks"));
 
+    assert((player.coins - buildingCostsEffective.coins >= 0) &&
+           (colonyGoodsSlotTools.inventory - buildingCostsEffective.tools >= 0) &&
+           (colonyGoodsSlotWood.inventory - buildingCostsEffective.wood >= 0) &&
+           (colonyGoodsSlotBricks.inventory - buildingCostsEffective.bricks >= 0));
+
     player.coins -= buildingCostsEffective.coins;
     colonyGoodsSlotTools.inventory -= buildingCostsEffective.tools;
     colonyGoodsSlotWood.inventory -= buildingCostsEffective.wood;
     colonyGoodsSlotBricks.inventory -= buildingCostsEffective.bricks;
-
-    assert((player.coins >= 0) &&
-           (colonyGoodsSlotTools.inventory >= 0) &&
-           (colonyGoodsSlotWood.inventory >= 0) &&
-           (colonyGoodsSlotBricks.inventory >= 0));
 }
 
 

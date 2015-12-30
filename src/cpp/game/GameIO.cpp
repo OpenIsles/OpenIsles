@@ -231,7 +231,7 @@ void GameIO::loadColonies(Game* game, const ConfigMgr* configMgr, rapidxml::xml_
             std::string xmlAttributeName = "goods-" + good.name;
             const char* xmlAttributeValue = getPropertyValueFromPropertiesNode(propertiesNode, xmlAttributeName.c_str());
             if (xmlAttributeValue != nullptr) {
-                colony->getGoods(&good).inventory = std::atoi(xmlAttributeValue);
+                colony->getGoods(&good).inventory = (unsigned int) std::atoi(xmlAttributeValue);
             } else {
                 colony->getGoods(&good).inventory = 0;
                 std::fprintf(stderr, _("Warning: Did not find Good '%s' in savefile.\n"), good.name.c_str());
