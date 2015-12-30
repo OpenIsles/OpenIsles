@@ -1,4 +1,3 @@
-#include <map/MapObjectType.h>
 #include "GameTest.h"
 
 

@@ -1,6 +1,5 @@
 #include <cstring>
 #include <gtest/gtest.h>
-#include <map/MapObjectType.h>
 #include "config/ConfigMgr.h"
 #include "config/MapTileType.h"
 #include "map/MapObjectType.h"

@@ -1,5 +1,4 @@
 #include <cmath>
-#include <map/MapObjectType.h>
 #include "economics/Carrier.h"
 #include "game/Colony.h"
 #include "game/Game.h"

@@ -1,4 +1,3 @@
-#include <map/MapObjectType.h>
 #include "config/ConfigMgr.h"
 #include "economics/EconomicsMgr.h"
 #include "game/Game.h"
