@@ -93,14 +93,14 @@ void GuiSelectedProductionBuildingWidget::renderElement(IRenderer* renderer) {
     if (goodsSlotInput->isVisible()) {
         updateInputSlotStatusBarText(
             goodsSlotInput, mapObjectType->inputAmountForProduction,
-            mapObjectType->secondsToProduce, selectedBuilding->productionSlots.input.inventory,
+            selectedBuilding->productionSlots.input.inventory,
             mapObjectType->buildingProduction.input.good->label,
             mapObjectType->buildingProduction.output.good->label);
     }
     if (goodsSlotInput2->isVisible()) {
         updateInputSlotStatusBarText(
             goodsSlotInput2, mapObjectType->input2AmountForProduction,
-            mapObjectType->secondsToProduce, selectedBuilding->productionSlots.input2.inventory,
+            selectedBuilding->productionSlots.input2.inventory,
             mapObjectType->buildingProduction.input2.good->label,
             mapObjectType->buildingProduction.output.good->label);
     }
@@ -110,8 +110,7 @@ void GuiSelectedProductionBuildingWidget::renderElement(IRenderer* renderer) {
 }
 
 void GuiSelectedProductionBuildingWidget::updateInputSlotStatusBarText(
-    GuiGoodsSlotElement* goodsSlotElement,
-    double inputAmountForProduction, double secondsToProduce, unsigned int inputInventory,
+    GuiGoodsSlotElement* goodsSlotElement, double inputAmountForProduction, unsigned int inputInventory,
     const std::string& inputLabel, const std::string& outputLabel) {
 
     // Ausrechnen, für wie viel Output-Güter die Input-Güter reichen
