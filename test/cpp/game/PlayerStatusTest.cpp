@@ -11,7 +11,7 @@ protected:
 
 /**
  * @brief Testet, dass die PlayerStatus-Struktur nach dem Laden eines Spiels sofort befüllt ist (und nicht erst
- * 10 Sekunden später, wenn die Finanzen aktualisiert werden)
+ * einen Zyklus später, wenn die Finanzen aktualisiert werden)
  */
 TEST_F(PlayerStatusTest, checkThatPlayerStatusIsSetRightAfterGameIsLoaded) {
     const PlayerStatus& playerStatus = game->getPlayer(0)->playerStatus;

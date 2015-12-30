@@ -11,7 +11,7 @@ struct NeededGood {
     const Good* good;
 
     /**
-     * Verbrauch dieses Guts pro Zyklus pro 100 Einwohner
+     * Verbrauch dieses Guts pro [Zyklus](@ref gameTicks) pro 100 Einwohner
      */
     double consumePerCycle;
 };

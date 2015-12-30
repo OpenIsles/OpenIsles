@@ -24,6 +24,9 @@
 /**
  * @page gameTicks Zeiteinheiten
  *
+ * Game-Ticks
+ * ==========
+ *
  * Alle Zeit im Spiel wird in `Game-Ticks` angegeben. Dies sind (spielgeschwindigkeit-abhängige) Millisekunden,
  * seitdem das Spiel gestartet wurde. Wenn von "Spielzeit" oder kurz "Ticks" gesprochen wird, so sind immer Game-Ticks
  * gemeint.
@@ -44,6 +47,15 @@
  *   30 Millisekunden Zeit verstreichen.
  *   Spielgeschwindigkeit ist 2x.
  *   Danach ist `ticks = 5060`.
+ *
+ * Zyklus
+ * ======
+ *
+ * Ein `Zyklus` ist das Intervall, in welchem bestimmte Spiellogiken ausgeführt werden:
+ * - Finanzen: Steuereinnahmen, Betriebskosten
+ * - Nahrungsmittel- und Güterverbrauch, Aktualisierung der Zufriedenheit
+ *
+ * Ein Zyklus ist fix als 10.000 Game-Ticks angesetzt, d.&nbsp;h. alle 10 Sekunden bei Normalspielgeschwindigkeit.
  */
 
 /**
@@ -102,9 +114,9 @@ private:
     bool fpsCounterEnabled = false;
 
     /**
-     * @brief [Zeitpunkt](@ref gameTicks), wann das nächste Mal die Finanzen aktualisiert werden
+     * @brief [Zeitpunkt](@ref gameTicks), wann das nächste Mal ein Zyklus standfindet.
      */
-    unsigned long nextFinancesTicks;
+    unsigned long nextCycleTicks;
 
 public:
     Game(const Context* const context);
@@ -269,7 +281,7 @@ public:
     /**
      * @brief Hauptschleife des Spiels. Sie führt die Spiellogik aus, indem sie
      * - alle Map-Objekte aktualisiert
-     * - alle 10 Sekunden die Finanzen aktualisiert.
+     * - bestimmte Spiellogiken (z.&nbsp;B. Finanzen) einmal pro [Zyklus](@ref gameTicks) ausführt
      *
      * Wichtig: Die auszuführende Spielzeit sollte nicht utopisch groß sein, da die Objekte alle nur einmalig
      * aktualisiert werden. Wenn man also eine Spielzeit von einer ganzen Minute angibt, so hat das Spiel danach

@@ -7,9 +7,9 @@
 struct PlayerStatus {
 
     unsigned long population;     ///< Einwohner
-    unsigned long taxesIncome;    ///< Steuererträge (je 6 Zyklen * 10 Sekunden)
-    unsigned long operatingCosts; ///< Betriebskosten (je 6 Zyklen * 10 Sekunden)
-    long balance;                 ///< Bilanz (je 6 Zyklen * 10 Sekunden)
+    unsigned long taxesIncome;    ///< Steuererträge (je 6 [Zyklen](@ref gameTicks))
+    unsigned long operatingCosts; ///< Betriebskosten (je 6 [Zyklen](@ref gameTicks))
+    long balance;                 ///< Bilanz (je 6 [Zyklen](@ref gameTicks))
 
     PlayerStatus() {
         population = 0;

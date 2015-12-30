@@ -13,16 +13,16 @@
 #include "utils/RandomEngine.h"
 
 /**
- * @brief Finanzen alle x Ticks aktualisieren (10 Sekunden)
+ * @brief Ein Zyklus findet alle x Ticks statt (das sind fix 10 Sekunden)
  */
-static constexpr unsigned long updateFinancesEveryTicks = 10000;
+static constexpr unsigned long doCycleEveryTicks = 10000;
 
 
 Game::Game(const Context* const context) : ContextAware(context) {
     speed = 1;
     ticks = 0;
     map = new Map(context);
-    nextFinancesTicks = updateFinancesEveryTicks;
+    nextCycleTicks = doCycleEveryTicks;
 
 #ifdef DEBUG
     fpsCounterEnabled = true;
@@ -258,9 +258,11 @@ void Game::update(unsigned long millisecondsElapsed) {
         map->deleteMapObject(mapObject);
     }
 
-    // Finanzen
-    if (ticks >= nextFinancesTicks) {
+    // bestimmte Spiellogiken finden einmal pro Zyklus statt
+    if (ticks >= nextCycleTicks) {
+        // Finanzen
         context->economicsMgr->updateFinances();
-        nextFinancesTicks += updateFinancesEveryTicks;
+
+        nextCycleTicks += doCycleEveryTicks;
     }
 }

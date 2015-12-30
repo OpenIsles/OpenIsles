@@ -35,7 +35,7 @@ public:
      * @brief Aktualisiert die Finanzen.
      * Es werden die Zahlen aus den PlayerStatus-Strukturen verwendet.
      *
-     * Diese Methode wird alle 10 Sekunden von Game::update() aufgerufen
+     * Diese Methode wird pro [Zyklus](@ref gameTicks) von Game::update() aufgerufen
      */
     void updateFinances();
 };
