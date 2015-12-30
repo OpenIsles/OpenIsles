@@ -134,7 +134,7 @@ public:
      * @return Rest-Lagerkapazität für diesen Slot
      */
     inline unsigned int getRemainingCapacity() const {
-        assert (capacity >= inventory);
+        assert(capacity >= inventory);
         return capacity - inventory;
     }
 

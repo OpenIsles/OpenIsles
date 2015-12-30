@@ -23,7 +23,7 @@ class DoubleToIntSequence {
 
 public:
     static std::array<int, 6> toIntSequence(double value) {
-        assert (value >= 0); // Negative Zahlen brauchen wir nicht ;-)
+        assert(value >= 0); // Negative Zahlen brauchen wir nicht ;-)
 
         // Zahl durch 6 teilbar machen
         int intValue = int(std::round(value * 6));
