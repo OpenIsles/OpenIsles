@@ -246,6 +246,7 @@ void EconomicsMgr::doGoodsConsumptionAndUpdatePopulationSatisfaction() {
     // TODO öffentliche Gebäude
     // TODO vermutlich hier auch bevölkerungsverändernde Sachen machen (Zuzug, Auszug, Aufstieg, Abstieg, Verhungern)
 
-    // TODO Wenn sich an der Zufriedenheit oder des Versorgungszustands was geändert hat, muss dem GuiMgr Bescheid
-    // gegeben werden, damit er das Panel aktualisiert, wenn grade die Infos zu einem Haus gezeigt werden.
+    // Dem GuiMgr Bescheid geben, da sich ggf. was an der Zufriedenheit oder des Versorgungszustands geändert hat.
+    // Dieser aktualisiert die Anzeige, wenn grade sichtbar.
+    context->guiMgr->onHouseInfoChanged();
 }

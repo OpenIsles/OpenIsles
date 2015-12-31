@@ -1,4 +1,5 @@
 #include <SDL.h>
+#include <cassert>
 #include <string>
 #include "defines.h"
 #include "config/ConfigMgr.h"
@@ -544,6 +545,21 @@ void GuiMgr::onNewGame() {
 
 void GuiMgr::onOfficeCatchmentAreaChanged() {
     ((GuiMinimap*) findElement(GUI_ID_MINIMAP))->updateMinimapTexture();
+}
+
+void GuiMgr::onHouseInfoChanged() {
+    GuiSelectedHouseBuildingWidget* selectedHouseBuildingWidget =
+        ((GuiSelectedHouseBuildingWidget*) findElement(GUI_ID_SELECTED_HOUSE_BUILDING_PANEL_WIDGET));
+
+    if (!selectedHouseBuildingWidget->isVisible()) {
+        return;
+    }
+
+    const Building* selectedBuilding =
+        dynamic_cast<const Building*>(context->game->getMap()->getSelectedMapObject());
+    assert(selectedBuilding != nullptr && selectedBuilding->isHouse());
+
+    selectedHouseBuildingWidget->onSelectedMapBuildingChanged(selectedBuilding);
 }
 
 void GuiMgr::setStatusBarText(const std::string& text) {

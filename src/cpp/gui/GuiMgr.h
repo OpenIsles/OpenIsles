@@ -218,6 +218,12 @@ public:
     void onOfficeCatchmentAreaChanged();
 
     /**
+     * @brief Callback, wenn sich Informationen bezüglich der Häuser geändert haben.
+     * Wir aktualisieren daraufhin das GuiSelectedHouseBuildingWidget, wenn es grade aktiv ist.
+     */
+    void onHouseInfoChanged();
+
+    /**
      * @brief Ändert den Text, den die Statusleiste anzeigen soll
      * @param text anzuzeigender Text
      */
