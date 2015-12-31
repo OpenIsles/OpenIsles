@@ -131,6 +131,15 @@ public:
     }
 
     /**
+     * @brief Entfernt ein Child-Element. parentElement wird hierbei auf `nullptr` gesetzt.
+     * @param childElement Child-Element
+     */
+    void removeChildElement(GuiBase* childElement) {
+        childElements.remove(childElement);
+        childElement->parentElement = nullptr;
+    }
+
+    /**
      * @brief Setzt den Text, der in der Statusleiste angezeigt wird, wenn mit der Maus über das Element gefahren wird.
      * @param statusBarText anzuzeigender Text in der Statusleiste
      */

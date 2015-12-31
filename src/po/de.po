@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenIsles 0.1\n"
 "Report-Msgid-Bugs-To: http://www.openisles.org\n"
-"POT-Creation-Date: 2015-12-28 19:50+0100\n"
+"POT-Creation-Date: 2015-12-31 23:18+0100\n"
 "PO-Revision-Date: 2015-12-28 19:25+0100\n"
 "Last-Translator: theHacker <openisles@openisles.org>\n"
 "Language-Team: theHacker <openisles@openisles.org>\n"
@@ -310,87 +310,87 @@ msgstr "Pioniere"
 msgid "populationTier|settlers"
 msgstr "Siedler"
 
-#: src/cpp/config/ConfigMgr.cpp:15
+#: src/cpp/config/ConfigMgr.cpp:24
 msgid "Loaded goods."
 msgstr "Waren geladen."
 
-#: src/cpp/config/ConfigMgr.cpp:18
-msgid "Loaded population tiers."
-msgstr "Bevölkerungsgruppen geladen."
-
-#: src/cpp/config/ConfigMgr.cpp:21
+#: src/cpp/config/ConfigMgr.cpp:27
 msgid "Loaded carrier mapObjectTypes."
 msgstr "Träger-Mapobjekt-Typen geladen."
 
-#: src/cpp/config/ConfigMgr.cpp:24
+#: src/cpp/config/ConfigMgr.cpp:30
 msgid "Loaded mapObjectTypes."
 msgstr "Mapobjekt-Typen geladen."
 
-#: src/cpp/config/ConfigMgr.cpp:27
+#: src/cpp/config/ConfigMgr.cpp:33
+msgid "Loaded population tiers."
+msgstr "Bevölkerungsgruppen geladen."
+
+#: src/cpp/config/ConfigMgr.cpp:36
 msgid "Loaded tiles."
 msgstr "Kacheln geladen."
 
-#: src/cpp/config/ConfigMgr.cpp:85 src/cpp/config/ConfigMgr.cpp:239
+#: src/cpp/config/ConfigMgr.cpp:94 src/cpp/config/ConfigMgr.cpp:245
 #, c-format
 msgid "Illegal node '%s'.\n"
 msgstr "Ungültiger Knoten: '%s'.\n"
 
-#: src/cpp/config/ConfigMgr.cpp:105
+#: src/cpp/config/ConfigMgr.cpp:114
 #, c-format
 msgid "Illegal value '%s' for structurePlacing.\n"
 msgstr "Ungültiger Wert '%s' für structurePlacing.\n"
 
-#: src/cpp/config/ConfigMgr.cpp:193
-#, c-format
-msgid "Illegal value '%s' for populationTier.\n"
-msgstr "Ungültiger Wert '%s' für populationTier.\n"
-
-#: src/cpp/config/ConfigMgr.cpp:217
+#: src/cpp/config/ConfigMgr.cpp:223
 #, c-format
 msgid "Loaded mapObjectType '%s'.\n"
 msgstr "Mapobjekt-Typ '%s' geladen.\n"
 
-#: src/cpp/config/ConfigMgr.cpp:256
+#: src/cpp/config/ConfigMgr.cpp:262
 #, c-format
 msgid "Loaded carrier mapObjectType '%s'.\n"
 msgstr "Träger-Mapobjekt-Typ '%s' geladen.\n"
 
-#: src/cpp/config/ConfigMgr.cpp:343
+#: src/cpp/config/ConfigMgr.cpp:349
 #, c-format
 msgid "Illegal mapTileTypeName '%s'.\n"
 msgstr "Ungültiger mapTileTypeName '%s'.\n"
 
-#: src/cpp/config/ConfigMgr.cpp:362
+#: src/cpp/config/ConfigMgr.cpp:368
 #, c-format
 msgid "Illegal bool value '%s'.\n"
 msgstr "Ungültiger boolescher Wert '%s'.\n"
 
-#: src/cpp/config/ConfigMgr.cpp:399
+#: src/cpp/config/ConfigMgr.cpp:405
 msgid "Could not parse catchmentArea: Illegal char before first line.\n"
 msgstr ""
 "Konnte catchmentArea nicht parsen: Ungültiges Zeichen vor der ersten Zeile.\n"
 
-#: src/cpp/config/ConfigMgr.cpp:409
+#: src/cpp/config/ConfigMgr.cpp:415
 msgid "Could not parse catchmentArea: Illegal space inside line.\n"
 msgstr ""
 "Konnte catchmentArea nicht parsen: Ungültiges Leerzeichen innerhalb einer "
 "Zeile.\n"
 
-#: src/cpp/config/ConfigMgr.cpp:425
+#: src/cpp/config/ConfigMgr.cpp:431
 msgid "Could not parse catchmentArea: widths are not equal.\n"
 msgstr "Konnte catchmentArea nicht parsen: Breiten sind nicht gleich.\n"
 
-#: src/cpp/config/ConfigMgr.cpp:437
+#: src/cpp/config/ConfigMgr.cpp:443
 msgid "Could not parse catchmentArea: Last line was not completly empty.\n"
 msgstr ""
 "Konnte catchmentArea nicht parsen: Letzte Zeile war nicht komplett leer.\n"
 
-#: src/cpp/config/ConfigMgr.cpp:491
+#: src/cpp/config/ConfigMgr.cpp:542
 #, c-format
 msgid "Loaded populationTier '%s'.\n"
 msgstr "Bevölkerungsgruppe '%s' geladen.\n"
 
-#: src/cpp/game/Game.cpp:204
+#: src/cpp/config/ConfigMgr.cpp:567
+#, c-format
+msgid "Illegal value '%s' for populationTier.\n"
+msgstr "Ungültiger Wert '%s' für populationTier.\n"
+
+#: src/cpp/game/Game.cpp:199
 msgid "Cannot have negative inhabitants.\n"
 msgstr "Negative Bewohnerzahl nicht möglich.\n"
 
@@ -510,29 +510,29 @@ msgstr ""
 "Konnte SDL-TTF nicht initialisieren: %s\n"
 "\n"
 
-#: src/cpp/gui/GuiMgr.cpp:114
+#: src/cpp/gui/GuiMgr.cpp:115
 msgid "Switch to building mode"
 msgstr "Baumodus einschalten"
 
-#: src/cpp/gui/GuiMgr.cpp:120
+#: src/cpp/gui/GuiMgr.cpp:121
 msgid "Switch to combat mode"
 msgstr "Kampfmodus einschalten"
 
-#: src/cpp/gui/GuiMgr.cpp:126
+#: src/cpp/gui/GuiMgr.cpp:127
 msgid "Switch to info mode"
 msgstr "Infomodus einschalten"
 
-#: src/cpp/gui/GuiMgr.cpp:132
+#: src/cpp/gui/GuiMgr.cpp:133
 #: src/cpp/gui/panel-widgets/GuiOptionsMenuWidget.cpp:20
 msgid "Options"
 msgstr "Einstellungen"
 
-#: src/cpp/gui/GuiMgr.cpp:225
+#: src/cpp/gui/GuiMgr.cpp:226
 #, c-format
 msgid "Identifier %d is already registered.\n"
 msgstr "Bezeichner %d ist bereits registriert.\n"
 
-#: src/cpp/gui/GuiMgr.cpp:237
+#: src/cpp/gui/GuiMgr.cpp:238
 #, c-format
 msgid "Identifier %d is not registered.\n"
 msgstr "Bezeichner %d ist nicht registriert.\n"
@@ -636,35 +636,40 @@ msgstr "Betriebskosten:"
 msgid "Balance:"
 msgstr "Bilanz:"
 
-#: src/cpp/gui/panel-widgets/GuiSelectedHouseBuildingWidget.cpp:17
+#: src/cpp/gui/panel-widgets/GuiSelectedHouseBuildingWidget.cpp:18
 msgid "Population growth in this population tier"
 msgstr "Zuwächse in dieser Bevölkerungsgruppe"
 
-#: src/cpp/gui/panel-widgets/GuiSelectedHouseBuildingWidget.cpp:18
+#: src/cpp/gui/panel-widgets/GuiSelectedHouseBuildingWidget.cpp:19
 msgid "No population growth in this population tier"
 msgstr "Keine Zuwächse in dieser Bevölkerungsgruppe"
 
-#: src/cpp/gui/panel-widgets/GuiSelectedHouseBuildingWidget.cpp:19
+#: src/cpp/gui/panel-widgets/GuiSelectedHouseBuildingWidget.cpp:20
 msgid "Slight population loss in this population tier"
 msgstr "Leichte Rückgänge in dieser Bevölkerungsgruppe"
 
-#: src/cpp/gui/panel-widgets/GuiSelectedHouseBuildingWidget.cpp:20
+#: src/cpp/gui/panel-widgets/GuiSelectedHouseBuildingWidget.cpp:21
 msgid "Severe population loss in this population tier"
 msgstr "Starke Rückgänge in dieser Bevölkerungsgruppe"
 
-#: src/cpp/gui/panel-widgets/GuiSelectedHouseBuildingWidget.cpp:47
+#: src/cpp/gui/panel-widgets/GuiSelectedHouseBuildingWidget.cpp:48
 msgid "Population in this population tier"
 msgstr "Anzahl dieser Bevölkerungsgruppe"
 
-#: src/cpp/gui/panel-widgets/GuiSelectedHouseBuildingWidget.cpp:56
+#: src/cpp/gui/panel-widgets/GuiSelectedHouseBuildingWidget.cpp:57
 msgid "Population tier's name"
 msgstr "Bezeichnung für diese Bevölkerung"
+
+#: src/cpp/gui/panel-widgets/GuiSelectedHouseBuildingWidget.cpp:115
+#, c-format
+msgid "The demand for %s is not being fulfilled"
+msgstr "Der Bedarf an %s wird nicht erfüllt"
 
 #: src/cpp/gui/panel-widgets/GuiSelectedProductionBuildingWidget.cpp:39
 msgid "Goods in this building ready for pickup"
 msgstr "Abholfertige Waren in diesem Gebäude"
 
-#: src/cpp/gui/panel-widgets/GuiSelectedProductionBuildingWidget.cpp:121
+#: src/cpp/gui/panel-widgets/GuiSelectedProductionBuildingWidget.cpp:120
 #, c-format
 msgid "Supply of %s (enough for another %.1ft of %s)"
 msgstr "%svorrat (reicht für weitere %.1ft %s)"

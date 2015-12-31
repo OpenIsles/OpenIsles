@@ -248,5 +248,7 @@ void EconomicsMgr::doGoodsConsumptionAndUpdatePopulationSatisfaction() {
 
     // Dem GuiMgr Bescheid geben, da sich ggf. was an der Zufriedenheit oder des Versorgungszustands geändert hat.
     // Dieser aktualisiert die Anzeige, wenn grade sichtbar.
+#ifndef IN_TESTS
     context->guiMgr->onHouseInfoChanged();
+#endif
 }

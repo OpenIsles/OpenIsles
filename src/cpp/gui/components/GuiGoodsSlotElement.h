@@ -1,15 +1,15 @@
-#ifndef _GUI_GOOD_ELEMENT_H
-#define _GUI_GOOD_ELEMENT_H
+#ifndef _GUI_GOODS_SLOT_ELEMENT_H
+#define _GUI_GOODS_SLOT_ELEMENT_H
 
 #include "config/Good.h"
 #include "game/GoodsSlot.h"
-#include "gui/components/GuiStaticGraphicElement.h"
+#include "gui/components/GuiGoodElement.h"
 #include "Context.h"
 
 /**
  * Statisches Element, was einen GoodsSlot visualisiert.
  */
-class GuiGoodsSlotElement : public GuiStaticGraphicElement {
+class GuiGoodsSlotElement : public GuiGoodElement {
 
 private:
     /**
@@ -21,29 +21,11 @@ private:
      */
     const GoodsSlot* goodsSlot;
 
-    /**
-     * @brief `true`, um den Zahlenwert anzuzeigen
-     */
-    bool displayValue = false;
-
-    /**
-     * @brief `true`, um den Balken auf der rechten Seite anzuzeigen
-     */
-    bool displayBar = false;
-
 public:
     GuiGoodsSlotElement(const Context* const context);
     virtual ~GuiGoodsSlotElement() override;
 
     void setGoodsSlot(const GoodsSlot* goodsSlot);
-
-    void setDisplayValue(bool displayValue) {
-        this->displayValue = displayValue;
-    }
-
-    void setDisplayBar(bool displayBar) {
-        this->displayBar = displayBar;
-    }
 
     /**
      * @brief Zeichnet das Element (ohne Kinder)

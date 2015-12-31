@@ -120,6 +120,8 @@ set(GUI_SOURCE_FILES
     src/cpp/gui/components/GuiButton.h
     src/cpp/gui/components/GuiFoodSupplyElement.cpp
     src/cpp/gui/components/GuiFoodSupplyElement.h
+    src/cpp/gui/components/GuiGoodElement.cpp
+    src/cpp/gui/components/GuiGoodElement.h
     src/cpp/gui/components/GuiGoodsSlotElement.cpp
     src/cpp/gui/components/GuiGoodsSlotElement.h
     src/cpp/gui/components/GuiIconWithStringElement.cpp

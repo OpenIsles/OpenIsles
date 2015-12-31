@@ -1,4 +1,5 @@
 #include <cassert>
+#include <cstdio>
 #include "defines.h"
 #include "config/ConfigMgr.h"
 #include "game/Game.h"
@@ -95,6 +96,39 @@ void GuiSelectedHouseBuildingWidget::onSelectedMapBuildingChanged(const Building
 #else
     populationTier.setText(mapObjectType->populationTier->title);
 #endif
+
+    // TODO Steuersatz
+
+    // verlangte Güter
+    // TODO untersuchen, ob es nicht performanter ist, immer 6(? aus der Config ausrechnen) Elemente anzulegen und ein-/auszublenden bzw. abzuändern
+    for (GuiGoodElement* goodElement : needsGoods) {
+        removeChildElement(goodElement);
+        delete goodElement;
+    }
+    needsGoods.clear();
+
+    // TODO wirklich nur anzeigen, wenn Bedarf nicht erfüllt wird
+    // TOOD teilweise-gedeckten Bedarf verarbeiten
+    int posIndex = 0;
+    for (const NeededGood& neededGood : mapObjectType->populationTier->needsGoods) {
+        GuiGoodElement* goodElement = new GuiGoodElement(context);
+
+        char buffer[128];
+        std::snprintf(buffer, 128, _("The demand for %s is not being fulfilled"), neededGood.good->label.c_str());
+
+        goodElement->setPosition(25 + (posIndex % 3) * 60, 220 + (posIndex / 3) * 60);
+        goodElement->setStatusBarText(buffer);
+        goodElement->setGood(neededGood.good);
+        goodElement->setDisplayValue(false);
+        goodElement->setDisplayBar(false);
+
+        needsGoods.push_back(goodElement);
+        addChildElement(goodElement);
+
+        posIndex++;
+    }
+
+    // TODO verlangte öffentliche Gebäude
 
     // Nahrungsversorgung
     double foodSupply = 1.0; // TODO im Moment können wir den Fall "verhungern" noch nicht handlen, drum is die Versorgung immer 100%
