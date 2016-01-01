@@ -1,5 +1,6 @@
 #include <list>
 #include <SDL.h>
+#include "defines.h"
 #include "config/ConfigMgr.h"
 #include "game/Colony.h"
 #include "game/Game.h"
@@ -69,6 +70,6 @@ void GuiColonyGoodsWidget::renderElement(IRenderer* renderer) {
         GuiGoodsSlotElement* guiGoodsSlotElement = iter->second;
 
         const GoodsSlot& goodsSlot = colony->getGoods(good);
-        guiGoodsSlotElement->setStatusBarText(toString(goodsSlot.inventory) + "t " + good->label);
+        guiGoodsSlotElement->setStatusBarText(toString(goodsSlot.inventory) + "t " + _(good->label.c_str()));
     }
 }

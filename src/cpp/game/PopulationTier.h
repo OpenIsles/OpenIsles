@@ -30,7 +30,7 @@ struct PopulationTier {
     std::string name;
 
     /**
-     * @brief Name der Bevölkerungsgruppe (für den Spieler)
+     * @brief Name der Bevölkerungsgruppe (für den Spieler) (msgid)
      */
     std::string title;
 

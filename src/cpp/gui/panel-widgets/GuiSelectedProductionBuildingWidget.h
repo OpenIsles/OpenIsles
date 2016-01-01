@@ -54,8 +54,8 @@ private:
      * @param inputAmountForProduction Info aus der Gebäude-Konfiguration,
      *                                 wie viele Güter pro 1t Output verbraucht werden
      * @param inputInventory Info aus dem konkreten Gebäude, wie viele Güter zur Verfügung stehen
-     * @param inputLabel Info aus der Gebäude-Konfiguration, wie das Input-Gut heißt
-     * @param outputLabel Info aus der Gebäude-Konfiguration, wie das Output-Gut heißt
+     * @param inputLabel Info aus der Gebäude-Konfiguration, wie das Input-Gut heißt (msgid)
+     * @param outputLabel Info aus der Gebäude-Konfiguration, wie das Output-Gut heißt (msgid)
      */
     void updateInputSlotStatusBarText(
         GuiGoodsSlotElement* goodsSlotElement, double inputAmountForProduction, unsigned int inputInventory,

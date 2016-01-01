@@ -120,7 +120,7 @@ void GuiAddBuildingWidget::renderElement(IRenderer* renderer) {
 
 void GuiAddBuildingWidget::onAddingMapObjectChanged(const MapObjectType* newAddingMapObject) {
     // Name des Map-Objekts
-    panelHeader.setText(newAddingMapObject->title);
+    panelHeader.setText(_(newAddingMapObject->title.c_str()));
 
     // produzierte Waren
     const ProductionSlots& buildingProduction = newAddingMapObject->buildingProduction;

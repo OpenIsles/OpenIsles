@@ -73,7 +73,7 @@ void GuiSelectedProductionBuildingWidget::onSelectedMapBuildingChanged(const Bui
 
     const MapObjectType* mapObjectType = newSelectedBuilding->getMapObjectType();
 
-    buildingName.setText(mapObjectType->title);
+    buildingName.setText(_(mapObjectType->title.c_str()));
 
     const ProductionSlots& productionSlots = newSelectedBuilding->productionSlots;
     guiProductionSlotsElement.setFromProductionSlots(productionSlots);
@@ -118,7 +118,7 @@ void GuiSelectedProductionBuildingWidget::updateInputSlotStatusBarText(
 
     char buffer[128];
     std::snprintf(buffer, 128, _("Supply of %s (enough for another %.1ft of %s)"),
-                  inputLabel.c_str(), inputEnoughForXOutputGoods, outputLabel.c_str());
+                  _(inputLabel.c_str()), inputEnoughForXOutputGoods, _(outputLabel.c_str()));
 
     goodsSlotElement->setStatusBarText(buffer);
 }

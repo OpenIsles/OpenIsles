@@ -56,6 +56,18 @@
 #define _(X) gettext(X)
 #define _NOOP(X) (X)
 
+/**
+ * @page i18n Internationalisierung
+ *
+ * Wichtig:
+ * Phrasen, die in der Config stehen, dürfen nicht direkt beim Einlesen durch gettext() gejagt werden,
+ * sondern müssen stattdessen die Msgid merken und bei jeder Benutzung mit gettext() auflösen.
+ * Hintergrund: Phrasen, die eine Pluralform haben, haben nicht nur *eine* Ersetzung. Außerdem ist das
+ * eine Voraussetzung, um später während der Laufzeit die Sprache ändern zu können.
+ *
+ * Im Quellcode sind Strings, die nicht aufgelöst auftauchen, mit `(msgid)` im Kommentar zu notieren.
+ */
+
 // Konstanten für Zeiteinheiten
 static const unsigned long TICKS_PER_SECOND = 1000;                  ///< Ticks pro Sekunde
 static const unsigned long TICKS_PER_MINUTE = 60 * TICKS_PER_SECOND; ///< Ticks pro Minute

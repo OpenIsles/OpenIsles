@@ -15,7 +15,7 @@ public:
     std::string name;
 
     /**
-     * @brief Bezeichnung des Guts
+     * @brief Bezeichnung des Guts (msgid)
      */
     std::string label;
 

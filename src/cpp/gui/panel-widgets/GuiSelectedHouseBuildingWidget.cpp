@@ -91,7 +91,7 @@ void GuiSelectedHouseBuildingWidget::onSelectedMapBuildingChanged(const Building
 #ifdef DEBUG
     // Im Debug-Modus zeigen wir zusätzlich noch die Einwohnerzahl im Gebäude selber an
     std::string debugTitle =
-        "(" + toString(newSelectedBuilding->inhabitants) + ") " + mapObjectType->populationTier->title;
+        "(" + toString(newSelectedBuilding->inhabitants) + ") " + _(mapObjectType->populationTier->title.c_str());
     populationTier.setText(debugTitle);
 #else
     populationTier.setText(mapObjectType->populationTier->title);
@@ -114,7 +114,7 @@ void GuiSelectedHouseBuildingWidget::onSelectedMapBuildingChanged(const Building
         GuiGoodElement* goodElement = new GuiGoodElement(context);
 
         char buffer[128];
-        std::snprintf(buffer, 128, _("The demand for %s is not being fulfilled"), neededGood.good->label.c_str());
+        std::snprintf(buffer, 128, _("The demand for %s is not being fulfilled"), _(neededGood.good->label.c_str()));
 
         goodElement->setPosition(25 + (posIndex % 3) * 60, 220 + (posIndex / 3) * 60);
         goodElement->setStatusBarText(buffer);

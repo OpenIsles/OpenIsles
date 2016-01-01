@@ -83,7 +83,7 @@ struct MapObjectType {
     std::string name;
 
     /**
-     * @brief Name des Map-Objekts (für den Spieler)
+     * @brief Name des Map-Objekts (für den Spieler) (msgid)
      */
     std::string title;
 
