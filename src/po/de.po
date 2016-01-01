@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenIsles 0.1\n"
 "Report-Msgid-Bugs-To: http://www.openisles.org\n"
-"POT-Creation-Date: 2015-12-31 23:18+0100\n"
-"PO-Revision-Date: 2015-12-28 19:25+0100\n"
+"POT-Creation-Date: 2016-01-01 10:43+0100\n"
+"PO-Revision-Date: 2016-01-01 10:43+0100\n"
 "Last-Translator: theHacker <openisles@openisles.org>\n"
 "Language-Team: theHacker <openisles@openisles.org>\n"
 "Language: de\n"
@@ -84,6 +84,11 @@ msgstr "Holz"
 #: data/config/goods.xml
 msgid "good|wool"
 msgstr "Wolle"
+
+# automatically generated out of data xmls
+#: data/config/map-objects.xml
+msgid "mapObjectType|aristocrats-house1"
+msgstr "Haus"
 
 # automatically generated out of data xmls
 #: data/config/map-objects.xml
@@ -363,7 +368,8 @@ msgstr "Ungültiger boolescher Wert '%s'.\n"
 #: src/cpp/config/ConfigMgr.cpp:405
 msgid "Could not parse catchmentArea: Illegal char before first line.\n"
 msgstr ""
-"Konnte catchmentArea nicht parsen: Ungültiges Zeichen vor der ersten Zeile.\n"
+"Konnte catchmentArea nicht parsen: Ungültiges Zeichen vor der ersten "
+"Zeile.\n"
 
 #: src/cpp/config/ConfigMgr.cpp:415
 msgid "Could not parse catchmentArea: Illegal space inside line.\n"
@@ -464,12 +470,12 @@ msgstr "Konnte Textur nicht erzeugen: %s\n"
 msgid "Illegal bytesPerPixel: %d\n"
 msgstr "Ungültige bytesPerPixel: %d\n"
 
-#: src/cpp/graphics/mgr/AbstractGraphicsMgr.cpp:206
+#: src/cpp/graphics/mgr/AbstractGraphicsMgr.cpp:207
 #, c-format
 msgid "Could not divide the frames equally: '%s'\n"
 msgstr "Konnte die Frames nicht gleichmäßig aufteilen: '%s'\n"
 
-#: src/cpp/graphics/mgr/AbstractGraphicsMgr.cpp:213
+#: src/cpp/graphics/mgr/AbstractGraphicsMgr.cpp:214
 #, c-format
 msgid "Could not divide the views equally: '%s'\n"
 msgstr "Konnte die Ansichten nicht gleichmaßig aufteilen: '%s'\n"
@@ -660,7 +666,7 @@ msgstr "Anzahl dieser Bevölkerungsgruppe"
 msgid "Population tier's name"
 msgstr "Bezeichnung für diese Bevölkerung"
 
-#: src/cpp/gui/panel-widgets/GuiSelectedHouseBuildingWidget.cpp:115
+#: src/cpp/gui/panel-widgets/GuiSelectedHouseBuildingWidget.cpp:117
 #, c-format
 msgid "The demand for %s is not being fulfilled"
 msgstr "Der Bedarf an %s wird nicht erfüllt"

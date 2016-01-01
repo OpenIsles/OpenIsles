@@ -440,6 +440,11 @@
     <property name="player" value="1"/>
    </properties>
   </object>
+  <object name="aristocrats-house1" x="1440" y="896" width="64" height="64">
+   <properties>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
   <object name="cobbled-street" x="1856" y="1184" width="32" height="32">
    <properties>
     <property name="connections" value="0101"/>

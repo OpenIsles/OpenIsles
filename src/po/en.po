@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenIsles 0.1\n"
 "Report-Msgid-Bugs-To: http://www.openisles.org\n"
-"POT-Creation-Date: 2015-12-31 23:19+0100\n"
-"PO-Revision-Date: 2015-12-28 19:47+0100\n"
+"POT-Creation-Date: 2016-01-01 10:43+0100\n"
+"PO-Revision-Date: 2016-01-01 10:44+0100\n"
 "Last-Translator: theHacker <openisles@openisles.org>\n"
 "Language-Team: theHacker <openisles@openisles.org>\n"
 "Language: en\n"
@@ -84,6 +84,11 @@ msgstr "wood"
 #: data/config/goods.xml
 msgid "good|wool"
 msgstr "wool"
+
+# automatically generated out of data xmls
+#: data/config/map-objects.xml
+msgid "mapObjectType|aristocrats-house1"
+msgstr "House"
 
 # automatically generated out of data xmls
 #: data/config/map-objects.xml
@@ -458,12 +463,12 @@ msgstr "Could not create texture: %s\n"
 msgid "Illegal bytesPerPixel: %d\n"
 msgstr "Illegal bytesPerPixel: %d\n"
 
-#: src/cpp/graphics/mgr/AbstractGraphicsMgr.cpp:206
+#: src/cpp/graphics/mgr/AbstractGraphicsMgr.cpp:207
 #, c-format
 msgid "Could not divide the frames equally: '%s'\n"
 msgstr "Could not divide the frames equally: '%s'\n"
 
-#: src/cpp/graphics/mgr/AbstractGraphicsMgr.cpp:213
+#: src/cpp/graphics/mgr/AbstractGraphicsMgr.cpp:214
 #, c-format
 msgid "Could not divide the views equally: '%s'\n"
 msgstr "Could not divide the views equally: '%s'\n"
@@ -652,7 +657,7 @@ msgstr "Population in this population tier"
 msgid "Population tier's name"
 msgstr "Population tier's name"
 
-#: src/cpp/gui/panel-widgets/GuiSelectedHouseBuildingWidget.cpp:115
+#: src/cpp/gui/panel-widgets/GuiSelectedHouseBuildingWidget.cpp:117
 #, c-format
 msgid "The demand for %s is not being fulfilled"
 msgstr "The demand for %s is not being fulfilled"
