@@ -82,6 +82,7 @@ add_custom_target(update-pot-file
         -E remove
         ${SOURCE_PO_DIR}/OpenIsles.sources.pot
         ${SOURCE_PO_DIR}/OpenIsles.data.pot
+    COMMENT "Updating .pot file..."
     VERBATIM
 )
 
@@ -101,6 +102,7 @@ foreach(lang IN LISTS I18N_LANGS)
         DEPENDS
             update-pot-file
             ${SOURCE_PO_DIR}/OpenIsles.pot
+        COMMENT "Updating .po file ${PO_FILE}..."
         VERBATIM
     )
 
@@ -108,6 +110,7 @@ foreach(lang IN LISTS I18N_LANGS)
 endforeach(lang IN LISTS I18N_LANGS)
 
 add_custom_target(update-po-files
+    COMMENT "Updating .po files..."
     DEPENDS ${GENERATED_PO_FILES}
 )
 
@@ -124,12 +127,14 @@ foreach(lang IN LISTS I18N_LANGS)
             -o ${MO_FILE}
         DEPENDS
             ${SOURCE_PO_DIR}/${lang}.po
+        COMMENT "Updating .mo file ${MO_FILE}..."
         VERBATIM
     )
 
     SET(GENERATED_MO_FILES ${GENERATED_MO_FILES} ${MO_FILE})
 endforeach(lang IN LISTS I18N_LANGS)
 
-add_custom_target(update-mo-files
+add_custom_target(update-mo-files ALL
     DEPENDS ${GENERATED_MO_FILES}
+    COMMENT "Updating .mo files..."
 )
