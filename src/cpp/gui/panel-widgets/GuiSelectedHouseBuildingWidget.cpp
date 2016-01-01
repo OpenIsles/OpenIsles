@@ -97,7 +97,7 @@ void GuiSelectedHouseBuildingWidget::onSelectedMapBuildingChanged(const Building
     std::string debugTitle = "(" + toString(newSelectedBuilding->inhabitants) + ") " + populationTierTitle;
     populationTier.setText(debugTitle);
 #else
-    populationTier.setText(buffer);
+    populationTier.setText(populationTierTitle);
 #endif
 
     // TODO Steuersatz
