@@ -1,5 +1,6 @@
 #include <cassert>
 #include <cstdio>
+#include <string>
 #include "defines.h"
 #include "config/ConfigMgr.h"
 #include "game/Game.h"

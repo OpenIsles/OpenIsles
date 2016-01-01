@@ -2,7 +2,7 @@
 #define _GUI_SELECTED_HOUSE_BUILDING_WIDGET_H
 
 #include <SDL.h>
-#include <string>
+#include <list>
 #include "Context.h"
 #include "graphics/graphic/sdl/SDLGraphic.h"
 #include "gui/components/GuiFoodSupplyElement.h"
