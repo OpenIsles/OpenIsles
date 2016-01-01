@@ -93,16 +93,16 @@ void EconomicsMgr::updateProduction(Building* building) {
  *
  * - "Steuersatz" = Dezimalbruch aus Config-XML (bzw. Anno&nbsp;1602-COD-File)
  * - "Steuerprozent" = angezeigte Steuer-Prozentzahl im Spiel
- * - "[Zyklus](@ref gameTicks)" = 10 Sekunden Spielzeit. Das ist das Intervall, in welchem Finanzenaktualisiert werden.
+ * - [\"Zyklus\"](@ref gameTicks) = 10 Sekunden Spielzeit. Das ist das Intervall, in welchem Finanzenaktualisiert werden.
  *
  * Überblick Formeln
  * =================
  *
- * Um die Berechnung der Finanzen möglichst genauso wie bei Anno&nbsp;1602 zu machen, würden zwei Formeln
+ * Um die Berechnung der Finanzen möglichst genauso wie bei Anno&nbsp;1602 zu machen, wurden zwei Formeln
  * untersucht:
  * - a) Um mit dem Steuersatz aus dem COD-File hinzukommen, muss man die Basis auf "34% Steuer" (im Spiel angezeigt)
  *      setzen.
- * - b) Die Formel aus <a href="http://www.annozone.de/Charlie/Cod/numerik.html]">AnnoZone</a>
+ * - b) Die Formel aus <a href="http://www.annozone.de/Charlie/Cod/numerik.html">AnnoZone</a>
  *
  * Beide Formeln können mittels einer Hilfstabelle (`doc/taxes-helper.ods`) verglichen werden.
  * Variante b) ist zwar genauer, aber komplizierter zu verstehen. Es wird deshalb Variante a) implementiert.
