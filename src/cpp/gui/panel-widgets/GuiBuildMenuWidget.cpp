@@ -140,7 +140,7 @@ GuiBuildMenuWidget::GuiBuildMenuWidget(const Context* const context) : GuiPanelW
                     graphicAddBuildingButton->getWidth(), graphicAddBuildingButton->getHeight());
                 addBuildingButton->setGraphic(graphicAddBuildingButton);
                 addBuildingButton->setGraphicPressed(graphicAddBuildingButton);
-                addBuildingButton->setStatusBarText(_(mapObjectType->title.c_str()));
+                addBuildingButton->setStatusBarText(_(mapObjectType->getTitleMsgid().c_str()));
                 addBuildingButton->setOnClickFunction([ this, context, mapObjectType ]() {
                     context->guiMgr->panelState.addingMapObject = mapObjectType;
                     context->guiMgr->panelState.buildingMenuOpen = false;

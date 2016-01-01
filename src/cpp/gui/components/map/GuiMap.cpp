@@ -614,7 +614,7 @@ bool GuiMap::onEventElement(SDL_Event& event) {
     if (event.type == SDL_MOUSEMOTION && hitTest(event.motion.x, event.motion.y)) {
         const MapObjectFixed* mapObjectFixed = getMapObjectFixedUnderMouseCoords(event.button.x, event.button.y);
         if (mapObjectFixed != nullptr && !mapObjectFixed->getMapObjectType()->isForest) {
-            context->guiMgr->setStatusBarText(_(mapObjectFixed->getMapObjectType()->title.c_str()));
+            context->guiMgr->setStatusBarText(_(mapObjectFixed->getMapObjectType()->getTitleMsgid().c_str()));
         } else {
             const Map* map = context->game->getMap();
             const MapCoords& mapCoords = MapCoordUtils::getMapCoordsUnderMouse(*map, event.motion.x, event.motion.y);

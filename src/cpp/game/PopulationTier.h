@@ -30,11 +30,6 @@ struct PopulationTier {
     std::string name;
 
     /**
-     * @brief Name der Bevölkerungsgruppe (für den Spieler) (msgid)
-     */
-    std::string title;
-
-    /**
      * @brief Anzahl der Güter, die komplett fehlen dürfen, aber trotzdem einen Aufstieg erlauben
      */
     unsigned char advancementMissingGoodsOk = 0;
@@ -76,6 +71,19 @@ struct PopulationTier {
      */
     bool operator<(const PopulationTier& populationTier) const {
         return (this->index < populationTier.index);
+    }
+
+    /**
+     * @brief Liefert den Namen der Bevölkerungsgruppe (für den Spieler) (msgid)
+     * @param plural Pluralform (`true`) oder Singularform (`false`)
+     * @return Name der Bevölkerungsgruppe (msgid)
+     */
+    std::string getTitleMsgid(bool plural) const {
+        if (plural) {
+            return "populationTier|" + name + "|plural";
+        } else {
+            return "populationTier|" + name + "|singular";
+        }
     }
 
 };

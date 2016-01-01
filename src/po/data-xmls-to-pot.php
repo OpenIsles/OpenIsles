@@ -47,7 +47,8 @@ $nodes = $populationTiersXml->xpath('/population-tiers/population-tier/@name');
 foreach ($nodes as $node) {
 	$msgIds[] = array(
 		'file' => 'data/config/population-tiers.xml',
-		'msgid' => "populationTier|$node"
+		'msgid' => "populationTier|$node|singular",
+		'msgid_plural' => "populationTier|$node|plural"
 	);
 }
 
@@ -60,7 +61,15 @@ foreach($msgIds as $msgId) {
 	$potFile .= "# automatically generated out of data xmls\n";
 	$potFile .= "#: ${msgId['file']}\n";
 	$potFile .= "msgid \"{$msgId['msgid']}\"\n";
-	$potFile .= "msgstr \"\"\n";
+
+	if (isset($msgId['msgid_plural'])) {
+	    $potFile .= "msgid_plural \"{$msgId['msgid_plural']}\"\n";
+	    $potFile .= "msgstr[0] \"\"\n";
+	    $potFile .= "msgstr[1] \"\"\n";
+	}
+	else {
+	    $potFile .= "msgstr \"\"\n";
+	}
 }
 
 file_put_contents($outputFile, $potFile);

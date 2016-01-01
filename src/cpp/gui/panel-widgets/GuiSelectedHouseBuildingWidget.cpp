@@ -89,13 +89,15 @@ void GuiSelectedHouseBuildingWidget::onSelectedMapBuildingChanged(const Building
     // Bevölkerungsdaten
     inhabitants.setText(toString(colonyPopulationTier.population));
 
+    std::string populationTierTitle = _N(mapObjectType->populationTier->getTitleMsgid(false).c_str(),
+                                         mapObjectType->populationTier->getTitleMsgid(true).c_str(),
+                                         colonyPopulationTier.population);
 #ifdef DEBUG
     // Im Debug-Modus zeigen wir zusätzlich noch die Einwohnerzahl im Gebäude selber an
-    std::string debugTitle =
-        "(" + toString(newSelectedBuilding->inhabitants) + ") " + _(mapObjectType->populationTier->title.c_str());
+    std::string debugTitle = "(" + toString(newSelectedBuilding->inhabitants) + ") " + populationTierTitle;
     populationTier.setText(debugTitle);
 #else
-    populationTier.setText(mapObjectType->populationTier->title);
+    populationTier.setText(buffer);
 #endif
 
     // TODO Steuersatz
@@ -115,7 +117,8 @@ void GuiSelectedHouseBuildingWidget::onSelectedMapBuildingChanged(const Building
         GuiGoodElement* goodElement = new GuiGoodElement(context);
 
         char buffer[128];
-        std::snprintf(buffer, 128, _("The demand for %s is not being fulfilled"), _(neededGood.good->label.c_str()));
+        std::snprintf(buffer, 128, _("The demand for %s is not being fulfilled"),
+                      _(neededGood.good->getTitleMsgid().c_str()));
 
         goodElement->setPosition(25 + (posIndex % 3) * 60, 220 + (posIndex / 3) * 60);
         goodElement->setStatusBarText(buffer);

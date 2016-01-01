@@ -83,11 +83,6 @@ struct MapObjectType {
     std::string name;
 
     /**
-     * @brief Name des Map-Objekts (für den Spieler) (msgid)
-     */
-    std::string title;
-
-    /**
      * @brief Breite (X-Richtung) des Map-Objekts in Map-Koordinaten
      */
     unsigned char mapWidth;
@@ -227,6 +222,15 @@ struct MapObjectType {
      * anzuzeigen.
      */
     bool isForest = false;
+
+
+    /**
+     * @brief Liefert den Name des Map-Objekts (für den Spieler) (msgid)
+     * @return Name des Map-Objekts (msgid)
+     */
+    std::string getTitleMsgid() const {
+        return "mapObjectType|" + name;
+    }
 
 };
 

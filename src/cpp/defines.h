@@ -54,6 +54,7 @@
 #include <libintl.h>
 
 #define _(X) gettext(X)
+#define _N(MSGID_SINGULAR, MSGID_PLURAL, N) ngettext(MSGID_SINGULAR, MSGID_PLURAL, N)
 #define _NOOP(X) (X)
 
 /**

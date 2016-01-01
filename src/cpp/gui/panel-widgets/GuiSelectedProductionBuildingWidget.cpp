@@ -73,7 +73,7 @@ void GuiSelectedProductionBuildingWidget::onSelectedMapBuildingChanged(const Bui
 
     const MapObjectType* mapObjectType = newSelectedBuilding->getMapObjectType();
 
-    buildingName.setText(_(mapObjectType->title.c_str()));
+    buildingName.setText(_(mapObjectType->getTitleMsgid().c_str()));
 
     const ProductionSlots& productionSlots = newSelectedBuilding->productionSlots;
     guiProductionSlotsElement.setFromProductionSlots(productionSlots);
@@ -94,15 +94,15 @@ void GuiSelectedProductionBuildingWidget::renderElement(IRenderer* renderer) {
         updateInputSlotStatusBarText(
             goodsSlotInput, mapObjectType->inputAmountForProduction,
             selectedBuilding->productionSlots.input.inventory,
-            mapObjectType->buildingProduction.input.good->label,
-            mapObjectType->buildingProduction.output.good->label);
+            mapObjectType->buildingProduction.input.good->getTitleMsgid(),
+            mapObjectType->buildingProduction.output.good->getTitleMsgid());
     }
     if (goodsSlotInput2->isVisible()) {
         updateInputSlotStatusBarText(
             goodsSlotInput2, mapObjectType->input2AmountForProduction,
             selectedBuilding->productionSlots.input2.inventory,
-            mapObjectType->buildingProduction.input2.good->label,
-            mapObjectType->buildingProduction.output.good->label);
+            mapObjectType->buildingProduction.input2.good->getTitleMsgid(),
+            mapObjectType->buildingProduction.output.good->getTitleMsgid());
     }
 
     // TODO Auslastung

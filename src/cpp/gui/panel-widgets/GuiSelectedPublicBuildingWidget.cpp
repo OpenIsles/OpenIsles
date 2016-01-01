@@ -55,7 +55,7 @@ void GuiSelectedPublicBuildingWidget::onSelectedMapBuildingChanged(const Buildin
 
     const MapObjectType* mapObjectType = newSelectedBuilding->getMapObjectType();
 
-    buildingName.setText(_(mapObjectType->title.c_str()));
+    buildingName.setText(_(mapObjectType->getTitleMsgid().c_str()));
 
     std::string graphicSetName = context->graphicsMgr->getGraphicSetNameForAddBuildingButton(mapObjectType);
     const IGraphic* graphic = context->graphicsMgr->getGraphicSet(graphicSetName)->getStatic()->getGraphic();

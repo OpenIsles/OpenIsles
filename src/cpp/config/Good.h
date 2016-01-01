@@ -15,11 +15,6 @@ public:
     std::string name;
 
     /**
-     * @brief Bezeichnung des Guts (msgid)
-     */
-    std::string label;
-
-    /**
      * @brief `true`, wenn das Gut ein Rohstoff ist.
      * Rohstoffe werden nur vom Marktkarren abgeholt, wenn das Gebäudelager voll ist.
      */
@@ -31,6 +26,15 @@ public:
      * auch nicht angezeigt.
      */
     bool invisible;
+
+
+    /**
+     * @brief Liefert die Bezeichnung des Guts (msgid)
+     * @return Bezeichnung des Guts (msgid)
+     */
+    std::string getTitleMsgid() const {
+        return "good|" + name;
+    }
 };
 
 #endif

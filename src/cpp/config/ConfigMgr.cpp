@@ -51,13 +51,11 @@ void ConfigMgr::loadGoods() {
          goodNode = goodNode->next_sibling("good", 4, true)) {
 
         std::string name = goodNode->first_attribute("name", 4, true)->value();
-        std::string label = std::string("good|" + name);
         bool rawMaterial = xmlAttributeToBool(goodNode->first_attribute("raw-material", 12, true), false);
         bool invisible = xmlAttributeToBool(goodNode->first_attribute("invisible", 9, true), false);
 
         Good& good = goodsMap[name];
         good.name = name;
-        good.label = label;
         good.rawMaterial = rawMaterial;
         good.invisible = invisible;
 
@@ -100,7 +98,6 @@ void ConfigMgr::loadMapObjectTypes() {
             node->first_attribute("width", 5, true)->value());
         mapObjectType.mapHeight = (unsigned char) stringToUnsignedLong(
             node->first_attribute("height", 6, true)->value());
-        mapObjectType.title = std::string("mapObjectType|" + mapObjectType.name).c_str();
 
         // Structure-Placing
         const char* structurePlacing = node->first_node("structure-placing", 17, true)->value();
@@ -485,7 +482,6 @@ void ConfigMgr::loadPopulationTiers() {
 
         populationTier.index = index++;
         populationTier.name = std::string(node->first_attribute("name", 4, true)->value());
-        populationTier.title = std::string("populationTier|" + populationTier.name);
 
         // <advancement>
         rapidxml::xml_node<>* advancementNode = node->first_node("advancement", 11, true);

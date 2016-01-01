@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenIsles 0.1\n"
 "Report-Msgid-Bugs-To: http://www.openisles.org\n"
-"POT-Creation-Date: 2016-01-01 10:43+0100\n"
-"PO-Revision-Date: 2016-01-01 10:44+0100\n"
+"POT-Creation-Date: 2016-01-01 15:41+0100\n"
+"PO-Revision-Date: 2016-01-01 15:43+0100\n"
 "Last-Translator: theHacker <openisles@openisles.org>\n"
 "Language-Team: theHacker <openisles@openisles.org>\n"
 "Language: en\n"
@@ -292,28 +292,38 @@ msgstr "Weaving mill"
 
 # automatically generated out of data xmls
 #: data/config/population-tiers.xml
-msgid "populationTier|aristocrats"
-msgstr "Aristocrats"
+msgid "populationTier|aristocrats|singular"
+msgid_plural "populationTier|aristocrats|plural"
+msgstr[0] "Aristocrat"
+msgstr[1] "Aristocrats"
 
 # automatically generated out of data xmls
 #: data/config/population-tiers.xml
-msgid "populationTier|burghers"
-msgstr "Burghers"
+msgid "populationTier|burghers|singular"
+msgid_plural "populationTier|burghers|plural"
+msgstr[0] "Burgher"
+msgstr[1] "Burghers"
 
 # automatically generated out of data xmls
 #: data/config/population-tiers.xml
-msgid "populationTier|merchants"
-msgstr "Merchants"
+msgid "populationTier|merchants|singular"
+msgid_plural "populationTier|merchants|plural"
+msgstr[0] "Merchant"
+msgstr[1] "Merchants"
 
 # automatically generated out of data xmls
 #: data/config/population-tiers.xml
-msgid "populationTier|pioneers"
-msgstr "Pioneers"
+msgid "populationTier|pioneers|singular"
+msgid_plural "populationTier|pioneers|plural"
+msgstr[0] "Pioneer"
+msgstr[1] "Pioneers"
 
 # automatically generated out of data xmls
 #: data/config/population-tiers.xml
-msgid "populationTier|settlers"
-msgstr "Settlers"
+msgid "populationTier|settlers|singular"
+msgid_plural "populationTier|settlers|plural"
+msgstr[0] "Settler"
+msgstr[1] "Settlers"
 
 #: src/cpp/config/ConfigMgr.cpp:24
 msgid "Loaded goods."
@@ -335,58 +345,58 @@ msgstr "Loaded population tiers."
 msgid "Loaded tiles."
 msgstr "Loaded tiles."
 
-#: src/cpp/config/ConfigMgr.cpp:94 src/cpp/config/ConfigMgr.cpp:245
+#: src/cpp/config/ConfigMgr.cpp:92 src/cpp/config/ConfigMgr.cpp:242
 #, c-format
 msgid "Illegal node '%s'.\n"
 msgstr "Illegal node '%s'.\n"
 
-#: src/cpp/config/ConfigMgr.cpp:114
+#: src/cpp/config/ConfigMgr.cpp:111
 #, c-format
 msgid "Illegal value '%s' for structurePlacing.\n"
 msgstr "Illegal value '%s' for structurePlacing.\n"
 
-#: src/cpp/config/ConfigMgr.cpp:223
+#: src/cpp/config/ConfigMgr.cpp:220
 #, c-format
 msgid "Loaded mapObjectType '%s'.\n"
 msgstr "Loaded mapObjectType '%s'.\n"
 
-#: src/cpp/config/ConfigMgr.cpp:262
+#: src/cpp/config/ConfigMgr.cpp:259
 #, c-format
 msgid "Loaded carrier mapObjectType '%s'.\n"
 msgstr "Loaded carrier mapObjectType '%s'.\n"
 
-#: src/cpp/config/ConfigMgr.cpp:349
+#: src/cpp/config/ConfigMgr.cpp:346
 #, c-format
 msgid "Illegal mapTileTypeName '%s'.\n"
 msgstr "Illegal mapTileTypeName '%s'.\n"
 
-#: src/cpp/config/ConfigMgr.cpp:368
+#: src/cpp/config/ConfigMgr.cpp:365
 #, c-format
 msgid "Illegal bool value '%s'.\n"
 msgstr "Illegal bool value '%s'.\n"
 
-#: src/cpp/config/ConfigMgr.cpp:405
+#: src/cpp/config/ConfigMgr.cpp:402
 msgid "Could not parse catchmentArea: Illegal char before first line.\n"
 msgstr "Could not parse catchmentArea: Illegal char before first line.\n"
 
-#: src/cpp/config/ConfigMgr.cpp:415
+#: src/cpp/config/ConfigMgr.cpp:412
 msgid "Could not parse catchmentArea: Illegal space inside line.\n"
 msgstr "Could not parse catchmentArea: Illegal space inside line.\n"
 
-#: src/cpp/config/ConfigMgr.cpp:431
+#: src/cpp/config/ConfigMgr.cpp:428
 msgid "Could not parse catchmentArea: widths are not equal.\n"
 msgstr "Could not parse catchmentArea: widths are not equal.\n"
 
-#: src/cpp/config/ConfigMgr.cpp:443
+#: src/cpp/config/ConfigMgr.cpp:440
 msgid "Could not parse catchmentArea: Last line was not completly empty.\n"
 msgstr "Could not parse catchmentArea: Last line was not completly empty.\n"
 
-#: src/cpp/config/ConfigMgr.cpp:542
+#: src/cpp/config/ConfigMgr.cpp:538
 #, c-format
 msgid "Loaded populationTier '%s'.\n"
 msgstr "Loaded populationTier '%s'.\n"
 
-#: src/cpp/config/ConfigMgr.cpp:567
+#: src/cpp/config/ConfigMgr.cpp:563
 #, c-format
 msgid "Illegal value '%s' for populationTier.\n"
 msgstr "Illegal value '%s' for populationTier.\n"
@@ -633,31 +643,31 @@ msgstr "Operating costs:"
 msgid "Balance:"
 msgstr "Balance:"
 
-#: src/cpp/gui/panel-widgets/GuiSelectedHouseBuildingWidget.cpp:18
+#: src/cpp/gui/panel-widgets/GuiSelectedHouseBuildingWidget.cpp:19
 msgid "Population growth in this population tier"
 msgstr "Population growth in this population tier"
 
-#: src/cpp/gui/panel-widgets/GuiSelectedHouseBuildingWidget.cpp:19
+#: src/cpp/gui/panel-widgets/GuiSelectedHouseBuildingWidget.cpp:20
 msgid "No population growth in this population tier"
 msgstr "No population growth in this population tier"
 
-#: src/cpp/gui/panel-widgets/GuiSelectedHouseBuildingWidget.cpp:20
+#: src/cpp/gui/panel-widgets/GuiSelectedHouseBuildingWidget.cpp:21
 msgid "Slight population loss in this population tier"
 msgstr "Slight population loss in this population tier"
 
-#: src/cpp/gui/panel-widgets/GuiSelectedHouseBuildingWidget.cpp:21
+#: src/cpp/gui/panel-widgets/GuiSelectedHouseBuildingWidget.cpp:22
 msgid "Severe population loss in this population tier"
 msgstr "Severe population loss in this population tier"
 
-#: src/cpp/gui/panel-widgets/GuiSelectedHouseBuildingWidget.cpp:48
+#: src/cpp/gui/panel-widgets/GuiSelectedHouseBuildingWidget.cpp:49
 msgid "Population in this population tier"
 msgstr "Population in this population tier"
 
-#: src/cpp/gui/panel-widgets/GuiSelectedHouseBuildingWidget.cpp:57
+#: src/cpp/gui/panel-widgets/GuiSelectedHouseBuildingWidget.cpp:58
 msgid "Population tier's name"
 msgstr "Population tier's name"
 
-#: src/cpp/gui/panel-widgets/GuiSelectedHouseBuildingWidget.cpp:117
+#: src/cpp/gui/panel-widgets/GuiSelectedHouseBuildingWidget.cpp:125
 #, c-format
 msgid "The demand for %s is not being fulfilled"
 msgstr "The demand for %s is not being fulfilled"

@@ -61,6 +61,7 @@ add_custom_target(update-pot-file
         --copyright-holder=theHacker
         -o ${SOURCE_PO_DIR}/OpenIsles.sources.pot
         -k_
+        -k_N:1,2
         -k_NOOP
         ${I18N_SOURCE_FILES}
     # .pot-Datei OpenIsles.data.pot aus den Data-XMLs generieren
