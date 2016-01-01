@@ -70,6 +70,12 @@ void GuiColonyGoodsWidget::renderElement(IRenderer* renderer) {
         GuiGoodsSlotElement* guiGoodsSlotElement = iter->second;
 
         const GoodsSlot& goodsSlot = colony->getGoods(good);
-        guiGoodsSlotElement->setStatusBarText(toString(goodsSlot.inventory) + "t " + _(good->getTitleMsgid().c_str()));
+
+        const char* goodTitle = _(good->getTitleMsgid().c_str());
+        if (goodsSlot.inventory > 0) {
+            guiGoodsSlotElement->setStatusBarText(toString(goodsSlot.inventory) + "t " + goodTitle);
+        } else {
+            guiGoodsSlotElement->setStatusBarText(goodTitle);
+        }
     }
 }
