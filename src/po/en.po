@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: OpenIsles 0.1\n"
 "Report-Msgid-Bugs-To: http://www.openisles.org\n"
 "POT-Creation-Date: 2016-01-01 15:41+0100\n"
-"PO-Revision-Date: 2016-01-01 15:43+0100\n"
+"PO-Revision-Date: 2016-01-01 16:27+0100\n"
 "Last-Translator: theHacker <openisles@openisles.org>\n"
 "Language-Team: theHacker <openisles@openisles.org>\n"
 "Language: en\n"
@@ -68,7 +68,7 @@ msgstr "tobacco"
 # automatically generated out of data xmls
 #: data/config/goods.xml
 msgid "good|tobacco-goods"
-msgstr "tobacco-goods"
+msgstr "tobacco goods"
 
 # automatically generated out of data xmls
 #: data/config/goods.xml
