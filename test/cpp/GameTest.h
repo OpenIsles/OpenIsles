@@ -47,7 +47,7 @@ protected:
         randomEngine = new RealRandomEngine();
         context.randomEngine = randomEngine;
 
-        configMgr = new ConfigMgr();
+        configMgr = new ConfigMgr("data/config");
         context.configMgr = configMgr;
 
         noSdlGraphicsMgr = new NoSDLGraphicsMgr(noSdlRenderer, configMgr);

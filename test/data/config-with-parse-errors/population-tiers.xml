@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<population-tiers>
+    <!-- ich bin kaputt ;-) -->
+
+    <food-good name="food consume-per-cycle="1.3" />
+</population-tiers>

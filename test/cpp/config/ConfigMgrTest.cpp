@@ -1,6 +1,7 @@
 #include <cstring>
 #include <gtest/gtest.h>
 #include "config/ConfigMgr.h"
+#include "config/ErrorInConfigException.h"
 #include "config/MapTileType.h"
 #include "map/MapObjectType.h"
 
@@ -9,7 +10,7 @@
  * @brief Test, ob die Konfiguration der Map-Objekt-Typen korrekt geladen wird.
  */
 TEST(ConfigMgrTest, loadMapObjectTypes) {
-    ConfigMgr configMgr;
+    ConfigMgr configMgr("data/config");
 
     // Teste 2 Objekte komplett
 
@@ -135,7 +136,7 @@ TEST(ConfigMgrTest, loadMapObjectTypes) {
  * @brief Test, ob die Konfiguration der Map-Objekt-Typen (speziell Träger) korrekt geladen wird.
  */
 TEST(ConfigMgrTest, loadCarrierMapObjectTypes) {
-    ConfigMgr configMgr;
+    ConfigMgr configMgr("data/config");
 
     const MapObjectType* carrier = configMgr.getMapObjectType("carrier");
     ASSERT_TRUE(carrier != nullptr);
@@ -168,7 +169,7 @@ TEST(ConfigMgrTest, parseCatchmentArea) {
         "   fooo\n"
         "   10001010\n"
         "   "
-    ), std::runtime_error);
+    ), ErrorInConfigException);
 
     // Erste Zeile muss leer sein
     ASSERT_THROW(ConfigMgr::parseCatchmentArea(
@@ -176,7 +177,7 @@ TEST(ConfigMgrTest, parseCatchmentArea) {
         "   11111111\n"
         "   00111100\n"
         "   "
-    ), std::runtime_error);
+    ), ErrorInConfigException);
 
     // ungültiges Zeichen
     ASSERT_THROW(ConfigMgr::parseCatchmentArea(
@@ -184,14 +185,14 @@ TEST(ConfigMgrTest, parseCatchmentArea) {
         "   0011XX00\n"
         "   00111100\n"
         "   "
-    ), std::runtime_error);
+    ), ErrorInConfigException);
 
     // Letzte Zeile nicht vorhanden
     ASSERT_THROW(ConfigMgr::parseCatchmentArea(
         "   \n"
         "   00110000\n"
         "   00111100"
-    ), std::runtime_error);
+    ), ErrorInConfigException);
 
     // Zwar ok, aber Breite nicht einheitlich
     ASSERT_THROW(ConfigMgr::parseCatchmentArea(
@@ -200,7 +201,7 @@ TEST(ConfigMgrTest, parseCatchmentArea) {
         "   11111111\n"
         "   000000001\n"
         " "
-    ), std::runtime_error);
+    ), ErrorInConfigException);
 
     // Korrekte Werte
     RectangleData<char>* catchmentArea = ConfigMgr::parseCatchmentArea(
@@ -277,7 +278,7 @@ TEST(ConfigMgrTest, parseCatchmentAreaDifferentLineEndings) {
  * @brief Prüft, ob alle Bevölkerungsgruppen richtig konfiguriert sind.
  */
 TEST(ConfigMgrTest, checkThatPopulationTiersAreFilledCorrectly) {
-    ConfigMgr configMgr;
+    ConfigMgr configMgr("data/config");
 
     {
         const PopulationTier* populationTier = configMgr.getPopulationTier("pioneers");
@@ -497,7 +498,7 @@ TEST(ConfigMgrTest, checkThatPopulationTiersAreFilledCorrectly) {
  * @brief Prüft, ob die Nahrungsbedürfnisse korrekt geladen wurden.
  */
 TEST(ConfigMgrTest, checkThatFoodNeedsIsFilledCorrectly) {
-    ConfigMgr configMgr;
+    ConfigMgr configMgr("data/config");
 
     const Good* food = configMgr.getGood("food");
     ASSERT_TRUE(food != nullptr);
@@ -511,7 +512,7 @@ TEST(ConfigMgrTest, checkThatFoodNeedsIsFilledCorrectly) {
  * @brief Prüft, ob alle Bevölkerungsgruppen im Set richtig sortiert sind
  */
 TEST(ConfigMgrTest, checkThatPopulationTiersAreSortedInSet) {
-    ConfigMgr configMgr;
+    ConfigMgr configMgr("data/config");
     const std::set<PopulationTier>& allPopulationTiers = configMgr.getAllPopulationTiers();
 
     // Größe des Sets überprüfen
@@ -536,4 +537,19 @@ TEST(ConfigMgrTest, checkThatPopulationTiersAreSortedInSet) {
     iter++;
 
     ASSERT_TRUE(iter == allPopulationTiers.cend());
+}
+
+/**
+ * @brief Prüft, ob eine Exception fliegt, wenn ein ungültiger Dateipfad angegeben wird
+ */
+TEST(ConfigMgrTest, checkForExceptionWhenFileNotExists) {
+    ASSERT_ANY_THROW(ConfigMgr("this/path/does/not/exist"));
+}
+
+/**
+ * @brief Prüft, ob eine Exception fliegt, wenn Parse-Fehler in einer Datei sind.
+ */
+TEST(ConfigMgrTest, checkForExceptionWhenThereAreParseErrors) {
+    // population-tiers.xml ist kaputt und muss zur Exception führen
+    ASSERT_THROW(ConfigMgr("data/config-with-parse-errors"), ErrorInConfigException);
 }

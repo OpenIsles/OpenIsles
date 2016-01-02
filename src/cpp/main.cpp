@@ -192,7 +192,7 @@ int main(int argc, char** argv) {
     ISoundMgr* sdlSoundMgr = new SDLSoundMgr();
     context.soundMgr = sdlSoundMgr;
 
-    ConfigMgr* configMgr = new ConfigMgr();
+    ConfigMgr* configMgr = new ConfigMgr("data/config");
     context.configMgr = configMgr;
 
     IGraphicsMgr* sdlGraphicsMgr = new SDLGraphicsMgr(sdlRenderer, configMgr);

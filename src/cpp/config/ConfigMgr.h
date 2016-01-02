@@ -172,11 +172,12 @@ private:
     NeededGood foodGood;
 
 public:
-    // TODO alles aus Datei einlesen
     /**
      * @brief Konstruiert die Konfiguration
+     * @param configPath Pfad, in dem die XML-Config-Dateien liegen (ohne Slash am Ende)
+     * @throws ErrorInConfigException wenn eine Datei nicht gefunden oder Syntaxfehler enthielt
      */
-    ConfigMgr();
+    ConfigMgr(std::string configPath);
 
     /**
      * Gibt den belegten Speicher der Konfigurationen wieder frei
@@ -309,28 +310,33 @@ public:
 private:
     /**
      * @brief Lädt die Waren
+     * @param configFilePath Pfad der zu ladenden Config-XML-Datei
      */
-    void loadGoods();
+    void loadGoods(const std::string& configFilePath);
 
     /**
      * @brief Lädt die Konfiguration der verfügbaren Map-Objekt-Typen aus `map-objects.xml`.
+     * @param configFilePath Pfad der zu ladenden Config-XML-Datei
      */
-    void loadMapObjectTypes();
+    void loadMapObjectTypes(const std::string& configFilePath);
 
     /**
      * @brief Lädt die Konfiguration der verfügbaren Map-Objekt-Typen aus `carriers.xml`.
+     * @param configFilePath Pfad der zu ladenden Config-XML-Datei
      */
-    void loadCarrierMapObjectTypes();
+    void loadCarrierMapObjectTypes(const std::string& configFilePath);
 
     /**
      * @brief Lädt die Konfiguration der Gelände-Kacheln
+     * @param configFilePath Pfad der zu ladenden Config-XML-Datei
      */
-    void loadTilesConfig();
+    void loadTilesConfig(const std::string& configFilePath);
 
     /**
      * @brief Lädt die Bevölkerungsgruppen
+     * @param configFilePath Pfad der zu ladenden Config-XML-Datei
      */
-    void loadPopulationTiers();
+    void loadPopulationTiers(const std::string& configFilePath);
 
     /**
      * @brief Helper, der aus einem String, der aus der XML ausgelesen wurde, den zugehörigen MapTileType findet.
