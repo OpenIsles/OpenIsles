@@ -81,10 +81,10 @@ struct Context {
 class ContextAware {
 
 public:
-    ContextAware(const Context* const context) : context(context) {}
+    ContextAware(const Context& context) : context(context) {}
 
 protected:
-    const Context* const context;
+    const Context& context;
 
 };
 

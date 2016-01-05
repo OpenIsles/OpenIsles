@@ -9,7 +9,7 @@ static Color colorWhite = Color(255, 255, 255, 255);
 static Color colorBlack = Color(0, 0, 0, 255);
 
 
-GuiSelectedPublicBuildingWidget::GuiSelectedPublicBuildingWidget(const Context* const context) :
+GuiSelectedPublicBuildingWidget::GuiSelectedPublicBuildingWidget(const Context& context) :
     GuiSelectedBuildingWidget(context), buildingName(context), buildingIconElement(context),
     operatingCostsLabel(context), operatingCosts(context), operatingCostsIcon(context) {
 
@@ -44,7 +44,7 @@ GuiSelectedPublicBuildingWidget::GuiSelectedPublicBuildingWidget(const Context* 
     operatingCosts.setAlign(RENDERTEXT_HALIGN_RIGHT | RENDERTEXT_VALIGN_TOP);
     addChildElement(&operatingCosts);
 
-    const IGraphic* graphicIcon = context->graphicsMgr->getGraphicSet("coin/coin-red-arrow")->getStatic()->getGraphic();
+    const IGraphic* graphicIcon = context.graphicsMgr->getGraphicSet("coin/coin-red-arrow")->getStatic()->getGraphic();
     operatingCostsIcon.setCoords(195, y - 7, graphicIcon->getWidth(), graphicIcon->getHeight());
     operatingCostsIcon.setGraphic(graphicIcon);
     addChildElement(&operatingCostsIcon);
@@ -57,8 +57,8 @@ void GuiSelectedPublicBuildingWidget::onSelectedMapBuildingChanged(const Buildin
 
     buildingName.setText(_(mapObjectType->getTitleMsgid().c_str()));
 
-    std::string graphicSetName = context->graphicsMgr->getGraphicSetNameForAddBuildingButton(mapObjectType);
-    const IGraphic* graphic = context->graphicsMgr->getGraphicSet(graphicSetName)->getStatic()->getGraphic();
+    std::string graphicSetName = context.graphicsMgr->getGraphicSetNameForAddBuildingButton(mapObjectType);
+    const IGraphic* graphic = context.graphicsMgr->getGraphicSet(graphicSetName)->getStatic()->getGraphic();
     buildingIconElement.setGraphic(graphic);
 
     operatingCosts.setText(toString(mapObjectType->operatingCosts.running));

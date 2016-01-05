@@ -19,7 +19,7 @@ public:
      * @brief Konstruktor.
      * @param context Dependency
      */
-    GuiMapRotateWidget(const Context* const context);
+    GuiMapRotateWidget(const Context& context);
 
     virtual ~GuiMapRotateWidget();
 

@@ -7,12 +7,12 @@ static Color colorBlack = Color(0, 0, 0, 255);
 static Color colorLightBrown = Color(223, 216, 183, 255);
 
 
-GuiPanelHeader::GuiPanelHeader(const Context* const context) : GuiStaticGraphicElement(context) {
+GuiPanelHeader::GuiPanelHeader(const Context& context) : GuiStaticGraphicElement(context) {
     // Größe ist fix
     width = 248;
     height = 40;
 
-    setGraphic(context->graphicsMgr->getGraphicSet("panel-header")->getStatic()->getGraphic());
+    setGraphic(context.graphicsMgr->getGraphicSet("panel-header")->getStatic()->getGraphic());
 
     textElement = new GuiStaticTextElement(context);
     textElement->setCoords(35, 10, 178, 18);
@@ -37,9 +37,9 @@ void GuiPanelHeader::setText(const std::string& text) {
 
 void GuiPanelHeader::setCoatOfArmsIcon(const Player* player) {
     const std::string graphicSetName =
-        context->graphicsMgr->getGraphicSetNameForCoatOfArms("large", player->getColor());
+        context.graphicsMgr->getGraphicSetNameForCoatOfArms("large", player->getColor());
     const IGraphic* coatOfArmsGraphic =
-        context->graphicsMgr->getGraphicSet(graphicSetName)->getStatic()->getGraphic();
+        context.graphicsMgr->getGraphicSet(graphicSetName)->getStatic()->getGraphic();
 
     setIconGraphic(coatOfArmsGraphic);
 }

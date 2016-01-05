@@ -2,7 +2,7 @@
 #include "gui/components/GuiGoodsSlotElement.h"
 
 
-GuiGoodsSlotElement::GuiGoodsSlotElement(const Context* const context) : GuiGoodElement(context) {
+GuiGoodsSlotElement::GuiGoodsSlotElement(const Context& context) : GuiGoodElement(context) {
 }
 
 GuiGoodsSlotElement::~GuiGoodsSlotElement() {

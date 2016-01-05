@@ -6,8 +6,8 @@
 static Color colorWhite = Color(255, 255, 255, 255);
 
 
-GuiStatusBar::GuiStatusBar(const Context* const context) : GuiStaticGraphicElement(context), textElement(context) {
-    backgroundGraphic = new SDLGraphic(context->graphicsMgr->getRenderer(), "data/img/gui/statusbar.png");
+GuiStatusBar::GuiStatusBar(const Context& context) : GuiStaticGraphicElement(context), textElement(context) {
+    backgroundGraphic = new SDLGraphic(context.graphicsMgr->getRenderer(), "data/img/gui/statusbar.png");
     setCoords(0, 734, backgroundGraphic->getWidth(), backgroundGraphic->getHeight());
     setGraphic(backgroundGraphic);
 

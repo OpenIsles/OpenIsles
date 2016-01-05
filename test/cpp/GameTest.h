@@ -57,11 +57,11 @@ protected:
         noSdlFontMgr = new NoSDLFontMgr();
         context.fontMgr = noSdlFontMgr;
 
-        game = new Game(&context);
+        game = new Game(context);
         context.game = game;
         context.game->setSpeed(1);
 
-        economicsMgr = new EconomicsMgr(&context);
+        economicsMgr = new EconomicsMgr(context);
         context.economicsMgr = economicsMgr;
 
         std::string mapPath = "data/map/" + mapFilename;

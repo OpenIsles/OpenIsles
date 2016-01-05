@@ -8,7 +8,7 @@
 #include "sound/sdl/SDLSoundMgr.h"
 
 
-GuiOptionsMenuWidget::GuiOptionsMenuWidget(const Context* const context) : GuiPanelWidget(context) {
+GuiOptionsMenuWidget::GuiOptionsMenuWidget(const Context& context) : GuiPanelWidget(context) {
     // TODO höchstwahrscheinlich sind die GUI-Komponenten lost-memory, da sie am Ende nicht zerstört werden
     // Idee untersuchen, dass ~GuiMgr() von jeder Komponente rekursiv die Kinder beseitigt.
 
@@ -22,22 +22,22 @@ GuiOptionsMenuWidget::GuiOptionsMenuWidget(const Context* const context) : GuiPa
     addChildElement(panelHeader);
 
     GuiPushButton* musicPushButton = new GuiPushButton(context);
-    musicPushButton->setGraphic(context->graphicsMgr->getGraphicSet("button-music")->getStatic()->getGraphic());
-    musicPushButton->setGraphicPressed(context->graphicsMgr->getGraphicSet("button-music-pressed")->getStatic()->getGraphic());
+    musicPushButton->setGraphic(context.graphicsMgr->getGraphicSet("button-music")->getStatic()->getGraphic());
+    musicPushButton->setGraphicPressed(context.graphicsMgr->getGraphicSet("button-music-pressed")->getStatic()->getGraphic());
     musicPushButton->setCoords(7, 345, 64, 64);
     musicPushButton->setStatusBarText(statusBarTextTurnMusicOn);
     musicPushButton->setOnClickFunction([musicPushButton, context, statusBarTextTurnMusicOff, statusBarTextTurnMusicOn]() {
         bool musicEnabled = musicPushButton->isActive();
 
         if (musicEnabled) {
-            context->soundMgr->enableMusic();
+            context.soundMgr->enableMusic();
             musicPushButton->setStatusBarText(statusBarTextTurnMusicOff);
         } else {
-            context->soundMgr->disableMusic();
+            context.soundMgr->disableMusic();
             musicPushButton->setStatusBarText(statusBarTextTurnMusicOn);
         }
     });
-    context->guiMgr->registerElement(GUI_ID_MUSIC_PUSH_BUTTON, musicPushButton);
+    context.guiMgr->registerElement(GUI_ID_MUSIC_PUSH_BUTTON, musicPushButton);
     addChildElement(musicPushButton);
 }
 

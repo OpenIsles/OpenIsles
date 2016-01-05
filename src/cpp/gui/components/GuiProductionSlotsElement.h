@@ -29,7 +29,7 @@ private:
     GuiStaticGraphicElement* productionArrow;  ///< Symbol Pfeil
 
 public:
-    GuiProductionSlotsElement(const Context* const context);
+    GuiProductionSlotsElement(const Context& context);
     virtual ~GuiProductionSlotsElement() override;
 
     /**

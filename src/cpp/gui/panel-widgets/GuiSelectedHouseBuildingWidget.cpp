@@ -23,12 +23,12 @@ static struct {
 };
 
 
-GuiSelectedHouseBuildingWidget::GuiSelectedHouseBuildingWidget(const Context* const context) :
+GuiSelectedHouseBuildingWidget::GuiSelectedHouseBuildingWidget(const Context& context) :
     GuiSelectedBuildingWidget(context), populationSatisfaction(context), inhabitants(context), populationTier(context),
     foodSupplyElement(context) {
 
     // Grafiken laden
-    IRenderer* const renderer = context->graphicsMgr->getRenderer();
+    IRenderer* const renderer = context.graphicsMgr->getRenderer();
     for (unsigned char i = 0; i < 4; i++) {
         std::string filename =
             std::string("data/img/gui/population-satisfaction/") + populationSatisfactionGui[i].filename;

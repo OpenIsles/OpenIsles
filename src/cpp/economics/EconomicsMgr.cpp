@@ -7,7 +7,7 @@
 #include "utils/DoubleToIntSequence.h"
 
 
-EconomicsMgr::EconomicsMgr(const Context* const context) : ContextAware(context) {
+EconomicsMgr::EconomicsMgr(const Context& context) : ContextAware(context) {
 }
 
 EconomicsMgr::~EconomicsMgr() {
@@ -46,7 +46,7 @@ void EconomicsMgr::updateProduction(Building* building) {
     // Waren die Waren grade frisch angeliefert?
     auto setNextGoodsProductionTicks = [&]() {
         building->hasRecievedAlInputGoodsSinceLastUpdate = true;
-        building->nextGoodsProductionTicks = context->game->getTicks() +
+        building->nextGoodsProductionTicks = context.game->getTicks() +
             (unsigned long) (mapObjectType->secondsToProduce * TICKS_PER_SECOND);
     };
 
@@ -57,7 +57,7 @@ void EconomicsMgr::updateProduction(Building* building) {
     }
 
     // Prüfen, ob es Zeit ist, was zu produzieren
-    if (context->game->getTicks() < building->nextGoodsProductionTicks) {
+    if (context.game->getTicks() < building->nextGoodsProductionTicks) {
         return;
     }
 
@@ -120,8 +120,8 @@ void EconomicsMgr::updateProduction(Building* building) {
  */
 
 void EconomicsMgr::updatePlayerStatus() {
-    const std::set<PopulationTier>& allPopulationTiers = context->configMgr->getAllPopulationTiers();
-    const Game* game = context->game;
+    const std::set<PopulationTier>& allPopulationTiers = context.configMgr->getAllPopulationTiers();
+    const Game* game = context.game;
 
     unsigned long populationSumPerPlayer[4] = { 0, 0, 0, 0 };
     unsigned long taxesIncomeSumPerPlayer[4] = { 0, 0, 0, 0 };
@@ -183,7 +183,7 @@ void EconomicsMgr::updatePlayerStatus() {
 
 void EconomicsMgr::updateFinances() {
     for (int playerIndex = 0; playerIndex < 4; playerIndex++) {
-        Player* player = context->game->getPlayer(playerIndex);
+        Player* player = context.game->getPlayer(playerIndex);
 
         // Steuereinnahmen
         unsigned long taxesIncome = (player->playerStatus.taxesIncome / 6); // abrunden
@@ -196,12 +196,12 @@ void EconomicsMgr::updateFinances() {
 }
 
 void EconomicsMgr::doGoodsConsumptionAndUpdatePopulationSatisfaction() {
-    const ConfigMgr* configMgr = context->configMgr;
+    const ConfigMgr* configMgr = context.configMgr;
 
     // Nahrungsverbrauch
     const NeededGood& foodNeededGood = configMgr->getFoodGood();
     
-    for (auto iter : context->game->getColonies()) {
+    for (auto iter : context.game->getColonies()) {
         Colony* colony = iter.second;
         
         unsigned int sumHousesPopulation = 0;
@@ -212,7 +212,7 @@ void EconomicsMgr::doGoodsConsumptionAndUpdatePopulationSatisfaction() {
         // Verbrauch ermitteln (double in diskreten Integer ausgehend von der Spielzeit umrechnen)
         double foodConsumption = foodNeededGood.consumePerCycle * (double) sumHousesPopulation / (double) 100;
         std::array<int, 6> intSequence = DoubleToIntSequence::toIntSequence(foodConsumption);
-        int cycleNr = (context->game->getTicks() / TICKS_PER_CYCLE) % 6;
+        int cycleNr = (context.game->getTicks() / TICKS_PER_CYCLE) % 6;
         int foodConsumptionThisCycle = intSequence[cycleNr];
 
         // Verbrauchen
@@ -249,6 +249,6 @@ void EconomicsMgr::doGoodsConsumptionAndUpdatePopulationSatisfaction() {
     // Dem GuiMgr Bescheid geben, da sich ggf. was an der Zufriedenheit oder des Versorgungszustands geändert hat.
     // Dieser aktualisiert die Anzeige, wenn grade sichtbar.
 #ifndef IN_TESTS
-    context->guiMgr->onHouseInfoChanged();
+    context.guiMgr->onHouseInfoChanged();
 #endif
 }

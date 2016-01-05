@@ -23,7 +23,7 @@ private:
     GuiStaticGraphicElement operatingCostsIcon;  ///< Symbol für Betriebskosten
 
 public:
-    GuiSelectedPublicBuildingWidget(const Context* const context);
+    GuiSelectedPublicBuildingWidget(const Context& context);
     virtual ~GuiSelectedPublicBuildingWidget() override {}
 
     /**

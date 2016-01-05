@@ -43,7 +43,7 @@ TEST_F(InCatchmentAreaFinderGoodsPriorityTest, checkThatFullerInventoryIsFetched
 
     // Testdurchführung
     CatchmentAreaIterator catchmentAreaIterator(*weavingMill, false);
-    InCatchmentAreaFinder inCatchmentAreaFinder(&context, &catchmentAreaIterator);
+    InCatchmentAreaFinder inCatchmentAreaFinder(context, &catchmentAreaIterator);
 
     InCatchmentAreaFinderResult result = inCatchmentAreaFinder.findBuildingWithGoods(goodsWoolOnly);
 
@@ -68,7 +68,7 @@ TEST_F(InCatchmentAreaFinderGoodsPriorityTest, checkThatOnSameInventoryLastColle
 
     // Testdurchführung
     CatchmentAreaIterator catchmentAreaIterator(*weavingMill, false);
-    InCatchmentAreaFinder inCatchmentAreaFinder(&context, &catchmentAreaIterator);
+    InCatchmentAreaFinder inCatchmentAreaFinder(context, &catchmentAreaIterator);
 
     InCatchmentAreaFinderResult result = inCatchmentAreaFinder.findBuildingWithGoods(goodsWoolOnly);
 

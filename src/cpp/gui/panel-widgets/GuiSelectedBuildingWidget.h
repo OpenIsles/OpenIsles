@@ -16,7 +16,7 @@ private:
     GuiPanelHeader panelHeader;
 
 public:
-    GuiSelectedBuildingWidget(const Context* const context);
+    GuiSelectedBuildingWidget(const Context& context);
     virtual ~GuiSelectedBuildingWidget() override;
 
     /**

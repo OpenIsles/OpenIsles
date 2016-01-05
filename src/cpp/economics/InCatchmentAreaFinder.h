@@ -48,7 +48,7 @@ private:
     CatchmentAreaIterator* catchmentAreaIterator;
 
 public:
-    InCatchmentAreaFinder(const Context* const context, CatchmentAreaIterator* catchmentAreaIterator);
+    InCatchmentAreaFinder(const Context& context, CatchmentAreaIterator* catchmentAreaIterator);
 
     /**
      * @brief Sucht im Einzugsbereich nach dem "besten" Gebäude, dass abholfertige Güter für ein Lagergebäude zur

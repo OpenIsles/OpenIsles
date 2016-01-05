@@ -18,14 +18,14 @@ bool AStar::debugAStar_rightAnglesOnly = false;
 #endif
 
 
-AStar::AStar(const Context* const context, CatchmentAreaIterator* catchmentAreaIterator,
+AStar::AStar(const Context& context, CatchmentAreaIterator* catchmentAreaIterator,
              bool cutRoute, bool useStreetOnly, bool rightAnglesOnly) :
     ContextAware(context), catchmentAreaIterator(catchmentAreaIterator),
     cutRoute(cutRoute), useStreetOnly(useStreetOnly), rightAnglesOnly(rightAnglesOnly) {
 }
 
 Route AStar::getRoute(const MapCoords& source, const MapCoords& destination) const {
-    Map* map = context->game->getMap();
+    Map* map = context.game->getMap();
 
     // Ermitteln, aus und in welches Gebäude wir die Route berechnen wollen. Dies ist optional, eine Route muss nicht
     // notwendigerweise ein Gebäude am Anfang/Ende haben. In diesem Fall ist der Building-Zeiger nullptr.
@@ -220,7 +220,7 @@ Route AStar::getRoute(const MapCoords& source, const MapCoords& destination) con
 }
 
 void AStar::cutRouteInsideBuildings(Route& route) const {
-    Map* map = context->game->getMap();
+    Map* map = context.game->getMap();
 
     // Erst von vorne
     int hopsToDeleteFromFront = 0;
@@ -286,7 +286,7 @@ bool AStar::isTileWalkable(const MapCoords& mapCoords, Building* sourceBuilding,
                            Building* destinationBuilding, CatchmentAreaIterator* catchmentAreaIterator,
                            bool useStreetOnly, bool& insideSourceOrDestinationBuilding) const {
 
-    Map* map = context->game->getMap();
+    Map* map = context.game->getMap();
 
     // Kachel überprüfen
     MapTile* mapTile = map->getMapTileAt(mapCoords);

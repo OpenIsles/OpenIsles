@@ -21,7 +21,7 @@ private:
     const Player* player;
 
 public:
-    GuiPlayerStatusWidget(const Context* const context);
+    GuiPlayerStatusWidget(const Context& context);
     virtual ~GuiPlayerStatusWidget() override;
 
     void setPlayer(const Player* player);

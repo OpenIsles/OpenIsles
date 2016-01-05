@@ -1,7 +1,7 @@
 #include "gui/panel-widgets/GuiSelectedBuildingWidget.h"
 
 
-GuiSelectedBuildingWidget::GuiSelectedBuildingWidget(const Context* const context) :
+GuiSelectedBuildingWidget::GuiSelectedBuildingWidget(const Context& context) :
     GuiPanelWidget(context), panelHeader(context) {
 
     panelHeader.setPosition(0, 0);

@@ -102,7 +102,7 @@ public:
      * @param useStreetOnly `true`, um nur Straßen für die Route zu verwenden, `false` erlaubt auch über Gras zu laufen
      * @param rightAnglesOnly `true`, um ausschließlich rechte Winkel für die Route zu verwenden
      */
-    AStar(const Context* const context, CatchmentAreaIterator* catchmentAreaIterator,
+    AStar(const Context& context, CatchmentAreaIterator* catchmentAreaIterator,
           bool cutRoute, bool useStreetOnly, bool rightAnglesOnly);
 
     /**

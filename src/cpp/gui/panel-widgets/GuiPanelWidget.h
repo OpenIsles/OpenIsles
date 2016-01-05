@@ -19,7 +19,7 @@ class SDL_Renderer;
 class GuiPanelWidget : public GuiBase {
 
 public:
-    GuiPanelWidget(const Context* const context) : GuiBase(context) {
+    GuiPanelWidget(const Context& context) : GuiBase(context) {
         setCoords(10, 352, 236, 400);
     }
     virtual ~GuiPanelWidget() {}

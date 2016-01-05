@@ -174,7 +174,7 @@ private:
     FourthDirection screenView;
 
 public:
-    Map(const Context* const context);
+    Map(const Context& context);
 
     VIRTUAL_ONLY_IN_TESTS
     ~Map();

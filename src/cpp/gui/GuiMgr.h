@@ -147,7 +147,7 @@ private:
     bool quitGame;
 
 public:
-    GuiMgr(const Context* const context, IRenderer* renderer);
+    GuiMgr(const Context& context, IRenderer* renderer);
     ~GuiMgr();
 
     /**

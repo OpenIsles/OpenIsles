@@ -11,7 +11,7 @@
 TEST_F(BuildOperationTest, orderOfInsertion) {
     const MapObjectType* pioneersHouse1 = configMgr->getMapObjectType("pioneers-house1");
 
-    BuildOperation buildOperation(&context, *player);
+    BuildOperation buildOperation(context, *player);
 
     buildOperation.requestBuild({36, 37}, pioneersHouse1, Direction::EAST);
     buildOperation.requestBuild({39, 40}, pioneersHouse1, Direction::EAST);
@@ -40,7 +40,7 @@ TEST_F(BuildOperationTest, somethingInTheWay) {
 
     {
         // Wirtshaus normal einsetzen: genug Platz
-        BuildOperation buildOperation(&context, *player);
+        BuildOperation buildOperation(context, *player);
         buildOperation.requestBuild(MapCoords(45, 33), tavern, Direction::SOUTH);
         const BuildOperationResult& result = buildOperation.getResult();
         ASSERT_EQ(BuildOperationResult::OK, result.result);
@@ -50,7 +50,7 @@ TEST_F(BuildOperationTest, somethingInTheWay) {
 
     {
         // Wirtshaus gedreht einsetzen: genug Platz
-        BuildOperation buildOperation(&context, *player);
+        BuildOperation buildOperation(context, *player);
         buildOperation.requestBuild(MapCoords(45, 33), tavern, Direction::WEST);
         const BuildOperationResult& result = buildOperation.getResult();
         ASSERT_EQ(BuildOperationResult::OK, result.result);
@@ -60,7 +60,7 @@ TEST_F(BuildOperationTest, somethingInTheWay) {
 
     {
         // Wirtshaus normal einsetzen: ein Feldweg im Weg
-        BuildOperation buildOperation(&context, *player);
+        BuildOperation buildOperation(context, *player);
         buildOperation.requestBuild(MapCoords(39, 34), tavern, Direction::NORTH);
         const BuildOperationResult& result = buildOperation.getResult();
         ASSERT_EQ(BuildOperationResult::SOMETHING_IN_THE_WAY, result.result);
@@ -70,7 +70,7 @@ TEST_F(BuildOperationTest, somethingInTheWay) {
 
     {
         // Wirtshaus gedreht einsetzen: ein Feldweg im Weg
-        BuildOperation buildOperation(&context, *player);
+        BuildOperation buildOperation(context, *player);
         buildOperation.requestBuild(MapCoords(38, 36), tavern, Direction::EAST);
         const BuildOperationResult& result = buildOperation.getResult();
         ASSERT_EQ(BuildOperationResult::SOMETHING_IN_THE_WAY, result.result);
@@ -87,7 +87,7 @@ TEST_F(BuildOperationTest, overlappingRequestBuild) {
 
     {
         // Ersten Marktplatz setzen
-        BuildOperation buildOperation(&context, *player);
+        BuildOperation buildOperation(context, *player);
         buildOperation.requestBuildWhenNothingInTheWay(MapCoords(45, 33), marketplace, Direction::SOUTH);
         ASSERT_EQ(12, buildOperation.getResult().size());
 
@@ -108,7 +108,7 @@ TEST_F(BuildOperationTest, overlappingRequestBuild) {
         const MapCoords mapCoords(47, 39);
 
         // Mit requestBuildWhenNothingInTheWay darf ich auf der Karte nicht überlappen
-        BuildOperation buildOperation(&context, *player);
+        BuildOperation buildOperation(context, *player);
         buildOperation.requestBuildWhenNothingInTheWay(mapCoords, marketplace, Direction::SOUTH);
         ASSERT_EQ(0, buildOperation.getResult().size());
 
@@ -132,7 +132,7 @@ TEST_F(BuildOperationTest, buildingCosts) {
         colony->getGoods(configMgr->getGood("wood")).inventory = 30;
         colony->getGoods(configMgr->getGood("bricks")).inventory = 20;
 
-        BuildOperation buildOperation(&context, *player);
+        BuildOperation buildOperation(context, *player);
         const MapCoords mc1 = { 45, 34 };
         const MapCoords mc2 = { 47, 34 };
         const MapCoords mc3 = { 39, 37 };
@@ -160,7 +160,7 @@ TEST_F(BuildOperationTest, buildingCosts) {
         colony->getGoods(configMgr->getGood("wood")).inventory = 2;
         colony->getGoods(configMgr->getGood("bricks")).inventory = 5;
 
-        BuildOperation buildOperation(&context, *player);
+        BuildOperation buildOperation(context, *player);
         buildOperation.requestBuildWhenNothingInTheWay({38, 40}, toolsmiths, Direction::SOUTH);
         ASSERT_EQ(false, buildOperation.getResult().at({38, 40})->resourcesEnoughToBuildThis);
     }
@@ -172,7 +172,7 @@ TEST_F(BuildOperationTest, buildingCosts) {
 TEST_F(BuildOperationTest, emptyBuildQueue) {
     const MapObjectType* pioneersHouse1 = configMgr->getMapObjectType("pioneers-house1");
 
-    BuildOperation buildOperation(&context, *player);
+    BuildOperation buildOperation(context, *player);
     buildOperation.requestBuildWhenNothingInTheWay({47, 39}, pioneersHouse1, Direction::NORTH); // da is belegt
 
     buildOperation.updateBuildMaterials(); // rebuildResult() triggern
@@ -210,7 +210,7 @@ TEST_F(BuildOperationTest, randomizeWhenBuildingHouses) {
     // Testdurchführung: Baue zweimal dasselbe und vergleiche das Ergebnis
 
     auto doOneBuild = [&]() {
-        BuildOperation buildOperation(&context, *player);
+        BuildOperation buildOperation(context, *player);
         for (const MapCoords& mapCoords : mapCoordsToBuildThere) {
             buildOperation.requestBuildWhenNothingInTheWay(mapCoords, pioneersHouses[0], Direction::SOUTH);
         }
@@ -268,7 +268,7 @@ TEST_F(BuildOperationTest, addingOneMoreHouse) {
 
     // Testdurchführung: Baue viele Häuser, baue danach ein weiteres. Es dürfen sich bestehende nicht ändern.
 
-    BuildOperation buildOperation(&context, *player);
+    BuildOperation buildOperation(context, *player);
     for (const MapCoords& mapCoords : mapCoordsToBuildThere) {
         buildOperation.requestBuildWhenNothingInTheWay(mapCoords, pioneersHouse1, Direction::SOUTH);
     };

@@ -13,7 +13,7 @@
 class GuiOptionsMenuWidget : public GuiPanelWidget {
 
 public:
-    GuiOptionsMenuWidget(const Context* const context);
+    GuiOptionsMenuWidget(const Context& context);
     virtual ~GuiOptionsMenuWidget() {}
 
     /**

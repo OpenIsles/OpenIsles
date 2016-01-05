@@ -202,11 +202,11 @@ int main(int argc, char** argv) {
     IFontMgr* sdlFontMgr = new SDLFontMgr();
     context.fontMgr = sdlFontMgr;
 
-    GuiMgr* guiMgr = new GuiMgr(&context, sdlRenderer);
+    GuiMgr* guiMgr = new GuiMgr(context, sdlRenderer);
     context.guiMgr = guiMgr;
     guiMgr->initGui();
 
-    EconomicsMgr* economicsMgr = new EconomicsMgr(&context);
+    EconomicsMgr* economicsMgr = new EconomicsMgr(context);
     context.economicsMgr = economicsMgr;
 
 #ifdef DEBUG
@@ -215,7 +215,7 @@ int main(int argc, char** argv) {
     PerformanceCounter performanceCounterRendering(500);
 #endif
     
-    Game* game = new Game(&context);
+    Game* game = new Game(context);
     context.game = game;
 
     game->loadGameFromTMX(cmdlineParams.mapFileToLoad);

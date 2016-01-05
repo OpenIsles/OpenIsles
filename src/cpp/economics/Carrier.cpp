@@ -196,7 +196,7 @@ void Carrier::onRouteDone(const Context& context, bool& deleteMe) {
         targetBuilding->lastGoodsCollections = context.game->getTicks();
 
         CatchmentAreaIterator catchmentAreaIterator(*owningBuilding, false);
-        AStar aStar(&context, &catchmentAreaIterator, true, owningBuilding->isStorageBuilding(), false);
+        AStar aStar(context, &catchmentAreaIterator, true, owningBuilding->isStorageBuilding(), false);
         Route returnRoute = aStar.getRoute(route.back(), route.front());
 
         deleteMe = true;
@@ -261,7 +261,7 @@ void Carrier::onHarvestingFinished(const Context& context) {
 
             const Good* goodGrass = context.configMgr->getGood("grass");
 
-            InCatchmentAreaFinder inCatchmentAreaFinder(&context, &catchmentAreaIterator);
+            InCatchmentAreaFinder inCatchmentAreaFinder(context, &catchmentAreaIterator);
             InCatchmentAreaFinderResult result;
 
             result = inCatchmentAreaFinder.findMapTileWithInvisibleGood(goodGrass, currentMapCoords);
@@ -287,7 +287,7 @@ void Carrier::onHarvestingFinished(const Context& context) {
     }
 
     // Träger voll bzw. nix mehr zum ernten gefunden? Dann auf den Heimweg zum Gebäude zurück machen
-    AStar aStar(&context, &catchmentAreaIterator, true, false, false);
+    AStar aStar(context, &catchmentAreaIterator, true, false, false);
     Route routeBackToOwningBuilding = aStar.getRoute(
         MapCoords((int) getMapCoords().x(), (int) getMapCoords().y()), owningBuilding->getMapCoords());
 

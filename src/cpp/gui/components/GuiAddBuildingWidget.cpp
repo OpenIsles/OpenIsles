@@ -11,7 +11,7 @@
 #include "utils/StringFormat.h"
 
 
-GuiAddBuildingWidget::GuiAddBuildingWidget(const Context* const context) :
+GuiAddBuildingWidget::GuiAddBuildingWidget(const Context& context) :
     GuiBase(context), panelHeader(context), productionSlotsElement(context),
     coinsElement(context), operatingCostsElement(context),
     toolsElement(context), woodElement(context), bricksElement(context) {
@@ -36,13 +36,13 @@ GuiAddBuildingWidget::GuiAddBuildingWidget(const Context* const context) :
     const int elementsY2 = elementsY1 + elementsHeight + 5;
 
     coinsElement.setCoords(elementsX, elementsY1, 85, elementsHeight);
-    coinsElement.setGraphic(context->graphicsMgr->getGraphicSet("coin/coin")->getStatic()->getGraphic());
+    coinsElement.setGraphic(context.graphicsMgr->getGraphicSet("coin/coin")->getStatic()->getGraphic());
     coinsElement.setStatusBarText(_("Costs for this structure"));
     addChildElement(&coinsElement);
 
     operatingCostsElement.setCoords(elementsX + 2*elementsXColumnWidth, elementsY1, 85, elementsHeight);
     operatingCostsElement.setGraphic(
-        context->graphicsMgr->getGraphicSet("coin/coin-red-arrow")->getStatic()->getGraphic());
+        context.graphicsMgr->getGraphicSet("coin/coin-red-arrow")->getStatic()->getGraphic());
     operatingCostsElement.setStatusBarText(_("Operating costs for this structure"));
     addChildElement(&operatingCostsElement);
 
@@ -51,22 +51,22 @@ GuiAddBuildingWidget::GuiAddBuildingWidget(const Context* const context) :
     const Good* good;
     std::string graphicSetName;
 
-    good = context->configMgr->getGood("tools");
-    graphicSetName = context->graphicsMgr->getGraphicSetNameForGoodIcons(good, false);
+    good = context.configMgr->getGood("tools");
+    graphicSetName = context.graphicsMgr->getGraphicSetNameForGoodIcons(good, false);
     toolsElement.setCoords(elementsX, elementsY2, 50, elementsHeight);
-    toolsElement.setGraphic(context->graphicsMgr->getGraphicSet(graphicSetName)->getStatic()->getGraphic());
+    toolsElement.setGraphic(context.graphicsMgr->getGraphicSet(graphicSetName)->getStatic()->getGraphic());
     toolsElement.setStatusBarText(_("Tools requirement for this structure"));
 
-    good = context->configMgr->getGood("wood");
-    graphicSetName = context->graphicsMgr->getGraphicSetNameForGoodIcons(good, false);
+    good = context.configMgr->getGood("wood");
+    graphicSetName = context.graphicsMgr->getGraphicSetNameForGoodIcons(good, false);
     woodElement.setCoords(elementsX + elementsXColumnWidth, elementsY2, 50, elementsHeight);
-    woodElement.setGraphic(context->graphicsMgr->getGraphicSet(graphicSetName)->getStatic()->getGraphic());
+    woodElement.setGraphic(context.graphicsMgr->getGraphicSet(graphicSetName)->getStatic()->getGraphic());
     woodElement.setStatusBarText(_("Wood requirement for this structure"));
 
-    good = context->configMgr->getGood("bricks");
-    graphicSetName = context->graphicsMgr->getGraphicSetNameForGoodIcons(good, false);
+    good = context.configMgr->getGood("bricks");
+    graphicSetName = context.graphicsMgr->getGraphicSetNameForGoodIcons(good, false);
     bricksElement.setCoords(elementsX + 2*elementsXColumnWidth, elementsY2, 50, elementsHeight);
-    bricksElement.setGraphic(context->graphicsMgr->getGraphicSet(graphicSetName)->getStatic()->getGraphic());
+    bricksElement.setGraphic(context.graphicsMgr->getGraphicSet(graphicSetName)->getStatic()->getGraphic());
     bricksElement.setStatusBarText(_("Bricks requirement for this structure"));
 
     addChildElement(&toolsElement);
@@ -80,12 +80,12 @@ void GuiAddBuildingWidget::renderElement(IRenderer* renderer) {
     int windowX, windowY;
     getWindowCoords(windowX, windowY);
 
-    const MapObjectType* mapObjectType = context->guiMgr->getPanelState().addingMapObject;
+    const MapObjectType* mapObjectType = context.guiMgr->getPanelState().addingMapObject;
 
     // Grafik
-    const FourthDirection& view = context->guiMgr->getPanelState().addingMapObjectView;
-    const std::string graphicsSetName = context->graphicsMgr->getGraphicSetNameForMapObject(mapObjectType);
-    const GraphicSet* graphicSet = context->graphicsMgr->getGraphicSet(graphicsSetName);
+    const FourthDirection& view = context.guiMgr->getPanelState().addingMapObjectView;
+    const std::string graphicsSetName = context.graphicsMgr->getGraphicSetNameForMapObject(mapObjectType);
+    const GraphicSet* graphicSet = context.graphicsMgr->getGraphicSet(graphicsSetName);
 
     // TODO duplicate code
     const IGraphic* graphic;

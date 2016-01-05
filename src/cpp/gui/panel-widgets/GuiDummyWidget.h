@@ -17,7 +17,7 @@ private:
     GuiPanelHeader* panelHeader;
 
 public:
-    GuiDummyWidget(const Context* const context);
+    GuiDummyWidget(const Context& context);
     virtual ~GuiDummyWidget();
 
     /**

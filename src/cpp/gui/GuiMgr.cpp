@@ -35,7 +35,7 @@ static Color colorWhite = Color(255, 255, 255, 255);
 #endif
 
 
-GuiMgr::GuiMgr(const Context* const context, IRenderer* renderer) :
+GuiMgr::GuiMgr(const Context& context, IRenderer* renderer) :
     ContextAware(context),
     renderer(renderer),
     quitGame(false)
@@ -151,7 +151,7 @@ void GuiMgr::initGui() {
             updateGuiFromPanelState();
 
             if (GUI_ID_PANEL_SWITCH_PUSH_BUTTON_BASE + i == GUI_ID_PANEL_SWITCH_PUSH_BUTTON_BUILD) {
-                ((GuiMap*) context->guiMgr->findElement(GUI_ID_MAP))->onStartAddingStructure();
+                ((GuiMap*) context.guiMgr->findElement(GUI_ID_MAP))->onStartAddingStructure();
             }
         });
         registerElement(GUI_ID_PANEL_SWITCH_PUSH_BUTTON_BASE + i, panelSwitchPushButton);
@@ -166,7 +166,7 @@ void GuiMgr::initGui() {
 
     // Initial ist für den Gebäudebau der Förster ausgewählt...
     panelState.selectedBuildingGroup = BuildingGroup::FARM;
-    panelState.addingMapObject = context->configMgr->getMapObjectType("foresters");
+    panelState.addingMapObject = context.configMgr->getMapObjectType("foresters");
     panelState.addingMapObjectView = Direction::SOUTH;
     panelState.buildingMenuOpen = false;
 
@@ -258,7 +258,7 @@ void GuiMgr::render() {
 
 #ifndef NO_SDL
 void GuiMgr::onEvent(SDL_Event& event) {
-    Game* game = context->game;
+    Game* game = context.game;
     Map* map = game->getMap();
 
     // Vorbereitende Arbeiten. Das Event wird danach trotzdem an die GUI-Element gegeben.
@@ -286,7 +286,7 @@ void GuiMgr::onEvent(SDL_Event& event) {
             motionMapCoordsEvent->mapCoordsNow = newMapCoordsUnderMouse;
 
             SDL_Event eventToPush = {}; // 0-initalisieren
-            eventToPush.type = context->userEventBase + USER_EVENT_MOUSEMOTION_MAPCOORDS;
+            eventToPush.type = context.userEventBase + USER_EVENT_MOUSEMOTION_MAPCOORDS;
             eventToPush.user.data1 = motionMapCoordsEvent;
             SDL_PushEvent(&eventToPush);
 
@@ -540,7 +540,7 @@ void GuiMgr::onNewGame() {
     ((GuiMinimap*) findElement(GUI_ID_MINIMAP))->onMapCoordsChanged();
     ((GuiMapRotateWidget*) findElement(GUI_ID_MAP_ROTATE_WIDGET))->onMapRotated();
     ((GuiPlayerStatusWidget*) findElement(GUI_ID_PLAYER_STATUS_PANEL_WIDGET))->setPlayer(
-        context->game->getCurrentPlayer());
+        context.game->getCurrentPlayer());
 }
 
 void GuiMgr::onOfficeCatchmentAreaChanged() {
@@ -556,7 +556,7 @@ void GuiMgr::onHouseInfoChanged() {
     }
 
     const Building* selectedBuilding =
-        dynamic_cast<const Building*>(context->game->getMap()->getSelectedMapObject());
+        dynamic_cast<const Building*>(context.game->getMap()->getSelectedMapObject());
     assert(selectedBuilding != nullptr && selectedBuilding->isHouse());
 
     selectedHouseBuildingWidget->onSelectedMapBuildingChanged(selectedBuilding);
@@ -596,7 +596,7 @@ void GuiMgr::updateGuiFromPanelState() {
     // Baukosten aktualisieren
     GuiResourcesBar* guiResourcesBar = (GuiResourcesBar*) findElement(GUI_ID_RESOURCES_BAR);
     if (panelState.selectedPanelButton == PanelButton::ADD_BUILDING) {
-        const MapObjectType* mapObjectType = context->guiMgr->getPanelState().addingMapObject;
+        const MapObjectType* mapObjectType = context.guiMgr->getPanelState().addingMapObject;
         const BuildingCosts& buildingCosts = mapObjectType->buildingCosts;
 
         guiResourcesBar->showBuildingCosts(buildingCosts);
@@ -606,7 +606,7 @@ void GuiMgr::updateGuiFromPanelState() {
 
     // Baumenü: Infos zum bauenden Gebäude
     if (panelState.selectedPanelButton == PanelButton::ADD_BUILDING) {
-        const MapObjectType* mapObjectType = context->guiMgr->getPanelState().addingMapObject;
+        const MapObjectType* mapObjectType = context.guiMgr->getPanelState().addingMapObject;
 
         GuiAddBuildingWidget* guiAddBuildingWidget = (GuiAddBuildingWidget*) findElement(GUI_ID_ADD_BUILDING_WIDGET);
         guiAddBuildingWidget->onAddingMapObjectChanged(mapObjectType);
@@ -614,7 +614,7 @@ void GuiMgr::updateGuiFromPanelState() {
 }
 
 void GuiMgr::increaseMapZoom() {
-    Map* map = context->game->getMap();
+    Map* map = context.game->getMap();
     int screenZoom = map->getScreenZoom();
     if (screenZoom == 1) {
         return;
@@ -630,7 +630,7 @@ static int maxScreenZoom = 4;
 #endif
 
 void GuiMgr::decreaseMapZoom() {
-    Map* map = context->game->getMap();
+    Map* map = context.game->getMap();
     int screenZoom = map->getScreenZoom();
     if (screenZoom == maxScreenZoom) {
         return;

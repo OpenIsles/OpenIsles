@@ -16,7 +16,7 @@ void GuiIconWithStringElement::renderElement(IRenderer* renderer) {
     graphic->drawAt(windowX, yMiddle - graphic->getHeight() / 2);
 
     const int fontSize = 14;
-    context->fontMgr->renderText(
+    context.fontMgr->renderText(
         renderer, string, windowX + graphic->getWidth() + 4, yMiddle,
         &colorWhite, &colorBlack, "DroidSans-Bold.ttf", fontSize, RENDERTEXT_HALIGN_LEFT | RENDERTEXT_VALIGN_MIDDLE);
 }

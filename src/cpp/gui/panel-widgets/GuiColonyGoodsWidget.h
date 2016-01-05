@@ -25,7 +25,7 @@ private:
     const Colony* colony;
 
 public:
-    GuiColonyGoodsWidget(const Context* const context);
+    GuiColonyGoodsWidget(const Context& context);
     virtual ~GuiColonyGoodsWidget() override;
 
     /**

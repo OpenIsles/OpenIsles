@@ -29,7 +29,7 @@ protected:
     std::function<void()> onClickFunction = []{};
 
 public:
-    GuiButton(const Context* const context);
+    GuiButton(const Context& context);
     virtual ~GuiButton() override;
 
     const IGraphic* getGraphicPressed() const {

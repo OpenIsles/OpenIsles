@@ -13,7 +13,7 @@
 class MapCoordUtilsTestMap : public Map {
 
 public:
-    MapCoordUtilsTestMap(const Context* const context) : Map(context) {
+    MapCoordUtilsTestMap(const Context& context) : Map(context) {
     }
 
     int getWidth() const override {
@@ -76,7 +76,7 @@ protected:
 
 protected:
     virtual void SetUp() {
-        map = new MapCoordUtilsTestMap(&context);
+        map = new MapCoordUtilsTestMap(context);
     }
 
     virtual void TearDown() {

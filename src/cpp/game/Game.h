@@ -121,7 +121,7 @@ private:
     unsigned long nextCycleTicks;
 
 public:
-    Game(const Context* const context);
+    Game(const Context& context);
     ~Game();
 
     /**

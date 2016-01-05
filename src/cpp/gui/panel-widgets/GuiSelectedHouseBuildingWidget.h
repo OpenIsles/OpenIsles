@@ -33,7 +33,7 @@ private:
     IGraphic* populationSatisfactionGraphics[4];
 
 public:
-    GuiSelectedHouseBuildingWidget(const Context* const context);
+    GuiSelectedHouseBuildingWidget(const Context& context);
     virtual ~GuiSelectedHouseBuildingWidget() override;
 
     /**

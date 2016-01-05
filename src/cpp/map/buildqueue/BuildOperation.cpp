@@ -41,14 +41,14 @@ void BuildOperation::requestBuild(const MapCoords& mapCoords, const MapObjectTyp
     // Kolonie prüfen: Alle Objekte in der Bau-Queue müssen in derselben Kolonie sein!
     if (colony == nullptr) {
         // Erste Map-Objekt gibt die Kolonie vor
-        colony = context->game->getColony(mapCoords);
+        colony = context.game->getColony(mapCoords);
         if (colony == nullptr) {
             return; // Keine Kolonie, da darf man eh nicht bauen
         }
 
     } else {
         // Jedes weitere Map-Objekt muss in dieser Kolonie sein
-        Colony* colonyThere = context->game->getColony(mapCoords);
+        Colony* colonyThere = context.game->getColony(mapCoords);
         if ((colony == nullptr) || (colonyThere != colony)) {
             return;
         }
@@ -59,14 +59,14 @@ void BuildOperation::requestBuild(const MapCoords& mapCoords, const MapObjectTyp
     if (mapObjectType->name == "pioneers-house1" || mapObjectType->name == "northern-forest1") {
         if (mapObjectType->name == "pioneers-house1") {
             std::uniform_int_distribution<int> randomPioneerHouse(1, 5);
-            std::string mapObjectTypeName = "pioneers-house" + toString(randomPioneerHouse(*context->randomEngine));
+            std::string mapObjectTypeName = "pioneers-house" + toString(randomPioneerHouse(*context.randomEngine));
 
-            mapObjectType = context->configMgr->getMapObjectType(mapObjectTypeName);
+            mapObjectType = context.configMgr->getMapObjectType(mapObjectTypeName);
         } else if (mapObjectType->name == "northern-forest1") {
             std::uniform_int_distribution<int> randomNorthernForest(1, 2);
-            std::string mapObjectTypeName = "northern-forest" + toString(randomNorthernForest(*context->randomEngine));
+            std::string mapObjectTypeName = "northern-forest" + toString(randomNorthernForest(*context.randomEngine));
 
-            mapObjectType = context->configMgr->getMapObjectType(mapObjectTypeName);
+            mapObjectType = context.configMgr->getMapObjectType(mapObjectTypeName);
         }
     }
 
@@ -109,7 +109,7 @@ bool BuildOperation::isSomethingInTheWayOnTheMap(const MapObjectToBuild& mapObje
                 return false;
             }
 
-            MapObjectFixed* mapObjectFixedAlreadyThere = context->game->getMap()->getMapObjectFixedAt(mapCoords);
+            MapObjectFixed* mapObjectFixedAlreadyThere = context.game->getMap()->getMapObjectFixedAt(mapCoords);
             if (mapObjectFixedAlreadyThere != nullptr) {
                 // Überbauen erlaubt?
                 if (!(mayBuildOver(mapObjectFixedAlreadyThere->getMapObjectType(), mapObjectType))) {
@@ -153,7 +153,7 @@ StreetConnections BuildOperation::calculateStreetConnections(
     const MapCoords& mapCoords, const ToDrawOrToReplaceWith& toDrawOrToReplaceWith) const {
 
     // Angrenzende Straßen (auf der Karte und im BuildOperationResult) checken
-    const Map* map = context->game->getMap();
+    const Map* map = context.game->getMap();
     auto isStreetThere = [&](const MapCoords& mapCoordsInLamdba) {
         if (map->isStreetAt(mapCoordsInLamdba)) {
             return true;
@@ -186,7 +186,7 @@ StreetConnections BuildOperation::calculateStreetConnections(
 void BuildOperation::adeptExistingStreets(
     const Street& streetToAdeptAround, bool resourcesEnoughToBuildThis) {
 
-    Map* map = context->game->getMap();
+    Map* map = context.game->getMap();
 
     auto adeptExistingStreet = [&](const MapCoords& mapCoords) {
         // Ist hier eine bestehende Straße?
@@ -281,9 +281,9 @@ void BuildOperation::rebuildResult() {
 
     BuildingCosts resourcesAvailable = {
         player.coins,
-        (int) colony->getGoods(context->configMgr->getGood("tools")).inventory,
-        (int) colony->getGoods(context->configMgr->getGood("wood")).inventory,
-        (int) colony->getGoods(context->configMgr->getGood("bricks")).inventory
+        (int) colony->getGoods(context.configMgr->getGood("tools")).inventory,
+        (int) colony->getGoods(context.configMgr->getGood("wood")).inventory,
+        (int) colony->getGoods(context.configMgr->getGood("bricks")).inventory
     };
 
     bool enoughResources = true;
@@ -326,7 +326,7 @@ void BuildOperation::rebuildResult() {
         bool costsNothingBecauseOfChange = false;
 
         MapObjectFixed* mapObjectFixedAlreadyThere =
-            context->game->getMap()->getMapObjectFixedAt(mapObjectToBuild.mapCoords);
+            context.game->getMap()->getMapObjectFixedAt(mapObjectToBuild.mapCoords);
         if (mapObjectFixedAlreadyThere != nullptr) {
             if (mapObjectFixedAlreadyThere->getMapObjectType() == mapObjectType) {
                 costsNothingBecauseOfChange = true;
@@ -423,7 +423,7 @@ void BuildOperation::doBuild() {
         return;
     }
 
-    Map* map = context->game->getMap();
+    Map* map = context.game->getMap();
     assert(colony != nullptr);
 
     // Merken, welche Objekte wir bereits bearbeiten haben. In der result-Map ist kachelweise alles drin.
@@ -471,18 +471,18 @@ void BuildOperation::doBuild() {
             const MapObjectType* mapObjectTypeToBuild = mapObjectFixedToBuild.getMapObjectType();
 
             if (mapObjectTypeToBuild->type == MapObjectTypeClass::HARVESTABLE) {
-                context->game->addHarvestable(
+                context.game->addHarvestable(
                     mapObjectFixedToBuild.getMapCoords(), mapObjectTypeToBuild,
                     mapObjectFixedToBuild.getView());
             }
             else if (mapObjectTypeToBuild->type == MapObjectTypeClass::STREET) {
-                context->game->addStreet(
+                context.game->addStreet(
                     mapObjectFixedToBuild.getMapCoords(), mapObjectTypeToBuild,
                     mapObjectFixedToBuild.getView(), &player,
                     dynamic_cast<const Street&>(mapObjectFixedToBuild).streetConnections);
             }
             else {
-                context->game->addStructure(
+                context.game->addStructure(
                     mapObjectFixedToBuild.getMapCoords(), mapObjectTypeToBuild,
                     mapObjectFixedToBuild.getView(), &player);
             }
@@ -507,9 +507,9 @@ void BuildOperation::doBuild() {
     }
 
     // Resourcen bezahlen
-    GoodsSlot& colonyGoodsSlotTools = colony->getGoods(context->configMgr->getGood("tools"));
-    GoodsSlot& colonyGoodsSlotWood = colony->getGoods(context->configMgr->getGood("wood"));
-    GoodsSlot& colonyGoodsSlotBricks = colony->getGoods(context->configMgr->getGood("bricks"));
+    GoodsSlot& colonyGoodsSlotTools = colony->getGoods(context.configMgr->getGood("tools"));
+    GoodsSlot& colonyGoodsSlotWood = colony->getGoods(context.configMgr->getGood("wood"));
+    GoodsSlot& colonyGoodsSlotBricks = colony->getGoods(context.configMgr->getGood("bricks"));
 
     assert((player.coins - buildingCostsEffective.coins >= 0) &&
            (colonyGoodsSlotTools.inventory - buildingCostsEffective.tools >= 0) &&
@@ -529,7 +529,7 @@ void BuildOperation::doBuild() {
 //unsigned char GuiMap::isAllowedToPlaceMapObject(
 //    const MapCoords& mapCoords, const MapObjectType* mapObjectType, const FourthDirection& view) const {
 //
-//    MapTile* mapTile = context->game->getMap()->getMapTileAt(mapCoords);
+//    MapTile* mapTile = context.game->getMap()->getMapTileAt(mapCoords);
 //    if (mapTile == nullptr) {
 //        return PLACING_STRUCTURE_OUTSIDE_OF_ISLE;
 //    }
@@ -542,8 +542,8 @@ void BuildOperation::doBuild() {
 //    unsigned char result = PLACING_STRUCTURE_ALLOWED;
 //
 //    // Resourcen checken
-//    Player* currentPlayer = context->game->getCurrentPlayer();
-//    Colony* colony = context->game->getColony(currentPlayer, isle);
+//    Player* currentPlayer = context.game->getCurrentPlayer();
+//    Colony* colony = context.game->getColony(currentPlayer, isle);
 //
 //    if (colony != nullptr) {
 //        const BuildingCosts& buildingCosts = mapObjectType->buildingCosts;
@@ -567,7 +567,7 @@ void BuildOperation::doBuild() {
 //
 //    for (int y = mapCoords.y(); y < mapCoords.y() + mapHeight; y++) {
 //        for (int x = mapCoords.x(); x < mapCoords.x() + mapWidth; x++) {
-//            const MapTile* mapTile = context->game->getMap()->getMapTileAt(MapCoords(x, y));
+//            const MapTile* mapTile = context.game->getMap()->getMapTileAt(MapCoords(x, y));
 //
 //            // Steht was im Weg?
 //            if (mapTile->mapObjectFixed != nullptr) {
@@ -590,7 +590,7 @@ void BuildOperation::doBuild() {
 //
 //            // Gebiet erschlossen?
 //            if (mapTile->player == nullptr ||                             // Gebiet nicht erschlossen,
-//                mapTile->player != context->game->getCurrentPlayer()) {   // oder nicht unseres
+//                mapTile->player != context.game->getCurrentPlayer()) {   // oder nicht unseres
 //
 //                result |= PLACING_STRUCTURE_ROOM_NOT_UNLOCK;
 //            }

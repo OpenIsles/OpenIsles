@@ -9,7 +9,7 @@ static Color colorLightBrown = Color(223, 216, 183, 255);
 static Color colorRed = Color(255, 0, 0, 255);
 
 
-GuiFoodSupplyElement::GuiFoodSupplyElement(const Context* const context) : GuiStaticTextElement(context) {
+GuiFoodSupplyElement::GuiFoodSupplyElement(const Context& context) : GuiStaticTextElement(context) {
     // Größe ist fix
     width = 210;
     height = 20;

@@ -20,7 +20,7 @@ private:
     bool active = false;
 
 public:
-    GuiPushButton(const Context* const context);
+    GuiPushButton(const Context& context);
     virtual ~GuiPushButton();
     
     /**

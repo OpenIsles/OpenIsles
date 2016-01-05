@@ -12,7 +12,7 @@
 TEST_F(BuildOperationTest, overbuildBuildSomethingInTheWay) {
     const MapObjectType* foresters = configMgr->getMapObjectType("foresters");
 
-    BuildOperation buildOperation(&context, *player);
+    BuildOperation buildOperation(context, *player);
     buildOperation.requestBuildWhenNothingInTheWay({47, 43}, foresters, Direction::EAST);
     const BuildOperationResult& result = buildOperation.getResult();
 
@@ -31,7 +31,7 @@ TEST_F(BuildOperationTest, overbuildBuildCompletely) {
     player->coins = 1000;
     colony->getGoods(configMgr->getGood("tools")).inventory = 5;
 
-    BuildOperation buildOperation(&context, *player);
+    BuildOperation buildOperation(context, *player);
     buildOperation.requestBuildWhenNothingInTheWay({43, 39}, foresters, Direction::SOUTH);
     const BuildOperationResult& result = buildOperation.getResult();
 
@@ -71,7 +71,7 @@ TEST_F(BuildOperationTest, overbuildBuildPartially) {
     player->coins = 1000;
     colony->getGoods(configMgr->getGood("tools")).inventory = 5;
 
-    BuildOperation buildOperation(&context, *player);
+    BuildOperation buildOperation(context, *player);
     buildOperation.requestBuildWhenNothingInTheWay({42, 42}, foresters, Direction::SOUTH);
     const BuildOperationResult& result = buildOperation.getResult();
 
@@ -128,7 +128,7 @@ TEST_F(BuildOperationTest, overbuildBuildStreetOverStreets) {
     {
         ASSERT_EQ(cobbledStreet, game->getMap()->getMapObjectFixedAt({44, 36})->getMapObjectType());
 
-        BuildOperation buildOperation(&context, *player);
+        BuildOperation buildOperation(context, *player);
         buildOperation.requestBuildWhenNothingInTheWay({44, 36}, farmRoad, Direction::SOUTH);
         buildOperation.doBuild();
 
@@ -141,7 +141,7 @@ TEST_F(BuildOperationTest, overbuildBuildStreetOverStreets) {
     {
         ASSERT_EQ(farmRoad, game->getMap()->getMapObjectFixedAt({46, 32})->getMapObjectType());
 
-        BuildOperation buildOperation(&context, *player);
+        BuildOperation buildOperation(context, *player);
         buildOperation.requestBuildWhenNothingInTheWay({46, 32}, cobbledStreet, Direction::SOUTH);
         buildOperation.doBuild();
 
@@ -154,7 +154,7 @@ TEST_F(BuildOperationTest, overbuildBuildStreetOverStreets) {
     {
         ASSERT_EQ(cobbledStreet, game->getMap()->getMapObjectFixedAt({44, 35})->getMapObjectType());
 
-        BuildOperation buildOperation(&context, *player);
+        BuildOperation buildOperation(context, *player);
         buildOperation.requestBuildWhenNothingInTheWay({44, 35}, cobbledStreet, Direction::SOUTH);
         buildOperation.doBuild();
 
@@ -167,7 +167,7 @@ TEST_F(BuildOperationTest, overbuildBuildStreetOverStreets) {
     {
         ASSERT_EQ(square1, game->getMap()->getMapObjectFixedAt({41, 35})->getMapObjectType());
 
-        BuildOperation buildOperation(&context, *player);
+        BuildOperation buildOperation(context, *player);
         buildOperation.requestBuildWhenNothingInTheWay({41, 35}, cobbledStreet, Direction::SOUTH);
         buildOperation.doBuild();
 
@@ -180,7 +180,7 @@ TEST_F(BuildOperationTest, overbuildBuildStreetOverStreets) {
     {
         ASSERT_EQ(farmRoad, game->getMap()->getMapObjectFixedAt({47, 32})->getMapObjectType());
 
-        BuildOperation buildOperation(&context, *player);
+        BuildOperation buildOperation(context, *player);
         buildOperation.requestBuildWhenNothingInTheWay({47, 32}, square1, Direction::SOUTH);
         buildOperation.doBuild();
 
@@ -193,7 +193,7 @@ TEST_F(BuildOperationTest, overbuildBuildStreetOverStreets) {
     {
         ASSERT_EQ(northernForest1, game->getMap()->getMapObjectFixedAt({45, 42})->getMapObjectType());
 
-        BuildOperation buildOperation(&context, *player);
+        BuildOperation buildOperation(context, *player);
         buildOperation.requestBuildWhenNothingInTheWay({45, 42}, tobaccoField, Direction::SOUTH);
         buildOperation.doBuild();
 
@@ -206,7 +206,7 @@ TEST_F(BuildOperationTest, overbuildBuildStreetOverStreets) {
     {
         ASSERT_EQ(spicesField, game->getMap()->getMapObjectFixedAt({41, 42})->getMapObjectType());
 
-        BuildOperation buildOperation(&context, *player);
+        BuildOperation buildOperation(context, *player);
         buildOperation.requestBuildWhenNothingInTheWay({41, 42}, spicesField, Direction::SOUTH);
         buildOperation.doBuild();
 

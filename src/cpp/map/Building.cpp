@@ -24,7 +24,7 @@ void Building::sendNewCarrier(const Context& context) {
     }
 
     CatchmentAreaIterator catchmentAreaIterator(*this, false);
-    InCatchmentAreaFinder inCatchmentAreaFinder(&context, &catchmentAreaIterator);
+    InCatchmentAreaFinder inCatchmentAreaFinder(context, &catchmentAreaIterator);
     InCatchmentAreaFinderResult result;
 
     // Lagergebäude holt alle verfügbaren Waren ab.

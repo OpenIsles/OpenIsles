@@ -38,7 +38,7 @@ private:
     double barValue;
 
 public:
-    GuiGoodElement(const Context* const context);
+    GuiGoodElement(const Context& context);
     virtual ~GuiGoodElement() override;
     
     void setGood(const Good* good);

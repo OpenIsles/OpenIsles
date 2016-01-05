@@ -22,7 +22,7 @@ protected:
     int align;                ///< Ausrichtung des Texts. Eine Kombination aus RENDERTEXT_?ALIGN_*-Konstanten
 
 public:
-    GuiStaticTextElement(const Context* const context);
+    GuiStaticTextElement(const Context& context);
     virtual ~GuiStaticTextElement() override;
 
     void setText(const std::string& text) {

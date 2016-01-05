@@ -1,7 +1,7 @@
 #include "gui/components/GuiStaticGraphicElement.h"
 
 
-GuiStaticGraphicElement::GuiStaticGraphicElement(const Context* const context) : GuiBase(context) {
+GuiStaticGraphicElement::GuiStaticGraphicElement(const Context& context) : GuiBase(context) {
 }
 
 GuiStaticGraphicElement::~GuiStaticGraphicElement() {

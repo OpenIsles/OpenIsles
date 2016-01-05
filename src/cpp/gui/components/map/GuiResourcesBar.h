@@ -33,7 +33,7 @@ public:
      * @brief Konstruktor.
      * @param context Dependency
      */
-    GuiResourcesBar(const Context* const context);
+    GuiResourcesBar(const Context& context);
 
     virtual ~GuiResourcesBar();
 

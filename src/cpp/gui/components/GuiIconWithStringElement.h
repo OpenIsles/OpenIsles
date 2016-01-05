@@ -23,7 +23,7 @@ private:
     std::string string;
 
 public:
-    GuiIconWithStringElement(const Context* const context) : GuiStaticGraphicElement(context) {
+    GuiIconWithStringElement(const Context& context) : GuiStaticGraphicElement(context) {
     }
     virtual ~GuiIconWithStringElement() override {}
 

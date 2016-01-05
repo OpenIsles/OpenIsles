@@ -150,7 +150,7 @@ public:
      * @param context Dependency
      * @param guiResourcesBar Dependency
      */
-    GuiMap(const Context* const context, GuiResourcesBar* guiResourcesBar);
+    GuiMap(const Context& context, GuiResourcesBar* guiResourcesBar);
 
     virtual ~GuiMap();
 

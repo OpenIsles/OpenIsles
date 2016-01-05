@@ -25,7 +25,7 @@ protected:
  */
 TEST_F(InCatchmentAreaFinderInvisibleGoodsTest, checkThatAfterGameStartGrassCanBeHarvested) {
     CatchmentAreaIterator catchmentAreaIterator(*sheepFarm, false);
-    InCatchmentAreaFinder inCatchmentAreaFinder(&context, &catchmentAreaIterator);
+    InCatchmentAreaFinder inCatchmentAreaFinder(context, &catchmentAreaIterator);
 
     InCatchmentAreaFinderResult result = inCatchmentAreaFinder.findMapTileWithInvisibleGood(goodGrass);
 
@@ -48,7 +48,7 @@ TEST_F(InCatchmentAreaFinderInvisibleGoodsTest, checkThatRouteToGrassIsFound) {
 
     // Testdurchführung
     CatchmentAreaIterator catchmentAreaIterator(*sheepFarm, false);
-    InCatchmentAreaFinder inCatchmentAreaFinder(&context, &catchmentAreaIterator);
+    InCatchmentAreaFinder inCatchmentAreaFinder(context, &catchmentAreaIterator);
 
     InCatchmentAreaFinderResult result = inCatchmentAreaFinder.findMapTileWithInvisibleGood(goodGrass);
 
@@ -72,7 +72,7 @@ TEST_F(InCatchmentAreaFinderInvisibleGoodsTest, checkThatNoRouteIsFoundWhenAllWa
 
     // Testdurchführung
     CatchmentAreaIterator catchmentAreaIterator(*sheepFarm, false);
-    InCatchmentAreaFinder inCatchmentAreaFinder(&context, &catchmentAreaIterator);
+    InCatchmentAreaFinder inCatchmentAreaFinder(context, &catchmentAreaIterator);
 
     InCatchmentAreaFinderResult result = inCatchmentAreaFinder.findMapTileWithInvisibleGood(goodGrass);
 
@@ -94,7 +94,7 @@ TEST_F(InCatchmentAreaFinderInvisibleGoodsTest, checkThatRouteToGrassIsFoundWhen
 
     // Testdurchführung
     CatchmentAreaIterator catchmentAreaIterator(*sheepFarm, false);
-    InCatchmentAreaFinder inCatchmentAreaFinder(&context, &catchmentAreaIterator);
+    InCatchmentAreaFinder inCatchmentAreaFinder(context, &catchmentAreaIterator);
 
     InCatchmentAreaFinderResult result = inCatchmentAreaFinder.findMapTileWithInvisibleGood(goodGrass, {30, 27});
 

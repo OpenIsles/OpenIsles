@@ -4,7 +4,7 @@
 #include "gui/components/GuiPushButton.h"
 
 
-GuiPushButton::GuiPushButton(const Context* const context) : GuiButton(context) {
+GuiPushButton::GuiPushButton(const Context& context) : GuiButton(context) {
 }
 
 GuiPushButton::~GuiPushButton() {

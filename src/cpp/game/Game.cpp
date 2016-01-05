@@ -13,7 +13,7 @@
 #include "utils/RandomEngine.h"
 
 
-Game::Game(const Context* const context) : ContextAware(context) {
+Game::Game(const Context& context) : ContextAware(context) {
     speed = 1;
     ticks = 0;
     map = new Map(context);
@@ -41,7 +41,7 @@ Game::~Game() {
 }
 
 Colony* Game::foundNewColony(const Player* player, const std::string& colonyName, const Isle* isle) {
-    const ConfigMgr* configMgr = context->configMgr;
+    const ConfigMgr* configMgr = context.configMgr;
     const std::unordered_map<std::string, Good>& allGoods = configMgr->getAllGoods();
     const std::set<PopulationTier>& allPopulationTiers = configMgr->getAllPopulationTiers();
 
@@ -79,7 +79,7 @@ Harvestable* Game::addHarvestable(
 
     // ein bisschen Zufall für das Startalter, damit die Felder nicht alle gleichzeitig wachsen
     std::uniform_real_distribution<double> randomInitAge(0.0, 0.25);
-    double initAge = randomInitAge(*context->randomEngine);
+    double initAge = randomInitAge(*context.randomEngine);
 
     // Objekt anlegen
     Harvestable* harvestable = (Harvestable*) instantiateNewMapObject(mapObjectType);
@@ -136,7 +136,7 @@ Structure* Game::addStructure(
 
         map->addOfficeCatchmentAreaToMap(*building);
 #ifndef NO_SDL
-        context->guiMgr->onOfficeCatchmentAreaChanged();
+        context.guiMgr->onOfficeCatchmentAreaChanged();
 #endif
     }
 
@@ -157,9 +157,9 @@ Structure* Game::addStructure(
     if (building != nullptr) {
         if (building->isHouse()) {
             // Häuser beginnen immer mit genau einem Einwohner
-            context->game->addInhabitantsToBuilding(building, 1);
+            context.game->addInhabitantsToBuilding(building, 1);
         } else {
-            context->game->addInhabitantsToBuilding(building, mapObjectType->inhabitants);
+            context.game->addInhabitantsToBuilding(building, mapObjectType->inhabitants);
         }
     }
 
@@ -211,22 +211,22 @@ void Game::addInhabitantsToBuilding(Building* building, char amount) {
         colony->populationTiers[populationTier].population += amount;
     }
 
-    context->economicsMgr->updatePlayerStatus();
+    context.economicsMgr->updatePlayerStatus();
 }
 
 void Game::setSelectedMapObject(const MapObject* selectedMapObject) {
     map->setSelectedMapObject(selectedMapObject);
 
 #ifndef NO_SDL
-    context->guiMgr->onSelectedMapObjectChanged(selectedMapObject);
+    context.guiMgr->onSelectedMapObjectChanged(selectedMapObject);
 #endif
 }
 
 void Game::loadGameFromTMX(const char* filename) {
-    GameIO::loadGameFromTMX(this, context->configMgr, context->graphicsMgr, filename);
+    GameIO::loadGameFromTMX(this, context.configMgr, context.graphicsMgr, filename);
 
 #ifndef NO_SDL
-    context->guiMgr->onNewGame();
+    context.guiMgr->onNewGame();
 #endif
 }
 
@@ -241,7 +241,7 @@ void Game::update(unsigned long millisecondsElapsed) {
     for (auto iter = mapObjects.rbegin(); iter != mapObjects.rend(); iter++) {
         MapObject* mapObject = *iter;
 
-        bool dontDeleteMe = mapObject->update(*context);
+        bool dontDeleteMe = mapObject->update(context);
         if (!dontDeleteMe) {
             // Objekt zur Löschung vormerken. Wir dürfen nicht löschen, wenn wir noch iterieren
             mapObjectsToDelete.push_back(mapObject);
@@ -255,7 +255,7 @@ void Game::update(unsigned long millisecondsElapsed) {
 
     // bestimmte Spiellogiken finden einmal pro Zyklus statt
     if (ticks >= nextCycleTicks) {
-        EconomicsMgr* economicsMgr = context->economicsMgr;
+        EconomicsMgr* economicsMgr = context.economicsMgr;
 
         // Finanzen
         economicsMgr->updateFinances();

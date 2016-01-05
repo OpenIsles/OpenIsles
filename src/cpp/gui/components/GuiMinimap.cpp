@@ -15,11 +15,11 @@ static Color minimapViewBorderColor = Color(0, 0, 255, 96);
 // Info: Anno-Karten sind 500x350 Kacheln groß
 // TODO Erlauben, guiElementBasedClipRect durch Methodenaufruf zu setzen (weil ein neues Spiel andere w/h-Map-Ratio hat)
 
-GuiMinimap::GuiMinimap(const Context* const context) :
+GuiMinimap::GuiMinimap(const Context& context) :
     GuiStaticGraphicElement(context), guiElementBasedClipRect(40, 13, 166, 166) {
 
     setCoords(0, 0, 256, 200);
-    setGraphic(context->graphicsMgr->getGraphicSet("minimap")->getStatic()->getGraphic());
+    setGraphic(context.graphicsMgr->getGraphicSet("minimap")->getStatic()->getGraphic());
 }
 
 GuiMinimap::~GuiMinimap() {
@@ -70,7 +70,7 @@ bool GuiMinimap::onEventElement(SDL_Event& event) {
 }
 
 void GuiMinimap::onMapCoordsChanged() {
-    Map* map = context->game->getMap();
+    Map* map = context.game->getMap();
 
     int windowX, windowY;
     getWindowCoords(windowX, windowY);
@@ -102,7 +102,7 @@ void GuiMinimap::onMapCoordsChanged() {
 }
 
 void GuiMinimap::updateMinimapTexture() {
-    Map* map = context->game->getMap();
+    Map* map = context.game->getMap();
 
     if (minimapTexture != nullptr) {
         SDL_DestroyTexture(minimapTexture);
@@ -130,7 +130,7 @@ void GuiMinimap::updateMinimapTexture() {
     }
 
     // Daten zur Texture umwandeln
-    IRenderer* const renderer = context->graphicsMgr->getRenderer();
+    IRenderer* const renderer = context.graphicsMgr->getRenderer();
     SDL_Renderer* sdlRealRenderer = (dynamic_cast<SDLRenderer*>(renderer))->getRealRenderer();
 
     SDL_Surface* surface = SDL_CreateRGBSurfaceFrom(
@@ -142,7 +142,7 @@ void GuiMinimap::updateMinimapTexture() {
 }
 
 void GuiMinimap::onClickInMinimap(int mouseX, int mouseY) {
-    Map* map = context->game->getMap();
+    Map* map = context.game->getMap();
 
     int windowX, windowY;
     getWindowCoords(windowX, windowY);

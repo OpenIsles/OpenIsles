@@ -9,7 +9,7 @@
 #include "utils/StringFormat.h"
 
 
-GuiColonyGoodsWidget::GuiColonyGoodsWidget(const Context* const context) : GuiSelectedBuildingWidget(context) {
+GuiColonyGoodsWidget::GuiColonyGoodsWidget(const Context& context) : GuiSelectedBuildingWidget(context) {
     // GUI-Elemente für die Güter anlegen
     const int xStart = 22;
 
@@ -17,7 +17,7 @@ GuiColonyGoodsWidget::GuiColonyGoodsWidget(const Context* const context) : GuiSe
     int y = 68;
     int i = 0;
 
-    const std::list<const Good*>& allGoods = context->configMgr->getAllGoodsOrdered();
+    const std::list<const Good*>& allGoods = context.configMgr->getAllGoodsOrdered();
     for (auto iter = allGoods.cbegin(); iter != allGoods.cend(); iter++, i++) {
         const Good* good = *iter;
 

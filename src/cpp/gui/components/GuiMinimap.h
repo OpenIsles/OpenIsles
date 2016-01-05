@@ -43,7 +43,7 @@ public:
      * @brief Konstruktor. Positioniert die Komponente entsprechend `Consts::minimapClipRect`.
      * @param context Dependency
      */
-    GuiMinimap(const Context* const context);
+    GuiMinimap(const Context& context);
 
     virtual ~GuiMinimap();
 

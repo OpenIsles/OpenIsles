@@ -31,7 +31,7 @@ public:
      * @brief Konstruktor.
      * @param context Dependency
      */
-    GuiStatusBar(const Context* const context);
+    GuiStatusBar(const Context& context);
 
     virtual ~GuiStatusBar() override;
 

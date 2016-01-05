@@ -26,7 +26,7 @@ private:
     GuiIconWithStringElement bricksElement;           ///< Ziegelkosten
 
 public:
-    GuiAddBuildingWidget(const Context* const context);
+    GuiAddBuildingWidget(const Context& context);
     virtual ~GuiAddBuildingWidget() {}
 
     /**

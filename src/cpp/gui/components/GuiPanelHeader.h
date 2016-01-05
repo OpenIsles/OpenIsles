@@ -32,7 +32,7 @@ public:
      * @brief Konstruktor. Positioniert die Komponente entsprechend `Consts::minimapClipRect`.
      * @param context Dependency
      */
-    GuiPanelHeader(const Context* const context);
+    GuiPanelHeader(const Context& context);
 
     virtual ~GuiPanelHeader();
 

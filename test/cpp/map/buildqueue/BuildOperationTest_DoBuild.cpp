@@ -17,7 +17,7 @@ TEST_F(BuildOperationTest, regularBuild) {
     colony->getGoods(configMgr->getGood("wood")).inventory = 40;
     colony->getGoods(configMgr->getGood("bricks")).inventory = 30;
 
-    BuildOperation buildOperation(&context, *player);
+    BuildOperation buildOperation(context, *player);
     buildOperation.requestBuildWhenNothingInTheWay(MapCoords(45, 33), marketplace, Direction::SOUTH);
     buildOperation.requestBuildWhenNothingInTheWay(MapCoords(37, 33), marketplace, Direction::NORTH);
     buildOperation.requestBuildWhenNothingInTheWay(MapCoords(38, 37), marketplace, Direction::WEST);
@@ -50,7 +50,7 @@ TEST_F(BuildOperationTest, partialBuildOutOfResources) {
     colony->getGoods(configMgr->getGood("wood")).inventory = 20;
     colony->getGoods(configMgr->getGood("bricks")).inventory = 30;
 
-    BuildOperation buildOperation(&context, *player);
+    BuildOperation buildOperation(context, *player);
     buildOperation.requestBuildWhenNothingInTheWay({39, 34}, distillery, Direction::SOUTH);
     buildOperation.requestBuildWhenNothingInTheWay({39, 37}, distillery, Direction::SOUTH);
     buildOperation.requestBuildWhenNothingInTheWay({39, 39}, distillery, Direction::SOUTH);
@@ -87,7 +87,7 @@ TEST_F(BuildOperationTest, adeptStreetsOutOfResources) {
     // Testaufbau
     player->coins = 10;
 
-    BuildOperation buildOperation(&context, *player);
+    BuildOperation buildOperation(context, *player);
     for (int x = 43; x <= 47; x++) {
         buildOperation.requestBuildWhenNothingInTheWay(MapCoords(x, 44), farmRoad, Direction::SOUTH);
     }
@@ -140,7 +140,7 @@ TEST_F(BuildOperationTest, partialCrossroads) {
     // Testaufbau
     player->coins = 5;
 
-    BuildOperation buildOperation(&context, *player);
+    BuildOperation buildOperation(context, *player);
     for (int y = 31; y <= 33; y++) {
         buildOperation.requestBuildWhenNothingInTheWay(MapCoords(46, y), farmRoad, Direction::SOUTH);
     }
@@ -178,7 +178,7 @@ TEST_F(BuildOperationTest, overbuildAndAdeptStreet) {
     colony->getGoods(configMgr->getGood("wood")).inventory = 20;
     colony->getGoods(configMgr->getGood("bricks")).inventory = 25;
 
-    BuildOperation buildOperation(&context, *player);
+    BuildOperation buildOperation(context, *player);
     for (int y = 31; y <= 36; y++) {
         buildOperation.requestBuildWhenNothingInTheWay(MapCoords(46, y), cobbledStreet, Direction::SOUTH);
     }

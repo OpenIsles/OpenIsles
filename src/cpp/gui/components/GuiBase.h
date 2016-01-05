@@ -65,7 +65,7 @@ protected:
     std::string statusBarText;
 
 public:
-    GuiBase(const Context* const context) : ContextAware(context) {
+    GuiBase(const Context& context) : ContextAware(context) {
         visible = true;
     }
     virtual ~GuiBase() {}

@@ -3,7 +3,7 @@
 #include "gui/components/GuiStaticTextElement.h"
 
 
-GuiStaticTextElement::GuiStaticTextElement(const Context* const context) : GuiBase(context) {
+GuiStaticTextElement::GuiStaticTextElement(const Context& context) : GuiBase(context) {
     shadowColor = nullptr;
 }
 
@@ -37,5 +37,5 @@ void GuiStaticTextElement::renderElement(IRenderer* renderer) {
         y = windowY;
     }
 
-    context->fontMgr->renderText(renderer, text, x, y, color, shadowColor, fontName, fontSize, align);
+    context.fontMgr->renderText(renderer, text, x, y, color, shadowColor, fontName, fontSize, align);
 }

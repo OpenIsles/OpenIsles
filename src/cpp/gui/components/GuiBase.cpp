@@ -32,7 +32,7 @@ bool GuiBase::onEvent(SDL_Event& event) {
 
         if (hit && !oldHit) {
             hovered = true;
-            context->guiMgr->setStatusBarText(statusBarText);
+            context.guiMgr->setStatusBarText(statusBarText);
 
             if (!onMouseEnter(event.motion)) {
                 return false;
@@ -62,6 +62,6 @@ void GuiBase::setStatusBarText(const std::string& statusBarText) {
     // Wurde der Text geändert während der Mauszeiger grade über dem Button steht,
     // müssen wir die Statuszeile sofort ändern.
     if (hovered) {
-        context->guiMgr->setStatusBarText(statusBarText);
+        context.guiMgr->setStatusBarText(statusBarText);
     }
 }

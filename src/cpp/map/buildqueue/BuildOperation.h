@@ -38,7 +38,7 @@ private:
     BuildOperationResult result;
 
 public:
-    BuildOperation(const Context* const context, Player& player) : ContextAware(context), player(player) {
+    BuildOperation(const Context& context, Player& player) : ContextAware(context), player(player) {
     }
 
     const std::list<MapObjectToBuild>& getMapObjectsToBuild() const {

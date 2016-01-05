@@ -22,7 +22,7 @@ private:
     const GoodsSlot* goodsSlot;
 
 public:
-    GuiGoodsSlotElement(const Context* const context);
+    GuiGoodsSlotElement(const Context& context);
     virtual ~GuiGoodsSlotElement() override;
 
     void setGoodsSlot(const GoodsSlot* goodsSlot);

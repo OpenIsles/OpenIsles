@@ -11,7 +11,7 @@
 class EconomicsMgr : public ContextAware {
 
 public:
-    EconomicsMgr(const Context* const context);
+    EconomicsMgr(const Context& context);
     ~EconomicsMgr();
 
     /**

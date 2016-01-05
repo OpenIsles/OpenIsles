@@ -31,7 +31,7 @@ struct PotentialInCatchmentAreaFinderResult : public InCatchmentAreaFinderResult
 
 
 InCatchmentAreaFinder::InCatchmentAreaFinder(
-    const Context* const context, CatchmentAreaIterator* catchmentAreaIterator) :
+    const Context& context, CatchmentAreaIterator* catchmentAreaIterator) :
         ContextAware(context), catchmentAreaIterator(catchmentAreaIterator) {}
 
 
@@ -63,7 +63,7 @@ InCatchmentAreaFinderResult InCatchmentAreaFinder::findBuildingWithGoods(
     std::set<Building*> buildingChecked; // Gebäude in dieses Set aufnehmen, wenn wir es schon behandelt haben.
                                          // Da wir kachelweise arbeiten, erhalten wir dasselbe Gebäude mehrfach.
 
-    Map* map = context->game->getMap();
+    Map* map = context.game->getMap();
     AStar aStar(context, catchmentAreaIterator, true, isStorageBuilding, false);
 
     catchmentAreaIterator->iterate([&](const MapCoords& mapCoords) {
@@ -174,7 +174,7 @@ InCatchmentAreaFinderResult InCatchmentAreaFinder::findBuildingWithGoods(
             potentialResult.goodsSlot.good = goodWeChoose;
             potentialResult.goodsSlot.inventory = colony->getGoods(goodWeChoose).inventory;
             potentialResult.goodsSlot.capacity = colony->getGoods(goodWeChoose).capacity;
-            potentialResult.lastGoodsCollections = context->game->getTicks() + 1; // Zeit in der Zukunft nehmen, damit diese Route als letztes verwendet wird
+            potentialResult.lastGoodsCollections = context.game->getTicks() + 1; // Zeit in der Zukunft nehmen, damit diese Route als letztes verwendet wird
         }
         else {
             potentialResult.goodsSlot.good = buildingThereType->buildingProduction.output.good;
@@ -251,7 +251,7 @@ InCatchmentAreaFinderResult InCatchmentAreaFinder::findMapTileWithInvisibleGood(
     // Liste aller Kacheln innerhalb des Einzugsbereichs anfertigen, die als Ziel in Frage kommen
     std::list<PotentialInCatchmentAreaFinderResult> potentialResults;
 
-    Game* game = context->game;
+    Game* game = context.game;
     Map* map = game->getMap();
     AStar aStar(context, catchmentAreaIterator, true, false, false);
 
@@ -296,7 +296,7 @@ InCatchmentAreaFinderResult InCatchmentAreaFinder::findMapTileWithInvisibleGood(
         potentialResult.foundSomething = true;
         potentialResult.mapCoords = mapCoords;
         potentialResult.route = route;
-        potentialResult.randomNumber = (*context->randomEngine)();
+        potentialResult.randomNumber = (*context.randomEngine)();
 
         // Als Zeitpunkt nehmen wir nextHarvestTicks. Das is nicht, wann zuletzt geerntet wurde, sondern wann das
         // nächste Mal geerntet werden kann.

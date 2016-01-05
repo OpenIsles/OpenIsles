@@ -33,24 +33,24 @@
 #endif
 
 
-GuiMap::GuiMap(const Context* const context, GuiResourcesBar* guiResourcesBar) :
+GuiMap::GuiMap(const Context& context, GuiResourcesBar* guiResourcesBar) :
     GuiBase(context), guiResourcesBar(guiResourcesBar) {
 
     setCoords(Consts::mapClipRect.x, Consts::mapClipRect.y, Consts::mapClipRect.w, Consts::mapClipRect.h);
 
-    toolsGood = context->configMgr->getGood("tools");
-    woodGood = context->configMgr->getGood("wood");
-    bricksGood = context->configMgr->getGood("bricks");
+    toolsGood = context.configMgr->getGood("tools");
+    woodGood = context.configMgr->getGood("wood");
+    bricksGood = context.configMgr->getGood("bricks");
 
 #ifdef DEBUG_GUIMAP
     debugGridOverlayGraphics[0] = new SDLGraphic(
-        context->graphicsMgr->getRenderer(), "data/debug-grid-overlay-elevation0.png");
+        context.graphicsMgr->getRenderer(), "data/debug-grid-overlay-elevation0.png");
     debugGridOverlayGraphics[2] = new SDLGraphic(
-        context->graphicsMgr->getRenderer(), "data/debug-grid-overlay-screencoords.png");
+        context.graphicsMgr->getRenderer(), "data/debug-grid-overlay-screencoords.png");
 #endif
 #if defined(DEBUG_GUIMAP_COORDS) || defined(DEBUG_GUIMAP)
     debugGridOverlayGraphics[1] = new SDLGraphic(
-        context->graphicsMgr->getRenderer(), "data/debug-grid-overlay-elevation1.png");
+        context.graphicsMgr->getRenderer(), "data/debug-grid-overlay-elevation1.png");
 #endif
 }
 
@@ -65,7 +65,7 @@ GuiMap::~GuiMap() {
 }
 
 void GuiMap::renderElement(IRenderer* renderer) {
-    Map* map = context->game->getMap();
+    Map* map = context.game->getMap();
 
     /*
      * Optimierung: Das Loopen über ALLE Kacheln ist teuer, weil wir jedes Mal die screenCoords ermitteln müssen,
@@ -206,9 +206,9 @@ void GuiMap::renderElement(IRenderer* renderer) {
                 renderer->setDrawColor(color);
                 renderer->fillRect(rect);
 
-                context->fontMgr->renderText(renderer, toString(hopIndex++), screenCoords.x(), screenCoords.y(),
-                                             &colorWhite, nullptr,
-                                             "DroidSans.ttf", 9, RENDERTEXT_HALIGN_CENTER | RENDERTEXT_VALIGN_MIDDLE);
+                context.fontMgr->renderText(renderer, toString(hopIndex++), screenCoords.x(), screenCoords.y(),
+                                            &colorWhite, nullptr,
+                                            "DroidSans.ttf", 9, RENDERTEXT_HALIGN_CENTER | RENDERTEXT_VALIGN_MIDDLE);
             }
         }
     }
@@ -236,11 +236,11 @@ void GuiMap::renderElement(IRenderer* renderer) {
 
         Building* building = dynamic_cast<Building*>(mapObject);
         if (building != nullptr) {
-            Rect rect = MapCoordUtils::getDrawCoordsForMapObjectFixed(*map, context->graphicsMgr, building);
-            context->graphicsMgr->getRenderer()->drawLine(rect.x, rect.y, rect.x, rect.y+rect.h);
-            context->graphicsMgr->getRenderer()->drawLine(rect.x, rect.y, rect.x+rect.w, rect.y);
-            context->graphicsMgr->getRenderer()->drawLine(rect.x+rect.w, rect.y, rect.x+rect.w, rect.y+rect.h);
-            context->graphicsMgr->getRenderer()->drawLine(rect.x, rect.y+rect.h, rect.x+rect.w, rect.y+rect.h);
+            Rect rect = MapCoordUtils::getDrawCoordsForMapObjectFixed(*map, context.graphicsMgr, building);
+            context.graphicsMgr->getRenderer()->drawLine(rect.x, rect.y, rect.x, rect.y+rect.h);
+            context.graphicsMgr->getRenderer()->drawLine(rect.x, rect.y, rect.x+rect.w, rect.y);
+            context.graphicsMgr->getRenderer()->drawLine(rect.x+rect.w, rect.y, rect.x+rect.w, rect.y+rect.h);
+            context.graphicsMgr->getRenderer()->drawLine(rect.x, rect.y+rect.h, rect.x+rect.w, rect.y+rect.h);
         }
     }
 #endif
@@ -254,7 +254,7 @@ void GuiMap::renderElement(IRenderer* renderer) {
 }
 
 void GuiMap::renderTile(const MapCoords& mapCoords) {
-    const Map* map = context->game->getMap();
+    const Map* map = context.game->getMap();
 
     const MapTile* mapTile = map->getMapTileAt(mapCoords);
     if (mapTile == nullptr) {
@@ -309,7 +309,7 @@ void GuiMap::renderTile(const MapCoords& mapCoords) {
 
 #ifdef DEBUG_GUIMAP
     // Kachel unter dem Mauszeiger rot färben
-    if (mapCoords == MapCoordUtils::getMapCoordsUnderMouse(*map, context->mouseCurrentX, context->mouseCurrentY)) {
+    if (mapCoords == MapCoordUtils::getMapCoordsUnderMouse(*map, context.mouseCurrentX, context.mouseCurrentY)) {
         drawingFlags |= IGraphic::DRAWING_FLAG_RED;
     }
 #endif
@@ -388,8 +388,8 @@ void GuiMap::renderTile(const MapCoords& mapCoords) {
         const FourthDirection& view = mapObjectToDrawHere->getView();
         const FourthDirection& viewToRender = Direction::addDirections(view, screenView);
 
-        const std::string& graphicSetName = context->graphicsMgr->getGraphicSetNameForMapObject(mapObjectType);
-        const GraphicSet* mapObjectGraphicSet = context->graphicsMgr->getGraphicSet(graphicSetName);
+        const std::string& graphicSetName = context.graphicsMgr->getGraphicSetNameForMapObject(mapObjectType);
+        const GraphicSet* mapObjectGraphicSet = context.graphicsMgr->getGraphicSet(graphicSetName);
 
         // TODO duplicate code
         const IGraphic* graphicToDrawHere;
@@ -533,13 +533,13 @@ void GuiMap::debugRenderTextMapCoords(IRenderer* renderer, const Map& map, const
     stringstream << mapCoords;
 
     static Color colorWhite = Color(255, 255, 255, 95);
-    context->fontMgr->renderText(renderer, stringstream.str(), screenCoords.x(), screenCoords.y(), &colorWhite,
-                                 nullptr, "DroidSans.ttf", 9, RENDERTEXT_HALIGN_CENTER | RENDERTEXT_VALIGN_MIDDLE);
+    context.fontMgr->renderText(renderer, stringstream.str(), screenCoords.x(), screenCoords.y(), &colorWhite,
+                                nullptr, "DroidSans.ttf", 9, RENDERTEXT_HALIGN_CENTER | RENDERTEXT_VALIGN_MIDDLE);
 }
 #endif
 
 bool GuiMap::onEventElement(SDL_Event& event) {
-    const WindowCoords& startClickWindowCoords = context->guiMgr->getStartClickWindowCoords();
+    const WindowCoords& startClickWindowCoords = context.guiMgr->getStartClickWindowCoords();
 
     // Bauen wir grade was?
     if (inBuildingMode) {
@@ -557,7 +557,7 @@ bool GuiMap::onEventElement(SDL_Event& event) {
         // Maustaste war schon gedrückt und die Position wurde bewegt? Dann müssen wir uns das Gebäude merken.
         // Wichtig in diesem Fall, dass wir die BuildOperation NICHT löschen, um die bestehenden Gebäude dort
         // nicht zu verlieren.
-        if (event.type == context->userEventBase + USER_EVENT_MOUSEMOTION_MAPCOORDS &&
+        if (event.type == context.userEventBase + USER_EVENT_MOUSEMOTION_MAPCOORDS &&
             isLeftMouseButtonDown &&
             hitTest(startClickWindowCoords.x(), startClickWindowCoords.y())) {
 
@@ -566,7 +566,7 @@ bool GuiMap::onEventElement(SDL_Event& event) {
         }
 
         // Maus bewegt, der Spieler hat die linke Maustaste aber noch nicht gedrückt? Dann nur hover-Objekt bewegen
-        if (event.type == context->userEventBase + USER_EVENT_MOUSEMOTION_MAPCOORDS &&
+        if (event.type == context.userEventBase + USER_EVENT_MOUSEMOTION_MAPCOORDS &&
             !isLeftMouseButtonDown) {
 
             updateHoverObject();
@@ -614,18 +614,18 @@ bool GuiMap::onEventElement(SDL_Event& event) {
     if (event.type == SDL_MOUSEMOTION && hitTest(event.motion.x, event.motion.y)) {
         const MapObjectFixed* mapObjectFixed = getMapObjectFixedUnderMouseCoords(event.button.x, event.button.y);
         if (mapObjectFixed != nullptr && !mapObjectFixed->getMapObjectType()->isForest) {
-            context->guiMgr->setStatusBarText(_(mapObjectFixed->getMapObjectType()->getTitleMsgid().c_str()));
+            context.guiMgr->setStatusBarText(_(mapObjectFixed->getMapObjectType()->getTitleMsgid().c_str()));
         } else {
-            const Map* map = context->game->getMap();
+            const Map* map = context.game->getMap();
             const MapCoords& mapCoords = MapCoordUtils::getMapCoordsUnderMouse(*map, event.motion.x, event.motion.y);
             const MapTile* mapTile = map->getMapTileAt(mapCoords);
 
             // Fruchtbarkeit nur auf Gras anzeigen, nicht Küste, Flüsse etc.
             if (mapTile != nullptr && mapTile->getMapTileConfig()->mapTileType == MapTileType::GRASS) {
                 // TODO Fruchtbarkeit von mapTile->isle;
-                context->guiMgr->setStatusBarText(_("TODO - Island's richness of soil"));
+                context.guiMgr->setStatusBarText(_("TODO - Island's richness of soil"));
             } else {
-                context->guiMgr->setStatusBarText("");
+                context.guiMgr->setStatusBarText("");
             }
         }
 
@@ -636,12 +636,12 @@ bool GuiMap::onEventElement(SDL_Event& event) {
 }
 
 void GuiMap::addToBuildQueration(bool mustResetBefore) {
-    const MapCoords& mapCoordsUnderMouse = context->guiMgr->getMapCoordsUnderMouse();
+    const MapCoords& mapCoordsUnderMouse = context.guiMgr->getMapCoordsUnderMouse();
 
     // Ok, wir müssen nun ggf. was platzieren. Es kommt nun drauf an, was wir grade platzieren
-    const MapObjectType* mapObjectType = context->guiMgr->getPanelState().addingMapObject;
+    const MapObjectType* mapObjectType = context.guiMgr->getPanelState().addingMapObject;
     StructurePlacing structurePlacing = mapObjectType->structurePlacing;
-    const FourthDirection& view = context->guiMgr->getPanelState().addingMapObjectView;
+    const FourthDirection& view = context.guiMgr->getPanelState().addingMapObjectView;
 
     if (structurePlacing == INDIVIDUALLY) {
         // Individuell: Wir gucken, ob hier baubar ist. Falls ja, fügen wir die Stelle zur Queue hinzu
@@ -659,7 +659,7 @@ void GuiMap::addToBuildQueration(bool mustResetBefore) {
         // Rechteck: Egal, was vorher gewählt war. Wir zeichnen ein Rechteck und plazieren überall dort, wo es geht.
         // Wichtig hierbei ist, dass diese Variante nur funktioniert, wenn mapObjectType eine Größe von 1x1 hat.
 
-        const MapCoords& mapCoordsClickStart = context->guiMgr->getStartClickMapCoords();
+        const MapCoords& mapCoordsClickStart = context.guiMgr->getStartClickMapCoords();
 
         // Die Richtung, in der wir iterieren is wichtig. Wir bauen immer vom
         // Startpunkt aus (falls nicht alle Resourcen da sind).
@@ -678,7 +678,7 @@ void GuiMap::addToBuildQueration(bool mustResetBefore) {
         // Pfad: Egal, was vorher gewählt war. Wir berechnen einen Pfad und plazieren überall auf dem Weg, wo es geht.
         // Wichtig hierbei ist, dass diese Variante nur funktioniert, wenn mapObjectType eine Größe von 1x1 hat.
 
-        const MapCoords& mapCoordsClickStart = context->guiMgr->getStartClickMapCoords();
+        const MapCoords& mapCoordsClickStart = context.guiMgr->getStartClickMapCoords();
 
         // Sonderfall: Start = End, keine Route, sondern nur das eine Feld.
         Route route;
@@ -702,17 +702,17 @@ void GuiMap::addToBuildQueration(bool mustResetBefore) {
 }
 
 void GuiMap::updateHoverObject() {
-    const MapCoords& mapCoordsUnderMouse = context->guiMgr->getMapCoordsUnderMouse();
+    const MapCoords& mapCoordsUnderMouse = context.guiMgr->getMapCoordsUnderMouse();
 
-    const MapObjectType* mapObjectType = context->guiMgr->getPanelState().addingMapObject;
-    const FourthDirection& view = context->guiMgr->getPanelState().addingMapObjectView;
+    const MapObjectType* mapObjectType = context.guiMgr->getPanelState().addingMapObject;
+    const FourthDirection& view = context.guiMgr->getPanelState().addingMapObjectView;
 
     resetBuildOperation();
     buildOperation->requestBuild(mapCoordsUnderMouse, mapObjectType, view);
 }
 
 const MapObjectFixed* GuiMap::getMapObjectFixedUnderMouseCoords(int mouseX, int mouseY) {
-    Map* map = context->game->getMap();
+    Map* map = context.game->getMap();
     int screenZoom = map->getScreenZoom();
 
     // Objekte iterieren und merken, welche in Frage kommen
@@ -726,7 +726,7 @@ const MapObjectFixed* GuiMap::getMapObjectFixedUnderMouseCoords(int mouseX, int 
             continue;
         }
 
-        Rect rect = MapCoordUtils::getDrawCoordsForMapObjectFixed(*map, context->graphicsMgr, mapObjectFixed);
+        Rect rect = MapCoordUtils::getDrawCoordsForMapObjectFixed(*map, context.graphicsMgr, mapObjectFixed);
 
         // Außerhalb der Boundary-Box des Objekt geklickt?
         // TODO für Gebäude mit elevation=0 ggf. anpassen
@@ -754,8 +754,8 @@ const MapObjectFixed* GuiMap::getMapObjectFixedUnderMouseCoords(int mouseX, int 
 
         const MapObjectType* mapObjectType = mapObjectFixed->getMapObjectType();
         const std::string graphicSetName =
-            context->graphicsMgr->getGraphicSetNameForMapObject(mapObjectType);
-        const GraphicSet* graphicSet = context->graphicsMgr->getGraphicSet(graphicSetName);
+            context.graphicsMgr->getGraphicSetNameForMapObject(mapObjectType);
+        const GraphicSet* graphicSet = context.graphicsMgr->getGraphicSet(graphicSetName);
 
         // TODO duplicate code
         const IGraphic* graphic;
@@ -828,12 +828,12 @@ void GuiMap::onClickInMapForSelection(int mouseX, int mouseY) {
     const Building* buildingClicked = dynamic_cast<const Building*>(mapObjectFixedClicked);
 
     if (buildingClicked != nullptr) {
-        context->game->setSelectedMapObject(buildingClicked);
+        context.game->setSelectedMapObject(buildingClicked);
         return;
     }
 
     // TODO später ggf. weitere Events
-    context->game->setSelectedMapObject(nullptr);
+    context.game->setSelectedMapObject(nullptr);
 }
 
 void GuiMap::onReleaseMouseLeftInBuildingMode() {
@@ -849,7 +849,7 @@ void GuiMap::drawCatchmentArea(IRenderer* const renderer, const MapObjectToBuild
         return;
     }
 
-    Map* map = context->game->getMap();
+    Map* map = context.game->getMap();
     int screenZoom = map->getScreenZoom();
     const FourthDirection& screenView = map->getScreenView();
 
@@ -952,7 +952,7 @@ void GuiMap::onRotateAddingStructure() {
 }
 
 void GuiMap::resetBuildOperation() {
-    Player* player = context->game->getCurrentPlayer();
+    Player* player = context.game->getCurrentPlayer();
     buildOperation.reset(new BuildOperation(context, *player));
 }
 

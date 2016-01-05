@@ -11,7 +11,7 @@ static Color colorBlack = Color(0, 0, 0, 255);
 static Color colorRedBar = Color(255, 0, 0, 255);
 
 
-GuiGoodElement::GuiGoodElement(const Context* const context) : GuiStaticGraphicElement(context) {
+GuiGoodElement::GuiGoodElement(const Context& context) : GuiStaticGraphicElement(context) {
     // Größe ist fix
     width = 42;
     height = 42;
@@ -24,8 +24,8 @@ void GuiGoodElement::setGood(const Good* good) {
     this->good = good;
 
     // Grafik aktualisieren
-    const std::string graphicSetName = context->graphicsMgr->getGraphicSetNameForGoodIcons(good, true);
-    setGraphic(context->graphicsMgr->getGraphicSet(graphicSetName)->getStatic()->getGraphic());
+    const std::string graphicSetName = context.graphicsMgr->getGraphicSetNameForGoodIcons(good, true);
+    setGraphic(context.graphicsMgr->getGraphicSet(graphicSetName)->getStatic()->getGraphic());
 }
 
 void GuiGoodElement::renderElement(IRenderer* renderer) {
@@ -38,7 +38,7 @@ void GuiGoodElement::renderElement(IRenderer* renderer) {
     if (displayValue) {
         char inventoryOutput[10];
         std::snprintf(inventoryOutput, 10, "%ut", value);
-        context->fontMgr->renderText(renderer, inventoryOutput, windowX + 40, windowY + 42, &colorWhite, &colorBlack,
+        context.fontMgr->renderText(renderer, inventoryOutput, windowX + 40, windowY + 42, &colorWhite, &colorBlack,
             "DroidSans.ttf", 12, RENDERTEXT_HALIGN_RIGHT | RENDERTEXT_VALIGN_BOTTOM);
     }
 

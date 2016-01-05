@@ -19,7 +19,7 @@ protected:
     const IGraphic* graphic = nullptr;
 
 public:
-    GuiStaticGraphicElement(const Context* const context);
+    GuiStaticGraphicElement(const Context& context);
     virtual ~GuiStaticGraphicElement() override;
 
     const IGraphic* getGraphic() const {

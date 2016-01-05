@@ -20,7 +20,7 @@ TEST_F(BuildOperationTest, buildStreets) {
 
     // Testaufbau
 
-    BuildOperation buildOperation(&context, *player);
+    BuildOperation buildOperation(context, *player);
     for (const MapCoords& mapCoords : mapCoordsToBuildThere) {
         buildOperation.requestBuild(mapCoords, cobbledStreet, Direction::SOUTH);
     }
@@ -107,7 +107,7 @@ TEST_F(BuildOperationTest, buildCostsNothingOverbuildResources) {
 
     // Testaufbau
 
-    BuildOperation buildOperation(&context, *player);
+    BuildOperation buildOperation(context, *player);
     for (int x = 40; x <= 44; x++) {
         buildOperation.requestBuild({x, 36}, cobbledStreet, Direction::SOUTH);
     }
@@ -147,7 +147,7 @@ TEST_F(BuildOperationTest, buildLonelyStreet) {
 
     // Testaufbau
 
-    BuildOperation buildOperation(&context, *player);
+    BuildOperation buildOperation(context, *player);
     buildOperation.requestBuild({46, 34}, farmRoad, Direction::SOUTH);
     buildOperation.requestBuild({48, 34}, farmRoad, Direction::WEST);
     buildOperation.requestBuild({50, 34}, farmRoad, Direction::EAST);
@@ -188,7 +188,7 @@ TEST_F(BuildOperationTest, buildAdeptedStreets) {
 
     // Testaufbau
 
-    BuildOperation buildOperation(&context, *player);
+    BuildOperation buildOperation(context, *player);
     for (int x = 43; x <= 49; x++) {
         buildOperation.requestBuild({x, 44}, farmRoad, Direction::EAST);
     }
@@ -283,7 +283,7 @@ TEST_F(BuildOperationTest, buildAdeptedStreetsOutOfResources) {
     // Testaufbau
     player->coins = 25;
 
-    BuildOperation buildOperation(&context, *player);
+    BuildOperation buildOperation(context, *player);
     for (int x = 43; x <= 49; x++) {
         buildOperation.requestBuildWhenNothingInTheWay(MapCoords(x, 44), farmRoad, Direction::SOUTH);
     }
@@ -429,7 +429,7 @@ TEST_F(BuildOperationTest, buildAdeptedStreetsFromTwoBuildRequests) {
     // Testaufbau
     player->coins = 5;
 
-    BuildOperation buildOperation(&context, *player);
+    BuildOperation buildOperation(context, *player);
     buildOperation.requestBuildWhenNothingInTheWay({50, 45}, farmRoad, Direction::SOUTH);
     buildOperation.requestBuildWhenNothingInTheWay({50, 46}, farmRoad, Direction::SOUTH);
     buildOperation.requestBuildWhenNothingInTheWay({49, 46}, farmRoad, Direction::SOUTH);

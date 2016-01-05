@@ -16,7 +16,7 @@ private:
     double foodSupply = 1.0;
 
 public:
-    GuiFoodSupplyElement(const Context* const context);
+    GuiFoodSupplyElement(const Context& context);
     virtual ~GuiFoodSupplyElement() override;
 
     void setFoodSupply(double foodSupply) {

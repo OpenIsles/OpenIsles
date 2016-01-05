@@ -20,7 +20,7 @@ public:
      * @brief Konstruktor.
      * @param context Dependency
      */
-    GuiMapZoomWidget(const Context* const context);
+    GuiMapZoomWidget(const Context& context);
 
     virtual ~GuiMapZoomWidget();
 
