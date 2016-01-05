@@ -10,7 +10,7 @@
 
 /**
  * @brief Hilfs-Komponente, die ein Symbol und einen String daneben anzeigt.
- * Wir verwenden sie für die Baumaterialen, Münzkosten und (TODO) Betriebskosten
+ * Wir verwenden sie für die Baumaterialen, Münzkosten und Betriebskosten
  *
  * Als Symbol wird GuiStaticGraphicElement#graphic verwendet.
  */
