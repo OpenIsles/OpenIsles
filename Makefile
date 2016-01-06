@@ -9,7 +9,7 @@ CREATE_TARGET_DIRECTORY = mkdir -p $(@D)
 MONTAGE := montage -background transparent
 BLENDER := /opt/blender-2.74/blender
 
-.PHONY: all clean build-gui clean-gui render-sheep render-cart \
+.PHONY: all clean build-gui clean-gui render-sheep render-cart render-build-menu \
         render-coat-of-arms render-coin render-blender clean-blender
 
 all: build-gui render-blender
@@ -378,6 +378,11 @@ $(DATA_DIRECTORY)/img/gui/population-man.png: $(SRC_DIRECTORY)/blender/gui/popul
 	$(BLENDER) -b $< -o //population-man\#.png -f 1
 	mv $(SRC_DIRECTORY)/blender/gui/population-man/population-man1.png $@
 
+render-build-menu: $(SRC_DIRECTORY)/blender/gui/build-menu/public.blend
+	mkdir -p $(DATA_DIRECTORY)/img/gui/build-menu
+	cd $(SRC_DIRECTORY)/blender/gui/build-menu; $(BLENDER) -b public.blend -P render.py
+	mv $(SRC_DIRECTORY)/blender/gui/build-menu/render/* $(DATA_DIRECTORY)/img/gui/build-menu
+
 ########################################################################################################################
 # PHONYs um alle Blender-Sachen zu rendern und zu cleanen                                                              #
 ########################################################################################################################
@@ -405,6 +410,7 @@ render-blender: \
 	$(DATA_DIRECTORY)/img/ships/little-ship.png \
 	render-coat-of-arms \
 	render-coin \
+	render-build-menu \
 	$(DATA_DIRECTORY)/img/gui/population-man.png
 	
 clean-blender:
@@ -428,6 +434,7 @@ clean-blender:
 	rm -rf $(DATA_DIRECTORY)/img/gui/coat-of-arms
 	rm -rf $(SRC_DIRECTORY)/blender/gui/coins/render
 	rm -rf $(DATA_DIRECTORY)/img/gui/coin
+	rm -rf $(SRC_DIRECTORY)/blender/gui/build-menu/render
 	rm -f $(DATA_DIRECTORY)/img/gui/population-man.png
 	rm -rf $(DATA_DIRECTORY)/img/animations
 	rm -rf $(DATA_DIRECTORY)/img/buildings
