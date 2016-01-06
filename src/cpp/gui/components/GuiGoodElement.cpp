@@ -36,7 +36,7 @@ void GuiGoodElement::renderElement(IRenderer* renderer) {
 
     // Wert anzeigen
     if (displayValue) {
-        std::string inventoryOutput = string_sprintf(inventoryOutput, 10, "%ut", value);
+        std::string inventoryOutput = string_sprintf("%ut", value);
         context.fontMgr->renderText(renderer, inventoryOutput, windowX + 40, windowY + 42, &colorWhite, &colorBlack,
             "DroidSans.ttf", 12, RENDERTEXT_HALIGN_RIGHT | RENDERTEXT_VALIGN_BOTTOM);
     }
