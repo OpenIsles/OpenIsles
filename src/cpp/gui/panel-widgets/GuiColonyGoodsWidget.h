@@ -3,7 +3,7 @@
 
 #include <SDL.h>
 #include <unordered_map>
-#include "Context.h"
+#include "global.h"
 #include "gui/components/GuiGoodsSlotElement.h"
 #include "gui/panel-widgets/GuiSelectedBuildingWidget.h"
 

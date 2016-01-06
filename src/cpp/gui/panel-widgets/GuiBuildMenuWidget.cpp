@@ -1,4 +1,5 @@
-#include "defines.h"
+#include <string>
+#include "global.h"
 #include "map/Structure.h"
 #include "gui/Identifiers.h"
 #include "gui/components/map/GuiMap.h"
@@ -13,7 +14,7 @@ GuiBuildMenuWidget::GuiBuildMenuWidget(const Context& context) : GuiPanelWidget(
     // TODO in Config auslagern
     static struct {
         BuildingGroup buildingGroup;
-        const char* name;
+        const std::string name;
         const std::string graphicSetName;
         const std::string graphicSetPressedName; // TODO Zustände nutzen
 
@@ -140,7 +141,7 @@ GuiBuildMenuWidget::GuiBuildMenuWidget(const Context& context) : GuiPanelWidget(
                     graphicAddBuildingButton->getWidth(), graphicAddBuildingButton->getHeight());
                 addBuildingButton->setGraphic(graphicAddBuildingButton);
                 addBuildingButton->setGraphicPressed(graphicAddBuildingButton);
-                addBuildingButton->setStatusBarText(_(mapObjectType->getTitleMsgid().c_str()));
+                addBuildingButton->setStatusBarText(_(mapObjectType->getTitleMsgid()));
                 addBuildingButton->setOnClickFunction([ this, context, mapObjectType ]() {
                     context.guiMgr->panelState.addingMapObject = mapObjectType;
                     context.guiMgr->panelState.buildingMenuOpen = false;

@@ -1,4 +1,32 @@
+#include <cstdarg>
 #include "utils/StringFormat.h"
+
+std::string string_sprintf_va_list(const std::string& formatString, va_list vlist) {
+    va_list vlist_count;
+    va_copy(vlist_count, vlist);
+
+    int bufferSize = std::vsnprintf(nullptr, 0, formatString.c_str(), vlist_count) + 1;
+    va_end(vlist_count);
+
+    char* buffer = new char[bufferSize];
+    std::vsnprintf(buffer, (std::size_t) bufferSize, formatString.c_str(), vlist);
+
+    std::string string = std::string(buffer);
+    delete buffer;
+
+    return string;
+}
+
+std::string string_sprintf(const std::string& formatString, ...) {
+    va_list vlist;
+    va_start(vlist, formatString);
+
+    std::string string = string_sprintf_va_list(formatString, vlist);
+
+    va_end(vlist);
+
+    return string;
+}
 
 #ifdef LINUX
 std::string toString(unsigned int x) {

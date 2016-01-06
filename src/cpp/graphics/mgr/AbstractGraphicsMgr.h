@@ -3,7 +3,7 @@
 
 #include <string>
 #include <unordered_map>
-#include "defines.h"
+#include "global.h"
 #include "config/ConfigMgr.h"
 #include "game/Player.h"
 #include "graphics/graphic/IGraphic.h"

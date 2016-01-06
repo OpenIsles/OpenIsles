@@ -2,7 +2,7 @@
 #define _ERROR_IN_CONFIG_EXCEPTION_H
 
 #include <stdexcept>
-#include "defines.h"
+#include "global.h"
 
 
 /**

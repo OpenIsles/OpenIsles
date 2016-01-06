@@ -1,4 +1,4 @@
-#include "defines.h"
+#include "global.h"
 #include "game/Game.h"
 #include "graphics/mgr/IFontMgr.h"
 #include "gui/panel-widgets/GuiDummyWidget.h"

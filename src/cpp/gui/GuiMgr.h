@@ -6,7 +6,7 @@
 #endif
 
 #include <map>
-#include "Context.h"
+#include "global.h"
 #include "game/GoodsSlot.h"
 #include "map/coords/MapCoords.h"
 #include "map/coords/WindowCoords.h"

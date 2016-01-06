@@ -5,7 +5,7 @@
 #include <memory>
 #include <random>
 #include <unordered_map>
-#include "Context.h"
+#include "global.h"
 #include "gui/components/map/GuiResourcesBar.h"
 #include "gui/components/GuiBase.h"
 #include "map/buildqueue/BuildOperation.h"

@@ -1,7 +1,7 @@
 #ifndef _GUI_MAP_ZOOM_WIDGET_H
 #define _GUI_MAP_ZOOM_WIDGET_H
 
-#include "Context.h"
+#include "global.h"
 #include "gui/components/GuiBase.h"
 #include "gui/components/GuiButton.h"
 

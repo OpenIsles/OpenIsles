@@ -1,7 +1,7 @@
 #ifndef _GUI_PLAYER_STATUS_WIDGET_H
 #define _GUI_PLAYER_STATUS_WIDGET_H
 
-#include "Context.h"
+#include "global.h"
 #include "game/Player.h"
 #include "gui/components/GuiPanelHeader.h"
 #include "gui/panel-widgets/GuiPanelWidget.h"

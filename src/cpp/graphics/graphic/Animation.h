@@ -2,10 +2,9 @@
 #define _ANIMATION_H
 
 #include <array>
-#include <cstdio>
 #include <stdexcept>
 #include <vector>
-#include "defines.h"
+#include "global.h"
 #include "graphics/graphic/IGraphic.h"
 
 /**
@@ -75,7 +74,7 @@ public:
      */
     const IGraphic* getGraphic() const {
         if (framesCount != 1) {
-            std::fputs(_("Animation does not have only frame.\n"), stderr);
+            Log::error(_("Animation does not have only frame."));
             throw std::runtime_error("Animation does not have only frame");
         }
 
@@ -90,7 +89,7 @@ public:
      */
     const IGraphic* getFrame(unsigned int frameIndex) const {
         if (frameIndex >= framesCount) {
-            std::fputs(_("Animation does not have this many frames.\n"), stderr);
+            Log::error(_("Animation does not have this many frames."));
             throw std::runtime_error("Animation does not have this many frames");
         }
 

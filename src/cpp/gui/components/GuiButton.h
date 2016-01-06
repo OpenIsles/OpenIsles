@@ -3,7 +3,7 @@
 
 #include <SDL.h>
 #include <functional>
-#include "Context.h"
+#include "global.h"
 #include "graphics/graphic/IGraphic.h"
 #include "gui/components/GuiStaticGraphicElement.h"
 

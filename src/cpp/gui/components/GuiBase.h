@@ -4,8 +4,8 @@
 #include <SDL.h>
 #include <list>
 #include <string>
+#include "global.h"
 #include "graphics/renderer/IRenderer.h"
-#include "Context.h"
 
 union SDL_Event;
 class SDL_Renderer;

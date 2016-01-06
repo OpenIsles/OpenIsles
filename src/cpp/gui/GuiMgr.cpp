@@ -1,7 +1,7 @@
 #include <SDL.h>
 #include <cassert>
 #include <string>
-#include "defines.h"
+#include "global.h"
 #include "config/ConfigMgr.h"
 #include "game/Game.h"
 #include "graphics/graphic/sdl/SDLGraphic.h"
@@ -104,7 +104,7 @@ void GuiMgr::initGui() {
 
     // Buttons zum Umschalten der Tabs und zugehörige UI-Gruppen
     static struct {
-        const char* statusBarText;
+        const std::string statusBarText;
         const char* graphicFilename;
         const char* graphicPressedFilename;
         PanelButton panelButtonToActive;
@@ -223,7 +223,7 @@ void GuiMgr::initPanelWidgets() {
 
 void GuiMgr::registerElement(int identifier, GuiBase* guiElement) {
     if (identifierMap.count(identifier) > 0) {
-        std::fprintf(stderr, _("Identifier %d is already registered.\n"), identifier);
+        Log::error(_("Identifier %d is already registered."), identifier);
         throw std::runtime_error("Identifier already registered");
     }
     
@@ -235,7 +235,7 @@ GuiBase* GuiMgr::findElement(int identifier) {
     auto iter = identifierMap.find(identifier);
     
     if (iter == identifierMap.end()) {
-        std::fprintf(stderr, _("Identifier %d is not registered.\n"), identifier);
+        Log::error(_("Identifier %d is not registered."), identifier);
         throw std::runtime_error("Identifier not registered");
     }
     

@@ -2,7 +2,7 @@
 #define _GUI_RESOURCES_BAR_H
 
 #include <SDL_events.h>
-#include "Context.h"
+#include "global.h"
 #include "config/ConfigMgr.h"
 #include "graphics/renderer/IRenderer.h"
 #include "gui/components/GuiBase.h"

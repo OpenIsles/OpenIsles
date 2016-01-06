@@ -3,7 +3,7 @@
 
 #include <cassert>
 #include <string>
-#include "defines.h"
+#include "global.h"
 #include "game/GoodsSlot.h"
 #include "game/Player.h"
 #include "graphics/graphic/IGraphic.h"

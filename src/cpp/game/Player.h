@@ -1,10 +1,9 @@
 #ifndef _PLAYER_H
 #define _PLAYER_H
 
-#include <cstdio>
-#include <cstring>
 #include <stdexcept>
-#include "defines.h"
+#include <string>
+#include "global.h"
 #include "game/PlayerStatus.h"
 
 /**
@@ -88,7 +87,7 @@ public:
             return PLAYER_WHITE;
         }
 
-        std::fprintf(stderr, _("Illegal player color: %u\n"), (unsigned int) color);
+        Log::error(_("Illegal player color: %u"), (unsigned int) color);
         throw std::runtime_error("Illegal player color");
     }
 };

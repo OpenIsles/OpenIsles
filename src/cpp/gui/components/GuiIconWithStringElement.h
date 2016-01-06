@@ -2,10 +2,10 @@
 #define _GUI_ICON_WITH_STRING_ELEMENT_H
 
 #include <string>
+#include "global.h"
 #include "graphics/graphic/IGraphic.h"
 #include "graphics/renderer/IRenderer.h"
 #include "gui/components/GuiStaticGraphicElement.h"
-#include "Context.h"
 
 
 /**

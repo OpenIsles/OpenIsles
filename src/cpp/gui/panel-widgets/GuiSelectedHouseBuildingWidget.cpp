@@ -1,7 +1,6 @@
 #include <cassert>
-#include <cstdio>
 #include <string>
-#include "defines.h"
+#include "global.h"
 #include "config/ConfigMgr.h"
 #include "game/Game.h"
 #include "graphics/mgr/IFontMgr.h"
@@ -89,8 +88,8 @@ void GuiSelectedHouseBuildingWidget::onSelectedMapBuildingChanged(const Building
     // Bevölkerungsdaten
     inhabitants.setText(toString(colonyPopulationTier.population));
 
-    std::string populationTierTitle = _N(mapObjectType->populationTier->getTitleMsgid(false).c_str(),
-                                         mapObjectType->populationTier->getTitleMsgid(true).c_str(),
+    std::string populationTierTitle = _N(mapObjectType->populationTier->getTitleMsgid(false),
+                                         mapObjectType->populationTier->getTitleMsgid(true),
                                          colonyPopulationTier.population);
 #ifdef DEBUG
     // Im Debug-Modus zeigen wir zusätzlich noch die Einwohnerzahl im Gebäude selber an
@@ -116,12 +115,11 @@ void GuiSelectedHouseBuildingWidget::onSelectedMapBuildingChanged(const Building
     for (const NeededGood& neededGood : mapObjectType->populationTier->needsGoods) {
         GuiGoodElement* goodElement = new GuiGoodElement(context);
 
-        char buffer[128];
-        std::snprintf(buffer, 128, _("The demand for %s is not being fulfilled"),
-                      _(neededGood.good->getTitleMsgid().c_str()));
+        std::string neededGoodText = string_sprintf(
+            _("The demand for %s is not being fulfilled"), _(neededGood.good->getTitleMsgid()).c_str());
 
         goodElement->setPosition(25 + (posIndex % 3) * 60, 220 + (posIndex / 3) * 60);
-        goodElement->setStatusBarText(buffer);
+        goodElement->setStatusBarText(neededGoodText);
         goodElement->setGood(neededGood.good);
         goodElement->setDisplayValue(false);
         goodElement->setDisplayBar(false);

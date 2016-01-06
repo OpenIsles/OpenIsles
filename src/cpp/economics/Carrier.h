@@ -5,7 +5,7 @@
 #include <gtest/gtest.h>
 #endif
 
-#include "Context.h"
+#include "global.h"
 #include "game/GoodsSlot.h"
 #include "graphics/graphic/Animation.h"
 #include "graphics/graphic/GraphicSet.h"

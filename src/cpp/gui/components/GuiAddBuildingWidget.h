@@ -2,7 +2,7 @@
 #define _GUI_ADD_BUILDING_WIDGET_H
 
 #include <SDL_render.h>
-#include "Context.h"
+#include "global.h"
 #include "gui/components/GuiBase.h"
 #include "gui/components/GuiIconWithStringElement.h"
 #include "gui/components/GuiPanelHeader.h"

@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenIsles 0.1\n"
 "Report-Msgid-Bugs-To: http://www.openisles.org\n"
-"POT-Creation-Date: 2016-01-01 15:41+0100\n"
-"PO-Revision-Date: 2016-01-01 16:27+0100\n"
+"POT-Creation-Date: 2016-01-06 02:56+0100\n"
+"PO-Revision-Date: 2016-01-06 02:58+0100\n"
 "Last-Translator: theHacker <openisles@openisles.org>\n"
 "Language-Team: theHacker <openisles@openisles.org>\n"
 "Language: en\n"
@@ -325,197 +325,202 @@ msgid_plural "populationTier|settlers|plural"
 msgstr[0] "Settler"
 msgstr[1] "Settlers"
 
-#: src/cpp/config/ConfigMgr.cpp:24
+#: src/cpp/config/ConfigMgr.cpp:21
 msgid "Loaded goods."
 msgstr "Loaded goods."
 
-#: src/cpp/config/ConfigMgr.cpp:27
+#: src/cpp/config/ConfigMgr.cpp:24
 msgid "Loaded carrier mapObjectTypes."
 msgstr "Loaded carrier mapObjectTypes."
 
-#: src/cpp/config/ConfigMgr.cpp:30
+#: src/cpp/config/ConfigMgr.cpp:27
 msgid "Loaded mapObjectTypes."
 msgstr "Loaded mapObjectTypes."
 
-#: src/cpp/config/ConfigMgr.cpp:33
+#: src/cpp/config/ConfigMgr.cpp:30
 msgid "Loaded population tiers."
 msgstr "Loaded population tiers."
 
-#: src/cpp/config/ConfigMgr.cpp:36
+#: src/cpp/config/ConfigMgr.cpp:33
 msgid "Loaded tiles."
 msgstr "Loaded tiles."
 
-#: src/cpp/config/ConfigMgr.cpp:92 src/cpp/config/ConfigMgr.cpp:242
+#: src/cpp/config/ConfigMgr.cpp:39
 #, c-format
-msgid "Illegal node '%s'.\n"
-msgstr "Illegal node '%s'.\n"
+msgid "Error while loading the configuration: %s."
+msgstr "Error while loading the configuration: %s."
 
-#: src/cpp/config/ConfigMgr.cpp:111
+#: src/cpp/config/ConfigMgr.cpp:96 src/cpp/config/ConfigMgr.cpp:245
 #, c-format
-msgid "Illegal value '%s' for structurePlacing.\n"
-msgstr "Illegal value '%s' for structurePlacing.\n"
+msgid "Illegal node '%s'."
+msgstr "Illegal node '%s'."
 
-#: src/cpp/config/ConfigMgr.cpp:220
+#: src/cpp/config/ConfigMgr.cpp:115
 #, c-format
-msgid "Loaded mapObjectType '%s'.\n"
-msgstr "Loaded mapObjectType '%s'.\n"
+msgid "Illegal value '%s' for structurePlacing."
+msgstr "Illegal value '%s' for structurePlacing."
 
-#: src/cpp/config/ConfigMgr.cpp:259
+#: src/cpp/config/ConfigMgr.cpp:223
 #, c-format
-msgid "Loaded carrier mapObjectType '%s'.\n"
-msgstr "Loaded carrier mapObjectType '%s'.\n"
+msgid "Loaded mapObjectType '%s'."
+msgstr "Loaded mapObjectType '%s'."
 
-#: src/cpp/config/ConfigMgr.cpp:346
+#: src/cpp/config/ConfigMgr.cpp:261
 #, c-format
-msgid "Illegal mapTileTypeName '%s'.\n"
-msgstr "Illegal mapTileTypeName '%s'.\n"
+msgid "Loaded carrier mapObjectType '%s'."
+msgstr "Loaded carrier mapObjectType '%s'."
 
-#: src/cpp/config/ConfigMgr.cpp:365
+#: src/cpp/config/ConfigMgr.cpp:348
 #, c-format
-msgid "Illegal bool value '%s'.\n"
-msgstr "Illegal bool value '%s'.\n"
+msgid "Illegal mapTileTypeName '%s'."
+msgstr "Illegal mapTileTypeName '%s'."
+
+#: src/cpp/config/ConfigMgr.cpp:366
+#, c-format
+msgid "Illegal bool value '%s'."
+msgstr "Illegal bool value '%s'."
 
 #: src/cpp/config/ConfigMgr.cpp:402
-msgid "Could not parse catchmentArea: Illegal char before first line.\n"
-msgstr "Could not parse catchmentArea: Illegal char before first line.\n"
+msgid "Could not parse catchmentArea: Illegal char before first line."
+msgstr "Could not parse catchmentArea: Illegal char before first line."
 
-#: src/cpp/config/ConfigMgr.cpp:412
-msgid "Could not parse catchmentArea: Illegal space inside line.\n"
-msgstr "Could not parse catchmentArea: Illegal space inside line.\n"
+#: src/cpp/config/ConfigMgr.cpp:411
+msgid "Could not parse catchmentArea: Illegal space inside line."
+msgstr "Could not parse catchmentArea: Illegal space inside line."
 
-#: src/cpp/config/ConfigMgr.cpp:428
-msgid "Could not parse catchmentArea: widths are not equal.\n"
-msgstr "Could not parse catchmentArea: widths are not equal.\n"
+#: src/cpp/config/ConfigMgr.cpp:426
+msgid "Could not parse catchmentArea: widths are not equal."
+msgstr "Could not parse catchmentArea: widths are not equal."
 
-#: src/cpp/config/ConfigMgr.cpp:440
-msgid "Could not parse catchmentArea: Last line was not completly empty.\n"
-msgstr "Could not parse catchmentArea: Last line was not completly empty.\n"
+#: src/cpp/config/ConfigMgr.cpp:437
+msgid "Could not parse catchmentArea: Last line was not completly empty."
+msgstr "Could not parse catchmentArea: Last line was not completly empty."
 
-#: src/cpp/config/ConfigMgr.cpp:538
+#: src/cpp/config/ConfigMgr.cpp:534
 #, c-format
-msgid "Loaded populationTier '%s'.\n"
-msgstr "Loaded populationTier '%s'.\n"
+msgid "Loaded populationTier '%s'."
+msgstr "Loaded populationTier '%s'."
 
-#: src/cpp/config/ConfigMgr.cpp:563
+#: src/cpp/config/ConfigMgr.cpp:560
 #, c-format
-msgid "Illegal value '%s' for populationTier.\n"
-msgstr "Illegal value '%s' for populationTier.\n"
+msgid "Illegal value '%s' for populationTier."
+msgstr "Illegal value '%s' for populationTier."
 
-#: src/cpp/game/Game.cpp:199
-msgid "Cannot have negative inhabitants.\n"
-msgstr "Cannot have negative inhabitants.\n"
+#: src/cpp/game/Game.cpp:198
+msgid "Cannot have negative inhabitants."
+msgstr "Cannot have negative inhabitants."
 
-#: src/cpp/game/GameIO.cpp:93
+#: src/cpp/game/GameIO.cpp:92
 #, c-format
-msgid "Illegal player color '%s'.\n"
-msgstr "Illegal player color '%s'.\n"
+msgid "Illegal player color '%s'."
+msgstr "Illegal player color '%s'."
 
-#: src/cpp/game/GameIO.cpp:145
+#: src/cpp/game/GameIO.cpp:144
 #, c-format
-msgid "Isle '%s' (%dx%d) does not match size on map (%dx%d).\n"
-msgstr "Isle '%s' (%dx%d) does not match size on map (%dx%d).\n"
+msgid "Isle '%s' (%dx%d) does not match size on map (%dx%d)."
+msgstr "Isle '%s' (%dx%d) does not match size on map (%dx%d)."
 
-#: src/cpp/game/GameIO.cpp:237
+#: src/cpp/game/GameIO.cpp:236
 #, c-format
-msgid "Warning: Did not find Good '%s' in savefile.\n"
-msgstr "Warning: Did not find Good '%s' in savefile.\n"
+msgid "Warning: Did not find Good '%s' in savefile."
+msgstr "Warning: Did not find Good '%s' in savefile."
 
-#: src/cpp/game/GameIO.cpp:252
+#: src/cpp/game/GameIO.cpp:251
 #, c-format
-msgid "Illegal mapObjectType '%s'.\n"
-msgstr "Illegal mapObjectType '%s'.\n"
+msgid "Illegal mapObjectType '%s'."
+msgstr "Illegal mapObjectType '%s'."
 
-#: src/cpp/game/Player.h:91
+#: src/cpp/game/Player.h:90
 #, c-format
-msgid "Illegal player color: %u\n"
-msgstr "Illegal player color: %u\n"
+msgid "Illegal player color: %u"
+msgstr "Illegal player color: %u"
 
-#: src/cpp/graphics/graphic/Animation.h:78
-msgid "Animation does not have only frame.\n"
-msgstr "Animation does not have only frame.\n"
+#: src/cpp/graphics/graphic/Animation.h:77
+msgid "Animation does not have only frame."
+msgstr "Animation does not have only frame."
 
-#: src/cpp/graphics/graphic/Animation.h:93
-msgid "Animation does not have this many frames.\n"
-msgstr "Animation does not have this many frames.\n"
+#: src/cpp/graphics/graphic/Animation.h:92
+msgid "Animation does not have this many frames."
+msgstr "Animation does not have this many frames."
 
-#: src/cpp/graphics/graphic/sdl/SDLGraphic.cpp:14
+#: src/cpp/graphics/graphic/sdl/SDLGraphic.cpp:13
 #, c-format
-msgid "Could not load graphic '%s': %s\n"
-msgstr "Could not load graphic '%s': %s\n"
+msgid "Could not load graphic '%s': %s"
+msgstr "Could not load graphic '%s': %s"
 
-#: src/cpp/graphics/graphic/sdl/SDLGraphic.cpp:23
+#: src/cpp/graphics/graphic/sdl/SDLGraphic.cpp:22
 #, c-format
-msgid "Loaded graphic '%s': size = (%d, %d)\n"
-msgstr "Loaded graphic '%s': size = (%d, %d)\n"
+msgid "Loaded graphic '%s': size = (%d, %d)"
+msgstr "Loaded graphic '%s': size = (%d, %d)"
 
-#: src/cpp/graphics/graphic/sdl/SDLGraphic.cpp:33
+#: src/cpp/graphics/graphic/sdl/SDLGraphic.cpp:32
 #, c-format
-msgid "Illegal srcRect: (%d, %d), %d, %d\n"
-msgstr "Illegal srcRect: (%d, %d), %d, %d\n"
+msgid "Illegal srcRect: (%d, %d), %d, %d"
+msgstr "Illegal srcRect: (%d, %d), %d, %d"
 
-#: src/cpp/graphics/graphic/sdl/SDLGraphic.cpp:48
+#: src/cpp/graphics/graphic/sdl/SDLGraphic.cpp:47
 #, c-format
-msgid "Could not create surface: %s\n"
-msgstr "Could not create surface: %s\n"
+msgid "Could not create surface: %s"
+msgstr "Could not create surface: %s"
 
-#: src/cpp/graphics/graphic/sdl/SDLGraphic.cpp:66
+#: src/cpp/graphics/graphic/sdl/SDLGraphic.cpp:65
 #, c-format
-msgid "Extracted graphic: srcRect = (%d, %d), %d, %d\n"
-msgstr "Extracted graphic: srcRect = (%d, %d), %d, %d\n"
+msgid "Extracted graphic: srcRect = (%d, %d), %d, %d"
+msgstr "Extracted graphic: srcRect = (%d, %d), %d, %d"
 
-#: src/cpp/graphics/graphic/sdl/SDLGraphic.cpp:73
+#: src/cpp/graphics/graphic/sdl/SDLGraphic.cpp:72
 #, c-format
-msgid "Could not create texture: %s\n"
-msgstr "Could not create texture: %s\n"
+msgid "Could not create texture: %s"
+msgstr "Could not create texture: %s"
 
-#: src/cpp/graphics/graphic/sdl/SDLGraphic.cpp:180
+#: src/cpp/graphics/graphic/sdl/SDLGraphic.cpp:179
 #, c-format
-msgid "Illegal bytesPerPixel: %d\n"
-msgstr "Illegal bytesPerPixel: %d\n"
+msgid "Illegal bytesPerPixel: %d"
+msgstr "Illegal bytesPerPixel: %d"
 
-#: src/cpp/graphics/mgr/AbstractGraphicsMgr.cpp:207
+#: src/cpp/graphics/mgr/AbstractGraphicsMgr.cpp:206
 #, c-format
-msgid "Could not divide the frames equally: '%s'\n"
-msgstr "Could not divide the frames equally: '%s'\n"
+msgid "Could not divide the frames equally: '%s'"
+msgstr "Could not divide the frames equally: '%s'"
 
-#: src/cpp/graphics/mgr/AbstractGraphicsMgr.cpp:214
+#: src/cpp/graphics/mgr/AbstractGraphicsMgr.cpp:213
 #, c-format
-msgid "Could not divide the views equally: '%s'\n"
-msgstr "Could not divide the views equally: '%s'\n"
+msgid "Could not divide the views equally: '%s'"
+msgstr "Could not divide the views equally: '%s'"
 
-#: src/cpp/graphics/renderer/sdl/SDLRenderer.cpp:13
+#: src/cpp/graphics/renderer/sdl/SDLRenderer.cpp:12
 #, c-format
-msgid "SDL could not be initialized: %s\n"
-msgstr "SDL could not be initialized: %s\n"
+msgid "SDL could not be initialized: %s"
+msgstr "SDL could not be initialized: %s"
 
-#: src/cpp/graphics/renderer/sdl/SDLRenderer.cpp:18
+#: src/cpp/graphics/renderer/sdl/SDLRenderer.cpp:17
 msgid "SDL initialized."
 msgstr "SDL initialized."
 
-#: src/cpp/graphics/renderer/sdl/SDLRenderer.cpp:22
+#: src/cpp/graphics/renderer/sdl/SDLRenderer.cpp:21
 #, c-format
-msgid "Could not load graphic 'data/img/appicon.png': %s\n"
-msgstr "Could not load graphic 'data/img/appicon.png': %s\n"
+msgid "Could not load graphic 'data/img/appicon.png': %s"
+msgstr "Could not load graphic 'data/img/appicon.png': %s"
 
-#: src/cpp/graphics/renderer/sdl/SDLRenderer.cpp:29
+#: src/cpp/graphics/renderer/sdl/SDLRenderer.cpp:28
 #, c-format
-msgid "SDL could not create window: %s\n"
-msgstr "SDL could not create window: %s\n"
+msgid "SDL could not create window: %s"
+msgstr "SDL could not create window: %s"
 
-#: src/cpp/graphics/renderer/sdl/SDLRenderer.cpp:38
+#: src/cpp/graphics/renderer/sdl/SDLRenderer.cpp:37
 #, c-format
-msgid "SDL could not create renderer: %s\n"
-msgstr "SDL could not create renderer: %s\n"
+msgid "SDL could not create renderer: %s"
+msgstr "SDL could not create renderer: %s"
 
-#: src/cpp/graphics/renderer/sdl/SDLRenderer.cpp:47
+#: src/cpp/graphics/renderer/sdl/SDLRenderer.cpp:46
 #, c-format
-msgid "Could not init SDL-image: %s\n"
-msgstr "Could not init SDL-image: %s\n"
+msgid "Could not init SDL-image: %s"
+msgstr "Could not init SDL-image: %s"
 
-#: src/cpp/graphics/renderer/sdl/SDLRenderer.cpp:53
+#: src/cpp/graphics/renderer/sdl/SDLRenderer.cpp:52
 #, c-format
-msgid "Could not init SDL-TTF: %s\n"
-msgstr "Could not init SDL-TTF: %s\n"
+msgid "Could not init SDL-TTF: %s"
+msgstr "Could not init SDL-TTF: %s"
 
 #: src/cpp/gui/GuiMgr.cpp:115
 msgid "Switch to building mode"
@@ -536,13 +541,13 @@ msgstr "Options"
 
 #: src/cpp/gui/GuiMgr.cpp:226
 #, c-format
-msgid "Identifier %d is already registered.\n"
-msgstr "Identifier %d is already registered.\n"
+msgid "Identifier %d is already registered."
+msgstr "Identifier %d is already registered."
 
 #: src/cpp/gui/GuiMgr.cpp:238
 #, c-format
-msgid "Identifier %d is not registered.\n"
-msgstr "Identifier %d is not registered.\n"
+msgid "Identifier %d is not registered."
+msgstr "Identifier %d is not registered."
 
 #: src/cpp/gui/components/GuiAddBuildingWidget.cpp:40
 msgid "Costs for this structure"
@@ -592,19 +597,19 @@ msgstr "Zoom out"
 msgid "TODO - Island's richness of soil"
 msgstr "TODO - Island's richness of soil"
 
-#: src/cpp/gui/panel-widgets/GuiBuildMenuWidget.cpp:25
+#: src/cpp/gui/panel-widgets/GuiBuildMenuWidget.cpp:26
 msgid "Craftsmanship"
 msgstr "Craftsmanship"
 
-#: src/cpp/gui/panel-widgets/GuiBuildMenuWidget.cpp:47
+#: src/cpp/gui/panel-widgets/GuiBuildMenuWidget.cpp:48
 msgid "Farms & plantations"
 msgstr "Farms & plantations"
 
-#: src/cpp/gui/panel-widgets/GuiBuildMenuWidget.cpp:69
+#: src/cpp/gui/panel-widgets/GuiBuildMenuWidget.cpp:70
 msgid "Port facilities"
 msgstr "Port facilities"
 
-#: src/cpp/gui/panel-widgets/GuiBuildMenuWidget.cpp:91
+#: src/cpp/gui/panel-widgets/GuiBuildMenuWidget.cpp:92
 msgid "Public buildings"
 msgstr "Public buildings"
 
@@ -634,7 +639,7 @@ msgid "Tax incomings:"
 msgstr "Tax incomings:"
 
 #: src/cpp/gui/panel-widgets/GuiPlayerStatusWidget.cpp:65
-#: src/cpp/gui/panel-widgets/GuiSelectedProductionBuildingWidget.cpp:47
+#: src/cpp/gui/panel-widgets/GuiSelectedProductionBuildingWidget.cpp:46
 #: src/cpp/gui/panel-widgets/GuiSelectedPublicBuildingWidget.cpp:31
 msgid "Operating costs:"
 msgstr "Operating costs:"
@@ -643,75 +648,75 @@ msgstr "Operating costs:"
 msgid "Balance:"
 msgstr "Balance:"
 
-#: src/cpp/gui/panel-widgets/GuiSelectedHouseBuildingWidget.cpp:19
+#: src/cpp/gui/panel-widgets/GuiSelectedHouseBuildingWidget.cpp:18
 msgid "Population growth in this population tier"
 msgstr "Population growth in this population tier"
 
-#: src/cpp/gui/panel-widgets/GuiSelectedHouseBuildingWidget.cpp:20
+#: src/cpp/gui/panel-widgets/GuiSelectedHouseBuildingWidget.cpp:19
 msgid "No population growth in this population tier"
 msgstr "No population growth in this population tier"
 
-#: src/cpp/gui/panel-widgets/GuiSelectedHouseBuildingWidget.cpp:21
+#: src/cpp/gui/panel-widgets/GuiSelectedHouseBuildingWidget.cpp:20
 msgid "Slight population loss in this population tier"
 msgstr "Slight population loss in this population tier"
 
-#: src/cpp/gui/panel-widgets/GuiSelectedHouseBuildingWidget.cpp:22
+#: src/cpp/gui/panel-widgets/GuiSelectedHouseBuildingWidget.cpp:21
 msgid "Severe population loss in this population tier"
 msgstr "Severe population loss in this population tier"
 
-#: src/cpp/gui/panel-widgets/GuiSelectedHouseBuildingWidget.cpp:49
+#: src/cpp/gui/panel-widgets/GuiSelectedHouseBuildingWidget.cpp:48
 msgid "Population in this population tier"
 msgstr "Population in this population tier"
 
-#: src/cpp/gui/panel-widgets/GuiSelectedHouseBuildingWidget.cpp:58
+#: src/cpp/gui/panel-widgets/GuiSelectedHouseBuildingWidget.cpp:57
 msgid "Population tier's name"
 msgstr "Population tier's name"
 
-#: src/cpp/gui/panel-widgets/GuiSelectedHouseBuildingWidget.cpp:125
+#: src/cpp/gui/panel-widgets/GuiSelectedHouseBuildingWidget.cpp:119
 #, c-format
 msgid "The demand for %s is not being fulfilled"
 msgstr "The demand for %s is not being fulfilled"
 
-#: src/cpp/gui/panel-widgets/GuiSelectedProductionBuildingWidget.cpp:39
+#: src/cpp/gui/panel-widgets/GuiSelectedProductionBuildingWidget.cpp:38
 msgid "Goods in this building ready for pickup"
 msgstr "Goods in this building ready for pickup"
 
-#: src/cpp/gui/panel-widgets/GuiSelectedProductionBuildingWidget.cpp:120
+#: src/cpp/gui/panel-widgets/GuiSelectedProductionBuildingWidget.cpp:119
 #, c-format
 msgid "Supply of %s (enough for another %.1ft of %s)"
 msgstr "Supply of %s (enough for another %.1ft of %s)"
 
-#: src/cpp/main.cpp:104
+#: src/cpp/i18n/LanguageMgr.cpp:8
+#, c-format
+msgid "Using locale '%s'."
+msgstr "Using locale '%s'."
+
+#: src/cpp/main.cpp:102
 msgid "FPS:"
 msgstr "FPS:"
 
-#: src/cpp/main.cpp:107
+#: src/cpp/main.cpp:105
 msgid "current:"
 msgstr "current:"
 
-#: src/cpp/main.cpp:112
+#: src/cpp/main.cpp:110
 msgid "average:"
 msgstr "average:"
 
-#: src/cpp/main.cpp:144
+#: src/cpp/main.cpp:142
 #, c-format
-msgid "Usage: %s -m mapFileToLoad [-b benchmarkFrames]\n"
-msgstr "Usage: %s -m mapFileToLoad [-b benchmarkFrames]\n"
+msgid "Usage: %s -m mapFileToLoad [-b benchmarkFrames]"
+msgstr "Usage: %s -m mapFileToLoad [-b benchmarkFrames]"
 
-#: src/cpp/main.cpp:150
-msgid "Error: No map file specified.\n"
-msgstr "Error: No map file specified.\n"
+#: src/cpp/main.cpp:148
+msgid "Error: No map file specified."
+msgstr "Error: No map file specified."
 
-#: src/cpp/main.cpp:162
-#, c-format
-msgid "Using locale '%s'.\n"
-msgstr "Using locale '%s'.\n"
+#: src/cpp/main.cpp:176
+msgid "Could not register events."
+msgstr "Could not register events."
 
-#: src/cpp/main.cpp:185
-msgid "Could not register events.\n"
-msgstr "Could not register events.\n"
-
-#: src/cpp/main.cpp:296
+#: src/cpp/main.cpp:284
 #, c-format
 msgid ""
 "PerfCounters: events avg %.3f, current = %.1f; gameUpdate avg %.3f, current "
@@ -720,45 +725,45 @@ msgstr ""
 "PerfCounters: events avg %.3f, current = %.1f; gameUpdate avg %.3f, current "
 "= %.1f; rendering avg %.3f, current = %.1f"
 
-#: src/cpp/main.cpp:308
+#: src/cpp/main.cpp:295
 #, c-format
 msgid "Screen: mapCentered = (%d, %d), zoom = %d, view = %d"
 msgstr "Screen: mapCentered = (%d, %d), zoom = %d, view = %d"
 
-#: src/cpp/main.cpp:313
+#: src/cpp/main.cpp:299
 #, c-format
 msgid "Game ticks: %lu"
 msgstr "Game ticks: %lu"
 
-#: src/cpp/main.cpp:317
+#: src/cpp/main.cpp:302
 #, c-format
 msgid "mouse = (%d, %d), screen = (%d, %d), mapElevated = (%d, %d)"
 msgstr "mouse = (%d, %d), screen = (%d, %d), mapElevated = (%d, %d)"
 
-#: src/cpp/main.cpp:337
+#: src/cpp/main.cpp:321
 #, c-format
 msgid "selectedMapObject(Fixed) on mapCoords (%d, %d), size = (%d, %d)"
 msgstr "selectedMapObject(Fixed) on mapCoords (%d, %d), size = (%d, %d)"
 
-#: src/cpp/main.cpp:347
+#: src/cpp/main.cpp:330
 #, c-format
 msgid "selectedMapObject(Moving) on mapCoords (%f, %f), size = (%d, %d)"
 msgstr "selectedMapObject(Moving) on mapCoords (%f, %f), size = (%d, %d)"
 
-#: src/cpp/main.cpp:354
+#: src/cpp/main.cpp:336
 #, c-format
 msgid "selectedMapObject(UNKNOWN!?) size = (%d, %d)"
 msgstr "selectedMapObject(UNKNOWN!?) size = (%d, %d)"
 
-#: src/cpp/main.cpp:368
+#: src/cpp/main.cpp:349
 msgid "catchmentAreaIterator set"
 msgstr "catchmentAreaIterator set"
 
-#: src/cpp/main.cpp:370
+#: src/cpp/main.cpp:351
 msgid "catchmentAreaIterator nullptr"
 msgstr "catchmentAreaIterator nullptr"
 
-#: src/cpp/main.cpp:374
+#: src/cpp/main.cpp:355
 #, c-format
 msgid ""
 "debugAStar: source = (%d, %d), destination = (%d, %d), %s, useStreetOnly = "
@@ -767,49 +772,49 @@ msgstr ""
 "debugAStar: source = (%d, %d), destination = (%d, %d), %s, useStreetOnly = "
 "%s, rightAnglesOnly = %s"
 
-#: src/cpp/main.cpp:381 src/cpp/main.cpp:382
+#: src/cpp/main.cpp:362 src/cpp/main.cpp:363
 msgid "false"
 msgstr "false"
 
-#: src/cpp/main.cpp:381 src/cpp/main.cpp:382
+#: src/cpp/main.cpp:362 src/cpp/main.cpp:363
 msgid "true"
 msgstr "true"
 
-#: src/cpp/map/Direction.h:143
+#: src/cpp/map/Direction.h:142
 #, c-format
-msgid "Illegal dirName '%s'.\n"
-msgstr "Illegal dirName '%s'.\n"
+msgid "Illegal dirName '%s'."
+msgstr "Illegal dirName '%s'."
 
-#: src/cpp/map/Isle.cpp:26
+#: src/cpp/map/Isle.cpp:25
 #, c-format
-msgid "Data is not csv encoded. Encoding = %s\n"
-msgstr "Data is not csv encoded. Encoding = %s\n"
+msgid "Data is not csv encoded. Encoding = %s"
+msgstr "Data is not csv encoded. Encoding = %s"
 
-#: src/cpp/map/Isle.h:43
+#: src/cpp/map/Isle.h:42
 #, c-format
-msgid "mapCoords (%d, %d) out of bounds.\n"
-msgstr "mapCoords (%d, %d) out of bounds.\n"
+msgid "mapCoords (%d, %d) out of bounds."
+msgstr "mapCoords (%d, %d) out of bounds."
 
-#: src/cpp/map/Map.cpp:32
-msgid "Map has to be quadratically for now. ;-p\n"
-msgstr "Map has to be quadratically for now. ;-p\n"
+#: src/cpp/map/Map.cpp:31
+msgid "Map has to be quadratically for now. ;-p"
+msgstr "Map has to be quadratically for now. ;-p"
 
-#: src/cpp/sound/sdl/SDLSoundMgr.cpp:9
+#: src/cpp/sound/sdl/SDLSoundMgr.cpp:8
 #, c-format
-msgid "Could not init SDL-mixer: %s\n"
-msgstr "Could not init SDL-mixer: %s\n"
+msgid "Could not init SDL-mixer: %s"
+msgstr "Could not init SDL-mixer: %s"
 
-#: src/cpp/sound/sdl/SDLSoundMgr.cpp:16
+#: src/cpp/sound/sdl/SDLSoundMgr.cpp:15
 #, c-format
-msgid "Could not open audio device: %s\n"
-msgstr "Could not open audio device: %s\n"
+msgid "Could not open audio device: %s"
+msgstr "Could not open audio device: %s"
 
-#: src/cpp/sound/sdl/SDLSoundMgr.cpp:39
+#: src/cpp/sound/sdl/SDLSoundMgr.cpp:38
 #, c-format
-msgid "Could not load music '%s': %s\n"
-msgstr "Could not load music '%s': %s\n"
+msgid "Could not load music '%s': %s"
+msgstr "Could not load music '%s': %s"
 
-#: src/cpp/sound/sdl/SDLSoundMgr.cpp:43
+#: src/cpp/sound/sdl/SDLSoundMgr.cpp:42
 #, c-format
-msgid "Loaded music '%s'.\n"
-msgstr "Loaded music '%s'.\n"
+msgid "Loaded music '%s'."
+msgstr "Loaded music '%s'."

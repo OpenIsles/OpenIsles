@@ -1,8 +1,7 @@
 #include <array>
-#include <cstdio>
 #include <cstdlib>
 #include <string>
-#include "defines.h"
+#include "global.h"
 #include "game/Colony.h"
 #include "game/Game.h"
 #include "game/GameIO.h"
@@ -90,7 +89,7 @@ void GameIO::loadPlayers(Game* game, rapidxml::xml_node<>* mapNode) {
         } else if (strcmp(playerColorAttrValue, "white") == 0) {
             playerColor = PlayerColor::WHITE;
         } else {
-            std::fprintf(stderr, _("Illegal player color '%s'.\n"), playerColorAttrValue);
+            Log::error(_("Illegal player color '%s'."), playerColorAttrValue);
             throw std::runtime_error("Illegal player color");
         }
 
@@ -142,8 +141,8 @@ void GameIO::loadMap(
 
             // Prüfen, ob die Insel wirklich die Größe hat, wie die Karte sie haben will.
             if (isle->getWidth() != isleMapWidth || isle->getHeight() != isleMapHeight) {
-                std::fprintf(stderr, _("Isle '%s' (%dx%d) does not match size on map (%dx%d).\n"),
-                             isleName, isle->getWidth(), isle->getHeight(), isleMapWidth, isleMapHeight);
+                Log::error(_("Isle '%s' (%dx%d) does not match size on map (%dx%d)."),
+                           isleName, isle->getWidth(), isle->getHeight(), isleMapWidth, isleMapHeight);
                 throw std::runtime_error("Isle does not match size on map");
             }
 
@@ -234,7 +233,7 @@ void GameIO::loadColonies(Game* game, const ConfigMgr* configMgr, rapidxml::xml_
                 colony->getGoods(&good).inventory = (unsigned int) std::atoi(xmlAttributeValue);
             } else {
                 colony->getGoods(&good).inventory = 0;
-                std::fprintf(stderr, _("Warning: Did not find Good '%s' in savefile.\n"), good.name.c_str());
+                Log::error(_("Warning: Did not find Good '%s' in savefile."), good.name.c_str());
             }
         }
     }
@@ -249,7 +248,7 @@ void GameIO::loadMapObjects(Game* game, const ConfigMgr* configMgr, rapidxml::xm
 
         const MapObjectType* mapObjectType = configMgr->getMapObjectType(nodeNameValue);
         if (mapObjectType == nullptr) {
-            std::fprintf(stderr, _("Illegal mapObjectType '%s'.\n"), nodeNameValue);
+            Log::error(_("Illegal mapObjectType '%s'."), nodeNameValue);
             throw std::runtime_error("Illegal mapObjectType");
         }
         const MapObjectTypeClass& mapObjectTypeClass = mapObjectType->type;

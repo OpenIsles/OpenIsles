@@ -1,7 +1,7 @@
 #ifndef _ECONOMICS_MGR_H
 #define _ECONOMICS_MGR_H
 
-#include "Context.h"
+#include "global.h"
 #include "map/Building.h"
 
 

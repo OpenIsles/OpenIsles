@@ -1,6 +1,7 @@
 #include <list>
+#include <string>
 #include <SDL.h>
-#include "defines.h"
+#include "global.h"
 #include "config/ConfigMgr.h"
 #include "game/Colony.h"
 #include "game/Game.h"
@@ -71,7 +72,7 @@ void GuiColonyGoodsWidget::renderElement(IRenderer* renderer) {
 
         const GoodsSlot& goodsSlot = colony->getGoods(good);
 
-        const char* goodTitle = _(good->getTitleMsgid().c_str());
+        std::string goodTitle = _(good->getTitleMsgid());
         if (goodsSlot.inventory > 0) {
             guiGoodsSlotElement->setStatusBarText(toString(goodsSlot.inventory) + "t " + goodTitle);
         } else {

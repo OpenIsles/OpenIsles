@@ -1,7 +1,6 @@
 #include <cassert>
-#include <cstdio>
 #include <cstring>
-#include "defines.h"
+#include "global.h"
 #include "config/ConfigMgr.h"
 #include "economics/EconomicsMgr.h"
 #include "game/Colony.h"
@@ -196,7 +195,7 @@ MapObject* Game::instantiateNewMapObject(const MapObjectType* mapObjectType) con
 
 void Game::addInhabitantsToBuilding(Building* building, char amount) {
     if ((int) building->inhabitants + amount < 0) {
-        std::fputs(_("Cannot have negative inhabitants.\n"), stderr);
+        Log::error(_("Cannot have negative inhabitants."));
         throw std::runtime_error("Cannot have negative inhabitants");
     }
 

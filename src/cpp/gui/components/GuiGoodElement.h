@@ -1,10 +1,9 @@
 #ifndef _GUI_GOOD_ELEMENT_H
 #define _GUI_GOOD_ELEMENT_H
 
+#include "global.h"
 #include "config/Good.h"
 #include "gui/components/GuiStaticGraphicElement.h"
-#include "Context.h"
-#include "../../config/Good.h"
 
 /**
  * Statisches Element, was ein Gut visualisiert.

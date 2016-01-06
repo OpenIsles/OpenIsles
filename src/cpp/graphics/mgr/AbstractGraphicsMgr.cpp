@@ -1,6 +1,5 @@
-#include <cstdio>
 #include <cstring>
-#include "defines.h"
+#include "global.h"
 #include "graphics/graphic/Animation.h"
 #include "graphics/graphic/GraphicSet.h"
 #include "graphics/mgr/AbstractGraphicsMgr.h"
@@ -204,14 +203,14 @@ void AbstractGraphicsMgr::loadStaticAnimationGraphicSetWith8Views(
 
     int fullGraphicWidth = sdlFullGraphic->getWidth();
     if (fullGraphicWidth % countFrames != 0) {
-        std::fprintf(stderr, _("Could not divide the frames equally: '%s'\n"), graphicFilename);
+        Log::error(_("Could not divide the frames equally: '%s'"), graphicFilename);
         throw std::runtime_error("Could not divide the frames equally");
     }
     int frameWidth = fullGraphicWidth / countFrames;
 
     int fullGraphicHeight = sdlFullGraphic->getHeight();
     if (fullGraphicHeight % 8 != 0) {
-        std::fprintf(stderr, _("Could not divide the views equally: '%s'\n"), graphicFilename);
+        Log::error(_("Could not divide the views equally: '%s'"), graphicFilename);
         throw std::runtime_error("Could not divide the views equally");
     }
     int frameHeight = fullGraphicHeight / 8;

@@ -1,4 +1,4 @@
-#include "defines.h"
+#include "global.h"
 #include "game/Game.h"
 #include "graphics/mgr/IGraphicsMgr.h"
 #include "gui/components/GuiMapRotateWidget.h"

@@ -5,7 +5,7 @@
 #include <gtest/gtest.h>
 #endif
 
-#include "Context.h"
+#include "global.h"
 #include "game/Colony.h"
 #include "game/Player.h"
 #include "graphics/mgr/IGraphicsMgr.h"

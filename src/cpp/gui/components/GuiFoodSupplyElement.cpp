@@ -1,4 +1,4 @@
-#include "defines.h"
+#include "global.h"
 #include "graphics/mgr/IFontMgr.h"
 #include "gui/components/GuiFoodSupplyElement.h"
 #include "utils/Color.h"

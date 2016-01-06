@@ -1,6 +1,5 @@
 #include <cassert>
-#include <cstdio>
-#include "defines.h"
+#include "global.h"
 #include "config/ConfigMgr.h"
 #include "economics/EconomicsMgr.h"
 #include "game/Game.h"
@@ -236,7 +235,7 @@ void EconomicsMgr::doGoodsConsumptionAndUpdatePopulationSatisfaction() {
             }
 
             // TODO Log-Meldung entfernen, wenn wir alles implementiert haben.
-            std::fprintf(stderr, "Houses got %ut to less food. TODO starving\n", -theoreticalInventoryAfter);
+            Log::debug("Houses got %ut to less food. TODO starving", -theoreticalInventoryAfter);
 
             // TODO der Balken in der GUI muss nun abnehmen, Bevölkerungsrückgang bzw. Verhungern einsetzen
         }

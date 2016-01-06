@@ -2,7 +2,7 @@
 #define _STREET_H
 
 #include <bitset>
-#include "Context.h"
+#include "global.h"
 #include "map/Structure.h"
 
 

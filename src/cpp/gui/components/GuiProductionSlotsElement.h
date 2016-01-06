@@ -1,11 +1,11 @@
 #ifndef _GUI_PRODUCTION_SLOTS_ELEMENT_H
 #define _GUI_PRODUCTION_SLOTS_ELEMENT_H
 
+#include "global.h"
 #include "game/ProductionSlot.h"
 #include "graphics/renderer/IRenderer.h"
 #include "gui/components/GuiGoodsSlotElement.h"
 #include "gui/components/GuiStaticGraphicElement.h"
-#include "Context.h"
 
 /**
  * @brief Statisches Element, was die Produktion eines Gebäude anzeigt.

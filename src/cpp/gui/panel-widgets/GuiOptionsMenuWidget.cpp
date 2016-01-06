@@ -1,5 +1,5 @@
-#include "Context.h"
-#include "defines.h"
+#include <string>
+#include "global.h"
 #include "map/Structure.h"
 #include "gui/Identifiers.h"
 #include "gui/components/GuiPushButton.h"
@@ -12,8 +12,8 @@ GuiOptionsMenuWidget::GuiOptionsMenuWidget(const Context& context) : GuiPanelWid
     // TODO höchstwahrscheinlich sind die GUI-Komponenten lost-memory, da sie am Ende nicht zerstört werden
     // Idee untersuchen, dass ~GuiMgr() von jeder Komponente rekursiv die Kinder beseitigt.
 
-    const char* statusBarTextTurnMusicOn = _("Turn music on");
-    const char* statusBarTextTurnMusicOff = _("Turn music off");
+    const std::string statusBarTextTurnMusicOn = _("Turn music on");
+    const std::string statusBarTextTurnMusicOff = _("Turn music off");
 
     GuiPanelHeader* panelHeader = new GuiPanelHeader(context);
     panelHeader->setPosition(0, 0);

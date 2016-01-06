@@ -1,6 +1,5 @@
 #include <cassert>
-#include <cstdio>
-#include "defines.h"
+#include "global.h"
 #include "config/ConfigMgr.h"
 #include "game/Game.h"
 #include "graphics/mgr/IFontMgr.h"
@@ -73,7 +72,7 @@ void GuiSelectedProductionBuildingWidget::onSelectedMapBuildingChanged(const Bui
 
     const MapObjectType* mapObjectType = newSelectedBuilding->getMapObjectType();
 
-    buildingName.setText(_(mapObjectType->getTitleMsgid().c_str()));
+    buildingName.setText(_(mapObjectType->getTitleMsgid()));
 
     const ProductionSlots& productionSlots = newSelectedBuilding->productionSlots;
     guiProductionSlotsElement.setFromProductionSlots(productionSlots);
@@ -116,9 +115,9 @@ void GuiSelectedProductionBuildingWidget::updateInputSlotStatusBarText(
     // Ausrechnen, für wie viel Output-Güter die Input-Güter reichen
     double inputEnoughForXOutputGoods = (double) inputInventory / inputAmountForProduction;
 
-    char buffer[128];
-    std::snprintf(buffer, 128, _("Supply of %s (enough for another %.1ft of %s)"),
-                  _(inputLabel.c_str()), inputEnoughForXOutputGoods, _(outputLabel.c_str()));
+    std::string supplyString = string_sprintf(
+        _("Supply of %s (enough for another %.1ft of %s)"),
+        _(inputLabel).c_str(), inputEnoughForXOutputGoods, _(outputLabel).c_str());
 
-    goodsSlotElement->setStatusBarText(buffer);
+    goodsSlotElement->setStatusBarText(supplyString);
 }

@@ -1,10 +1,10 @@
 #ifndef _GUI_GOODS_SLOT_ELEMENT_H
 #define _GUI_GOODS_SLOT_ELEMENT_H
 
+#include "global.h"
 #include "config/Good.h"
 #include "game/GoodsSlot.h"
 #include "gui/components/GuiGoodElement.h"
-#include "Context.h"
 
 /**
  * Statisches Element, was einen GoodsSlot visualisiert.

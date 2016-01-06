@@ -3,7 +3,7 @@
 
 #include <string>
 #include <gtest/gtest.h>
-#include "Context.h"
+#include "global.h"
 #include "config/ConfigMgr.h"
 #include "economics/EconomicsMgr.h"
 #include "game/Game.h"

@@ -1,5 +1,5 @@
 #include <string>
-#include "defines.h"
+#include "global.h"
 #include "config/ConfigMgr.h"
 #include "game/Game.h"
 #include "graphics/graphic/GraphicSet.h"
@@ -120,7 +120,7 @@ void GuiAddBuildingWidget::renderElement(IRenderer* renderer) {
 
 void GuiAddBuildingWidget::onAddingMapObjectChanged(const MapObjectType* newAddingMapObject) {
     // Name des Map-Objekts
-    panelHeader.setText(_(newAddingMapObject->getTitleMsgid().c_str()));
+    panelHeader.setText(_(newAddingMapObject->getTitleMsgid()));
 
     // produzierte Waren
     const ProductionSlots& buildingProduction = newAddingMapObject->buildingProduction;

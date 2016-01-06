@@ -2,7 +2,7 @@
 #define _GUI_BUILD_MENU_WIDGET_H
 
 #include <SDL_render.h>
-#include "Context.h"
+#include "global.h"
 #include "gui/panel-widgets/GuiPanelWidget.h"
 
 

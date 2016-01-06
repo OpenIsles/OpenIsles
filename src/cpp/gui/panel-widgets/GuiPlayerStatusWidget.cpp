@@ -1,4 +1,4 @@
-#include "defines.h"
+#include "global.h"
 #include "graphics/mgr/IFontMgr.h"
 #include "gui/panel-widgets/GuiPlayerStatusWidget.h"
 #include "utils/Color.h"

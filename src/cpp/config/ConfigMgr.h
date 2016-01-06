@@ -9,7 +9,7 @@
 #include <set>
 #include <string>
 #include <unordered_map>
-#include "defines.h"
+#include "global.h"
 #include "config/Good.h"
 #include "config/MapTileType.h"
 #include "config/NeededGood.h"

@@ -1,8 +1,8 @@
 #ifndef _GUI_FOOD_SUPPLY_ELEMENT_H
 #define _GUI_FOOD_SUPPLY_ELEMENT_H
 
+#include "global.h"
 #include "gui/components/GuiStaticTextElement.h"
-#include "Context.h"
 
 /**
  * Statisches Element, was die Nahrungsversorgung visualisiert

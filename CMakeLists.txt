@@ -54,6 +54,8 @@ set(COMMON_SOURCE_FILES
     src/cpp/graphics/mgr/IFontMgr.h
     src/cpp/graphics/mgr/IGraphicsMgr.h
     src/cpp/graphics/renderer/IRenderer.h
+    src/cpp/i18n/LanguageMgr.cpp
+    src/cpp/i18n/LanguageMgr.h
     src/cpp/map/buildqueue/BuildOperation.cpp
     src/cpp/map/buildqueue/BuildOperation.h
     src/cpp/map/buildqueue/BuildOperationResult.h
@@ -99,6 +101,7 @@ set(COMMON_SOURCE_FILES
     src/cpp/utils/DoubleToIntSequence.h
     src/cpp/utils/Events.h
     src/cpp/utils/MapCoordsIterator.h
+    src/cpp/utils/Log.h
     src/cpp/utils/RandomEngine.h
     src/cpp/utils/Rect.h
     src/cpp/utils/RectangleData.h
@@ -106,7 +109,7 @@ set(COMMON_SOURCE_FILES
     src/cpp/utils/StringFormat.cpp
     src/cpp/utils/StringFormat.h
     src/cpp/Context.h
-    src/cpp/defines.h
+    src/cpp/global.h
 )
 set(GUI_SOURCE_FILES
     src/cpp/gui/components/map/GuiMap.cpp

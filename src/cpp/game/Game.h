@@ -7,6 +7,7 @@
 
 #include <map>
 #include <vector>
+#include "global.h"
 #include "game/Colony.h"
 #include "game/GameIO.h"
 #include "game/Player.h"
@@ -19,7 +20,6 @@
 #include "map/MapObject.h"
 #include "map/Street.h"
 #include "map/Structure.h"
-#include "Context.h"
 
 /**
  * @page gameTicks Zeiteinheiten

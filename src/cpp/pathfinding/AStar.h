@@ -2,9 +2,9 @@
 #define _A_STAR_H
 
 #include <list>
+#include "global.h"
 #include "map/coords/MapCoords.h"
 #include "utils/CatchmentAreaIterator.h"
-#include "Context.h"
 
 #ifdef DEBUG_A_STAR
 #include <memory>

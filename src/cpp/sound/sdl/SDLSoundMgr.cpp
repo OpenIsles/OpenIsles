@@ -1,19 +1,18 @@
-#include <cstdio>
 #include <stdexcept>
-#include "defines.h"
+#include "global.h"
 #include "sound/sdl/SDLSoundMgr.h"
 
 SDLSoundMgr::SDLSoundMgr() {
     // Library initialisieren
     if ((Mix_Init(MIX_INIT_OGG) & MIX_INIT_OGG) != MIX_INIT_OGG) {
-        std::fprintf(stderr, _("Could not init SDL-mixer: %s\n"), Mix_GetError());
+        Log::error(_("Could not init SDL-mixer: %s"), Mix_GetError());
         throw std::runtime_error("SDL Mixer could not be initialized");
     }
     atexit(Mix_Quit);
 
     // Audio-Device öffnen
     if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 1024) == -1) {
-        std::fprintf(stderr, _("Could not open audio device: %s\n"), Mix_GetError());
+        Log::error(_("Could not open audio device: %s"), Mix_GetError());
         throw std::runtime_error("Could not open audio device");
     }
 
@@ -36,11 +35,11 @@ SDLSoundMgr::~SDLSoundMgr() {
 Mix_Music* SDLSoundMgr::loadMusic(const char* file) {
     Mix_Music* mixMusic = Mix_LoadMUS(file);
     if (mixMusic == nullptr) {
-        std::fprintf(stderr, _("Could not load music '%s': %s\n"), file, Mix_GetError());
+        Log::error(_("Could not load music '%s': %s"), file, Mix_GetError());
         throw std::runtime_error("Could not load music");
     }
 
-    std::printf(_("Loaded music '%s'.\n"), file);
+    Log::info(_("Loaded music '%s'."), file);
     return mixMusic;
 }
 

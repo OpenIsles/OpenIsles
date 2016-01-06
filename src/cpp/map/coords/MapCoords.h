@@ -1,7 +1,7 @@
 #ifndef _MAP_COORDS_H
 #define _MAP_COORDS_H
 
-#include <iostream>
+#include <ostream>
 #include "map/coords/XYCoords.h"
 
 

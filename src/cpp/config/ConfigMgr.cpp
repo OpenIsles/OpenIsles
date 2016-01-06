@@ -1,5 +1,4 @@
-#include <cstdio>
-#include "defines.h"
+#include "global.h"
 #include "config/ConfigMgr.h"
 #include "config/ErrorInConfigException.h"
 #include "config/Good.h"
@@ -15,33 +14,29 @@
  */
 static std::unordered_map<MapObjectType*, std::string> mapObjectTypeToPopulationTierName;
 
-static constexpr unsigned int bufferSize = 512;   ///< Größe des Allzweck-Buffers
-static char buffer[bufferSize];                   ///< Allzweck-Buffer, z.&nbsp;B. für Übersetzungen
-
 
 ConfigMgr::ConfigMgr(std::string configPath) {
     try {
         loadGoods(configPath + "/goods.xml");
-        std::puts(_("Loaded goods."));
+        Log::info(_("Loaded goods."));
 
         loadCarrierMapObjectTypes(configPath + "/carriers.xml");
-        std::puts(_("Loaded carrier mapObjectTypes."));
+        Log::info(_("Loaded carrier mapObjectTypes."));
 
         loadMapObjectTypes(configPath + "/map-objects.xml");
-        std::puts(_("Loaded mapObjectTypes."));
+        Log::info(_("Loaded mapObjectTypes."));
 
         loadPopulationTiers(configPath + "/population-tiers.xml");
-        std::puts(_("Loaded population tiers."));
+        Log::info(_("Loaded population tiers."));
 
         loadTilesConfig(configPath + "/tiles.xml");
-        std::puts(_("Loaded tiles."));
+        Log::info(_("Loaded tiles."));
 
     } catch (const rapidxml::parse_error& e) {
         // Fehler beim Parsen einer XML.
         // TODO e.what() kommt immer auf Englisch zurück. Das muss übersetzt werden. Idee: künstlich Phrasen anlegen
 
-        std::snprintf(buffer, bufferSize, _("Error while loading the configuration: %s.\n"), e.what());
-        throw ErrorInConfigException(buffer);
+        throw ErrorInConfigException(string_sprintf(_("Error while loading the configuration: %s."), e.what()));
     }
 }
 
@@ -98,8 +93,7 @@ void ConfigMgr::loadMapObjectTypes(const std::string& configFilePath) {
         } else if (strcmp(nodeName, "building") == 0) {
             mapObjectType.type = MapObjectTypeClass::BUILDING;
         } else {
-            std::snprintf(buffer, bufferSize, _("Illegal node '%s'.\n"), nodeName);
-            throw ErrorInConfigException(buffer);
+            throw ErrorInConfigException(string_sprintf(_("Illegal node '%s'."), nodeName));
         }
 
         // Basics
@@ -117,8 +111,8 @@ void ConfigMgr::loadMapObjectTypes(const std::string& configFilePath) {
         } else if (strcmp(structurePlacing, "path") == 0) {
             mapObjectType.structurePlacing = StructurePlacing::PATH;
         } else {
-            std::snprintf(buffer, bufferSize, _("Illegal value '%s' for structurePlacing.\n"), structurePlacing);
-            throw ErrorInConfigException(buffer);
+            throw ErrorInConfigException(
+                string_sprintf(_("Illegal value '%s' for structurePlacing."), structurePlacing));
         }
 
         // Baubar auf
@@ -226,7 +220,7 @@ void ConfigMgr::loadMapObjectTypes(const std::string& configFilePath) {
             mapObjectType.maxAge = (unsigned char) stringToUnsignedLong(maxAgeNode->value());
         }
 
-        std::printf(_("Loaded mapObjectType '%s'.\n"), mapObjectType.name.c_str());
+        Log::info(_("Loaded mapObjectType '%s'."), mapObjectType.name.c_str());
     }
 
     delete xmlDocument;
@@ -248,8 +242,7 @@ void ConfigMgr::loadCarrierMapObjectTypes(const std::string& configFilePath) {
         // Knoten-Typ
         const char* nodeName = node->name();
         if (strcmp(nodeName, "carrier") != 0) {
-            std::snprintf(buffer, bufferSize, _("Illegal node '%s'.\n"), nodeName);
-            throw ErrorInConfigException(buffer);
+            throw ErrorInConfigException(string_sprintf(_("Illegal node '%s'."), nodeName));
         }
 
         mapObjectType.type = MapObjectTypeClass::CARRIER;
@@ -265,7 +258,7 @@ void ConfigMgr::loadCarrierMapObjectTypes(const std::string& configFilePath) {
 
         // TODO Animations
 
-        std::printf(_("Loaded carrier mapObjectType '%s'.\n"), mapObjectType.name.c_str());
+        Log::info(_("Loaded carrier mapObjectType '%s'."), mapObjectType.name.c_str());
     }
 
     delete xmlDocument;
@@ -352,8 +345,7 @@ MapTileType ConfigMgr::getMapTileTypeByName(const std::string& mapTileTypeName) 
         return MapTileType::GRASS;
     }
     else {
-        std::snprintf(buffer, bufferSize, _("Illegal mapTileTypeName '%s'.\n"), mapTileTypeName.c_str());
-        throw ErrorInConfigException(buffer);
+        throw ErrorInConfigException(string_sprintf(_("Illegal mapTileTypeName '%s'."), mapTileTypeName.c_str()));
     }
 }
 
@@ -371,8 +363,7 @@ bool ConfigMgr::xmlAttributeToBool(rapidxml::xml_attribute<>* attribute, bool de
         return true;
     }
     else {
-        std::snprintf(buffer, bufferSize, _("Illegal bool value '%s'.\n"), value);
-        throw ErrorInConfigException(buffer);
+        throw ErrorInConfigException(string_sprintf(_("Illegal bool value '%s'."), value));
     }
 }
 
@@ -408,7 +399,7 @@ RectangleData<char>* ConfigMgr::parseCatchmentArea(const char* catchmentAreaValu
             } else if (*ptr == ' ') {
                 // Zeichen ok, ignorieren
             } else {
-                throw ErrorInConfigException(_("Could not parse catchmentArea: Illegal char before first line.\n"));
+                throw ErrorInConfigException(_("Could not parse catchmentArea: Illegal char before first line."));
             }
             continue;
         }
@@ -417,7 +408,7 @@ RectangleData<char>* ConfigMgr::parseCatchmentArea(const char* catchmentAreaValu
             if (x == 0) {
                 continue; // Leerzeichen am Zeilenanfang ok
             } else {
-                throw ErrorInConfigException(_("Could not parse catchmentArea: Illegal char before first line.\n"));
+                throw ErrorInConfigException(_("Could not parse catchmentArea: Illegal space inside line."));
             }
         }
 
@@ -432,7 +423,7 @@ RectangleData<char>* ConfigMgr::parseCatchmentArea(const char* catchmentAreaValu
                 catchmentAreaWidth = x;
             } else {
                 if (x != catchmentAreaWidth) {
-                    throw ErrorInConfigException(_("Could not parse catchmentArea: widths are not equal.\n"));
+                    throw ErrorInConfigException(_("Could not parse catchmentArea: widths are not equal."));
                 }
             }
 
@@ -443,7 +434,7 @@ RectangleData<char>* ConfigMgr::parseCatchmentArea(const char* catchmentAreaValu
 
     // Letzte Zeile muss leer sein.
     if (x != 0) {
-        throw ErrorInConfigException(_("Could not parse catchmentArea: Last line was not completly empty.\n"));
+        throw ErrorInConfigException(_("Could not parse catchmentArea: Last line was not completly empty."));
     }
     int catchmentAreaHeight = y;
 
@@ -540,7 +531,7 @@ void ConfigMgr::loadPopulationTiers(const std::string& configFilePath) {
 
         populationTiers.insert(populationTier);
 
-        std::printf(_("Loaded populationTier '%s'.\n"), populationTier.name.c_str());
+        Log::info(_("Loaded populationTier '%s'."), populationTier.name.c_str());
     }
 
     // Nahrungsbedürfnis
@@ -565,8 +556,8 @@ void ConfigMgr::loadPopulationTiers(const std::string& configFilePath) {
 
         const PopulationTier* populationTier = getPopulationTier(populationTierString);
         if (populationTier == nullptr) {
-            std::snprintf(buffer, bufferSize, _("Illegal value '%s' for populationTier.\n"), populationTierString.c_str());
-            throw ErrorInConfigException(buffer);
+            throw ErrorInConfigException(string_sprintf(
+                _("Illegal value '%s' for populationTier."), populationTierString.c_str()));
         }
 
         mapObjectType->populationTier = populationTier;

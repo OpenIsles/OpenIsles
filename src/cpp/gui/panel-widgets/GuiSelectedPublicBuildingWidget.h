@@ -3,7 +3,7 @@
 
 #include <SDL.h>
 #include <string>
-#include "Context.h"
+#include "global.h"
 #include "gui/components/GuiStaticGraphicElement.h"
 #include "gui/components/GuiStaticTextElement.h"
 #include "gui/panel-widgets/GuiSelectedBuildingWidget.h"

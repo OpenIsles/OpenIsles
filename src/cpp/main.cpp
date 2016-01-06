@@ -1,13 +1,11 @@
 #ifdef WINDOWS
 #define SDL_MAIN_HANDLED
 #endif
-#include <cstdio>
 #include <cstdlib>
 #include <libintl.h>
 #include <stdexcept>
 #include <unistd.h>
-#include "defines.h"
-#include "Context.h"
+#include "global.h"
 #include "config/ConfigMgr.h"
 #include "economics/EconomicsMgr.h"
 #include "game/Game.h"
@@ -141,13 +139,13 @@ bool parseCmdlineParams(int argc, char** argv) {
                 break;
 
             default:
-                std::fprintf(stderr, _("Usage: %s -m mapFileToLoad [-b benchmarkFrames]\n"), argv[0]);
+                Log::error(_("Usage: %s -m mapFileToLoad [-b benchmarkFrames]"), argv[0]);
                 return false;
         }
     }
 
     if (cmdlineParams.mapFileToLoad == nullptr) {
-        std::fputs(_("Error: No map file specified.\n"), stderr);
+        Log::error(_("Error: No map file specified."));
         return false;
     }
 
@@ -157,14 +155,7 @@ bool parseCmdlineParams(int argc, char** argv) {
 int main(int argc, char** argv) {
     // Internationalisierung aktivieren //////////////////////////////////////////////////////////////////////////////
 
-    const char* newLocale = setlocale(LC_ALL, "");
-    if (newLocale != nullptr) {
-        std::printf(_("Using locale '%s'.\n"), newLocale);
-    }
-
-    bindtextdomain("OpenIsles", "data/locale"); // TODO CMake ${PROJECT_NAME} und eine Variable für das Locale-Dir nutzen
-    bind_textdomain_codeset("OpenIsles", "UTF-8");
-    textdomain("OpenIsles");
+    LanguageMgr::initFromEnvironment();
 
     // Befehlszeilen-Analyse /////////////////////////////////////////////////////////////////////////////////////////
 
@@ -182,7 +173,7 @@ int main(int argc, char** argv) {
 
     context.userEventBase = SDL_RegisterEvents(USER_EVENT_MAXEVENT + 1);
     if (context.userEventBase == (uint32_t) -1) {
-        std::fputs(_("Could not register events.\n"), stderr);
+        Log::error(_("Could not register events."));
         throw std::runtime_error("Could not register events");
     }
 
@@ -278,9 +269,6 @@ int main(int argc, char** argv) {
         SDL_GetMouseState(&context.mouseCurrentX, &context.mouseCurrentY);
 
 #ifdef DEBUG
-        const int bufferSize = 1024;
-        char buffer[bufferSize];
-
         Map* map = game->getMap();
         const MapCoords& mapCoordsCentered = map->getMapCoordsCentered();
         int screenZoom = map->getScreenZoom();
@@ -292,7 +280,7 @@ int main(int argc, char** argv) {
             MapCoordUtils::getMapCoordsUnderMouse(*map, context.mouseCurrentX, context.mouseCurrentY);
 
         // Debug-Infos vorbereiten, damit wir sie später einfach nur ausgeben können
-        std::snprintf(buffer, bufferSize,
+        debugOutput[0] = string_sprintf(
             _("PerfCounters: events avg %.3f, current = %.1f; "
               "gameUpdate avg %.3f, current = %.1f; rendering avg %.3f, current = %.1f"),
             performanceCounterEvents.getMillisAvg(),
@@ -302,18 +290,15 @@ int main(int argc, char** argv) {
             performanceCounterRendering.getMillisAvg(),
             performanceCounterRendering.getMillisCurrent()
         );
-        debugOutput[0] = buffer;
 
-        std::snprintf(buffer, bufferSize,
+        debugOutput[1] = string_sprintf(
             _("Screen: mapCentered = (%d, %d), zoom = %d, view = %d"),
             mapCoordsCentered.x(), mapCoordsCentered.y(), screenZoom, screenView
         );
-        debugOutput[1] = buffer;
 
-        std::snprintf(buffer, bufferSize, _("Game ticks: %lu"), game->getTicks());
-        debugOutput[2] = buffer;
+        debugOutput[2] = string_sprintf(_("Game ticks: %lu"), game->getTicks());
 
-        std::snprintf(buffer, bufferSize,
+        debugOutput[3] = string_sprintf(
             _("mouse = (%d, %d), screen = (%d, %d), mapElevated = (%d, %d)"),
             context.mouseCurrentX,
             context.mouseCurrentY,
@@ -322,7 +307,6 @@ int main(int argc, char** argv) {
             mouseCurrentMapCoords.x(),
             mouseCurrentMapCoords.y()
         );
-        debugOutput[3] = buffer;
 
         const MapObject* selectedMapObject = map->getSelectedMapObject();
         if (selectedMapObject != nullptr) {
@@ -333,28 +317,25 @@ int main(int argc, char** argv) {
             if (smoFixed != nullptr) {
                 const MapCoords& mapCoords = smoFixed->getMapCoords();
 
-                std::snprintf(buffer, bufferSize,
+                debugOutput[4] = string_sprintf(
                     _("selectedMapObject(Fixed) on mapCoords (%d, %d), size = (%d, %d)"),
                     mapCoords.x(), mapCoords.y(), mapWidth, mapHeight
                 );
-                debugOutput[4] = buffer;
             }
             else {
                 const MapObjectMoving* smoMoving = dynamic_cast<const MapObjectMoving*>(selectedMapObject);
                 if (smoMoving != nullptr) {
                     const DoubleMapCoords& mapCoords = smoMoving->getMapCoords();
-                    std::snprintf(buffer, bufferSize,
+                    debugOutput[4] = string_sprintf(
                         _("selectedMapObject(Moving) on mapCoords (%f, %f), size = (%d, %d)"),
                         mapCoords.x(), mapCoords.y(), mapWidth, mapHeight
                     );
-                    debugOutput[4] = buffer;
                 }
                 else {
-                    std::snprintf(buffer, bufferSize,
+                    debugOutput[4] = string_sprintf(
                         _("selectedMapObject(UNKNOWN!?) size = (%d, %d)"),
                         mapWidth, mapHeight
                     );
-                    debugOutput[4] = buffer;
                 }
             }
 
@@ -363,25 +344,24 @@ int main(int argc, char** argv) {
         }
 
 #ifdef DEBUG_A_STAR
-        const char* catchmentAreaIteratorString;
+        std::string catchmentAreaIteratorString;
         if (AStar::debugAStar_catchmentAreaIterator) {
             catchmentAreaIteratorString = _("catchmentAreaIterator set");
         } else {
             catchmentAreaIteratorString = _("catchmentAreaIterator nullptr");
         }
 
-        std::snprintf(buffer, bufferSize,
+        debugOutput[5] = string_sprintf(
             _("debugAStar: source = (%d, %d), destination = (%d, %d), "
               "%s, useStreetOnly = %s, rightAnglesOnly = %s"),
             AStar::debugAStar_source.x(),
             AStar::debugAStar_source.y(),
             AStar::debugAStar_destination.x(),
             AStar::debugAStar_destination.y(),
-            catchmentAreaIteratorString,
-            (AStar::debugAStar_useStreetOnly ? _("true") : _("false")),
-            (AStar::debugAStar_rightAnglesOnly ? _("true") : _("false"))
+            catchmentAreaIteratorString.c_str(),
+            (AStar::debugAStar_useStreetOnly ? _("true") : _("false")).c_str(),
+            (AStar::debugAStar_rightAnglesOnly ? _("true") : _("false")).c_str()
         );
-        debugOutput[5] = buffer;
 #endif // DEBUG_A_STAR
 #endif // DEBUG
 

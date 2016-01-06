@@ -2,7 +2,7 @@
 #define _GUI_SELECTED_BUILDING_WIDGET_H
 
 #include <SDL.h>
-#include "Context.h"
+#include "global.h"
 #include "gui/components/GuiPanelHeader.h"
 #include "gui/panel-widgets/GuiPanelWidget.h"
 

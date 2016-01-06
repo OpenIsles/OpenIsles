@@ -2,7 +2,7 @@
 #define _IN_CATCHMENT_AREA_FINDER_H
 
 #include <list>
-#include "Context.h"
+#include "global.h"
 #include "config/Good.h"
 #include "map/coords/MapCoords.h"
 #include "map/MapObject.h"

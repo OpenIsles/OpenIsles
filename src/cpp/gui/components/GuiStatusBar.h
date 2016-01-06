@@ -3,7 +3,7 @@
 
 #include <SDL_events.h>
 #include <string>
-#include "Context.h"
+#include "global.h"
 #include "graphics/graphic/sdl/SDLGraphic.h"
 #include "graphics/renderer/IRenderer.h"
 #include "gui/components/GuiStaticGraphicElement.h"

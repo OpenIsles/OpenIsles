@@ -3,7 +3,7 @@
 
 #include <SDL_render.h>
 #include <string>
-#include "Context.h"
+#include "global.h"
 #include "game/Player.h"
 #include "graphics/graphic/IGraphic.h"
 #include "gui/components/GuiStaticGraphicElement.h"

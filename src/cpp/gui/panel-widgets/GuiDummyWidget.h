@@ -2,7 +2,7 @@
 #define _GUI_DUMMY_WIDGET_H
 
 #include <SDL_render.h>
-#include "Context.h"
+#include "global.h"
 #include "gui/components/GuiPanelHeader.h"
 #include "gui/panel-widgets/GuiPanelWidget.h"
 

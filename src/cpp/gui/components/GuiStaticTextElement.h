@@ -3,7 +3,7 @@
 
 #include <SDL.h>
 #include <string>
-#include "Context.h"
+#include "global.h"
 #include "gui/components/GuiBase.h"
 #include "utils/Color.h"
 

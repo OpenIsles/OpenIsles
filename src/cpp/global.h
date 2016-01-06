@@ -1,5 +1,9 @@
-#ifndef _DEFINES_H
-#define _DEFINES_H
+#ifndef _GLOBAL_H
+#define _GLOBAL_H
+
+// Includes, die überall verfügbar sein soll
+#include "Context.h"
+#include "utils/Log.h"
 
 // Bestimmte Methoden sind nur dann virtuell, wenn wir die Tests kompilieren. Wir sparen uns für die richtige
 // Anwendung den vtable-Overhead :-)
@@ -52,9 +56,10 @@
 
 // i18n-Helper
 #include <libintl.h>
+#include "i18n/LanguageMgr.h"
 
-#define _(X) gettext(X)
-#define _N(MSGID_SINGULAR, MSGID_PLURAL, N) ngettext(MSGID_SINGULAR, MSGID_PLURAL, N)
+#define _(X) LanguageMgr::translate(X)
+#define _N(MSGID_SINGULAR, MSGID_PLURAL, N) LanguageMgr::translatePlural(MSGID_SINGULAR, MSGID_PLURAL, N)
 #define _NOOP(X) (X)
 
 /**

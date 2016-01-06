@@ -4,6 +4,28 @@
 #include <string>
 
 /**
+ * @brief Analog std::sprintf(), allerdings mit std::string-Input und -Output.
+ * @param formatString Format-Zeichenkette (siehe std::printf())
+ * @param vlist va_list mit den Parametern
+ * @return String
+ *
+ * Wichtig: Parameter für '%s' müssen trotzdem C-Strings (char*) sein!
+ * Bei Übergabe eines std::string kommt Speichermist raus!
+ */
+std::string string_sprintf_va_list(const std::string& formatString, va_list vlist);
+
+/**
+ * @brief Analog std::sprintf(), allerdings mit std::string-Input und -Output.
+ * @param formatString Format-Zeichenkette (siehe std::printf())
+ * @param ... Parameter
+ * @return String
+ *
+ * Wichtig: Parameter für '%s' müssen trotzdem C-Strings (char*) sein!
+ * Bei Übergabe eines std::string kommt Speichermist raus!
+ */
+std::string string_sprintf(const std::string& formatString, ...);
+
+/**
  * Wrapper, um eine Zahl zu einem String umzuwandeln.
  *
  * @param x Zahl

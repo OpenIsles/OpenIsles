@@ -2,7 +2,7 @@
 #define _GUI_MINIMAP_H
 
 #include <SDL_render.h>
-#include "Context.h"
+#include "global.h"
 #include "gui/components/GuiStaticGraphicElement.h"
 #include "map/Structure.h"
 #include "utils/Rect.h"

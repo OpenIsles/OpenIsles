@@ -1,9 +1,9 @@
-#include <cstdio>
 #include "gui/components/GuiGoodElement.h"
 #include "graphics/mgr/IFontMgr.h"
 #include "graphics/mgr/IGraphicsMgr.h"
 #include "utils/Color.h"
 #include "utils/Rect.h"
+#include "utils/StringFormat.h"
 
 
 static Color colorWhite = Color(255, 255, 255, 255);
@@ -36,8 +36,7 @@ void GuiGoodElement::renderElement(IRenderer* renderer) {
 
     // Wert anzeigen
     if (displayValue) {
-        char inventoryOutput[10];
-        std::snprintf(inventoryOutput, 10, "%ut", value);
+        std::string inventoryOutput = string_sprintf(inventoryOutput, 10, "%ut", value);
         context.fontMgr->renderText(renderer, inventoryOutput, windowX + 40, windowY + 42, &colorWhite, &colorBlack,
             "DroidSans.ttf", 12, RENDERTEXT_HALIGN_RIGHT | RENDERTEXT_VALIGN_BOTTOM);
     }

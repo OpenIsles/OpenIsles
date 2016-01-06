@@ -5,8 +5,7 @@
 #include <array>
 #include <list>
 #include <string.h>
-#include "Context.h"
-#include "defines.h"
+#include "global.h"
 #include "config/ConfigMgr.h"
 #include "graphics/graphic/Animation.h"
 #include "graphics/renderer/IRenderer.h"

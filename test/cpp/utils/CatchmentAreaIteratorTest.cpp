@@ -1,4 +1,5 @@
 #include <gtest/gtest.h>
+#include <cstring>
 #include <set>
 #include <unordered_map>
 #include <unordered_set>

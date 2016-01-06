@@ -2,7 +2,7 @@
 #define _GUI_STATIC_GRAPHIC_ELEMENT_H
 
 #include <SDL.h>
-#include "Context.h"
+#include "global.h"
 #include "graphics/graphic/IGraphic.h"
 #include "gui/components/GuiBase.h"
 
