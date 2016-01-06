@@ -21,4 +21,4 @@ Weitere Infos gibts auf der Webseite [openisles.org](http://de.openisles.org).
 
 ---
 
-![Screenshot](http://openisles.org/media/screenshots/2015-08-23-build-menu-revised.png)
+![Screenshot](http://static.openisles.org/media/screenshots/2015-08-23-build-menu-revised.png)
