@@ -375,7 +375,7 @@ render-coin: $(SRC_DIRECTORY)/blender/gui/coin/coin.blend
 	
 $(DATA_DIRECTORY)/img/gui/population-man.png: $(SRC_DIRECTORY)/blender/gui/population-man/population-man.blend
 	$(CREATE_TARGET_DIRECTORY)
-	blender -b $< -o //population-man\#.png -f 1
+	$(BLENDER) -b $< -o //population-man\#.png -f 1
 	mv $(SRC_DIRECTORY)/blender/gui/population-man/population-man1.png $@
 
 ########################################################################################################################
