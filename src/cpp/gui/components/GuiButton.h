@@ -19,6 +19,11 @@ protected:
     const IGraphic* graphicPressed;
 
     /**
+     * @brief soll ein Schatten an den Grafiken gezeichnet werden
+     */
+    bool useShadow = false;
+
+    /**
      * @brief gibt an, ob der Button grade im Zustand "runtergedrückt" steht
      */
     bool pressed = false;
@@ -42,6 +47,14 @@ public:
      */
     void setGraphicPressed(const IGraphic* graphicPressed) {
         this->graphicPressed = graphicPressed;
+    }
+
+    bool isUseShadow() const {
+        return useShadow;
+    }
+
+    void setUseShadow(bool useShadow) {
+        this->useShadow = useShadow;
     }
 
     void setOnClickFunction(std::function<void()> onClickFunction) {
@@ -68,6 +81,14 @@ public:
      */
     virtual bool onEventElement(SDL_Event& event) override;
 
+protected:
+    /**
+     * @brief Zeichnet die zu verwendende Grafik. Abgeleitete Klassen können dies in renderElement() nutzen,
+     * um die effektive Grafik zu wählen, die im Moment gezeichnet werden soll.
+     *
+     * @param graphicToUse Grafik, die für den Button gezeichnet werden soll.
+     */
+    void drawGraphic(const IGraphic* graphic);
 };
 
 #endif

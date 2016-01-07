@@ -11,10 +11,22 @@ GuiButton::~GuiButton() {
 }
 
 void GuiButton::renderElement(IRenderer* renderer) {
+    const IGraphic* graphicToUse = (pressed) ? graphicPressed : graphic;
+    drawGraphic(graphicToUse);
+}
+
+void GuiButton::drawGraphic(const IGraphic* graphicToUse) {
     int windowX, windowY;
     getWindowCoords(windowX, windowY);
-    
-    const IGraphic* graphicToUse = (pressed) ? graphicPressed : graphic;
+
+    // Schatten nutzt grundsätzlich graphic! Abgeleitete Klassen können dies nicht verändern, damit der
+    // Schatten immer gleich bleibt (und sich z.B. nicht ändert, wenn der GuiPushButton in den active-Zustand geht)
+    if (useShadow) {
+        // TODO gucken, ob das ein bool bleiben kann, oder ob wir shadowX/Y brauchen, um unterschiedliche
+        // Schattenweiten zu werfen, weil die Buttons nicht einheitlich sein können.
+        graphic->drawShadowAt(windowX + 5, windowY + 14);
+    }
+
     graphicToUse->drawAt(windowX, windowY);
 }
 

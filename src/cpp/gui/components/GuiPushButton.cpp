@@ -11,11 +11,8 @@ GuiPushButton::~GuiPushButton() {
 }
 
 void GuiPushButton::renderElement(IRenderer* renderer) {
-    int windowX, windowY;
-    getWindowCoords(windowX, windowY);
-
     const IGraphic* graphicToUse = (pressed) ? graphicPressed : (active ? graphicPressed : graphic);
-    graphicToUse->drawAt(windowX, windowY);
+    drawGraphic(graphicToUse);
 }
 
 bool GuiPushButton::onEventElement(SDL_Event& event) {
