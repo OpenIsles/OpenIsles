@@ -24,8 +24,8 @@ GuiBuildMenuWidget::GuiBuildMenuWidget(const Context& context) : GuiPanelWidget(
         {
             BuildingGroup::CRAFTSMAN,
             _("Craftsmanship"),
-            "add-building-group/craftsman",
-            "add-building-group/craftsman-pressed", {
+            "add-building-group/craftsman", // TODO build-menu-Grafik verwenden
+            "add-building-group/craftsman-pressed", { // TODO build-menu-Grafik verwenden
                 nullptr,
                 nullptr,
                 nullptr,
@@ -46,8 +46,8 @@ GuiBuildMenuWidget::GuiBuildMenuWidget(const Context& context) : GuiPanelWidget(
         }, {
             BuildingGroup::FARM,
             _("Farms & plantations"),
-            "add-building-group/farm",
-            "add-building-group/farm-pressed", {
+            "add-building-group/farm", // TODO build-menu-Grafik verwenden
+            "add-building-group/farm-pressed", { // TODO build-menu-Grafik verwenden
                 nullptr,
                 nullptr,
                 context.configMgr->getMapObjectType("sugarcane-plantation"),
@@ -68,8 +68,8 @@ GuiBuildMenuWidget::GuiBuildMenuWidget(const Context& context) : GuiPanelWidget(
         }, {
             BuildingGroup::PORT,
             _("Port facilities"),
-            "add-building-group/port",
-            "add-building-group/port-pressed", {
+            "build-menu/port",
+            "build-menu/port-pressed", {
                 nullptr,
                 nullptr,
                 nullptr,
@@ -90,8 +90,8 @@ GuiBuildMenuWidget::GuiBuildMenuWidget(const Context& context) : GuiPanelWidget(
         }, {
             BuildingGroup::PUBLIC,
             _("Public buildings"),
-            "add-building-group/public",
-            "add-building-group/public-pressed", {
+            "build-menu/public",
+            "build-menu/public-pressed", {
                 context.configMgr->getMapObjectType("square1"),
                 context.configMgr->getMapObjectType("square2"),
                 context.configMgr->getMapObjectType("square3"),

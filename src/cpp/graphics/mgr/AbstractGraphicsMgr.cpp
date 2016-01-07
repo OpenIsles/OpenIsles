@@ -120,14 +120,15 @@ void AbstractGraphicsMgr::loadGraphics() {
     loadStaticGraphicSet("add-building-button/pier", "data/img/gui/add-building/pier.png");
     loadStaticGraphicSet("add-building-button/dummy", "data/img/gui/add-building/dummy.png");
 
-    loadStaticGraphicSet("add-building-group/craftsman", "data/img/gui/button-add-building-craftsman.png");
-    loadStaticGraphicSet("add-building-group/craftsman-pressed", "data/img/gui/button-add-building-craftsman-pressed.png");
-    loadStaticGraphicSet("add-building-group/farm", "data/img/gui/button-add-building-farm.png");
-    loadStaticGraphicSet("add-building-group/farm-pressed", "data/img/gui/button-add-building-farm-pressed.png");
-    loadStaticGraphicSet("add-building-group/port", "data/img/gui/button-add-building-port.png");
-    loadStaticGraphicSet("add-building-group/port-pressed", "data/img/gui/button-add-building-port-pressed.png");
-    loadStaticGraphicSet("add-building-group/public", "data/img/gui/button-add-building-public.png");
-    loadStaticGraphicSet("add-building-group/public-pressed", "data/img/gui/button-add-building-public-pressed.png");
+    // TODO generate-build-buttons.php entfernen, wenn die neuen Blender-Buttons komplett sind
+    loadStaticGraphicSet("add-building-group/craftsman", "data/img/gui/button-add-building-craftsman.png"); // TODO build-menu-Grafik verwenden
+    loadStaticGraphicSet("add-building-group/craftsman-pressed", "data/img/gui/button-add-building-craftsman-pressed.png"); // TODO build-menu-Grafik verwenden
+    loadStaticGraphicSet("add-building-group/farm", "data/img/gui/button-add-building-farm.png"); // TODO build-menu-Grafik verwenden
+    loadStaticGraphicSet("add-building-group/farm-pressed", "data/img/gui/button-add-building-farm-pressed.png"); // TODO build-menu-Grafik verwenden
+    loadStaticGraphicSet("build-menu/port", "data/img/gui/build-menu/port.png");
+    loadStaticGraphicSet("build-menu/port-pressed", "data/img/gui/build-menu/port-pressed.png");
+    loadStaticGraphicSet("build-menu/public", "data/img/gui/build-menu/public.png");
+    loadStaticGraphicSet("build-menu/public-pressed", "data/img/gui/build-menu/public-pressed.png");
 
     loadStaticGraphicSet("production-arrow", "data/img/gui/production-arrow.png");
     loadStaticGraphicSet("production-plus", "data/img/gui/production-plus.png");
