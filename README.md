@@ -3,7 +3,7 @@
 ## the free island-building game
 
 OpenIsles is a free island-building game which significantly orientates itself by the classic Anno 1602.  
-This project's mail goal on the one hand is to provide that game as a remake to the Linux community while creating 
+This project's main goal on the one hand is to provide that game as a remake to the Linux community while creating 
 the possibility for reconfiguring and expanding all factors of the game.
 
 For further information visit the website [openisles.org](http://en.openisles.org).
