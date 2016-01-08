@@ -67,6 +67,8 @@ protected:
 public:
     GuiBase(const Context& context) : ContextAware(context) {
         visible = true;
+        x = y = 0;
+        width = height = 0;
     }
     virtual ~GuiBase() {}
 

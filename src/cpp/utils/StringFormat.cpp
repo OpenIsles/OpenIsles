@@ -12,7 +12,7 @@ std::string string_sprintf_va_list(const std::string& formatString, va_list vlis
     std::vsnprintf(buffer, (std::size_t) bufferSize, formatString.c_str(), vlist);
 
     std::string string = std::string(buffer);
-    delete buffer;
+    delete[] buffer;
 
     return string;
 }
