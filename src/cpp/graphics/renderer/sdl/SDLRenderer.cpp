@@ -77,8 +77,14 @@ const int SDLRenderer::getWindowHeight() const {
 
 void SDLRenderer::setClipRect(const Rect* const rect) {
     if (rect != nullptr) {
-        // SDL misst das Rechteck von UNTEN, kp, warum und ob das ein Bug is.
-        // Das Problem tritt auch nur in Linux auf. Unter Windows verhält sich SDL_RenderSetClipRect() wie erwartet.
+        // TODO Workaround entfernen, wenn SDL den Bug gefixed hat
+        /* Workaround für Bug in SDL
+         * @see https://bugzilla.libsdl.org/show_bug.cgi?id=2700
+         *
+         * SDL misst das Rechteck unter Linux von UNTEN. Unter Windows verhält sich SDL_RenderSetClipRect() wie erwartet.
+         * Problem ist, dass SDL nicht korrekt vom OpenGL-Koordinatensystem abstrahiert und das hat den Nullpunkt
+         * unten-links.
+         */
 #ifdef LINUX
         int fixedY = getWindowHeight() - (rect->y + rect->h);
         SDL_Rect sdlRect = { rect->x, fixedY, rect->w, rect->h };
