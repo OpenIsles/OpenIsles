@@ -16,23 +16,20 @@
  * Die Animation enthält immer eine fixe Zahl von Bildern, die beim Instanziieren über den Konstruktor bekannt
  * gemacht werden muss. Mittels addFrame() werden die Frame-Einzelgrafiken dann gesetzt.
  */
-class Animation : private std::vector<const IGraphic*> {
+class Animation {
 
 private:
     /**
-     * @brief Anzahl Frames in der Animation.
-     *
-     * Dies entspricht `size()` des Vektors. Wir merken uns den Wert aber selber,
-     * um den Container nicht fragen zu können.
+     * @brief Vektor mit den Frames
      */
-    unsigned int framesCount;
+    std::vector<const IGraphic*> frames;
 
 public:
     /**
      * @brief Legt eine neue Animation an.
      * @param framesCount Anzahl der Frames, den die Animation hat.
      */
-    Animation(int framesCount) : std::vector<const IGraphic*>(framesCount), framesCount(framesCount) {
+    Animation(std::size_t framesCount) : frames(framesCount) {
     }
 
     /**
@@ -47,11 +44,11 @@ public:
      * @brief Destruktur. Entlädt alle Grafiken.
      */
     ~Animation() {
-        for (auto iter = cbegin(); iter != cend(); iter++) {
+        for (auto iter = frames.cbegin(); iter != frames.cend(); iter++) {
             const IGraphic* graphic = *iter;
             delete graphic;
         }
-        clear();
+        frames.clear();
     }
 
     /**
@@ -62,8 +59,8 @@ public:
      * @param frameIndex Index des Frames im Bereich 0 bis `framesCount-1`
      * @param graphic Zeiger auf die Einzelgrafik
      */
-    void addFrame(int frameIndex, const IGraphic* graphic) {
-        this->at(frameIndex) = graphic;
+    void addFrame(std::size_t frameIndex, const IGraphic* graphic) {
+        frames.at(frameIndex) = graphic;
     }
 
     /**
@@ -73,12 +70,12 @@ public:
      * @return Zeiger auf die Einzelgrafik
      */
     const IGraphic* getGraphic() const {
-        if (framesCount != 1) {
+        if (frames.size() != 1) {
             Log::error(_("Animation does not have only frame."));
             throw std::runtime_error("Animation does not have only frame");
         }
 
-        return front();
+        return frames.front();
     }
 
     /**
@@ -87,21 +84,21 @@ public:
      * @param frameIndex Index des Frames im Bereich 0 bis `framesCount-1`
      * @return Zeiger auf die Einzelgrafik des Frames
      */
-    const IGraphic* getFrame(unsigned int frameIndex) const {
-        if (frameIndex >= framesCount) {
+    const IGraphic* getFrame(std::size_t frameIndex) const {
+        if (frameIndex >= frames.size()) {
             Log::error(_("Animation does not have this many frames."));
             throw std::runtime_error("Animation does not have this many frames");
         }
 
-        return at(frameIndex);
+        return frames.at(frameIndex);
     }
 
     /**
      * @brief Liefert die Anzahl der Frames in der Animation zurück
      * @return Anzahl Frames in der Animation
      */
-    unsigned int getFramesCount() const {
-        return framesCount;
+    std::size_t getFramesCount() const {
+        return frames.size();
     }
 
     /**
