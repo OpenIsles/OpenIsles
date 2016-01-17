@@ -12,6 +12,11 @@
  */
 class GuiOptionsMenuWidget : public GuiPanelWidget {
 
+private:
+    GuiPanelHeader panelHeader;    ///< Panelheader
+
+    GuiPushButton musicPushButton; ///< Musik-Button
+
 public:
     GuiOptionsMenuWidget(const Context& context);
     virtual ~GuiOptionsMenuWidget() {}
@@ -19,7 +24,9 @@ public:
     /**
      * @brief Zeichnet das Element (ohne Kinder)
      */
-    virtual void renderElement(IRenderer* renderer);
+    virtual void renderElement(IRenderer* renderer) {
+        // Nix zu tun, machen die Kinder alles
+    }
 
 };
 

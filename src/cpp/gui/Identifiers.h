@@ -13,8 +13,6 @@
 #define GUI_ID_MAP_ROTATE_WIDGET 6
 #define GUI_ID_MAP_ZOOM_WIDGET 7
 
-#define GUI_ID_MUSIC_PUSH_BUTTON 101
-
 // Gebäude bauen ///////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // Button pro Gruppe (+ Offset)
