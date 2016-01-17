@@ -29,16 +29,6 @@ public:
     }
 
     /**
-     * @brief Ändert die Koordinaten.
-     * @param x neue X-Screen-Koordinate
-     * @param y neue Y-Screen-Koordinate
-     */
-    void setTo(int x, int y) {
-        _x = x;
-        _y = y;
-    }
-
-    /**
      * @brief Gleichheitsoperator
      * @param screenCoords anderer Operand
      * @return `true`, wenn diese Koordinaten gleich sind, sonst `false`
