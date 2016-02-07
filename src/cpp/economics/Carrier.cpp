@@ -151,6 +151,16 @@ void Carrier::onRouteDone(const Context& context, bool& deleteMe) {
             return;
         }
     }
+    else if (mapObjectType->name == "cattle") {
+        // Das war Hinweg zum Erntefeld -> Animation umstellen und mit Ernten anfangen
+        if (onOutboundTrip) {
+            animations = context.graphicsMgr->getGraphicSet("cattle")->getEightDirectionsAnimation("eating");
+            animationFrame = 0;
+            state = HARVESTING;
+            harvestingFinishedTicks = context.game->getTicks() + mapObjectType->secondsToProduce * TICKS_PER_SECOND;
+            return;
+        }
+    }
 
     Map* map = context.game->getMap();
     MapTile* mapTile = map->getMapTileAt(route.back());
@@ -266,8 +276,15 @@ void Carrier::onHarvestingFinished(const Context& context) {
 
             result = inCatchmentAreaFinder.findMapTileWithInvisibleGood(goodGrass, currentMapCoords);
             if (result) {
-                EightDirectionsAnimation animations =
-                    context.graphicsMgr->getGraphicSet("sheep1")->getEightDirectionsAnimation("walking");
+                // TODO Träger über Config steuern
+                EightDirectionsAnimation animations;
+                if (owningBuilding->getMapObjectType()->name == "sheep-farm") {
+                    animations = context.graphicsMgr->getGraphicSet("sheep1")->getEightDirectionsAnimation("walking");
+                } else if (owningBuilding->getMapObjectType()->name == "cattle-farm") {
+                    animations = context.graphicsMgr->getGraphicSet("cattle")->getEightDirectionsAnimation("walking");
+                } else {
+                    assert(false);
+                }
 
                 initRoute(owningBuilding, result.route, goodGrass, carriedGoods.capacity,
                           true, animations, context.game->getTicks());
@@ -298,8 +315,15 @@ void Carrier::onHarvestingFinished(const Context& context) {
     }
 
     const Good* goodGrass = context.configMgr->getGood("grass");
-    EightDirectionsAnimation animations =
-                    context.graphicsMgr->getGraphicSet("sheep1")->getEightDirectionsAnimation("walking");
+    // TODO Träger über Config steuern
+    EightDirectionsAnimation animations;
+    if (owningBuilding->getMapObjectType()->name == "sheep-farm") {
+        animations = context.graphicsMgr->getGraphicSet("sheep1")->getEightDirectionsAnimation("walking");
+    } else if (owningBuilding->getMapObjectType()->name == "cattle-farm") {
+        animations = context.graphicsMgr->getGraphicSet("cattle")->getEightDirectionsAnimation("walking");
+    } else {
+        assert(false);
+    }
 
     initRoute(owningBuilding, routeBackToOwningBuilding, goodGrass, carriedGoods.capacity,
               false, animations, context.game->getTicks());
@@ -324,7 +348,7 @@ GoodsSlot* Carrier::findGoodsSlotToUnloadTo(Building* building, const Good* good
         }
 
         // TODO Träger über Config steuern. GoodSlots mit invisibleGoods unterstützen
-        if (mapObjectType->name == "sheep") {
+        if (mapObjectType->name == "sheep" || mapObjectType->name == "cattle") {
             return &building->productionSlots.output;
         }
 

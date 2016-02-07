@@ -502,7 +502,7 @@
             <output good="cattle" capacity="4" seconds-to-produce="25" />
         </production-slots>
         <inhabitants>2</inhabitants>
-        <carriers name="sheep" max-carriers="2" />
+        <carriers name="cattle" max-carriers="2" />
     </building>
 
     <building name="hunters-hut" width="1" height="1">

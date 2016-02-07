@@ -250,7 +250,7 @@ $(foreach GOOD,$(GOODS),$(eval $(call RENDER_GOODS_ICONS,$(GOOD))))
 # Animationen                                                                                                          #
 ########################################################################################################################
 
-ANIMATIONS := carrier
+ANIMATIONS := carrier cattle
 
 define RENDER_ANIMATION
 $(DATA_DIRECTORY)/img/animations/$(1).png: $(SRC_DIRECTORY)/blender/animations/$(1)/$(1).blend

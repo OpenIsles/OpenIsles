@@ -150,6 +150,7 @@ void AbstractGraphicsMgr::loadGraphics() {
     loadStaticAnimationGraphicSetWith8Views("cart-without-cargo", "data/img/animations/cart-without-cargo.png", 32);
     loadStaticAnimationGraphicSetWith8Views("cart-with-cargo", "data/img/animations/cart-with-cargo.png", 32);
     loadSheepGraphicSets();
+    loadCattleGraphicSets();
 
     loadHarvestablesGraphicSet("mapobjects/northern-forest1", "data/img/harvestables/northern-forest1.png", 5);
     loadHarvestablesGraphicSet("mapobjects/northern-forest2", "data/img/harvestables/northern-forest2.png", 5);
@@ -376,6 +377,7 @@ void AbstractGraphicsMgr::loadMapZoomGraphicSet() {
     delete graphic;
 }
 
+// TODO Duplicate Code loadSheepGraphicSets() / loadCattleGraphicSets() - über XML-Datei regeln
 void AbstractGraphicsMgr::loadSheepGraphicSets() {
     for (int i = 0; i < 2; i++) {
         const std::string graphicFilename = "data/img/animations/sheep" + toString(i) + ".png";
@@ -414,4 +416,42 @@ void AbstractGraphicsMgr::loadSheepGraphicSets() {
         graphicSets["sheep" + toString(i)] = graphicSet;
         delete graphic;
     }
+}
+
+// TODO Duplicate Code loadSheepGraphicSets() / loadCattleGraphicSets() - über XML-Datei regeln
+void AbstractGraphicsMgr::loadCattleGraphicSets() {
+    IGraphic* graphic = loadGraphic("data/img/animations/cattle.png");
+
+    int frameWidth = graphic->getWidth() / 14;
+    int frameHeight = graphic->getHeight() / 8;
+
+    GraphicSet* graphicSet = new GraphicSet();
+    Rect frameRect(0, 0, frameWidth, frameHeight);
+
+    forEachEighthDirection(view) {
+        frameRect.x = 0;
+
+        Animation* animationWalking = new Animation(8);
+        for (int frameIndex = 0; frameIndex < 8; frameIndex++, frameRect.x += frameWidth) {
+            IGraphic* frameGraphic = loadGraphic(*graphic, frameRect);
+            animationWalking->addFrame(frameIndex, frameGraphic);
+        }
+        graphicSet->addByStateAndView("walking", view, animationWalking);
+
+        Animation* animationEating = new Animation(6);
+        for (int frameIndex = 0; frameIndex < 6; frameIndex++, frameRect.x += frameWidth) {
+            IGraphic* frameGraphic = loadGraphic(*graphic, frameRect);
+            animationEating->addFrame(frameIndex, frameGraphic);
+        }
+        graphicSet->addByStateAndView("eating", view, animationEating);
+
+        // TODO später entfernen; nur dazu da, dass der bisherige Code funktioniert.
+        IGraphic* firstFrameGraphic = loadGraphic(*graphic, Rect(0, frameRect.y, frameWidth, frameHeight));
+        graphicSet->addByView(view, new Animation(firstFrameGraphic));
+
+        frameRect.y += frameHeight;
+    }
+
+    graphicSets["cattle"] = graphicSet;
+    delete graphic;
 }

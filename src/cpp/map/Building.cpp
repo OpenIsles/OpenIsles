@@ -105,8 +105,14 @@ void Building::sendNewCarrier(const Context& context) {
             }
 
             const MapObjectType* carrierType = mapObjectType->carrier.mapObjectType;
-            EightDirectionsAnimation animations =
-                context.graphicsMgr->getGraphicSet("sheep0")->getEightDirectionsAnimation("walking");
+            EightDirectionsAnimation animations; // TODO Träger über Config steuern: Animations
+            if (mapObjectType->name == "sheep-farm") {
+                animations = context.graphicsMgr->getGraphicSet("sheep0")->getEightDirectionsAnimation("walking");
+            } else if (mapObjectType->name == "cattle-farm") {
+                animations = context.graphicsMgr->getGraphicSet("cattle")->getEightDirectionsAnimation("walking");
+            } else {
+                assert(false);
+            }
             addCarrierMapObject(context, result.route, firstGood, carrierType, animations);
 
             // Slot markieren, dass nicht ein zweiter Träger hinläuft.

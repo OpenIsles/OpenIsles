@@ -21,8 +21,19 @@
     <carrier name="sheep">
         <capacity>4</capacity>
         <seconds-to-produce>18</seconds-to-produce>
+        <!-- TODO animations auslesen -->
         <animations>
             <walking-animation carrier-state="walking" graphic-set="sheep" />
+        </animations>
+    </carrier>
+
+    <!-- Rinder -->
+    <carrier name="cattle">
+        <capacity>3</capacity>
+        <seconds-to-produce>17</seconds-to-produce>
+        <!-- TODO animations auslesen -->
+        <animations>
+            <walking-animation carrier-state="walking" graphic-set="cattle" />
         </animations>
     </carrier>
 </carriers>

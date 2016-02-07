@@ -126,6 +126,11 @@ private:
      * @brief Lädt die Grafik-Sets für die Schafe
      */
     void loadSheepGraphicSets();
+
+    /**
+     * @brief Lädt die Grafik-Sets für die Rinder
+     */
+    void loadCattleGraphicSets();
 };
 
 #endif
