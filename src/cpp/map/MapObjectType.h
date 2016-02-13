@@ -132,6 +132,11 @@ struct MapObjectType {
     std::unique_ptr<RectangleData<char>> catchmentArea;
 
     /**
+     * (nur für Gebäude) `true`, wenn der Einzugsbereich des Gebäudes zum bebaubaren Bereich zählt
+     */
+    bool increasesBuildableArea = false;
+
+    /**
      * @brief Baukosten
      */
     BuildingCosts buildingCosts;
@@ -148,6 +153,11 @@ struct MapObjectType {
      * @brief Güter, die verbraucht und hergestellt werden.
      */
     ProductionSlots buildingProduction;
+
+    /**
+     * @brief (nur für Lagergebäude) gibt an, wie viel Lagerkapazität das Gebäude zur Verfügung stellt.
+     */
+    unsigned char goodsCapacity = 0;
 
     /**
      * @brief gibt für Nicht-Wohngebäude an, wie viele Einwohner sich im Gebäude befinden. Jede Plantage,

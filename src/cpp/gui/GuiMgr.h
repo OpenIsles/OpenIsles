@@ -212,10 +212,10 @@ public:
     void onNewGame();
 
     /**
-     * @brief Callback, wenn sich Einzugsgebiete von Lagergebäuden ändern. Wir benachrichtigen dann die Minimap,
+     * @brief Callback, wenn sich der bebaubare Bereich ändert. Wir benachrichtigen dann die Minimap,
      * die diese Info braucht.
      */
-    void onOfficeCatchmentAreaChanged();
+    void onBuildableAreaChanged();
 
     /**
      * @brief Callback, wenn sich Informationen bezüglich der Häuser geändert haben.

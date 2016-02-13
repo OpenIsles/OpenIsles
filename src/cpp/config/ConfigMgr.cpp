@@ -160,6 +160,12 @@ void ConfigMgr::loadMapObjectTypes(const std::string& configFilePath) {
         if (catchmentAreaNode != nullptr) {
             const char* catchmentAreaValue = catchmentAreaNode->value();
             mapObjectType.catchmentArea.reset(parseCatchmentArea(catchmentAreaValue));
+
+            rapidxml::xml_attribute<>* increasesBuildableAreaAttribute =
+                catchmentAreaNode->first_attribute("increases-buildable-area", 24, true);
+            if (increasesBuildableAreaAttribute != nullptr) {
+                mapObjectType.increasesBuildableArea = true;
+            }
         }
 
         // produzierte und verbrauchte Waren
@@ -185,6 +191,12 @@ void ConfigMgr::loadMapObjectTypes(const std::string& configFilePath) {
                     readGoodSlotConfig(mapObjectType.buildingProduction.input2, input2Node);
                 }
             }
+        }
+
+        // Lagergebäude? Kapazität
+        rapidxml::xml_node<>* goodsCapacityNode = node->first_node("goods-capacity", 14, true);
+        if (goodsCapacityNode != nullptr) {
+            mapObjectType.goodsCapacity = (unsigned char) stringToUnsignedLong(goodsCapacityNode->value());
         }
 
         // Einwohner

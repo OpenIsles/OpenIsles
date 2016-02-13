@@ -144,7 +144,7 @@ void Map::addMapObject(MapObject* mapObject) {
     assert(false);
 }
 
-void Map::addOfficeCatchmentAreaToMap(const Building& building) {
+void Map::addBuildingCatchmentAreaToBuildableArea(const Building& building) {
     CatchmentAreaIterator catchmentAreaIterator(building, false);
     catchmentAreaIterator.iterate([&](const MapCoords& mapCoords) {
         MapTile* mapTile = mapTiles->getData(mapCoords.x(), mapCoords.y(), nullptr);

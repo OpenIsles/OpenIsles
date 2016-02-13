@@ -128,28 +128,21 @@ Structure* Game::addStructure(
     // Objekt in die Liste aufnehmen.
     map->addMapObject(structure);
 
-    // Kontor oder Marktplatz? Einzugbereich in mapTiles aktualisieren und Lagerkapazität der Kolonie erhöhen
-    // TODO Flag an die Config, dass das Gebäude zum baubaren Einzugsbereich zählt
-    if (building != nullptr &&
-        (mapObjectType->name == "office1" || mapObjectType->name == "office2" || mapObjectType->name == "marketplace")) {
-
-        map->addOfficeCatchmentAreaToMap(*building);
+    // Bebaubaren Bereich in mapTiles aktualisieren
+    if (building != nullptr && mapObjectType->increasesBuildableArea) {
+        map->addBuildingCatchmentAreaToBuildableArea(*building);
 #ifndef NO_SDL
-        context.guiMgr->onOfficeCatchmentAreaChanged();
+        context.guiMgr->onBuildableAreaChanged();
 #endif
     }
 
-    // Colony kann erst gefunden werden, wenn addOfficeCatchmentAreaToMap() aufgerufen wurde
+    // Colony kann erst gefunden werden, wenn addBuildingCatchmentAreaToBuildableArea() aufgerufen wurde
     Colony* colony = getColony(mapCoords);
     structure->setColony(colony);
 
-    // TODO Lagerkapazitäterhöhung über Config lösen
-    if (mapObjectType->name == "office1") {
-        colony->increaseGoodsCapacity(30);
-    } else if (mapObjectType->name == "office2") {
-        colony->increaseGoodsCapacity(50);
-    } else if (mapObjectType->name == "marketplace") {
-        colony->increaseGoodsCapacity(10);
+    // Lagergebäude? Kapazität der Kolonie erhöhen
+    if (mapObjectType->goodsCapacity > 0) {
+        colony->increaseGoodsCapacity(mapObjectType->goodsCapacity);
     }
 
     // Einwohner setzen

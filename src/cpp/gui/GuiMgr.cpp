@@ -543,7 +543,7 @@ void GuiMgr::onNewGame() {
         context.game->getCurrentPlayer());
 }
 
-void GuiMgr::onOfficeCatchmentAreaChanged() {
+void GuiMgr::onBuildableAreaChanged() {
     ((GuiMinimap*) findElement(GUI_ID_MINIMAP))->updateMinimapTexture();
 }
 

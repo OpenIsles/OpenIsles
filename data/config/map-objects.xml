@@ -640,7 +640,7 @@
         <operating-costs>
             <running>15</running>
         </operating-costs>
-        <catchment-area>
+        <catchment-area increases-buildable-area="true">
             00000000000000011111111000000000000000
             00000000000111111111111111100000000000
             00000000011111111111111111111000000000
@@ -680,6 +680,7 @@
             00000000000111111111111111100000000000
             00000000000000011111111000000000000000
         </catchment-area>
+        <goods-capacity>30</goods-capacity>
         <inhabitants>2</inhabitants>
         <carriers name="cart" max-carriers="1" />
     </building>
@@ -698,7 +699,7 @@
         <operating-costs>
             <running>15</running>
         </operating-costs>
-        <catchment-area>
+        <catchment-area increases-buildable-area="true">
             00000000000000011111111000000000000000
             00000000000111111111111111100000000000
             00000000011111111111111111111000000000
@@ -738,6 +739,7 @@
             00000000000111111111111111100000000000
             00000000000000011111111000000000000000
         </catchment-area>
+        <goods-capacity>50</goods-capacity>
         <inhabitants>3</inhabitants>
         <carriers name="cart" max-carriers="2" />
     </building>
@@ -1203,7 +1205,7 @@
         <operating-costs>
             <running>10</running>
         </operating-costs>
-        <catchment-area>
+        <catchment-area increases-buildable-area="true">
             00000000000000011111111000000000000000
             00000000000111111111111111100000000000
             00000000011111111111111111111000000000
@@ -1243,6 +1245,7 @@
             00000000000111111111111111100000000000
             00000000000000011111111000000000000000
         </catchment-area>
+        <goods-capacity>10</goods-capacity>
         <inhabitants>3</inhabitants>
         <carriers name="cart" max-carriers="2" />
     </building>

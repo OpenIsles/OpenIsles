@@ -289,7 +289,7 @@ public:
      * @brief Aktualisiert die internen Strukturen der Karte (mapTiles) beim Neuerrichten eines Kontors
      * @param building Kontor-Gebäude
      */
-    void addOfficeCatchmentAreaToMap(const Building& building);
+    void addBuildingCatchmentAreaToBuildableArea(const Building& building);
 
     /**
      * @brief Räumt alles weg und gibt Speicher wieder frei
