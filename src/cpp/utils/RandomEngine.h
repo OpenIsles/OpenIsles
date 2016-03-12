@@ -16,9 +16,9 @@ public:
 
     typedef unsigned long result_type;
 
-    virtual unsigned long operator()() = 0;
-    virtual unsigned long min() = 0;
-    virtual unsigned long max() = 0;
+    virtual result_type operator()() = 0;
+    virtual result_type min() = 0;
+    virtual result_type max() = 0;
 };
 
 
@@ -34,15 +34,15 @@ private:
     std::default_random_engine generator;
 
 public:
-    virtual unsigned long operator()() {
+    virtual result_type operator()() {
         return generator();
     }
 
-    virtual unsigned long min() {
+    virtual result_type min() {
         return generator.min();
     }
 
-    virtual unsigned long max() {
+    virtual result_type max() {
         return generator.max();
     }
 };
@@ -61,17 +61,17 @@ public:
         unsigned long nextNumber;
 
     public:
-        virtual unsigned long operator()() {
-            unsigned long returnValue = nextNumber;
+        virtual result_type operator()() {
+            result_type returnValue = nextNumber;
             nextNumber = (nextNumber + 1) % 10000000;
             return returnValue;
         }
 
-        virtual unsigned long min() {
+        virtual result_type min() {
             return 0;
         }
 
-        virtual unsigned long max() {
+        virtual result_type max() {
             return 9999999;
         }
     };
