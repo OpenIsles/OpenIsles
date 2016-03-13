@@ -220,6 +220,7 @@ set(TEST_FILES
     test/cpp/utils/CatchmentAreaIteratorTest.cpp
     test/cpp/utils/DoubleToIntSequenceTest.cpp
     test/cpp/utils/MapCoordsIteratorTest.cpp
+    test/cpp/utils/RandomEngineTest.cpp
 )
 
 

@@ -19,6 +19,23 @@ public:
     virtual result_type operator()() = 0;
     virtual result_type min() = 0;
     virtual result_type max() = 0;
+
+    /**
+     * @brief Liefert zufällig einen bool-Wert zurück, der mit einer bestimmten Wahrscheinlich `true` ist.
+     * @param probability Wahrscheinlichkeit (Bereich 0 bis 1), mit der `true` zurückkommt
+     * @return `true` zu einer Wahrscheinlichkeit von `probability`,
+     *         `false` zu einer Wahrscheinlichkeit von `1 - probability`,
+     */
+    bool getBoolByProbability(double probability) {
+        assert((probability >= 0) && (probability <= 1));
+
+        result_type minValue = min();
+        result_type maxValue = max();
+        result_type randomValue = operator()();
+
+        result_type threshold = result_type(double(minValue) + double(maxValue - minValue) * probability);
+        return (randomValue <= threshold);
+    }
 };
 
 
