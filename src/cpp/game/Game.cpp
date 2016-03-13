@@ -182,6 +182,7 @@ Street* Game::addStreet(const MapCoords& mapCoords, const MapObjectType* mapObje
 
 MapObject* Game::instantiateNewMapObject(const MapObjectType* mapObjectType) const {
     MapObject* mapObject = MapObject::instantiate(mapObjectType);
+    mapObject->setCreatedTicks(ticks);
     mapObject->setLastUpdateTicks(ticks);
     return mapObject;
 }
@@ -201,6 +202,10 @@ void Game::addInhabitantsToBuilding(Building* building, char amount) {
     if (building->isHouse()) {
         const PopulationTier* populationTier = building->getMapObjectType()->populationTier;
         colony->populationTiers[populationTier].population += amount;
+
+#ifndef IN_TESTS
+        context.guiMgr->onHouseInfoChanged();
+#endif
     }
 
     context.economicsMgr->updatePlayerStatus();

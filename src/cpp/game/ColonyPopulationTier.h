@@ -14,6 +14,11 @@ struct ColonyPopulationTier {
     unsigned int population;
 
     /**
+     * @brief [Zeitpunkt](@ref gameTicks), wann zuletzt Einwohner hinzugekommen sind
+     */
+    unsigned long lastIncreaseTicks;
+
+    /**
      * @brief Zufriedenheit
      */
     PopulationSatisfaction populationSatisfaction;

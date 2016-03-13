@@ -18,6 +18,7 @@ Colony::Colony(const std::unordered_map<std::string, Good>& allGoods,
     for (auto iter = allPopulationTiers.cbegin(); iter != allPopulationTiers.cend(); iter++) {
         const PopulationTier* populationTier = &*iter;
         populationTiers[populationTier].population = 0;
+        populationTiers[populationTier].lastIncreaseTicks = 0;
         populationTiers[populationTier].populationSatisfaction = PopulationSatisfaction::GOOD;
         populationTiers[populationTier].taxesPercent = 32;
     }

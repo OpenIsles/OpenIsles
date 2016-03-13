@@ -154,6 +154,13 @@ private:
                              const MapObjectType* carrierType,
                              const EightDirectionsAnimation& animations);
 
+    /**
+     * @brief Aktualisiert ggf. die Einwohnerzahl des Gebäudes
+     *
+     * @param context (Dependency)
+     */
+    void updateInhabitants(const Context& context);
+
 };
 
 #endif

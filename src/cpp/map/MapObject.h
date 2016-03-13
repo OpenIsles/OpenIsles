@@ -58,6 +58,11 @@ protected:
      */
     unsigned long lastUpdateTicks;
 
+    /**
+     * @brief [Zeitpunkt](@ref gameTicks), wann dieses Objekt erzeugt wurde
+     */
+    unsigned long createdTicks;
+
 public:
     /**
      * @brief Helper, der je nach Map-Objekt-Typ eine konkrete Instanz von `MapObject` erstellt.
@@ -68,7 +73,8 @@ public:
 
 protected:
     MapObject() {
-        // TODO Alle Objekte müssen lastUpdateTicks ordentlich gesetzt (mit Game#ticks initialisiert) haben. Eine Factory wäre hübsch
+        // Niemals direkt benutzen, sondern via MapObject::instantiate(),
+        // damit createdTicks und lastUpdateTicks ordentlich gesetzt sind.
     }
 
 public:
@@ -128,6 +134,14 @@ public:
 
     void setLastUpdateTicks(unsigned long lastUpdateTicks) {
         this->lastUpdateTicks = lastUpdateTicks;
+    }
+
+    unsigned long getCreatedTicks() const {
+        return createdTicks;
+    }
+
+    void setCreatedTicks(unsigned long createdTicks) {
+        this->createdTicks = createdTicks;
     }
 
     /**

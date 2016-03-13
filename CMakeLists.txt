@@ -202,6 +202,7 @@ set(TEST_FILES
     test/cpp/economics/FinancesTest.cpp
     test/cpp/economics/FoodConsumptionTest.cpp
     test/cpp/economics/HousesTest.cpp
+    test/cpp/economics/HousesTest_IncreasingInhabitants.cpp
     test/cpp/economics/InCatchmentAreaFinderGoodsPriorityTest.cpp
     test/cpp/economics/InCatchmentAreaFinderInvisibleGoodsTest.cpp
     test/cpp/economics/MaxCarriersAndCarrierDelayTest.cpp

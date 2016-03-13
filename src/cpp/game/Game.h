@@ -300,6 +300,18 @@ public:
      */
     void update(unsigned long millisecondsElapsed);
 
+    /**
+     * @brief Ändert die Einwohner innerhalb eines Gebäudes. Positive Werte fügen Bewohner hinzu, negative nehmen
+     * welche weg.
+     *
+     * Diese Methode aktualisiert gleich die Einwohnerzahl der Kolonie. Es sollte immer diese Methode benutzt werden,
+     * um Einwohner zu ändern.
+     *
+     * @param building Gebäude, dessen Einwohner geändert werden sollen
+     * @param amount Bevölkerung, die hinzukommen soll
+     */
+    void addInhabitantsToBuilding(Building* building, char amount);
+
 
 #ifdef IN_TESTS
     /**
@@ -353,18 +365,6 @@ private:
      * @return instanziiertes Map-Objekt
      */
     MapObject* instantiateNewMapObject(const MapObjectType* mapObjectType) const;
-
-    /**
-     * @brief Ändert die Einwohner innerhalb eines Gebäudes. Positive Werte fügen Bewohner hinzu, negative nehmen
-     * welche weg.
-     *
-     * Diese Methode aktualisiert gleich die Einwohnerzahl der Kolonie. Es sollte immer diese Methode benutzt werden,
-     * um Einwohner zu ändern.
-     *
-     * @param building Gebäude, dessen Einwohner geändert werden sollen
-     * @param amount Bevölkerung, die hinzukommen soll
-     */
-    void addInhabitantsToBuilding(Building* building, char amount);
 };
 
 #endif

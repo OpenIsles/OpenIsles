@@ -9,6 +9,7 @@
 bool Building::updateObject(const Context& context) {
     context.economicsMgr->updateProduction(this);
     sendNewCarrier(context);
+    updateInhabitants(context);
     return true;
 }
 
@@ -171,4 +172,44 @@ void Building::addCarrierMapObject(const Context& context,
 
     // Delay bis zum nächsten Träger einstellen
     nextCarrierMinTicks = gameTicks + Building::CARRIER_DELAY;
+}
+
+void Building::updateInhabitants(const Context& context) {
+    // Bin ich ein Haus?
+    if (!isHouse()) {
+        return;
+    }
+
+    // Haus voll?
+    const PopulationTier* populationTier = mapObjectType->populationTier;
+    if (inhabitants >= populationTier->maxPopulationPerHouse) {
+        return;
+    }
+
+    // Laune berücksichtigen. Neutral = keine Veränderung
+    if (colony->populationTiers[populationTier].populationSatisfaction == PopulationSatisfaction::NEUTRAL) {
+        return;
+    }
+
+    if (colony->populationTiers[populationTier].populationSatisfaction == PopulationSatisfaction::BAD ||
+        colony->populationTiers[populationTier].populationSatisfaction == PopulationSatisfaction::WORST) {
+
+        // TODO mies gelaunte Häuser
+        Log::debug("Houses are not satisfied. TODO decrease inhabitants");
+        return;
+    }
+
+    // In den ersten 2 Minuten kein Bevölkerungswachstum
+    if (context.game->getTicks() - createdTicks < 125*TICKS_PER_SECOND) {
+        return;
+    }
+
+    // Nicht alle Gebäude auf einmal. Maximal alle 500ms einer
+    if (context.game->getTicks() - colony->populationTiers[populationTier].lastIncreaseTicks < 500) {
+        return;
+    }
+
+    colony->populationTiers[populationTier].lastIncreaseTicks = context.game->getTicks();
+    context.game->addInhabitantsToBuilding(this, 1);
+    // TODO Siedler und höhere Bevölkerungsgruppen nehmen nicht um 1, sondern mehr zu
 }
