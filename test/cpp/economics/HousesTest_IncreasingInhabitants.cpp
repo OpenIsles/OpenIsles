@@ -2,7 +2,7 @@
 
 
 /**
- * @brief Test, der sich prüft, ob die Bevölkerung in den Wohnhäusern sich korrekt verhält
+ * @brief Test, der prüft, ob die Bevölkerung in den Wohnhäusern sich korrekt verhält
  */
 class HousesTest_IncreasingInhabitants : public GameTest {
 
