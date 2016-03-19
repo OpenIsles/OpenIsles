@@ -44,7 +44,7 @@ protected:
     virtual void SetUp() {
         noSdlRenderer = new NoSDLRenderer();
 
-        randomEngine = new RealRandomEngine();
+        randomEngine = new TestRandomEngine();
         context.randomEngine = randomEngine;
 
         configMgr = new ConfigMgr("data/config");

@@ -27,14 +27,9 @@ public:
      *         `false` zu einer Wahrscheinlichkeit von `1 - probability`,
      */
     bool getBoolByProbability(double probability) {
-        assert((probability >= 0) && (probability <= 1));
-
-        result_type minValue = min();
-        result_type maxValue = max();
-        result_type randomValue = operator()();
-
-        result_type threshold = result_type(double(minValue) + double(maxValue - minValue) * probability);
-        return (randomValue <= threshold);
+        std::uniform_real_distribution<double> distribution(0, 1);
+        double randomValue = distribution(*this);
+        return (randomValue <= probability);
     }
 };
 
@@ -68,28 +63,25 @@ public:
 #ifdef IN_TESTS
     /**
      * @brief Zufallsgenerator-Engine, die zum Testen benutzt wird.
-     * Die Engine ist nicht wirklich zufällig, sondern zählt einfach nur immer um eins nach oben
      */
     class TestRandomEngine : public IRandomEngine {
     private:
         /**
-         * @brief nächste "Zufalls"zahl, die zurückgeliefert werden wird
+         * @brief Zufallsengine
          */
-        unsigned long nextNumber;
+        std::linear_congruential_engine<unsigned long, 9997, 4711, 99999989> generator; // 99999989 ist prim
 
     public:
         virtual result_type operator()() {
-            result_type returnValue = nextNumber;
-            nextNumber = (nextNumber + 1) % 10000000;
-            return returnValue;
+            return generator();
         }
 
         virtual result_type min() {
-            return 0;
+            return generator.min();
         }
 
         virtual result_type max() {
-            return 9999999;
+            return generator.max();
         }
     };
 #endif
