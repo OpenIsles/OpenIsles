@@ -1,6 +1,7 @@
 #ifndef _RANDOM_GENERATOR_H
 #define _RANDOM_GENERATOR_H
 
+#include <list>
 #include <random>
 
 /**
@@ -31,6 +32,29 @@ public:
         double randomValue = distribution(*this);
         return (randomValue <= probability);
     }
+
+    /**
+     * @brief Liefert aus einer Liste einen zufälligen Eintrag zurück
+     * @param list Liste mit allen zur Verfügung stehenden Einträgen
+     * @return zufälliger Eintrag
+     *
+     * @see http://stackoverflow.com/a/16421677/2992323
+     */
+    template <typename T>
+    T getRandomListEntry(const std::list<T>& list) {
+        assert(!list.empty());
+
+        auto iterBegin = list.cbegin();
+        auto iterEnd = list.cend();
+        long distance = std::distance(iterBegin, iterEnd);
+        std::uniform_int_distribution<long> distribution(0, distance - 1);
+
+        auto iter = iterBegin;
+        long randomOffset = distribution(*this);
+        std::advance(iter, randomOffset);
+        return *iter;
+    }
+
 };
 
 

@@ -16,6 +16,7 @@ set(MAIN_SOURCE_FILE
     src/cpp/main.cpp
 )
 set(COMMON_SOURCE_FILES
+    src/cpp/config/BuildingCosts.cpp
     src/cpp/config/BuildingCosts.h
     src/cpp/config/ConfigMgr.cpp
     src/cpp/config/ConfigMgr.h
@@ -202,6 +203,7 @@ set(TEST_FILES
     test/cpp/economics/FinancesTest.cpp
     test/cpp/economics/FoodConsumptionTest.cpp
     test/cpp/economics/HousesTest.cpp
+    test/cpp/economics/HousesTest_Advancement.cpp
     test/cpp/economics/HousesTest_IncreasingInhabitants.cpp
     test/cpp/economics/InCatchmentAreaFinderGoodsPriorityTest.cpp
     test/cpp/economics/InCatchmentAreaFinderInvisibleGoodsTest.cpp

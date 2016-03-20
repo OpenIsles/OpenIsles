@@ -4,6 +4,7 @@
 #include "economics/EconomicsMgr.h"
 #include "economics/InCatchmentAreaFinder.h"
 #include "game/Game.h"
+#include "utils/RandomEngine.h"
 
 
 bool Building::updateObject(const Context& context) {
@@ -180,13 +181,8 @@ void Building::updateInhabitants(const Context& context) {
         return;
     }
 
-    // Haus voll?
-    const PopulationTier* populationTier = mapObjectType->populationTier;
-    if (inhabitants >= populationTier->maxPopulationPerHouse) {
-        return;
-    }
-
     // Laune berücksichtigen. Neutral = keine Veränderung
+    const PopulationTier* populationTier = mapObjectType->populationTier;
     if (colony->populationTiers[populationTier].populationSatisfaction == PopulationSatisfaction::NEUTRAL) {
         return;
     }
@@ -199,12 +195,21 @@ void Building::updateInhabitants(const Context& context) {
         return;
     }
 
+    // ggf. Aufstieg machen
+    checkForHouseAdvancement(context);
+
+    // Haus voll?
+    if (inhabitants >= mapObjectType->populationTier->maxPopulationPerHouse) {
+        return;
+    }
+
     // In den ersten 2 Minuten kein Bevölkerungswachstum
     if (context.game->getTicks() - createdTicks < 125*TICKS_PER_SECOND) {
         return;
     }
 
     // Nicht alle Gebäude auf einmal. Maximal alle 500ms einer
+    // TODO Zufall
     if (context.game->getTicks() - colony->populationTiers[populationTier].lastIncreaseTicks < 500) {
         return;
     }
@@ -212,4 +217,72 @@ void Building::updateInhabitants(const Context& context) {
     colony->populationTiers[populationTier].lastIncreaseTicks = context.game->getTicks();
     context.game->addInhabitantsToBuilding(this, 1);
     // TODO Siedler und höhere Bevölkerungsgruppen nehmen nicht um 1, sondern mehr zu
+}
+
+void Building::checkForHouseAdvancement(const Context& context) {
+    // nächst-höhere Bevölkerungsgruppe suchen
+    const PopulationTier* currentPopulationTier = mapObjectType->populationTier;
+    const PopulationTier* nextPopulationTier = nullptr;
+    for (const PopulationTier& populationTier : context.configMgr->getAllPopulationTiers()) {
+        if (populationTier.index == currentPopulationTier->index + 1) {
+            nextPopulationTier = &populationTier;
+        }
+    }
+
+    if (nextPopulationTier == nullptr) {
+        return; // höchste Stufe bereits erreicht
+    }
+
+    // Mindestzeit zwischen zwei Umbauten einhalten (beim ersten Haus einer Stufe weniger)
+    bool isFirstHouse = (colony->populationTiers[nextPopulationTier].population == 0);
+    unsigned long minTicksWait = ((isFirstHouse) ? 7 : 20) * TICKS_PER_SECOND; // TODO Zufall
+
+    if (context.game->getTicks() - colony->lastAdvancementTicks < minTicksWait) {
+        return;
+    }
+
+    // Haus voll?
+    if (inhabitants < currentPopulationTier->maxPopulationPerHouse) {
+        return;
+    }
+
+    // Baumaterial da?
+    BuildingCosts buildingCostsThere(player, colony, context.configMgr);
+    const BuildingCosts& advancementCosts = nextPopulationTier->advancementCosts;
+
+    if (!((buildingCostsThere - advancementCosts).isNonNegative())) {
+        return;
+    }
+
+    // Ok. Alles gut. Umbau durchführen
+
+    // Neues Gebäude und Ausrichtung würfeln
+    std::list<const MapObjectType*> possibleNewMapObjectTypes =
+        context.configMgr->getMapObjectTypesByPopulationTier(nextPopulationTier);
+    if (possibleNewMapObjectTypes.empty()) {
+        // merkwürdige Konfiguration: könnte zwar aufsteigen, aber es gibt kein Gebäude in dieser Bevölkerungsgruppe
+        Log::debug("Cannot advance mapObjectType %s because there are no buildings for populationTier %s.",
+                   mapObjectType->name.c_str(), nextPopulationTier->name.c_str());
+        return;
+    }
+    const MapObjectType* newMapObjectType = context.randomEngine->getRandomListEntry(possibleNewMapObjectTypes);
+
+    std::uniform_int_distribution<unsigned char> viewOffsetDistribution(0, 3);
+    unsigned char viewOffset = viewOffsetDistribution(*context.randomEngine);
+    FourthDirection newView = Direction::add90DegreeOffset(view, viewOffset);
+
+    setMapObjectType(newMapObjectType);
+    setView(newView);
+
+    // Einwohner hochstufen
+    colony->populationTiers[currentPopulationTier].population -= inhabitants;
+    colony->populationTiers[nextPopulationTier].population += inhabitants;
+
+    // Umbaukosten abziehen
+    player->coins -= advancementCosts.coins;
+    colony->getGoods(context.configMgr->getGood("tools")).inventory -= advancementCosts.tools; // TODO duplicate code; Baukosten abziehen haben wir mehrfach
+    colony->getGoods(context.configMgr->getGood("wood")).inventory -= advancementCosts.wood;
+    colony->getGoods(context.configMgr->getGood("bricks")).inventory -= advancementCosts.bricks;
+
+    colony->lastAdvancementTicks = context.game->getTicks();
 }

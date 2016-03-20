@@ -224,6 +224,23 @@ public:
         }
     }
 
+    /**
+     * @brief Liefert eine Liste aller `MapObjectType`, die eine bestimmte Bevölkerungsgruppe haben.
+     * @param populationTier Bevölkerungsgruppe
+     * @return Liste von `MapObjectType`
+     */
+    std::list<const MapObjectType*> getMapObjectTypesByPopulationTier(const PopulationTier* populationTier) const {
+        std::list<const MapObjectType*> mapObjectTypes;
+
+        for (auto iter = mapObjectTypesMap.cbegin(); iter != mapObjectTypesMap.cend(); iter++) {
+            if (iter->second.populationTier == populationTier) {
+                mapObjectTypes.push_back(&iter->second);
+            }
+        }
+
+        return mapObjectTypes;
+    }
+
 #ifdef IN_TESTS
     // Tests die Möglichkeit zu geben, MapObjectType zu verändern
 

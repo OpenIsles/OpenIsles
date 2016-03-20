@@ -1,4 +1,6 @@
+#include <algorithm>
 #include <cstring>
+#include <list>
 #include <gtest/gtest.h>
 #include "config/ConfigMgr.h"
 #include "config/ErrorInConfigException.h"
@@ -560,4 +562,40 @@ TEST(ConfigMgrTest, checkForExceptionWhenFileNotExists) {
 TEST(ConfigMgrTest, checkForExceptionWhenThereAreParseErrors) {
     // population-tiers.xml ist kaputt und muss zur Exception führen
     ASSERT_THROW(ConfigMgr("data/config-with-parse-errors"), ErrorInConfigException);
+}
+
+TEST(ConfigMgrTest, checkGetMapObjectTypesByPopulationTier) {
+    ConfigMgr configMgr("data/config");
+
+    const PopulationTier* settlers = configMgr.getPopulationTier("settlers");
+    std::list<const MapObjectType*> mapObjectTypes = configMgr.getMapObjectTypesByPopulationTier(settlers);
+    ASSERT_EQ(5, mapObjectTypes.size());
+    ASSERT_TRUE(
+        std::find_if(mapObjectTypes.cbegin(), mapObjectTypes.cend(),
+                     [](const MapObjectType* mapObjectType) { return mapObjectType->name == "settlers-house1"; }
+        ) != mapObjectTypes.cend()
+    );
+    ASSERT_TRUE(
+        std::find_if(mapObjectTypes.cbegin(), mapObjectTypes.cend(),
+                     [](const MapObjectType* mapObjectType) { return mapObjectType->name == "settlers-house2"; }
+        ) != mapObjectTypes.cend()
+    );
+    ASSERT_TRUE(
+        std::find_if(mapObjectTypes.cbegin(), mapObjectTypes.cend(),
+                     [](const MapObjectType* mapObjectType) { return mapObjectType->name == "settlers-house3"; }
+        ) != mapObjectTypes.cend()
+    );
+    ASSERT_TRUE(
+        std::find_if(mapObjectTypes.cbegin(), mapObjectTypes.cend(),
+                     [](const MapObjectType* mapObjectType) { return mapObjectType->name == "settlers-house4"; }
+        ) != mapObjectTypes.cend()
+    );
+    ASSERT_TRUE(
+        std::find_if(mapObjectTypes.cbegin(), mapObjectTypes.cend(),
+                     [](const MapObjectType* mapObjectType) { return mapObjectType->name == "settlers-house5"; }
+        ) != mapObjectTypes.cend()
+    );
+
+    const PopulationTier* pioneers = configMgr.getPopulationTier("pioneers");
+    ASSERT_EQ(5, configMgr.getMapObjectTypesByPopulationTier(pioneers).size());
 }

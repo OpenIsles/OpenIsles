@@ -22,6 +22,8 @@ Colony::Colony(const std::unordered_map<std::string, Good>& allGoods,
         populationTiers[populationTier].populationSatisfaction = PopulationSatisfaction::GOOD;
         populationTiers[populationTier].taxesPercent = 32;
     }
+
+    lastAdvancementTicks = 0;
 }
 
 Colony::~Colony() {

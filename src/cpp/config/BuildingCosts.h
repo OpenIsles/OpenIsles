@@ -1,6 +1,10 @@
 #ifndef _BUILDING_COSTS_H
 #define _BUILDING_COSTS_H
 
+class Colony;
+class ConfigMgr;
+class Player;
+
 /**
  * @brief Baukosten eines Gebäudes
  */
@@ -34,6 +38,14 @@ public:
     BuildingCosts(long coins, int tools, int wood, int bricks)
         : coins(coins), tools(tools), wood(wood), bricks(bricks) {
     }
+
+    /**
+     * @brief Konstruiert ein Baukosten-Objekt aus einem Spieler und dem Kolonie-Warenbestand
+     * @param player Spieler (für das Münzguthaben)
+     * @param colony Kolonie (für den Warenbestand)
+     * @param configMgr (Dependency)
+     */
+    BuildingCosts(const Player* player, const Colony* colony, const ConfigMgr* configMgr);
 
     /**
      * @brief Setzt die Baukosten auf 0.
@@ -71,6 +83,20 @@ public:
         tools -= subtrahend.tools;
         wood -= subtrahend.wood;
         bricks -= subtrahend.bricks;
+    }
+
+    /**
+     * @brief Subtraktions-Operator, der Baukosten abzieht.
+     * @param subtrahend Subtrahend
+     * @return Differenz
+     */
+    BuildingCosts operator-(const BuildingCosts& subtrahend) {
+        BuildingCosts difference;
+        difference.coins = this->coins - subtrahend.coins;
+        difference.tools = this->tools - subtrahend.tools;
+        difference.wood = this->wood - subtrahend.wood;
+        difference.bricks = this->bricks - subtrahend.bricks;
+        return difference;
     }
 
     /**

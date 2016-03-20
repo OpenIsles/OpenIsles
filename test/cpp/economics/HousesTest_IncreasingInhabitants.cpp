@@ -109,4 +109,25 @@ TEST_F(HousesTest_IncreasingInhabitants, pioneersOnly_1house) {
     testWithPioneersOnly(1);
 }
 
+TEST_F(HousesTest_IncreasingInhabitants, neverExceedMaximumInhabitants) {
+    // Pionier-Häuser bauen
+    unsigned int i = 0;
+    Building* buildings[50];
+    for (int y = 23; i < 50; y += 2) {
+        for (int x = 27; x <= 41 && i < 50; x += 2, i++) {
+            buildings[i] = (Building*) game->addStructure({x, y}, pioneersHouse2, southView, player);
+        }
+    }
+
+    // 5 Minuten spielen. Kein Haus darf überfüllt sein
+    for (i = 0 ; i < 300; i++) {
+        game->update(1000);
+
+        for (int j = 0; j < 50; j++) {
+            ASSERT_LE(buildings[j]->inhabitants,
+                      buildings[j]->getMapObjectType()->populationTier->maxPopulationPerHouse);
+        }
+    }
+}
+
 // TODO Tests über mehrere Siedlungen

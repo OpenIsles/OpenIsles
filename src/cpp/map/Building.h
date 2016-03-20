@@ -161,6 +161,12 @@ private:
      */
     void updateInhabitants(const Context& context);
 
+    /**
+     * @brief Prüft die Voraussetzungen für einen Aufstieg und führt ihn ggf. durch
+     *
+     * @param context (Dependency)
+     */
+    void checkForHouseAdvancement(const Context& context);
 };
 
 #endif

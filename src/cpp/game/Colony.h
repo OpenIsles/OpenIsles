@@ -37,6 +37,11 @@ public:
      * @brief Infos pro Bevölkerungsgruppe
      */
     std::unordered_map<const PopulationTier*, ColonyPopulationTier> populationTiers;
+
+    /**
+     * @brief [Zeitpunkt](@ref gameTicks), wann in dieser Siedlung zuletzt ein Haus aufgestiegen ist
+     */
+    unsigned long lastAdvancementTicks;
     
 public:
     /**
