@@ -1191,6 +1191,36 @@
         <population-tier>burghers</population-tier>
     </building>
 
+    <building name="merchants-house1" width="2" height="2">
+        <structure-placing>individually</structure-placing>
+        <placeable-on>
+            <map-tile-type>grass</map-tile-type>
+        </placeable-on>
+        <building-costs>
+            <coins>0</coins>
+            <tools>3</tools>
+            <wood>3</wood>
+            <bricks>9</bricks>
+        </building-costs>
+        <catchment-area>
+            00001111110000
+            00011111111000
+            00111111111100
+            01111111111110
+            11111111111111
+            11111111111111
+            11111111111111
+            11111111111111
+            11111111111111
+            11111111111111
+            01111111111110
+            00111111111100
+            00011111111000
+            00001111110000
+        </catchment-area>
+        <population-tier>merchants</population-tier>
+    </building>
+
     <building name="aristocrats-house1" width="2" height="2">
         <structure-placing>individually</structure-placing>
         <placeable-on>

@@ -34,6 +34,7 @@ void AbstractGraphicsMgr::loadGraphics() {
     loadStaticGraphicSetWith4Views("mapobjects/settlers-house4", "data/img/buildings/settlers-house4.png");
     loadStaticGraphicSetWith4Views("mapobjects/settlers-house5", "data/img/buildings/settlers-house5.png");
     loadStaticGraphicSetWith4Views("mapobjects/burghers-house1", "data/img/buildings/burghers-house1.png");
+    loadStaticGraphicSetWith4Views("mapobjects/merchants-house1", "data/img/buildings/merchants-house1.png");
     loadStaticGraphicSetWith4Views("mapobjects/aristocrats-house1", "data/img/buildings/aristocrats-house1.png");
     loadStaticGraphicSetWith4Views("mapobjects/stonemason", "data/img/buildings/stonemason.png");
     loadStaticGraphicSetWith4Views("mapobjects/office1", "data/img/buildings/office1.png");
