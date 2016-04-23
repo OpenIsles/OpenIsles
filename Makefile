@@ -10,7 +10,7 @@ MONTAGE := montage -background transparent
 BLENDER := /opt/blender-2.74/blender
 
 .PHONY: all clean build-gui clean-gui render-sheep render-cart render-build-menu \
-        render-coat-of-arms render-coin render-blender clean-blender
+        render-coat-of-arms render-coin render-public-building-icons render-blender clean-blender
 
 all: build-gui render-blender
 
@@ -385,6 +385,11 @@ render-build-menu: $(SRC_DIRECTORY)/blender/gui/build-menu/public.blend \
 	cd $(SRC_DIRECTORY)/blender/gui/build-menu; $(BLENDER) -b port.blend -P render.py
 	mv $(SRC_DIRECTORY)/blender/gui/build-menu/render/* $(DATA_DIRECTORY)/img/gui/build-menu
 
+render-public-building-icons: $(SRC_DIRECTORY)/blender/gui/public-building-icon/public-building-icon.blend
+	mkdir -p $(DATA_DIRECTORY)/img/gui/public-building-icon
+	cd $(SRC_DIRECTORY)/blender/gui/public-building-icon; $(BLENDER) -b public-building-icon.blend -P render.py
+	mv $(SRC_DIRECTORY)/blender/gui/public-building-icon/render/* $(DATA_DIRECTORY)/img/gui/public-building-icon
+
 ########################################################################################################################
 # PHONYs um alle Blender-Sachen zu rendern und zu cleanen                                                              #
 ########################################################################################################################
@@ -413,6 +418,7 @@ render-blender: \
 	render-coat-of-arms \
 	render-coin \
 	render-build-menu \
+	render-public-building-icons \
 	$(DATA_DIRECTORY)/img/gui/population-man.png
 	
 clean-blender:
@@ -437,6 +443,8 @@ clean-blender:
 	rm -rf $(SRC_DIRECTORY)/blender/gui/coins/render
 	rm -rf $(DATA_DIRECTORY)/img/gui/coin
 	rm -rf $(SRC_DIRECTORY)/blender/gui/build-menu/render
+	rm -rf $(SRC_DIRECTORY)/blender/gui/public-building-icon/render
+	rm -rf $(DATA_DIRECTORY)/img/gui/public-building-icon
 	rm -f $(DATA_DIRECTORY)/img/gui/population-man.png
 	rm -rf $(DATA_DIRECTORY)/img/animations
 	rm -rf $(DATA_DIRECTORY)/img/buildings
