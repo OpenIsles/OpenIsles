@@ -41,27 +41,9 @@ GuiMap::GuiMap(const Context& context, GuiResourcesBar* guiResourcesBar) :
     toolsGood = context.configMgr->getGood("tools");
     woodGood = context.configMgr->getGood("wood");
     bricksGood = context.configMgr->getGood("bricks");
-
-#ifdef DEBUG_GUIMAP
-    debugGridOverlayGraphics[0] = new SDLGraphic(
-        context.graphicsMgr->getRenderer(), "data/debug-grid-overlay-elevation0.png");
-    debugGridOverlayGraphics[2] = new SDLGraphic(
-        context.graphicsMgr->getRenderer(), "data/debug-grid-overlay-screencoords.png");
-#endif
-#if defined(DEBUG_GUIMAP_COORDS) || defined(DEBUG_GUIMAP)
-    debugGridOverlayGraphics[1] = new SDLGraphic(
-        context.graphicsMgr->getRenderer(), "data/debug-grid-overlay-elevation1.png");
-#endif
 }
 
 GuiMap::~GuiMap() {
-#ifdef DEBUG_GUIMAP
-    delete debugGridOverlayGraphics[0];
-    delete debugGridOverlayGraphics[2];
-#endif
-#ifdef DEBUG_GUIMAP_COORDS
-    delete debugGridOverlayGraphics[1];
-#endif
 }
 
 void GuiMap::renderElement(IRenderer* renderer) {
@@ -215,13 +197,13 @@ void GuiMap::renderElement(IRenderer* renderer) {
 #endif
 
 #if defined(DEBUG_GUIMAP_COORDS) && !defined(DEBUG_GUIMAP)
-    debugGridOverlayGraphics[1]->drawAt(0, 0);
+    context.graphicsMgr->getGraphicSet("debug/grid-overlay-evelation1")->getStatic()->getGraphic()->drawAt(0, 0);
 #endif
 #ifdef DEBUG_GUIMAP
     // Grid zeichnen, an dem wir uns orientieren können
-    debugGridOverlayGraphics[0]->drawAt(0, 0);
-    debugGridOverlayGraphics[1]->drawAt(0, 0);
-    debugGridOverlayGraphics[2]->drawAt(0, 0);
+    context.graphicsMgr->getGraphicSet("debug/grid-overlay-evelation0")->getStatic()->getGraphic()->drawAt(0, 0);
+    context.graphicsMgr->getGraphicSet("debug/grid-overlay-evelation1")->getStatic()->getGraphic()->drawAt(0, 0);
+    context.graphicsMgr->getGraphicSet("debug/grid-overlay-screencoords")->getStatic()->getGraphic()->drawAt(0, 0);
 
     // Zusätzlich die Mitte markieren. Die sollte sich genau im ScreenCoords(0, 0)-Punkt decken
     int x = Consts::mapClipRect.w / 2;
@@ -237,10 +219,10 @@ void GuiMap::renderElement(IRenderer* renderer) {
         Building* building = dynamic_cast<Building*>(mapObject);
         if (building != nullptr) {
             Rect rect = MapCoordUtils::getDrawCoordsForMapObjectFixed(*map, context.graphicsMgr, building);
-            context.graphicsMgr->getRenderer()->drawLine(rect.x, rect.y, rect.x, rect.y+rect.h);
-            context.graphicsMgr->getRenderer()->drawLine(rect.x, rect.y, rect.x+rect.w, rect.y);
-            context.graphicsMgr->getRenderer()->drawLine(rect.x+rect.w, rect.y, rect.x+rect.w, rect.y+rect.h);
-            context.graphicsMgr->getRenderer()->drawLine(rect.x, rect.y+rect.h, rect.x+rect.w, rect.y+rect.h);
+            renderer->drawLine(rect.x, rect.y, rect.x, rect.y+rect.h);
+            renderer->drawLine(rect.x, rect.y, rect.x+rect.w, rect.y);
+            renderer->drawLine(rect.x+rect.w, rect.y, rect.x+rect.w, rect.y+rect.h);
+            renderer->drawLine(rect.x, rect.y+rect.h, rect.x+rect.w, rect.y+rect.h);
         }
     }
 #endif

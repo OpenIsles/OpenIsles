@@ -35,7 +35,7 @@ enum PanelButton : unsigned char {
     /**
      * @brief Baumenü
      */
-    ADD_BUILDING = 0,
+    BUILD = 0,
 
     /**
      * @brief Kampfmenü
@@ -45,7 +45,7 @@ enum PanelButton : unsigned char {
     /**
      * @brief Info-Panel
      */
-    INFO = 2,
+    PLAYER_STATUS = 2,
 
     /**
      * @brief Einstellungs-Panel

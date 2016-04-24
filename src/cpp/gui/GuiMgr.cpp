@@ -4,7 +4,6 @@
 #include "global.h"
 #include "config/ConfigMgr.h"
 #include "game/Game.h"
-#include "graphics/graphic/sdl/SDLGraphic.h"
 #include "gui/components/map/GuiMap.h"
 #include "gui/components/GuiAddBuildingWidget.h"
 #include "gui/components/GuiPushButton.h"
@@ -24,7 +23,6 @@
 #include "map/Map.h"
 #include "utils/Color.h"
 #include "utils/Events.h"
-#include "utils/Rect.h"
 
 static Color colorWhite = Color(255, 255, 255, 255);
 
@@ -43,15 +41,6 @@ GuiMgr::GuiMgr(const Context& context, IRenderer* renderer) :
 }
 
 GuiMgr::~GuiMgr() {
-    // Grafiken wieder wegräumen. Der Konstruktur hat sie alle direkt geladen.
-    // TODO Die Grafiken könnte man alle schön in den GraphicsMgr packen, dann muss man hier den Aufwand nicht betreiben
-    delete ((GuiStaticGraphicElement*) findElement(GUI_ID_PANEL))->getGraphic();
-
-    for (int i = 0; i < 4; i++) {
-        delete ((GuiPushButton*) findElement(GUI_ID_PANEL_SWITCH_PUSH_BUTTON_BASE + i))->getGraphic();
-        delete ((GuiPushButton*) findElement(GUI_ID_PANEL_SWITCH_PUSH_BUTTON_BASE + i))->getGraphicPressed();
-    }
-
     // GUI-Elemente wegräumen
     for (auto iter = identifierMap.cbegin(); iter != identifierMap.cend(); iter++) {
         GuiBase* guiElement = iter->second;
@@ -61,6 +50,8 @@ GuiMgr::~GuiMgr() {
 }
 
 void GuiMgr::initGui() {
+    const IGraphicsMgr* graphicsMgr = context.graphicsMgr;
+
     //////////////////////////////////////////////////////////////////////////////////////////
     // GUI-Elemente anlegen //////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////////
@@ -74,7 +65,7 @@ void GuiMgr::initGui() {
     registerElement(GUI_ID_MAP, guiMap);
 
     // Panel
-    IGraphic* graphic = new SDLGraphic(renderer, "data/img/gui/panel.png");
+    const IGraphic* graphic = graphicsMgr->getGraphicSet("panel")->getStatic()->getGraphic();
     GuiStaticGraphicElement* panel = new GuiStaticGraphicElement(context);
     panel->setCoords(768, 0, graphic->getWidth(), graphic->getHeight());
     panel->setGraphic(graphic);
@@ -105,34 +96,34 @@ void GuiMgr::initGui() {
     // Buttons zum Umschalten der Tabs und zugehörige UI-Gruppen
     static struct {
         const std::string statusBarText;
-        const char* graphicFilename;
-        const char* graphicPressedFilename;
+        const IGraphic* graphic;
+        const IGraphic* graphicPressed;
         PanelButton panelButtonToActive;
         GuiPanelWidget* panelWidgetToActivate;
 
     } tabGraphics[4][2] = {
         {
             _("Switch to building mode"),
-            "data/img/gui/button-build.png",
-            "data/img/gui/button-build-pressed.png",
-            PanelButton::ADD_BUILDING,
+            graphicsMgr->getGraphicSet("panel-buttons/build")->getStatic()->getGraphic(),
+            graphicsMgr->getGraphicSet("panel-buttons/build-pressed")->getStatic()->getGraphic(),
+            PanelButton::BUILD,
             (GuiPanelWidget*) findElement(GUI_ID_BUILD_MENU_PANEL_WIDGET)
         }, {
             _("Switch to combat mode"), // TODO wir wollen den Kampfmodus doch gar nicht ;-)
-            "data/img/gui/button-dummy.png",
-            "data/img/gui/button-dummy-pressed.png",
+            graphicsMgr->getGraphicSet("panel-buttons/dummy")->getStatic()->getGraphic(),
+            graphicsMgr->getGraphicSet("panel-buttons/dummy-pressed")->getStatic()->getGraphic(),
             PanelButton::MILITARY,
             (GuiPanelWidget*) findElement(GUI_ID_MILITARY_PANEL_WIDGET)
         }, {
             _("Switch to info mode"),
-            "data/img/gui/button-player-status.png",
-            "data/img/gui/button-player-status-pressed.png",
-            PanelButton::INFO,
+            graphicsMgr->getGraphicSet("panel-buttons/player-status")->getStatic()->getGraphic(),
+            graphicsMgr->getGraphicSet("panel-buttons/player-status-pressed")->getStatic()->getGraphic(),
+            PanelButton::PLAYER_STATUS,
             (GuiPanelWidget*) findElement(GUI_ID_PLAYER_STATUS_PANEL_WIDGET)
         }, {
             _("Options"),
-            "data/img/gui/button-dummy.png",
-            "data/img/gui/button-dummy-pressed.png",
+            graphicsMgr->getGraphicSet("panel-buttons/dummy")->getStatic()->getGraphic(),
+            graphicsMgr->getGraphicSet("panel-buttons/dummy-pressed")->getStatic()->getGraphic(),
             PanelButton::OPTIONS,
             (GuiPanelWidget*) findElement(GUI_ID_OPTIONS_MENU_PANEL_WIDGET)
         }
@@ -141,8 +132,8 @@ void GuiMgr::initGui() {
     for (int i = 0; i < 4; i++) {
         // Button
         GuiPushButton* panelSwitchPushButton = new GuiPushButton(context);
-        panelSwitchPushButton->setGraphic(new SDLGraphic(renderer, tabGraphics[i]->graphicFilename));
-        panelSwitchPushButton->setGraphicPressed(new SDLGraphic(renderer, tabGraphics[i]->graphicPressedFilename));
+        panelSwitchPushButton->setGraphic(tabGraphics[i]->graphic);
+        panelSwitchPushButton->setGraphicPressed(tabGraphics[i]->graphicPressed);
         panelSwitchPushButton->setCoords(22 + i*55, 285, 48, 64);
         panelSwitchPushButton->setStatusBarText(tabGraphics[i]->statusBarText);
         panelSwitchPushButton->setOnClickFunction([this, i]() {
@@ -162,7 +153,7 @@ void GuiMgr::initGui() {
     // Zustand initialisieren ////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////////
 
-    panelState.selectedPanelButton = PanelButton::INFO;
+    panelState.selectedPanelButton = PanelButton::PLAYER_STATUS;
 
     // Initial ist für den Gebäudebau der Förster ausgewählt...
     panelState.selectedBuildingGroup = BuildingGroup::FARM;
@@ -325,11 +316,11 @@ void GuiMgr::onEvent(SDL_Event& event) {
     // Rechtsklick...
     if (event.type == SDL_MOUSEBUTTONUP && event.button.button == SDL_BUTTON_RIGHT) {
         // Platzieren wir ein Gebäude -> abbrechen
-        if (panelState.selectedPanelButton == PanelButton::ADD_BUILDING) {
+        if (panelState.selectedPanelButton == PanelButton::BUILD) {
             if (panelState.buildingMenuOpen) {
                 panelState.buildingMenuOpen = false;
             } else {
-                panelState.selectedPanelButton = PanelButton::INFO;
+                panelState.selectedPanelButton = PanelButton::PLAYER_STATUS;
                 panelState.activeGuiPanelWidget = (GuiPanelWidget*) findElement(GUI_ID_PLAYER_STATUS_PANEL_WIDGET);
             }
             updateGuiFromPanelState();
@@ -421,7 +412,7 @@ void GuiMgr::onEvent(SDL_Event& event) {
 
         // Panel umschalten
         else if (event.key.keysym.scancode == SDL_SCANCODE_B) {
-            panelState.selectedPanelButton = PanelButton::ADD_BUILDING;
+            panelState.selectedPanelButton = PanelButton::BUILD;
             panelState.activeGuiPanelWidget = (GuiPanelWidget*) findElement(GUI_ID_BUILD_MENU_PANEL_WIDGET);
             updateGuiFromPanelState();
 
@@ -433,8 +424,8 @@ void GuiMgr::onEvent(SDL_Event& event) {
         } else if (event.key.keysym.scancode == SDL_SCANCODE_I) {
             // nur umschalten, wenn wir noch nicht im Info-Modus sind. Z.B. wenn ein Gebäude ausgewählt ist und "I"
             // gedrückt wird, darf sich nichts verändern. Wir zeigen dann auch NICHT die Punkteanzeige
-            if (panelState.selectedPanelButton != PanelButton::INFO) {
-                panelState.selectedPanelButton = PanelButton::INFO;
+            if (panelState.selectedPanelButton != PanelButton::PLAYER_STATUS) {
+                panelState.selectedPanelButton = PanelButton::PLAYER_STATUS;
                 panelState.activeGuiPanelWidget = (GuiPanelWidget*) findElement(GUI_ID_PLAYER_STATUS_PANEL_WIDGET);
                 updateGuiFromPanelState();
             }
@@ -530,7 +521,7 @@ void GuiMgr::onSelectedMapObjectChanged(const MapObject* newSelectedMapObject) {
         }
     }
 
-    panelState.selectedPanelButton = PanelButton::INFO;
+    panelState.selectedPanelButton = PanelButton::PLAYER_STATUS;
     updateGuiFromPanelState();
 }
 
@@ -585,7 +576,7 @@ void GuiMgr::updateGuiFromPanelState() {
     // Baumenü: gewählte Kategorie
     for (int i = 0; i < 4; i++) {
         bool active = (
-            (panelState.selectedPanelButton == PanelButton::ADD_BUILDING) &&
+            (panelState.selectedPanelButton == PanelButton::BUILD) &&
             (i == (int) (panelState.selectedBuildingGroup))
         );
 
@@ -595,7 +586,7 @@ void GuiMgr::updateGuiFromPanelState() {
 
     // Baukosten aktualisieren
     GuiResourcesBar* guiResourcesBar = (GuiResourcesBar*) findElement(GUI_ID_RESOURCES_BAR);
-    if (panelState.selectedPanelButton == PanelButton::ADD_BUILDING) {
+    if (panelState.selectedPanelButton == PanelButton::BUILD) {
         const MapObjectType* mapObjectType = context.guiMgr->getPanelState().addingMapObject;
         const BuildingCosts& buildingCosts = mapObjectType->buildingCosts;
 
@@ -605,7 +596,7 @@ void GuiMgr::updateGuiFromPanelState() {
     }
 
     // Baumenü: Infos zum bauenden Gebäude
-    if (panelState.selectedPanelButton == PanelButton::ADD_BUILDING) {
+    if (panelState.selectedPanelButton == PanelButton::BUILD) {
         const MapObjectType* mapObjectType = context.guiMgr->getPanelState().addingMapObject;
 
         GuiAddBuildingWidget* guiAddBuildingWidget = (GuiAddBuildingWidget*) findElement(GUI_ID_ADD_BUILDING_WIDGET);

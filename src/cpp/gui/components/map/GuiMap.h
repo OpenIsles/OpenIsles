@@ -13,10 +13,6 @@
 #include "map/Structure.h"
 #include "utils/RectangleData.h"
 
-#if defined(DEBUG_GUIMAP_COORDS) || defined(DEBUG_GUIMAP)
-#include "graphics/graphic/sdl/SDLGraphic.h"
-#endif
-
 
 // Konstanten für isAllowedToPlaceMapObject()
 
@@ -113,18 +109,6 @@ private:
      * @brief `true`, wenn gerade ein neues Gebäude positioniert wird.
      */
     bool inBuildingMode = false;
-
-
-#if defined(DEBUG_GUIMAP) || defined(DEBUG_GUIMAP_COORDS)
-    /**
-     * @brief Hilfsgrafiken mit Gitternetz-Linien-Overlays
-     *
-     * 0 = Gitternetz-Linien-Overlay für elevation 0
-     * 1 = Gitternetz-Linien-Overlay für elevation 1
-     * 2 = Achsen für ScreenCoords
-     */
-    SDLGraphic* debugGridOverlayGraphics[3];
-#endif
 
     /**
      * @brief Referenz auf das Baumaterial "Werkzeug"

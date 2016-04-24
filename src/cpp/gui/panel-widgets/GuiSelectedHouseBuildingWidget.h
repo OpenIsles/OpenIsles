@@ -27,11 +27,6 @@ private:
 
     GuiFoodSupplyElement foodSupplyElement;         ///< Nahrungsversorgung
 
-    /**
-     * @brief Grafiken der Zufriedenheit
-     */
-    IGraphic* populationSatisfactionGraphics[4];
-
 public:
     GuiSelectedHouseBuildingWidget(const Context& context);
     virtual ~GuiSelectedHouseBuildingWidget() override;

@@ -12,27 +12,19 @@ static Color colorWhite = Color(255, 255, 255, 255);
 static Color colorBlack = Color(0, 0, 0, 255);
 
 static struct {
-    const char* filename;
+    const char* graphicSetName;
     const char* statusBarText;
 } populationSatisfactionGui[4] = {
-    { "good.png"   , _NOOP("Population growth in this population tier") },
-    { "neutral.png", _NOOP("No population growth in this population tier") },
-    { "bad.png"    , _NOOP("Slight population loss in this population tier") },
-    { "worst.png"  , _NOOP("Severe population loss in this population tier") }
+    { "population-satisfaction/good"   , _NOOP("Population growth in this population tier") },
+    { "population-satisfaction/neutral", _NOOP("No population growth in this population tier") },
+    { "population-satisfaction/bad"    , _NOOP("Slight population loss in this population tier") },
+    { "population-satisfaction/worst"  , _NOOP("Severe population loss in this population tier") }
 };
 
 
 GuiSelectedHouseBuildingWidget::GuiSelectedHouseBuildingWidget(const Context& context) :
     GuiSelectedBuildingWidget(context), populationSatisfaction(context), inhabitants(context), populationTier(context),
     foodSupplyElement(context) {
-
-    // Grafiken laden
-    IRenderer* const renderer = context.graphicsMgr->getRenderer();
-    for (unsigned char i = 0; i < 4; i++) {
-        std::string filename =
-            std::string("data/img/gui/population-satisfaction/") + populationSatisfactionGui[i].filename;
-        populationSatisfactionGraphics[i] = new SDLGraphic(renderer, filename.c_str());
-    }
 
     // Erst die Grafik...
     populationSatisfaction.setCoords(35, 45, 91, 102);
@@ -63,9 +55,6 @@ GuiSelectedHouseBuildingWidget::GuiSelectedHouseBuildingWidget(const Context& co
 }
 
 GuiSelectedHouseBuildingWidget::~GuiSelectedHouseBuildingWidget() {
-    for (unsigned char i = 0; i < 4; i++) {
-        delete populationSatisfactionGraphics[i];
-    }
 }
 
 void GuiSelectedHouseBuildingWidget::renderElement(IRenderer* renderer) {
@@ -82,7 +71,9 @@ void GuiSelectedHouseBuildingWidget::onSelectedMapBuildingChanged(const Building
 
     // Zufriedenheit
     unsigned char populationSatisfactionIndex = colonyPopulationTier.populationSatisfaction;
-    populationSatisfaction.setGraphic(populationSatisfactionGraphics[populationSatisfactionIndex]);
+    const char* graphicSetName = populationSatisfactionGui[populationSatisfactionIndex].graphicSetName;
+    const IGraphic* graphic = context.graphicsMgr->getGraphicSet(graphicSetName)->getStatic()->getGraphic();
+    populationSatisfaction.setGraphic(graphic);
     populationSatisfaction.setStatusBarText(_(populationSatisfactionGui[populationSatisfactionIndex].statusBarText));
 
     // Bevölkerungsdaten

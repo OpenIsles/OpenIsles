@@ -88,6 +88,13 @@ void AbstractGraphicsMgr::loadGraphics() {
     loadMapRotateGraphicSet();
     loadMapZoomGraphicSet();
 
+    loadStaticGraphicSet("panel-buttons/build", "data/img/gui/panel-buttons/build.png");
+    loadStaticGraphicSet("panel-buttons/build-pressed", "data/img/gui/panel-buttons/build-pressed.png");
+    loadStaticGraphicSet("panel-buttons/dummy", "data/img/gui/panel-buttons/dummy.png");
+    loadStaticGraphicSet("panel-buttons/dummy-pressed", "data/img/gui/panel-buttons/dummy-pressed.png");
+    loadStaticGraphicSet("panel-buttons/player-status", "data/img/gui/panel-buttons/player-status.png");
+    loadStaticGraphicSet("panel-buttons/player-status-pressed", "data/img/gui/panel-buttons/player-status-pressed.png");
+
     loadStaticGraphicSet("add-building-grid", "data/img/gui/add-building/add-building-grid.png");
 
     loadStaticGraphicSet("add-building-button/chapel", "data/img/gui/add-building/chapel.png");
@@ -148,6 +155,11 @@ void AbstractGraphicsMgr::loadGraphics() {
     loadStaticGraphicSet("button-music", "data/img/gui/button-music.png");
     loadStaticGraphicSet("button-music-pressed", "data/img/gui/button-music-pressed.png");
 
+    loadStaticGraphicSet("population-satisfaction/good", "data/img/gui/population-satisfaction/good.png");
+    loadStaticGraphicSet("population-satisfaction/neutral", "data/img/gui/population-satisfaction/neutral.png");
+    loadStaticGraphicSet("population-satisfaction/bad", "data/img/gui/population-satisfaction/bad.png");
+    loadStaticGraphicSet("population-satisfaction/worst", "data/img/gui/population-satisfaction/worst.png");
+
     loadStaticAnimationGraphicSetWith8Views("carrier", "data/img/animations/carrier.png", 31);
     loadStaticAnimationGraphicSetWith8Views("cart-without-cargo", "data/img/animations/cart-without-cargo.png", 32);
     loadStaticAnimationGraphicSetWith8Views("cart-with-cargo", "data/img/animations/cart-with-cargo.png", 32);
@@ -159,6 +171,14 @@ void AbstractGraphicsMgr::loadGraphics() {
     loadHarvestablesGraphicSet("mapobjects/sugarcane-field", "data/img/harvestables/sugarcane-field.png", 5);
     loadHarvestablesGraphicSet("mapobjects/tobacco-field", "data/img/harvestables/tobacco-field.png", 7);
     loadHarvestablesGraphicSet("mapobjects/spices-field", "data/img/harvestables/spices-field.png", 6);
+
+#ifdef DEBUG_GUIMAP
+    loadStaticGraphicSet("debug/grid-overlay-evelation0", "data/debug-grid-overlay-elevation0.png");
+    loadStaticGraphicSet("debug/grid-overlay-screencoords", "data/debug-grid-overlay-screencoords.png");
+#endif
+#if defined(DEBUG_GUIMAP_COORDS) || defined(DEBUG_GUIMAP)
+    loadStaticGraphicSet("debug/grid-overlay-evelation1", "data/debug-grid-overlay-elevation1.png");
+#endif
 }
 
 void AbstractGraphicsMgr::loadTiles() {

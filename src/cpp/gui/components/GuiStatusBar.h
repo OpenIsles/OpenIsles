@@ -4,8 +4,6 @@
 #include <SDL_events.h>
 #include <string>
 #include "global.h"
-#include "graphics/graphic/sdl/SDLGraphic.h"
-#include "graphics/renderer/IRenderer.h"
 #include "gui/components/GuiStaticGraphicElement.h"
 #include "gui/components/GuiStaticTextElement.h"
 
@@ -16,11 +14,6 @@
 class GuiStatusBar : public GuiStaticGraphicElement {
 
 private:
-    /**
-     * @brief Hintergrund-Grafik
-     */
-    IGraphic* backgroundGraphic;
-
     /**
      * @brief Textelement, dass den Statusleisten-Text darstellt
      */
