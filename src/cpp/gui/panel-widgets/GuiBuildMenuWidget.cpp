@@ -140,7 +140,7 @@ GuiBuildMenuWidget::GuiBuildMenuWidget(const Context& context) : GuiPanelWidget(
                 addBuildingButton->setGraphic(graphicAddBuildingButton);
                 addBuildingButton->setGraphicPressed(graphicAddBuildingButton);
                 addBuildingButton->setStatusBarText(_(mapObjectType->getTitleMsgid()));
-                addBuildingButton->setOnClickFunction([ this, context, mapObjectType ]() {
+                addBuildingButton->setOnClickFunction([this, &context, mapObjectType]() {
                     context.guiMgr->panelState.addingMapObject = mapObjectType;
                     context.guiMgr->panelState.buildingMenuOpen = false;
                     context.guiMgr->updateGuiFromPanelState();
@@ -163,7 +163,7 @@ GuiBuildMenuWidget::GuiBuildMenuWidget(const Context& context) : GuiPanelWidget(
         addBuildingPushButton->setUseShadow((groupIndex >= 2) ? true : false); // TODO einheitlich true setzen, wenn die Blender-Grafiken komplett sind
         addBuildingPushButton->setCoords(12 + groupIndex * 55, 340, 52, 64);
         addBuildingPushButton->setStatusBarText(buildingGroups[groupIndex].name);
-        addBuildingPushButton->setOnClickFunction([ this, context, groupIndex ]() {
+        addBuildingPushButton->setOnClickFunction([this, &context, groupIndex]() {
             // Wenn man die Gruppe nochmal klickt, die bereits ausgewählt ist und das ausgewählte Gebäude nicht
             // aus dieser Gruppe ist, wird das Gebäude gewechselt und eins aus der Gruppe genommen
             if (context.guiMgr->panelState.selectedBuildingGroup == (BuildingGroup) groupIndex &&

@@ -15,7 +15,7 @@ GuiMapZoomWidget::GuiMapZoomWidget(const Context& context) :
     buttonPlus.setStatusBarText(_("Zoom in"));
     buttonPlus.setGraphic(graphicSet->getByState("plus")->getGraphic());
     buttonPlus.setGraphicPressed(graphicSet->getByState("plus_pressed")->getGraphic());
-    buttonPlus.setOnClickFunction([this, context]() {
+    buttonPlus.setOnClickFunction([&context]() {
         context.guiMgr->increaseMapZoom();
     });
 
@@ -23,7 +23,7 @@ GuiMapZoomWidget::GuiMapZoomWidget(const Context& context) :
     buttonMinus.setStatusBarText(_("Zoom out"));
     buttonMinus.setGraphic(graphicSet->getByState("minus")->getGraphic());
     buttonMinus.setGraphicPressed(graphicSet->getByState("minus_pressed")->getGraphic());
-    buttonMinus.setOnClickFunction([this, context]() {
+    buttonMinus.setOnClickFunction([&context]() {
         context.guiMgr->decreaseMapZoom();
     });
 

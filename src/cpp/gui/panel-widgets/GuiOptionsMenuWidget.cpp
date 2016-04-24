@@ -22,7 +22,7 @@ GuiOptionsMenuWidget::GuiOptionsMenuWidget(const Context& context) :
     musicPushButton.setGraphicPressed(context.graphicsMgr->getGraphicSet("button-music-pressed")->getStatic()->getGraphic());
     musicPushButton.setCoords(7, 345, 64, 64);
     musicPushButton.setStatusBarText(statusBarTextTurnMusicOn);
-    musicPushButton.setOnClickFunction([this, context, statusBarTextTurnMusicOff, statusBarTextTurnMusicOn]() {
+    musicPushButton.setOnClickFunction([this, &context, statusBarTextTurnMusicOff, statusBarTextTurnMusicOn]() {
         bool musicEnabled = musicPushButton.isActive();
 
         if (musicEnabled) {

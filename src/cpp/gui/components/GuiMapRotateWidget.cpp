@@ -12,14 +12,14 @@ GuiMapRotateWidget::GuiMapRotateWidget(const Context& context) :
 
     buttonLeft.setCoords(0, 0, 45, 90);
     buttonLeft.setStatusBarText(_("Rotate map counterclockwise"));
-    buttonLeft.setOnClickFunction([this, context]() {
+    buttonLeft.setOnClickFunction([this, &context]() {
         context.game->getMap()->rotateViewCounterclockwise();
         updateButtonGraphics();
     });
 
     buttonRight.setCoords(45, 0, 45, 90);
     buttonRight.setStatusBarText(_("Rotate map clockwise"));
-    buttonRight.setOnClickFunction([this, context]() {
+    buttonRight.setOnClickFunction([this, &context]() {
         context.game->getMap()->rotateViewClockwise();
         updateButtonGraphics();
     });
