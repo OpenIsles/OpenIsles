@@ -32,7 +32,7 @@ bool GuiBase::onEvent(SDL_Event& event) {
 
         if (hit && !oldHit) {
             hovered = true;
-            context.guiMgr->setStatusBarText(statusBarText);
+            context.guiMgr->setStatusBarText(statusBarText); // FIXME Problem, dass nicht unbedingt der Statustext des obersten Elements genommen wird.
 
             if (!onMouseEnter(event.motion)) {
                 return false;

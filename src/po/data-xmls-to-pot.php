@@ -52,6 +52,25 @@ foreach ($nodes as $node) {
 	);
 }
 
+// verlangte öffentliche Gebäude
+
+$publicBuildings = array();
+$nodes = $populationTiersXml->xpath('/population-tiers/population-tier/needs/public-building/@name');
+foreach ($nodes as $node) {
+    $publicBuildings[] = "$node";
+}
+$publicBuildings = array_unique($publicBuildings);
+
+foreach ($publicBuildings as $publicBuilding) {
+	$msgIds[] = array(
+		'file' => 'data/config/population-tiers.xml',
+		'msgid' => "neededPublicBuilding|new|$publicBuilding"
+	);
+	$msgIds[] = array(
+		'file' => 'data/config/population-tiers.xml',
+		'msgid' => "neededPublicBuilding|overdue|$publicBuilding"
+	);
+}
 
 //// .pot-File zusammenbauen ///////////////////////////////////////////////////////////////////////////////////////////
 

@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenIsles 0.1\n"
 "Report-Msgid-Bugs-To: http://www.openisles.org\n"
-"POT-Creation-Date: 2016-01-06 02:56+0100\n"
-"PO-Revision-Date: 2016-01-06 02:58+0100\n"
+"POT-Creation-Date: 2016-04-24 13:40+0200\n"
+"PO-Revision-Date: 2016-04-24 13:39+0200\n"
 "Last-Translator: theHacker <openisles@openisles.org>\n"
 "Language-Team: theHacker <openisles@openisles.org>\n"
 "Language: en\n"
@@ -92,6 +92,11 @@ msgstr "House"
 
 # automatically generated out of data xmls
 #: data/config/map-objects.xml
+msgid "mapObjectType|burghers-house1"
+msgstr "House"
+
+# automatically generated out of data xmls
+#: data/config/map-objects.xml
 msgid "mapObjectType|butchers"
 msgstr "Butcher's"
 
@@ -139,6 +144,11 @@ msgstr "Hunter's hut"
 #: data/config/map-objects.xml
 msgid "mapObjectType|marketplace"
 msgstr "Marketplace"
+
+# automatically generated out of data xmls
+#: data/config/map-objects.xml
+msgid "mapObjectType|merchants-house1"
+msgstr "House"
 
 # automatically generated out of data xmls
 #: data/config/map-objects.xml
@@ -292,6 +302,36 @@ msgstr "Weaving mill"
 
 # automatically generated out of data xmls
 #: data/config/population-tiers.xml
+msgid "neededPublicBuilding|new|chapel"
+msgstr "The residents demand a chapel"
+
+# automatically generated out of data xmls
+#: data/config/population-tiers.xml
+msgid "neededPublicBuilding|new|marketplace"
+msgstr "The residents demand a marketplace"
+
+# automatically generated out of data xmls
+#: data/config/population-tiers.xml
+msgid "neededPublicBuilding|new|tavern"
+msgstr "The residents demand a tavern"
+
+# automatically generated out of data xmls
+#: data/config/population-tiers.xml
+msgid "neededPublicBuilding|overdue|chapel"
+msgstr "The residents complain about a missing chapel"
+
+# automatically generated out of data xmls
+#: data/config/population-tiers.xml
+msgid "neededPublicBuilding|overdue|marketplace"
+msgstr "The residents complain about a missing marketplace"
+
+# automatically generated out of data xmls
+#: data/config/population-tiers.xml
+msgid "neededPublicBuilding|overdue|tavern"
+msgstr "The residents complain about a missing tavern"
+
+# automatically generated out of data xmls
+#: data/config/population-tiers.xml
 msgid "populationTier|aristocrats|singular"
 msgid_plural "populationTier|aristocrats|plural"
 msgstr[0] "Aristocrat"
@@ -350,7 +390,7 @@ msgstr "Loaded tiles."
 msgid "Error while loading the configuration: %s."
 msgstr "Error while loading the configuration: %s."
 
-#: src/cpp/config/ConfigMgr.cpp:96 src/cpp/config/ConfigMgr.cpp:245
+#: src/cpp/config/ConfigMgr.cpp:96 src/cpp/config/ConfigMgr.cpp:257
 #, c-format
 msgid "Illegal node '%s'."
 msgstr "Illegal node '%s'."
@@ -360,53 +400,53 @@ msgstr "Illegal node '%s'."
 msgid "Illegal value '%s' for structurePlacing."
 msgstr "Illegal value '%s' for structurePlacing."
 
-#: src/cpp/config/ConfigMgr.cpp:223
+#: src/cpp/config/ConfigMgr.cpp:235
 #, c-format
 msgid "Loaded mapObjectType '%s'."
 msgstr "Loaded mapObjectType '%s'."
 
-#: src/cpp/config/ConfigMgr.cpp:261
+#: src/cpp/config/ConfigMgr.cpp:273
 #, c-format
 msgid "Loaded carrier mapObjectType '%s'."
 msgstr "Loaded carrier mapObjectType '%s'."
 
-#: src/cpp/config/ConfigMgr.cpp:348
+#: src/cpp/config/ConfigMgr.cpp:360
 #, c-format
 msgid "Illegal mapTileTypeName '%s'."
 msgstr "Illegal mapTileTypeName '%s'."
 
-#: src/cpp/config/ConfigMgr.cpp:366
+#: src/cpp/config/ConfigMgr.cpp:378
 #, c-format
 msgid "Illegal bool value '%s'."
 msgstr "Illegal bool value '%s'."
 
-#: src/cpp/config/ConfigMgr.cpp:402
+#: src/cpp/config/ConfigMgr.cpp:414
 msgid "Could not parse catchmentArea: Illegal char before first line."
 msgstr "Could not parse catchmentArea: Illegal char before first line."
 
-#: src/cpp/config/ConfigMgr.cpp:411
+#: src/cpp/config/ConfigMgr.cpp:423
 msgid "Could not parse catchmentArea: Illegal space inside line."
 msgstr "Could not parse catchmentArea: Illegal space inside line."
 
-#: src/cpp/config/ConfigMgr.cpp:426
+#: src/cpp/config/ConfigMgr.cpp:438
 msgid "Could not parse catchmentArea: widths are not equal."
 msgstr "Could not parse catchmentArea: widths are not equal."
 
-#: src/cpp/config/ConfigMgr.cpp:437
+#: src/cpp/config/ConfigMgr.cpp:449
 msgid "Could not parse catchmentArea: Last line was not completly empty."
 msgstr "Could not parse catchmentArea: Last line was not completly empty."
 
-#: src/cpp/config/ConfigMgr.cpp:534
+#: src/cpp/config/ConfigMgr.cpp:546
 #, c-format
 msgid "Loaded populationTier '%s'."
 msgstr "Loaded populationTier '%s'."
 
-#: src/cpp/config/ConfigMgr.cpp:560
+#: src/cpp/config/ConfigMgr.cpp:572
 #, c-format
 msgid "Illegal value '%s' for populationTier."
 msgstr "Illegal value '%s' for populationTier."
 
-#: src/cpp/game/Game.cpp:198
+#: src/cpp/game/Game.cpp:192
 msgid "Cannot have negative inhabitants."
 msgstr "Cannot have negative inhabitants."
 
@@ -435,11 +475,11 @@ msgstr "Illegal mapObjectType '%s'."
 msgid "Illegal player color: %u"
 msgstr "Illegal player color: %u"
 
-#: src/cpp/graphics/graphic/Animation.h:77
+#: src/cpp/graphics/graphic/Animation.h:74
 msgid "Animation does not have only frame."
 msgstr "Animation does not have only frame."
 
-#: src/cpp/graphics/graphic/Animation.h:92
+#: src/cpp/graphics/graphic/Animation.h:89
 msgid "Animation does not have this many frames."
 msgstr "Animation does not have this many frames."
 
@@ -478,12 +518,12 @@ msgstr "Could not create texture: %s"
 msgid "Illegal bytesPerPixel: %d"
 msgstr "Illegal bytesPerPixel: %d"
 
-#: src/cpp/graphics/mgr/AbstractGraphicsMgr.cpp:206
+#: src/cpp/graphics/mgr/AbstractGraphicsMgr.cpp:239
 #, c-format
 msgid "Could not divide the frames equally: '%s'"
 msgstr "Could not divide the frames equally: '%s'"
 
-#: src/cpp/graphics/mgr/AbstractGraphicsMgr.cpp:213
+#: src/cpp/graphics/mgr/AbstractGraphicsMgr.cpp:246
 #, c-format
 msgid "Could not divide the views equally: '%s'"
 msgstr "Could not divide the views equally: '%s'"
@@ -522,29 +562,29 @@ msgstr "Could not init SDL-image: %s"
 msgid "Could not init SDL-TTF: %s"
 msgstr "Could not init SDL-TTF: %s"
 
-#: src/cpp/gui/GuiMgr.cpp:115
+#: src/cpp/gui/GuiMgr.cpp:106
 msgid "Switch to building mode"
 msgstr "Switch to building mode"
 
-#: src/cpp/gui/GuiMgr.cpp:121
+#: src/cpp/gui/GuiMgr.cpp:112
 msgid "Switch to combat mode"
 msgstr "Switch to combat mode"
 
-#: src/cpp/gui/GuiMgr.cpp:127
+#: src/cpp/gui/GuiMgr.cpp:118
 msgid "Switch to info mode"
 msgstr "Switch to info mode"
 
-#: src/cpp/gui/GuiMgr.cpp:133
-#: src/cpp/gui/panel-widgets/GuiOptionsMenuWidget.cpp:20
+#: src/cpp/gui/GuiMgr.cpp:124
+#: src/cpp/gui/panel-widgets/GuiOptionsMenuWidget.cpp:17
 msgid "Options"
 msgstr "Options"
 
-#: src/cpp/gui/GuiMgr.cpp:226
+#: src/cpp/gui/GuiMgr.cpp:217
 #, c-format
 msgid "Identifier %d is already registered."
 msgstr "Identifier %d is already registered."
 
-#: src/cpp/gui/GuiMgr.cpp:238
+#: src/cpp/gui/GuiMgr.cpp:229
 #, c-format
 msgid "Identifier %d is not registered."
 msgstr "Identifier %d is not registered."
@@ -593,7 +633,7 @@ msgstr "Zoom in"
 msgid "Zoom out"
 msgstr "Zoom out"
 
-#: src/cpp/gui/components/map/GuiMap.cpp:626
+#: src/cpp/gui/components/map/GuiMap.cpp:608
 msgid "TODO - Island's richness of soil"
 msgstr "TODO - Island's richness of soil"
 
@@ -618,11 +658,11 @@ msgstr "Public buildings"
 msgid "Dummy widget"
 msgstr "Dummy widget"
 
-#: src/cpp/gui/panel-widgets/GuiOptionsMenuWidget.cpp:15
+#: src/cpp/gui/panel-widgets/GuiOptionsMenuWidget.cpp:13
 msgid "Turn music on"
 msgstr "Turn music on"
 
-#: src/cpp/gui/panel-widgets/GuiOptionsMenuWidget.cpp:16
+#: src/cpp/gui/panel-widgets/GuiOptionsMenuWidget.cpp:14
 msgid "Turn music off"
 msgstr "Turn music off"
 
@@ -664,15 +704,15 @@ msgstr "Slight population loss in this population tier"
 msgid "Severe population loss in this population tier"
 msgstr "Severe population loss in this population tier"
 
-#: src/cpp/gui/panel-widgets/GuiSelectedHouseBuildingWidget.cpp:48
+#: src/cpp/gui/panel-widgets/GuiSelectedHouseBuildingWidget.cpp:40
 msgid "Population in this population tier"
 msgstr "Population in this population tier"
 
-#: src/cpp/gui/panel-widgets/GuiSelectedHouseBuildingWidget.cpp:57
+#: src/cpp/gui/panel-widgets/GuiSelectedHouseBuildingWidget.cpp:49
 msgid "Population tier's name"
 msgstr "Population tier's name"
 
-#: src/cpp/gui/panel-widgets/GuiSelectedHouseBuildingWidget.cpp:119
+#: src/cpp/gui/panel-widgets/GuiSelectedHouseBuildingWidget.cpp:110
 #, c-format
 msgid "The demand for %s is not being fulfilled"
 msgstr "The demand for %s is not being fulfilled"
@@ -818,3 +858,43 @@ msgstr "Could not load music '%s': %s"
 #, c-format
 msgid "Loaded music '%s'."
 msgstr "Loaded music '%s'."
+
+# automatically generated out of data xmls
+#~ msgid "neededPublicBuilding|overdue|theater"
+#~ msgstr "The residents complain about a missing theater"
+
+# automatically generated out of data xmls
+#~ msgid "neededPublicBuilding|overdue|school"
+#~ msgstr "The residents complain about a missing school"
+
+# automatically generated out of data xmls
+#~ msgid "neededPublicBuilding|overdue|high-school"
+#~ msgstr "The residents complain about a missing high-school"
+
+# automatically generated out of data xmls
+#~ msgid "neededPublicBuilding|overdue|church"
+#~ msgstr "The residents complain about a missing church"
+
+# automatically generated out of data xmls
+#~ msgid "neededPublicBuilding|overdue|bathhouse"
+#~ msgstr "The residents complain about a missing bathhouse"
+
+# automatically generated out of data xmls
+#~ msgid "neededPublicBuilding|new|theater"
+#~ msgstr "The residents demand a theater"
+
+# automatically generated out of data xmls
+#~ msgid "neededPublicBuilding|new|school"
+#~ msgstr "The residents demand a school"
+
+# automatically generated out of data xmls
+#~ msgid "neededPublicBuilding|new|high-school"
+#~ msgstr "The residents demand a high-school"
+
+# automatically generated out of data xmls
+#~ msgid "neededPublicBuilding|new|church"
+#~ msgstr "The residents demand a larger house of worship"
+
+# automatically generated out of data xmls
+#~ msgid "neededPublicBuilding|new|bathhouse"
+#~ msgstr "The residents demand a bathhouse"

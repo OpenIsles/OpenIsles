@@ -19,13 +19,14 @@ class GuiSelectedHouseBuildingWidget : public GuiSelectedBuildingWidget {
 
 private:
     // Child-Elemente
-    GuiStaticGraphicElement populationSatisfaction; ///< Zufriedenheit der Bevölkerung
-    GuiStaticTextElement inhabitants;               ///< Anzahl Einwohner
-    GuiStaticTextElement populationTier;            ///< Bevölkerungsgruppe
+    GuiStaticGraphicElement populationSatisfaction;           ///< Zufriedenheit der Bevölkerung
+    GuiStaticTextElement inhabitants;                         ///< Anzahl Einwohner
+    GuiStaticTextElement populationTier;                      ///< Bevölkerungsgruppe
 
-    std::list<GuiGoodElement*> needsGoods;          ///< verlangte Güter
+    std::list<GuiGoodElement*> needsGoods;                    ///< verlangte Güter
+    std::list<GuiStaticGraphicElement*> needsPublicBuildings; ///< verlangte öffentliche Gebäude
 
-    GuiFoodSupplyElement foodSupplyElement;         ///< Nahrungsversorgung
+    GuiFoodSupplyElement foodSupplyElement;                   ///< Nahrungsversorgung
 
 public:
     GuiSelectedHouseBuildingWidget(const Context& context);

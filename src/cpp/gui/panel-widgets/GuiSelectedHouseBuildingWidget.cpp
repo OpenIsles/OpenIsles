@@ -121,7 +121,36 @@ void GuiSelectedHouseBuildingWidget::onSelectedMapBuildingChanged(const Building
         posIndex++;
     }
 
-    // TODO verlangte öffentliche Gebäude
+    // verlangte öffentliche Gebäude
+    // TODO untersuchen, ob es nicht performanter ist, immer 6(? aus der Config ausrechnen) Elemente anzulegen und ein-/auszublenden bzw. abzuändern
+    for (GuiStaticGraphicElement* publicBuildingElement : needsPublicBuildings) {
+        removeChildElement(publicBuildingElement);
+        delete publicBuildingElement;
+    }
+    needsPublicBuildings.clear();
+
+    // TODO wirklich nur anzeigen, wenn Bedarf nicht erfüllt wird
+    posIndex = 0;
+    for (const MapObjectType* neededPublicBuilding : mapObjectType->populationTier->needsPublicBuildings) {
+        GuiStaticGraphicElement* graphicElement = new GuiStaticGraphicElement(context);
+
+        std::string graphicSetName = "public-building-icon/" + neededPublicBuilding->name;
+        graphic = context.graphicsMgr->getGraphicSet(graphicSetName)->getStatic()->getGraphic();
+
+        bool isNewDemandInThisTier = false; // TODO Checken, ob dieses Bedürfnis neu ist (supersedes berücksichtigen!)
+        std::string neededPublicBuildingText =
+            _(neededPublicBuilding->getNeededPublicBuildingMsgid(isNewDemandInThisTier));
+
+        graphicElement->setPosition(15 + posIndex * 40, 325);
+        graphicElement->setGraphic(graphic);
+        graphicElement->setStatusBarText(neededPublicBuildingText);
+        // TODO useShadow von GuiButton in GuiStaticGraphicElement verlagern, um hier einen Schatten aktivieren zu können
+
+        needsPublicBuildings.push_back(graphicElement);
+        addChildElement(graphicElement);
+
+        posIndex++;
+    }
 
     // Nahrungsversorgung
     double foodSupply = 1.0; // TODO im Moment können wir den Fall "verhungern" noch nicht handlen, drum is die Versorgung immer 100%

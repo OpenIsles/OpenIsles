@@ -160,6 +160,15 @@ void AbstractGraphicsMgr::loadGraphics() {
     loadStaticGraphicSet("population-satisfaction/bad", "data/img/gui/population-satisfaction/bad.png");
     loadStaticGraphicSet("population-satisfaction/worst", "data/img/gui/population-satisfaction/worst.png");
 
+//    loadStaticGraphicSet("public-building-icon/bathhouse", "data/img/gui/public-building-icon/bathhouse.png");
+    loadStaticGraphicSet("public-building-icon/chapel", "data/img/gui/public-building-icon/chapel.png");
+//    loadStaticGraphicSet("public-building-icon/church", "data/img/gui/public-building-icon/church.png");
+//    loadStaticGraphicSet("public-building-icon/high-school", "data/img/gui/public-building-icon/high-school.png");
+    loadStaticGraphicSet("public-building-icon/marketplace", "data/img/gui/public-building-icon/marketplace.png");
+//    loadStaticGraphicSet("public-building-icon/school", "data/img/gui/public-building-icon/school.png");
+    loadStaticGraphicSet("public-building-icon/tavern", "data/img/gui/public-building-icon/tavern.png");
+//    loadStaticGraphicSet("public-building-icon/theater", "data/img/gui/public-building-icon/theater.png");
+
     loadStaticAnimationGraphicSetWith8Views("carrier", "data/img/animations/carrier.png", 31);
     loadStaticAnimationGraphicSetWith8Views("cart-without-cargo", "data/img/animations/cart-without-cargo.png", 32);
     loadStaticAnimationGraphicSetWith8Views("cart-with-cargo", "data/img/animations/cart-with-cargo.png", 32);

@@ -242,6 +242,27 @@ struct MapObjectType {
         return "mapObjectType|" + name;
     }
 
+    /**
+     * @brief Liefert den Statuszeilen-Text für das Bedürfnis nach einem öffentliche Gebäude (msgid)
+     *
+     * Es gibt zwei verschiedene Texte. Einen, wenn das Bedürfnis neu ist in der aktuellen Bevölkerungsgruppe
+     * (`isNewDemandInThisTier == true`) und einen, wenn das Bedürfnis bereits erfüllt sein sollte und nun nicht
+     * mehr erfüllt ist (`isNewDemandInThisTier == false`).
+     *
+     * Vorsicht: Diese Methode darf nur für öffentliche Gebäude aufgerufen werden, die ein Bedürfnis darstellen.
+     * Nicht für jeden `MapObjectType` ist auch eine passende Übersetzung da.
+     *
+     * @param isNewDemandInThisTier `true`, wenn das Bedürfnis neu ist in der aktuellen Bevölkerungsgruppe
+     * @return Statuszeilen-Text (msgid)
+     */
+    std::string getNeededPublicBuildingMsgid(bool isNewDemandInThisTier) const {
+        if (isNewDemandInThisTier) {
+            return "neededPublicBuilding|new|" + name;
+        } else  {
+            return "neededPublicBuilding|overdue|" + name;
+        }
+    }
+
 };
 
 #endif
