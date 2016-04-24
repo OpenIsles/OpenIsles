@@ -32,6 +32,13 @@ public:
      */
     void setGraphic(const IGraphic* graphic) {
         this->graphic = graphic;
+
+        // Wenn noch keine Größe für dieses Element gesetzt ist,
+        // wird das Element automatisch auf die Größe der Grafik vergrößert
+        if (width == 0 || height == 0) {
+            width = graphic->getWidth();
+            height = graphic->getHeight();
+        }
     }
     
     /**

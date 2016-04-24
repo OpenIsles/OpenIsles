@@ -6,7 +6,7 @@
 
 GuiStatusBar::GuiStatusBar(const Context& context) : GuiStaticGraphicElement(context), textElement(context) {
     const IGraphic* backgroundGraphic = context.graphicsMgr->getGraphicSet("statusbar")->getStatic()->getGraphic();
-    setCoords(0, 734, backgroundGraphic->getWidth(), backgroundGraphic->getHeight());
+    setPosition(0, 734);
     setGraphic(backgroundGraphic);
 
     constexpr int paddingX = 15;

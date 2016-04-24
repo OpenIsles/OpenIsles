@@ -57,7 +57,7 @@ GuiSelectedProductionBuildingWidget::GuiSelectedProductionBuildingWidget(const C
     addChildElement(&operatingCosts);
 
     const IGraphic* graphicIcon = context.graphicsMgr->getGraphicSet("coin/coin")->getStatic()->getGraphic();
-    operatingCostsIcon.setCoords(195, y - 7, graphicIcon->getWidth(), graphicIcon->getHeight());
+    operatingCostsIcon.setPosition(195, y - 7);
     operatingCostsIcon.setGraphic(graphicIcon);
     addChildElement(&operatingCostsIcon);
 

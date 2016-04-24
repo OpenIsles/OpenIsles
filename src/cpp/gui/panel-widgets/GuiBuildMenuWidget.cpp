@@ -116,7 +116,7 @@ GuiBuildMenuWidget::GuiBuildMenuWidget(const Context& context) : GuiPanelWidget(
         // Grid
         GuiStaticGraphicElement* addBuildingGrid = new GuiStaticGraphicElement(context);
         const IGraphic* graphicAddBuildingGrid = context.graphicsMgr->getGraphicSet("add-building-grid")->getStatic()->getGraphic();
-        addBuildingGrid->setCoords(775, 450, graphicAddBuildingGrid->getWidth(), graphicAddBuildingGrid->getHeight());
+        addBuildingGrid->setPosition(775, 450);
         addBuildingGrid->setGraphic(graphicAddBuildingGrid);
         addBuildingGrid->setVisible(false);
         context.guiMgr->registerElement(GUI_ID_ADD_BUILDING_GRID_BASE + groupIndex, addBuildingGrid);
@@ -136,9 +136,7 @@ GuiBuildMenuWidget::GuiBuildMenuWidget(const Context& context) : GuiPanelWidget(
                     context.graphicsMgr->getGraphicSet(graphicSetName)->getStatic()->getGraphic();
 
                 GuiButton* addBuildingButton = new GuiButton(context);
-                addBuildingButton->setCoords(
-                    12 + 58 * gridX, 13 + 58 * gridY,
-                    graphicAddBuildingButton->getWidth(), graphicAddBuildingButton->getHeight());
+                addBuildingButton->setPosition(12 + 58 * gridX, 13 + 58 * gridY);
                 addBuildingButton->setGraphic(graphicAddBuildingButton);
                 addBuildingButton->setGraphicPressed(graphicAddBuildingButton);
                 addBuildingButton->setStatusBarText(_(mapObjectType->getTitleMsgid()));
