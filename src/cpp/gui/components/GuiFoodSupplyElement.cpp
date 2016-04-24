@@ -4,10 +4,6 @@
 #include "utils/Color.h"
 #include "utils/Rect.h"
 
-static Color colorBlack = Color(0, 0, 0, 255);
-static Color colorLightBrown = Color(223, 216, 183, 255);
-static Color colorRed = Color(255, 0, 0, 255);
-
 
 GuiFoodSupplyElement::GuiFoodSupplyElement(const Context& context) : GuiStaticTextElement(context) {
     // Größe ist fix
@@ -15,8 +11,8 @@ GuiFoodSupplyElement::GuiFoodSupplyElement(const Context& context) : GuiStaticTe
     height = 20;
 
     setText(_("Food"));
-    setColor(&colorLightBrown);
-    setShadowColor(&colorBlack);
+    setColor(&Color::lightBrown);
+    setShadowColor(&Color::black);
     setFontName("DroidSans-Bold.ttf");
     setFontSize(14);
     setAlign(RENDERTEXT_HALIGN_LEFT | RENDERTEXT_VALIGN_MIDDLE);
@@ -34,14 +30,14 @@ void GuiFoodSupplyElement::renderElement(IRenderer* renderer) {
 
     // Balken
     const Rect foodSupplyRect(windowX + 100, windowY, 110, 20);
-    renderer->setDrawColor(colorBlack);
+    renderer->setDrawColor(Color::black);
     renderer->drawRect(foodSupplyRect);
 
     Rect foodSupplyFilledRect(windowX + 101, windowY + 1, int(108.0 * foodSupply), 18);
-    renderer->setDrawColor(colorRed);
+    renderer->setDrawColor(Color::red);
     renderer->fillRect(foodSupplyFilledRect);
 
-    renderer->setDrawColor(colorBlack);
+    renderer->setDrawColor(Color::black);
     int x = windowX + 175;
     renderer->drawLine(x, windowY + 1, x, windowY + 19);
 

@@ -96,6 +96,7 @@ set(COMMON_SOURCE_FILES
     src/cpp/sound/ISoundMgr.h
     src/cpp/utils/CatchmentAreaIterator.cpp
     src/cpp/utils/CatchmentAreaIterator.h
+    src/cpp/utils/Color.cpp
     src/cpp/utils/Color.h
     src/cpp/utils/Consts.cpp
     src/cpp/utils/Consts.h

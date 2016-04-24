@@ -3,9 +3,6 @@
 #include "gui/components/GuiPanelHeader.h"
 #include "utils/Color.h"
 
-static Color colorBlack = Color(0, 0, 0, 255);
-static Color colorLightBrown = Color(223, 216, 183, 255);
-
 
 GuiPanelHeader::GuiPanelHeader(const Context& context) : GuiStaticGraphicElement(context) {
     // Größe ist fix
@@ -16,8 +13,8 @@ GuiPanelHeader::GuiPanelHeader(const Context& context) : GuiStaticGraphicElement
 
     textElement = new GuiStaticTextElement(context);
     textElement->setCoords(35, 10, 178, 18);
-    textElement->setColor(&colorLightBrown);
-    textElement->setShadowColor(&colorBlack);
+    textElement->setColor(&Color::lightBrown);
+    textElement->setShadowColor(&Color::black);
     textElement->setFontName("DroidSans-Bold.ttf");
     textElement->setFontSize(14);
     textElement->setAlign(RENDERTEXT_HALIGN_CENTER | RENDERTEXT_VALIGN_MIDDLE);

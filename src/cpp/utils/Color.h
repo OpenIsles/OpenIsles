@@ -6,6 +6,17 @@
  */
 struct Color {
 
+public:
+    // fixe Farben
+    static Color black;               ///< Schwarz
+    static Color lightBrown;          ///< Hellbraun
+    static Color red;                 ///< Rot
+    static Color white;               ///< Weiß
+
+    static Color minimapViewBorder;   ///< Rahmenfarbe für den sichtbaren Ausschnitt in der Minimap
+    static Color catchmentAreaBorder; ///< Farbe, mit der Einzugsbereiche gezeichnet werden
+
+public:
     /**
      * Rot-Anteil (0 bis 255)
      */

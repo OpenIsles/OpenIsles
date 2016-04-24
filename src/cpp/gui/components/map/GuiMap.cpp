@@ -835,7 +835,7 @@ void GuiMap::drawCatchmentArea(IRenderer* const renderer, const MapObjectToBuild
     int screenZoom = map->getScreenZoom();
     const FourthDirection& screenView = map->getScreenView();
 
-    renderer->setDrawColor(Color(0xc8, 0xaf, 0x37, 255));
+    renderer->setDrawColor(Color::catchmentAreaBorder);
 
     const RectangleData<char>& catchmentArea = *mapObjectToBuild.mapObjectType->catchmentArea;
     const MapCoords& mapCoords = mapObjectToBuild.mapCoords;

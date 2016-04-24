@@ -5,17 +5,14 @@
 #include "utils/Color.h"
 #include "utils/StringFormat.h"
 
-static Color colorWhite = Color(255, 255, 255, 255);
-static Color colorBlack = Color(0, 0, 0, 255);
-
 
 GuiSelectedPublicBuildingWidget::GuiSelectedPublicBuildingWidget(const Context& context) :
     GuiSelectedBuildingWidget(context), buildingName(context), buildingIconElement(context),
     operatingCostsLabel(context), operatingCosts(context), operatingCostsIcon(context) {
 
     buildingName.setCoords(0, 55, 236, 15);
-    buildingName.setColor(&colorWhite);
-    buildingName.setShadowColor(&colorBlack);
+    buildingName.setColor(&Color::white);
+    buildingName.setShadowColor(&Color::black);
     buildingName.setFontName("DroidSans-Bold.ttf");
     buildingName.setFontSize(14);
     buildingName.setAlign(RENDERTEXT_HALIGN_CENTER | RENDERTEXT_VALIGN_TOP);
@@ -29,16 +26,16 @@ GuiSelectedPublicBuildingWidget::GuiSelectedPublicBuildingWidget(const Context& 
 
     operatingCostsLabel.setCoords(10, y, 150, 15);
     operatingCostsLabel.setText(_("Operating costs:"));
-    operatingCostsLabel.setColor(&colorWhite);
-    operatingCostsLabel.setShadowColor(&colorBlack);
+    operatingCostsLabel.setColor(&Color::white);
+    operatingCostsLabel.setShadowColor(&Color::black);
     operatingCostsLabel.setFontName("DroidSans-Bold.ttf");
     operatingCostsLabel.setFontSize(14);
     operatingCostsLabel.setAlign(RENDERTEXT_HALIGN_LEFT | RENDERTEXT_VALIGN_TOP);
     addChildElement(&operatingCostsLabel);
 
     operatingCosts.setCoords(160, y, 30, 15);
-    operatingCosts.setColor(&colorWhite);
-    operatingCosts.setShadowColor(&colorBlack);
+    operatingCosts.setColor(&Color::white);
+    operatingCosts.setShadowColor(&Color::black);
     operatingCosts.setFontName("DroidSans-Bold.ttf");
     operatingCosts.setFontSize(14);
     operatingCosts.setAlign(RENDERTEXT_HALIGN_RIGHT | RENDERTEXT_VALIGN_TOP);

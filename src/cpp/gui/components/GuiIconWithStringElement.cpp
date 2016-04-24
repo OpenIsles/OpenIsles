@@ -3,10 +3,6 @@
 #include "utils/Color.h"
 
 
-static Color colorBlack = Color(0, 0, 0, 255);
-static Color colorWhite = Color(255, 255, 255, 255);
-
-
 void GuiIconWithStringElement::renderElement(IRenderer* renderer) {
     int windowX, windowY;
     getWindowCoords(windowX, windowY);
@@ -18,5 +14,5 @@ void GuiIconWithStringElement::renderElement(IRenderer* renderer) {
     const int fontSize = 14;
     context.fontMgr->renderText(
         renderer, string, windowX + graphic->getWidth() + 4, yMiddle,
-        &colorWhite, &colorBlack, "DroidSans-Bold.ttf", fontSize, RENDERTEXT_HALIGN_LEFT | RENDERTEXT_VALIGN_MIDDLE);
+        &Color::white, &Color::black, "DroidSans-Bold.ttf", fontSize, RENDERTEXT_HALIGN_LEFT | RENDERTEXT_VALIGN_MIDDLE);
 }

@@ -6,10 +6,9 @@
 #include "graphics/mgr/IFontMgr.h"
 #include "gui/panel-widgets/GuiSelectedHouseBuildingWidget.h"
 #include "map/Map.h"
+#include "utils/Color.h"
 #include "utils/StringFormat.h"
 
-static Color colorWhite = Color(255, 255, 255, 255);
-static Color colorBlack = Color(0, 0, 0, 255);
 
 static struct {
     const char* graphicSetName;
@@ -32,8 +31,8 @@ GuiSelectedHouseBuildingWidget::GuiSelectedHouseBuildingWidget(const Context& co
 
     // ...dann die Texte drüberliegen
     inhabitants.setCoords(0, 85, 50, 14);
-    inhabitants.setColor(&colorWhite);
-    inhabitants.setShadowColor(&colorBlack);
+    inhabitants.setColor(&Color::white);
+    inhabitants.setShadowColor(&Color::black);
     inhabitants.setFontName("DroidSans-Bold.ttf");
     inhabitants.setFontSize(14);
     inhabitants.setAlign(RENDERTEXT_HALIGN_RIGHT | RENDERTEXT_VALIGN_MIDDLE);
@@ -41,8 +40,8 @@ GuiSelectedHouseBuildingWidget::GuiSelectedHouseBuildingWidget(const Context& co
     addChildElement(&inhabitants);
 
     populationTier.setCoords(115, 85, 120, 14);
-    populationTier.setColor(&colorWhite);
-    populationTier.setShadowColor(&colorBlack);
+    populationTier.setColor(&Color::white);
+    populationTier.setShadowColor(&Color::black);
     populationTier.setFontName("DroidSans-Bold.ttf");
     populationTier.setFontSize(14);
     populationTier.setAlign(RENDERTEXT_HALIGN_LEFT | RENDERTEXT_VALIGN_MIDDLE);

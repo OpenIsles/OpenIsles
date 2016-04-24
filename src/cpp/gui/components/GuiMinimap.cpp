@@ -4,11 +4,7 @@
 #include "graphics/renderer/sdl/SDLRenderer.h"
 #include "gui/components/GuiMinimap.h"
 #include "map/coords/MapCoords.h"
-
-/**
- * @brief Rahmenfarbe für den sichtbaren Ausschnitt in der Minimap
- */
-static Color minimapViewBorderColor = Color(0, 0, 255, 96);
+#include "utils/Color.h"
 
 
 // TODO nicht-quadratische Karten erlauben (Wir brauchen x/yScaleFactor).
@@ -48,7 +44,7 @@ void GuiMinimap::renderElement(IRenderer* renderer) {
     SDL_RenderCopy(sdlRealRenderer, minimapTexture, nullptr, &sdlMinimapClipRect);
 
     // Aktuellen Ausschnitt markieren
-    renderer->setDrawColor(minimapViewBorderColor);
+    renderer->setDrawColor(Color::minimapViewBorder);
     renderer->setDrawBlendMode(IRenderer::BLENDMODE_BLEND);
     SDL_RenderDrawLines(sdlRealRenderer, pointsCurrentClipping, 5);
 

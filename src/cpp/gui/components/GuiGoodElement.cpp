@@ -6,11 +6,6 @@
 #include "utils/StringFormat.h"
 
 
-static Color colorWhite = Color(255, 255, 255, 255);
-static Color colorBlack = Color(0, 0, 0, 255);
-static Color colorRedBar = Color(255, 0, 0, 255);
-
-
 GuiGoodElement::GuiGoodElement(const Context& context) : GuiStaticGraphicElement(context) {
     // Größe ist fix
     width = 42;
@@ -37,7 +32,7 @@ void GuiGoodElement::renderElement(IRenderer* renderer) {
     // Wert anzeigen
     if (displayValue) {
         std::string inventoryOutput = string_sprintf("%ut", value);
-        context.fontMgr->renderText(renderer, inventoryOutput, windowX + 40, windowY + 42, &colorWhite, &colorBlack,
+        context.fontMgr->renderText(renderer, inventoryOutput, windowX + 40, windowY + 42, &Color::white, &Color::black,
             "DroidSans.ttf", 12, RENDERTEXT_HALIGN_RIGHT | RENDERTEXT_VALIGN_BOTTOM);
     }
 
@@ -45,7 +40,7 @@ void GuiGoodElement::renderElement(IRenderer* renderer) {
     else if (displayBar) {
         int barHeight = (int) (barValue * (double) height);
 
-        renderer->setDrawColor(colorRedBar);
+        renderer->setDrawColor(Color::red);
 
         const int barWidth = 4;
         Rect rect(windowX + width - barWidth, windowY + (height - barHeight), barWidth, barHeight);

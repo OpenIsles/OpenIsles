@@ -6,9 +6,6 @@
 #include "gui/components/map/GuiResourcesBar.h"
 #include "utils/Color.h"
 
-static Color colorWhite = Color(255, 255, 255, 255);
-static Color colorBlack = Color(0, 0, 0, 255);
-
 
 GuiResourcesBar::GuiResourcesBar(const Context& context) : GuiBase(context) {
 }
@@ -28,7 +25,7 @@ void GuiResourcesBar::renderElement(IRenderer* renderer) {
         outputString += ")";
     }
     context.fontMgr->renderText(renderer, outputString, 42, 10,
-        &colorWhite, &colorBlack, "DroidSans-Bold.ttf", 18, RENDERTEXT_HALIGN_LEFT);
+        &Color::white, &Color::black, "DroidSans-Bold.ttf", 18, RENDERTEXT_HALIGN_LEFT);
 
     // Siedlung, wo der Cursor grade is
     const MapCoords& mapCoordsUnderMouse = context.guiMgr->getMapCoordsUnderMouse();
@@ -69,7 +66,7 @@ void GuiResourcesBar::renderElement(IRenderer* renderer) {
             }
 
             context.fontMgr->renderText(renderer, outputString, x + 35, 10,
-                &colorWhite, &colorBlack, "DroidSans-Bold.ttf", 18, RENDERTEXT_HALIGN_LEFT);
+                &Color::white, &Color::black, "DroidSans-Bold.ttf", 18, RENDERTEXT_HALIGN_LEFT);
         }
     }
 
@@ -81,5 +78,5 @@ void GuiResourcesBar::renderElement(IRenderer* renderer) {
 
     outputString = toString(colony->population);
     context.fontMgr->renderText(renderer, outputString, 690, 10,
-        &colorWhite, &colorBlack, "DroidSans-Bold.ttf", 18, RENDERTEXT_HALIGN_LEFT);
+        &Color::white, &Color::black, "DroidSans-Bold.ttf", 18, RENDERTEXT_HALIGN_LEFT);
 }

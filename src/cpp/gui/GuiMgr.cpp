@@ -21,10 +21,7 @@
 #include "gui/panel-widgets/GuiSelectedPublicBuildingWidget.h"
 #include "gui/Identifiers.h"
 #include "map/Map.h"
-#include "utils/Color.h"
 #include "utils/Events.h"
-
-static Color colorWhite = Color(255, 255, 255, 255);
 
 #ifdef DEBUG_A_STAR
 #include "map/coords/MapCoords.h"

@@ -28,8 +28,6 @@
 #include "pathfinding/AStar.h"
 #endif
 
-static Color colorWhite = Color(255, 255, 255, 255);
-
 /* Globale TODOs
  * --------------
  *
@@ -100,17 +98,17 @@ void drawFrame(const Context& context, IRenderer* renderer) {
     // FPS-Anzeige
     if (context.game->isFpsCounterEnabled()) {
         context.fontMgr->renderText(renderer, _("FPS:"),
-                                    10, 686, &colorWhite, nullptr, "DroidSans-Bold.ttf", 14, RENDERTEXT_HALIGN_LEFT);
+                                    10, 686, &Color::white, nullptr, "DroidSans-Bold.ttf", 14, RENDERTEXT_HALIGN_LEFT);
 
         context.fontMgr->renderText(renderer, _("current:"),
-                                    77, 698, &colorWhite, nullptr, "DroidSans-Bold.ttf", 14, RENDERTEXT_HALIGN_RIGHT);
+                                    77, 698, &Color::white, nullptr, "DroidSans-Bold.ttf", 14, RENDERTEXT_HALIGN_RIGHT);
         context.fontMgr->renderText(renderer, toString((int) fpsCounter.getFpsCurrent()),
-                                    80, 698, &colorWhite, nullptr, "DroidSans.ttf", 14, RENDERTEXT_HALIGN_LEFT);
+                                    80, 698, &Color::white, nullptr, "DroidSans.ttf", 14, RENDERTEXT_HALIGN_LEFT);
 
         context.fontMgr->renderText(renderer, _("average:"),
-                                    77, 711, &colorWhite, nullptr, "DroidSans-Bold.ttf", 14, RENDERTEXT_HALIGN_RIGHT);
+                                    77, 711, &Color::white, nullptr, "DroidSans-Bold.ttf", 14, RENDERTEXT_HALIGN_RIGHT);
         context.fontMgr->renderText(renderer, toString(fpsCounter.getFpsAvg()),
-                                    80, 711, &colorWhite, nullptr, "DroidSans.ttf", 14, RENDERTEXT_HALIGN_LEFT);
+                                    80, 711, &Color::white, nullptr, "DroidSans.ttf", 14, RENDERTEXT_HALIGN_LEFT);
     }
 
 #ifdef DEBUG
@@ -121,7 +119,7 @@ void drawFrame(const Context& context, IRenderer* renderer) {
         }
 
         context.fontMgr->renderText(renderer, debugOutput[i], 10, 40 + 15 * i,
-            &colorWhite, nullptr, "DroidSans-Bold.ttf", 14, RENDERTEXT_HALIGN_LEFT);
+            &Color::white, nullptr, "DroidSans-Bold.ttf", 14, RENDERTEXT_HALIGN_LEFT);
     }
 #endif
 }
