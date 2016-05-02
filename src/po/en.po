@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenIsles 0.1\n"
 "Report-Msgid-Bugs-To: http://www.openisles.org\n"
-"POT-Creation-Date: 2016-04-24 13:40+0200\n"
-"PO-Revision-Date: 2016-04-24 13:39+0200\n"
+"POT-Creation-Date: 2016-05-02 14:14+0200\n"
+"PO-Revision-Date: 2016-05-02 14:14+0200\n"
 "Last-Translator: theHacker <openisles@openisles.org>\n"
 "Language-Team: theHacker <openisles@openisles.org>\n"
 "Language: en\n"
@@ -202,6 +202,11 @@ msgstr "House"
 
 # automatically generated out of data xmls
 #: data/config/map-objects.xml
+msgid "mapObjectType|school"
+msgstr "School"
+
+# automatically generated out of data xmls
+#: data/config/map-objects.xml
 msgid "mapObjectType|settlers-house1"
 msgstr "House"
 
@@ -312,6 +317,11 @@ msgstr "The residents demand a marketplace"
 
 # automatically generated out of data xmls
 #: data/config/population-tiers.xml
+msgid "neededPublicBuilding|new|school"
+msgstr "The residents demand a school"
+
+# automatically generated out of data xmls
+#: data/config/population-tiers.xml
 msgid "neededPublicBuilding|new|tavern"
 msgstr "The residents demand a tavern"
 
@@ -324,6 +334,11 @@ msgstr "The residents complain about a missing chapel"
 #: data/config/population-tiers.xml
 msgid "neededPublicBuilding|overdue|marketplace"
 msgstr "The residents complain about a missing marketplace"
+
+# automatically generated out of data xmls
+#: data/config/population-tiers.xml
+msgid "neededPublicBuilding|overdue|school"
+msgstr "The residents complain about a missing school"
 
 # automatically generated out of data xmls
 #: data/config/population-tiers.xml
@@ -518,12 +533,12 @@ msgstr "Could not create texture: %s"
 msgid "Illegal bytesPerPixel: %d"
 msgstr "Illegal bytesPerPixel: %d"
 
-#: src/cpp/graphics/mgr/AbstractGraphicsMgr.cpp:239
+#: src/cpp/graphics/mgr/AbstractGraphicsMgr.cpp:241
 #, c-format
 msgid "Could not divide the frames equally: '%s'"
 msgstr "Could not divide the frames equally: '%s'"
 
-#: src/cpp/graphics/mgr/AbstractGraphicsMgr.cpp:246
+#: src/cpp/graphics/mgr/AbstractGraphicsMgr.cpp:248
 #, c-format
 msgid "Could not divide the views equally: '%s'"
 msgstr "Could not divide the views equally: '%s'"
@@ -562,29 +577,29 @@ msgstr "Could not init SDL-image: %s"
 msgid "Could not init SDL-TTF: %s"
 msgstr "Could not init SDL-TTF: %s"
 
-#: src/cpp/gui/GuiMgr.cpp:106
+#: src/cpp/gui/GuiMgr.cpp:103
 msgid "Switch to building mode"
 msgstr "Switch to building mode"
 
-#: src/cpp/gui/GuiMgr.cpp:112
+#: src/cpp/gui/GuiMgr.cpp:109
 msgid "Switch to combat mode"
 msgstr "Switch to combat mode"
 
-#: src/cpp/gui/GuiMgr.cpp:118
+#: src/cpp/gui/GuiMgr.cpp:115
 msgid "Switch to info mode"
 msgstr "Switch to info mode"
 
-#: src/cpp/gui/GuiMgr.cpp:124
+#: src/cpp/gui/GuiMgr.cpp:121
 #: src/cpp/gui/panel-widgets/GuiOptionsMenuWidget.cpp:17
 msgid "Options"
 msgstr "Options"
 
-#: src/cpp/gui/GuiMgr.cpp:217
+#: src/cpp/gui/GuiMgr.cpp:214
 #, c-format
 msgid "Identifier %d is already registered."
 msgstr "Identifier %d is already registered."
 
-#: src/cpp/gui/GuiMgr.cpp:229
+#: src/cpp/gui/GuiMgr.cpp:226
 #, c-format
 msgid "Identifier %d is not registered."
 msgstr "Identifier %d is not registered."
@@ -609,11 +624,11 @@ msgstr "Wood requirement for this structure"
 msgid "Bricks requirement for this structure"
 msgstr "Bricks requirement for this structure"
 
-#: src/cpp/gui/components/GuiFoodSupplyElement.cpp:17
+#: src/cpp/gui/components/GuiFoodSupplyElement.cpp:13
 msgid "Food"
 msgstr "Food"
 
-#: src/cpp/gui/components/GuiFoodSupplyElement.cpp:23
+#: src/cpp/gui/components/GuiFoodSupplyElement.cpp:19
 msgid "Food supply (State equal over all tiers)"
 msgstr "Food supply (State equal over all tiers)"
 
@@ -666,62 +681,62 @@ msgstr "Turn music on"
 msgid "Turn music off"
 msgstr "Turn music off"
 
-#: src/cpp/gui/panel-widgets/GuiPlayerStatusWidget.cpp:15
+#: src/cpp/gui/panel-widgets/GuiPlayerStatusWidget.cpp:11
 msgid "Player's status"
 msgstr "Player's status"
 
-#: src/cpp/gui/panel-widgets/GuiPlayerStatusWidget.cpp:45
+#: src/cpp/gui/panel-widgets/GuiPlayerStatusWidget.cpp:41
 msgid "Population:"
 msgstr "Population:"
 
-#: src/cpp/gui/panel-widgets/GuiPlayerStatusWidget.cpp:55
+#: src/cpp/gui/panel-widgets/GuiPlayerStatusWidget.cpp:51
 msgid "Tax incomings:"
 msgstr "Tax incomings:"
 
-#: src/cpp/gui/panel-widgets/GuiPlayerStatusWidget.cpp:65
-#: src/cpp/gui/panel-widgets/GuiSelectedProductionBuildingWidget.cpp:46
-#: src/cpp/gui/panel-widgets/GuiSelectedPublicBuildingWidget.cpp:31
+#: src/cpp/gui/panel-widgets/GuiPlayerStatusWidget.cpp:61
+#: src/cpp/gui/panel-widgets/GuiSelectedProductionBuildingWidget.cpp:43
+#: src/cpp/gui/panel-widgets/GuiSelectedPublicBuildingWidget.cpp:28
 msgid "Operating costs:"
 msgstr "Operating costs:"
 
-#: src/cpp/gui/panel-widgets/GuiPlayerStatusWidget.cpp:75
+#: src/cpp/gui/panel-widgets/GuiPlayerStatusWidget.cpp:71
 msgid "Balance:"
 msgstr "Balance:"
 
-#: src/cpp/gui/panel-widgets/GuiSelectedHouseBuildingWidget.cpp:18
+#: src/cpp/gui/panel-widgets/GuiSelectedHouseBuildingWidget.cpp:17
 msgid "Population growth in this population tier"
 msgstr "Population growth in this population tier"
 
-#: src/cpp/gui/panel-widgets/GuiSelectedHouseBuildingWidget.cpp:19
+#: src/cpp/gui/panel-widgets/GuiSelectedHouseBuildingWidget.cpp:18
 msgid "No population growth in this population tier"
 msgstr "No population growth in this population tier"
 
-#: src/cpp/gui/panel-widgets/GuiSelectedHouseBuildingWidget.cpp:20
+#: src/cpp/gui/panel-widgets/GuiSelectedHouseBuildingWidget.cpp:19
 msgid "Slight population loss in this population tier"
 msgstr "Slight population loss in this population tier"
 
-#: src/cpp/gui/panel-widgets/GuiSelectedHouseBuildingWidget.cpp:21
+#: src/cpp/gui/panel-widgets/GuiSelectedHouseBuildingWidget.cpp:20
 msgid "Severe population loss in this population tier"
 msgstr "Severe population loss in this population tier"
 
-#: src/cpp/gui/panel-widgets/GuiSelectedHouseBuildingWidget.cpp:40
+#: src/cpp/gui/panel-widgets/GuiSelectedHouseBuildingWidget.cpp:39
 msgid "Population in this population tier"
 msgstr "Population in this population tier"
 
-#: src/cpp/gui/panel-widgets/GuiSelectedHouseBuildingWidget.cpp:49
+#: src/cpp/gui/panel-widgets/GuiSelectedHouseBuildingWidget.cpp:48
 msgid "Population tier's name"
 msgstr "Population tier's name"
 
-#: src/cpp/gui/panel-widgets/GuiSelectedHouseBuildingWidget.cpp:110
+#: src/cpp/gui/panel-widgets/GuiSelectedHouseBuildingWidget.cpp:109
 #, c-format
 msgid "The demand for %s is not being fulfilled"
 msgstr "The demand for %s is not being fulfilled"
 
-#: src/cpp/gui/panel-widgets/GuiSelectedProductionBuildingWidget.cpp:38
+#: src/cpp/gui/panel-widgets/GuiSelectedProductionBuildingWidget.cpp:35
 msgid "Goods in this building ready for pickup"
 msgstr "Goods in this building ready for pickup"
 
-#: src/cpp/gui/panel-widgets/GuiSelectedProductionBuildingWidget.cpp:119
+#: src/cpp/gui/panel-widgets/GuiSelectedProductionBuildingWidget.cpp:116
 #, c-format
 msgid "Supply of %s (enough for another %.1ft of %s)"
 msgstr "Supply of %s (enough for another %.1ft of %s)"
@@ -731,32 +746,32 @@ msgstr "Supply of %s (enough for another %.1ft of %s)"
 msgid "Using locale '%s'."
 msgstr "Using locale '%s'."
 
-#: src/cpp/main.cpp:102
+#: src/cpp/main.cpp:100
 msgid "FPS:"
 msgstr "FPS:"
 
-#: src/cpp/main.cpp:105
+#: src/cpp/main.cpp:103
 msgid "current:"
 msgstr "current:"
 
-#: src/cpp/main.cpp:110
+#: src/cpp/main.cpp:108
 msgid "average:"
 msgstr "average:"
 
-#: src/cpp/main.cpp:142
+#: src/cpp/main.cpp:140
 #, c-format
 msgid "Usage: %s -m mapFileToLoad [-b benchmarkFrames]"
 msgstr "Usage: %s -m mapFileToLoad [-b benchmarkFrames]"
 
-#: src/cpp/main.cpp:148
+#: src/cpp/main.cpp:146
 msgid "Error: No map file specified."
 msgstr "Error: No map file specified."
 
-#: src/cpp/main.cpp:176
+#: src/cpp/main.cpp:174
 msgid "Could not register events."
 msgstr "Could not register events."
 
-#: src/cpp/main.cpp:284
+#: src/cpp/main.cpp:282
 #, c-format
 msgid ""
 "PerfCounters: events avg %.3f, current = %.1f; gameUpdate avg %.3f, current "
@@ -765,45 +780,45 @@ msgstr ""
 "PerfCounters: events avg %.3f, current = %.1f; gameUpdate avg %.3f, current "
 "= %.1f; rendering avg %.3f, current = %.1f"
 
-#: src/cpp/main.cpp:295
+#: src/cpp/main.cpp:293
 #, c-format
 msgid "Screen: mapCentered = (%d, %d), zoom = %d, view = %d"
 msgstr "Screen: mapCentered = (%d, %d), zoom = %d, view = %d"
 
-#: src/cpp/main.cpp:299
+#: src/cpp/main.cpp:297
 #, c-format
 msgid "Game ticks: %lu"
 msgstr "Game ticks: %lu"
 
-#: src/cpp/main.cpp:302
+#: src/cpp/main.cpp:300
 #, c-format
 msgid "mouse = (%d, %d), screen = (%d, %d), mapElevated = (%d, %d)"
 msgstr "mouse = (%d, %d), screen = (%d, %d), mapElevated = (%d, %d)"
 
-#: src/cpp/main.cpp:321
+#: src/cpp/main.cpp:319
 #, c-format
 msgid "selectedMapObject(Fixed) on mapCoords (%d, %d), size = (%d, %d)"
 msgstr "selectedMapObject(Fixed) on mapCoords (%d, %d), size = (%d, %d)"
 
-#: src/cpp/main.cpp:330
+#: src/cpp/main.cpp:328
 #, c-format
 msgid "selectedMapObject(Moving) on mapCoords (%f, %f), size = (%d, %d)"
 msgstr "selectedMapObject(Moving) on mapCoords (%f, %f), size = (%d, %d)"
 
-#: src/cpp/main.cpp:336
+#: src/cpp/main.cpp:334
 #, c-format
 msgid "selectedMapObject(UNKNOWN!?) size = (%d, %d)"
 msgstr "selectedMapObject(UNKNOWN!?) size = (%d, %d)"
 
-#: src/cpp/main.cpp:349
+#: src/cpp/main.cpp:347
 msgid "catchmentAreaIterator set"
 msgstr "catchmentAreaIterator set"
 
-#: src/cpp/main.cpp:351
+#: src/cpp/main.cpp:349
 msgid "catchmentAreaIterator nullptr"
 msgstr "catchmentAreaIterator nullptr"
 
-#: src/cpp/main.cpp:355
+#: src/cpp/main.cpp:353
 #, c-format
 msgid ""
 "debugAStar: source = (%d, %d), destination = (%d, %d), %s, useStreetOnly = "
@@ -812,11 +827,11 @@ msgstr ""
 "debugAStar: source = (%d, %d), destination = (%d, %d), %s, useStreetOnly = "
 "%s, rightAnglesOnly = %s"
 
-#: src/cpp/main.cpp:362 src/cpp/main.cpp:363
+#: src/cpp/main.cpp:360 src/cpp/main.cpp:361
 msgid "false"
 msgstr "false"
 
-#: src/cpp/main.cpp:362 src/cpp/main.cpp:363
+#: src/cpp/main.cpp:360 src/cpp/main.cpp:361
 msgid "true"
 msgstr "true"
 
@@ -864,10 +879,6 @@ msgstr "Loaded music '%s'."
 #~ msgstr "The residents complain about a missing theater"
 
 # automatically generated out of data xmls
-#~ msgid "neededPublicBuilding|overdue|school"
-#~ msgstr "The residents complain about a missing school"
-
-# automatically generated out of data xmls
 #~ msgid "neededPublicBuilding|overdue|high-school"
 #~ msgstr "The residents complain about a missing high-school"
 
@@ -882,10 +893,6 @@ msgstr "Loaded music '%s'."
 # automatically generated out of data xmls
 #~ msgid "neededPublicBuilding|new|theater"
 #~ msgstr "The residents demand a theater"
-
-# automatically generated out of data xmls
-#~ msgid "neededPublicBuilding|new|school"
-#~ msgstr "The residents demand a school"
 
 # automatically generated out of data xmls
 #~ msgid "neededPublicBuilding|new|high-school"

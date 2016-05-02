@@ -54,6 +54,7 @@ void AbstractGraphicsMgr::loadGraphics() {
     loadStaticGraphicSetWith4Views("mapobjects/distillery", "data/img/buildings/distillery.png");
     loadStaticGraphicSetWith4Views("mapobjects/tobacco-goods", "data/img/buildings/tobacco-goods.png");
     loadStaticGraphicSetWith4Views("mapobjects/spices-plantation", "data/img/buildings/spices-plantation.png");
+    loadStaticGraphicSetWith4Views("mapobjects/school", "data/img/buildings/school.png");
 
     loadStreetTileset("cobbled-street");
     loadStreetTileset("farm-road");
@@ -123,6 +124,7 @@ void AbstractGraphicsMgr::loadGraphics() {
     loadStaticGraphicSet("add-building-button/distillery", "data/img/gui/add-building/distillery.png");
     loadStaticGraphicSet("add-building-button/tobacco-goods", "data/img/gui/add-building/tobacco-goods.png");
     loadStaticGraphicSet("add-building-button/spices-plantation", "data/img/gui/add-building/spices-plantation.png");
+    loadStaticGraphicSet("add-building-button/school", "data/img/gui/add-building/school.png");
     loadStaticGraphicSet("add-building-button/square1", "data/img/gui/add-building/square1.png");
     loadStaticGraphicSet("add-building-button/square2", "data/img/gui/add-building/square2.png");
     loadStaticGraphicSet("add-building-button/square3", "data/img/gui/add-building/square3.png");
@@ -165,7 +167,7 @@ void AbstractGraphicsMgr::loadGraphics() {
 //    loadStaticGraphicSet("public-building-icon/church", "data/img/gui/public-building-icon/church.png");
 //    loadStaticGraphicSet("public-building-icon/high-school", "data/img/gui/public-building-icon/high-school.png");
     loadStaticGraphicSet("public-building-icon/marketplace", "data/img/gui/public-building-icon/marketplace.png");
-//    loadStaticGraphicSet("public-building-icon/school", "data/img/gui/public-building-icon/school.png");
+    loadStaticGraphicSet("public-building-icon/school", "data/img/gui/public-building-icon/school.png");
     loadStaticGraphicSet("public-building-icon/tavern", "data/img/gui/public-building-icon/tavern.png");
 //    loadStaticGraphicSet("public-building-icon/theater", "data/img/gui/public-building-icon/theater.png");
 

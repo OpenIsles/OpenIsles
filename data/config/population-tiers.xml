@@ -53,7 +53,7 @@
             <public-building name="marketplace" />
             <public-building name="chapel" />
             <public-building name="tavern" />
-            <!--<public-building name="school" />-->
+            <public-building name="school" />
         </needs>
         <max-population-per-house>15</max-population-per-house>
         <taxes-per-inhabitant>2.1</taxes-per-inhabitant>
@@ -77,7 +77,7 @@
             <good name="spices" consume-per-cycle="0.6" />
             <public-building name="marketplace" />
             <public-building name="tavern" />
-            <!--<public-building name="school" />-->
+            <public-building name="school" />
             <!--<public-building name="church" />-->
             <!--<public-building name="bathhouse" />-->
         </needs>

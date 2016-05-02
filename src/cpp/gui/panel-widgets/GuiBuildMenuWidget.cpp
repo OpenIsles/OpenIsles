@@ -99,7 +99,7 @@ GuiBuildMenuWidget::GuiBuildMenuWidget(const Context& context) : GuiPanelWidget(
                 context.configMgr->getMapObjectType("cathedral"),
                 context.configMgr->getMapObjectType("tavern"),
                 nullptr,
-                nullptr,
+                context.configMgr->getMapObjectType("school"),
                 nullptr,
                 nullptr,
                 context.configMgr->getMapObjectType("farm-road"),
