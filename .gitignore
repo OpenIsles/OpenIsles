@@ -6,3 +6,6 @@
 
 # gerenderte Zwischenbilder, die im Source-Verzeichnis liegen
 render/
+
+# generierte .pot-Datei
+*.pot
