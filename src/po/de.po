@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenIsles 0.1\n"
 "Report-Msgid-Bugs-To: http://www.openisles.org\n"
-"POT-Creation-Date: 2016-05-02 14:14+0200\n"
-"PO-Revision-Date: 2016-05-02 14:14+0200\n"
+"POT-Creation-Date: 2016-05-02 14:43+0200\n"
+"PO-Revision-Date: 2016-05-02 14:43+0200\n"
 "Last-Translator: theHacker <openisles@openisles.org>\n"
 "Language-Team: theHacker <openisles@openisles.org>\n"
 "Language: de\n"
@@ -323,7 +323,7 @@ msgstr "Die Hausbewohner verlangen nach einer Schule"
 # automatically generated out of data xmls
 #: data/config/population-tiers.xml
 msgid "neededPublicBuilding|new|tavern"
-msgstr "Die Hausbewohner verlangen nach einem Wirthauses"
+msgstr "Die Hausbewohner verlangen nach einem Wirtshaus"
 
 # automatically generated out of data xmls
 #: data/config/population-tiers.xml
@@ -343,7 +343,7 @@ msgstr "Die Hausbewohner beklagen das Fehlen einer Schule"
 # automatically generated out of data xmls
 #: data/config/population-tiers.xml
 msgid "neededPublicBuilding|overdue|tavern"
-msgstr "Die Hausbewohner beklagen das Fehlen eines Wirthauses"
+msgstr "Die Hausbewohner beklagen das Fehlen eines Wirtshauses"
 
 # automatically generated out of data xmls
 #: data/config/population-tiers.xml
