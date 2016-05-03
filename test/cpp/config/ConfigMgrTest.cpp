@@ -385,8 +385,8 @@ TEST(ConfigMgrTest, checkThatPopulationTiersAreFilledCorrectly) {
             iter++;
             ASSERT_EQ("tavern", (*iter)->name);
             iter++;
-//            ASSERT_EQ("school", (*iter)->name);
-//            iter++;
+            ASSERT_EQ("school", (*iter)->name);
+            iter++;
             ASSERT_EQ(populationTier->needsPublicBuildings.cend(), iter);
         }
 
@@ -433,8 +433,8 @@ TEST(ConfigMgrTest, checkThatPopulationTiersAreFilledCorrectly) {
             iter++;
             ASSERT_EQ("tavern", (*iter)->name);
             iter++;
-//            ASSERT_EQ("school", (*iter)->name);
-//            iter++;
+            ASSERT_EQ("school", (*iter)->name);
+            iter++;
 //            ASSERT_EQ("church", (*iter)->name);
 //            iter++;
 //            ASSERT_EQ("bathhouse", (*iter)->name);
