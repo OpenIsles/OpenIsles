@@ -32,6 +32,7 @@ public:
     virtual void setHintRenderScaleQuality(const char* scaleQuality) {}
     virtual void startFrame() {}
     virtual void endFrame() {}
+    virtual void takeScreenshot(const char* filename) {}
 };
 
 #endif

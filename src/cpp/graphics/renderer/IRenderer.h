@@ -96,6 +96,12 @@ public:
      */
     virtual void endFrame() = 0;
 
+    /**
+     * @brief Macht einen Screenshot im Bitmap-Format.
+     * @param Dateiname, unter dem der Screenshot abgespeichert werden soll
+     */
+    virtual void takeScreenshot(const char* filename) = 0;
+
 };
 
 #endif

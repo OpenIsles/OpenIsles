@@ -446,6 +446,11 @@ void GuiMgr::onEvent(SDL_Event& event) {
             game->toggleFpsCounter();
         }
 
+        // Screenshot abspeichern
+        else if (event.key.keysym.scancode == SDL_SCANCODE_F12) {
+            renderer->takeScreenshot("openisles-screenshot.bmp");
+        }
+
 #ifdef DEBUG_A_STAR
         bool needToRecalculate = false;
 
