@@ -238,6 +238,13 @@ public:
     }
 
     /**
+     * @brief Setzt das Quit-Flag, um Beenden des Spiels einzuleiten
+     */
+    void quit() {
+        quitGame = true;
+    }
+
+    /**
      * @brief Ermittelt, ob der Benutzer das Spiel via UI beenden will. Die Hauptschleife muss dieses Flag checken
      * und falls gesetzt, die Anwendung beenden.
      *
@@ -256,6 +263,14 @@ public:
      * @brief Zoomt die Karte eine Stufe raus. No-Op, wenn schon auf Anschlag rausgezoomt.
      */
     void decreaseMapZoom();
+
+    /**
+     * @brief Macht einen Screenshot im Bitmap-Format.
+     * @param fullMap `true`, um die komplette Karte als Riesenscreenshot zu speichern
+     *                `false` für einen normalen Screenshot mit GUI
+     * @param filename Dateiname, unter dem der Screenshot abgespeichert werden soll
+     */
+    void takeScreenshot(bool fullMap, const char* filename);
 
 private:
     /**
@@ -297,14 +312,6 @@ private:
      * @param yDelta Veränderung in Y-Map-Koordinaten
      */
     void scrollMap(Map* map, int xDelta, int yDelta);
-
-    /**
-     * @brief Macht einen Screenshot im Bitmap-Format.
-     * @param fullMap `true`, um die komplette Karte als Riesenscreenshot zu speichern
-     *                `false` für einen normalen Screenshot mit GUI
-     * @param filename Dateiname, unter dem der Screenshot abgespeichert werden soll
-     */
-    void takeScreenshot(bool fullMap, const char* filename);
 };
 
 #endif

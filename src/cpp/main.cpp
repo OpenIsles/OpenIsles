@@ -67,6 +67,17 @@ static struct {
      */
     char* mapFileToLoad = nullptr;
 
+    /**
+     * @brief wenn ungleich 0, läuft das Spiel exakt die angegebene [Spielzeit](@ref gameTicks), führt danach den
+     * Riesenscreenshot aus und beendet dann.
+     */
+    unsigned long ticksToRun = 0;
+
+    /**
+     * @brief Dateiname, unter dem ein Riesenscreenshot abgespeichert werden soll
+     */
+    char* bmpFileForBigScreenshot = nullptr;
+
 } cmdlineParams;
 
 
@@ -126,7 +137,7 @@ void drawFrame(const Context& context, IRenderer* renderer) {
 
 bool parseCmdlineParams(int argc, char** argv) {
     int opt;
-    while ((opt = getopt(argc, argv, "b:m:")) != -1) {
+    while ((opt = getopt(argc, argv, "b:m:t:s:")) != -1) {
         switch (opt) {
             case 'b':
                 cmdlineParams.benchmarkFrames = atoi(optarg);
@@ -136,8 +147,17 @@ bool parseCmdlineParams(int argc, char** argv) {
                 cmdlineParams.mapFileToLoad = optarg;
                 break;
 
+            case 't':
+                cmdlineParams.ticksToRun = (unsigned long) atol(optarg);
+                break;
+
+            case 's':
+                cmdlineParams.bmpFileForBigScreenshot = optarg;
+                break;
+
             default:
-                Log::error(_("Usage: %s -m mapFileToLoad [-b benchmarkFrames]"), argv[0]);
+                Log::error(_("Usage: %s -m mapFileToLoad [-b benchmarkFrames] [-t runOnlyGameTicks -s bmpFileForBigScreenshot]"),
+                           argv[0]);
                 return false;
         }
     }
@@ -210,6 +230,15 @@ int main(int argc, char** argv) {
     game->loadGameFromTMX(cmdlineParams.mapFileToLoad);
 
     sdlRenderer->showWindow();
+
+    // Automatischer Riesenscreenshot angefordert? ///////////////////////////////////////////////////////////////////
+
+    if ((cmdlineParams.ticksToRun > 0) && (cmdlineParams.bmpFileForBigScreenshot != nullptr)) {
+        game->updateRealistically(cmdlineParams.ticksToRun);
+        guiMgr->takeScreenshot(true, cmdlineParams.bmpFileForBigScreenshot);
+
+        guiMgr->quit();
+    }
 
     // Mainloop //////////////////////////////////////////////////////////////////////////////////////////////////////
 

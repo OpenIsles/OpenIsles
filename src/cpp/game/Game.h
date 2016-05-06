@@ -301,22 +301,8 @@ public:
     void update(unsigned long millisecondsElapsed);
 
     /**
-     * @brief Ändert die Einwohner innerhalb eines Gebäudes. Positive Werte fügen Bewohner hinzu, negative nehmen
-     * welche weg.
-     *
-     * Diese Methode aktualisiert gleich die Einwohnerzahl der Kolonie. Es sollte immer diese Methode benutzt werden,
-     * um Einwohner zu ändern.
-     *
-     * @param building Gebäude, dessen Einwohner geändert werden sollen
-     * @param amount Bevölkerung, die hinzukommen soll
-     */
-    void addInhabitantsToBuilding(Building* building, char amount);
-
-
-#ifdef IN_TESTS
-    /**
-     * @brief Hilfsmethode für Tests, die große Zeitspannen Spiellogik auslöst
-     * und die Tests damit "realistischer" durchführt.
+     * @brief Hilfsmethode für Tests/Automatismen, die große Zeitspannen Spiellogik auslösen
+     * und damit "realistischer" durchführt.
      *
      * Diese Methode löst das Problem, dass update() nicht mit zu großem Wert für `millisecondsElapsed`
      * aufgerufen werden darf. Lösung hier ist, dass die große Zeitspanne durch mehrfache kleine update()-Aufrufe
@@ -345,7 +331,7 @@ public:
     }
 
     /**
-     * @brief Shortcut für einheitlichen Aufruf von update(unsigned long, unsigned long) aus den Tests heraus.
+     * @brief Shortcut für einheitlichen Aufruf von update(unsigned long, unsigned long)
      * @param millisecondsElapsed Millisekunden, die das Spiel fortschreiten soll.
      */
     inline void updateRealistically(unsigned long millisecondsElapsed) {
@@ -354,7 +340,18 @@ public:
 
         update(millisecondsElapsed, millisecondsIncrement);
     }
-#endif
+
+    /**
+     * @brief Ändert die Einwohner innerhalb eines Gebäudes. Positive Werte fügen Bewohner hinzu, negative nehmen
+     * welche weg.
+     *
+     * Diese Methode aktualisiert gleich die Einwohnerzahl der Kolonie. Es sollte immer diese Methode benutzt werden,
+     * um Einwohner zu ändern.
+     *
+     * @param building Gebäude, dessen Einwohner geändert werden sollen
+     * @param amount Bevölkerung, die hinzukommen soll
+     */
+    void addInhabitantsToBuilding(Building* building, char amount);
 
 private:
     /**
