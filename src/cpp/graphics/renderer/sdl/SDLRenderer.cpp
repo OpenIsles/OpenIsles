@@ -149,24 +149,20 @@ void SDLRenderer::endFrame() {
     SDL_RenderPresent(renderer);
 }
 
-void SDLRenderer::takeScreenshot(const char* filename) {
+void* SDLRenderer::takeScreenshot() {
     int width, height;
     SDL_QueryTexture(offscreenTexture, nullptr, nullptr, &width, &height);
 
     char* pixels = new char[3 * width * height];
 
-    if (SDL_RenderReadPixels(renderer, nullptr, SDL_PIXELFORMAT_RGB24, pixels, 3 * width) == 0) {
-
-        SDL_Surface* sdlSurface = SDL_CreateRGBSurfaceFrom(
-            pixels, width, height, 24, 3 * width, 0x000000ff, 0x0000ff00, 0x00ff0000, 0x00000000);
-        SDL_SaveBMP(sdlSurface, filename);
-        SDL_FreeSurface(sdlSurface);
-    }
-    else {
-        Log::error(_("Cannot get pixel data for screenshot."));
+    if (SDL_RenderReadPixels(renderer, nullptr, SDL_PIXELFORMAT_RGB24, pixels, 3 * width) != 0) {
+        delete[] pixels;
+        return nullptr;
     }
 
-    delete pixels;
+    SDL_Surface* sdlSurface = SDL_CreateRGBSurfaceFrom(
+        pixels, width, height, 24, 3 * width, 0x000000ff, 0x0000ff00, 0x00ff0000, 0x00000000);
+    return sdlSurface;
 }
 
 SDL_Renderer* SDLRenderer::getRealRenderer() {

@@ -297,6 +297,14 @@ private:
      * @param yDelta Veränderung in Y-Map-Koordinaten
      */
     void scrollMap(Map* map, int xDelta, int yDelta);
+
+    /**
+     * @brief Macht einen Screenshot im Bitmap-Format.
+     * @param fullMap `true`, um die komplette Karte als Riesenscreenshot zu speichern
+     *                `false` für einen normalen Screenshot mit GUI
+     * @param filename Dateiname, unter dem der Screenshot abgespeichert werden soll
+     */
+    void takeScreenshot(bool fullMap, const char* filename);
 };
 
 #endif

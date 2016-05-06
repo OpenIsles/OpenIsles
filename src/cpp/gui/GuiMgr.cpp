@@ -448,7 +448,12 @@ void GuiMgr::onEvent(SDL_Event& event) {
 
         // Screenshot abspeichern
         else if (event.key.keysym.scancode == SDL_SCANCODE_F12) {
-            renderer->takeScreenshot("openisles-screenshot.bmp");
+            if (event.key.keysym.mod & KMOD_SHIFT) {
+                takeScreenshot(true, "openisles-fullmap-screenshot.bmp");
+            }
+            else {
+                takeScreenshot(false, "openisles-screenshot.bmp");
+            }
         }
 
 #ifdef DEBUG_A_STAR
@@ -640,4 +645,100 @@ inline void GuiMgr::changeMapZoom(Map* map, int newScreenZoom) {
 inline void GuiMgr::scrollMap(Map* map, int xDelta, int yDelta) {
     map->scroll(xDelta, yDelta);
     ((GuiMinimap*) findElement(GUI_ID_MINIMAP))->onMapCoordsChanged();
+}
+
+void GuiMgr::takeScreenshot(bool fullMap, const char* filename) {
+#ifndef NO_SDL
+    // normalen Screenshot
+    if (!fullMap) {
+        SDL_Surface* sdlSurface = (SDL_Surface*) renderer->takeScreenshot();
+        if (sdlSurface != nullptr) {
+            SDL_SaveBMP(sdlSurface, filename);
+            delete[] (char*) sdlSurface->pixels;
+            SDL_FreeSurface(sdlSurface);
+        } else {
+            Log::error(_("Cannot get pixel data for screenshot."));
+        }
+        return;
+    }
+
+    /* komplette Karte
+     *
+     * Da wir Hardware-Rendering betreiben und die Grafiken an den Renderer gebunden sind, müssen wir diesen
+     * bestehenden Renderer nutzen, um den Screenshot anzufertigen. Ein Ändern der Größe des Viewports geht nicht
+     * so einfach.
+     * Die Event-Behandling findet außerhalb des Renderings eines Frames statt, also können wir nun "Extra-Frames"
+     * einschieben und dann aus dem VRAM die Teile wieder auslesen und zum Riesenscreenshot zusammensetzen.
+     */
+
+    GuiMap* guiMap = dynamic_cast<GuiMap*>(findElement(GUI_ID_MAP));
+    int windowX, windowY;
+    guiMap->getWindowCoords(windowX, windowY);
+    SDL_Rect rectSource{ windowX, windowY, guiMap->width, guiMap->height };
+
+    // Berechne Screenshot-Größe
+    Map* map = context.game->getMap();
+    assert (map->getWidth() == map->getHeight()); // quaratische Maps annehmen, um die Berechnungen zu vereinfachen!
+
+    int bigScreenshotWidth = (map->getWidth() + map->getHeight()) * IGraphicsMgr::TILE_WIDTH_HALF;
+    int bigScreenshotHeight = (map->getWidth() + map->getHeight() + 1) * IGraphicsMgr::TILE_HEIGHT_HALF;
+
+    SDL_Surface* sdlBigSurface = SDL_CreateRGBSurface(
+        0, bigScreenshotWidth, bigScreenshotHeight, 24, 0x00ff0000, 0x0000ff00, 0x000000ff, 0x00000000);
+    if (sdlBigSurface == nullptr) {
+        Log::error(_("Cannot allocate memory for big screenshot."));
+        return;
+    }
+
+    // Zustand von GuiMap sichern
+    MapCoords oldMapCoordsCentered = map->getMapCoordsCentered();
+    int oldScreenZoom = map->getScreenZoom();
+
+    // Screenshot anfertigen
+    map->setScreenZoom(1);
+
+    for (int y = 0; y < bigScreenshotHeight; y += guiMap->height) {
+        for (int x = 0; x < bigScreenshotWidth; x += guiMap->width) {
+            Log::debug(_("Creating tile screenshot for (%d, %d)"), x, y);
+
+            int wx = x - (bigScreenshotWidth / 2) + (guiMap->width / 2);
+            int wy = y + (guiMap->height / 2);
+
+            int mx = (int) std::floor((wx / (double) IGraphicsMgr::TILE_WIDTH) +
+                                      (wy / (double) IGraphicsMgr::TILE_HEIGHT));
+            int my = (int) std::floor((-wx / (double) IGraphicsMgr::TILE_WIDTH) +
+                                      (wy / (double) IGraphicsMgr::TILE_HEIGHT));
+
+            map->setMapCoordsCentered(MapCoords(mx, my));
+
+            renderer->startFrame();
+            guiMap->renderElement(renderer);
+
+            // endFrame() sorgt dafür, dass der Backbuffer sichtbar wird. Das ist für den Nutzer sehr hässlich, löst aber
+            // erstmal ein Problem. OpenGL hat intern ein Koordinatensystem, was das Bild verkehrtrum darstellt, wenn wir
+            // den Buffer abgreifen, BEVOR er ausgegeben ist.
+            renderer->endFrame();
+
+            SDL_Surface* sdlSurface = (SDL_Surface*) renderer->takeScreenshot();
+            if (sdlSurface == nullptr) {
+                Log::error(
+                    _("Cannot get pixel data for screenshot. There are now pixels missing on the big screenshot."));
+                continue;
+            }
+
+            SDL_Rect rectDestination = { x, y, rectSource.w, rectSource.h };
+            SDL_BlitSurface(sdlSurface, &rectSource, sdlBigSurface, &rectDestination);
+
+            delete[] (char*) sdlSurface->pixels;
+            SDL_FreeSurface(sdlSurface);
+        }
+    }
+
+    SDL_SaveBMP(sdlBigSurface, filename);
+    SDL_FreeSurface(sdlBigSurface);
+
+    // Zustand von GuiMap wiederherstellen
+    map->setMapCoordsCentered(oldMapCoordsCentered);
+    map->setScreenZoom(oldScreenZoom);
+#endif
 }

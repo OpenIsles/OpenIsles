@@ -95,12 +95,13 @@ public:
      * @brief Beendet das Zeichnen eines Frames vor: Der Renderer kopiert den Backbuffer in das sichtbare Fenster.
      */
     virtual void endFrame() = 0;
-
     /**
-     * @brief Macht einen Screenshot im Bitmap-Format.
-     * @param Dateiname, unter dem der Screenshot abgespeichert werden soll
+     * @brief Liefert den Inhalt des Backbuffer als Surface zurück.
+     * @return Zeiger auf ein `SDL_Surface` mit alloziertem Pixel-Buffer. Der Aufruf muss diesen und das
+     *         Surface wieder freigeben!
+     *         Bei einem Fehler wird `nullptr` zurückgeliefert.
      */
-    virtual void takeScreenshot(const char* filename) = 0;
+    virtual void* takeScreenshot() = 0;
 
 };
 
