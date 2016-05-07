@@ -1,0 +1,797 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="isometric" renderorder="right-down" width="90" height="90" tilewidth="64" tileheight="32" nextobjectid="136">
+ <properties>
+  <property name="current-player" value="1"/>
+  <property name="player1-color" value="red"/>
+  <property name="player1-name" value="Spieler 1"/>
+  <property name="player2-color" value="yellow"/>
+  <property name="player2-name" value="Spieler 2"/>
+  <property name="player3-color" value="white"/>
+  <property name="player3-name" value="Spieler 3"/>
+  <property name="player4-color" value="blue"/>
+  <property name="player4-name" value="Spieler 4"/>
+ </properties>
+ <objectgroup name="isles">
+  <object id="1" name="large1" type="isle" x="128" y="128" width="2560" height="2560"/>
+  <object id="2" type="startpoint" x="512" y="512"/>
+ </objectgroup>
+ <objectgroup name="colonies">
+  <object id="3" name="City" type="colony" x="2176" y="1312" width="32" height="32">
+   <properties>
+    <property name="goods-alcohol" value="1"/>
+    <property name="goods-bricks" value="2"/>
+    <property name="goods-cattle" value="0"/>
+    <property name="goods-cloth" value="0"/>
+    <property name="goods-food" value="0"/>
+    <property name="goods-spices" value="0"/>
+    <property name="goods-sugar" value="5"/>
+    <property name="goods-tobacco" value="7"/>
+    <property name="goods-tobacco-goods" value="5"/>
+    <property name="goods-tools" value="15"/>
+    <property name="goods-wood" value="30"/>
+    <property name="goods-wool" value="0"/>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+ </objectgroup>
+ <objectgroup name="map-objects">
+  <object id="4" name="marketplace" x="1440" y="896" width="128" height="96">
+   <properties>
+    <property name="player" value="1"/>
+    <property name="view" value="south"/>
+   </properties>
+  </object>
+  <object id="5" name="marketplace" x="1376" y="2048" width="128" height="96">
+   <properties>
+    <property name="player" value="1"/>
+    <property name="view" value="south"/>
+   </properties>
+  </object>
+  <object id="6" name="marketplace" x="1856" y="768" width="128" height="96">
+   <properties>
+    <property name="player" value="1"/>
+    <property name="view" value="south"/>
+   </properties>
+  </object>
+  <object id="7" name="marketplace" x="1664" y="1472" width="128" height="96">
+   <properties>
+    <property name="player" value="1"/>
+    <property name="view" value="south"/>
+   </properties>
+  </object>
+  <object id="8" name="office1" x="2368" y="1568" width="64" height="96">
+   <properties>
+    <property name="player" value="1"/>
+    <property name="view" value="west"/>
+   </properties>
+  </object>
+  <object id="9" name="office2" x="2304" y="1312" width="64" height="96">
+   <properties>
+    <property name="player" value="1"/>
+    <property name="view" value="west"/>
+   </properties>
+  </object>
+  <object id="10" name="cobbled-street" x="1920" y="1184" width="32" height="32">
+   <properties>
+    <property name="connections" value="0010"/>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object id="11" name="pier" x="2432" y="1568" width="32" height="32">
+   <properties>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object id="12" name="cobbled-street" x="1920" y="1152" width="32" height="32">
+   <properties>
+    <property name="connections" value="1010"/>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object id="13" name="cobbled-street" x="1920" y="1088" width="32" height="32">
+   <properties>
+    <property name="connections" value="1000"/>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object id="14" name="pier" x="2432" y="1536" width="32" height="32">
+   <properties>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object id="15" name="cobbled-street" x="1920" y="1120" width="32" height="32">
+   <properties>
+    <property name="connections" value="1010"/>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object id="16" name="pier" x="2432" y="1632" width="32" height="32">
+   <properties>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object id="17" name="pier" x="2368" y="1344" width="32" height="32">
+   <properties>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object id="18" name="pier" x="2368" y="1376" width="32" height="32">
+   <properties>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object id="19" name="pier" x="2368" y="1312" width="32" height="32">
+   <properties>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object id="20" name="farm-road" x="1888" y="1280" width="32" height="32">
+   <properties>
+    <property name="connections" value="0101"/>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object id="21" name="farm-road" x="1920" y="1280" width="32" height="32">
+   <properties>
+    <property name="connections" value="0101"/>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object id="22" name="farm-road" x="1856" y="1280" width="32" height="32">
+   <properties>
+    <property name="connections" value="0100"/>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object id="23" name="farm-road" x="1952" y="1280" width="32" height="32">
+   <properties>
+    <property name="connections" value="0001"/>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object id="24" name="pier" x="2432" y="1600" width="32" height="32">
+   <properties>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object id="25" name="pier" x="2432" y="1664" width="32" height="32">
+   <properties>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object id="26" name="pier" x="2432" y="1696" width="32" height="32">
+   <properties>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object id="27" name="pier" x="2272" y="896" width="32" height="32">
+   <properties>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object id="28" name="pioneers-house1" x="1888" y="1568" width="64" height="64">
+   <properties>
+    <property name="player" value="1"/>
+    <property name="view" value="south"/>
+   </properties>
+  </object>
+  <object id="29" name="chapel" x="1888" y="1440" width="64" height="32">
+   <properties>
+    <property name="player" value="1"/>
+    <property name="view" value="south"/>
+   </properties>
+  </object>
+  <object id="30" name="tavern" x="2016" y="1760" width="64" height="96">
+   <properties>
+    <property name="player" value="1"/>
+    <property name="view" value="south"/>
+   </properties>
+  </object>
+  <object id="31" name="school" x="2080" y="1600" width="64" height="64">
+   <properties>
+    <property name="player" value="1"/>
+    <property name="view" value="south"/>
+   </properties>
+  </object>
+  <object id="32" name="hunters-hut" x="1824" y="1280" width="32" height="32">
+   <properties>
+    <property name="player" value="1"/>
+    <property name="view" value="south"/>
+   </properties>
+  </object>
+  <object id="33" name="foresters" x="2208" y="1824" width="64" height="64">
+   <properties>
+    <property name="player" value="1"/>
+    <property name="view" value="south"/>
+   </properties>
+  </object>
+  <object id="34" name="northern-forest1" x="2176" y="1824" width="32" height="32">
+   <properties>
+    <property name="age" value="2"/>
+    <property name="view" value="south"/>
+   </properties>
+  </object>
+  <object id="35" name="northern-forest2" x="2176" y="1856" width="32" height="32">
+   <properties>
+    <property name="age" value="1"/>
+    <property name="view" value="north"/>
+   </properties>
+  </object>
+  <object id="36" name="northern-forest1" x="2208" y="1888" width="32" height="32">
+   <properties>
+    <property name="age" value="0"/>
+    <property name="view" value="east"/>
+   </properties>
+  </object>
+  <object id="37" name="northern-forest1" x="2176" y="1888" width="32" height="32">
+   <properties>
+    <property name="age" value="2"/>
+   </properties>
+  </object>
+  <object id="40" name="northern-forest1" x="2112" y="1984" width="32" height="32">
+   <properties>
+    <property name="age" value="4"/>
+    <property name="view" value="north"/>
+   </properties>
+  </object>
+  <object id="41" name="sheep-farm" x="1536" y="1184" width="64" height="64">
+   <properties>
+    <property name="player" value="1"/>
+    <property name="view" value="south"/>
+   </properties>
+  </object>
+  <object id="42" name="northern-forest2" x="1504" y="1152" width="32" height="32">
+   <properties>
+    <property name="age" value="3"/>
+    <property name="view" value="south"/>
+   </properties>
+  </object>
+  <object id="43" name="northern-forest1" x="1536" y="1152" width="32" height="32">
+   <properties>
+    <property name="age" value="4"/>
+    <property name="view" value="north"/>
+   </properties>
+  </object>
+  <object id="44" name="farm-road" x="1632" y="1184" width="32" height="32">
+   <properties>
+    <property name="connections" value="0001"/>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object id="45" name="farm-road" x="1600" y="1184" width="32" height="32">
+   <properties>
+    <property name="connections" value="0100"/>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object id="46" name="farm-road" x="1728" y="1088" width="32" height="32">
+   <properties>
+    <property name="connections" value="0010"/>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object id="47" name="farm-road" x="1728" y="1056" width="32" height="32">
+   <properties>
+    <property name="connections" value="1000"/>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object id="48" name="cattle-farm" x="1696" y="992" width="64" height="64">
+   <properties>
+    <property name="player" value="1"/>
+    <property name="view" value="east"/>
+   </properties>
+  </object>
+  <object id="49" name="tobacco-field" x="1376" y="1376" width="32" height="32">
+   <properties>
+    <property name="age" value="4"/>
+    <property name="view" value="west"/>
+   </properties>
+  </object>
+  <object id="50" name="tobacco-plantation" x="1312" y="1376" width="64" height="64">
+   <properties>
+    <property name="player" value="1"/>
+    <property name="view" value="east"/>
+   </properties>
+  </object>
+  <object id="51" name="tobacco-field" x="1376" y="1440" width="32" height="32">
+   <properties>
+    <property name="age" value="3"/>
+    <property name="view" value="south"/>
+   </properties>
+  </object>
+  <object id="52" name="sugarcane-plantation" x="1248" y="1568" width="64" height="64">
+   <properties>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object id="53" name="tobacco-field" x="1280" y="1344" width="32" height="32">
+   <properties>
+    <property name="age" value="1"/>
+    <property name="view" value="west"/>
+   </properties>
+  </object>
+  <object id="54" name="tobacco-field" x="1312" y="1344" width="32" height="32">
+   <properties>
+    <property name="age" value="2"/>
+    <property name="view" value="west"/>
+   </properties>
+  </object>
+  <object id="55" name="tobacco-field" x="1376" y="1344" width="32" height="32">
+   <properties>
+    <property name="age" value="4"/>
+    <property name="view" value="east"/>
+   </properties>
+  </object>
+  <object id="56" name="tobacco-field" x="1344" y="1440" width="32" height="32">
+   <properties>
+    <property name="age" value="3"/>
+    <property name="view" value="west"/>
+   </properties>
+  </object>
+  <object id="57" name="tobacco-field" x="1312" y="1440" width="32" height="32">
+   <properties>
+    <property name="age" value="4"/>
+    <property name="view" value="north"/>
+   </properties>
+  </object>
+  <object id="58" name="sugarcane-field" x="1248" y="1632" width="32" height="32">
+   <properties>
+    <property name="age" value="4"/>
+    <property name="view" value="north"/>
+   </properties>
+  </object>
+  <object id="59" name="sugarcane-field" x="1312" y="1632" width="32" height="32">
+   <properties>
+    <property name="age" value="3"/>
+    <property name="view" value="south"/>
+   </properties>
+  </object>
+  <object id="60" name="sugarcane-field" x="1248" y="1536" width="32" height="32">
+   <properties>
+    <property name="age" value="1"/>
+    <property name="view" value="west"/>
+   </properties>
+  </object>
+  <object id="61" name="sugarcane-field" x="1280" y="1536" width="32" height="32">
+   <properties>
+    <property name="age" value="2"/>
+    <property name="view" value="west"/>
+   </properties>
+  </object>
+  <object id="62" name="sugarcane-field" x="1312" y="1536" width="32" height="32">
+   <properties>
+    <property name="age" value="4"/>
+    <property name="view" value="east"/>
+   </properties>
+  </object>
+  <object id="63" name="sugarcane-field" x="1280" y="1632" width="32" height="32">
+   <properties>
+    <property name="age" value="3"/>
+    <property name="view" value="west"/>
+   </properties>
+  </object>
+  <object id="64" name="sugarcane-field" x="1312" y="1568" width="32" height="32">
+   <properties>
+    <property name="age" value="1"/>
+    <property name="view" value="west"/>
+   </properties>
+  </object>
+  <object id="65" name="sugarcane-field" x="1312" y="1600" width="32" height="32">
+   <properties>
+    <property name="age" value="1"/>
+    <property name="view" value="south"/>
+   </properties>
+  </object>
+  <object id="66" name="tobacco-field" x="1376" y="1408" width="32" height="32">
+   <properties>
+    <property name="age" value="4"/>
+    <property name="view" value="north"/>
+   </properties>
+  </object>
+  <object id="67" name="tobacco-field" x="1344" y="1344" width="32" height="32">
+   <properties>
+    <property name="age" value="1"/>
+    <property name="view" value="north"/>
+   </properties>
+  </object>
+  <object id="68" name="sugarcane-field" x="1408" y="1664" width="32" height="32">
+   <properties>
+    <property name="age" value="4"/>
+    <property name="view" value="south"/>
+   </properties>
+  </object>
+  <object id="69" name="sugarcane-field" x="1408" y="1632" width="32" height="32">
+   <properties>
+    <property name="age" value="4"/>
+    <property name="view" value="south"/>
+   </properties>
+  </object>
+  <object id="70" name="sugarcane-field" x="1440" y="1632" width="32" height="32">
+   <properties>
+    <property name="age" value="4"/>
+    <property name="view" value="south"/>
+   </properties>
+  </object>
+  <object id="71" name="sugarcane-field" x="1440" y="1664" width="32" height="32">
+   <properties>
+    <property name="age" value="4"/>
+    <property name="view" value="south"/>
+   </properties>
+  </object>
+  <object id="72" name="tobacco-field" x="1504" y="1376" width="32" height="32">
+   <properties>
+    <property name="age" value="6"/>
+    <property name="view" value="south"/>
+   </properties>
+  </object>
+  <object id="73" name="tobacco-field" x="1472" y="1376" width="32" height="32">
+   <properties>
+    <property name="age" value="6"/>
+    <property name="view" value="south"/>
+   </properties>
+  </object>
+  <object id="74" name="tobacco-field" x="1472" y="1408" width="32" height="32">
+   <properties>
+    <property name="age" value="6"/>
+    <property name="view" value="south"/>
+   </properties>
+  </object>
+  <object id="75" name="tobacco-field" x="1504" y="1408" width="32" height="32">
+   <properties>
+    <property name="age" value="6"/>
+    <property name="view" value="south"/>
+   </properties>
+  </object>
+  <object id="76" name="spices-field" x="1312" y="1888" width="32" height="32">
+   <properties>
+    <property name="age" value="4"/>
+    <property name="view" value="west"/>
+   </properties>
+  </object>
+  <object id="77" name="spices-field" x="1440" y="1856" width="32" height="32">
+   <properties>
+    <property name="age" value="5"/>
+    <property name="view" value="south"/>
+   </properties>
+  </object>
+  <object id="78" name="spices-field" x="1472" y="1824" width="32" height="32">
+   <properties>
+    <property name="age" value="5"/>
+    <property name="view" value="south"/>
+   </properties>
+  </object>
+  <object id="79" name="spices-field" x="1472" y="1856" width="32" height="32">
+   <properties>
+    <property name="age" value="5"/>
+    <property name="view" value="south"/>
+   </properties>
+  </object>
+  <object id="80" name="spices-field" x="1280" y="1888" width="32" height="32">
+   <properties>
+    <property name="age" value="5"/>
+    <property name="view" value="north"/>
+   </properties>
+  </object>
+  <object id="81" name="spices-field" x="1440" y="1824" width="32" height="32">
+   <properties>
+    <property name="age" value="5"/>
+    <property name="view" value="south"/>
+   </properties>
+  </object>
+  <object id="82" name="spices-field" x="1344" y="1856" width="32" height="32">
+   <properties>
+    <property name="age" value="5"/>
+    <property name="view" value="north"/>
+   </properties>
+  </object>
+  <object id="83" name="spices-field" x="1344" y="1888" width="32" height="32">
+   <properties>
+    <property name="age" value="4"/>
+    <property name="view" value="south"/>
+   </properties>
+  </object>
+  <object id="84" name="spices-plantation" x="1280" y="1824" width="64" height="64">
+   <properties>
+    <property name="player" value="1"/>
+    <property name="view" value="east"/>
+   </properties>
+  </object>
+  <object id="85" name="weaving-mill1" x="1664" y="1728" width="64" height="64">
+   <properties>
+    <property name="player" value="1"/>
+    <property name="view" value="south"/>
+   </properties>
+  </object>
+  <object id="86" name="northern-forest1" x="1632" y="1728" width="32" height="32">
+   <properties>
+    <property name="age" value="3"/>
+    <property name="view" value="west"/>
+   </properties>
+  </object>
+  <object id="87" name="northern-forest2" x="1632" y="1696" width="32" height="32">
+   <properties>
+    <property name="age" value="3"/>
+    <property name="view" value="south"/>
+   </properties>
+  </object>
+  <object id="88" name="northern-forest1" x="1664" y="1696" width="32" height="32">
+   <properties>
+    <property name="age" value="4"/>
+    <property name="view" value="east"/>
+   </properties>
+  </object>
+  <object id="89" name="northern-forest2" x="1632" y="1888" width="32" height="32">
+   <properties>
+    <property name="age" value="4"/>
+    <property name="view" value="west"/>
+   </properties>
+  </object>
+  <object id="90" name="northern-forest2" x="1664" y="1856" width="32" height="32">
+   <properties>
+    <property name="age" value="3"/>
+    <property name="view" value="east"/>
+   </properties>
+  </object>
+  <object id="91" name="butchers" x="1664" y="1888" width="64" height="64">
+   <properties>
+    <property name="player" value="1"/>
+    <property name="view" value="south"/>
+   </properties>
+  </object>
+  <object id="92" name="northern-forest1" x="1632" y="1856" width="32" height="32">
+   <properties>
+    <property name="age" value="4"/>
+    <property name="view" value="west"/>
+   </properties>
+  </object>
+  <object id="93" name="northern-forest1" x="1824" y="1760" width="32" height="32">
+   <properties>
+    <property name="age" value="3"/>
+    <property name="view" value="north"/>
+   </properties>
+  </object>
+  <object id="94" name="tobacco-goods" x="1856" y="1920" width="64" height="64">
+   <properties>
+    <property name="player" value="1"/>
+    <property name="view" value="south"/>
+   </properties>
+  </object>
+  <object id="96" name="northern-forest2" x="1824" y="1888" width="32" height="32">
+   <properties>
+    <property name="age" value="4"/>
+    <property name="view" value="west"/>
+   </properties>
+  </object>
+  <object id="97" name="northern-forest1" x="1856" y="1888" width="32" height="32">
+   <properties>
+    <property name="age" value="4"/>
+    <property name="view" value="east"/>
+   </properties>
+  </object>
+  <object id="98" name="distillery" x="1856" y="1760" width="64" height="64">
+   <properties>
+    <property name="player" value="1"/>
+    <property name="view" value="west"/>
+   </properties>
+  </object>
+  <object id="99" name="northern-forest2" x="1824" y="1920" width="32" height="32">
+   <properties>
+    <property name="age" value="4"/>
+    <property name="view" value="west"/>
+   </properties>
+  </object>
+  <object id="100" name="northern-forest1" x="1824" y="1728" width="32" height="32">
+   <properties>
+    <property name="age" value="2"/>
+    <property name="view" value="west"/>
+   </properties>
+  </object>
+  <object id="101" name="stonemason" x="1664" y="2048" width="64" height="64">
+   <properties>
+    <property name="player" value="1"/>
+    <property name="view" value="south"/>
+   </properties>
+  </object>
+  <object id="102" name="northern-forest1" x="1632" y="2016" width="32" height="32">
+   <properties>
+    <property name="age" value="3"/>
+    <property name="view" value="west"/>
+   </properties>
+  </object>
+  <object id="103" name="northern-forest2" x="1632" y="2048" width="32" height="32">
+   <properties>
+    <property name="age" value="2"/>
+    <property name="view" value="west"/>
+   </properties>
+  </object>
+  <object id="104" name="northern-forest1" x="1824" y="2112" width="32" height="32">
+   <properties>
+    <property name="age" value="2"/>
+    <property name="view" value="north"/>
+   </properties>
+  </object>
+  <object id="105" name="toolsmiths" x="1856" y="2112" width="64" height="64">
+   <properties>
+    <property name="player" value="1"/>
+    <property name="view" value="south"/>
+   </properties>
+  </object>
+  <object id="106" name="square1" x="2048" y="1152" width="32" height="32">
+   <properties>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object id="107" name="square3" x="2048" y="1024" width="32" height="32">
+   <properties>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object id="108" name="square2" x="2048" y="1088" width="32" height="32">
+   <properties>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object id="109" name="farm-road" x="1728" y="1440" width="32" height="32">
+   <properties>
+    <property name="connections" value="0001"/>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object id="110" name="farm-road" x="1664" y="1440" width="32" height="32">
+   <properties>
+    <property name="connections" value="0100"/>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object id="111" name="northern-forest1" x="1632" y="1440" width="32" height="32">
+   <properties>
+    <property name="age" value="3"/>
+    <property name="view" value="west"/>
+   </properties>
+  </object>
+  <object id="112" name="northern-forest1" x="1856" y="1408" width="32" height="32">
+   <properties>
+    <property name="age" value="3"/>
+   </properties>
+  </object>
+  <object id="113" name="northern-forest1" x="1888" y="1408" width="32" height="32">
+   <properties>
+    <property name="age" value="3"/>
+    <property name="view" value="south"/>
+   </properties>
+  </object>
+  <object id="114" name="northern-forest2" x="1856" y="1440" width="32" height="32">
+   <properties>
+    <property name="age" value="2"/>
+    <property name="view" value="north"/>
+   </properties>
+  </object>
+  <object id="115" name="northern-forest2" x="1920" y="1408" width="32" height="32">
+   <properties>
+    <property name="age" value="3"/>
+    <property name="view" value="south"/>
+   </properties>
+  </object>
+  <object id="116" name="northern-forest1" x="1856" y="1248" width="32" height="32">
+   <properties>
+    <property name="age" value="4"/>
+    <property name="view" value="north"/>
+   </properties>
+  </object>
+  <object id="117" name="northern-forest1" x="1888" y="1344" width="32" height="32">
+   <properties>
+    <property name="age" value="3"/>
+    <property name="view" value="south"/>
+   </properties>
+  </object>
+  <object id="118" name="cobbled-street" x="1920" y="1792" width="32" height="32">
+   <properties>
+    <property name="connections" value="0010"/>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object id="119" name="cobbled-street" x="1920" y="1760" width="32" height="32">
+   <properties>
+    <property name="connections" value="1000"/>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object id="120" name="farm-road" x="1728" y="1888" width="32" height="32">
+   <properties>
+    <property name="connections" value="1000"/>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object id="121" name="farm-road" x="1728" y="1920" width="32" height="32">
+   <properties>
+    <property name="connections" value="0010"/>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object id="122" name="farm-road" x="2272" y="1856" width="32" height="32">
+   <properties>
+    <property name="connections" value="0100"/>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object id="123" name="farm-road" x="2304" y="1856" width="32" height="32">
+   <properties>
+    <property name="connections" value="0001"/>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object id="124" name="cathedral" x="1152" y="1056" width="192" height="128">
+   <properties>
+    <property name="player" value="1"/>
+    <property name="view" value="south"/>
+   </properties>
+  </object>
+  <object id="125" name="northern-forest2" x="1888" y="1376" width="32" height="32">
+   <properties>
+    <property name="age" value="2"/>
+    <property name="view" value="west"/>
+   </properties>
+  </object>
+  <object id="126" name="northern-forest2" x="1856" y="1376" width="32" height="32">
+   <properties>
+    <property name="age" value="3"/>
+    <property name="view" value="east"/>
+   </properties>
+  </object>
+  <object id="127" name="northern-forest2" x="1952" y="1440" width="32" height="32">
+   <properties>
+    <property name="age" value="2"/>
+    <property name="view" value="north"/>
+   </properties>
+  </object>
+  <object id="128" name="northern-forest1" x="2240" y="1888" width="32" height="32">
+   <properties>
+    <property name="age" value="1"/>
+    <property name="view" value="north"/>
+   </properties>
+  </object>
+  <object id="129" name="farm-road" x="1696" y="1440" width="32" height="32">
+   <properties>
+    <property name="connections" value="0101"/>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
+  <object id="130" name="spices-field" x="1280" y="1792" width="32" height="32">
+   <properties>
+    <property name="age" value="4"/>
+    <property name="view" value="west"/>
+   </properties>
+  </object>
+  <object id="131" name="spices-field" x="1312" y="1792" width="32" height="32">
+   <properties>
+    <property name="age" value="5"/>
+    <property name="view" value="south"/>
+   </properties>
+  </object>
+  <object id="132" name="spices-field" x="1344" y="1792" width="32" height="32">
+   <properties>
+    <property name="age" value="3"/>
+    <property name="view" value="west"/>
+   </properties>
+  </object>
+  <object id="133" name="spices-field" x="1344" y="1824" width="32" height="32">
+   <properties>
+    <property name="age" value="5"/>
+    <property name="view" value="south"/>
+   </properties>
+  </object>
+  <object id="134" name="northern-forest2" x="1920" y="1472" width="32" height="32">
+   <properties>
+    <property name="age" value="0"/>
+    <property name="view" value="south"/>
+   </properties>
+  </object>
+  <object id="135" name="northern-forest1" x="1888" y="1472" width="32" height="32">
+   <properties>
+    <property name="age" value="2"/>
+    <property name="view" value="east"/>
+   </properties>
+  </object>
+ </objectgroup>
+</map>

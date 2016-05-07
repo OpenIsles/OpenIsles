@@ -234,7 +234,7 @@ int main(int argc, char** argv) {
     // Automatischer Riesenscreenshot angefordert? ///////////////////////////////////////////////////////////////////
 
     if ((cmdlineParams.ticksToRun > 0) && (cmdlineParams.bmpFileForBigScreenshot != nullptr)) {
-        game->updateRealistically(cmdlineParams.ticksToRun);
+        game->update(cmdlineParams.ticksToRun, 1000);
         guiMgr->takeScreenshot(true, cmdlineParams.bmpFileForBigScreenshot);
 
         guiMgr->quit();

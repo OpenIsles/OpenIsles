@@ -1,6 +1,11 @@
 SRC_DIRECTORY := src
 DATA_DIRECTORY := data
 
+# Zielverzeichnis, in dem die fertige Anwendung kompiliert wurde
+# @see https://youtrack.jetbrains.com/issue/CPP-3374
+TARGET_DIRECTORY := ~/.clion/system/cmake/generated/OpenIsles-1b82d0b6/1b82d0b6/Debug
+TARGET_EXECUTABLE := $(TARGET_DIRECTORY)/OpenIsles
+
 # Für das fertige Tileset für Tiled: Anzahl Kacheln pro Zeile
 TILESET_WIDTH := 4
 
@@ -10,7 +15,8 @@ MONTAGE := montage -background transparent
 BLENDER := /opt/blender-2.74/blender
 
 .PHONY: all clean build-gui clean-gui render-sheep render-cart render-build-menu \
-        render-coat-of-arms render-coin render-public-building-icons render-blender clean-blender
+        render-coat-of-arms render-coin render-public-building-icons render-blender clean-blender \
+        build-add-building-gui
 
 all: build-gui render-blender
 
@@ -54,7 +60,7 @@ clean-gui:
 	rm -f $(DATA_DIRECTORY)/img/gui/minimap.png \
 	rm -f $(DATA_DIRECTORY)/img/gui/map-rotate.png \
 	rm -f $(DATA_DIRECTORY)/img/gui/map-zoom.png \
-	rm -f $(DATA_DIRECTORY)/img/gui/add-building/add-building-grid.png
+	rm -rf $(DATA_DIRECTORY)/img/gui/add-building
 	
 build-gui: \
 	$(DATA_DIRECTORY)/img/gui/panel.png \
@@ -63,7 +69,8 @@ build-gui: \
 	$(DATA_DIRECTORY)/img/gui/minimap.png \
 	$(DATA_DIRECTORY)/img/gui/map-rotate.png \
 	$(DATA_DIRECTORY)/img/gui/map-zoom.png \
-	$(DATA_DIRECTORY)/img/gui/add-building/add-building-grid.png
+	$(DATA_DIRECTORY)/img/gui/add-building/add-building-grid.png \
+	build-add-building-gui
 
 $(DATA_DIRECTORY)/img/gui/panel.png: $(SRC_DIRECTORY)/psd/marble-panels.psd
 	$(CREATE_TARGET_DIRECTORY)
@@ -141,6 +148,49 @@ $(DATA_DIRECTORY)/img/gui/add-building/add-building-grid.png: $(SRC_DIRECTORY)/b
 	$(CREATE_TARGET_DIRECTORY)
 	cd $(SRC_DIRECTORY)/blender/gui/add-building-grid; $(BLENDER) -b $(notdir $<) -P render.py
 	mv $(SRC_DIRECTORY)/blender/gui/add-building-grid/add-building-grid.png $@
+
+SCREENSHOT=$(DATA_DIRECTORY)/img/gui/add-building/screenshot-add-building-gui.bmp
+build-add-building-gui: $(TARGET_EXECUTABLE)
+	mkdir -p $(DATA_DIRECTORY)/img/gui/add-building
+	# TODO später, wenn der Zustand "Gras abgefressen" in der Map gespeichert ist, können wir vorhersehbar machen, wo Schafe/Rinder hinlaufen, damit sie immer an derselben Stelle im Screenshot sind
+	# Alternative wäre Boden-Kacheln zu nehmen, die kein Gras anbieten
+	# TODO später, wenn Gebäude-Lagerbestand in der Map gespeichert ist, dem Förster etwas Lagerbestand geben, um Baumstämme vor dem Haus liegen zu haben
+	$(TARGET_EXECUTABLE) -m $(DATA_DIRECTORY)/map/map-for-add-building-gui.tmx \
+	                     -t 19000 -s $(SCREENSHOT)
+	convert $(SCREENSHOT) \
+	    \( +clone -crop 75x75+2632+1752 -resize 46x46 -write $(DATA_DIRECTORY)/img/gui/add-building/butchers.png +delete \) \
+	    \( +clone -crop 102x102+3019+1112 -resize 46x46 -write $(DATA_DIRECTORY)/img/gui/add-building/cathedral.png +delete \) \
+	    \( +clone -crop 103x103+3524+1316 -resize 46x46 -write $(DATA_DIRECTORY)/img/gui/add-building/cattle-farm.png +delete \) \
+	    \( +clone -crop 67x67+3310+1621 -resize 46x46 -write $(DATA_DIRECTORY)/img/gui/add-building/chapel.png +delete \) \
+	    \( +clone -crop 55x55+3620+1513 -resize 46x46 -write $(DATA_DIRECTORY)/img/gui/add-building/cobbled-street.png +delete \) \
+	    \( +clone -crop 78x78+2937+1780 -resize 46x46 -write $(DATA_DIRECTORY)/img/gui/add-building/distillery.png +delete \) \
+	    \( +clone -crop 55x55+3497+1577 -resize 46x46 -write $(DATA_DIRECTORY)/img/gui/add-building/farm-road.png +delete \) \
+	    \( +clone -crop 66x66+3220+1999 -resize 46x46 -write $(DATA_DIRECTORY)/img/gui/add-building/foresters.png +delete \) \
+	    \( +clone -crop 69x69+2973+2001 -resize 46x46 -write $(DATA_DIRECTORY)/img/gui/add-building/forest.png +delete \) \
+	    \( +clone -crop 50x50+3169+1699 -resize 46x46 -write $(DATA_DIRECTORY)/img/gui/add-building/house.png +delete \) \
+	    \( +clone -crop 61x61+3410+1530 -resize 46x46 -write $(DATA_DIRECTORY)/img/gui/add-building/hunters-hut.png +delete \) \
+	    \( +clone -crop 89x89+3038+1525 -resize 46x46 -write $(DATA_DIRECTORY)/img/gui/add-building/marketplace.png +delete \) \
+	    \( +clone -crop 80x80+3636+1955 -resize 46x46 -write $(DATA_DIRECTORY)/img/gui/add-building/office1.png +delete \) \
+	    \( +clone -crop 64x64+3836+1800 -resize 46x46 -write $(DATA_DIRECTORY)/img/gui/add-building/office2.png +delete \) \
+	    \( +clone -crop 57x57+4234+1578 -resize 46x46 -write $(DATA_DIRECTORY)/img/gui/add-building/pier.png +delete \) \
+	    \( +clone -crop 69x69+3319+1807 -resize 46x46 -write $(DATA_DIRECTORY)/img/gui/add-building/school.png +delete \) \
+	    \( +clone -crop 92x92+3210+1332 -resize 46x46 -write $(DATA_DIRECTORY)/img/gui/add-building/sheep-farm.png +delete \) \
+	    \( +clone -crop 65x65+2485+1615 -resize 46x46 -write $(DATA_DIRECTORY)/img/gui/add-building/spices-field.png +delete \) \
+	    \( +clone -crop 74x74+2316+1533 -resize 46x46 -write $(DATA_DIRECTORY)/img/gui/add-building/spices-plantation.png +delete \) \
+	    \( +clone -crop 56x56+3748+1572 -resize 46x46 -write $(DATA_DIRECTORY)/img/gui/add-building/square1.png +delete \) \
+	    \( +clone -crop 56x56+3812+1540 -resize 46x46 -write $(DATA_DIRECTORY)/img/gui/add-building/square2.png +delete \) \
+	    \( +clone -crop 56x56+3876+1508 -resize 46x46 -write $(DATA_DIRECTORY)/img/gui/add-building/square3.png +delete \) \
+	    \( +clone -crop 72x72+2452+1834 -resize 46x46 -write $(DATA_DIRECTORY)/img/gui/add-building/stonemason.png +delete \) \
+	    \( +clone -crop 65x65+2647+1502 -resize 46x46 -write $(DATA_DIRECTORY)/img/gui/add-building/sugarcane-field.png +delete \) \
+	    \( +clone -crop 67x67+2531+1392 -resize 46x46 -write $(DATA_DIRECTORY)/img/gui/add-building/sugarcane-plantation.png +delete \) \
+	    \( +clone -crop 64x64+3098+1872 -resize 46x46 -write $(DATA_DIRECTORY)/img/gui/add-building/tavern.png +delete \) \
+	    \( +clone -crop 63x63+2972+1413 -resize 46x46 -write $(DATA_DIRECTORY)/img/gui/add-building/tobacco-field.png +delete \) \
+	    \( +clone -crop 60x60+2786+1863 -resize 46x46 -write $(DATA_DIRECTORY)/img/gui/add-building/tobacco-goods.png +delete \) \
+	    \( +clone -crop 76x76+2789+1318 -resize 46x46 -write $(DATA_DIRECTORY)/img/gui/add-building/tobacco-plantation.png +delete \) \
+	    \( +clone -crop 56x56+2594+1963 -resize 46x46 -write $(DATA_DIRECTORY)/img/gui/add-building/toolsmiths.png +delete \) \
+	    \( +clone -crop 68x68+2787+1664 -resize 46x46 -write $(DATA_DIRECTORY)/img/gui/add-building/weaving-mill1.png +delete \) \
+	    null:
+	rm $(SCREENSHOT)
 	
 ########################################################################################################################
 # Gebäude                                                                                                              #
