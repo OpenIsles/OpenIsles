@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenIsles 0.1\n"
 "Report-Msgid-Bugs-To: http://www.openisles.org\n"
-"POT-Creation-Date: 2016-05-02 14:14+0200\n"
-"PO-Revision-Date: 2016-05-02 14:14+0200\n"
+"POT-Creation-Date: 2016-05-08 19:16+0200\n"
+"PO-Revision-Date: 2016-05-08 19:16+0200\n"
 "Last-Translator: theHacker <openisles@openisles.org>\n"
 "Language-Team: theHacker <openisles@openisles.org>\n"
 "Language: en\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.8.4\n"
+"X-Generator: Poedit 1.8.7.1\n"
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-SearchPath-0: .\n"
 
@@ -533,12 +533,12 @@ msgstr "Could not create texture: %s"
 msgid "Illegal bytesPerPixel: %d"
 msgstr "Illegal bytesPerPixel: %d"
 
-#: src/cpp/graphics/mgr/AbstractGraphicsMgr.cpp:241
+#: src/cpp/graphics/mgr/AbstractGraphicsMgr.cpp:242
 #, c-format
 msgid "Could not divide the frames equally: '%s'"
 msgstr "Could not divide the frames equally: '%s'"
 
-#: src/cpp/graphics/mgr/AbstractGraphicsMgr.cpp:248
+#: src/cpp/graphics/mgr/AbstractGraphicsMgr.cpp:249
 #, c-format
 msgid "Could not divide the views equally: '%s'"
 msgstr "Could not divide the views equally: '%s'"
@@ -604,6 +604,27 @@ msgstr "Identifier %d is already registered."
 msgid "Identifier %d is not registered."
 msgstr "Identifier %d is not registered."
 
+#: src/cpp/gui/GuiMgr.cpp:660
+msgid "Cannot get pixel data for screenshot."
+msgstr "Cannot get pixel data for screenshot."
+
+#: src/cpp/gui/GuiMgr.cpp:689
+msgid "Cannot allocate memory for big screenshot."
+msgstr "Cannot allocate memory for big screenshot."
+
+#: src/cpp/gui/GuiMgr.cpp:702
+#, c-format
+msgid "Creating tile screenshot for (%d, %d)"
+msgstr "Creating tile screenshot for (%d, %d)"
+
+#: src/cpp/gui/GuiMgr.cpp:725
+msgid ""
+"Cannot get pixel data for screenshot. There are now pixels missing on the "
+"big screenshot."
+msgstr ""
+"Cannot get pixel data for screenshot. There are now pixels missing on the "
+"big screenshot."
+
 #: src/cpp/gui/components/GuiAddBuildingWidget.cpp:40
 msgid "Costs for this structure"
 msgstr "Costs for this structure"
@@ -667,6 +688,10 @@ msgstr "Port facilities"
 #: src/cpp/gui/panel-widgets/GuiBuildMenuWidget.cpp:92
 msgid "Public buildings"
 msgstr "Public buildings"
+
+#: src/cpp/gui/panel-widgets/GuiBuildMenuWidget.cpp:203
+msgid "Switch to demolition mode"
+msgstr "Switch to demolition mode"
 
 #: src/cpp/gui/panel-widgets/GuiDummyWidget.cpp:15
 #: src/cpp/gui/panel-widgets/GuiDummyWidget.cpp:29
@@ -746,32 +771,36 @@ msgstr "Supply of %s (enough for another %.1ft of %s)"
 msgid "Using locale '%s'."
 msgstr "Using locale '%s'."
 
-#: src/cpp/main.cpp:100
+#: src/cpp/main.cpp:111
 msgid "FPS:"
 msgstr "FPS:"
 
-#: src/cpp/main.cpp:103
+#: src/cpp/main.cpp:114
 msgid "current:"
 msgstr "current:"
 
-#: src/cpp/main.cpp:108
+#: src/cpp/main.cpp:119
 msgid "average:"
 msgstr "average:"
 
-#: src/cpp/main.cpp:140
+#: src/cpp/main.cpp:159
 #, c-format
-msgid "Usage: %s -m mapFileToLoad [-b benchmarkFrames]"
-msgstr "Usage: %s -m mapFileToLoad [-b benchmarkFrames]"
+msgid ""
+"Usage: %s -m mapFileToLoad [-b benchmarkFrames] [-t runOnlyGameTicks -s "
+"bmpFileForBigScreenshot]"
+msgstr ""
+"Usage: %s -m mapFileToLoad [-b benchmarkFrames] [-t runOnlyGameTicks -s "
+"bmpFileForBigScreenshot]"
 
-#: src/cpp/main.cpp:146
+#: src/cpp/main.cpp:166
 msgid "Error: No map file specified."
 msgstr "Error: No map file specified."
 
-#: src/cpp/main.cpp:174
+#: src/cpp/main.cpp:194
 msgid "Could not register events."
 msgstr "Could not register events."
 
-#: src/cpp/main.cpp:282
+#: src/cpp/main.cpp:311
 #, c-format
 msgid ""
 "PerfCounters: events avg %.3f, current = %.1f; gameUpdate avg %.3f, current "
@@ -780,45 +809,45 @@ msgstr ""
 "PerfCounters: events avg %.3f, current = %.1f; gameUpdate avg %.3f, current "
 "= %.1f; rendering avg %.3f, current = %.1f"
 
-#: src/cpp/main.cpp:293
+#: src/cpp/main.cpp:322
 #, c-format
 msgid "Screen: mapCentered = (%d, %d), zoom = %d, view = %d"
 msgstr "Screen: mapCentered = (%d, %d), zoom = %d, view = %d"
 
-#: src/cpp/main.cpp:297
+#: src/cpp/main.cpp:326
 #, c-format
 msgid "Game ticks: %lu"
 msgstr "Game ticks: %lu"
 
-#: src/cpp/main.cpp:300
+#: src/cpp/main.cpp:329
 #, c-format
 msgid "mouse = (%d, %d), screen = (%d, %d), mapElevated = (%d, %d)"
 msgstr "mouse = (%d, %d), screen = (%d, %d), mapElevated = (%d, %d)"
 
-#: src/cpp/main.cpp:319
+#: src/cpp/main.cpp:348
 #, c-format
 msgid "selectedMapObject(Fixed) on mapCoords (%d, %d), size = (%d, %d)"
 msgstr "selectedMapObject(Fixed) on mapCoords (%d, %d), size = (%d, %d)"
 
-#: src/cpp/main.cpp:328
+#: src/cpp/main.cpp:357
 #, c-format
 msgid "selectedMapObject(Moving) on mapCoords (%f, %f), size = (%d, %d)"
 msgstr "selectedMapObject(Moving) on mapCoords (%f, %f), size = (%d, %d)"
 
-#: src/cpp/main.cpp:334
+#: src/cpp/main.cpp:363
 #, c-format
 msgid "selectedMapObject(UNKNOWN!?) size = (%d, %d)"
 msgstr "selectedMapObject(UNKNOWN!?) size = (%d, %d)"
 
-#: src/cpp/main.cpp:347
+#: src/cpp/main.cpp:376
 msgid "catchmentAreaIterator set"
 msgstr "catchmentAreaIterator set"
 
-#: src/cpp/main.cpp:349
+#: src/cpp/main.cpp:378
 msgid "catchmentAreaIterator nullptr"
 msgstr "catchmentAreaIterator nullptr"
 
-#: src/cpp/main.cpp:353
+#: src/cpp/main.cpp:382
 #, c-format
 msgid ""
 "debugAStar: source = (%d, %d), destination = (%d, %d), %s, useStreetOnly = "
@@ -827,11 +856,11 @@ msgstr ""
 "debugAStar: source = (%d, %d), destination = (%d, %d), %s, useStreetOnly = "
 "%s, rightAnglesOnly = %s"
 
-#: src/cpp/main.cpp:360 src/cpp/main.cpp:361
+#: src/cpp/main.cpp:389 src/cpp/main.cpp:390
 msgid "false"
 msgstr "false"
 
-#: src/cpp/main.cpp:360 src/cpp/main.cpp:361
+#: src/cpp/main.cpp:389 src/cpp/main.cpp:390
 msgid "true"
 msgstr "true"
 
@@ -905,6 +934,3 @@ msgstr "Loaded music '%s'."
 # automatically generated out of data xmls
 #~ msgid "neededPublicBuilding|new|bathhouse"
 #~ msgstr "The residents demand a bathhouse"
-
-msgid "Switch to demolition mode"
-msgstr "Switch to demolition mode"
