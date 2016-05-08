@@ -139,6 +139,8 @@ void AbstractGraphicsMgr::loadGraphics() {
     loadStaticGraphicSet("build-menu/port-pressed", "data/img/gui/build-menu/port-pressed.png");
     loadStaticGraphicSet("build-menu/public", "data/img/gui/build-menu/public.png");
     loadStaticGraphicSet("build-menu/public-pressed", "data/img/gui/build-menu/public-pressed.png");
+    loadStaticGraphicSet("build-menu/demolish", "data/img/gui/build-menu/demolish.png");
+    loadStaticGraphicSet("build-menu/demolish-pressed", "data/img/gui/build-menu/demolish-pressed.png");
 
     loadStaticGraphicSet("production-arrow", "data/img/gui/production-arrow.png");
     loadStaticGraphicSet("production-plus", "data/img/gui/production-plus.png");

@@ -910,3 +910,6 @@ msgstr "Musik '%s' geladen."
 # automatically generated out of data xmls
 #~ msgid "neededPublicBuilding|overdue|theater"
 #~ msgstr "Die Hausbewohner beklagen das Fehlen eines Theaters"
+
+msgid "Switch to demolish mode"
+msgstr "Abreißmodus aktivieren"

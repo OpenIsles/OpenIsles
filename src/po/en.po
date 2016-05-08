@@ -905,3 +905,6 @@ msgstr "Loaded music '%s'."
 # automatically generated out of data xmls
 #~ msgid "neededPublicBuilding|new|bathhouse"
 #~ msgstr "The residents demand a bathhouse"
+
+msgid "Switch to demolition mode"
+msgstr "Switch to demolition mode"

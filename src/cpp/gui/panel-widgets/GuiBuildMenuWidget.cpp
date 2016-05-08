@@ -161,7 +161,7 @@ GuiBuildMenuWidget::GuiBuildMenuWidget(const Context& context) : GuiPanelWidget(
         addBuildingPushButton->setGraphicPressed(
             context.graphicsMgr->getGraphicSet(buildingGroups[groupIndex].graphicSetPressedName)->getStatic()->getGraphic());
         addBuildingPushButton->setUseShadow((groupIndex >= 2) ? true : false); // TODO einheitlich true setzen, wenn die Blender-Grafiken komplett sind
-        addBuildingPushButton->setCoords(12 + groupIndex * 55, 340, 52, 64);
+        addBuildingPushButton->setCoords(12 + groupIndex * 55, 345, 52, 64);
         addBuildingPushButton->setStatusBarText(buildingGroups[groupIndex].name);
         addBuildingPushButton->setOnClickFunction([this, &context, groupIndex]() {
             // Wenn man die Gruppe nochmal klickt, die bereits ausgewählt ist und das ausgewählte Gebäude nicht
@@ -191,6 +191,22 @@ GuiBuildMenuWidget::GuiBuildMenuWidget(const Context& context) : GuiPanelWidget(
         context.guiMgr->registerElement(GUI_ID_ADD_BUILDING_PUSH_BUTTON_BASE + groupIndex, addBuildingPushButton);
         addChildElement(addBuildingPushButton);
     }
+
+    // Abreißen
+    GuiPushButton* demolishButton = new GuiPushButton(context);
+    demolishButton->setGraphic(
+        context.graphicsMgr->getGraphicSet("build-menu/demolish")->getStatic()->getGraphic());
+    demolishButton->setGraphicPressed(
+        context.graphicsMgr->getGraphicSet("build-menu/demolish-pressed")->getStatic()->getGraphic());
+    demolishButton->setUseShadow(true);
+    demolishButton->setCoords(177, 280, 52, 64);
+    demolishButton->setStatusBarText(_("Switch to demolition mode"));
+    demolishButton->setOnClickFunction([this, &context]() {
+        // TODO Abreißmodus aktivieren
+        Log::debug("TODO Abrissmodus");
+    });
+    context.guiMgr->registerElement(GUI_ID_DEMOLISH_PUSH_BUTTON, demolishButton);
+    addChildElement(demolishButton);
 
     // Gebäudebau: Infos, über zu platzierendes Gebäude
     GuiAddBuildingWidget* addBuildingWidget = new GuiAddBuildingWidget(context);

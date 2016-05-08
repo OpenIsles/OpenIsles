@@ -16,7 +16,7 @@ GuiAddBuildingWidget::GuiAddBuildingWidget(const Context& context) :
     coinsElement(context), operatingCostsElement(context),
     toolsElement(context), woodElement(context), bricksElement(context) {
 
-    setCoords(0, 0, 210, 320);
+    setCoords(0, 0, 210, 290);
 
     // Gebäudename
     panelHeader.setPosition(0, 0);
@@ -24,15 +24,15 @@ GuiAddBuildingWidget::GuiAddBuildingWidget(const Context& context) :
 
     // Produktion
 
-    productionSlotsElement.setPosition(15, 175);
+    productionSlotsElement.setPosition(15, 165);
     addChildElement(&productionSlotsElement);
 
     // Baukosten: Münzen und Betriebskosten
 
     const int elementsX = 7;
     const int elementsXColumnWidth = 75;
-    const int elementsHeight = 30;
-    const int elementsY1 = 255;
+    const int elementsHeight = 25;
+    const int elementsY1 = 215;
     const int elementsY2 = elementsY1 + elementsHeight + 5;
 
     coinsElement.setCoords(elementsX, elementsY1, 85, elementsHeight);

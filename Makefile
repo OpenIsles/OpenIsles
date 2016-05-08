@@ -428,11 +428,13 @@ $(DATA_DIRECTORY)/img/gui/population-man.png: $(SRC_DIRECTORY)/blender/gui/popul
 	$(BLENDER) -b $< -o //population-man\#.png -f 1
 	mv $(SRC_DIRECTORY)/blender/gui/population-man/population-man1.png $@
 
-render-build-menu: $(SRC_DIRECTORY)/blender/gui/build-menu/public.blend \
-                   $(SRC_DIRECTORY)/blender/gui/build-menu/port.blend
+render-build-menu: $(SRC_DIRECTORY)/blender/gui/build-menu/demolish.blend \
+                   $(SRC_DIRECTORY)/blender/gui/build-menu/port.blend \
+                   $(SRC_DIRECTORY)/blender/gui/build-menu/public.blend
 	mkdir -p $(DATA_DIRECTORY)/img/gui/build-menu
-	cd $(SRC_DIRECTORY)/blender/gui/build-menu; $(BLENDER) -b public.blend -P render.py
+	cd $(SRC_DIRECTORY)/blender/gui/build-menu; $(BLENDER) -b demolish.blend -P render-demolish.py
 	cd $(SRC_DIRECTORY)/blender/gui/build-menu; $(BLENDER) -b port.blend -P render.py
+	cd $(SRC_DIRECTORY)/blender/gui/build-menu; $(BLENDER) -b public.blend -P render.py
 	mv $(SRC_DIRECTORY)/blender/gui/build-menu/render/* $(DATA_DIRECTORY)/img/gui/build-menu
 
 render-public-building-icons: $(SRC_DIRECTORY)/blender/gui/public-building-icon/public-building-icon.blend
