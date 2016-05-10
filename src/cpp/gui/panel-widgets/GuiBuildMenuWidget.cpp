@@ -155,13 +155,16 @@ GuiBuildMenuWidget::GuiBuildMenuWidget(const Context& context) : GuiPanelWidget(
         }
 
         // Button für die Gruppe
+        const IGraphic* graphic =
+            context.graphicsMgr->getGraphicSet(buildingGroups[groupIndex].graphicSetName)->getStatic()->getGraphic();
+        const IGraphic* graphicPressed =
+            context.graphicsMgr->getGraphicSet(buildingGroups[groupIndex].graphicSetPressedName)->getStatic()->getGraphic();
+
         GuiPushButton* addBuildingPushButton = new GuiPushButton(context);
-        addBuildingPushButton->setGraphic(
-            context.graphicsMgr->getGraphicSet(buildingGroups[groupIndex].graphicSetName)->getStatic()->getGraphic());
-        addBuildingPushButton->setGraphicPressed(
-            context.graphicsMgr->getGraphicSet(buildingGroups[groupIndex].graphicSetPressedName)->getStatic()->getGraphic());
+        addBuildingPushButton->setGraphic(graphic);
+        addBuildingPushButton->setGraphicPressed(graphicPressed);
         addBuildingPushButton->setUseShadow((groupIndex >= 2) ? true : false); // TODO einheitlich true setzen, wenn die Blender-Grafiken komplett sind
-        addBuildingPushButton->setCoords(12 + groupIndex * 55, 345, 52, 64);
+        addBuildingPushButton->setCoords(12 + groupIndex * 55, 345, graphic->getWidth(), graphic->getHeight());
         addBuildingPushButton->setStatusBarText(buildingGroups[groupIndex].name);
         addBuildingPushButton->setOnClickFunction([this, &context, groupIndex]() {
             // Wenn man die Gruppe nochmal klickt, die bereits ausgewählt ist und das ausgewählte Gebäude nicht
@@ -193,13 +196,16 @@ GuiBuildMenuWidget::GuiBuildMenuWidget(const Context& context) : GuiPanelWidget(
     }
 
     // Abreißen
+    const IGraphic* graphic =
+        context.graphicsMgr->getGraphicSet("build-menu/demolish")->getStatic()->getGraphic();
+    const IGraphic* graphicPressed =
+        context.graphicsMgr->getGraphicSet("build-menu/demolish-pressed")->getStatic()->getGraphic();
+
     GuiPushButton* demolishButton = new GuiPushButton(context);
-    demolishButton->setGraphic(
-        context.graphicsMgr->getGraphicSet("build-menu/demolish")->getStatic()->getGraphic());
-    demolishButton->setGraphicPressed(
-        context.graphicsMgr->getGraphicSet("build-menu/demolish-pressed")->getStatic()->getGraphic());
+    demolishButton->setGraphic(graphic);
+    demolishButton->setGraphicPressed(graphicPressed);
     demolishButton->setUseShadow(true);
-    demolishButton->setCoords(177, 280, 52, 64);
+    demolishButton->setCoords(177, 280, graphic->getWidth(), graphic->getHeight());
     demolishButton->setStatusBarText(_("Switch to demolition mode"));
     demolishButton->setOnClickFunction([this, &context]() {
         // TODO Abreißmodus aktivieren
