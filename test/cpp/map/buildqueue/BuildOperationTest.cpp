@@ -294,3 +294,40 @@ TEST_F(BuildOperationTest, addingOneMoreHouse) {
 
     ASSERT_TRUE(resultAfter.at(mapCoordsToBuildAfter)->mapObjectToReplaceWith != nullptr);
 }
+
+/**
+ * @brief Überprüft den internen Zustand von mapObjectsToBuildMode
+ */
+TEST_F(BuildOperationTest, mapObjectToBuildModes) {
+    const MapObjectType* pioneersHouse1 = configMgr->getMapObjectType("pioneers-house1");
+
+    BuildOperation buildOperation1(context, *player);
+    ASSERT_EQ(MapObjectToBuild::Mode::EMPTY, buildOperation1.getMapObjectsToBuildMode());
+
+    BuildOperation buildOperation2(context, *player);
+    buildOperation2.requestBuildWhenNothingInTheWay({39, 37}, pioneersHouse1, Direction::NORTH);
+    buildOperation2.requestBuildWhenNothingInTheWay({39, 40}, pioneersHouse1, Direction::NORTH);
+    ASSERT_EQ(MapObjectToBuild::Mode::BUILD, buildOperation2.getMapObjectsToBuildMode());
+
+    BuildOperation buildOperation3(context, *player);
+    buildOperation3.requestDemolish(*context.game->getMap()->getMapObjectFixedAt({47, 45}));
+    buildOperation3.requestDemolish(*context.game->getMap()->getMapObjectFixedAt({45, 45}));
+    ASSERT_EQ(MapObjectToBuild::Mode::DEMOLISH, buildOperation3.getMapObjectsToBuildMode());
+}
+
+/**
+ * @brief Fügt einen Abreißauftrag der Queue hinzu und prüft, ob alle betroffenen Kacheln als "zu entfernen"
+ * markiert werden
+ */
+TEST_F(BuildOperationTest, demolishMapObject) {
+    BuildOperation buildOperation(context, *player);
+    buildOperation.requestDemolish(*context.game->getMap()->getMapObjectFixedAt({48, 40}));
+
+    BuildOperationResult result = buildOperation.getResult();
+    ASSERT_EQ(BuildOperationResult::OK, result.result);
+    ASSERT_EQ(4, result.size());
+    ASSERT_EQ(true, result.at(MapCoords(48, 40))->deleteMapObjectThere);
+    ASSERT_EQ(true, result.at(MapCoords(49, 40))->deleteMapObjectThere);
+    ASSERT_EQ(true, result.at(MapCoords(48, 41))->deleteMapObjectThere);
+    ASSERT_EQ(true, result.at(MapCoords(49, 41))->deleteMapObjectThere);
+}

@@ -21,8 +21,14 @@ private:
 
     /**
      * @brief Bauaufträge ("Build-Queue")
+     * Es können immer nur Aufträge desselben Typs in der Queue sein (siehe mapObjectsToBuildMode).
      */
     std::list<MapObjectToBuild> mapObjectsToBuild;
+
+    /**
+     * @brief gibt an, welcher Typ von Bauauftrag in der Build-Queue ist.
+     */
+    MapObjectToBuild::Mode mapObjectsToBuildMode = MapObjectToBuild::EMPTY;
 
     /**
      * @brief Kolonie, in der gebaut wird.
@@ -43,6 +49,10 @@ public:
 
     const std::list<MapObjectToBuild>& getMapObjectsToBuild() const {
         return mapObjectsToBuild;
+    }
+
+    MapObjectToBuild::Mode getMapObjectsToBuildMode() const {
+        return mapObjectsToBuildMode;
     }
 
     const BuildOperationResult& getResult() const {
@@ -72,15 +82,11 @@ public:
     void requestBuildWhenNothingInTheWay(
         const MapCoords& mapCoords, const MapObjectType* mapObjectType, const FourthDirection& view);
 
-    // TODO Objekt abreißen
     /**
      * @brief Fügt dem Bauauftrag ein Objekt hinzu, was abgerissen werden soll.
      * @param mapObjectFixed Objekt, das abgerissen werden soll.
      */
-    void requestRemoval(const MapObjectFixed& mapObjectFixed) {
-        mapObjectsToBuild.push_back({ mapObjectFixed.getMapCoords() });
-        rebuildResult();
-    }
+    void requestDemolish(const MapObjectFixed& mapObjectFixed);
 
     /**
      * @brief Wird aufgerufen, wenn sich die verfügbaren Baumaterialen geändert haben (könnten) und wir deshalb
@@ -153,6 +159,16 @@ private:
      * @brief Aktualisiert `result` nach einer Änderung der Build-Queue
      */
     void rebuildResult();
+
+    /**
+     * @brief Sub-Methode von rebuildResult(), die sich drum kümmert, wenn wir bauen wollen
+     */
+    void rebuildResultBuild();
+
+    /**
+     * @brief Sub-Methode von rebuildResult(), die sich drum kümmert, wenn wir abreißen wollen
+     */
+    void rebuildResultDemolish();
 
 };
 

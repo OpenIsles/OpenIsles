@@ -137,9 +137,8 @@ GuiBuildMenuWidget::GuiBuildMenuWidget(const Context& context) : GuiPanelWidget(
         addBuildingPushButton->setOnClickFunction([this, &context, addBuildingPushButton, groupIndex]() {
             // Sonderfall: Abreißmodus
             if (buildingGroups[groupIndex].mapObjectTypes.empty()) {
-                Log::debug("TODO Abreißmodus");
-
                 context.guiMgr->panelState.selectedBuildingGroup = (BuildingGroup) groupIndex;
+                context.guiMgr->panelState.addingMapObject = nullptr;
                 context.guiMgr->panelState.buildingMenuOpen = false;
                 context.guiMgr->updateGuiFromPanelState();
                 return;

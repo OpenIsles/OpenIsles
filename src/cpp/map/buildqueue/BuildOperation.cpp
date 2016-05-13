@@ -8,6 +8,9 @@
 void BuildOperation::requestBuild(const MapCoords& mapCoords, const MapObjectType* mapObjectType,
                                   const FourthDirection& view) {
 
+    assert (mapObjectsToBuildMode == MapObjectToBuild::EMPTY ||
+            mapObjectsToBuildMode == MapObjectToBuild::BUILD);
+
     // TODO BUILDOPERATION die untenstehende Prüfung entsprechend einem Teil von isAllowedToPlaceMapObject()
 
     // Erst überprüfen, ob sich das neue Objekt mit einem bestehenden in der Queue überlappt
@@ -72,11 +75,15 @@ void BuildOperation::requestBuild(const MapCoords& mapCoords, const MapObjectTyp
 
     // Objekt in die Bauqueue aufnehmen und Result-Objekt aktualisieren
     mapObjectsToBuild.push_back({ mapCoords, mapObjectType, view });
+    mapObjectsToBuildMode = MapObjectToBuild::BUILD;
     rebuildResult();
 }
 
 void BuildOperation::requestBuildWhenNothingInTheWay(const MapCoords& mapCoords, const MapObjectType* mapObjectType,
                                                      const FourthDirection& view) {
+
+    assert (mapObjectsToBuildMode == MapObjectToBuild::EMPTY ||
+            mapObjectsToBuildMode == MapObjectToBuild::BUILD);
 
     // Überprüfen. ob auf der Karte alles frei is,...
     if (isSomethingInTheWayOnTheMap({ mapCoords, mapObjectType, view })) {
@@ -85,6 +92,15 @@ void BuildOperation::requestBuildWhenNothingInTheWay(const MapCoords& mapCoords,
 
     // ...dann requestBuild() übergeben
     requestBuild(mapCoords, mapObjectType, view);
+}
+
+void BuildOperation::requestDemolish(const MapObjectFixed& mapObjectFixed) {
+    assert (mapObjectsToBuildMode == MapObjectToBuild::EMPTY ||
+            mapObjectsToBuildMode == MapObjectToBuild::DEMOLISH);
+
+    mapObjectsToBuild.push_back({ mapObjectFixed.getMapCoords() });
+    mapObjectsToBuildMode = MapObjectToBuild::DEMOLISH;
+    rebuildResult();
 }
 
 bool BuildOperation::isSomethingInTheWayOnTheMap(const MapObjectToBuild& mapObjectToBuild) const {
@@ -275,10 +291,23 @@ void BuildOperation::rebuildResult() {
     result.buildingCosts.reset();
     result.result = BuildOperationResult::OK;
 
-    if (mapObjectsToBuild.empty()) {
-        return;
-    }
+    switch (mapObjectsToBuildMode) {
+        case MapObjectToBuild::EMPTY:
+            // nix tun
+            return;
 
+        case MapObjectToBuild::BUILD:
+            rebuildResultBuild();
+            return;
+
+        case MapObjectToBuild::DEMOLISH:
+            rebuildResultDemolish();
+            return;
+    }
+    assert(false);
+}
+
+void BuildOperation::rebuildResultBuild() {
     BuildingCosts resourcesAvailable = {
         player.coins,
         (int) colony->getGoods(context.configMgr->getGood("tools")).inventory,
@@ -414,6 +443,26 @@ void BuildOperation::rebuildResult() {
             adeptExistingStreets(streetToDraw, resultBit->resourcesEnoughToBuildThis);
         }
     }
+}
+
+void BuildOperation::rebuildResultDemolish() {
+    for (const MapObjectToBuild& mapObjectToBuild : mapObjectsToBuild) {
+        const MapCoords& mapCoords = mapObjectToBuild.mapCoords;
+        const MapObjectFixed* mapObjectFixed = context.game->getMap()->getMapObjectFixedAt(mapCoords);
+        assert(mapObjectFixed != nullptr);
+
+        std::shared_ptr<BuildOperationResultBit> resultBit(new BuildOperationResultBit());
+        resultBit->deleteMapObjectThere = true;
+
+        // ResultBit den Koordinaten zuweisen
+        for (int y = 0, my = mapObjectToBuild.mapCoords.y(); y < mapObjectFixed->getMapHeight(); y++, my++) {
+            for (int x = 0, mx = mapObjectToBuild.mapCoords.x(); x < mapObjectFixed->getMapWidth(); x++, mx++) {
+                result[MapCoords(mx, my)] = resultBit;
+            }
+        }
+    }
+
+    // TODO Straßen umbiegen, wenn wir löschen
 }
 
 void BuildOperation::doBuild() {

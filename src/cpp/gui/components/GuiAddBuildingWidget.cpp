@@ -81,6 +81,10 @@ void GuiAddBuildingWidget::renderElement(IRenderer* renderer) {
     getWindowCoords(windowX, windowY);
 
     const MapObjectType* mapObjectType = context.guiMgr->getPanelState().addingMapObject;
+    if (mapObjectType == nullptr) {
+        // Abreißen -> nix zu tun
+        return;
+    }
 
     // Grafik
     const FourthDirection& view = context.guiMgr->getPanelState().addingMapObjectView;
@@ -119,18 +123,39 @@ void GuiAddBuildingWidget::renderElement(IRenderer* renderer) {
 }
 
 void GuiAddBuildingWidget::onAddingMapObjectChanged(const MapObjectType* newAddingMapObject) {
-    // Name des Map-Objekts
-    panelHeader.setText(_(newAddingMapObject->getTitleMsgid()));
+    // normales Bauen
+    if (newAddingMapObject != nullptr) {
+        // Name des Map-Objekts
+        panelHeader.setText(_(newAddingMapObject->getTitleMsgid()));
 
-    // produzierte Waren
-    const ProductionSlots& buildingProduction = newAddingMapObject->buildingProduction;
-    productionSlotsElement.setFromProductionSlots(buildingProduction);
+        // produzierte Waren
+        const ProductionSlots& buildingProduction = newAddingMapObject->buildingProduction;
+        productionSlotsElement.setFromProductionSlots(buildingProduction);
+        productionSlotsElement.setVisible(true);
 
-    // Baukosten
-    const BuildingCosts& buildingCosts = newAddingMapObject->buildingCosts;
-    coinsElement.setString(toString(buildingCosts.coins));
-    operatingCostsElement.setString(toString(newAddingMapObject->operatingCosts.running));
-    toolsElement.setString(toString(buildingCosts.tools));
-    woodElement.setString(toString(buildingCosts.wood));
-    bricksElement.setString(toString(buildingCosts.bricks));
+        // Baukosten
+        const BuildingCosts& buildingCosts = newAddingMapObject->buildingCosts;
+        coinsElement.setString(toString(buildingCosts.coins));
+        coinsElement.setVisible(true);
+        operatingCostsElement.setString(toString(newAddingMapObject->operatingCosts.running));
+        operatingCostsElement.setVisible(true);
+        toolsElement.setString(toString(buildingCosts.tools));
+        toolsElement.setVisible(true);
+        woodElement.setString(toString(buildingCosts.wood));
+        woodElement.setVisible(true);
+        bricksElement.setString(toString(buildingCosts.bricks));
+        bricksElement.setVisible(true);
+    }
+
+    // Abreißen
+    else {
+        panelHeader.setText(_("Demolish"));
+
+        productionSlotsElement.setVisible(false);
+        coinsElement.setVisible(false);
+        operatingCostsElement.setVisible(false);
+        toolsElement.setVisible(false);
+        woodElement.setVisible(false);
+        bricksElement.setVisible(false);
+    }
 }

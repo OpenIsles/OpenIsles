@@ -26,9 +26,10 @@ public:
     const MapObjectType* mapObjectType;
     FourthDirection view;
 
-    enum {
-        BUILD,
-        DEMOLISH
+    enum Mode {
+        EMPTY,   ///< leere Buildqueue
+        BUILD,   ///< Auftrag, etwas Neues zu bauen
+        DEMOLISH ///< Auftrag, etwas Bestehendes abzureißen
     } mode;
 };
 

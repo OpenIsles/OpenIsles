@@ -76,6 +76,7 @@ struct PanelState {
 
     /**
      * @brief zuletzt/aktuell gewähltes Map-Objekt im Baumenü
+     * `nullptr` im Abreißmodus
      */
     const MapObjectType* addingMapObject;
 

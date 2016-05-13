@@ -119,7 +119,7 @@ void GuiMap::renderElement(IRenderer* renderer) {
     });
 
     // Einzugsbereich jetzt malen, damit er oben drauf is
-    if (buildOperation) {
+    if (buildOperation && (buildOperation->getMapObjectsToBuildMode() == MapObjectToBuild::BUILD)) {
         const std::list<MapObjectToBuild>& mapObjectsToBuild = buildOperation->getMapObjectsToBuild();
         // nur zeichnen, wenn genau ein Objekt in der Buildqueue is.
         if (mapObjectsToBuild.size() == 1) {
@@ -367,6 +367,11 @@ void GuiMap::renderTile(const MapCoords& mapCoords) {
             }
         }
 
+        // Bestehendes Objekt löschen? Dann auch maskiert zeichnen
+        if (drawWhat == FROM_MAP && buildOperationResultBit && buildOperationResultBit->deleteMapObjectThere) {
+            drawingFlags = IGraphic::DRAWING_FLAG_MASKED;
+        }
+
         const FourthDirection& view = mapObjectToDrawHere->getView();
         const FourthDirection& viewToRender = Direction::addDirections(view, screenView);
 
@@ -461,7 +466,9 @@ void GuiMap::renderTile(const MapCoords& mapCoords) {
 
         Rect rectDestination = Rect(destDrawX, destDrawY, rectSource.w / screenZoom, rectSource.h / screenZoom);
 
-        if (selectedMapObject != nullptr) {
+        if (selectedMapObject != nullptr &&
+            (!(drawingFlags & IGraphic::DRAWING_FLAG_MASKED))) { // Wenn "maskiert", dann grundsätzlich nicht
+                                                                 // zusätzlich "darkened" anwenden
             bool insideCatchmentArea =
                 (selectedBuilding != nullptr &&
                  CatchmentArea::isInsideCatchmentArea(*selectedBuilding, *mapObjectToDrawHere));
@@ -622,6 +629,12 @@ void GuiMap::addToBuildQueration(bool mustResetBefore) {
 
     // Ok, wir müssen nun ggf. was platzieren. Es kommt nun drauf an, was wir grade platzieren
     const MapObjectType* mapObjectType = context.guiMgr->getPanelState().addingMapObject;
+    if (mapObjectType == nullptr) {
+        Log::debug("TODO Abreißmodus implementieren. Beim Loslassen der Maustaste krachts ;-)");
+        // TODO buildOperation->requestDemolish() aufrufen
+        return;
+    }
+
     StructurePlacing structurePlacing = mapObjectType->structurePlacing;
     const FourthDirection& view = context.guiMgr->getPanelState().addingMapObjectView;
 
@@ -684,13 +697,23 @@ void GuiMap::addToBuildQueration(bool mustResetBefore) {
 }
 
 void GuiMap::updateHoverObject() {
-    const MapCoords& mapCoordsUnderMouse = context.guiMgr->getMapCoordsUnderMouse();
-
-    const MapObjectType* mapObjectType = context.guiMgr->getPanelState().addingMapObject;
-    const FourthDirection& view = context.guiMgr->getPanelState().addingMapObjectView;
-
     resetBuildOperation();
-    buildOperation->requestBuild(mapCoordsUnderMouse, mapObjectType, view);
+
+    const MapCoords& mapCoordsUnderMouse = context.guiMgr->getMapCoordsUnderMouse();
+    const MapObjectType* mapObjectType = context.guiMgr->getPanelState().addingMapObject;
+
+    // Bauen
+    if (mapObjectType != nullptr) {
+        const FourthDirection& view = context.guiMgr->getPanelState().addingMapObjectView;
+        buildOperation->requestBuild(mapCoordsUnderMouse, mapObjectType, view);
+    }
+    // Abreißen
+    else {
+        const MapObjectFixed* mapObjectFixed = context.game->getMap()->getMapObjectFixedAt(mapCoordsUnderMouse);
+        if (mapObjectFixed != nullptr) {
+            buildOperation->requestDemolish(*mapObjectFixed);
+        }
+    }
 }
 
 const MapObjectFixed* GuiMap::getMapObjectFixedUnderMouseCoords(int mouseX, int mouseY) {

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenIsles 0.1\n"
 "Report-Msgid-Bugs-To: http://www.openisles.org\n"
-"POT-Creation-Date: 2016-05-08 19:16+0200\n"
+"POT-Creation-Date: 2016-05-13 14:09+0200\n"
 "PO-Revision-Date: 2016-05-08 19:16+0200\n"
 "Last-Translator: theHacker <openisles@openisles.org>\n"
 "Language-Team: theHacker <openisles@openisles.org>\n"
@@ -533,12 +533,12 @@ msgstr "Could not create texture: %s"
 msgid "Illegal bytesPerPixel: %d"
 msgstr "Illegal bytesPerPixel: %d"
 
-#: src/cpp/graphics/mgr/AbstractGraphicsMgr.cpp:242
+#: src/cpp/graphics/mgr/AbstractGraphicsMgr.cpp:246
 #, c-format
 msgid "Could not divide the frames equally: '%s'"
 msgstr "Could not divide the frames equally: '%s'"
 
-#: src/cpp/graphics/mgr/AbstractGraphicsMgr.cpp:249
+#: src/cpp/graphics/mgr/AbstractGraphicsMgr.cpp:253
 #, c-format
 msgid "Could not divide the views equally: '%s'"
 msgstr "Could not divide the views equally: '%s'"
@@ -577,47 +577,47 @@ msgstr "Could not init SDL-image: %s"
 msgid "Could not init SDL-TTF: %s"
 msgstr "Could not init SDL-TTF: %s"
 
-#: src/cpp/gui/GuiMgr.cpp:103
+#: src/cpp/gui/GuiMgr.cpp:104
 msgid "Switch to building mode"
 msgstr "Switch to building mode"
 
-#: src/cpp/gui/GuiMgr.cpp:109
+#: src/cpp/gui/GuiMgr.cpp:110
 msgid "Switch to combat mode"
 msgstr "Switch to combat mode"
 
-#: src/cpp/gui/GuiMgr.cpp:115
+#: src/cpp/gui/GuiMgr.cpp:116
 msgid "Switch to info mode"
 msgstr "Switch to info mode"
 
-#: src/cpp/gui/GuiMgr.cpp:121
+#: src/cpp/gui/GuiMgr.cpp:122
 #: src/cpp/gui/panel-widgets/GuiOptionsMenuWidget.cpp:17
 msgid "Options"
 msgstr "Options"
 
-#: src/cpp/gui/GuiMgr.cpp:214
+#: src/cpp/gui/GuiMgr.cpp:221
 #, c-format
 msgid "Identifier %d is already registered."
 msgstr "Identifier %d is already registered."
 
-#: src/cpp/gui/GuiMgr.cpp:226
+#: src/cpp/gui/GuiMgr.cpp:233
 #, c-format
 msgid "Identifier %d is not registered."
 msgstr "Identifier %d is not registered."
 
-#: src/cpp/gui/GuiMgr.cpp:660
+#: src/cpp/gui/GuiMgr.cpp:681
 msgid "Cannot get pixel data for screenshot."
 msgstr "Cannot get pixel data for screenshot."
 
-#: src/cpp/gui/GuiMgr.cpp:689
+#: src/cpp/gui/GuiMgr.cpp:710
 msgid "Cannot allocate memory for big screenshot."
 msgstr "Cannot allocate memory for big screenshot."
 
-#: src/cpp/gui/GuiMgr.cpp:702
+#: src/cpp/gui/GuiMgr.cpp:723
 #, c-format
 msgid "Creating tile screenshot for (%d, %d)"
 msgstr "Creating tile screenshot for (%d, %d)"
 
-#: src/cpp/gui/GuiMgr.cpp:725
+#: src/cpp/gui/GuiMgr.cpp:746
 msgid ""
 "Cannot get pixel data for screenshot. There are now pixels missing on the "
 "big screenshot."
@@ -644,6 +644,10 @@ msgstr "Wood requirement for this structure"
 #: src/cpp/gui/components/GuiAddBuildingWidget.cpp:70
 msgid "Bricks requirement for this structure"
 msgstr "Bricks requirement for this structure"
+
+#: src/cpp/gui/components/GuiAddBuildingWidget.cpp:152
+msgid "Demolish"
+msgstr "Demolish"
 
 #: src/cpp/gui/components/GuiFoodSupplyElement.cpp:13
 msgid "Food"
@@ -673,25 +677,25 @@ msgstr "Zoom out"
 msgid "TODO - Island's richness of soil"
 msgstr "TODO - Island's richness of soil"
 
-#: src/cpp/gui/panel-widgets/GuiBuildMenuWidget.cpp:26
+#: src/cpp/gui/panel-widgets/GuiBuildMenuWidget.cpp:36
+msgid "Switch to demolition mode"
+msgstr "Switch to demolition mode"
+
+#: src/cpp/gui/panel-widgets/GuiBuildMenuWidget.cpp:43
 msgid "Craftsmanship"
 msgstr "Craftsmanship"
 
-#: src/cpp/gui/panel-widgets/GuiBuildMenuWidget.cpp:48
+#: src/cpp/gui/panel-widgets/GuiBuildMenuWidget.cpp:62
 msgid "Farms & plantations"
 msgstr "Farms & plantations"
 
-#: src/cpp/gui/panel-widgets/GuiBuildMenuWidget.cpp:70
+#: src/cpp/gui/panel-widgets/GuiBuildMenuWidget.cpp:84
 msgid "Port facilities"
 msgstr "Port facilities"
 
-#: src/cpp/gui/panel-widgets/GuiBuildMenuWidget.cpp:92
+#: src/cpp/gui/panel-widgets/GuiBuildMenuWidget.cpp:99
 msgid "Public buildings"
 msgstr "Public buildings"
-
-#: src/cpp/gui/panel-widgets/GuiBuildMenuWidget.cpp:203
-msgid "Switch to demolition mode"
-msgstr "Switch to demolition mode"
 
 #: src/cpp/gui/panel-widgets/GuiDummyWidget.cpp:15
 #: src/cpp/gui/panel-widgets/GuiDummyWidget.cpp:29

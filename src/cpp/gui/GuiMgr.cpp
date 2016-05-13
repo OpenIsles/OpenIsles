@@ -613,9 +613,12 @@ void GuiMgr::updateGuiFromPanelState() {
     GuiResourcesBar* guiResourcesBar = (GuiResourcesBar*) findElement(GUI_ID_RESOURCES_BAR);
     if (panelState.selectedPanelButton == PanelButton::BUILD) {
         const MapObjectType* mapObjectType = context.guiMgr->getPanelState().addingMapObject;
-        const BuildingCosts& buildingCosts = mapObjectType->buildingCosts;
-
-        guiResourcesBar->showBuildingCosts(buildingCosts);
+        if (mapObjectType != nullptr) {
+            const BuildingCosts& buildingCosts = mapObjectType->buildingCosts;
+            guiResourcesBar->showBuildingCosts(buildingCosts);
+        } else {
+            guiResourcesBar->hideBuildingCosts();
+        }
     } else {
         guiResourcesBar->hideBuildingCosts();
     }
