@@ -33,6 +33,7 @@
     <property name="goods-cattle" value="0"/>
     <property name="goods-cloth" value="0"/>
     <property name="goods-food" value="0"/>
+    <property name="goods-grain" value="0"/>
     <property name="goods-spices" value="0"/>
     <property name="goods-sugar" value="5"/>
     <property name="goods-tobacco" value="7"/>
@@ -50,6 +51,7 @@
     <property name="goods-cattle" value="0"/>
     <property name="goods-cloth" value="0"/>
     <property name="goods-food" value="0"/>
+    <property name="goods-grain" value="0"/>
     <property name="goods-spices" value="0"/>
     <property name="goods-sugar" value="0"/>
     <property name="goods-tobacco" value="0"/>
@@ -67,6 +69,7 @@
     <property name="goods-cattle" value="0"/>
     <property name="goods-cloth" value="0"/>
     <property name="goods-food" value="0"/>
+    <property name="goods-grain" value="0"/>
     <property name="goods-spices" value="0"/>
     <property name="goods-sugar" value="0"/>
     <property name="goods-tobacco" value="0"/>
@@ -84,6 +87,7 @@
     <property name="goods-cattle" value="0"/>
     <property name="goods-cloth" value="0"/>
     <property name="goods-food" value="0"/>
+    <property name="goods-grain" value="0"/>
     <property name="goods-spices" value="0"/>
     <property name="goods-sugar" value="0"/>
     <property name="goods-tobacco" value="0"/>
@@ -101,6 +105,7 @@
     <property name="goods-cattle" value="0"/>
     <property name="goods-cloth" value="0"/>
     <property name="goods-food" value="0"/>
+    <property name="goods-grain" value="0"/>
     <property name="goods-spices" value="0"/>
     <property name="goods-sugar" value="0"/>
     <property name="goods-tobacco" value="0"/>

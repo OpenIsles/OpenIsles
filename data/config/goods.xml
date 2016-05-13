@@ -5,6 +5,7 @@
     <good name="sugar" raw-material="true" />
     <good name="tobacco" raw-material="true" />
     <good name="cattle" raw-material="true" />
+    <good name="grain" raw-material="true" />
 
     <!-- Verbrauchsgüter -->
     <good name="food" />
