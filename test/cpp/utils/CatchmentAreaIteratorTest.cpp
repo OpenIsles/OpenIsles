@@ -73,7 +73,7 @@ public:
     CatchmentAreaIteratorWithCatchmentAreaTest() {
         // Testaufbau
         RectangleData<char>* catchmentArea = new RectangleData<char>(6, 6);
-        std::strcpy(catchmentArea->data, "011110111111111111111111111111011110");
+        std::memcpy(catchmentArea->data, "011110111111111111111111111111011110", 36);
 
         mapObjectType.mapWidth = 2;
         mapObjectType.mapHeight = 2;
