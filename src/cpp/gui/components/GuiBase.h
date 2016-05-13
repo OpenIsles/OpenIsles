@@ -76,7 +76,39 @@ public:
         return id;
     }
 
-    void getCoords(int& x, int& y, int& width, int& height) {
+    int getX() const {
+        return x;
+    }
+
+    void setX(int x) {
+        this->x = x;
+    }
+
+    int getY() const {
+        return y;
+    }
+
+    void setY(int y) {
+        this->y = y;
+    }
+
+    int getWidth() const {
+        return width;
+    }
+
+    void setWidth(int width) {
+        this->width = width;
+    }
+
+    int getHeight() const {
+        return height;
+    }
+
+    void setHeight(int height) {
+        this->height = height;
+    }
+
+    void getCoords(int& x, int& y, int& width, int& height) const {
         x = this->x;
         y = this->y;
         width = this->width;
@@ -101,7 +133,7 @@ public:
      * @param windowY Y-Fenster-Koordinate
      * @return true, wenn innerhalb des Elements; sonst false
      */
-    bool hitTest(int windowX, int windowY) {
+    bool hitTest(int windowX, int windowY) const {
         // Fensterkoordinaten ermitteln
         int thisWindowX, thisWindowY;
         getWindowCoords(thisWindowX, thisWindowY);
@@ -238,14 +270,13 @@ public:
         return true;
     }
 
-protected:
     /**
      * @brief Ermittelt die Fensterkoordinaten des Elements, d.h. die Position, wo das Element effektiv im Fenster
      * liegt.
      * @param windowX erhält die X-Fensterkoordinate
      * @param windowY erhält die Y-Fensterkoordinate
      */
-    void getWindowCoords(int& windowX, int& windowY) {
+    void getWindowCoords(int& windowX, int& windowY) const {
         if (parentElement == nullptr) {
             windowX = x;
             windowY = y;
@@ -254,6 +285,20 @@ protected:
             windowX += x;
             windowY += y;
         }
+    }
+
+    int getWindowX() const {
+        int windowX, windowY;
+        getWindowCoords(windowX, windowY);
+
+        return windowX;
+    }
+
+    int getWindowY() const {
+        int windowX, windowY;
+        getWindowCoords(windowX, windowY);
+
+        return windowY;
     }
 
 };

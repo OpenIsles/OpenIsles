@@ -265,6 +265,12 @@ public:
     void decreaseMapZoom();
 
     /**
+     * @brief Im Baumodus. Ändert den ausgewählten MapObjectType, der gebaut werden soll und schließt das Baumenü
+     * @param mapObjectType MapObjectType, der ausgewählt werden soll
+     */
+    void setMapObjectToBuild(const MapObjectType* mapObjectType);
+
+    /**
      * @brief Macht einen Screenshot im Bitmap-Format.
      * @param fullMap `true`, um die komplette Karte als Riesenscreenshot zu speichern
      *                `false` für einen normalen Screenshot mit GUI

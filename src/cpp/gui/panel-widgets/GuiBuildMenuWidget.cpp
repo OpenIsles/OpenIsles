@@ -1,9 +1,13 @@
+#include <algorithm>
+#include <cassert>
+#include <list>
 #include <string>
 #include "global.h"
 #include "map/Structure.h"
 #include "gui/Identifiers.h"
 #include "gui/components/map/GuiMap.h"
 #include "gui/components/GuiAddBuildingWidget.h"
+#include "gui/components/GuiBuildMenu.h"
 #include "gui/components/GuiButton.h"
 #include "gui/components/GuiPushButton.h"
 #include "gui/components/GuiStaticGraphicElement.h"
@@ -18,7 +22,7 @@ GuiBuildMenuWidget::GuiBuildMenuWidget(const Context& context) : GuiPanelWidget(
         const std::string graphicSetName;
         const std::string graphicSetPressedName; // TODO Zustände nutzen
 
-        const MapObjectType* mapObjectTypes[16];
+        std::list<const MapObjectType*> mapObjectTypes;
 
     } buildingGroups[4] = {
         {
@@ -26,10 +30,6 @@ GuiBuildMenuWidget::GuiBuildMenuWidget(const Context& context) : GuiPanelWidget(
             _("Craftsmanship"),
             "add-building-group/craftsman", // TODO build-menu-Grafik verwenden
             "add-building-group/craftsman-pressed", { // TODO build-menu-Grafik verwenden
-                nullptr,
-                nullptr,
-                nullptr,
-                nullptr,
                 context.configMgr->getMapObjectType("stonemason"),
                 nullptr,
                 nullptr,
@@ -62,22 +62,13 @@ GuiBuildMenuWidget::GuiBuildMenuWidget(const Context& context) : GuiPanelWidget(
                 context.configMgr->getMapObjectType("cattle-farm"),
                 context.configMgr->getMapObjectType("hunters-hut"),
                 context.configMgr->getMapObjectType("foresters"),
-                context.configMgr->getMapObjectType("northern-forest1"),
-                nullptr,
+                context.configMgr->getMapObjectType("northern-forest1")
             }
         }, {
             BuildingGroup::PORT,
             _("Port facilities"),
             "build-menu/port",
             "build-menu/port-pressed", {
-                nullptr,
-                nullptr,
-                nullptr,
-                nullptr,
-                nullptr,
-                nullptr,
-                nullptr,
-                nullptr,
                 nullptr,
                 context.configMgr->getMapObjectType("pier"),
                 nullptr,
@@ -113,47 +104,6 @@ GuiBuildMenuWidget::GuiBuildMenuWidget(const Context& context) : GuiPanelWidget(
     };
 
     for (int groupIndex = 0; groupIndex < 4; groupIndex++) {
-        // Grid
-        GuiStaticGraphicElement* addBuildingGrid = new GuiStaticGraphicElement(context);
-        const IGraphic* graphicAddBuildingGrid = context.graphicsMgr->getGraphicSet("add-building-grid")->getStatic()->getGraphic();
-        addBuildingGrid->setPosition(775, 450);
-        addBuildingGrid->setGraphic(graphicAddBuildingGrid);
-        addBuildingGrid->setVisible(false);
-        context.guiMgr->registerElement(GUI_ID_ADD_BUILDING_GRID_BASE + groupIndex, addBuildingGrid);
-
-        // Buttons im Grid
-        for (int gridY = 0; gridY < 4; gridY++) {
-            for (int gridX = 0; gridX < 4; gridX++) {
-                int buildingIndex = gridY * 4 + gridX;
-
-                const MapObjectType* mapObjectType = buildingGroups[groupIndex].mapObjectTypes[buildingIndex];
-                if (mapObjectType == nullptr) {
-                    continue;
-                }
-
-                std::string graphicSetName = context.graphicsMgr->getGraphicSetNameForAddBuildingButton(mapObjectType);
-                const IGraphic* graphicAddBuildingButton =
-                    context.graphicsMgr->getGraphicSet(graphicSetName)->getStatic()->getGraphic();
-
-                GuiButton* addBuildingButton = new GuiButton(context);
-                addBuildingButton->setPosition(12 + 58 * gridX, 13 + 58 * gridY);
-                addBuildingButton->setGraphic(graphicAddBuildingButton);
-                addBuildingButton->setGraphicPressed(graphicAddBuildingButton);
-                addBuildingButton->setStatusBarText(_(mapObjectType->getTitleMsgid()));
-                addBuildingButton->setOnClickFunction([this, &context, mapObjectType]() {
-                    context.guiMgr->panelState.addingMapObject = mapObjectType;
-                    context.guiMgr->panelState.buildingMenuOpen = false;
-                    context.guiMgr->updateGuiFromPanelState();
-
-                    ((GuiMap*) context.guiMgr->findElement(GUI_ID_MAP))->onStartAddingStructure();
-                });
-
-                context.guiMgr->registerElement(
-                    GUI_ID_ADD_BUILDING_GRID_BUTTON_BASE + groupIndex * 16 + buildingIndex, addBuildingButton);
-                addBuildingGrid->addChildElement(addBuildingButton);
-            }
-        }
-
         // Button für die Gruppe
         const IGraphic* graphic =
             context.graphicsMgr->getGraphicSet(buildingGroups[groupIndex].graphicSetName)->getStatic()->getGraphic();
@@ -166,28 +116,45 @@ GuiBuildMenuWidget::GuiBuildMenuWidget(const Context& context) : GuiPanelWidget(
         addBuildingPushButton->setUseShadow((groupIndex >= 2) ? true : false); // TODO einheitlich true setzen, wenn die Blender-Grafiken komplett sind
         addBuildingPushButton->setCoords(12 + groupIndex * 55, 345, graphic->getWidth(), graphic->getHeight());
         addBuildingPushButton->setStatusBarText(buildingGroups[groupIndex].name);
-        addBuildingPushButton->setOnClickFunction([this, &context, groupIndex]() {
+        addBuildingPushButton->setOnClickFunction([this, &context, addBuildingPushButton, groupIndex]() {
+            GuiBuildMenu* guiBuildMenu = dynamic_cast<GuiBuildMenu*>(context.guiMgr->findElement(GUI_ID_BUILD_MENU));
+
             // Wenn man die Gruppe nochmal klickt, die bereits ausgewählt ist und das ausgewählte Gebäude nicht
             // aus dieser Gruppe ist, wird das Gebäude gewechselt und eins aus der Gruppe genommen
             if (context.guiMgr->panelState.selectedBuildingGroup == (BuildingGroup) groupIndex &&
                 context.guiMgr->panelState.buildingMenuOpen) {
 
-                bool addingStructureInSelectedBuildingGroup = false;
-                for (int i = 0; i < 16; i++) {
-                    if (buildingGroups[groupIndex].mapObjectTypes[i] == context.guiMgr->panelState.addingMapObject) {
-                        addingStructureInSelectedBuildingGroup = true;
-                        break;
-                    }
-                }
+                bool addingStructureInSelectedBuildingGroup =
+                    (std::find(buildingGroups[groupIndex].mapObjectTypes.cbegin(),
+                               buildingGroups[groupIndex].mapObjectTypes.cend(),
+                               context.guiMgr->panelState.addingMapObject) !=
+                                        buildingGroups[groupIndex].mapObjectTypes.cend());
 
                 if (!addingStructureInSelectedBuildingGroup) {
-                    // Gebäude unten links nehmen (= Index 12 von 16)
-                    context.guiMgr->panelState.addingMapObject = buildingGroups[groupIndex].mapObjectTypes[12];
+                    // Button unten links nehmen (is etwas tricky, das auch zu rechnen, da die Liste nicht
+                    // unbedingt ein 4-Vielfaches an Elementen hat)
+                    auto iter = buildingGroups[groupIndex].mapObjectTypes.cend();
+                    std::size_t decreaseIter = 1 + // eins extra, weil cend() immer eins nach dem Ende is
+                        (buildingGroups[groupIndex].mapObjectTypes.size() == 0) ?
+                                               4 : (buildingGroups[groupIndex].mapObjectTypes.size() % 4);
+                    std::advance(iter, -decreaseIter);
+
+                    // Unten links sollte immer freigeschaltet sein
+                    assert (*iter != nullptr);
+
+                    context.guiMgr->panelState.addingMapObject = *iter;
                 }
             }
             else {
                 context.guiMgr->panelState.selectedBuildingGroup = (BuildingGroup) groupIndex;
                 context.guiMgr->panelState.buildingMenuOpen = true;
+
+                // Build-Menü mit den richtigen Buttons füllen (das ändert seine Höhe)
+                guiBuildMenu->setButtons(buildingGroups[groupIndex].mapObjectTypes);
+
+                // nun umpositionieren
+                int newBuildMenuY = addBuildingPushButton->getWindowY() - guiBuildMenu->getHeight() - 5;
+                guiBuildMenu->setY(newBuildMenuY);
             }
             context.guiMgr->updateGuiFromPanelState();
         });

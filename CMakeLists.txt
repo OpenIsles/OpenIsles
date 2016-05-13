@@ -122,6 +122,8 @@ set(GUI_SOURCE_FILES
     src/cpp/gui/components/GuiAddBuildingWidget.h
     src/cpp/gui/components/GuiBase.cpp
     src/cpp/gui/components/GuiBase.h
+    src/cpp/gui/components/GuiBuildMenu.cpp
+    src/cpp/gui/components/GuiBuildMenu.h
     src/cpp/gui/components/GuiButton.cpp
     src/cpp/gui/components/GuiButton.h
     src/cpp/gui/components/GuiFoodSupplyElement.cpp

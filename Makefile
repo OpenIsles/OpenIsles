@@ -69,7 +69,9 @@ build-gui: \
 	$(DATA_DIRECTORY)/img/gui/minimap.png \
 	$(DATA_DIRECTORY)/img/gui/map-rotate.png \
 	$(DATA_DIRECTORY)/img/gui/map-zoom.png \
-	$(DATA_DIRECTORY)/img/gui/add-building/add-building-grid.png \
+	$(DATA_DIRECTORY)/img/gui/add-building/panel-top.png \
+	$(DATA_DIRECTORY)/img/gui/add-building/panel.png \
+	$(DATA_DIRECTORY)/img/gui/add-building/panel-bottom.png \
 	build-add-building-gui
 
 $(DATA_DIRECTORY)/img/gui/panel.png: $(SRC_DIRECTORY)/psd/marble-panels.psd
@@ -144,10 +146,17 @@ $(DATA_DIRECTORY)/img/gui/map-zoom.png: $(SRC_DIRECTORY)/blender/gui/map-zoom/ma
 		-swap 1,2 -delete 3,4 \
 		+append $@
 
-$(DATA_DIRECTORY)/img/gui/add-building/add-building-grid.png: $(SRC_DIRECTORY)/blender/gui/add-building-grid/add-building-grid.blend
+$(DATA_DIRECTORY)/img/gui/add-building/panel-top.png: $(SRC_DIRECTORY)/psd/add-building-panel.psd
 	$(CREATE_TARGET_DIRECTORY)
-	cd $(SRC_DIRECTORY)/blender/gui/add-building-grid; $(BLENDER) -b $(notdir $<) -P render.py
-	mv $(SRC_DIRECTORY)/blender/gui/add-building-grid/add-building-grid.png $@
+	convert $< -flatten -crop 245x5+0+0 $@
+
+$(DATA_DIRECTORY)/img/gui/add-building/panel.png: $(SRC_DIRECTORY)/psd/add-building-panel.psd
+	$(CREATE_TARGET_DIRECTORY)
+	convert $< -flatten -crop 245x60+0+5 $@
+
+$(DATA_DIRECTORY)/img/gui/add-building/panel-bottom.png: $(SRC_DIRECTORY)/psd/add-building-panel.psd
+	$(CREATE_TARGET_DIRECTORY)
+	convert $< -flatten -crop 245x5+0+65 $@
 
 SCREENSHOT=$(DATA_DIRECTORY)/img/gui/add-building/screenshot-add-building-gui.bmp
 build-add-building-gui: $(TARGET_EXECUTABLE)

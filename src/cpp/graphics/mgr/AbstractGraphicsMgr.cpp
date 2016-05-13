@@ -96,7 +96,11 @@ void AbstractGraphicsMgr::loadGraphics() {
     loadStaticGraphicSet("panel-buttons/player-status", "data/img/gui/panel-buttons/player-status.png");
     loadStaticGraphicSet("panel-buttons/player-status-pressed", "data/img/gui/panel-buttons/player-status-pressed.png");
 
-    loadStaticGraphicSet("add-building-grid", "data/img/gui/add-building/add-building-grid.png");
+    loadStaticGraphicSet("add-building/panel-top", "data/img/gui/add-building/panel-top.png");
+    loadStaticGraphicSet("add-building/panel", "data/img/gui/add-building/panel.png");
+    loadStaticGraphicSet("add-building/panel-bottom", "data/img/gui/add-building/panel-bottom.png");
+
+    loadStaticGraphicSet("add-building-button/question-mark", "data/img/gui/add-building/question-mark.png");
 
     loadStaticGraphicSet("add-building-button/chapel", "data/img/gui/add-building/chapel.png");
     loadStaticGraphicSet("add-building-button/marketplace", "data/img/gui/add-building/marketplace.png");

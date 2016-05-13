@@ -6,6 +6,7 @@
 #include "game/Game.h"
 #include "gui/components/map/GuiMap.h"
 #include "gui/components/GuiAddBuildingWidget.h"
+#include "gui/components/GuiBuildMenu.h"
 #include "gui/components/GuiPushButton.h"
 #include "gui/components/GuiMapRotateWidget.h"
 #include "gui/components/GuiMapZoomWidget.h"
@@ -145,6 +146,12 @@ void GuiMgr::initGui() {
         registerElement(GUI_ID_PANEL_SWITCH_PUSH_BUTTON_BASE + i, panelSwitchPushButton);
         panel->addChildElement(panelSwitchPushButton);
     }
+
+    // Baumenü
+    GuiBuildMenu* guiBuildMenu = new GuiBuildMenu(context);
+    guiBuildMenu->setPosition(774, 590);
+    guiBuildMenu->setVisible(false);
+    registerElement(GUI_ID_BUILD_MENU, guiBuildMenu);
 
     //////////////////////////////////////////////////////////////////////////////////////////
     // Zustand initialisieren ////////////////////////////////////////////////////////////////
@@ -564,6 +571,14 @@ void GuiMgr::setStatusBarText(const std::string& text) {
     ((GuiStatusBar*) findElement(GUI_ID_STATUS_BAR))->setText(text);
 }
 
+void GuiMgr::setMapObjectToBuild(const MapObjectType* mapObjectType) {
+    panelState.addingMapObject = mapObjectType;
+    panelState.buildingMenuOpen = false;
+    updateGuiFromPanelState();
+
+    ((GuiMap*) findElement(GUI_ID_MAP))->onStartAddingStructure();
+}
+
 void GuiMgr::updateGuiFromPanelState() {
     // Einen der 4 Buttons wählen
     for (int i = 0; i < 4; i++) {
@@ -580,6 +595,10 @@ void GuiMgr::updateGuiFromPanelState() {
         guiPanelWidget->setVisible(active);
     }
 
+    // Baumenü
+    GuiBuildMenu* guiBuildMenu = dynamic_cast<GuiBuildMenu*>(context.guiMgr->findElement(GUI_ID_BUILD_MENU));
+    guiBuildMenu->setVisible(panelState.buildingMenuOpen);
+
     // Baumenü: gewählte Kategorie
     for (int i = 0; i < 4; i++) {
         bool active = (
@@ -588,7 +607,6 @@ void GuiMgr::updateGuiFromPanelState() {
         );
 
         ((GuiPushButton*) findElement(GUI_ID_ADD_BUILDING_PUSH_BUTTON_BASE + i))->setActive(active);
-        findElement(GUI_ID_ADD_BUILDING_GRID_BASE + i)->setVisible(active && panelState.buildingMenuOpen);
     }
 
     // Baukosten aktualisieren
