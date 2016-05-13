@@ -6,22 +6,29 @@
 #include "map/MapObjectType.h"
 
 /**
- * Enum für die Gebäude-Gruppen, d.h. wie sie im Baumenü angeordnet werden
+ * Enum für die Gebäude-Gruppen, d.h. wie sie im Baumenü angeordnet werden.
+ * (muss 0-based fortlaufend sein, da wir auf Integer für Array-Index casten)
  */
 typedef
 enum BuildingGroup : unsigned char {
 
+    // Abreißen
+    DEMOLISH = 0,
+
     // Handwerksbetriebe
-    CRAFTSMAN = 0,
+    CRAFTSMAN,
 
     // Farmen & Plantagen
-    FARM = 1,
+    FARM,
 
     // Hafenanlagen
-    PORT = 2,
+    PORT,
 
     // Öffentliche Gebäude
-    PUBLIC = 3
+    PUBLIC,
+
+    // Marker, wie viele Elemente der Enum hat
+    _SIZE
 
 } BuildingGroup;
 

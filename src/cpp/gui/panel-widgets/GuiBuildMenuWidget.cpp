@@ -18,15 +18,28 @@ GuiBuildMenuWidget::GuiBuildMenuWidget(const Context& context) : GuiPanelWidget(
     // TODO in Config auslagern
     static struct {
         BuildingGroup buildingGroup;
+
+        struct {
+            int x, y;
+        } buttonPosition;
+
         const std::string name;
         const std::string graphicSetName;
         const std::string graphicSetPressedName; // TODO Zustände nutzen
 
-        std::list<const MapObjectType*> mapObjectTypes;
+        std::list<const MapObjectType*> mapObjectTypes; // leere Liste für Abreißmodus
 
-    } buildingGroups[4] = {
+    } buildingGroups[BuildingGroup::_SIZE] = {
         {
+            BuildingGroup::DEMOLISH,
+            { 177, 280 },
+            _("Switch to demolition mode"),
+            "build-menu/demolish",
+            "build-menu/demolish-pressed",
+            {}
+        }, {
             BuildingGroup::CRAFTSMAN,
+            { 12, 345 },
             _("Craftsmanship"),
             "add-building-group/craftsman", // TODO build-menu-Grafik verwenden
             "add-building-group/craftsman-pressed", { // TODO build-menu-Grafik verwenden
@@ -45,6 +58,7 @@ GuiBuildMenuWidget::GuiBuildMenuWidget(const Context& context) : GuiPanelWidget(
             }
         }, {
             BuildingGroup::FARM,
+            { 67, 345 },
             _("Farms & plantations"),
             "add-building-group/farm", // TODO build-menu-Grafik verwenden
             "add-building-group/farm-pressed", { // TODO build-menu-Grafik verwenden
@@ -66,6 +80,7 @@ GuiBuildMenuWidget::GuiBuildMenuWidget(const Context& context) : GuiPanelWidget(
             }
         }, {
             BuildingGroup::PORT,
+            { 122, 345 },
             _("Port facilities"),
             "build-menu/port",
             "build-menu/port-pressed", {
@@ -80,6 +95,7 @@ GuiBuildMenuWidget::GuiBuildMenuWidget(const Context& context) : GuiPanelWidget(
             }
         }, {
             BuildingGroup::PUBLIC,
+            { 177, 345 },
             _("Public buildings"),
             "build-menu/public",
             "build-menu/public-pressed", {
@@ -103,7 +119,7 @@ GuiBuildMenuWidget::GuiBuildMenuWidget(const Context& context) : GuiPanelWidget(
         }
     };
 
-    for (int groupIndex = 0; groupIndex < 4; groupIndex++) {
+    for (int groupIndex = 0; groupIndex < BuildingGroup::_SIZE; groupIndex++) {
         // Button für die Gruppe
         const IGraphic* graphic =
             context.graphicsMgr->getGraphicSet(buildingGroups[groupIndex].graphicSetName)->getStatic()->getGraphic();
@@ -113,10 +129,22 @@ GuiBuildMenuWidget::GuiBuildMenuWidget(const Context& context) : GuiPanelWidget(
         GuiPushButton* addBuildingPushButton = new GuiPushButton(context);
         addBuildingPushButton->setGraphic(graphic);
         addBuildingPushButton->setGraphicPressed(graphicPressed);
-        addBuildingPushButton->setUseShadow((groupIndex >= 2) ? true : false); // TODO einheitlich true setzen, wenn die Blender-Grafiken komplett sind
-        addBuildingPushButton->setCoords(12 + groupIndex * 55, 345, graphic->getWidth(), graphic->getHeight());
+        addBuildingPushButton->setUseShadow((groupIndex == 0 || groupIndex >= 3) ? true : false); // TODO einheitlich true setzen, wenn die Blender-Grafiken komplett sind
+        addBuildingPushButton->setCoords(
+            buildingGroups[groupIndex].buttonPosition.x, buildingGroups[groupIndex].buttonPosition.y,
+            graphic->getWidth(), graphic->getHeight());
         addBuildingPushButton->setStatusBarText(buildingGroups[groupIndex].name);
         addBuildingPushButton->setOnClickFunction([this, &context, addBuildingPushButton, groupIndex]() {
+            // Sonderfall: Abreißmodus
+            if (buildingGroups[groupIndex].mapObjectTypes.empty()) {
+                Log::debug("TODO Abreißmodus");
+
+                context.guiMgr->panelState.selectedBuildingGroup = (BuildingGroup) groupIndex;
+                context.guiMgr->panelState.buildingMenuOpen = false;
+                context.guiMgr->updateGuiFromPanelState();
+                return;
+            }
+
             GuiBuildMenu* guiBuildMenu = dynamic_cast<GuiBuildMenu*>(context.guiMgr->findElement(GUI_ID_BUILD_MENU));
 
             // Wenn man die Gruppe nochmal klickt, die bereits ausgewählt ist und das ausgewählte Gebäude nicht
@@ -161,25 +189,6 @@ GuiBuildMenuWidget::GuiBuildMenuWidget(const Context& context) : GuiPanelWidget(
         context.guiMgr->registerElement(GUI_ID_ADD_BUILDING_PUSH_BUTTON_BASE + groupIndex, addBuildingPushButton);
         addChildElement(addBuildingPushButton);
     }
-
-    // Abreißen
-    const IGraphic* graphic =
-        context.graphicsMgr->getGraphicSet("build-menu/demolish")->getStatic()->getGraphic();
-    const IGraphic* graphicPressed =
-        context.graphicsMgr->getGraphicSet("build-menu/demolish-pressed")->getStatic()->getGraphic();
-
-    GuiPushButton* demolishButton = new GuiPushButton(context);
-    demolishButton->setGraphic(graphic);
-    demolishButton->setGraphicPressed(graphicPressed);
-    demolishButton->setUseShadow(true);
-    demolishButton->setCoords(177, 280, graphic->getWidth(), graphic->getHeight());
-    demolishButton->setStatusBarText(_("Switch to demolition mode"));
-    demolishButton->setOnClickFunction([this, &context]() {
-        // TODO Abreißmodus aktivieren
-        Log::debug("TODO Abrissmodus");
-    });
-    context.guiMgr->registerElement(GUI_ID_DEMOLISH_PUSH_BUTTON, demolishButton);
-    addChildElement(demolishButton);
 
     // Gebäudebau: Infos, über zu platzierendes Gebäude
     GuiAddBuildingWidget* addBuildingWidget = new GuiAddBuildingWidget(context);

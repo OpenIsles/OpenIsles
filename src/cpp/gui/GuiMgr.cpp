@@ -600,7 +600,7 @@ void GuiMgr::updateGuiFromPanelState() {
     guiBuildMenu->setVisible(panelState.buildingMenuOpen);
 
     // Baumenü: gewählte Kategorie
-    for (int i = 0; i < 4; i++) {
+    for (int i = 0; i < BuildingGroup::_SIZE; i++) {
         bool active = (
             (panelState.selectedPanelButton == PanelButton::BUILD) &&
             (i == (int) (panelState.selectedBuildingGroup))
