@@ -441,6 +441,35 @@
         <max-age>5</max-age>
     </harvestable>
 
+    <building name="grain-farm" width="2" height="2">
+        <structure-placing>individually</structure-placing>
+        <placeable-on>
+            <map-tile-type>grass</map-tile-type>
+        </placeable-on>
+        <building-costs>
+            <coins>100</coins>
+            <tools>2</tools>
+            <wood>5</wood>
+            <bricks>0</bricks>
+        </building-costs>
+        <operating-costs>
+            <running>5</running>
+            <decommissioned>0</decommissioned>
+        </operating-costs>
+        <catchment-area>
+            1111
+            1111
+            1111
+            1111
+        </catchment-area>
+        <production-slots>
+            <!-- TODO input-Träger -->
+            <output good="grain" capacity="6" seconds-to-produce="8" />
+        </production-slots>
+        <inhabitants>2</inhabitants>
+        <carriers name="carrier" max-carriers="1" />
+    </building>
+
     <building name="sheep-farm" width="2" height="2">
         <structure-placing>individually</structure-placing>
         <placeable-on>
