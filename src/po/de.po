@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenIsles 0.1\n"
 "Report-Msgid-Bugs-To: http://www.openisles.org\n"
-"POT-Creation-Date: 2016-05-13 19:15+0200\n"
-"PO-Revision-Date: 2016-05-13 19:15+0200\n"
+"POT-Creation-Date: 2016-05-14 16:54+0200\n"
+"PO-Revision-Date: 2016-05-14 16:54+0200\n"
 "Last-Translator: theHacker <openisles@openisles.org>\n"
 "Language-Team: theHacker <openisles@openisles.org>\n"
 "Language: de\n"
@@ -39,6 +39,11 @@ msgstr "Schlachtvieh"
 #: data/config/goods.xml
 msgid "good|cloth"
 msgstr "Stoffe"
+
+# automatically generated out of data xmls
+#: data/config/goods.xml
+msgid "good|flour"
+msgstr "Mehl"
 
 # automatically generated out of data xmls
 #: data/config/goods.xml
@@ -548,12 +553,12 @@ msgstr "Konnte Textur nicht erzeugen: %s"
 msgid "Illegal bytesPerPixel: %d"
 msgstr "Ungültige bytesPerPixel: %d"
 
-#: src/cpp/graphics/mgr/AbstractGraphicsMgr.cpp:247
+#: src/cpp/graphics/mgr/AbstractGraphicsMgr.cpp:248
 #, c-format
 msgid "Could not divide the frames equally: '%s'"
 msgstr "Konnte die Frames nicht gleichmäßig aufteilen: '%s'"
 
-#: src/cpp/graphics/mgr/AbstractGraphicsMgr.cpp:254
+#: src/cpp/graphics/mgr/AbstractGraphicsMgr.cpp:255
 #, c-format
 msgid "Could not divide the views equally: '%s'"
 msgstr "Konnte die Ansichten nicht gleichmaßig aufteilen: '%s'"
@@ -919,33 +924,33 @@ msgid "Loaded music '%s'."
 msgstr "Musik '%s' geladen."
 
 # automatically generated out of data xmls
-#~ msgid "neededPublicBuilding|new|bathhouse"
-#~ msgstr "Die Hausbewohner verlangen nach einem Badehaus"
-
-# automatically generated out of data xmls
-#~ msgid "neededPublicBuilding|new|church"
-#~ msgstr "Die Hausbewohner verlangen nach einem größeren Gotteshaus"
-
-# automatically generated out of data xmls
-#~ msgid "neededPublicBuilding|new|high-school"
-#~ msgstr "Die Hausbewohner verlangen nach einer Hochschule"
-
-# automatically generated out of data xmls
-#~ msgid "neededPublicBuilding|new|theater"
-#~ msgstr "Die Hausbewohner verlangen nach einem Theater"
-
-# automatically generated out of data xmls
-#~ msgid "neededPublicBuilding|overdue|bathhouse"
-#~ msgstr "Die Hausbewohner beklagen das Fehlen eines Badehauses"
-
-# automatically generated out of data xmls
-#~ msgid "neededPublicBuilding|overdue|church"
-#~ msgstr "Die Hausbewohner beklagen das Fehlen einer Kirche"
+#~ msgid "neededPublicBuilding|overdue|theater"
+#~ msgstr "Die Hausbewohner beklagen das Fehlen eines Theaters"
 
 # automatically generated out of data xmls
 #~ msgid "neededPublicBuilding|overdue|high-school"
 #~ msgstr "Die Hausbewohner beklagen das Fehlen einer Hochschule"
 
 # automatically generated out of data xmls
-#~ msgid "neededPublicBuilding|overdue|theater"
-#~ msgstr "Die Hausbewohner beklagen das Fehlen eines Theaters"
+#~ msgid "neededPublicBuilding|overdue|church"
+#~ msgstr "Die Hausbewohner beklagen das Fehlen einer Kirche"
+
+# automatically generated out of data xmls
+#~ msgid "neededPublicBuilding|overdue|bathhouse"
+#~ msgstr "Die Hausbewohner beklagen das Fehlen eines Badehauses"
+
+# automatically generated out of data xmls
+#~ msgid "neededPublicBuilding|new|theater"
+#~ msgstr "Die Hausbewohner verlangen nach einem Theater"
+
+# automatically generated out of data xmls
+#~ msgid "neededPublicBuilding|new|high-school"
+#~ msgstr "Die Hausbewohner verlangen nach einer Hochschule"
+
+# automatically generated out of data xmls
+#~ msgid "neededPublicBuilding|new|church"
+#~ msgstr "Die Hausbewohner verlangen nach einem größeren Gotteshaus"
+
+# automatically generated out of data xmls
+#~ msgid "neededPublicBuilding|new|bathhouse"
+#~ msgstr "Die Hausbewohner verlangen nach einem Badehaus"
