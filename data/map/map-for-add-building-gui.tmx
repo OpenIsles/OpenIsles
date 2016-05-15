@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="isometric" renderorder="right-down" width="90" height="90" tilewidth="64" tileheight="32" nextobjectid="137">
+<map version="1.0" orientation="isometric" renderorder="right-down" width="90" height="90" tilewidth="64" tileheight="32" nextobjectid="150">
  <properties>
   <property name="current-player" value="1"/>
   <property name="player1-color" value="red"/>
@@ -799,6 +799,71 @@
    <properties>
     <property name="player" value="1"/>
     <property name="view" value="east"/>
+   </properties>
+  </object>
+  <object id="137" name="grain-field" x="1664" y="2208" width="32" height="32">
+   <properties>
+    <property name="age" value="5"/>
+   </properties>
+  </object>
+  <object id="138" name="grain-field" x="1632" y="2208" width="32" height="32">
+   <properties>
+    <property name="age" value="5"/>
+   </properties>
+  </object>
+  <object id="139" name="grain-field" x="1632" y="2272" width="32" height="32">
+   <properties>
+    <property name="age" value="5"/>
+   </properties>
+  </object>
+  <object id="140" name="grain-field" x="1632" y="2240" width="32" height="32">
+   <properties>
+    <property name="age" value="5"/>
+   </properties>
+  </object>
+  <object id="141" name="grain-field" x="1728" y="2272" width="32" height="32">
+   <properties>
+    <property name="age" value="5"/>
+   </properties>
+  </object>
+  <object id="142" name="grain-field" x="1696" y="2208" width="32" height="32">
+   <properties>
+    <property name="age" value="5"/>
+   </properties>
+  </object>
+  <object id="143" name="grain-field" x="1728" y="2240" width="32" height="32">
+   <properties>
+    <property name="age" value="5"/>
+   </properties>
+  </object>
+  <object id="144" name="grain-field" x="1696" y="2304" width="32" height="32">
+   <properties>
+    <property name="age" value="0"/>
+   </properties>
+  </object>
+  <object id="145" name="grain-field" x="1664" y="2304" width="32" height="32">
+   <properties>
+    <property name="age" value="5"/>
+   </properties>
+  </object>
+  <object id="146" name="grain-field" x="1504" y="2240" width="32" height="32">
+   <properties>
+    <property name="age" value="5"/>
+   </properties>
+  </object>
+  <object id="147" name="grain-field" x="1504" y="2208" width="32" height="32">
+   <properties>
+    <property name="age" value="5"/>
+   </properties>
+  </object>
+  <object id="148" name="grain-field" x="1536" y="2208" width="32" height="32">
+   <properties>
+    <property name="age" value="5"/>
+   </properties>
+  </object>
+  <object id="149" name="grain-field" x="1536" y="2240" width="32" height="32">
+   <properties>
+    <property name="age" value="5"/>
    </properties>
   </object>
  </objectgroup>

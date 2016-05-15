@@ -176,7 +176,8 @@ build-add-building-gui: $(TARGET_EXECUTABLE)
 	    \( +clone -crop 55x55+3497+1577 -resize 46x46 -write $(DATA_DIRECTORY)/img/gui/add-building/farm-road.png +delete \) \
 	    \( +clone -crop 66x66+3220+1999 -resize 46x46 -write $(DATA_DIRECTORY)/img/gui/add-building/foresters.png +delete \) \
 	    \( +clone -crop 69x69+2973+2001 -resize 46x46 -write $(DATA_DIRECTORY)/img/gui/add-building/forest.png +delete \) \
-	    \( +clone -crop 83x83+2253+1924 -resize 46x46 -write $(DATA_DIRECTORY)/img/gui/add-building/grain-farm.png +delete \) \
+	    \( +clone -crop 73x73+2258+1928 -resize 46x46 -write $(DATA_DIRECTORY)/img/gui/add-building/grain-farm.png +delete \) \
+	    \( +clone -crop 63x63+2170+1844 -resize 46x46 -write $(DATA_DIRECTORY)/img/gui/add-building/grain-field.png +delete \) \
 	    \( +clone -crop 50x50+3169+1699 -resize 46x46 -write $(DATA_DIRECTORY)/img/gui/add-building/house.png +delete \) \
 	    \( +clone -crop 61x61+3410+1530 -resize 46x46 -write $(DATA_DIRECTORY)/img/gui/add-building/hunters-hut.png +delete \) \
 	    \( +clone -crop 89x89+3038+1525 -resize 46x46 -write $(DATA_DIRECTORY)/img/gui/add-building/marketplace.png +delete \) \
@@ -264,7 +265,7 @@ $(foreach STREET_TILESET,$(STREET_TILESETS),$(eval $(call RENDER_STREET_TILESET,
 # Erntebare Landschaften                                                                                               #
 ########################################################################################################################
 
-HARVESTABLES := northern-forest1 northern-forest2 spices-field sugarcane-field tobacco-field
+HARVESTABLES := grain-field northern-forest1 northern-forest2 spices-field sugarcane-field tobacco-field
 
 define RENDER_HARVESTABLE
 $(DATA_DIRECTORY)/img/harvestables/$(1).png: $(SRC_DIRECTORY)/blender/harvestables/$(1)/$(1).blend

@@ -71,7 +71,7 @@ GuiBuildMenuWidget::GuiBuildMenuWidget(const Context& context) : GuiPanelWidget(
                 context.configMgr->getMapObjectType("spices-plantation"),
                 context.configMgr->getMapObjectType("spices-field"),
                 context.configMgr->getMapObjectType("grain-farm"),
-                nullptr,
+                context.configMgr->getMapObjectType("grain-field"),
                 context.configMgr->getMapObjectType("sheep-farm"),
                 context.configMgr->getMapObjectType("cattle-farm"),
                 context.configMgr->getMapObjectType("hunters-hut"),

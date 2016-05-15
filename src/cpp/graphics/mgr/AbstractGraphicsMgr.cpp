@@ -135,6 +135,7 @@ void AbstractGraphicsMgr::loadGraphics() {
     loadStaticGraphicSet("add-building-button/square3", "data/img/gui/add-building/square3.png");
     loadStaticGraphicSet("add-building-button/pier", "data/img/gui/add-building/pier.png");
     loadStaticGraphicSet("add-building-button/grain-farm", "data/img/gui/add-building/grain-farm.png");
+    loadStaticGraphicSet("add-building-button/grain-field", "data/img/gui/add-building/grain-field.png");
 
     // TODO generate-build-buttons.php entfernen, wenn die neuen Blender-Buttons komplett sind
     loadStaticGraphicSet("add-building-group/craftsman", "data/img/gui/button-add-building-craftsman.png"); // TODO build-menu-Grafik verwenden
@@ -189,6 +190,7 @@ void AbstractGraphicsMgr::loadGraphics() {
     loadHarvestablesGraphicSet("mapobjects/sugarcane-field", "data/img/harvestables/sugarcane-field.png", 5);
     loadHarvestablesGraphicSet("mapobjects/tobacco-field", "data/img/harvestables/tobacco-field.png", 7);
     loadHarvestablesGraphicSet("mapobjects/spices-field", "data/img/harvestables/spices-field.png", 6);
+    loadHarvestablesGraphicSet("mapobjects/grain-field", "data/img/harvestables/grain-field.png", 6);
 
 #ifdef DEBUG_GUIMAP
     loadStaticGraphicSet("debug/grid-overlay-evelation0", "data/debug-grid-overlay-elevation0.png");
