@@ -304,6 +304,53 @@
         <carriers name="carrier" max-carriers="1" />
     </building>
 
+    <building name="grain-mill" width="2" height="2">
+        <structure-placing>individually</structure-placing>
+        <placeable-on>
+            <map-tile-type>grass</map-tile-type>
+        </placeable-on>
+        <building-costs>
+            <coins>100</coins>
+            <tools>3</tools>
+            <wood>6</wood>
+            <bricks>0</bricks>
+        </building-costs>
+        <operating-costs>
+            <running>5</running>
+            <decommissioned>0</decommissioned>
+        </operating-costs>
+        <catchment-area>
+            0000000111111110000000
+            0000011111111111100000
+            0000111111111111110000
+            0001111111111111111000
+            0011111111111111111100
+            0111111111111111111110
+            0111111111111111111110
+            1111111111111111111111
+            1111111111111111111111
+            1111111111111111111111
+            1111111111111111111111
+            1111111111111111111111
+            1111111111111111111111
+            1111111111111111111111
+            1111111111111111111111
+            0111111111111111111110
+            0111111111111111111110
+            0011111111111111111100
+            0001111111111111111000
+            0000111111111111110000
+            0000011111111111100000
+            0000000111111110000000
+        </catchment-area>
+        <production-slots>
+            <input good="grain" capacity="5" amount-for-production="2" />
+            <output good="flour" capacity="6" seconds-to-produce="18" />
+        </production-slots>
+        <inhabitants>2</inhabitants>
+        <carriers name="carrier" max-carriers="1" />
+    </building>
+
     <!-- Farmen und Plantagen -->
 
     <building name="sugarcane-plantation" width="2" height="2">

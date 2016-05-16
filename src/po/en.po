@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenIsles 0.1\n"
 "Report-Msgid-Bugs-To: http://www.openisles.org\n"
-"POT-Creation-Date: 2016-05-14 23:51+0200\n"
-"PO-Revision-Date: 2016-05-14 23:51+0200\n"
+"POT-Creation-Date: 2016-05-16 11:17+0200\n"
+"PO-Revision-Date: 2016-05-16 11:17+0200\n"
 "Last-Translator: theHacker <openisles@openisles.org>\n"
 "Language-Team: theHacker <openisles@openisles.org>\n"
 "Language: en\n"
@@ -154,6 +154,11 @@ msgstr "Grain farm"
 #: data/config/map-objects.xml
 msgid "mapObjectType|grain-field"
 msgstr "Grain field"
+
+# automatically generated out of data xmls
+#: data/config/map-objects.xml
+msgid "mapObjectType|grain-mill"
+msgstr "Grain mill"
 
 # automatically generated out of data xmls
 #: data/config/map-objects.xml
@@ -553,12 +558,12 @@ msgstr "Could not create texture: %s"
 msgid "Illegal bytesPerPixel: %d"
 msgstr "Illegal bytesPerPixel: %d"
 
-#: src/cpp/graphics/mgr/AbstractGraphicsMgr.cpp:250
+#: src/cpp/graphics/mgr/AbstractGraphicsMgr.cpp:251
 #, c-format
 msgid "Could not divide the frames equally: '%s'"
 msgstr "Could not divide the frames equally: '%s'"
 
-#: src/cpp/graphics/mgr/AbstractGraphicsMgr.cpp:257
+#: src/cpp/graphics/mgr/AbstractGraphicsMgr.cpp:258
 #, c-format
 msgid "Could not divide the views equally: '%s'"
 msgstr "Could not divide the views equally: '%s'"

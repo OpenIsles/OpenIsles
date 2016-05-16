@@ -56,6 +56,7 @@ void AbstractGraphicsMgr::loadGraphics() {
     loadStaticGraphicSetWith4Views("mapobjects/spices-plantation", "data/img/buildings/spices-plantation.png");
     loadStaticGraphicSetWith4Views("mapobjects/school", "data/img/buildings/school.png");
     loadStaticGraphicSetWith4Views("mapobjects/grain-farm", "data/img/buildings/grain-farm.png");
+    loadStaticGraphicSetWith4Views("mapobjects/grain-mill", "data/img/buildings/grain-mill.png");
 
     loadStreetTileset("cobbled-street");
     loadStreetTileset("farm-road");
@@ -136,6 +137,7 @@ void AbstractGraphicsMgr::loadGraphics() {
     loadStaticGraphicSet("add-building-button/pier", "data/img/gui/add-building/pier.png");
     loadStaticGraphicSet("add-building-button/grain-farm", "data/img/gui/add-building/grain-farm.png");
     loadStaticGraphicSet("add-building-button/grain-field", "data/img/gui/add-building/grain-field.png");
+    loadStaticGraphicSet("add-building-button/grain-mill", "data/img/gui/add-building/grain-mill.png");
 
     // TODO generate-build-buttons.php entfernen, wenn die neuen Blender-Buttons komplett sind
     loadStaticGraphicSet("add-building-group/craftsman", "data/img/gui/button-add-building-craftsman.png"); // TODO build-menu-Grafik verwenden
