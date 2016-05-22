@@ -54,7 +54,7 @@ GuiBuildMenuWidget::GuiBuildMenuWidget(const Context& context) : GuiPanelWidget(
                 context.configMgr->getMapObjectType("weaving-mill1"),
                 context.configMgr->getMapObjectType("butchers"),
                 context.configMgr->getMapObjectType("grain-mill"),
-                nullptr
+                context.configMgr->getMapObjectType("bakery")
             }
         }, {
             BuildingGroup::FARM,

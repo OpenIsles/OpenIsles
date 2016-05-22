@@ -167,6 +167,7 @@ build-add-building-gui: $(TARGET_EXECUTABLE)
 	$(TARGET_EXECUTABLE) -m $(DATA_DIRECTORY)/map/map-for-add-building-gui.tmx \
 	                     -t 19000 -s $(SCREENSHOT)
 	convert $(SCREENSHOT) \
+	    \( +clone -crop 53x53+2013+1602 -resize 46x46 -write $(DATA_DIRECTORY)/img/gui/add-building/bakery.png +delete \) \
 	    \( +clone -crop 75x75+2632+1752 -resize 46x46 -write $(DATA_DIRECTORY)/img/gui/add-building/butchers.png +delete \) \
 	    \( +clone -crop 102x102+3019+1112 -resize 46x46 -write $(DATA_DIRECTORY)/img/gui/add-building/cathedral.png +delete \) \
 	    \( +clone -crop 103x103+3524+1316 -resize 46x46 -write $(DATA_DIRECTORY)/img/gui/add-building/cattle-farm.png +delete \) \
@@ -208,7 +209,7 @@ build-add-building-gui: $(TARGET_EXECUTABLE)
 # Gebäude                                                                                                              #
 ########################################################################################################################
 
-BUILDINGS := aristocrats-house1 burghers-house1 butchers cathedral cattle-farm chapel distillery \
+BUILDINGS := aristocrats-house1 bakery burghers-house1 butchers cathedral cattle-farm chapel distillery \
              foresters grain-farm grain-mill hunters-hut marketplace merchants-house1 office1 office2 pier \
              pioneers-house1 pioneers-house2 pioneers-house3 pioneers-house4 pioneers-house5 \
              school settlers-house1 settlers-house2 settlers-house3 settlers-house4 settlers-house5 \
