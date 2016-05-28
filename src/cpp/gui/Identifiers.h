@@ -1,5 +1,10 @@
 /**
  * In dieser Datei sind alle guiIdentifiers gelistet
+ *
+ * Wichtig:
+ * Da guiMgr::identifierMap eine std::map ist, bedeutet das, wir iterieren von niedriger zu hoher ID.
+ * Niedrige IDs werden zuerst gezeichnet und bekommen Events zuletzt. Wir müssen also hier die Reihenfolge
+ * korrekt setzen.
  */
 #ifndef _GUI_IDENTIFIERS_H
 #define _GUI_IDENTIFIERS_H

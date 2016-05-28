@@ -128,20 +128,14 @@ public:
     }
     
     /**
-     * @brief Prüft, ob die angegebenen Fenster-Koordinaten innerhalb des Elements liegen.
+     * @brief Prüft, ob die angegebenen Fenster-Koordinaten dieses Element treffen.
+     * D.&nbsp;h. dass sie a) innerhalb des Elements liegen und b) es kein sichtbares Kind-Element an dieser Stelle gibt
+     *
      * @param windowX X-Fenster-Koordinate
      * @param windowY Y-Fenster-Koordinate
-     * @return true, wenn innerhalb des Elements; sonst false
+     * @return `true`, wenn das Element getroffen wird; sonst `false`
      */
-    bool hitTest(int windowX, int windowY) const {
-        // Fensterkoordinaten ermitteln
-        int thisWindowX, thisWindowY;
-        getWindowCoords(thisWindowX, thisWindowY);
-        
-        // Kollision prüfen
-        return ((windowX >= thisWindowX) && (windowY >= thisWindowY) &&
-                (windowX < thisWindowX + width) && (windowY < thisWindowY + height));
-    }
+    bool hitTest(int windowX, int windowY) const;
     
     bool isVisible() const {
         return visible;

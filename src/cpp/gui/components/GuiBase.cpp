@@ -2,6 +2,28 @@
 #include "gui/GuiMgr.h"
 
 
+bool GuiBase::hitTest(int windowX, int windowY) const {
+    // Unsichtbare Elemente werden nicht getroffen
+    if (!visible) {
+        return false;
+    }
+
+    // Gibt es sichtbare Kinder an dieser Stelle? Dann liegen sie drüber und wir treffen nicht hier
+    for (const GuiBase* childElement : childElements) {
+        if (childElement->hitTest(windowX, windowY)) {
+            return false;
+        }
+    }
+
+    // Fensterkoordinaten ermitteln
+    int thisWindowX, thisWindowY;
+    getWindowCoords(thisWindowX, thisWindowY);
+
+    // Kollision prüfen
+    return ((windowX >= thisWindowX) && (windowY >= thisWindowY) &&
+            (windowX < thisWindowX + width) && (windowY < thisWindowY + height));
+}
+
 bool GuiBase::onEvent(SDL_Event& event) {
     // Unsichtbare Elemente kriegen keine Events
     if (!visible) {
@@ -20,7 +42,7 @@ bool GuiBase::onEvent(SDL_Event& event) {
 
         bool hit = hitTest(x, y);
         if (hit) {
-            if (!onMouseMove(event.motion)) { //
+            if (!onMouseMove(event.motion)) {
                 return false;
             }
         }
@@ -32,7 +54,7 @@ bool GuiBase::onEvent(SDL_Event& event) {
 
         if (hit && !oldHit) {
             hovered = true;
-            context.guiMgr->setStatusBarText(statusBarText); // FIXME Problem, dass nicht unbedingt der Statustext des obersten Elements genommen wird.
+            context.guiMgr->setStatusBarText(statusBarText);
 
             if (!onMouseEnter(event.motion)) {
                 return false;

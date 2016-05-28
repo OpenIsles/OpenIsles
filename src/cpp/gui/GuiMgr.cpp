@@ -239,6 +239,7 @@ GuiBase* GuiMgr::findElement(int identifier) {
 
 void GuiMgr::render() {
     // Alle GUI-Elemente rendern
+    // Beim Rendern malen wir die "untersten" Elemente (mit der niedrigsten ID) zuerst, d.h. wir iterieren vorwärts
     for (auto iter = identifierMap.cbegin(); iter != identifierMap.cend(); iter++) {
         GuiBase* guiElement = iter->second;
         
@@ -295,8 +296,9 @@ void GuiMgr::onEvent(SDL_Event& event) {
         }
     }
 
-    // Erst alle GUI-Elemente durchgehen, dass die das Event zuerst kriegen
-    for (auto iter = identifierMap.cbegin(); iter != identifierMap.cend(); iter++) {
+    // Erst alle GUI-Elemente durchgehen, dass die das Event zuerst kriegen.
+    // Wichtig: Events kriegen die "obersten" Elemente (mit der höhsten ID) zuerst, d.h. wir iterieren rückwärts
+    for (auto iter = identifierMap.crbegin(); iter != identifierMap.crend(); iter++) {
         GuiBase* guiElement = iter->second;
 
         // nur an Toplevel-Elemente schicken
