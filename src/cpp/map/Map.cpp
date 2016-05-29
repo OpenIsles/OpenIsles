@@ -201,15 +201,23 @@ void Map::deleteMapObject(MapObject* mapObject) {
     else {
         MapObjectMoving* mapObjectMoving = dynamic_cast<MapObjectMoving*>(mapObject);
         if (mapObjectMoving != nullptr) {
-            // TODO Bewegliche Map-Objekte dürfen aktuell nur 1 Kachel groß sein. Später, wenn Schiffe da sind, müssen wir das erweitern.
-            assert((mapObjectMoving->getMapWidth() == 1) && (mapObjectMoving->getMapHeight() == 1));
+            const int mapWidth = mapObject->getMapWidth();
+            const int mapHeight = mapObject->getMapHeight();
 
-            // Fläche auf den MapTiles als belegt markieren
+            // TODO Bewegliche Map-Objekte dürfen aktuell nur 1 Kachel groß sein. Später, wenn Schiffe da sind, müssen wir das ggf. erweitern.
+            assert ((mapWidth == 1) && (mapHeight == 1));
+
+            // Fläche auf den MapTiles ummarkieren.
+            // Es sind u.U. mehrere Kacheln markiert, wenn sich das Objekt zwischen zwei Kacheln befindet.
             const DoubleMapCoords& mapCoords = mapObjectMoving->getMapCoords();
-            getMapTileAt(MapCoords(int(mapCoords.x()), int(mapCoords.y())))->mapObjectsMoving.remove(mapObjectMoving);
+            for (int my = int(std::floor(mapCoords.y())); my < int(std::ceil(mapCoords.y())) + mapHeight; my++) {
+                for (int mx = int(std::floor(mapCoords.x())); mx < int(std::ceil(mapCoords.x())) + mapWidth; mx++) {
+                    getMapTileAt(MapCoords(mx, my))->mapObjectsMoving.remove(mapObjectMoving);
+                }
+            }
         }
         else {
-            assert(false);
+            assert (false);
         }
     }
 

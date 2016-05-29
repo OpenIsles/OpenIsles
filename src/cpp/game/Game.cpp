@@ -212,13 +212,19 @@ void Game::addInhabitantsToBuilding(Building* building, char amount) {
 }
 
 void Game::deleteMapObject(MapObject* mapObject) {
-    // Einwohner entfernen
+
     Building* building = dynamic_cast<Building*>(mapObject);
     if (building != nullptr) {
+        // Einwohner entfernen
         addInhabitantsToBuilding(building, -(char(building->inhabitants)));
+
+        // Träger vernichten. Alle ihre Waren gehen damit verloren
+        for (Carrier* carrier : building->carriers) {
+            map->deleteMapObject(carrier);
+        }
+        building->carriers.clear();
     }
 
-    // TODO Träger vernichten
     // TODO Kolonie vernichten, wenn MapObject das (eine!) Kontor war
     // TODO Lagerkapazität bei Marktplatz verringern
 

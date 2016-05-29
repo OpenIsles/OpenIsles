@@ -158,6 +158,38 @@ TEST_F(BuildOperationTest, demolishMultipleObjects) {
     }
 }
 
-// TODO Schafffarm abreißen -> Schäfchen verschwinden
-// TODO Marktplatz abreißen -> Lagerbestand, Marktkarren verschwinden
+/**
+ * @brief Reißt die Schaffarm ab und prüft, ob die Schäfchen verschwinden.
+ *
+ * Anno 1602 lässt in diesem Fall die Schäfchen noch weiter bestehen. Sie verschwinden erst, wenn sie am Zielort
+ * ankommen. Dieses Verhalten triggert auch den bekannten Gold-Bug (wo man an Stelle der Schaffarm schnell eine
+ * Goldschmiede baut. Die Schäfchen liefern dann kein Gras in die Schaffarm, sondern werden in der Goldschmiede zu
+ * Gold).
+ *
+ * Da wir uns keine Koordinaten merken, sondern eine direkte Referenz auf das Gebäude, müssen wir mit dem Vernichten
+ * des Gebäudes auch alle seine Träger vernichten.
+ */
+TEST_F(BuildOperationTest, demolishSheepFarm_testSheepsVanish) {
+    Map* map = game->getMap();
+    const Building* sheepFarm = dynamic_cast<Building*>(map->getMapObjectFixedAt({34, 40}));
+
+    // Spiel kurz laufen lassen, um die Schäfchen loszuschicken
+    game->update(3000, 1000);
+    ASSERT_FALSE(sheepFarm->carriers.empty());
+
+    // Schaffarm nun abreißen
+    BuildOperation buildOperation(context, *player);
+    buildOperation.requestDemolish(*sheepFarm);
+    buildOperation.doBuild();
+
+    // Referenz sheepFarm und sheepFarm->carriers nun ungültig. Wir durchsuchen die MapObject-Liste manuell.
+    // Finden wir einen Träger, stimmt was nicht!
+    for (const MapObject* mapObject : map->getMapObjects()) {
+        const Carrier* carrier = dynamic_cast<const Carrier*>(mapObject);
+        ASSERT_TRUE(carrier == nullptr);
+    }
+}
+
+// TODO Marktplatz abreißen -> Lagerbestand, Marktkarren verschwinden,
+//                             bebaubaren Bereich einschränken, Gebäude außerhalb verfallen
 // TODO Kontor abreißen -> Kolonie vernichten (erst später, wenn nur ein Kontor pro Kolonie da is)
