@@ -92,7 +92,8 @@ void EconomicsMgr::updateProduction(Building* building) {
  *
  * - "Steuersatz" = Dezimalbruch aus Config-XML (bzw. Anno&nbsp;1602-COD-File)
  * - "Steuerprozent" = angezeigte Steuer-Prozentzahl im Spiel
- * - [\"Zyklus\"](@ref gameTicks) = 10 Sekunden Spielzeit. Das ist das Intervall, in welchem Finanzenaktualisiert werden.
+ * - [\"Zyklus\"](@ref gameTicks) = 10 Sekunden Spielzeit. Das ist das Intervall, in welchem Finanzen
+ *   aktualisiert werden.
  *
  * Überblick Formeln
  * =================
