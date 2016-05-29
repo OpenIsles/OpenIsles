@@ -267,6 +267,14 @@ public:
         Player* player, const StreetConnections& streetConnections);
 
     /**
+     * @brief Entfernt ein Map-Objekt und führt alle notwendigen Logiken hierzu aus (z.&nbsp;B. Träger entfernen,
+     * Bevölkerung aktualisieren und vieles mehr).
+     *
+     * @param mapObject zu löschendes Map-Objekt
+     */
+    void deleteMapObject(MapObject* mapObject);
+
+    /**
      * @brief Schaltet das aktuell gewählte MapObject um.
      * Diese Methode sagt dem GuiMgr Bescheid, damit das Panel rechts angepasst wird.
      *

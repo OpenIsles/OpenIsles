@@ -188,7 +188,7 @@ MapObject* Game::instantiateNewMapObject(const MapObjectType* mapObjectType) con
 }
 
 void Game::addInhabitantsToBuilding(Building* building, char amount) {
-    if ((int) building->inhabitants + amount < 0) {
+    if ((char) building->inhabitants + amount < 0) {
         Log::error(_("Cannot have negative inhabitants."));
         throw std::runtime_error("Cannot have negative inhabitants");
     }
@@ -208,6 +208,34 @@ void Game::addInhabitantsToBuilding(Building* building, char amount) {
 #endif
     }
 
+    context.economicsMgr->updatePlayerStatus();
+}
+
+void Game::deleteMapObject(MapObject* mapObject) {
+    // Löschen wir das aktuell ausgewählte Objekt? Dann vorher deselektieren
+    if (map->getSelectedMapObject() == mapObject) {
+        map->setSelectedMapObject(nullptr);
+    }
+
+    Building* building = dynamic_cast<Building*>(mapObject);
+    if (building != nullptr) {
+        // Einwohner entfernen
+        addInhabitantsToBuilding(building, -(char(building->inhabitants)));
+
+        // Träger vernichten. Alle ihre Waren gehen damit verloren
+        for (Carrier* carrier : building->carriers) {
+            map->deleteMapObject(carrier);
+        }
+        building->carriers.clear();
+    }
+
+    // TODO Kolonie vernichten, wenn MapObject das (eine!) Kontor war
+    // TODO Lagerkapazität bei Marktplatz verringern
+
+    // Objekt entfernen
+    getMap()->deleteMapObject(mapObject);
+
+    // PlayerStatus aktualisieren, damit die Finanzen stimmen
     context.economicsMgr->updatePlayerStatus();
 }
 

@@ -21,11 +21,18 @@ private:
 
     /**
      * @brief Bauaufträge ("Build-Queue")
+     *
+     * Es können immer nur Aufträge desselben Typs in der Queue sein (siehe mapObjectsToBuildMode).
      */
     std::list<MapObjectToBuild> mapObjectsToBuild;
 
     /**
-     * @brief Kolonie, in der gebaut wird.
+     * @brief gibt an, welcher Typ von Bauauftrag in der Build-Queue ist.
+     */
+    MapObjectToBuild::Mode mapObjectsToBuildMode = MapObjectToBuild::EMPTY;
+
+    /**
+     * @brief Kolonie, in der gebaut/abgerissen wird.
      *
      * Es kann immer nur in einer Kolonie gebaut werden. Dieses Feld ist erst gesetzt, wenn
      * der erste Bauauftrag in der Queue ist.
@@ -43,6 +50,14 @@ public:
 
     const std::list<MapObjectToBuild>& getMapObjectsToBuild() const {
         return mapObjectsToBuild;
+    }
+
+    MapObjectToBuild::Mode getMapObjectsToBuildMode() const {
+        return mapObjectsToBuildMode;
+    }
+
+    Colony* getColony() const {
+        return colony;
     }
 
     const BuildOperationResult& getResult() const {
@@ -72,15 +87,11 @@ public:
     void requestBuildWhenNothingInTheWay(
         const MapCoords& mapCoords, const MapObjectType* mapObjectType, const FourthDirection& view);
 
-    // TODO Objekt abreißen
     /**
      * @brief Fügt dem Bauauftrag ein Objekt hinzu, was abgerissen werden soll.
      * @param mapObjectFixed Objekt, das abgerissen werden soll.
      */
-    void requestRemoval(const MapObjectFixed& mapObjectFixed) {
-        mapObjectsToBuild.push_back({ mapObjectFixed.getMapCoords() });
-        rebuildResult();
-    }
+    void requestDemolish(const MapObjectFixed& mapObjectFixed);
 
     /**
      * @brief Wird aufgerufen, wenn sich die verfügbaren Baumaterialen geändert haben (könnten) und wir deshalb
@@ -105,6 +116,17 @@ private:
         TO_REPLACE_WITH
     };
 
+    /**
+     * Überprüft die Kolonie für eine anstehende Bauoperation.
+     *
+     * Es wird für das erste Objekt `colony` gesettet. Für jedes weitere Objekt wird sichergestellt, dass nicht
+     * in zwei Kolonien gleichzeitig gebaut wird.
+     *
+     * @param mapCoords Map-Koordinaten, auf die gebaut/abgerissen werden soll
+     * @return `true`, wenn alles ok ist. `false`, wenn die geplante Bauoperation verboten ist, weil entweder dort
+     *         noch gar keine Kolonie oder die falsche Kolonie ist.
+     */
+    bool testColony(const MapCoords& mapCoords);
 
     /**
      * @brief Überprüft, ob ein geplantes Objekt in die Karte gesetzt werden kann oder was im Weg ist.
@@ -153,6 +175,16 @@ private:
      * @brief Aktualisiert `result` nach einer Änderung der Build-Queue
      */
     void rebuildResult();
+
+    /**
+     * @brief Sub-Methode von rebuildResult(), die sich drum kümmert, wenn wir bauen wollen
+     */
+    void rebuildResultBuild();
+
+    /**
+     * @brief Sub-Methode von rebuildResult(), die sich drum kümmert, wenn wir abreißen wollen
+     */
+    void rebuildResultDemolish();
 
 };
 

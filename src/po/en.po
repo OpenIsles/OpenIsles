@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenIsles 0.1\n"
 "Report-Msgid-Bugs-To: http://www.openisles.org\n"
-"POT-Creation-Date: 2016-05-22 15:18+0200\n"
-"PO-Revision-Date: 2016-05-22 15:18+0200\n"
+"POT-Creation-Date: 2016-05-29 14:39+0200\n"
+"PO-Revision-Date: 2016-05-08 19:16+0200\n"
 "Last-Translator: theHacker <openisles@openisles.org>\n"
 "Language-Team: theHacker <openisles@openisles.org>\n"
 "Language: en\n"
@@ -634,20 +634,20 @@ msgstr "Identifier %d is already registered."
 msgid "Identifier %d is not registered."
 msgstr "Identifier %d is not registered."
 
-#: src/cpp/gui/GuiMgr.cpp:678
+#: src/cpp/gui/GuiMgr.cpp:683
 msgid "Cannot get pixel data for screenshot."
 msgstr "Cannot get pixel data for screenshot."
 
-#: src/cpp/gui/GuiMgr.cpp:707
+#: src/cpp/gui/GuiMgr.cpp:712
 msgid "Cannot allocate memory for big screenshot."
 msgstr "Cannot allocate memory for big screenshot."
 
-#: src/cpp/gui/GuiMgr.cpp:720
+#: src/cpp/gui/GuiMgr.cpp:725
 #, c-format
 msgid "Creating tile screenshot for (%d, %d)"
 msgstr "Creating tile screenshot for (%d, %d)"
 
-#: src/cpp/gui/GuiMgr.cpp:743
+#: src/cpp/gui/GuiMgr.cpp:748
 msgid ""
 "Cannot get pixel data for screenshot. There are now pixels missing on the "
 "big screenshot."
@@ -675,6 +675,10 @@ msgstr "Wood requirement for this structure"
 msgid "Bricks requirement for this structure"
 msgstr "Bricks requirement for this structure"
 
+#: src/cpp/gui/components/GuiAddBuildingWidget.cpp:152
+msgid "Demolish"
+msgstr "Demolish"
+
 #: src/cpp/gui/components/GuiFoodSupplyElement.cpp:13
 msgid "Food"
 msgstr "Food"
@@ -699,7 +703,7 @@ msgstr "Zoom in"
 msgid "Zoom out"
 msgstr "Zoom out"
 
-#: src/cpp/gui/components/map/GuiMap.cpp:608
+#: src/cpp/gui/components/map/GuiMap.cpp:615
 msgid "TODO - Island's richness of soil"
 msgstr "TODO - Island's richness of soil"
 

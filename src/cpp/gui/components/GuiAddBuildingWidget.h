@@ -37,7 +37,7 @@ public:
     /**
      * @brief Wird aufgerufen, wenn der Nutzer ein anderes Map-Objekt auswählt, was gebaut werden soll
      *
-     * @param newAddingMapObject Map-Objekt-Typ, der grade ausgewählt wurde
+     * @param newAddingMapObject Map-Objekt-Typ, der grade ausgewählt wurde (`nullptr` im Abrissmodus)
      */
     void onAddingMapObjectChanged(const MapObjectType* newAddingMapObject);
 

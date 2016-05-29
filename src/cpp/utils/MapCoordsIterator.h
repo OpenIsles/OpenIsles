@@ -52,6 +52,20 @@ public:
         }
     }
 
+    /**
+     * @brief Liefert die Anzahl der Map-Kacheln, die iteriert werden.
+     * Diese Methode berechnet also, wie oft der Callback in iterate() später aufgerufen wird.
+     *
+     * @return Anzahl der Map-Kacheln im Iterator
+     */
+    unsigned int size() const {
+        int sizeY = (mapYMax - mapYMin + 1);
+        int sizeX = (mapXMax - mapXMin + 1);
+        assert ((sizeX > 0) && (sizeY > 0));
+
+        return (unsigned int) (sizeX * sizeY);
+    }
+
 private:
     /**
      * @brief Führt das Iterieren in Süd-Ansicht durch

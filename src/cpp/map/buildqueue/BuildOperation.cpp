@@ -8,6 +8,9 @@
 void BuildOperation::requestBuild(const MapCoords& mapCoords, const MapObjectType* mapObjectType,
                                   const FourthDirection& view) {
 
+    assert (mapObjectsToBuildMode == MapObjectToBuild::EMPTY ||
+            mapObjectsToBuildMode == MapObjectToBuild::BUILD);
+
     // TODO BUILDOPERATION die untenstehende Prüfung entsprechend einem Teil von isAllowedToPlaceMapObject()
 
     // Erst überprüfen, ob sich das neue Objekt mit einem bestehenden in der Queue überlappt
@@ -38,20 +41,8 @@ void BuildOperation::requestBuild(const MapCoords& mapCoords, const MapObjectTyp
         }
     }
 
-    // Kolonie prüfen: Alle Objekte in der Bau-Queue müssen in derselben Kolonie sein!
-    if (colony == nullptr) {
-        // Erste Map-Objekt gibt die Kolonie vor
-        colony = context.game->getColony(mapCoords);
-        if (colony == nullptr) {
-            return; // Keine Kolonie, da darf man eh nicht bauen
-        }
-
-    } else {
-        // Jedes weitere Map-Objekt muss in dieser Kolonie sein
-        Colony* colonyThere = context.game->getColony(mapCoords);
-        if ((colony == nullptr) || (colonyThere != colony)) {
-            return;
-        }
+    if (!testColony(mapCoords)) {
+        return; // keine/falsche Kolonie: Bauen ist hier verboten
     }
 
     // Sonderfälle, wo zufällig gewählt wird: Haus (= zufälliges Pionier-Haus) und Wald
@@ -72,11 +63,15 @@ void BuildOperation::requestBuild(const MapCoords& mapCoords, const MapObjectTyp
 
     // Objekt in die Bauqueue aufnehmen und Result-Objekt aktualisieren
     mapObjectsToBuild.push_back({ mapCoords, mapObjectType, view });
+    mapObjectsToBuildMode = MapObjectToBuild::BUILD;
     rebuildResult();
 }
 
 void BuildOperation::requestBuildWhenNothingInTheWay(const MapCoords& mapCoords, const MapObjectType* mapObjectType,
                                                      const FourthDirection& view) {
+
+    assert (mapObjectsToBuildMode == MapObjectToBuild::EMPTY ||
+            mapObjectsToBuildMode == MapObjectToBuild::BUILD);
 
     // Überprüfen. ob auf der Karte alles frei is,...
     if (isSomethingInTheWayOnTheMap({ mapCoords, mapObjectType, view })) {
@@ -85,6 +80,41 @@ void BuildOperation::requestBuildWhenNothingInTheWay(const MapCoords& mapCoords,
 
     // ...dann requestBuild() übergeben
     requestBuild(mapCoords, mapObjectType, view);
+}
+
+void BuildOperation::requestDemolish(const MapObjectFixed& mapObjectFixed) {
+    assert (mapObjectsToBuildMode == MapObjectToBuild::EMPTY ||
+            mapObjectsToBuildMode == MapObjectToBuild::DEMOLISH);
+
+    const MapCoords& mapCoords = mapObjectFixed.getMapCoords();
+
+    if (!testColony(mapCoords)) {
+        return; // keine/falsche Kolonie: Abreißen ist hier verboten
+    }
+
+    mapObjectsToBuild.push_back({ mapCoords });
+    mapObjectsToBuildMode = MapObjectToBuild::DEMOLISH;
+    rebuildResult();
+}
+
+bool BuildOperation::testColony(const MapCoords& mapCoords) {
+    // Kolonie prüfen: Alle Objekte in der Bau-Queue müssen in derselben Kolonie sein!
+    if (colony == nullptr) {
+        // Erste Map-Objekt gibt die Kolonie vor
+        colony = context.game->getColony(mapCoords);
+        if (colony == nullptr) {
+            return false; // Keine Kolonie, da darf man eh nicht bauen
+        }
+
+    } else {
+        // Jedes weitere Map-Objekt muss in dieser Kolonie sein
+        Colony* colonyThere = context.game->getColony(mapCoords);
+        if (colonyThere != colony) {
+            return false;
+        }
+    }
+
+    return true;
 }
 
 bool BuildOperation::isSomethingInTheWayOnTheMap(const MapObjectToBuild& mapObjectToBuild) const {
@@ -275,10 +305,23 @@ void BuildOperation::rebuildResult() {
     result.buildingCosts.reset();
     result.result = BuildOperationResult::OK;
 
-    if (mapObjectsToBuild.empty()) {
-        return;
-    }
+    switch (mapObjectsToBuildMode) {
+        case MapObjectToBuild::EMPTY:
+            // nix tun
+            return;
 
+        case MapObjectToBuild::BUILD:
+            rebuildResultBuild();
+            return;
+
+        case MapObjectToBuild::DEMOLISH:
+            rebuildResultDemolish();
+            return;
+    }
+    assert(false);
+}
+
+void BuildOperation::rebuildResultBuild() {
     BuildingCosts resourcesAvailable = {
         player.coins,
         (int) colony->getGoods(context.configMgr->getGood("tools")).inventory,
@@ -416,6 +459,26 @@ void BuildOperation::rebuildResult() {
     }
 }
 
+void BuildOperation::rebuildResultDemolish() {
+    for (const MapObjectToBuild& mapObjectToBuild : mapObjectsToBuild) {
+        const MapCoords& mapCoords = mapObjectToBuild.mapCoords;
+        const MapObjectFixed* mapObjectFixed = context.game->getMap()->getMapObjectFixedAt(mapCoords);
+        assert(mapObjectFixed != nullptr);
+
+        std::shared_ptr<BuildOperationResultBit> resultBit(new BuildOperationResultBit());
+        resultBit->deleteMapObjectThere = true;
+
+        // ResultBit den Koordinaten zuweisen
+        for (int y = 0, my = mapObjectToBuild.mapCoords.y(); y < mapObjectFixed->getMapHeight(); y++, my++) {
+            for (int x = 0, mx = mapObjectToBuild.mapCoords.x(); x < mapObjectFixed->getMapWidth(); x++, mx++) {
+                result[MapCoords(mx, my)] = resultBit;
+            }
+        }
+    }
+
+    // TODO Straßen umbiegen, wenn wir löschen
+}
+
 void BuildOperation::doBuild() {
     assert(result.result == BuildOperationResult::OK);
 
@@ -443,13 +506,13 @@ void BuildOperation::doBuild() {
             continue;
         }
 
-        // Reichen die Resourcen nicht? Dann einfach überspringen.
-        if (!resultBit.resourcesEnoughToBuildThis) {
+        // Reichen die Resourcen zum Bauen nicht? Dann einfach überspringen.
+        if (mapObjectsToBuildMode == MapObjectToBuild::BUILD && !resultBit.resourcesEnoughToBuildThis) {
             continue;
         }
 
-        // Bestehenes Objekt soll entfernt werden?
-        if (resultBit.mapObjectToReplaceWith || resultBit.deleteMapObjectThere) {
+        // Bestehendes Objekt soll überbaut werden?
+        if (resultBit.mapObjectToReplaceWith) {
             // Über alle Kacheln loopen. z.B. ein 2x2-Gebäude kann 4 1x1-Felder überschreiben
             const int mapHeight = resultBit.mapObjectToReplaceWith->getMapHeight();
             const int mapWidth = resultBit.mapObjectToReplaceWith->getMapWidth();
@@ -459,10 +522,30 @@ void BuildOperation::doBuild() {
                 for (int mx = mapCoordsToReplaceWith.x(); mx < mapCoordsToReplaceWith.x() + mapWidth; mx++) {
                     MapObjectFixed* mapObjectFixedThere = map->getMapObjectFixedAt({mx, my});
                     if (mapObjectFixedThere != nullptr) {
-                        map->deleteMapObject(mapObjectFixedThere);
+                        context.game->deleteMapObject(mapObjectFixedThere);
                     }
                 }
             }
+        }
+
+        // Bestehendes Objekt soll abgerissen werden?
+        if (resultBit.deleteMapObjectThere) {
+            MapObjectFixed* mapObjectFixedThere = map->getMapObjectFixedAt(mapCoords);
+            assert (mapObjectFixedThere != nullptr);
+
+            // Kacheln als erledigt markieren
+            for (int my = mapObjectFixedThere->getMapCoords().y();
+                 my < mapObjectFixedThere->getMapCoords().y() + mapObjectFixedThere->getMapHeight(); my++) {
+
+                for (int mx = mapObjectFixedThere->getMapCoords().x();
+                     mx < mapObjectFixedThere->getMapCoords().x() + mapObjectFixedThere->getMapWidth(); mx++) {
+
+                    mapCoordsDone.insert(MapCoords(mx, my));
+                }
+            }
+
+            // jetzt erst löschen
+            context.game->deleteMapObject(mapObjectFixedThere);
         }
 
         // Neues Objekt hinzufügen

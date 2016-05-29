@@ -44,4 +44,20 @@ protected:
         ASSERT_EQ(mapWidth, mapObjectFixed->getMapWidth());
         ASSERT_EQ(mapHeight, mapObjectFixed->getMapHeight());
     }
+
+    /**
+     * @brief Assert-Helper. Prüft, ob ein BuildOperationResultBit für eine Abriss-Operation korrekt gesetzt ist
+     * @param resultBit Result-Bit zu prüfen
+     */
+    void assertCorrectResultBitForDemolish(const BuildOperationResultBit& resultBit) const {
+        ASSERT_EQ(true, resultBit.deleteMapObjectThere);
+
+        // immer false beim Abreißen
+        ASSERT_EQ(false, resultBit.somethingInTheWay);
+        ASSERT_EQ(false, resultBit.resourcesEnoughToBuildThis);
+        ASSERT_EQ(false, resultBit.costsNothingBecauseOfChange);
+
+        ASSERT_TRUE(resultBit.mapObjectToReplaceWith == nullptr);
+        ASSERT_TRUE(resultBit.mapObjectToDraw == nullptr);
+    }
 };
