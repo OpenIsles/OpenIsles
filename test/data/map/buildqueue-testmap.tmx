@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="isometric" renderorder="right-down" width="100" height="100" tilewidth="64" tileheight="32">
+<map version="1.0" orientation="isometric" renderorder="right-down" width="100" height="100" tilewidth="64" tileheight="32" nextobjectid="86">
  <properties>
   <property name="current-player" value="1"/>
   <property name="player1-color" value="red"/>
@@ -12,11 +12,11 @@
   <property name="player4-name" value="Spieler 4"/>
  </properties>
  <objectgroup name="isles">
-  <object type="startpoint" x="1472" y="1248" width="32" height="32"/>
-  <object name="large1" type="isle" x="352" y="288" width="2560" height="2560"/>
+  <object id="1" type="startpoint" x="1472" y="1248" width="32" height="32"/>
+  <object id="2" name="large1" type="isle" x="352" y="288" width="2560" height="2560"/>
  </objectgroup>
  <objectgroup name="colonies">
-  <object name="Kolonie" type="colony" x="1184" y="1184" width="32" height="32">
+  <object id="3" name="Kolonie" type="colony" x="1184" y="1184" width="32" height="32">
    <properties>
     <property name="goods-alcohol" value="0"/>
     <property name="goods-bricks" value="40"/>
@@ -35,480 +35,492 @@
   </object>
  </objectgroup>
  <objectgroup name="map-objects">
-  <object name="office1" x="1312" y="1056" width="96" height="64">
+  <object id="4" name="office1" x="1312" y="1056" width="96" height="64">
    <properties>
     <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="marketplace" x="1536" y="1856" width="128" height="96">
+  <object id="5" name="marketplace" x="1536" y="1856" width="128" height="96">
    <properties>
     <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="cobbled-street" x="1344" y="1152" width="32" height="32">
+  <object id="6" name="cobbled-street" x="1344" y="1152" width="32" height="32">
    <properties>
-    <property name="player" value="1"/>
     <property name="connections" value="0101"/>
+    <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="settlers-house1" x="1536" y="1280" width="64" height="64">
+  <object id="7" name="settlers-house1" x="1536" y="1280" width="64" height="64">
    <properties>
     <property name="player" value="1"/>
     <property name="view" value="east"/>
    </properties>
   </object>
-  <object name="cobbled-street" x="1504" y="1344" width="32" height="32">
+  <object id="8" name="cobbled-street" x="1504" y="1344" width="32" height="32">
    <properties>
-    <property name="player" value="1"/>
     <property name="connections" value="1010"/>
+    <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="cobbled-street" x="1504" y="1280" width="32" height="32">
+  <object id="9" name="cobbled-street" x="1504" y="1280" width="32" height="32">
    <properties>
-    <property name="player" value="1"/>
     <property name="connections" value="1010"/>
+    <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="cobbled-street" x="1504" y="1184" width="32" height="32">
+  <object id="10" name="cobbled-street" x="1504" y="1184" width="32" height="32">
    <properties>
-    <property name="player" value="1"/>
     <property name="connections" value="1010"/>
+    <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="tavern" x="1536" y="1184" width="96" height="64">
+  <object id="11" name="tavern" x="1536" y="1184" width="96" height="64">
    <properties>
     <property name="player" value="1"/>
     <property name="view" value="east"/>
    </properties>
   </object>
-  <object name="cobbled-street" x="1472" y="1152" width="32" height="32">
+  <object id="12" name="cobbled-street" x="1472" y="1152" width="32" height="32">
    <properties>
-    <property name="player" value="1"/>
     <property name="connections" value="0101"/>
+    <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="cobbled-street" x="1504" y="1248" width="32" height="32">
+  <object id="13" name="cobbled-street" x="1504" y="1248" width="32" height="32">
    <properties>
-    <property name="player" value="1"/>
     <property name="connections" value="1110"/>
+    <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="pioneers-house3" x="1536" y="1344" width="64" height="64">
+  <object id="14" name="pioneers-house3" x="1536" y="1344" width="64" height="64">
    <properties>
     <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="cobbled-street" x="1536" y="1248" width="32" height="32">
+  <object id="15" name="cobbled-street" x="1536" y="1248" width="32" height="32">
    <properties>
-    <property name="player" value="1"/>
     <property name="connections" value="0101"/>
+    <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="cobbled-street" x="1600" y="1248" width="32" height="32">
+  <object id="16" name="cobbled-street" x="1600" y="1248" width="32" height="32">
    <properties>
-    <property name="player" value="1"/>
     <property name="connections" value="0101"/>
+    <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="cobbled-street" x="1312" y="1152" width="32" height="32">
+  <object id="17" name="cobbled-street" x="1312" y="1152" width="32" height="32">
    <properties>
-    <property name="player" value="1"/>
     <property name="connections" value="0101"/>
+    <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="cobbled-street" x="1632" y="1248" width="32" height="32">
+  <object id="18" name="cobbled-street" x="1632" y="1248" width="32" height="32">
    <properties>
-    <property name="player" value="1"/>
     <property name="connections" value="0001"/>
+    <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="cobbled-street" x="1376" y="1152" width="32" height="32">
+  <object id="19" name="cobbled-street" x="1376" y="1152" width="32" height="32">
    <properties>
-    <property name="player" value="1"/>
     <property name="connections" value="0101"/>
+    <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="cobbled-street" x="1440" y="1152" width="32" height="32">
+  <object id="20" name="cobbled-street" x="1440" y="1152" width="32" height="32">
    <properties>
-    <property name="player" value="1"/>
     <property name="connections" value="0101"/>
+    <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="farm-road" x="1280" y="1152" width="32" height="32">
+  <object id="21" name="farm-road" x="1280" y="1152" width="32" height="32">
    <properties>
-    <property name="player" value="1"/>
     <property name="connections" value="0100"/>
+    <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="cobbled-street" x="1504" y="1216" width="32" height="32">
+  <object id="22" name="cobbled-street" x="1504" y="1216" width="32" height="32">
    <properties>
-    <property name="player" value="1"/>
     <property name="connections" value="1010"/>
+    <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="cobbled-street" x="1504" y="1312" width="32" height="32">
+  <object id="23" name="cobbled-street" x="1504" y="1312" width="32" height="32">
    <properties>
-    <property name="player" value="1"/>
     <property name="connections" value="1010"/>
+    <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="pioneers-house1" x="1600" y="1280" width="64" height="64">
+  <object id="24" name="pioneers-house1" x="1600" y="1280" width="64" height="64">
    <properties>
     <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="cobbled-street" x="1504" y="1152" width="32" height="32">
+  <object id="25" name="cobbled-street" x="1504" y="1152" width="32" height="32">
    <properties>
-    <property name="player" value="1"/>
     <property name="connections" value="0011"/>
+    <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="cobbled-street" x="1568" y="1248" width="32" height="32">
+  <object id="26" name="cobbled-street" x="1568" y="1248" width="32" height="32">
    <properties>
-    <property name="player" value="1"/>
     <property name="connections" value="0101"/>
+    <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="cobbled-street" x="1408" y="1120" width="32" height="32">
+  <object id="27" name="cobbled-street" x="1408" y="1120" width="32" height="32">
    <properties>
-    <property name="player" value="1"/>
     <property name="connections" value="1010"/>
+    <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="cobbled-street" x="1408" y="1152" width="32" height="32">
+  <object id="28" name="cobbled-street" x="1408" y="1152" width="32" height="32">
    <properties>
-    <property name="player" value="1"/>
     <property name="connections" value="1101"/>
+    <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="cobbled-street" x="1408" y="1088" width="32" height="32">
+  <object id="29" name="cobbled-street" x="1408" y="1088" width="32" height="32">
    <properties>
-    <property name="player" value="1"/>
     <property name="connections" value="1010"/>
+    <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="farm-road" x="1408" y="1024" width="32" height="32">
+  <object id="30" name="farm-road" x="1408" y="1024" width="32" height="32">
    <properties>
-    <property name="player" value="1"/>
     <property name="connections" value="0111"/>
+    <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="sugarcane-field" x="1472" y="1184" width="32" height="32">
+  <object id="31" name="sugarcane-field" x="1472" y="1184" width="32" height="32">
    <properties>
     <property name="age" value="1"/>
     <property name="view" value="west"/>
    </properties>
   </object>
-  <object name="sugarcane-field" x="1472" y="1216" width="32" height="32">
+  <object id="32" name="sugarcane-field" x="1472" y="1216" width="32" height="32">
    <properties>
     <property name="age" value="3"/>
     <property name="view" value="west"/>
    </properties>
   </object>
-  <object name="sugarcane-field" x="1472" y="1248" width="32" height="32">
+  <object id="33" name="sugarcane-field" x="1472" y="1248" width="32" height="32">
    <properties>
     <property name="age" value="4"/>
     <property name="view" value="south"/>
    </properties>
   </object>
-  <object name="sugarcane-field" x="1440" y="1248" width="32" height="32">
+  <object id="34" name="sugarcane-field" x="1440" y="1248" width="32" height="32">
    <properties>
     <property name="age" value="3"/>
     <property name="view" value="west"/>
    </properties>
   </object>
-  <object name="sugarcane-field" x="1440" y="1216" width="32" height="32">
+  <object id="35" name="sugarcane-field" x="1440" y="1216" width="32" height="32">
    <properties>
     <property name="age" value="3"/>
     <property name="view" value="south"/>
    </properties>
   </object>
-  <object name="sugarcane-field" x="1440" y="1184" width="32" height="32">
+  <object id="36" name="sugarcane-field" x="1440" y="1184" width="32" height="32">
    <properties>
     <property name="age" value="2"/>
     <property name="view" value="west"/>
    </properties>
   </object>
-  <object name="sugarcane-field" x="1408" y="1216" width="32" height="32">
+  <object id="37" name="sugarcane-field" x="1408" y="1216" width="32" height="32">
    <properties>
     <property name="age" value="2"/>
     <property name="view" value="west"/>
    </properties>
   </object>
-  <object name="tobacco-field" x="1408" y="1184" width="32" height="32">
+  <object id="38" name="tobacco-field" x="1408" y="1184" width="32" height="32">
    <properties>
     <property name="age" value="3"/>
     <property name="view" value="west"/>
    </properties>
   </object>
-  <object name="sugarcane-field" x="1408" y="1248" width="32" height="32">
+  <object id="39" name="sugarcane-field" x="1408" y="1248" width="32" height="32">
    <properties>
     <property name="age" value="3"/>
     <property name="view" value="west"/>
    </properties>
   </object>
-  <object name="tobacco-field" x="1312" y="1216" width="32" height="32">
+  <object id="40" name="tobacco-field" x="1312" y="1216" width="32" height="32">
    <properties>
     <property name="age" value="2"/>
     <property name="view" value="west"/>
    </properties>
   </object>
-  <object name="spices-field" x="1376" y="1248" width="32" height="32">
+  <object id="41" name="spices-field" x="1376" y="1248" width="32" height="32">
    <properties>
     <property name="age" value="4"/>
     <property name="view" value="south"/>
    </properties>
   </object>
-  <object name="tobacco-field" x="1344" y="1184" width="32" height="32">
+  <object id="42" name="tobacco-field" x="1344" y="1184" width="32" height="32">
    <properties>
     <property name="age" value="2"/>
     <property name="view" value="west"/>
    </properties>
   </object>
-  <object name="tobacco-field" x="1376" y="1216" width="32" height="32">
+  <object id="43" name="tobacco-field" x="1376" y="1216" width="32" height="32">
    <properties>
     <property name="age" value="3"/>
     <property name="view" value="west"/>
    </properties>
   </object>
-  <object name="tobacco-field" x="1376" y="1184" width="32" height="32">
+  <object id="44" name="tobacco-field" x="1376" y="1184" width="32" height="32">
    <properties>
     <property name="age" value="1"/>
     <property name="view" value="west"/>
    </properties>
   </object>
-  <object name="tobacco-field" x="1312" y="1184" width="32" height="32">
+  <object id="45" name="tobacco-field" x="1312" y="1184" width="32" height="32">
    <properties>
     <property name="age" value="3"/>
     <property name="view" value="west"/>
    </properties>
   </object>
-  <object name="tobacco-field" x="1344" y="1248" width="32" height="32">
+  <object id="46" name="tobacco-field" x="1344" y="1248" width="32" height="32">
    <properties>
     <property name="age" value="3"/>
     <property name="view" value="west"/>
    </properties>
   </object>
-  <object name="tobacco-field" x="1312" y="1248" width="32" height="32">
+  <object id="47" name="tobacco-field" x="1312" y="1248" width="32" height="32">
    <properties>
     <property name="age" value="3"/>
     <property name="view" value="west"/>
    </properties>
   </object>
-  <object name="tobacco-field" x="1344" y="1216" width="32" height="32">
+  <object id="48" name="tobacco-field" x="1344" y="1216" width="32" height="32">
    <properties>
     <property name="age" value="3"/>
     <property name="view" value="south"/>
    </properties>
   </object>
-  <object name="spices-field" x="1376" y="1280" width="32" height="32">
+  <object id="49" name="spices-field" x="1376" y="1280" width="32" height="32">
    <properties>
     <property name="age" value="1"/>
     <property name="view" value="west"/>
    </properties>
   </object>
-  <object name="spices-field" x="1312" y="1280" width="32" height="32">
+  <object id="50" name="spices-field" x="1312" y="1280" width="32" height="32">
    <properties>
     <property name="age" value="3"/>
     <property name="view" value="west"/>
    </properties>
   </object>
-  <object name="spices-field" x="1376" y="1312" width="32" height="32">
+  <object id="51" name="spices-field" x="1376" y="1312" width="32" height="32">
    <properties>
     <property name="age" value="3"/>
     <property name="view" value="west"/>
    </properties>
   </object>
-  <object name="spices-field" x="1344" y="1280" width="32" height="32">
+  <object id="52" name="spices-field" x="1344" y="1280" width="32" height="32">
    <properties>
     <property name="age" value="2"/>
     <property name="view" value="west"/>
    </properties>
   </object>
-  <object name="spices-field" x="1312" y="1312" width="32" height="32">
+  <object id="53" name="spices-field" x="1312" y="1312" width="32" height="32">
    <properties>
     <property name="age" value="4"/>
     <property name="view" value="south"/>
    </properties>
   </object>
-  <object name="spices-field" x="1344" y="1312" width="32" height="32">
+  <object id="54" name="spices-field" x="1344" y="1312" width="32" height="32">
    <properties>
     <property name="age" value="2"/>
     <property name="view" value="west"/>
    </properties>
   </object>
-  <object name="spices-field" x="1344" y="1344" width="32" height="32">
+  <object id="55" name="spices-field" x="1344" y="1344" width="32" height="32">
    <properties>
     <property name="age" value="3"/>
     <property name="view" value="west"/>
    </properties>
   </object>
-  <object name="spices-field" x="1312" y="1344" width="32" height="32">
+  <object id="56" name="spices-field" x="1312" y="1344" width="32" height="32">
    <properties>
     <property name="age" value="3"/>
     <property name="view" value="west"/>
    </properties>
   </object>
-  <object name="northern-forest2" x="1376" y="1344" width="32" height="32">
+  <object id="57" name="northern-forest2" x="1376" y="1344" width="32" height="32">
    <properties>
     <property name="age" value="3"/>
     <property name="view" value="south"/>
    </properties>
   </object>
-  <object name="northern-forest2" x="1440" y="1312" width="32" height="32">
+  <object id="58" name="northern-forest2" x="1440" y="1312" width="32" height="32">
    <properties>
     <property name="age" value="2"/>
     <property name="view" value="west"/>
    </properties>
   </object>
-  <object name="northern-forest2" x="1408" y="1280" width="32" height="32">
+  <object id="59" name="northern-forest2" x="1408" y="1280" width="32" height="32">
    <properties>
     <property name="age" value="3"/>
     <property name="view" value="west"/>
    </properties>
   </object>
-  <object name="northern-forest2" x="1472" y="1312" width="32" height="32">
+  <object id="60" name="northern-forest2" x="1472" y="1312" width="32" height="32">
    <properties>
     <property name="age" value="3"/>
     <property name="view" value="west"/>
    </properties>
   </object>
-  <object name="northern-forest1" x="1408" y="1344" width="32" height="32">
+  <object id="61" name="northern-forest1" x="1408" y="1344" width="32" height="32">
    <properties>
     <property name="age" value="3"/>
     <property name="view" value="west"/>
    </properties>
   </object>
-  <object name="sugarcane-field" x="1472" y="1280" width="32" height="32">
+  <object id="62" name="sugarcane-field" x="1472" y="1280" width="32" height="32">
    <properties>
     <property name="age" value="1"/>
     <property name="view" value="west"/>
    </properties>
   </object>
-  <object name="northern-forest1" x="1408" y="1312" width="32" height="32">
+  <object id="63" name="northern-forest1" x="1408" y="1312" width="32" height="32">
    <properties>
     <property name="age" value="4"/>
     <property name="view" value="south"/>
    </properties>
   </object>
-  <object name="northern-forest1" x="1440" y="1280" width="32" height="32">
+  <object id="64" name="northern-forest1" x="1440" y="1280" width="32" height="32">
    <properties>
     <property name="age" value="2"/>
     <property name="view" value="west"/>
    </properties>
   </object>
-  <object name="northern-forest2" x="1472" y="1344" width="32" height="32">
+  <object id="65" name="northern-forest2" x="1472" y="1344" width="32" height="32">
    <properties>
     <property name="age" value="3"/>
     <property name="view" value="south"/>
    </properties>
   </object>
-  <object name="northern-forest1" x="1440" y="1344" width="32" height="32">
+  <object id="66" name="northern-forest1" x="1440" y="1344" width="32" height="32">
    <properties>
     <property name="age" value="3"/>
     <property name="view" value="west"/>
    </properties>
   </object>
-  <object name="settlers-house4" x="1600" y="1344" width="64" height="64">
+  <object id="67" name="settlers-house4" x="1600" y="1344" width="64" height="64">
    <properties>
     <property name="player" value="1"/>
     <property name="view" value="west"/>
    </properties>
   </object>
-  <object name="square1" x="1376" y="1120" width="32" height="32">
+  <object id="68" name="square1" x="1376" y="1120" width="32" height="32">
    <properties>
     <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="square1" x="1344" y="1120" width="32" height="32">
+  <object id="69" name="square1" x="1344" y="1120" width="32" height="32">
    <properties>
     <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="square1" x="1312" y="1120" width="32" height="32">
+  <object id="70" name="square1" x="1312" y="1120" width="32" height="32">
    <properties>
     <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="farm-road" x="1312" y="1024" width="32" height="32">
+  <object id="71" name="farm-road" x="1312" y="1024" width="32" height="32">
    <properties>
-    <property name="player" value="1"/>
     <property name="connections" value="0101"/>
+    <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="farm-road" x="1280" y="1024" width="32" height="32">
+  <object id="72" name="farm-road" x="1280" y="1024" width="32" height="32">
    <properties>
-    <property name="player" value="1"/>
     <property name="connections" value="0100"/>
+    <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="farm-road" x="1440" y="1024" width="32" height="32">
+  <object id="73" name="farm-road" x="1440" y="1024" width="32" height="32">
    <properties>
-    <property name="player" value="1"/>
     <property name="connections" value="0101"/>
+    <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="farm-road" x="1504" y="1024" width="32" height="32">
+  <object id="74" name="farm-road" x="1504" y="1024" width="32" height="32">
    <properties>
-    <property name="player" value="1"/>
     <property name="connections" value="0001"/>
+    <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="farm-road" x="1472" y="1024" width="32" height="32">
+  <object id="75" name="farm-road" x="1472" y="1024" width="32" height="32">
    <properties>
-    <property name="player" value="1"/>
     <property name="connections" value="0101"/>
+    <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="farm-road" x="1344" y="1024" width="32" height="32">
+  <object id="76" name="farm-road" x="1344" y="1024" width="32" height="32">
    <properties>
-    <property name="player" value="1"/>
     <property name="connections" value="0101"/>
+    <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="farm-road" x="1376" y="1024" width="32" height="32">
+  <object id="77" name="farm-road" x="1376" y="1024" width="32" height="32">
    <properties>
-    <property name="player" value="1"/>
     <property name="connections" value="0101"/>
+    <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="cobbled-street" x="1408" y="1056" width="32" height="32">
+  <object id="78" name="cobbled-street" x="1408" y="1056" width="32" height="32">
    <properties>
-    <property name="player" value="1"/>
     <property name="connections" value="1010"/>
+    <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="cobbled-street" x="1504" y="1376" width="32" height="32">
+  <object id="79" name="cobbled-street" x="1504" y="1376" width="32" height="32">
    <properties>
-    <property name="player" value="1"/>
     <property name="connections" value="1000"/>
+    <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="cobbled-street" x="1376" y="1440" width="32" height="32">
+  <object id="80" name="cobbled-street" x="1376" y="1440" width="32" height="32">
    <properties>
-    <property name="player" value="1"/>
     <property name="connections" value="0000"/>
+    <property name="player" value="1"/>
     <property name="view" value="south"/>
    </properties>
   </object>
-  <object name="cobbled-street" x="1440" y="1440" width="32" height="32">
+  <object id="81" name="cobbled-street" x="1440" y="1440" width="32" height="32">
    <properties>
-    <property name="player" value="1"/>
     <property name="connections" value="0000"/>
+    <property name="player" value="1"/>
     <property name="view" value="east"/>
    </properties>
   </object>
-  <object name="cobbled-street" x="1504" y="1440" width="32" height="32">
+  <object id="82" name="cobbled-street" x="1504" y="1440" width="32" height="32">
    <properties>
-    <property name="player" value="1"/>
     <property name="connections" value="0000"/>
+    <property name="player" value="1"/>
     <property name="view" value="north"/>
    </properties>
   </object>
-  <object name="cobbled-street" x="1568" y="1440" width="32" height="32">
+  <object id="83" name="cobbled-street" x="1568" y="1440" width="32" height="32">
+   <properties>
+    <property name="connections" value="0000"/>
+    <property name="player" value="1"/>
+    <property name="view" value="west"/>
+   </properties>
+  </object>
+  <object id="84" name="sheep-farm" x="1088" y="1280" width="64" height="64">
    <properties>
     <property name="player" value="1"/>
-    <property name="connections" value="0000"/>
+    <property name="view" value="east"/>
+   </properties>
+  </object>
+  <object id="85" name="burghers-house1" x="1376" y="1728" width="64" height="64">
+   <properties>
+    <property name="player" value="1"/>
     <property name="view" value="west"/>
    </properties>
   </object>
