@@ -30,16 +30,7 @@ TEST_F(BuildOperationTest, demolishBuilding) {
     std::initializer_list<MapCoords> allMapCoordsTavern = {{48, 37}, {49, 37}, {50, 37}, {48, 38}, {49, 38}, {50, 38}};
     for (const MapCoords& mapCoords : allMapCoordsTavern) {
         const BuildOperationResultBit& resultBit = *result.at(mapCoords);
-
-        ASSERT_EQ(true, resultBit.deleteMapObjectThere);
-
-        // immer false beim Abreißen
-        ASSERT_EQ(false, resultBit.somethingInTheWay);
-        ASSERT_EQ(false, resultBit.resourcesEnoughToBuildThis);
-        ASSERT_EQ(false, resultBit.costsNothingBecauseOfChange);
-
-        ASSERT_TRUE(resultBit.mapObjectToReplaceWith == nullptr);
-        ASSERT_TRUE(resultBit.mapObjectToDraw == nullptr);
+        assertCorrectResultBitForDemolish(resultBit);
     }
 
     // Test 2: Ausführen
@@ -129,6 +120,42 @@ TEST_F(BuildOperationTest, financesUpdate) {
     buildOperation2.doBuild();
 
     ASSERT_LT(player->playerStatus.balance, balanceBefore);
+}
+
+/**
+ * @brief Testet das Abreißen mehrere Objekte auf einmal ab
+ *
+ * Wir reißen das Rechteck (41, 35)-(42, 37) ab. 2 Plätze, 2 Straßen und 2 Tabakfelder
+ */
+TEST_F(BuildOperationTest, demolishMultipleObjects) {
+    std::initializer_list<MapCoords> mapCoordsToDemolish = {{41, 35}, {41, 36}, {41, 37}, {42, 35}, {42, 36}, {42, 37}};
+    Map* map = game->getMap();
+
+    // Test 1: BuildOperation
+    BuildOperation buildOperation(context, *player);
+    for (const MapCoords& mapCoords : mapCoordsToDemolish) {
+        buildOperation.requestDemolish(*map->getMapObjectFixedAt(mapCoords));
+    }
+
+    ASSERT_EQ(MapObjectToBuild::DEMOLISH, buildOperation.getMapObjectsToBuildMode());
+    ASSERT_EQ(colony, buildOperation.getColony());
+
+    const BuildOperationResult& result = buildOperation.getResult();
+    ASSERT_EQ(BuildOperationResult::OK, result.result);
+    ASSERT_EQ(6, result.size());
+
+    for (const MapCoords& mapCoords : mapCoordsToDemolish) {
+        const BuildOperationResultBit& resultBit = *result.at(mapCoords);
+        assertCorrectResultBitForDemolish(resultBit);
+    }
+
+    // Test 2: Ausführen
+    buildOperation.doBuild();
+
+    // Alle Felder müssen weg sein
+    for (const MapCoords& mapCoords : mapCoordsToDemolish) {
+        ASSERT_TRUE(map->getMapObjectFixedAt(mapCoords) == nullptr);
+    }
 }
 
 // TODO Schafffarm abreißen -> Schäfchen verschwinden

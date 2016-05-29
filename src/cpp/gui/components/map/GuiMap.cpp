@@ -626,15 +626,39 @@ bool GuiMap::onEventElement(SDL_Event& event) {
 
 void GuiMap::addToBuildQueration(bool mustResetBefore) {
     const MapCoords& mapCoordsUnderMouse = context.guiMgr->getMapCoordsUnderMouse();
-
-    // Ok, wir müssen nun ggf. was platzieren. Es kommt nun drauf an, was wir grade platzieren
     const MapObjectType* mapObjectType = context.guiMgr->getPanelState().addingMapObject;
+
+    // Abrissmodus
     if (mapObjectType == nullptr) {
-        Log::debug("TODO Abreißmodus für mehrere Objekte implementieren.");
-        // TODO buildOperation->requestDemolish() aufrufen
+        resetBuildOperation(); // immer clearen, weil das neue Rechteck alle vorher gesetzten Kacheln ersetzt
+
+        const MapCoords& mapCoordsClickStart = context.guiMgr->getStartClickMapCoords();
+        MapCoordsIterator mapCoordsIterator(mapCoordsClickStart, mapCoordsUnderMouse, Direction::SOUTH);
+
+        // nur eine Kachel? dann sind auch Gebäude erlaubt
+        if (mapCoordsIterator.size() == 1) {
+            MapObjectFixed* mapObjectFixedThere = context.game->getMap()->getMapObjectFixedAt(mapCoordsClickStart);
+            if (mapObjectFixedThere != nullptr) {
+                buildOperation->requestDemolish(*mapObjectFixedThere);
+            }
+        }
+        // mehrere Kacheln? Dann rechteckig alles außer Gebäuden hinzufügen
+        else {
+            mapCoordsIterator.iterate([&](const MapCoords& mapCoords) {
+                MapObjectFixed* mapObjectFixedThere = context.game->getMap()->getMapObjectFixedAt(mapCoords);
+                if (mapObjectFixedThere != nullptr) {
+                    Building* buildingThere = dynamic_cast<Building*>(mapObjectFixedThere);
+                    if (buildingThere == nullptr) {
+                        buildOperation->requestDemolish(*mapObjectFixedThere);
+                    }
+                }
+            });
+        }
+
         return;
     }
 
+    // Ok, wir müssen nun ggf. was platzieren. Es kommt nun drauf an, was wir grade platzieren
     StructurePlacing structurePlacing = mapObjectType->structurePlacing;
     const FourthDirection& view = context.guiMgr->getPanelState().addingMapObjectView;
 
