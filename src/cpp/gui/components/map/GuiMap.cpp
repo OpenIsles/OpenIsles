@@ -991,5 +991,9 @@ void GuiMap::updateBuildingCosts() {
         return;
     }
 
-    guiResourcesBar->showBuildingCosts(buildOperation->getResult().buildingCosts);
+    if (context.guiMgr->getPanelState().addingMapObject != nullptr) {
+        guiResourcesBar->showBuildingCosts(buildOperation->getResult().buildingCosts);
+    } else {
+        guiResourcesBar->hideBuildingCosts();
+    }
 }
