@@ -171,7 +171,7 @@ void EconomicsMgr::updatePlayerStatus() {
         }
     }
 
-    /// PlayerStatus aktualisieren
+    // PlayerStatus aktualisieren
     for (int playerIndex = 0; playerIndex < 4; playerIndex++) {
         PlayerStatus& playerStatus = game->getPlayer(playerIndex)->playerStatus;
         playerStatus.population = populationSumPerPlayer[playerIndex];
