@@ -522,7 +522,7 @@ void BuildOperation::doBuild() {
                 for (int mx = mapCoordsToReplaceWith.x(); mx < mapCoordsToReplaceWith.x() + mapWidth; mx++) {
                     MapObjectFixed* mapObjectFixedThere = map->getMapObjectFixedAt({mx, my});
                     if (mapObjectFixedThere != nullptr) {
-                        map->deleteMapObject(mapObjectFixedThere);
+                        context.game->deleteMapObject(mapObjectFixedThere);
                     }
                 }
             }
@@ -545,7 +545,7 @@ void BuildOperation::doBuild() {
             }
 
             // jetzt erst löschen
-            map->deleteMapObject(mapObjectFixedThere);
+            context.game->deleteMapObject(mapObjectFixedThere);
         }
 
         // Neues Objekt hinzufügen

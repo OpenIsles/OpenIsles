@@ -52,3 +52,85 @@ TEST_F(BuildOperationTest, demolishBuilding) {
     BuildingCosts resourcesAfter = BuildingCosts(player, colony, context.configMgr);
     ASSERT_TRUE(resourcesAfter == resourcesBefore);
 }
+
+/**
+ * @brief Testet, ob die Bevölkerung korrekt abnimmt
+ *
+ * Wir reißen einmal das Wirtshaus (48, 37) und ein Wohnhaus auf (50, 42) ab
+ */
+TEST_F(BuildOperationTest, populationVanishes) {
+    // Testaufbau
+    const PopulationTier* settlers = configMgr->getPopulationTier("settlers");
+
+    const MapObjectFixed* tavern = game->getMap()->getMapObjectFixedAt({48, 37});
+    const MapObjectFixed* house = game->getMap()->getMapObjectFixedAt({50, 42});
+
+    // Test 1: Wirtshaus weg
+    unsigned long playerPopulationBefore = player->playerStatus.population;
+    unsigned int colonyPopulationBefore = colony->population;
+
+    BuildOperation buildOperation(context, *player);
+    buildOperation.requestDemolish(*tavern);
+    buildOperation.doBuild();
+
+    ASSERT_LT(colony->population, colonyPopulationBefore);
+    ASSERT_EQ(colony->population, colonyPopulationBefore - configMgr->getMapObjectType("tavern")->inhabitants);
+
+    ASSERT_LT(player->playerStatus.population, playerPopulationBefore);
+
+    // Test 2: Wohnhaus weg
+    playerPopulationBefore = player->playerStatus.population;
+    colonyPopulationBefore = colony->population;
+    unsigned int settlersBefore = colony->populationTiers[settlers].population;
+    unsigned int populationInHouse = dynamic_cast<const Building*>(house)->inhabitants;
+
+    BuildOperation buildOperation2(context, *player);
+    buildOperation2.requestDemolish(*house);
+    buildOperation2.doBuild();
+
+    ASSERT_LT(colony->populationTiers[settlers].population, settlersBefore);
+    ASSERT_EQ(colony->populationTiers[settlers].population, settlersBefore - populationInHouse);
+
+    ASSERT_LT(colony->population, colonyPopulationBefore);
+    ASSERT_EQ(colony->population, colonyPopulationBefore - populationInHouse);
+
+    ASSERT_LT(player->playerStatus.population, playerPopulationBefore);
+}
+
+/**
+ * @brief Testet, ob die Finanzen korrekt aktualisiert werden
+ *
+ * Wir reißen wieder das Wirtshaus (48, 37) und ein Wohnhaus auf (50, 42) ab
+ */
+TEST_F(BuildOperationTest, financesUpdate) {
+    // Testaufbau
+    const MapObjectFixed* tavern = game->getMap()->getMapObjectFixedAt({48, 37});
+    const MapObjectFixed* house = game->getMap()->getMapObjectFixedAt({50, 42});
+
+    // Steuersatz extrem setzen, damit wir später n Unterschied sehen, wenn ein Haus abgerissen wird
+    const PopulationTier* settlers = configMgr->getPopulationTier("settlers");
+    colony->populationTiers[settlers].taxesPercent = 255;
+    economicsMgr->updatePlayerStatus();
+
+    // Test 1: Wirtshaus weg
+    long balanceBefore = player->playerStatus.balance;
+
+    BuildOperation buildOperation(context, *player);
+    buildOperation.requestDemolish(*tavern);
+    buildOperation.doBuild();
+
+    ASSERT_GT(player->playerStatus.balance, balanceBefore);
+
+    // Test 2: Wohnhaus weg
+    balanceBefore = player->playerStatus.balance;
+
+    BuildOperation buildOperation2(context, *player);
+    buildOperation2.requestDemolish(*house);
+    buildOperation2.doBuild();
+
+    ASSERT_LT(player->playerStatus.balance, balanceBefore);
+}
+
+// TODO Schafffarm abreißen -> Schäfchen verschwinden
+// TODO Marktplatz abreißen -> Lagerbestand, Marktkarren verschwinden
+// TODO Kontor abreißen -> Kolonie vernichten (erst später, wenn nur ein Kontor pro Kolonie da is)
