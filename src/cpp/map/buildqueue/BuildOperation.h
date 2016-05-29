@@ -21,6 +21,7 @@ private:
 
     /**
      * @brief Bauaufträge ("Build-Queue")
+     *
      * Es können immer nur Aufträge desselben Typs in der Queue sein (siehe mapObjectsToBuildMode).
      */
     std::list<MapObjectToBuild> mapObjectsToBuild;
@@ -31,7 +32,7 @@ private:
     MapObjectToBuild::Mode mapObjectsToBuildMode = MapObjectToBuild::EMPTY;
 
     /**
-     * @brief Kolonie, in der gebaut wird.
+     * @brief Kolonie, in der gebaut/abgerissen wird.
      *
      * Es kann immer nur in einer Kolonie gebaut werden. Dieses Feld ist erst gesetzt, wenn
      * der erste Bauauftrag in der Queue ist.
@@ -53,6 +54,10 @@ public:
 
     MapObjectToBuild::Mode getMapObjectsToBuildMode() const {
         return mapObjectsToBuildMode;
+    }
+
+    Colony* getColony() const {
+        return colony;
     }
 
     const BuildOperationResult& getResult() const {
@@ -111,6 +116,17 @@ private:
         TO_REPLACE_WITH
     };
 
+    /**
+     * Überprüft die Kolonie für eine anstehende Bauoperation.
+     *
+     * Es wird für das erste Objekt `colony` gesettet. Für jedes weitere Objekt wird sichergestellt, dass nicht
+     * in zwei Kolonien gleichzeitig gebaut wird.
+     *
+     * @param mapCoords Map-Koordinaten, auf die gebaut/abgerissen werden soll
+     * @return `true`, wenn alles ok ist. `false`, wenn die geplante Bauoperation verboten ist, weil entweder dort
+     *         noch gar keine Kolonie oder die falsche Kolonie ist.
+     */
+    bool testColony(const MapCoords& mapCoords);
 
     /**
      * @brief Überprüft, ob ein geplantes Objekt in die Karte gesetzt werden kann oder was im Weg ist.

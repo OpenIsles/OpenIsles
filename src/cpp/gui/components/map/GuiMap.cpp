@@ -630,7 +630,7 @@ void GuiMap::addToBuildQueration(bool mustResetBefore) {
     // Ok, wir müssen nun ggf. was platzieren. Es kommt nun drauf an, was wir grade platzieren
     const MapObjectType* mapObjectType = context.guiMgr->getPanelState().addingMapObject;
     if (mapObjectType == nullptr) {
-        Log::debug("TODO Abreißmodus implementieren. Beim Loslassen der Maustaste krachts ;-)");
+        Log::debug("TODO Abreißmodus für mehrere Objekte implementieren.");
         // TODO buildOperation->requestDemolish() aufrufen
         return;
     }
