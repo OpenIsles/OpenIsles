@@ -212,6 +212,10 @@ void Game::addInhabitantsToBuilding(Building* building, char amount) {
 }
 
 void Game::deleteMapObject(MapObject* mapObject) {
+    // Löschen wir das aktuell ausgewählte Objekt? Dann vorher deselektieren
+    if (map->getSelectedMapObject() == mapObject) {
+        map->setSelectedMapObject(nullptr);
+    }
 
     Building* building = dynamic_cast<Building*>(mapObject);
     if (building != nullptr) {
