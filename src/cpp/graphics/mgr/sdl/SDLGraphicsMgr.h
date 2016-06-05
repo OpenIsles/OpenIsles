@@ -18,7 +18,7 @@ public:
      * @param renderer (Dependency)
      * @param configMgr (Dependency)
      */
-    SDLGraphicsMgr(IRenderer* const renderer, const ConfigMgr* const configMgr);
+    SDLGraphicsMgr(IRenderer* const renderer, ConfigMgr* const configMgr);
     virtual ~SDLGraphicsMgr() {}
 
 private:

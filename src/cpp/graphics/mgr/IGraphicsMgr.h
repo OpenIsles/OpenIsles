@@ -58,12 +58,7 @@ public:
      */
     virtual void loadGraphics() = 0;
 
-    virtual const GraphicSet* getGraphicSet(std::string graphicName) const = 0;
-
-    VIRTUAL_ONLY_IN_TESTS
-    std::string getGraphicSetNameForMapObject(const MapObjectType* mapObjectType) const {
-        return "mapobjects/" + mapObjectType->name;
-    }
+    virtual const GraphicSet* getGraphicSet(const std::string& graphicName) const = 0;
 
     std::string getGraphicSetNameForGoodIcons(const Good* good, bool marketplaceIcon) const {
         const std::string graphicSetNamePrefix = (marketplaceIcon) ? "goods-marketplace-icon" : "goods-icon";

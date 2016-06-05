@@ -88,8 +88,7 @@ void GuiAddBuildingWidget::renderElement(IRenderer* renderer) {
 
     // Grafik
     const FourthDirection& view = context.guiMgr->getPanelState().addingMapObjectView;
-    const std::string graphicsSetName = context.graphicsMgr->getGraphicSetNameForMapObject(mapObjectType);
-    const GraphicSet* graphicSet = context.graphicsMgr->getGraphicSet(graphicsSetName);
+    const GraphicSet* graphicSet = mapObjectType->graphicSet;
 
     // TODO duplicate code
     const IGraphic* graphic;

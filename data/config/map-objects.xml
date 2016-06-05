@@ -4,6 +4,16 @@
     <!-- Handwerksbetriebe -->
 
     <building name="stonemason" width="2" height="2">
+        <graphic-set name="mapobjects/stonemason" />
+        <!--
+        TODO Animationen abhängig vom Lagerbestand
+        <graphic-set name="mapobjects/stonemason">
+            <animation inventory="0">empty</animation>
+            <animation inventory="2">inventory-1</animation>
+            <animation inventory="4">inventory-2</animation>
+            <animation inventory="7">inventory-3</animation>
+        </graphic-set>
+        -->
         <structure-placing>individually</structure-placing>
         <placeable-on>
             <map-tile-type>grass</map-tile-type>
@@ -44,6 +54,7 @@
     </building>
 
     <building name="toolsmiths" width="2" height="2">
+        <graphic-set name="mapobjects/toolsmiths" />
         <structure-placing>individually</structure-placing>
         <placeable-on>
             <map-tile-type>grass</map-tile-type>
@@ -99,6 +110,7 @@
     </building>
 
     <building name="tobacco-goods" width="2" height="2">
+        <graphic-set name="mapobjects/tobacco-goods" />
         <structure-placing>individually</structure-placing>
         <placeable-on>
             <map-tile-type>grass</map-tile-type>
@@ -150,6 +162,7 @@
     </building>
 
     <building name="distillery" width="2" height="2">
+        <graphic-set name="mapobjects/distillery" />
         <structure-placing>individually</structure-placing>
         <placeable-on>
             <map-tile-type>grass</map-tile-type>
@@ -201,6 +214,7 @@
     </building>
 
     <building name="weaving-mill1" width="2" height="2">
+        <graphic-set name="mapobjects/weaving-mill1" />
         <structure-placing>individually</structure-placing>
         <placeable-on>
             <map-tile-type>grass</map-tile-type>
@@ -258,6 +272,7 @@
     </building>
 
     <building name="butchers" width="2" height="2">
+        <graphic-set name="mapobjects/butchers" />
         <structure-placing>individually</structure-placing>
         <placeable-on>
             <map-tile-type>grass</map-tile-type>
@@ -305,6 +320,14 @@
     </building>
 
     <building name="grain-mill" width="2" height="2">
+        <graphic-set name="mapobjects/grain-mill" />
+        <!--
+        TODO Animationen abhängig vom Zustand des Gebäudes (arbeitet oder tut nix)
+        <graphic-set name="mapobjects/grain-mill">
+            <animation state="not-working">not-working</animation>
+            <animation state="working">working</animation>
+        </graphic-set>
+        -->
         <structure-placing>individually</structure-placing>
         <placeable-on>
             <map-tile-type>grass</map-tile-type>
@@ -352,6 +375,7 @@
     </building>
 
     <building name="bakery" width="2" height="2">
+        <graphic-set name="mapobjects/bakery" />
         <structure-placing>individually</structure-placing>
         <placeable-on>
             <map-tile-type>grass</map-tile-type>
@@ -411,6 +435,7 @@
     <!-- Farmen und Plantagen -->
 
     <building name="sugarcane-plantation" width="2" height="2">
+        <graphic-set name="mapobjects/sugarcane-plantation" />
         <structure-placing>individually</structure-placing>
         <placeable-on>
             <map-tile-type>grass</map-tile-type>
@@ -442,6 +467,7 @@
     </building>
 
     <harvestable name="sugarcane-field" width="1" height="1">
+        <graphic-set name="mapobjects/sugarcane-field" />
         <structure-placing>rectangle</structure-placing>
         <placeable-on>
             <map-tile-type>grass</map-tile-type>
@@ -456,6 +482,7 @@
     </harvestable>
 
     <building name="tobacco-plantation" width="2" height="2">
+        <graphic-set name="mapobjects/tobacco-plantation" />
         <structure-placing>individually</structure-placing>
         <placeable-on>
             <map-tile-type>grass</map-tile-type>
@@ -487,6 +514,7 @@
     </building>
 
     <harvestable name="tobacco-field" width="1" height="1">
+        <graphic-set name="mapobjects/tobacco-field" />
         <structure-placing>rectangle</structure-placing>
         <placeable-on>
             <map-tile-type>grass</map-tile-type>
@@ -501,6 +529,7 @@
     </harvestable>
 
     <building name="spices-plantation" width="2" height="2">
+        <graphic-set name="mapobjects/spices-plantation" />
         <structure-placing>individually</structure-placing>
         <placeable-on>
             <map-tile-type>grass</map-tile-type>
@@ -532,6 +561,7 @@
     </building>
 
     <harvestable name="spices-field" width="1" height="1">
+        <graphic-set name="mapobjects/spices-field" />
         <structure-placing>rectangle</structure-placing>
         <placeable-on>
             <map-tile-type>grass</map-tile-type>
@@ -546,6 +576,7 @@
     </harvestable>
 
     <building name="grain-farm" width="2" height="2">
+        <graphic-set name="mapobjects/grain-farm" />
         <structure-placing>individually</structure-placing>
         <placeable-on>
             <map-tile-type>grass</map-tile-type>
@@ -575,6 +606,7 @@
     </building>
 
     <harvestable name="grain-field" width="1" height="1">
+        <graphic-set name="mapobjects/grain-field" />
         <structure-placing>rectangle</structure-placing>
         <placeable-on>
             <map-tile-type>grass</map-tile-type>
@@ -589,6 +621,7 @@
     </harvestable>
 
     <building name="sheep-farm" width="2" height="2">
+        <graphic-set name="mapobjects/sheep-farm" />
         <structure-placing>individually</structure-placing>
         <placeable-on>
             <map-tile-type>grass</map-tile-type>
@@ -622,6 +655,7 @@
     </building>
 
     <building name="cattle-farm" width="2" height="2">
+        <graphic-set name="mapobjects/cattle-farm" />
         <structure-placing>individually</structure-placing>
         <placeable-on>
             <map-tile-type>grass</map-tile-type>
@@ -653,6 +687,7 @@
     </building>
 
     <building name="hunters-hut" width="1" height="1">
+        <graphic-set name="mapobjects/hunters-hut" />
         <structure-placing>individually</structure-placing>
         <placeable-on>
             <map-tile-type>grass</map-tile-type>
@@ -695,6 +730,16 @@
     </building>
 
     <building name="foresters" width="2" height="2">
+        <graphic-set name="mapobjects/foresters" />
+        <!--
+        TODO Animationen abhängig vom Lagerbestand
+        <graphic-set name="mapobjects/foresters">
+            <animation inventory="0">empty</animation>
+            <animation inventory="2">inventory-1</animation>
+            <animation inventory="5">inventory-2</animation>
+            <animation inventory="9">inventory-3</animation>
+        </graphic-set>
+        -->
         <structure-placing>individually</structure-placing>
         <placeable-on>
             <map-tile-type>grass</map-tile-type>
@@ -728,6 +773,7 @@
     </building>
 
     <harvestable name="northern-forest1" width="1" height="1">
+        <graphic-set name="mapobjects/northern-forest1" />
         <structure-placing>rectangle</structure-placing>
         <placeable-on>
             <map-tile-type>grass</map-tile-type>
@@ -743,6 +789,7 @@
     </harvestable>
 
     <harvestable name="northern-forest2" width="1" height="1">
+        <graphic-set name="mapobjects/northern-forest2" />
         <structure-placing>rectangle</structure-placing>
         <placeable-on>
             <map-tile-type>grass</map-tile-type>
@@ -760,6 +807,7 @@
     <!-- Hafenanlagen -->
 
     <structure name="pier" width="1" height="1">
+        <graphic-set name="mapobjects/pier" />
         <structure-placing>individually</structure-placing>
         <placeable-on>
             <map-tile-type>shore-ocean</map-tile-type>
@@ -774,6 +822,7 @@
     </structure>
 
     <building name="office1" width="3" height="2">
+        <graphic-set name="mapobjects/office1" />
         <structure-placing>individually</structure-placing>
         <placeable-on>
             <map-tile-type>grass</map-tile-type>
@@ -833,6 +882,7 @@
     </building>
 
     <building name="office2" width="3" height="2">
+        <graphic-set name="mapobjects/office2" />
         <structure-placing>individually</structure-placing>
         <placeable-on>
             <map-tile-type>grass</map-tile-type>
@@ -896,6 +946,7 @@
     <!-- TODO "supersedes" verarbeiten. Zeigt an, dass diese öffentliche Gebäude dasselbe Bedürfnis befriedigt,
          wie das Gebäude, dass es supersedet. Transitiv, d.h. cathedrale ⊃ church ⊃ chapel -->
     <building name="cathedral" width="6" height="4" supersedes="church">
+        <graphic-set name="mapobjects/cathedral" />
         <structure-placing>individually</structure-placing>
         <placeable-on>
             <map-tile-type>grass</map-tile-type>
@@ -965,6 +1016,7 @@
     </building>
 
     <building name="tavern" width="2" height="3">
+        <graphic-set name="mapobjects/tavern" />
         <structure-placing>individually</structure-placing>
         <placeable-on>
             <map-tile-type>grass</map-tile-type>
@@ -1009,6 +1061,7 @@
     </building>
 
     <building name="pioneers-house1" width="2" height="2">
+        <graphic-set name="mapobjects/pioneers-house1" />
         <structure-placing>individually</structure-placing>
         <placeable-on>
             <map-tile-type>grass</map-tile-type>
@@ -1039,6 +1092,7 @@
     </building>
 
     <building name="pioneers-house2" width="2" height="2">
+        <graphic-set name="mapobjects/pioneers-house2" />
         <structure-placing>individually</structure-placing>
         <placeable-on>
             <map-tile-type>grass</map-tile-type>
@@ -1069,6 +1123,7 @@
     </building>
 
     <building name="pioneers-house3" width="2" height="2">
+        <graphic-set name="mapobjects/pioneers-house3" />
         <structure-placing>individually</structure-placing>
         <placeable-on>
             <map-tile-type>grass</map-tile-type>
@@ -1099,6 +1154,7 @@
     </building>
 
     <building name="pioneers-house4" width="2" height="2">
+        <graphic-set name="mapobjects/pioneers-house4" />
         <structure-placing>individually</structure-placing>
         <placeable-on>
             <map-tile-type>grass</map-tile-type>
@@ -1129,6 +1185,7 @@
     </building>
 
     <building name="pioneers-house5" width="2" height="2">
+        <graphic-set name="mapobjects/pioneers-house5" />
         <structure-placing>individually</structure-placing>
         <placeable-on>
             <map-tile-type>grass</map-tile-type>
@@ -1159,6 +1216,7 @@
     </building>
 
     <building name="settlers-house1" width="2" height="2">
+        <graphic-set name="mapobjects/settlers-house1" />
         <structure-placing>individually</structure-placing>
         <placeable-on>
             <map-tile-type>grass</map-tile-type>
@@ -1189,6 +1247,7 @@
     </building>
 
     <building name="settlers-house2" width="2" height="2">
+        <graphic-set name="mapobjects/settlers-house2" />
         <structure-placing>individually</structure-placing>
         <placeable-on>
             <map-tile-type>grass</map-tile-type>
@@ -1219,6 +1278,7 @@
     </building>
 
     <building name="settlers-house3" width="2" height="2">
+        <graphic-set name="mapobjects/settlers-house3" />
         <structure-placing>individually</structure-placing>
         <placeable-on>
             <map-tile-type>grass</map-tile-type>
@@ -1249,6 +1309,7 @@
     </building>
 
     <building name="settlers-house4" width="2" height="2">
+        <graphic-set name="mapobjects/settlers-house4" />
         <structure-placing>individually</structure-placing>
         <placeable-on>
             <map-tile-type>grass</map-tile-type>
@@ -1279,6 +1340,7 @@
     </building>
 
     <building name="settlers-house5" width="2" height="2">
+        <graphic-set name="mapobjects/settlers-house5" />
         <structure-placing>individually</structure-placing>
         <placeable-on>
             <map-tile-type>grass</map-tile-type>
@@ -1309,6 +1371,7 @@
     </building>
 
     <building name="burghers-house1" width="2" height="2">
+        <graphic-set name="mapobjects/burghers-house1" />
         <structure-placing>individually</structure-placing>
         <placeable-on>
             <map-tile-type>grass</map-tile-type>
@@ -1339,6 +1402,7 @@
     </building>
 
     <building name="merchants-house1" width="2" height="2">
+        <graphic-set name="mapobjects/merchants-house1" />
         <structure-placing>individually</structure-placing>
         <placeable-on>
             <map-tile-type>grass</map-tile-type>
@@ -1369,6 +1433,7 @@
     </building>
 
     <building name="aristocrats-house1" width="2" height="2">
+        <graphic-set name="mapobjects/aristocrats-house1" />
         <structure-placing>individually</structure-placing>
         <placeable-on>
             <map-tile-type>grass</map-tile-type>
@@ -1399,6 +1464,7 @@
     </building>
 
     <building name="marketplace" width="4" height="3">
+        <graphic-set name="mapobjects/marketplace" />
         <structure-placing>individually</structure-placing>
         <placeable-on>
             <map-tile-type>grass</map-tile-type>
@@ -1458,6 +1524,7 @@
     </building>
 
     <building name="chapel" width="2" height="1">
+        <graphic-set name="mapobjects/chapel" />
         <structure-placing>individually</structure-placing>
         <placeable-on>
             <map-tile-type>grass</map-tile-type>
@@ -1494,6 +1561,7 @@
     </building>
 
     <building name="school" width="2" height="2">
+        <graphic-set name="mapobjects/school" />
         <structure-placing>individually</structure-placing>
         <placeable-on>
             <map-tile-type>grass</map-tile-type>
@@ -1541,6 +1609,7 @@
     <!-- Straßen und Plätze -->
 
     <structure name="square1" width="1" height="1">
+        <graphic-set name="mapobjects/square1" />
         <structure-placing>rectangle</structure-placing>
         <placeable-on>
             <map-tile-type>grass</map-tile-type>
@@ -1554,6 +1623,7 @@
     </structure>
 
     <structure name="square2" width="1" height="1">
+        <graphic-set name="mapobjects/square2" />
         <structure-placing>rectangle</structure-placing>
         <placeable-on>
             <map-tile-type>grass</map-tile-type>
@@ -1567,6 +1637,7 @@
     </structure>
 
     <structure name="square3" width="1" height="1">
+        <graphic-set name="mapobjects/square3" />
         <structure-placing>rectangle</structure-placing>
         <placeable-on>
             <map-tile-type>grass</map-tile-type>
@@ -1580,6 +1651,7 @@
     </structure>
 
     <street name="farm-road" width="1" height="1">
+        <graphic-set name="mapobjects/farm-road" />
         <structure-placing>path</structure-placing>
         <placeable-on>
             <map-tile-type>grass</map-tile-type>
@@ -1593,6 +1665,7 @@
     </street>
 
     <street name="cobbled-street" width="1" height="1">
+        <graphic-set name="mapobjects/cobbled-street" />
         <structure-placing>path</structure-placing>
         <placeable-on>
             <map-tile-type>grass</map-tile-type>

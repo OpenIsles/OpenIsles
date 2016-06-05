@@ -23,6 +23,7 @@ TEST(ConfigMgrTest, loadMapObjectTypes) {
     ASSERT_EQ("mapObjectType|cathedral", cathedral->getTitleMsgid());
     ASSERT_EQ(6, cathedral->mapWidth);
     ASSERT_EQ(4, cathedral->mapHeight);
+    ASSERT_EQ("mapobjects/cathedral", cathedral->graphicSetName);
     ASSERT_EQ(StructurePlacing::INDIVIDUALLY, cathedral->structurePlacing);
     ASSERT_EQ((MapTileTypeInt) MapTileType::GRASS, cathedral->placeableOnMapTileTypeMask);
     ASSERT_EQ(50, cathedral->catchmentArea->width);
@@ -58,6 +59,7 @@ TEST(ConfigMgrTest, loadMapObjectTypes) {
     ASSERT_EQ("mapObjectType|sugarcane-field", sugarcaneField->getTitleMsgid());
     ASSERT_EQ(1, sugarcaneField->mapWidth);
     ASSERT_EQ(1, sugarcaneField->mapHeight);
+    ASSERT_EQ("mapobjects/sugarcane-field", sugarcaneField->graphicSetName);
     ASSERT_EQ(StructurePlacing::RECTANGLE, sugarcaneField->structurePlacing);
     ASSERT_EQ((MapTileTypeInt) MapTileType::GRASS, sugarcaneField->placeableOnMapTileTypeMask);
     ASSERT_TRUE(sugarcaneField->catchmentArea == nullptr);

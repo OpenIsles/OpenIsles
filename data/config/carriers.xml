@@ -3,37 +3,39 @@
     <!-- einfacher Träger -->
     <carrier name="carrier">
         <capacity>4</capacity>
-        <animations>
-            <animation carrier-state="running" graphic-set="carrier" />
-        </animations>
+        <graphic-set name="carrier">
+            <animation state="running">running</animation>
+        </graphic-set>
     </carrier>
 
     <!-- Marktkarren -->
     <carrier name="cart">
         <capacity>6</capacity>
-        <animations>
-            <animation carrier-state="without-cargo" graphic-set="cart-without-cargo" />
-            <animation carrier-state="with-cargo" graphic-set="cart-with-cargo" />
-        </animations>
+        <graphic-set name="cart">
+            <animation state="running" inventory="0">running-without-cargo</animation>
+            <animation state="running" inventory="1">running-with-cargo</animation>
+        </graphic-set>
     </carrier>
 
     <!-- Schaf -->
     <carrier name="sheep">
         <capacity>4</capacity>
         <seconds-to-produce>18</seconds-to-produce>
-        <!-- TODO animations auslesen -->
-        <animations>
-            <walking-animation carrier-state="walking" graphic-set="sheep" />
-        </animations>
+        <graphic-set name="sheep">
+            <animation state="eating" inventory="0">eating-1</animation>
+            <animation state="walking" inventory="0">walking-1</animation>
+            <animation state="eating" inventory="1">eating-2</animation>
+            <animation state="walking" inventory="1">walking-2</animation>
+        </graphic-set>
     </carrier>
 
     <!-- Rinder -->
     <carrier name="cattle">
         <capacity>3</capacity>
         <seconds-to-produce>17</seconds-to-produce>
-        <!-- TODO animations auslesen -->
-        <animations>
-            <walking-animation carrier-state="walking" graphic-set="cattle" />
-        </animations>
+        <graphic-set name="cattle">
+            <animation state="eating" inventory="0">eating</animation>
+            <animation state="walking" inventory="0">walking</animation>
+        </graphic-set>
     </carrier>
 </carriers>

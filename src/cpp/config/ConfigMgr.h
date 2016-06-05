@@ -5,6 +5,7 @@
 #include <gtest/gtest.h>
 #endif
 
+#include <cassert>
 #include <list>
 #include <set>
 #include <string>
@@ -211,6 +212,20 @@ public:
     }
 
     /**
+     * @brief Liefert alle MapObjectType zurück
+     * @return Liste aller `MapObjectType`s.
+     */
+    const std::list<const MapObjectType*> getAllMapObjectTypes() const {
+        std::list<const MapObjectType*> mapObjectTypes;
+
+        for (auto iter = mapObjectTypesMap.cbegin(); iter != mapObjectTypesMap.cend(); iter++) {
+            mapObjectTypes.push_back(&iter->second);
+        }
+
+        return mapObjectTypes;
+    }
+
+    /**
      * @brief Liefert den `MapObjectType` einer Struktur/Gebäudes ausgehend von seinem Namen zurück.
      * @param name Name des Map-Objekts
      * @return `MapObjectType`. `nullptr`, wenn es keinen solchen Map-Objekt-Typ gibt.
@@ -239,6 +254,18 @@ public:
         }
 
         return mapObjectTypes;
+    }
+
+    /**
+     * @brief Setzt (einmalig!) `graphicSet` eines `MapObjectType`.
+     *
+     * Wird vom `IGraphicsMgr` aufgerufen, wenn die Grafiken geladen sind.
+     *
+     * @param graphicSet geladenes GraphicSet
+     */
+    void initMapObjectTypeGraphicSet(const MapObjectType* mapObjectType, const GraphicSet* graphicSet) {
+        assert (mapObjectType->graphicSet == nullptr);
+        const_cast<MapObjectType*>(mapObjectType)->graphicSet = graphicSet;
     }
 
 #ifdef IN_TESTS

@@ -83,12 +83,10 @@ public:
     /**
      * @brief Berechnet für ein bestimmtes Map-Objekt das SDL-Rechteck, an welche Stelle die Grafik gesetzt werden muss.
      * @param map (Dependency)
-     * @param graphicsMgr (Dependency)
      * @param mapObjectFixed Map-Objekt
      * @return Rechteck mit den Draw-Koordinaten, wo die Grafik hingezeichnet werden muss
      */
-    static Rect getDrawCoordsForMapObjectFixed(
-        const Map& map, IGraphicsMgr* graphicsMgr, const MapObjectFixed* mapObjectFixed);
+    static Rect getDrawCoordsForMapObjectFixed(const Map& map, const MapObjectFixed* mapObjectFixed);
 
     /**
      * @brief Ermittelt für die aktuelle Position des Mauszeigers, welche Screen-Koordinate dort liegt.

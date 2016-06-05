@@ -103,31 +103,6 @@ TEST_F(MapCoordUtilsTest, screenToMapCoords) {
     }
 }
 
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-/**
- * @brief GraphicsMgr, der immer die passende Grafik für den MapCoordUtilsTest vorgaukelt
- */
-class MapCoordUtilsTestGraphicsMgr : public NoSDLGraphicsMgr {
-
-private:
-    GraphicSet* graphicSet;
-
-public:
-    MapCoordUtilsTestGraphicsMgr(GraphicSet* const graphicSet) :
-        NoSDLGraphicsMgr(nullptr, nullptr), graphicSet(graphicSet) {}
-
-    virtual std::string getGraphicSetNameForMapObject(const MapObjectType* mapObjectType) const {
-        return "irrelevant :-)";
-    }
-
-    virtual const GraphicSet* getGraphicSet(std::string graphicSetName) const {
-        return graphicSet;
-    }
-};
-
 /**
  * @brief Wir sind auf (5, 5) zentriert und haben ein 4x3-Gebäude auf (6, 6) stehen.
  * Wir testen nun, ob je nach Ansicht die drawCoords korrekt sind.
@@ -148,10 +123,9 @@ TEST_F(MapCoordUtilsTest, getDrawCoordsForBuilding) {
     graphicSet.addByView(Direction::NORTH, new Animation(graphic3));
     graphicSet.addByView(Direction::WEST, new Animation(graphic4));
 
-    MapCoordUtilsTestGraphicsMgr graphicsMgr(&graphicSet);
-
     MapObjectType mapObjectType;
     mapObjectType.type = MapObjectTypeClass::BUILDING;
+    mapObjectType.graphicSet = &graphicSet;
 
     Building building;
     building.setMapCoords(MapCoords(6, 6));
@@ -163,28 +137,28 @@ TEST_F(MapCoordUtilsTest, getDrawCoordsForBuilding) {
     // Testdurchführung
 
     map->setScreenView(Direction::SOUTH);
-    Rect actual = MapCoordUtils::getDrawCoordsForMapObjectFixed(*map, &graphicsMgr, &building);
+    Rect actual = MapCoordUtils::getDrawCoordsForMapObjectFixed(*map, &building);
     ASSERT_EQ(288, actual.x);
     ASSERT_EQ(331, actual.y);
     ASSERT_EQ(224, actual.w);
     ASSERT_EQ(160, actual.h);
 
     map->setScreenView(Direction::EAST);
-    actual = MapCoordUtils::getDrawCoordsForMapObjectFixed(*map, &graphicsMgr, &building);
+    actual = MapCoordUtils::getDrawCoordsForMapObjectFixed(*map, &building);
     ASSERT_EQ(128, actual.x);
     ASSERT_EQ(267, actual.y);
     ASSERT_EQ(224, actual.w);
     ASSERT_EQ(160, actual.h);
 
     map->setScreenView(Direction::NORTH);
-    actual = MapCoordUtils::getDrawCoordsForMapObjectFixed(*map, &graphicsMgr, &building);
+    actual = MapCoordUtils::getDrawCoordsForMapObjectFixed(*map, &building);
     ASSERT_EQ(256, actual.x);
     ASSERT_EQ(187, actual.y);
     ASSERT_EQ(224, actual.w);
     ASSERT_EQ(160, actual.h);
 
     map->setScreenView(Direction::WEST);
-    actual = MapCoordUtils::getDrawCoordsForMapObjectFixed(*map, &graphicsMgr, &building);
+    actual = MapCoordUtils::getDrawCoordsForMapObjectFixed(*map, &building);
     ASSERT_EQ(416, actual.x);
     ASSERT_EQ(251, actual.y);
     ASSERT_EQ(224, actual.w);

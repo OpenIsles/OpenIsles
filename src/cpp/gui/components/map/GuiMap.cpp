@@ -375,8 +375,7 @@ void GuiMap::renderTile(const MapCoords& mapCoords) {
         const FourthDirection& view = mapObjectToDrawHere->getView();
         const FourthDirection& viewToRender = Direction::addDirections(view, screenView);
 
-        const std::string& graphicSetName = context.graphicsMgr->getGraphicSetNameForMapObject(mapObjectType);
-        const GraphicSet* mapObjectGraphicSet = context.graphicsMgr->getGraphicSet(graphicSetName);
+        const GraphicSet* mapObjectGraphicSet = mapObjectType->graphicSet;
 
         // TODO duplicate code
         const IGraphic* graphicToDrawHere;
@@ -755,7 +754,7 @@ const MapObjectFixed* GuiMap::getMapObjectFixedUnderMouseCoords(int mouseX, int 
             continue;
         }
 
-        Rect rect = MapCoordUtils::getDrawCoordsForMapObjectFixed(*map, context.graphicsMgr, mapObjectFixed);
+        Rect rect = MapCoordUtils::getDrawCoordsForMapObjectFixed(*map, mapObjectFixed);
 
         // Außerhalb der Boundary-Box des Objekt geklickt?
         // TODO für Gebäude mit elevation=0 ggf. anpassen
@@ -782,9 +781,7 @@ const MapObjectFixed* GuiMap::getMapObjectFixedUnderMouseCoords(int mouseX, int 
         const FourthDirection& viewToRender = Direction::addDirections(structureView, screenView);
 
         const MapObjectType* mapObjectType = mapObjectFixed->getMapObjectType();
-        const std::string graphicSetName =
-            context.graphicsMgr->getGraphicSetNameForMapObject(mapObjectType);
-        const GraphicSet* graphicSet = context.graphicsMgr->getGraphicSet(graphicSetName);
+        const GraphicSet* graphicSet = mapObjectType->graphicSet;
 
         // TODO duplicate code
         const IGraphic* graphic;

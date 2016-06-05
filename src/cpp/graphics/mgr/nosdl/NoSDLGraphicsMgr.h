@@ -16,7 +16,7 @@ public:
      * @param renderer (Dependency)
      * @param configMgr (Dependency)
      */
-    NoSDLGraphicsMgr(IRenderer* const renderer, const ConfigMgr* const configMgr) :
+    NoSDLGraphicsMgr(IRenderer* const renderer, ConfigMgr* const configMgr) :
         AbstractGraphicsMgr(renderer, configMgr) {}
 
     virtual ~NoSDLGraphicsMgr() {}

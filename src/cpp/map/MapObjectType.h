@@ -8,6 +8,7 @@
 #include "config/MapTileType.h"
 #include "game/PopulationTier.h"
 #include "game/ProductionSlots.h"
+#include "graphics/graphic/GraphicSet.h"
 #include "utils/RectangleData.h"
 
 
@@ -91,6 +92,20 @@ struct MapObjectType {
      * @brief Höhe (Y-Richtung) des Map-Objekts in Map-Koordinaten
      */
     unsigned char mapHeight;
+
+    /**
+     * @brief Name des GraphicSet
+     *
+     * Dieser Name sollte niemals benutzt werden, sondern immer direkt auf `graphicSet` zugreifen.
+     * Einzige Ausnahme ist einmalig zu Beginn der Anwendung: Wenn die Konfiguration geladen wird, müssen wir uns
+     * den Namen des GraphicSet merken, bis die Grafiken geladen sind. Damit wird dann `graphicSet` gesetzt.
+     */
+    std::string graphicSetName;
+
+    /**
+     * @brief Zeiger auf das GraphicSet, was zum Zeichnen verwendet wird
+     */
+    const GraphicSet* graphicSet = nullptr;
 
     /**
       * @brief gibt an, wie das Map-Objekt platziert wird

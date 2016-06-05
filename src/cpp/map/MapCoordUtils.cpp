@@ -95,17 +95,14 @@ Rect MapCoordUtils::mapToDrawCoords(
     return screenToDrawCoords(screenCoords, map, elevation, graphic, mapWidth, mapHeight);
 }
 
-Rect MapCoordUtils::getDrawCoordsForMapObjectFixed(
-    const Map& map, IGraphicsMgr* graphicsMgr, const MapObjectFixed* mapObjectFixed) {
-
+Rect MapCoordUtils::getDrawCoordsForMapObjectFixed(const Map& map, const MapObjectFixed* mapObjectFixed) {
     const MapCoords& mapCoords = mapObjectFixed->getMapCoords();
 
     const FourthDirection& structureView = mapObjectFixed->getView();
     const FourthDirection& viewToRender = Direction::addDirections(structureView, map.getScreenView());
 
     const MapObjectType* mapObjectType = mapObjectFixed->getMapObjectType();
-    const std::string graphicSetName = graphicsMgr->getGraphicSetNameForMapObject(mapObjectType);
-    const GraphicSet* graphicSet = graphicsMgr->getGraphicSet(graphicSetName);
+    const GraphicSet* graphicSet = mapObjectType->graphicSet;
 
     // TODO duplicate code
     const IGraphic* graphic;

@@ -24,7 +24,7 @@ class AbstractGraphicsMgr : public IGraphicsMgr {
 protected:
     // Dependencies
     IRenderer* const renderer;
-    const ConfigMgr* const configMgr;
+    ConfigMgr* const configMgr;
 
     std::unordered_map<std::string, const GraphicSet*> graphicSets;
 
@@ -34,7 +34,7 @@ public:
      * @param renderer (Dependency)
      * @param configMgr (Dependency)
      */
-    AbstractGraphicsMgr(IRenderer* const renderer, const ConfigMgr* const configMgr) :
+    AbstractGraphicsMgr(IRenderer* const renderer, ConfigMgr* const configMgr) :
         renderer(renderer), configMgr(configMgr) {}
 
     /**
@@ -51,7 +51,7 @@ public:
      * @return Grafik-Set
      */
     VIRTUAL_ONLY_IN_TESTS
-    const GraphicSet* getGraphicSet(std::string graphicSetName) const {
+    const GraphicSet* getGraphicSet(const std::string& graphicSetName) const {
         return graphicSets.at(graphicSetName);
     }
 
@@ -131,6 +131,12 @@ private:
      * @brief Lädt die Grafik-Sets für die Rinder
      */
     void loadCattleGraphicSets();
+
+    /**
+     * @brief Wird aufgerufen, nachdem alle Grafiken geladen sind. Diese Methode verlinkt die GraphicSet zu den
+     * MapObjectType::graphicSet
+     */
+    void linkGraphicSetsToMapObjectTypes();
 };
 
 #endif

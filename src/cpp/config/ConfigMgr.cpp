@@ -102,6 +102,11 @@ void ConfigMgr::loadMapObjectTypes(const std::string& configFilePath) {
         mapObjectType.mapHeight = (unsigned char) stringToUnsignedLong(
             node->first_attribute("height", 6, true)->value());
 
+        rapidxml::xml_node<>* graphicSetNode = node->first_node("graphic-set", 11, true);
+        mapObjectType.graphicSetName = std::string(graphicSetNode->first_attribute("name", 4, true)->value());
+
+        // TODO <animation>-Unter-Tag auswerten und für die Animationen nutzen
+
         // Structure-Placing
         const char* structurePlacing = node->first_node("structure-placing", 17, true)->value();
         if (strcmp(structurePlacing, "individually") == 0) {

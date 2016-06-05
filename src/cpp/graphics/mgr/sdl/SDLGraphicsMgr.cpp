@@ -5,6 +5,6 @@
 #include "graphics/mgr/sdl/SDLGraphicsMgr.h"
 
 
-SDLGraphicsMgr::SDLGraphicsMgr(IRenderer* const renderer, const ConfigMgr* const configMgr) :
+SDLGraphicsMgr::SDLGraphicsMgr(IRenderer* const renderer, ConfigMgr* const configMgr) :
     AbstractGraphicsMgr(renderer, configMgr) {
 }

@@ -203,6 +203,8 @@ void AbstractGraphicsMgr::loadGraphics() {
 #if defined(DEBUG_GUIMAP_COORDS) || defined(DEBUG_GUIMAP)
     loadStaticGraphicSet("debug/grid-overlay-evelation1", "data/debug-grid-overlay-elevation1.png");
 #endif
+
+    linkGraphicSetsToMapObjectTypes();
 }
 
 void AbstractGraphicsMgr::loadTiles() {
@@ -500,4 +502,25 @@ void AbstractGraphicsMgr::loadCattleGraphicSets() {
 
     graphicSets["cattle"] = graphicSet;
     delete graphic;
+}
+
+void AbstractGraphicsMgr::linkGraphicSetsToMapObjectTypes() {
+    const std::list<const MapObjectType*> allMapObjectTypes = configMgr->getAllMapObjectTypes();
+
+    for (const MapObjectType* mapObjectType : allMapObjectTypes) {
+        const std::string& graphicSetName = mapObjectType->graphicSetName;
+
+        // TODO Träger haben noch kein GraphicSet konfiguriert. Dazu müssen wir erst sheep0 und sheep1 zusammenbringen
+        if (graphicSetName.empty()) {
+            continue;
+        }
+
+        const GraphicSet* graphicSet = getGraphicSet(graphicSetName);
+        if (graphicSet == nullptr) {
+            Log::error(_("Could not find graphicSet: '%s'"), graphicSetName);
+            throw std::runtime_error("Could not find graphicSet");
+        }
+
+        configMgr->initMapObjectTypeGraphicSet(mapObjectType, graphicSet);
+    }
 }
