@@ -1,4 +1,5 @@
 #include <cassert>
+#include <cmath>
 #include "global.h"
 #include "config/ConfigMgr.h"
 #include "game/CatchmentArea.h"
