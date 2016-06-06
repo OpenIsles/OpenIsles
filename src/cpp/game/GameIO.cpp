@@ -1,5 +1,6 @@
 #include <array>
 #include <cstdlib>
+#include <cstring>
 #include <string>
 #include "global.h"
 #include "game/Colony.h"
@@ -39,11 +40,11 @@ void GameIO::loadGameFromTMX(
 
         const char* layerName = objectgroupNode->first_attribute("name", 4, true)->value();
 
-        if (strcmp(layerName, "isles") == 0) {
+        if (std::strcmp(layerName, "isles") == 0) {
             objectgroupIslesNode = objectgroupNode;
-        } else if (strcmp(layerName, "colonies") == 0) {
+        } else if (std::strcmp(layerName, "colonies") == 0) {
             objectgroupColoniesNode = objectgroupNode;
-        } else if (strcmp(layerName, "map-objects") == 0) {
+        } else if (std::strcmp(layerName, "map-objects") == 0) {
             objectgroupMapObjectsNode = objectgroupNode;
         }
     }
@@ -80,13 +81,13 @@ void GameIO::loadPlayers(Game* game, rapidxml::xml_node<>* mapNode) {
         const char* playerColorAttrValue = getPropertyValueFromPropertiesNode(propertiesNode, playerColorAttrName.c_str());
         PlayerColor playerColor;
 
-        if (strcmp(playerColorAttrValue, "red") == 0) {
+        if (std::strcmp(playerColorAttrValue, "red") == 0) {
             playerColor = PlayerColor::RED;
-        } else if (strcmp(playerColorAttrValue, "blue") == 0) {
+        } else if (std::strcmp(playerColorAttrValue, "blue") == 0) {
             playerColor = PlayerColor::BLUE;
-        } else if (strcmp(playerColorAttrValue, "yellow") == 0) {
+        } else if (std::strcmp(playerColorAttrValue, "yellow") == 0) {
             playerColor = PlayerColor::YELLOW;
-        } else if (strcmp(playerColorAttrValue, "white") == 0) {
+        } else if (std::strcmp(playerColorAttrValue, "white") == 0) {
             playerColor = PlayerColor::WHITE;
         } else {
             Log::error(_("Illegal player color '%s'."), playerColorAttrValue);
@@ -121,7 +122,7 @@ void GameIO::loadMap(
         MapCoords mapCoords = getMapCoordsFromObjectNode(objectNode);
 
         // Insel
-        if (strcmp(nodeType, "isle") == 0) {
+        if (std::strcmp(nodeType, "isle") == 0) {
             // Objekt aus der Tiled-Datei lesen
             const char* isleName = objectNode->first_attribute("name", 4, true)->value();
 
@@ -179,7 +180,7 @@ void GameIO::loadMap(
         }
 
             // Startpunkt: Diesen Punkt wollen wir auf den Bildschirm zentrieren
-        else if (strcmp(nodeType, "startpoint") == 0) {
+        else if (std::strcmp(nodeType, "startpoint") == 0) {
             map->setMapCoordsCentered(mapCoords);
         }
     }
@@ -203,7 +204,7 @@ void GameIO::loadColonies(Game* game, const ConfigMgr* configMgr, rapidxml::xml_
          objectNode = objectNode->next_sibling("object", 6, true)) {
 
         const char* nodeType = objectNode->first_attribute("type", 4, true)->value();
-        if (strcmp(nodeType, "colony") != 0) {
+        if (std::strcmp(nodeType, "colony") != 0) {
             continue;
         }
 
@@ -305,7 +306,7 @@ const char* GameIO::getPropertyValueFromPropertiesNode(rapidxml::xml_node<>* pro
          propertyNode = propertyNode->next_sibling("property", 8, true)) {
 
         const char* thisPropertyName = propertyNode->first_attribute("name", 4, true)->value();
-        if (strcmp(thisPropertyName, propertyName) != 0) {
+        if (std::strcmp(thisPropertyName, propertyName) != 0) {
             continue;
         }
 

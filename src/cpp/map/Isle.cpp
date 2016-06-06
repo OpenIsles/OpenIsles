@@ -1,4 +1,4 @@
-#include <string.h>
+#include <cstring>
 #include "global.h"
 #include "map/Isle.h"
 #include "rapidxml/rapidxml.hpp"
@@ -21,7 +21,7 @@ Isle::Isle(const char* filename) {
     rapidxml::xml_node<>* dataNode = layerNode->first_node("data");
 
     const char* dataEncoding = dataNode->first_attribute("encoding", 8, true)->value();
-    if (strcmp(dataEncoding, "csv") != 0) {
+    if (std::strcmp(dataEncoding, "csv") != 0) {
         Log::error(_("Data is not csv encoded. Encoding = %s"), dataEncoding);
         throw std::runtime_error("Data is not csv encoded");
     }

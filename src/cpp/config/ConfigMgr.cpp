@@ -1,3 +1,4 @@
+#include <cstring>
 #include "global.h"
 #include "config/ConfigMgr.h"
 #include "config/ErrorInConfigException.h"
@@ -84,13 +85,13 @@ void ConfigMgr::loadMapObjectTypes(const std::string& configFilePath) {
 
         // Knoten-Typ
         const char* nodeName = node->name();
-        if (strcmp(nodeName, "harvestable") == 0) {
+        if (std::strcmp(nodeName, "harvestable") == 0) {
             mapObjectType.type = MapObjectTypeClass::HARVESTABLE;
-        } else if (strcmp(nodeName, "structure") == 0) {
+        } else if (std::strcmp(nodeName, "structure") == 0) {
             mapObjectType.type = MapObjectTypeClass::STRUCTURE;
-        } else if (strcmp(nodeName, "street") == 0) {
+        } else if (std::strcmp(nodeName, "street") == 0) {
             mapObjectType.type = MapObjectTypeClass::STREET;
-        } else if (strcmp(nodeName, "building") == 0) {
+        } else if (std::strcmp(nodeName, "building") == 0) {
             mapObjectType.type = MapObjectTypeClass::BUILDING;
         } else {
             throw ErrorInConfigException(string_sprintf(_("Illegal node '%s'."), nodeName));
@@ -109,11 +110,11 @@ void ConfigMgr::loadMapObjectTypes(const std::string& configFilePath) {
 
         // Structure-Placing
         const char* structurePlacing = node->first_node("structure-placing", 17, true)->value();
-        if (strcmp(structurePlacing, "individually") == 0) {
+        if (std::strcmp(structurePlacing, "individually") == 0) {
             mapObjectType.structurePlacing = StructurePlacing::INDIVIDUALLY;
-        } else if (strcmp(structurePlacing, "rectangle") == 0) {
+        } else if (std::strcmp(structurePlacing, "rectangle") == 0) {
             mapObjectType.structurePlacing = StructurePlacing::RECTANGLE;
-        } else if (strcmp(structurePlacing, "path") == 0) {
+        } else if (std::strcmp(structurePlacing, "path") == 0) {
             mapObjectType.structurePlacing = StructurePlacing::PATH;
         } else {
             throw ErrorInConfigException(
@@ -258,7 +259,7 @@ void ConfigMgr::loadCarrierMapObjectTypes(const std::string& configFilePath) {
 
         // Knoten-Typ
         const char* nodeName = node->name();
-        if (strcmp(nodeName, "carrier") != 0) {
+        if (std::strcmp(nodeName, "carrier") != 0) {
             throw ErrorInConfigException(string_sprintf(_("Illegal node '%s'."), nodeName));
         }
 
@@ -373,10 +374,10 @@ bool ConfigMgr::xmlAttributeToBool(rapidxml::xml_attribute<>* attribute, bool de
     }
 
     const char* value = attribute->value();
-    if (strcmp(value, "false") == 0) {
+    if (std::strcmp(value, "false") == 0) {
         return false;
     }
-    else if (strcmp(value, "true") == 0) {
+    else if (std::strcmp(value, "true") == 0) {
         return true;
     }
     else {
