@@ -49,6 +49,7 @@ set(COMMON_SOURCE_FILES
     src/cpp/game/ProductionSlots.h
     src/cpp/graphics/graphic/Animation.h
     src/cpp/graphics/graphic/GraphicSet.h
+    src/cpp/graphics/graphic/GraphicSetKeyState.h
     src/cpp/graphics/graphic/IGraphic.h
     src/cpp/graphics/mgr/AbstractGraphicsMgr.cpp
     src/cpp/graphics/mgr/AbstractGraphicsMgr.h

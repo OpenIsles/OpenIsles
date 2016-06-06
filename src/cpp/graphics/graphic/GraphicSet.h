@@ -4,10 +4,10 @@
 #include <string>
 #include <unordered_map>
 #include "graphics/graphic/Animation.h"
+#include "graphics/graphic/GraphicSetKeyState.h"
 #include "graphics/graphic/IGraphic.h"
 #include "map/Direction.h"
 
-using GraphicSetKeyState = const std::string;
 using GraphicSetKeyView = const EighthDirection;
 
 /**
@@ -18,8 +18,6 @@ struct GraphicSetKey {
     /**
      * @brief Zustand. Wird z.&nbsp;B. benutzt, um separate Animationen eines Marktkarrens für Zustand
      * "Karren mit Waren voll" und "Karren leer" zu haben.
-     *
-     * Ist kein Zustand zugeordnet, ist ein Leerstring gesetzt.
      */
     GraphicSetKeyState state;
 
@@ -30,10 +28,10 @@ struct GraphicSetKey {
 
     /**
      * @brief Erzeugt einen Key aus Zustand und Ansicht.
-     * @param state Zustand (Leerstring, wenn nicht zutreffend)
+     * @param state Zustand
      * @param view Ansicht
      */
-    GraphicSetKey(GraphicSetKeyState& state, GraphicSetKeyView& view) : state(state), view(view) {
+    GraphicSetKey(const GraphicSetKeyState& state, GraphicSetKeyView& view) : state(state), view(view) {
     }
 
 };
@@ -48,8 +46,7 @@ struct GraphicSetKeyHasher {
      * @return Hashwert
      */
     std::size_t operator() (const GraphicSetKey& key) const {
-        std::hash<std::string> strHash;
-        return (3 * strHash(key.state)) ^ (5 * key.view);
+        return (3 * key.state + 0x74bc6d53) ^ (5 * key.view);
     }
 };
 
@@ -108,7 +105,7 @@ public:
      * @param animation Animation
      */
     void addStatic(Animation* animation) {
-        addByStateAndView("", Direction::NONE, animation);
+        addByStateAndView(GraphicSetKeyState::NONE, Direction::NONE, animation);
     }
 
     /**
@@ -116,7 +113,7 @@ public:
      * @param state Zustand
      * @param animation Animation
      */
-    void addByState(GraphicSetKeyState& state, Animation* animation) {
+    void addByState(const GraphicSetKeyState& state, Animation* animation) {
         addByStateAndView(state, Direction::NONE, animation);
     }
 
@@ -125,17 +122,17 @@ public:
      * @param view Ansicht
      * @param animation Animation
      */
-    void addByView(GraphicSetKeyView& view, Animation* animation) {
-        addByStateAndView("", view, animation);
+    void addByView(const GraphicSetKeyView& view, Animation* animation) {
+        addByStateAndView(GraphicSetKeyState::NONE, view, animation);
     }
 
     /**
      * @brief Fügt eine Animation mit einem bestimmten Zustand und einer bestimmten Ansicht hinzu
-     * @param state Zustand (Leerstring, wenn nicht zutreffend)
+     * @param state Zustand
      * @param view Ansicht
      * @param animation Animation
      */
-    void addByStateAndView(GraphicSetKeyState& state, GraphicSetKeyView& view, Animation* animation) {
+    void addByStateAndView(const GraphicSetKeyState& state, GraphicSetKeyView& view, Animation* animation) {
         (*this)[GraphicSetKey(state, view)] = animation;
     }
 
@@ -144,7 +141,7 @@ public:
      * @return Animation
      */
     const Animation* getStatic() const {
-        return getByStateAndView("", Direction::NONE);
+        return getByStateAndView(GraphicSetKeyState::NONE, Direction::NONE);
     }
 
     /**
@@ -152,7 +149,7 @@ public:
      * @param state Zustand
      * @return Animation
      */
-    const Animation* getByState(GraphicSetKeyState& state) const {
+    const Animation* getByState(const GraphicSetKeyState& state) const {
         return getByStateAndView(state, Direction::NONE);
     }
 
@@ -162,16 +159,16 @@ public:
      * @return Animation
      */
     const Animation* getByView(GraphicSetKeyView& view) const {
-        return getByStateAndView("", view);
+        return getByStateAndView(GraphicSetKeyState::NONE, view);
     }
 
     /**
      * @brief Liefert eine Animation mit einem bestimmten Zustand und einer bestimmten Ansicht zurück
-     * @param state Zustand (Leerstring, wenn nicht zutreffend)
+     * @param state Zustand
      * @param view Ansicht
      * @return Animation
      */
-    const Animation* getByStateAndView(GraphicSetKeyState& state, GraphicSetKeyView& view) const {
+    const Animation* getByStateAndView(const GraphicSetKeyState& state, GraphicSetKeyView& view) const {
         return this->at(GraphicSetKey(state, view));
     }
 
@@ -183,7 +180,7 @@ public:
         return animations;
     }
 
-    EightDirectionsAnimation getEightDirectionsAnimation(GraphicSetKeyState& state) const {
+    EightDirectionsAnimation getEightDirectionsAnimation(const GraphicSetKeyState& state) const {
         EightDirectionsAnimation animations;
         forEachEighthDirection(view) {
             animations[view] = getByStateAndView(state, view);

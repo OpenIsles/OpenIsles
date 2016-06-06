@@ -2,6 +2,7 @@
 #include "global.h"
 #include "graphics/graphic/Animation.h"
 #include "graphics/graphic/GraphicSet.h"
+#include "graphics/graphic/GraphicSetKeyState.h"
 #include "graphics/mgr/AbstractGraphicsMgr.h"
 #include "map/Street.h"
 #include "utils/StringFormat.h"
@@ -294,27 +295,27 @@ void AbstractGraphicsMgr::loadStreetTileset(const std::string& streetTileset) {
     IGraphic* streetsGraphic = loadGraphic(graphicFilename.c_str());
 
     static struct {
-        const std::string state;
+        GraphicSetKeyState state;
         int tileOffsetPerView[4];
     } streetTiles[11]{
-        { Street::STATE_NAME_EW, { 0, 1, 0, 1 } },
-        { Street::STATE_NAME_NS, { 1, 0, 1, 0 } },
-        { Street::STATE_NAME_NE, { 2, 3, 4, 5 } },
-        { Street::STATE_NAME_ES, { 3, 4, 5, 2 } },
-        { Street::STATE_NAME_SW, { 4, 5, 2, 3 } },
-        { Street::STATE_NAME_NW, { 5, 2, 3, 4 } },
-        { Street::STATE_NAME_NSW, { 6, 7, 8, 9 } },
-        { Street::STATE_NAME_NEW, { 7, 8, 9, 6 } },
-        { Street::STATE_NAME_NES, { 8, 9, 6, 7 }} ,
-        { Street::STATE_NAME_ESW, { 9, 6, 7, 8 } },
-        { Street::STATE_NAME_NESW, { 10, 10, 10, 10 } }
+        { GraphicSetKeyState::STRAIGHT0, { 0, 1, 0, 1 } },
+        { GraphicSetKeyState::STRAIGHT90, { 1, 0, 1, 0 } },
+        { GraphicSetKeyState::CURVE0, { 2, 3, 4, 5 } },
+        { GraphicSetKeyState::CURVE90, { 3, 4, 5, 2 } },
+        { GraphicSetKeyState::CURVE180, { 4, 5, 2, 3 } },
+        { GraphicSetKeyState::CURVE270, { 5, 2, 3, 4 } },
+        { GraphicSetKeyState::TEE0, { 6, 7, 8, 9 } },
+        { GraphicSetKeyState::TEE90, { 7, 8, 9, 6 } },
+        { GraphicSetKeyState::TEE180, { 8, 9, 6, 7 }} ,
+        { GraphicSetKeyState::TEE270, { 9, 6, 7, 8 } },
+        { GraphicSetKeyState::CROSS, { 10, 10, 10, 10 } }
     };
 
     GraphicSet* graphicSet = new GraphicSet();
 
     Rect tileRect(0, 0, TILE_WIDTH, TILE_HEIGHT);
     for (int i = 0; i < 11; i++) {
-        const std::string& state = streetTiles[i].state;
+        const GraphicSetKeyState& state = streetTiles[i].state;
 
         forEachFourthDirection(view) {
             tileRect.x = TILE_WIDTH * streetTiles[i].tileOffsetPerView[((unsigned char) view) / 2];
@@ -363,7 +364,10 @@ void AbstractGraphicsMgr::loadHarvestablesGraphicSet(
     forEachFourthDirection(view) {
         for (int stateIndex = 0; stateIndex < tileStatesCount; stateIndex++) {
             IGraphic* tileGraphic = loadGraphic(*graphic, tileRect);
-            std::string state = "growth" + toString(stateIndex);
+
+            GraphicSetKeyState state = (GraphicSetKeyState) (GraphicSetKeyState::GROWTH0 + stateIndex);
+            assert (state >= GraphicSetKeyState::GROWTH0 && state <= GraphicSetKeyState::GROWTH6);
+
             graphicSet->addByStateAndView(state, view, new Animation(tileGraphic));
 
             tileRect.x += tileWidth;
@@ -386,16 +390,21 @@ void AbstractGraphicsMgr::loadMapRotateGraphicSet() {
     Rect tileRect(0, 0, tileWidth, height);
 
     forEachFourthDirection(view) {
-        for (const char* stateName : {"left", "right"}) {
-            for (const char* stateSuffix : {"", "_pressed"}) {
-                std::string state = std::string(stateName) + stateSuffix;
+        IGraphic* tileGraphic = loadGraphic(*graphic, tileRect);
+        graphicSet->addByStateAndView(GraphicSetKeyState::LEFT, view, new Animation(tileGraphic));
+        tileRect.x += tileWidth;
 
-                IGraphic* tileGraphic = loadGraphic(*graphic, tileRect);
-                graphicSet->addByStateAndView(state, view, new Animation(tileGraphic));
+        tileGraphic = loadGraphic(*graphic, tileRect);
+        graphicSet->addByStateAndView(GraphicSetKeyState::LEFT_PRESSED, view, new Animation(tileGraphic));
+        tileRect.x += tileWidth;
 
-                tileRect.x += tileWidth;
-            }
-        }
+        tileGraphic = loadGraphic(*graphic, tileRect);
+        graphicSet->addByStateAndView(GraphicSetKeyState::RIGHT, view, new Animation(tileGraphic));
+        tileRect.x += tileWidth;
+
+        tileGraphic = loadGraphic(*graphic, tileRect);
+        graphicSet->addByStateAndView(GraphicSetKeyState::RIGHT_PRESSED, view, new Animation(tileGraphic));
+        tileRect.x += tileWidth;
     }
 
     graphicSets["map-rotate"] = graphicSet;
@@ -410,22 +419,28 @@ void AbstractGraphicsMgr::loadMapZoomGraphicSet() {
     GraphicSet* graphicSet = new GraphicSet();
     Rect tileRect(0, 0, tileWidth, height);
 
-    for (const char* stateName : {"plus", "minus"}) {
-        for (const char* stateSuffix : {"", "_pressed"}) {
-            std::string state = std::string(stateName) + stateSuffix;
+    IGraphic* tileGraphic = loadGraphic(*graphic, tileRect);
+    graphicSet->addByState(GraphicSetKeyState::PLUS, new Animation(tileGraphic));
+    tileRect.x += tileWidth;
 
-            IGraphic* tileGraphic = loadGraphic(*graphic, tileRect);
-            graphicSet->addByState(state, new Animation(tileGraphic));
+    tileGraphic = loadGraphic(*graphic, tileRect);
+    graphicSet->addByState(GraphicSetKeyState::PLUS_PRESSED, new Animation(tileGraphic));
+    tileRect.x += tileWidth;
 
-            tileRect.x += tileWidth;
-        }
-    }
+    tileGraphic = loadGraphic(*graphic, tileRect);
+    graphicSet->addByState(GraphicSetKeyState::MINUS, new Animation(tileGraphic));
+    tileRect.x += tileWidth;
+
+    tileGraphic = loadGraphic(*graphic, tileRect);
+    graphicSet->addByState(GraphicSetKeyState::MINUS_PRESSED, new Animation(tileGraphic));
+    tileRect.x += tileWidth;
 
     graphicSets["map-zoom"] = graphicSet;
     delete graphic;
 }
 
 // TODO Duplicate Code loadSheepGraphicSets() / loadCattleGraphicSets() - über XML-Datei regeln
+// TODO sheep0.png und sheep1.png in separate GraphicSetKeyStates, aber in selbes GraphicSet speichern
 void AbstractGraphicsMgr::loadSheepGraphicSets() {
     for (int i = 0; i < 2; i++) {
         const std::string graphicFilename = "data/img/animations/sheep" + toString(i) + ".png";
@@ -445,14 +460,14 @@ void AbstractGraphicsMgr::loadSheepGraphicSets() {
                 IGraphic* frameGraphic = loadGraphic(*graphic, frameRect);
                 animationWalking->addFrame(frameIndex, frameGraphic);
             }
-            graphicSet->addByStateAndView("walking", view, animationWalking);
+            graphicSet->addByStateAndView(GraphicSetKeyState::WALKING, view, animationWalking);
 
             Animation* animationEating = new Animation(4);
             for (int frameIndex = 0; frameIndex < 4; frameIndex++, frameRect.x += frameWidth) {
                 IGraphic* frameGraphic = loadGraphic(*graphic, frameRect);
                 animationEating->addFrame(frameIndex, frameGraphic);
             }
-            graphicSet->addByStateAndView("eating", view, animationEating);
+            graphicSet->addByStateAndView(GraphicSetKeyState::EATING, view, animationEating);
 
             // TODO später entfernen; nur dazu da, dass der bisherige Code funktioniert.
             IGraphic* firstFrameGraphic = loadGraphic(*graphic, Rect(0, frameRect.y, frameWidth, frameHeight));
@@ -484,14 +499,14 @@ void AbstractGraphicsMgr::loadCattleGraphicSets() {
             IGraphic* frameGraphic = loadGraphic(*graphic, frameRect);
             animationWalking->addFrame(frameIndex, frameGraphic);
         }
-        graphicSet->addByStateAndView("walking", view, animationWalking);
+        graphicSet->addByStateAndView(GraphicSetKeyState::WALKING, view, animationWalking);
 
         Animation* animationEating = new Animation(6);
         for (int frameIndex = 0; frameIndex < 6; frameIndex++, frameRect.x += frameWidth) {
             IGraphic* frameGraphic = loadGraphic(*graphic, frameRect);
             animationEating->addFrame(frameIndex, frameGraphic);
         }
-        graphicSet->addByStateAndView("eating", view, animationEating);
+        graphicSet->addByStateAndView(GraphicSetKeyState::EATING, view, animationEating);
 
         // TODO später entfernen; nur dazu da, dass der bisherige Code funktioniert.
         IGraphic* firstFrameGraphic = loadGraphic(*graphic, Rect(0, frameRect.y, frameWidth, frameHeight));

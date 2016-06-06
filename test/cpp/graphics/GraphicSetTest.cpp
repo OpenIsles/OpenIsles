@@ -1,47 +1,34 @@
 #include <gtest/gtest.h>
 #include "graphics/graphic/GraphicSet.h"
+#include "graphics/graphic/GraphicSetKeyState.h"
 
 class GraphicSetTest : public testing::Test {
 
 protected:
-    GraphicSetKey keyEmpty = GraphicSetKey("", Direction::NONE);
-    GraphicSetKey keyFooNorth = GraphicSetKey("foo", Direction::NORTH);
-    GraphicSetKey keyFooNorth2 = GraphicSetKey("foo", Direction::NORTH);
-    GraphicSetKey keyBarFoo = GraphicSetKey("bar", Direction::EAST);
-    GraphicSetKey keyUppercase = GraphicSetKey("BAR", Direction::EAST);
+    GraphicSetKey keyWalkingNorth = GraphicSetKey(GraphicSetKeyState::WALKING, Direction::NORTH);
+    GraphicSetKey keyWalkingNorth2 = GraphicSetKey(GraphicSetKeyState::WALKING, Direction::NORTH);
+    GraphicSetKey keyEatingEast = GraphicSetKey(GraphicSetKeyState::EATING, Direction::EAST);
 };
 
 
 TEST_F(GraphicSetTest, GraphicSetKeyHasher) {
     GraphicSetKeyHasher graphicSetKeyHasher;
 
-    std::size_t hashEmpty = graphicSetKeyHasher(keyEmpty);
-    std::size_t hashFooBar = graphicSetKeyHasher(keyFooNorth);
-    std::size_t hashFooBar2 = graphicSetKeyHasher(keyFooNorth2);
-    std::size_t hashBarFoo = graphicSetKeyHasher(keyBarFoo);
-    std::size_t hashUppercase = graphicSetKeyHasher(keyUppercase);
+    std::size_t hashWalkingNorth = graphicSetKeyHasher(keyWalkingNorth);
+    std::size_t hashWalkingNorth2 = graphicSetKeyHasher(keyWalkingNorth2);
+    std::size_t hashEatingEast = graphicSetKeyHasher(keyEatingEast);
 
-    ASSERT_NE(hashEmpty, hashFooBar);
-    ASSERT_NE(hashEmpty, hashBarFoo);
-    ASSERT_NE(hashEmpty, hashUppercase);
-    ASSERT_NE(hashFooBar, hashBarFoo);
-    ASSERT_NE(hashFooBar, hashUppercase);
-    ASSERT_NE(hashBarFoo, hashUppercase);
-
-    ASSERT_EQ(hashFooBar, hashFooBar2);
+    ASSERT_NE(hashWalkingNorth, hashEatingEast);
+    ASSERT_EQ(hashWalkingNorth, hashWalkingNorth2);
 }
 
 TEST_F(GraphicSetTest, GraphicSetKeyEqualer) {
     GraphicSetKeyEqualer graphicSetKeyEqualer;
 
-    ASSERT_TRUE(graphicSetKeyEqualer(keyEmpty, keyEmpty));
-    ASSERT_TRUE(graphicSetKeyEqualer(keyFooNorth, keyFooNorth));
-    ASSERT_TRUE(graphicSetKeyEqualer(keyBarFoo, keyBarFoo));
-    ASSERT_TRUE(graphicSetKeyEqualer(keyUppercase, keyUppercase));
+    ASSERT_TRUE(graphicSetKeyEqualer(keyWalkingNorth, keyWalkingNorth));
+    ASSERT_TRUE(graphicSetKeyEqualer(keyEatingEast, keyEatingEast));
 
-    ASSERT_FALSE(graphicSetKeyEqualer(keyFooNorth, keyEmpty));
-    ASSERT_FALSE(graphicSetKeyEqualer(keyBarFoo, keyFooNorth));
-    ASSERT_FALSE(graphicSetKeyEqualer(keyBarFoo, keyUppercase));
+    ASSERT_FALSE(graphicSetKeyEqualer(keyEatingEast, keyWalkingNorth));
 
-    ASSERT_TRUE(graphicSetKeyEqualer(keyFooNorth, keyFooNorth2));
+    ASSERT_TRUE(graphicSetKeyEqualer(keyWalkingNorth, keyWalkingNorth2));
 }

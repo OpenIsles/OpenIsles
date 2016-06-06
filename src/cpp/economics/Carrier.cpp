@@ -2,6 +2,7 @@
 #include "economics/Carrier.h"
 #include "game/Colony.h"
 #include "game/Game.h"
+#include "graphics/graphic/GraphicSetKeyState.h"
 
 
 void Carrier::initRoute(
@@ -144,7 +145,8 @@ void Carrier::onRouteDone(const Context& context, bool& deleteMe) {
         if (onOutboundTrip) {
             const std::string& graphicName = (carriedGoods.inventory > 0) ? "sheep1" : "sheep0";
 
-            animations = context.graphicsMgr->getGraphicSet(graphicName)->getEightDirectionsAnimation("eating");
+            animations = context.graphicsMgr
+                ->getGraphicSet(graphicName)->getEightDirectionsAnimation(GraphicSetKeyState::EATING);
             animationFrame = 0;
             state = HARVESTING;
             harvestingFinishedTicks = context.game->getTicks() + mapObjectType->secondsToProduce * TICKS_PER_SECOND;
@@ -154,7 +156,8 @@ void Carrier::onRouteDone(const Context& context, bool& deleteMe) {
     else if (mapObjectType->name == "cattle") {
         // Das war Hinweg zum Erntefeld -> Animation umstellen und mit Ernten anfangen
         if (onOutboundTrip) {
-            animations = context.graphicsMgr->getGraphicSet("cattle")->getEightDirectionsAnimation("eating");
+            animations = context.graphicsMgr
+                ->getGraphicSet("cattle")->getEightDirectionsAnimation(GraphicSetKeyState::EATING);
             animationFrame = 0;
             state = HARVESTING;
             harvestingFinishedTicks = context.game->getTicks() + mapObjectType->secondsToProduce * TICKS_PER_SECOND;
@@ -279,9 +282,11 @@ void Carrier::onHarvestingFinished(const Context& context) {
                 // TODO Träger über Config steuern
                 EightDirectionsAnimation animations;
                 if (owningBuilding->getMapObjectType()->name == "sheep-farm") {
-                    animations = context.graphicsMgr->getGraphicSet("sheep1")->getEightDirectionsAnimation("walking");
+                    animations = context.graphicsMgr
+                        ->getGraphicSet("sheep1")->getEightDirectionsAnimation(GraphicSetKeyState::WALKING);
                 } else if (owningBuilding->getMapObjectType()->name == "cattle-farm") {
-                    animations = context.graphicsMgr->getGraphicSet("cattle")->getEightDirectionsAnimation("walking");
+                    animations = context.graphicsMgr
+                        ->getGraphicSet("cattle")->getEightDirectionsAnimation(GraphicSetKeyState::WALKING);
                 } else {
                     assert(false);
                 }
@@ -318,9 +323,11 @@ void Carrier::onHarvestingFinished(const Context& context) {
     // TODO Träger über Config steuern
     EightDirectionsAnimation animations;
     if (owningBuilding->getMapObjectType()->name == "sheep-farm") {
-        animations = context.graphicsMgr->getGraphicSet("sheep1")->getEightDirectionsAnimation("walking");
+        animations = context.graphicsMgr->
+            getGraphicSet("sheep1")->getEightDirectionsAnimation(GraphicSetKeyState::WALKING);
     } else if (owningBuilding->getMapObjectType()->name == "cattle-farm") {
-        animations = context.graphicsMgr->getGraphicSet("cattle")->getEightDirectionsAnimation("walking");
+        animations = context.graphicsMgr->
+            getGraphicSet("cattle")->getEightDirectionsAnimation(GraphicSetKeyState::WALKING);
     } else {
         assert(false);
     }

@@ -3,6 +3,7 @@
 
 #include <bitset>
 #include "global.h"
+#include "graphics/graphic/GraphicSetKeyState.h"
 #include "map/Structure.h"
 
 
@@ -68,21 +69,6 @@ public:
 class Street : public Structure {
 
 public:
-    // State-Namen. Benennung immer in der Reihenfolge N, E, S, W (= von oben im Uhrzeigersinn - analog CSS-Border ;-))
-
-    constexpr static const char* STATE_NAME_EW = "straight0";
-    constexpr static const char* STATE_NAME_NS = "straight90";
-    constexpr static const char* STATE_NAME_NE = "curve0";
-    constexpr static const char* STATE_NAME_ES = "curve90";
-    constexpr static const char* STATE_NAME_SW = "curve180";
-    constexpr static const char* STATE_NAME_NW = "curve270";
-    constexpr static const char* STATE_NAME_NSW = "tee0";
-    constexpr static const char* STATE_NAME_NEW = "tee90";
-    constexpr static const char* STATE_NAME_NES = "tee180";
-    constexpr static const char* STATE_NAME_ESW = "tee270";
-    constexpr static const char* STATE_NAME_NESW = "cross";
-
-public:
     /**
      * @brief Bitmaske, die angibt, welche Grafik verwendet wird = von welchen Seiten andere Straßen anschließen
      */
@@ -100,30 +86,30 @@ public:
     }
 
     /**
-     * @brief Ermittelt den Namen des Zustands, den wir rendern müssen, basierend auf `streetConnections`
-     * @return `state`-Name
+     * @brief Ermittelt den Zustand, den wir rendern müssen, basierend auf `streetConnections`
+     * @return Zustand
      */
-    const std::string getStateToRender() const {
+    const GraphicSetKeyState& getStateToRender() const {
         unsigned char bitMask = (unsigned char) streetConnections.to_ulong();
         assert(bitMask >= 0 && bitMask < 16);
 
-        constexpr static const char* bitMaskToState[16] = {
-            STATE_NAME_EW,
-            STATE_NAME_EW,
-            STATE_NAME_NS,
-            STATE_NAME_SW,
-            STATE_NAME_EW,
-            STATE_NAME_EW,
-            STATE_NAME_ES,
-            STATE_NAME_ESW,
-            STATE_NAME_NS,
-            STATE_NAME_NW,
-            STATE_NAME_NS,
-            STATE_NAME_NSW,
-            STATE_NAME_NE,
-            STATE_NAME_NEW,
-            STATE_NAME_NES,
-            STATE_NAME_NESW
+        static GraphicSetKeyState bitMaskToState[16] = {
+            GraphicSetKeyState::STRAIGHT0,
+            GraphicSetKeyState::STRAIGHT0,
+            GraphicSetKeyState::STRAIGHT90,
+            GraphicSetKeyState::CURVE180,
+            GraphicSetKeyState::STRAIGHT0,
+            GraphicSetKeyState::STRAIGHT0,
+            GraphicSetKeyState::CURVE90,
+            GraphicSetKeyState::TEE270,
+            GraphicSetKeyState::STRAIGHT90,
+            GraphicSetKeyState::CURVE270,
+            GraphicSetKeyState::STRAIGHT90,
+            GraphicSetKeyState::TEE0,
+            GraphicSetKeyState::CURVE0,
+            GraphicSetKeyState::TEE90,
+            GraphicSetKeyState::TEE180,
+            GraphicSetKeyState::CROSS
         };
         return bitMaskToState[bitMask];
     }

@@ -2,6 +2,7 @@
 #include <cassert>
 #include <cmath>
 #include <string>
+#include "graphics/graphic/GraphicSetKeyState.h"
 #include "map/Building.h"
 #include "map/Map.h"
 #include "map/MapCoordUtils.h"
@@ -109,12 +110,12 @@ Rect MapCoordUtils::getDrawCoordsForMapObjectFixed(const Map& map, const MapObje
     if (mapObjectType->type == MapObjectTypeClass::HARVESTABLE) {
         // Harvestable? ausgewachsenen Zustand nehmen
         unsigned char maxAge = mapObjectType->maxAge;
-        const std::string fullgrownState = "growth" + toString(maxAge);
-        graphic = graphicSet->getByStateAndView(fullgrownState, viewToRender)->getGraphic();
+        GraphicSetKeyState graphicSetKeyStateFullgrown = (GraphicSetKeyState) (GraphicSetKeyState::GROWTH0 + maxAge);
+        graphic = graphicSet->getByStateAndView(graphicSetKeyStateFullgrown, viewToRender)->getGraphic();
     }
     else if (mapObjectType->type == MapObjectTypeClass::STREET) {
         const Street* street = dynamic_cast<const Street*>(mapObjectFixed);
-        const std::string state = street->getStateToRender();
+        const GraphicSetKeyState& state = street->getStateToRender();
         graphic = graphicSet->getByStateAndView(state, viewToRender)->getGraphic();
     }
     else {

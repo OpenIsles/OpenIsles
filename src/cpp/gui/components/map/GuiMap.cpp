@@ -7,6 +7,7 @@
 #include "game/CatchmentArea.h"
 #include "game/Colony.h"
 #include "game/Game.h"
+#include "graphics/graphic/GraphicSetKeyState.h"
 #include "graphics/graphic/IGraphic.h"
 #include "graphics/renderer/sdl/SDLRenderer.h"
 #include "gui/components/map/GuiMap.h"
@@ -380,11 +381,14 @@ void GuiMap::renderTile(const MapCoords& mapCoords) {
         // TODO duplicate code
         const IGraphic* graphicToDrawHere;
         if (harvestable != nullptr) {
-            const std::string stateToRender = "growth" + toString(int(harvestable->getAge()));
+            GraphicSetKeyState stateToRender =
+                (GraphicSetKeyState) (GraphicSetKeyState::GROWTH0 + int(harvestable->getAge()));
+            assert (stateToRender >= GraphicSetKeyState::GROWTH0 && stateToRender <= GraphicSetKeyState::GROWTH6);
+
             graphicToDrawHere = mapObjectGraphicSet->getByStateAndView(stateToRender, viewToRender)->getGraphic();
         }
         else if (street != nullptr) {
-            const std::string stateToRender = street->getStateToRender();
+            const GraphicSetKeyState& stateToRender = street->getStateToRender();
             graphicToDrawHere = mapObjectGraphicSet->getByStateAndView(stateToRender, viewToRender)->getGraphic();
         }
         else if (structure != nullptr) {
@@ -787,12 +791,15 @@ const MapObjectFixed* GuiMap::getMapObjectFixedUnderMouseCoords(int mouseX, int 
         const IGraphic* graphic;
         if (mapObjectType->type == MapObjectTypeClass::HARVESTABLE) {
             const Harvestable* harvestable = dynamic_cast<const Harvestable*>(mapObjectFixed);
-            const std::string state = "growth" + toString(int(harvestable->getAge()));
+
+            GraphicSetKeyState state = (GraphicSetKeyState) (GraphicSetKeyState::GROWTH0 + int(harvestable->getAge()));
+            assert (state >= GraphicSetKeyState::GROWTH0 && state <= GraphicSetKeyState::GROWTH6);
+
             graphic = graphicSet->getByStateAndView(state, viewToRender)->getGraphic();
         }
         else if (mapObjectType->type == MapObjectTypeClass::STREET) {
             const Street* street = dynamic_cast<const Street*>(mapObjectFixed);
-            const std::string state = street->getStateToRender();
+            const GraphicSetKeyState& state = street->getStateToRender();
             graphic = graphicSet->getByStateAndView(state, viewToRender)->getGraphic();
         }
         else {

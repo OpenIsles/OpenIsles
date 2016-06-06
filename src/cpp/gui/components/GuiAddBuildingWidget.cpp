@@ -95,11 +95,11 @@ void GuiAddBuildingWidget::renderElement(IRenderer* renderer) {
     if (mapObjectType->type == MapObjectTypeClass::HARVESTABLE) {
         // Harvestable? ausgewachsenen Zustand nehmen
         unsigned char maxAge = mapObjectType->maxAge;
-        const std::string fullgrownState = "growth" + toString(maxAge);
-        graphic = graphicSet->getByStateAndView(fullgrownState, view)->getGraphic();
+        GraphicSetKeyState graphicSetKeyStateFullgrown = (GraphicSetKeyState) (GraphicSetKeyState::GROWTH0 + maxAge);
+        graphic = graphicSet->getByStateAndView(graphicSetKeyStateFullgrown, view)->getGraphic();
     }
     else if (mapObjectType->type == MapObjectTypeClass::STREET) {
-        const std::string state = Street::STATE_NAME_EW;
+        const GraphicSetKeyState& state = GraphicSetKeyState::STRAIGHT0;
         graphic = graphicSet->getByStateAndView(state, view)->getGraphic();
     }
     else {

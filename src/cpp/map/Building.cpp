@@ -4,6 +4,7 @@
 #include "economics/EconomicsMgr.h"
 #include "economics/InCatchmentAreaFinder.h"
 #include "game/Game.h"
+#include "graphics/graphic/GraphicSetKeyState.h"
 #include "utils/RandomEngine.h"
 
 
@@ -109,9 +110,11 @@ void Building::sendNewCarrier(const Context& context) {
             const MapObjectType* carrierType = mapObjectType->carrier.mapObjectType;
             EightDirectionsAnimation animations; // TODO Träger über Config steuern: Animations
             if (mapObjectType->name == "sheep-farm") {
-                animations = context.graphicsMgr->getGraphicSet("sheep0")->getEightDirectionsAnimation("walking");
+                animations = context.graphicsMgr
+                    ->getGraphicSet("sheep0")->getEightDirectionsAnimation(GraphicSetKeyState::WALKING);
             } else if (mapObjectType->name == "cattle-farm") {
-                animations = context.graphicsMgr->getGraphicSet("cattle")->getEightDirectionsAnimation("walking");
+                animations = context.graphicsMgr
+                    ->getGraphicSet("cattle")->getEightDirectionsAnimation(GraphicSetKeyState::WALKING);
             } else {
                 assert(false);
             }
