@@ -139,28 +139,18 @@ bool Carrier::updateObject(const Context& context) {
 }
 
 void Carrier::onRouteDone(const Context& context, bool& deleteMe) {
-    // TODO verallgemeinern
-    if (mapObjectType->name == "sheep") {
+    // TODO verallgemeinern: Träger zu Erntefeld vs. Träger zu Gebäude
+    if (mapObjectType->name == "sheep" || mapObjectType->name == "cattle") {
         // Das war Hinweg zum Erntefeld -> Animation umstellen und mit Ernten anfangen
         if (onOutboundTrip) {
-            const std::string& graphicName = (carriedGoods.inventory > 0) ? "sheep1" : "sheep0";
+            const GraphicSetKeyState& graphicSetKeyState =
+                (carriedGoods.inventory > 0) ?GraphicSetKeyState::EATING_WITH_GOODS : GraphicSetKeyState::EATING;
 
-            animations = context.graphicsMgr
-                ->getGraphicSet(graphicName)->getEightDirectionsAnimation(GraphicSetKeyState::EATING);
+            animations = mapObjectType->getAnimationsForState(graphicSetKeyState);
             animationFrame = 0;
             state = HARVESTING;
-            harvestingFinishedTicks = context.game->getTicks() + mapObjectType->secondsToProduce * TICKS_PER_SECOND;
-            return;
-        }
-    }
-    else if (mapObjectType->name == "cattle") {
-        // Das war Hinweg zum Erntefeld -> Animation umstellen und mit Ernten anfangen
-        if (onOutboundTrip) {
-            animations = context.graphicsMgr
-                ->getGraphicSet("cattle")->getEightDirectionsAnimation(GraphicSetKeyState::EATING);
-            animationFrame = 0;
-            state = HARVESTING;
-            harvestingFinishedTicks = context.game->getTicks() + mapObjectType->secondsToProduce * TICKS_PER_SECOND;
+            harvestingFinishedTicks =
+                context.game->getTicks() + (unsigned long) (mapObjectType->secondsToProduce * TICKS_PER_SECOND);
             return;
         }
     }
@@ -218,13 +208,10 @@ void Carrier::onRouteDone(const Context& context, bool& deleteMe) {
         // Es kann sein, dass es keine Rückroute gibt, wenn der Nutzer inzwischen die Map verändert hat.
         // In diesem Fall hat er Pech gehabt, die Waren verschwinden mit dem Träger
         if (returnRoute.routeExists()) {
-            const GraphicSet& graphicSet = *context.graphicsMgr->getGraphicSet(
-                owningBuilding->isStorageBuilding() ? "cart-with-cargo" : "carrier");
-
             Carrier* returnCarrier = (Carrier*) MapObject::instantiate(mapObjectType);
             returnCarrier->initRoute(
                 owningBuilding, returnRoute, goodsSlotToTakeFrom->good, mapObjectType->carrier.capacity,
-                false, graphicSet.getEightDirectionsAnimation(), context.game->getTicks());
+                false, mapObjectType->getAnimationsForState(WALKING_WITH_GOODS), context.game->getTicks());
             returnCarrier->carriedGoods.inventory = goodsWeCollect;
 
             map->addMapObject(returnCarrier);
@@ -279,17 +266,8 @@ void Carrier::onHarvestingFinished(const Context& context) {
 
             result = inCatchmentAreaFinder.findMapTileWithInvisibleGood(goodGrass, currentMapCoords);
             if (result) {
-                // TODO Träger über Config steuern
-                EightDirectionsAnimation animations;
-                if (owningBuilding->getMapObjectType()->name == "sheep-farm") {
-                    animations = context.graphicsMgr
-                        ->getGraphicSet("sheep1")->getEightDirectionsAnimation(GraphicSetKeyState::WALKING);
-                } else if (owningBuilding->getMapObjectType()->name == "cattle-farm") {
-                    animations = context.graphicsMgr
-                        ->getGraphicSet("cattle")->getEightDirectionsAnimation(GraphicSetKeyState::WALKING);
-                } else {
-                    assert(false);
-                }
+                EightDirectionsAnimation animations =
+                    mapObjectType->getAnimationsForState(GraphicSetKeyState::WALKING_WITH_GOODS);
 
                 initRoute(owningBuilding, result.route, goodGrass, carriedGoods.capacity,
                           true, animations, context.game->getTicks());
@@ -320,17 +298,7 @@ void Carrier::onHarvestingFinished(const Context& context) {
     }
 
     const Good* goodGrass = context.configMgr->getGood("grass");
-    // TODO Träger über Config steuern
-    EightDirectionsAnimation animations;
-    if (owningBuilding->getMapObjectType()->name == "sheep-farm") {
-        animations = context.graphicsMgr->
-            getGraphicSet("sheep1")->getEightDirectionsAnimation(GraphicSetKeyState::WALKING);
-    } else if (owningBuilding->getMapObjectType()->name == "cattle-farm") {
-        animations = context.graphicsMgr->
-            getGraphicSet("cattle")->getEightDirectionsAnimation(GraphicSetKeyState::WALKING);
-    } else {
-        assert(false);
-    }
+    EightDirectionsAnimation animations = mapObjectType->getAnimationsForState(GraphicSetKeyState::WALKING_WITH_GOODS);
 
     initRoute(owningBuilding, routeBackToOwningBuilding, goodGrass, carriedGoods.capacity,
               false, animations, context.game->getTicks());

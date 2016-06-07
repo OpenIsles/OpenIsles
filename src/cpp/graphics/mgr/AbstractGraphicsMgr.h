@@ -52,7 +52,13 @@ public:
      */
     VIRTUAL_ONLY_IN_TESTS
     const GraphicSet* getGraphicSet(const std::string& graphicSetName) const {
-        return graphicSets.at(graphicSetName);
+        auto iter = graphicSets.find(graphicSetName);
+        if (iter != graphicSets.cend()) {
+            return iter->second;
+        }
+
+        Log::error(_("Count not find graphicSet '%s'."), graphicSetName.c_str());
+        throw std::runtime_error("Could not find graphicSet");
     }
 
     IRenderer* const getRenderer() const {
@@ -61,8 +67,6 @@ public:
 
 protected:
     virtual void loadStaticGraphicSet(const std::string&, const char* graphicFilename);
-    virtual void loadStaticAnimationGraphicSetWith8Views(
-        const std::string& graphicSetName, const char* graphicFilename, unsigned int countFrames);
 
     /**
      * @brief Lädt eine Grafik.
@@ -123,14 +127,24 @@ private:
     void loadMapZoomGraphicSet();
 
     /**
-     * @brief Lädt die Grafik-Sets für die Schafe
+     * @brief Lädt das Grafik-Set für die Träger
      */
-    void loadSheepGraphicSets();
+    void loadCarrierGraphicSet();
+
+    /**
+     * @brief Lädt das Grafik-Set für die Marktkarren
+     */
+    void loadCartGraphicSet();
+
+    /**
+     * @brief Lädt das Grafik-Set für die Schafe
+     */
+    void loadSheepGraphicSet();
 
     /**
      * @brief Lädt die Grafik-Sets für die Rinder
      */
-    void loadCattleGraphicSets();
+    void loadCattleGraphicSet();
 
     /**
      * @brief Wird aufgerufen, nachdem alle Grafiken geladen sind. Diese Methode verlinkt die GraphicSet zu den

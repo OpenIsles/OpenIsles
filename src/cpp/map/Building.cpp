@@ -38,8 +38,7 @@ void Building::sendNewCarrier(const Context& context) {
         }
 
         const MapObjectType* carrierType = mapObjectType->carrier.mapObjectType;
-        EightDirectionsAnimation animations =
-            context.graphicsMgr->getGraphicSet("cart-without-cargo")->getEightDirectionsAnimation();
+        EightDirectionsAnimation animations = carrierType->getAnimationsForState(GraphicSetKeyState::WALKING);
         addCarrierMapObject(context, result, carrierType, animations);
         return;
     }
@@ -108,16 +107,7 @@ void Building::sendNewCarrier(const Context& context) {
             }
 
             const MapObjectType* carrierType = mapObjectType->carrier.mapObjectType;
-            EightDirectionsAnimation animations; // TODO Träger über Config steuern: Animations
-            if (mapObjectType->name == "sheep-farm") {
-                animations = context.graphicsMgr
-                    ->getGraphicSet("sheep0")->getEightDirectionsAnimation(GraphicSetKeyState::WALKING);
-            } else if (mapObjectType->name == "cattle-farm") {
-                animations = context.graphicsMgr
-                    ->getGraphicSet("cattle")->getEightDirectionsAnimation(GraphicSetKeyState::WALKING);
-            } else {
-                assert(false);
-            }
+            EightDirectionsAnimation animations = carrierType->getAnimationsForState(GraphicSetKeyState::WALKING);
             addCarrierMapObject(context, result.route, firstGood, carrierType, animations);
 
             // Slot markieren, dass nicht ein zweiter Träger hinläuft.
@@ -138,7 +128,7 @@ void Building::sendNewCarrier(const Context& context) {
 
             const MapObjectType* carrierType = mapObjectType->carrier.mapObjectType;
             EightDirectionsAnimation animations =
-                context.graphicsMgr->getGraphicSet("carrier")->getEightDirectionsAnimation();
+                context.graphicsMgr->getGraphicSet("carrier")->getEightDirectionsAnimation(GraphicSetKeyState::WALKING);
             addCarrierMapObject(context, result, carrierType, animations);
         }
 

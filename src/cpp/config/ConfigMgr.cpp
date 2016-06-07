@@ -274,6 +274,9 @@ void ConfigMgr::loadCarrierMapObjectTypes(const std::string& configFilePath) {
             mapObjectType.secondsToProduce = stringToDouble(secondsToProduceNode->value());
         }
 
+        rapidxml::xml_node<>* graphicSetNode = node->first_node("graphic-set", 11, true);
+        mapObjectType.graphicSetName = std::string(graphicSetNode->first_attribute("name", 4, true)->value());
+
         // TODO Animations
 
         Log::info(_("Loaded carrier mapObjectType '%s'."), mapObjectType.name.c_str());

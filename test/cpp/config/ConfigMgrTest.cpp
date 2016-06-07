@@ -154,21 +154,18 @@ TEST(ConfigMgrTest, loadCarrierMapObjectTypes) {
     ASSERT_TRUE(carrier != nullptr);
     ASSERT_EQ(MapObjectTypeClass::CARRIER, carrier->type);
     ASSERT_EQ(4, carrier->carrier.capacity);
-    // TODO animations
     ASSERT_EQ(0, carrier->secondsToProduce);
 
     const MapObjectType* cart = configMgr.getMapObjectType("cart");
     ASSERT_TRUE(cart != nullptr);
     ASSERT_EQ(MapObjectTypeClass::CARRIER, cart->type);
     ASSERT_EQ(6, cart->carrier.capacity);
-    // TODO animations
     ASSERT_EQ(0, cart->secondsToProduce);
 
     const MapObjectType* sheep = configMgr.getMapObjectType("sheep");
     ASSERT_TRUE(sheep != nullptr);
     ASSERT_EQ(MapObjectTypeClass::CARRIER, sheep->type);
     ASSERT_EQ(4, sheep->carrier.capacity);
-    // TODO animations
     ASSERT_EQ(18, sheep->secondsToProduce);
 }
 

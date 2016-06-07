@@ -3,6 +3,7 @@
 
 #include <string>
 #include <unordered_map>
+#include "global.h"
 #include "graphics/graphic/Animation.h"
 #include "graphics/graphic/GraphicSetKeyState.h"
 #include "graphics/graphic/IGraphic.h"
@@ -169,15 +170,13 @@ public:
      * @return Animation
      */
     const Animation* getByStateAndView(const GraphicSetKeyState& state, GraphicSetKeyView& view) const {
-        return this->at(GraphicSetKey(state, view));
-    }
-
-    EightDirectionsAnimation getEightDirectionsAnimation() const {
-        EightDirectionsAnimation animations;
-        forEachEighthDirection(view) {
-            animations[view] = getByView(view);
+        auto iter = this->find(GraphicSetKey(state, view));
+        if (iter != this->cend()) {
+            return iter->second;
         }
-        return animations;
+
+        Log::error(_("Count not find animation (%d, %d) on GraphicSet."), state, view);
+        throw std::runtime_error("Could not find animation");
     }
 
     EightDirectionsAnimation getEightDirectionsAnimation(const GraphicSetKeyState& state) const {

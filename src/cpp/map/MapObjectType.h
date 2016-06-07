@@ -278,6 +278,34 @@ struct MapObjectType {
         }
     }
 
+    /**
+     * @brief Liefert die Animationen für einen bestimmten Status zurück.
+     *
+     * Diese Methode ist gegenüber GraphicSet::getEightDirectionsAnimation(const GraphicSetKeyState&) zu bevorzugen,
+     * da diese sicherstellt, dass die richtige Animation verwendet wird, auch wenn bestimmte Status nicht belegt sind,
+     * z.&nbsp;B. keine Animation für "läuft (mit Waren)" da ist.
+     *
+     * @param graphicSetKeyState Status
+     * @return Animationen
+     */
+    EightDirectionsAnimation getAnimationsForState(GraphicSetKeyState graphicSetKeyState) const {
+
+        bool hasWithGoodsAnimations = (name == "sheep" || name == "cart"); // TODO Konfigurieren über <graphic-set>/<animation>
+
+        // Es gibt MapObjectTypes, die keine Animation für "... mit Waren" haben. Normale Animation nehmen.
+        if (graphicSetKeyState == GraphicSetKeyState::WALKING_WITH_GOODS && !hasWithGoodsAnimations) {
+            graphicSetKeyState = GraphicSetKeyState::WALKING;
+        }
+        else if (graphicSetKeyState == GraphicSetKeyState::EATING_WITH_GOODS && !hasWithGoodsAnimations) {
+            graphicSetKeyState = GraphicSetKeyState::EATING;
+        }
+
+        // TODO WORKING
+        // TODO INVENTORYn
+
+        return graphicSet->getEightDirectionsAnimation(graphicSetKeyState);
+    }
+
 };
 
 #endif
