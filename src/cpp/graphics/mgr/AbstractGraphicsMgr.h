@@ -128,6 +128,20 @@ private:
     void loadHarvestablesGraphicSet(GraphicSet* graphicSet, const char* graphicFilename, int statesCount);
 
     /**
+     * @brief Lädt eine Animation (vertikal-gekachelt 8 Ansichten; horizonal die Frames)
+     *
+     * @param graphicSet GraphicSet, was die Animation erhalten soll
+     * @param graphicFilename Dateipfad der Quellgrafik
+     * @param state Zustand im GraphicSet, in den die Animation geladen werden soll
+     * @param framesCount Anzahl Frames, der in der Grafik enthalten ist
+     * @param startFrame (zero-based) Index des ersten Frames für die Animation
+     * @endFrame startFrame (zero-based) Index des letzten Frames für die Animation
+     */
+    void loadAnimationGraphicSet(
+        GraphicSet* graphicSet, const char* graphicFilename, const GraphicSetKeyState& state,
+        int framesCount, int startFrame, int endFrame);
+
+    /**
      * @brief Lädt das Grafik-Set für das MapRotate-Widget
      */
     void loadMapRotateGraphicSet();
@@ -136,26 +150,6 @@ private:
      * @brief Lädt das Grafik-Set für das MapZoom-Widget
      */
     void loadMapZoomGraphicSet();
-
-    /**
-     * @brief Lädt das Grafik-Set für die Träger
-     */
-    void loadCarrierGraphicSet();
-
-    /**
-     * @brief Lädt das Grafik-Set für die Marktkarren
-     */
-    void loadCartGraphicSet();
-
-    /**
-     * @brief Lädt das Grafik-Set für die Schafe
-     */
-    void loadSheepGraphicSet();
-
-    /**
-     * @brief Lädt die Grafik-Sets für die Rinder
-     */
-    void loadCattleGraphicSet();
 
     /**
      * @brief Wird aufgerufen, nachdem alle Grafiken geladen sind. Diese Methode verlinkt die GraphicSet zu den

@@ -48,11 +48,6 @@ void AbstractGraphicsMgr::loadGraphics() {
     loadMapRotateGraphicSet();
     loadMapZoomGraphicSet();
 
-    loadCarrierGraphicSet();
-    loadCartGraphicSet();
-    loadSheepGraphicSet();
-    loadCattleGraphicSet();
-
 #ifdef DEBUG_GUIMAP
     loadStaticGraphicSet("debug/grid-overlay-evelation0", "data/debug-grid-overlay-elevation0.png");
     loadStaticGraphicSet("debug/grid-overlay-screencoords", "data/debug-grid-overlay-screencoords.png");
@@ -113,31 +108,77 @@ void AbstractGraphicsMgr::loadGraphicsFromXmlConfig(const std::string& configFil
         GraphicSet* graphicSet = new GraphicSet();
         graphicSets[graphicSetName] = graphicSet;
 
-        // statische Grafik
-        rapidxml::xml_node<>* staticNode = graphicSetNode->first_node("static", 6, true);
-        if (staticNode != nullptr) {
-            const char* imageFile = staticNode->first_attribute("image-file", 10, true)->value();
+        for (rapidxml::xml_node<>* subNode = graphicSetNode->first_node();
+             subNode != nullptr;
+             subNode = subNode->next_sibling()) {
 
-            loadStaticGraphicSet(graphicSet, imageFile);
+            const char* nodeName = subNode->name();
+
+            // statische Grafik
+            if (std::strcmp(nodeName, "static") == 0) {
+                const char* imageFile = subNode->first_attribute("image-file", 10, true)->value();
+
+                loadStaticGraphicSet(graphicSet, imageFile);
+            }
+
+            // 4x (je View) nebeneinander
+            else if (std::strcmp(nodeName, "static-views-horizontal") == 0) {
+                const char* imageFile = subNode->first_attribute("image-file", 10, true)->value();
+
+                loadStaticGraphicSetWith4Views(graphicSet, imageFile);
+            }
+
+            // verschiedene Wachstumzustände (nebeneinander) 4x (je View) untereinander
+            else if (std::strcmp(nodeName, "harvestable") == 0) {
+                const char* imageFile = subNode->first_attribute("image-file", 10, true)->value();
+                int statesCount = std::atoi(subNode->first_attribute("states-count", 12, true)->value());
+
+                loadHarvestablesGraphicSet(graphicSet, imageFile, statesCount);
+            }
+
+            // Animation (Frames nach rechts) mit 8 Ansichten (untereinander)
+            else if (std::strcmp(nodeName, "animation") == 0) {
+                const char* stateName = subNode->first_attribute("state", 5, true)->value();
+                const char* imageFile = subNode->first_attribute("image-file", 10, true)->value();
+                int framesCount = std::atoi(subNode->first_attribute("frames-count", 12, true)->value());
+
+                int startFrame = 0;
+                int endFrame = framesCount - 1;
+
+                rapidxml::xml_attribute<>* framesAttribute = subNode->first_attribute("frames", 6, true);
+                if (framesAttribute != nullptr) {
+                    std::string framesAttributeValue = std::string(framesAttribute->value());
+
+                    std::size_t c = framesAttributeValue.find("-");
+                    if (c == std::string::npos) {
+                        Log::error(_("Could not parse frames '%s'"), framesAttributeValue.c_str());
+                        throw std::runtime_error("Could not parse frames");
+                    }
+
+                    startFrame = std::atoi(framesAttributeValue.substr(0, c).c_str());
+                    endFrame = std::atoi(framesAttributeValue.substr(c + 1).c_str());
+                }
+
+                GraphicSetKeyState state = GraphicSetKeyState::NONE;
+                if (std::strcmp(stateName, "walking") == 0) {
+                    state = GraphicSetKeyState::WALKING;
+                } else if (std::strcmp(stateName, "walking-with-goods") == 0) {
+                    state = GraphicSetKeyState::WALKING_WITH_GOODS;
+                } else if (std::strcmp(stateName, "eating") == 0) {
+                    state = GraphicSetKeyState::EATING;
+                } else if (std::strcmp(stateName, "eating-with-goods") == 0) {
+                    state = GraphicSetKeyState::EATING_WITH_GOODS;
+                }
+                // TODO weitere Zustände bei Bedarf; nicht alle, weil wir nicht alle brauchen
+
+                if (state == GraphicSetKeyState::NONE) {
+                    Log::error(_("Illegal state '%s' for animation in graphicSet '%s'"), stateName, graphicSetName.c_str());
+                    throw std::runtime_error("Illegal state for animation");
+                }
+
+                loadAnimationGraphicSet(graphicSet, imageFile, state, framesCount, startFrame, endFrame);
+            }
         }
-
-        // 4x (je View) nebeneinander
-        rapidxml::xml_node<>* staticViewsHorizontalNode = graphicSetNode->first_node("static-views-horizontal", 23, true);
-        if (staticViewsHorizontalNode != nullptr) {
-            const char* imageFile = staticViewsHorizontalNode->first_attribute("image-file", 10, true)->value();
-
-            loadStaticGraphicSetWith4Views(graphicSet, imageFile);
-        }
-
-        // verschiedene Wachstumzustände (nebeneinander) 4x (je View) untereinander
-        rapidxml::xml_node<>* harvestableNode = graphicSetNode->first_node("harvestable", 11, true);
-        if (harvestableNode != nullptr) {
-            const char* imageFile = harvestableNode->first_attribute("image-file", 10, true)->value();
-            int statesCount = std::atoi(harvestableNode->first_attribute("states-count", 12, true)->value());
-
-            loadHarvestablesGraphicSet(graphicSet, imageFile, statesCount);
-        }
-
 
         // Jetzt sollte mindestens ein if-Block durchlaufen und was im GraphicSet sein
         if (graphicSet->isEmpty()) {
@@ -249,6 +290,46 @@ void AbstractGraphicsMgr::loadHarvestablesGraphicSet(
     delete graphic;
 }
 
+void AbstractGraphicsMgr::loadAnimationGraphicSet(
+    GraphicSet* graphicSet, const char* graphicFilename, const GraphicSetKeyState& state,
+    int framesCount, int startFrame, int endFrame) {
+
+    assert ((startFrame >= 0) && (startFrame <= endFrame) && (endFrame < framesCount));
+
+    IGraphic* fullGraphic = loadGraphic(graphicFilename);
+
+    int fullGraphicWidth = fullGraphic->getWidth();
+    if (fullGraphicWidth % framesCount != 0) {
+        Log::error(_("Could not divide the frames equally: '%s'"), graphicFilename);
+        throw std::runtime_error("Could not divide the frames equally");
+    }
+    int frameWidth = fullGraphicWidth / framesCount;
+
+    int fullGraphicHeight = fullGraphic->getHeight();
+    if (fullGraphicHeight % 8 != 0) {
+        Log::error(_("Could not divide the views equally: '%s'"), graphicFilename);
+        throw std::runtime_error("Could not divide the views equally");
+    }
+    int frameHeight = fullGraphicHeight / 8;
+
+    Rect frameRect(0, 0, frameWidth, frameHeight);
+
+    forEachEighthDirection(view) {
+        Animation* animation = new Animation(endFrame - startFrame + 1);
+
+        frameRect.x = startFrame * frameWidth;
+        for (int frameIndex = startFrame, i = 0; frameIndex <= endFrame; frameIndex++, i++, frameRect.x += frameWidth) {
+            IGraphic* frameGraphic = loadGraphic(*fullGraphic, frameRect);
+            animation->addFrame(i, frameGraphic);
+        }
+
+        graphicSet->addByStateAndView(state, view, animation);
+        frameRect.y += frameHeight;
+    }
+
+    delete fullGraphic;
+}
+
 void AbstractGraphicsMgr::loadMapRotateGraphicSet() {
     IGraphic* graphic = loadGraphic("data/img/gui/map-rotate.png");
     int tileWidth = graphic->getWidth() / 16;
@@ -303,173 +384,6 @@ void AbstractGraphicsMgr::loadMapZoomGraphicSet() {
     graphicSet->addByState(GraphicSetKeyState::MINUS_PRESSED, new Animation(tileGraphic));
 
     graphicSets["map-zoom"] = graphicSet;
-    delete graphic;
-}
-
-// TODO Duplicate Code loadCarrierGraphicSet() / loadCartGraphicSet() / loadSheepGraphicSets() / loadCattleGraphicSet() - über XML-Datei regeln
-void AbstractGraphicsMgr::loadCarrierGraphicSet() {
-    IGraphic* fullGraphic = loadGraphic("data/img/animations/carrier.png");
-
-    int fullGraphicWidth = fullGraphic->getWidth();
-    if (fullGraphicWidth % 31 != 0) {
-        Log::error(_("Could not divide the frames equally: '%s'"), "data/img/animations/carrier.png");
-        throw std::runtime_error("Could not divide the frames equally");
-    }
-    int frameWidth = fullGraphicWidth / 31;
-
-    int fullGraphicHeight = fullGraphic->getHeight();
-    if (fullGraphicHeight % 8 != 0) {
-        Log::error(_("Could not divide the views equally: '%s'"), "data/img/animations/carrier.png");
-        throw std::runtime_error("Could not divide the views equally");
-    }
-    int frameHeight = fullGraphicHeight / 8;
-
-    GraphicSet* graphicSet = new GraphicSet();
-    Rect frameRect(0, 0, frameWidth, frameHeight);
-
-    forEachEighthDirection(view) {
-        Animation* animation = new Animation(31);
-        for (int x = 0, frameIndex = 0; x < fullGraphicWidth; x += frameWidth, frameIndex++) {
-            frameRect.x = x;
-
-            IGraphic* frameGraphic = loadGraphic(*fullGraphic, frameRect);
-            animation->addFrame(frameIndex, frameGraphic);
-        }
-
-        graphicSet->addByStateAndView(GraphicSetKeyState::WALKING, view, animation);
-        frameRect.y += frameHeight;
-    }
-
-    graphicSets["carrier"] = graphicSet;
-
-    delete fullGraphic;
-}
-
-// TODO Duplicate Code loadCarrierGraphicSet() / loadCartGraphicSet() / loadSheepGraphicSets() / loadCattleGraphicSet() - über XML-Datei regeln
-void AbstractGraphicsMgr::loadCartGraphicSet() {
-    GraphicSet* graphicSet = new GraphicSet();
-
-    for (int i = 0; i < 2; i++) {
-        const char* graphicFilename = (i == 0) ?
-            "data/img/animations/cart-without-cargo.png" : "data/img/animations/cart-with-cargo.png";
-        IGraphic* fullGraphic = loadGraphic(graphicFilename);
-
-        int fullGraphicWidth = fullGraphic->getWidth();
-        if (fullGraphicWidth % 32 != 0) {
-            Log::error(_("Could not divide the frames equally: '%s'"), graphicFilename);
-            throw std::runtime_error("Could not divide the frames equally");
-        }
-        int frameWidth = fullGraphicWidth / 32;
-
-        int fullGraphicHeight = fullGraphic->getHeight();
-        if (fullGraphicHeight % 8 != 0) {
-            Log::error(_("Could not divide the views equally: '%s'"), graphicFilename);
-            throw std::runtime_error("Could not divide the views equally");
-        }
-        int frameHeight = fullGraphicHeight / 8;
-
-        Rect frameRect(0, 0, frameWidth, frameHeight);
-
-        forEachEighthDirection(view) {
-            Animation* animation = new Animation(32);
-            for (int x = 0, frameIndex = 0; x < fullGraphicWidth; x += frameWidth, frameIndex++) {
-                frameRect.x = x;
-
-                IGraphic* frameGraphic = loadGraphic(*fullGraphic, frameRect);
-                animation->addFrame(frameIndex, frameGraphic);
-            }
-
-            GraphicSetKeyState state = (i == 0) ? GraphicSetKeyState::WALKING : GraphicSetKeyState::WALKING_WITH_GOODS;
-            graphicSet->addByStateAndView(state, view, animation);
-            frameRect.y += frameHeight;
-        }
-
-        delete fullGraphic;
-    }
-
-    graphicSets["cart"] = graphicSet;
-}
-
-// TODO Duplicate Code loadCarrierGraphicSet() / loadCartGraphicSet() / loadSheepGraphicSets() / loadCattleGraphicSet() - über XML-Datei regeln
-void AbstractGraphicsMgr::loadSheepGraphicSet() {
-    GraphicSet* graphicSet = new GraphicSet();
-
-    for (int i = 0; i < 2; i++) {
-        const std::string graphicFilename = "data/img/animations/sheep" + toString(i) + ".png";
-        IGraphic* graphic = loadGraphic(graphicFilename.c_str());
-
-        int frameWidth = graphic->getWidth() / 12;
-        int frameHeight = graphic->getHeight() / 8;
-
-        Rect frameRect(0, 0, frameWidth, frameHeight);
-
-        forEachEighthDirection(view) {
-            frameRect.x = 0;
-
-            Animation* animationWalking = new Animation(8);
-            for (int frameIndex = 0; frameIndex < 8; frameIndex++, frameRect.x += frameWidth) {
-                IGraphic* frameGraphic = loadGraphic(*graphic, frameRect);
-                animationWalking->addFrame(frameIndex, frameGraphic);
-            }
-            GraphicSetKeyState state = (i == 0) ? GraphicSetKeyState::WALKING : GraphicSetKeyState::WALKING_WITH_GOODS;
-            graphicSet->addByStateAndView(state, view, animationWalking);
-
-            Animation* animationEating = new Animation(4);
-            for (int frameIndex = 0; frameIndex < 4; frameIndex++, frameRect.x += frameWidth) {
-                IGraphic* frameGraphic = loadGraphic(*graphic, frameRect);
-                animationEating->addFrame(frameIndex, frameGraphic);
-            }
-            state = (i == 0) ? GraphicSetKeyState::EATING : GraphicSetKeyState::EATING_WITH_GOODS;
-            graphicSet->addByStateAndView(state, view, animationEating);
-
-            // TODO später entfernen; nur dazu da, dass der bisherige Code funktioniert.
-            IGraphic* firstFrameGraphic = loadGraphic(*graphic, Rect(0, frameRect.y, frameWidth, frameHeight));
-            graphicSet->addByView(view, new Animation(firstFrameGraphic));
-
-            frameRect.y += frameHeight;
-        }
-
-        delete graphic;
-    }
-
-    graphicSets["sheep"] = graphicSet;
-}
-
-// TODO Duplicate Code loadCarrierGraphicSet() / loadCartGraphicSet() / loadSheepGraphicSets() / loadCattleGraphicSet() - über XML-Datei regeln
-void AbstractGraphicsMgr::loadCattleGraphicSet() {
-    IGraphic* graphic = loadGraphic("data/img/animations/cattle.png");
-
-    int frameWidth = graphic->getWidth() / 14;
-    int frameHeight = graphic->getHeight() / 8;
-
-    GraphicSet* graphicSet = new GraphicSet();
-    Rect frameRect(0, 0, frameWidth, frameHeight);
-
-    forEachEighthDirection(view) {
-        frameRect.x = 0;
-
-        Animation* animationWalking = new Animation(8);
-        for (int frameIndex = 0; frameIndex < 8; frameIndex++, frameRect.x += frameWidth) {
-            IGraphic* frameGraphic = loadGraphic(*graphic, frameRect);
-            animationWalking->addFrame(frameIndex, frameGraphic);
-        }
-        graphicSet->addByStateAndView(GraphicSetKeyState::WALKING, view, animationWalking);
-
-        Animation* animationEating = new Animation(6);
-        for (int frameIndex = 0; frameIndex < 6; frameIndex++, frameRect.x += frameWidth) {
-            IGraphic* frameGraphic = loadGraphic(*graphic, frameRect);
-            animationEating->addFrame(frameIndex, frameGraphic);
-        }
-        graphicSet->addByStateAndView(GraphicSetKeyState::EATING, view, animationEating);
-
-        // TODO später entfernen; nur dazu da, dass der bisherige Code funktioniert.
-        IGraphic* firstFrameGraphic = loadGraphic(*graphic, Rect(0, frameRect.y, frameWidth, frameHeight));
-        graphicSet->addByView(view, new Animation(firstFrameGraphic));
-
-        frameRect.y += frameHeight;
-    }
-
-    graphicSets["cattle"] = graphicSet;
     delete graphic;
 }
 

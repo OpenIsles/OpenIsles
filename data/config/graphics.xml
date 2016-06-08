@@ -143,6 +143,35 @@
         <harvestable image-file="data/img/harvestables/grain-field.png" states-count="6" />
     </graphic-set>
 
+    <!-- Träger -->
+
+    <graphic-set name="carrier">
+        <animation state="walking" image-file="data/img/animations/carrier.png"
+                   frames-count="31" />
+    </graphic-set>
+    <graphic-set name="cart">
+        <animation state="walking" image-file="data/img/animations/cart-without-cargo.png"
+                   frames-count="32" />
+        <animation state="walking-with-goods" image-file="data/img/animations/cart-with-cargo.png"
+                   frames-count="32" />
+    </graphic-set>
+    <graphic-set name="sheep">
+        <animation state="walking" image-file="data/img/animations/sheep0.png"
+                   frames-count="12" frames="0-7" />
+        <animation state="eating" image-file="data/img/animations/sheep0.png"
+                   frames-count="12" frames="8-11" />
+        <animation state="walking-with-goods" image-file="data/img/animations/sheep1.png"
+                   frames-count="12" frames="0-7" />
+        <animation state="eating-with-goods" image-file="data/img/animations/sheep1.png"
+                   frames-count="12" frames="8-11" />
+    </graphic-set>
+    <graphic-set name="cattle">
+        <animation state="walking" image-file="data/img/animations/cattle.png"
+                   frames-count="14" frames="0-7" />
+        <animation state="eating" image-file="data/img/animations/cattle.png"
+                   frames-count="14" frames="8-13" />
+    </graphic-set>
+
     <!-- statische Grafiken -->
 
     <graphic-set name="coin/coin">
