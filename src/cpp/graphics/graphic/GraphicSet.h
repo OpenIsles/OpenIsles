@@ -102,6 +102,13 @@ public:
     }
 
     /**
+     * @return `true`, wenn keine Animation im Graphik-Set ist
+     */
+    bool isEmpty() const {
+        return empty();
+    }
+
+    /**
      * @brief Fügt eine statische Animation hinzu
      * @param animation Animation
      */

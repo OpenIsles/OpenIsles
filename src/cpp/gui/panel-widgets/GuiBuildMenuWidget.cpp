@@ -76,7 +76,7 @@ GuiBuildMenuWidget::GuiBuildMenuWidget(const Context& context) : GuiPanelWidget(
                 context.configMgr->getMapObjectType("cattle-farm"),
                 context.configMgr->getMapObjectType("hunters-hut"),
                 context.configMgr->getMapObjectType("foresters"),
-                context.configMgr->getMapObjectType("northern-forest1")
+                context.configMgr->getMapObjectType("northern-forest1") // TODO Merker in der Config einbauen, dass hier zufällig verteilt wird (Häuser/Wald); GraphicSet-Name sollte angepasst werden
             }
         }, {
             BuildingGroup::PORT,
@@ -111,7 +111,7 @@ GuiBuildMenuWidget::GuiBuildMenuWidget(const Context& context) : GuiPanelWidget(
                 nullptr,
                 context.configMgr->getMapObjectType("farm-road"),
                 context.configMgr->getMapObjectType("cobbled-street"),
-                context.configMgr->getMapObjectType("pioneers-house1"),
+                context.configMgr->getMapObjectType("pioneers-house1"), // TODO Merker in der Config einbauen, dass hier zufällig verteilt wird (Häuser/Wald); GraphicSet-Name sollte angepasst werden
                 context.configMgr->getMapObjectType("marketplace"),
                 context.configMgr->getMapObjectType("chapel"),
                 nullptr

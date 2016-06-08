@@ -1,0 +1,445 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<graphics>
+
+    <!-- Map-Objekte -->
+
+    <graphic-set name="mapobjects/chapel">
+        <static-views-horizontal image-file="data/img/buildings/chapel.png" />
+    </graphic-set>
+    <graphic-set name="mapobjects/pioneers-house1">
+        <static-views-horizontal image-file="data/img/buildings/pioneers-house1.png" />
+    </graphic-set>
+    <graphic-set name="mapobjects/pioneers-house2">
+        <static-views-horizontal image-file="data/img/buildings/pioneers-house2.png" />
+    </graphic-set>
+    <graphic-set name="mapobjects/pioneers-house3">
+        <static-views-horizontal image-file="data/img/buildings/pioneers-house3.png" />
+    </graphic-set>
+    <graphic-set name="mapobjects/pioneers-house4">
+        <static-views-horizontal image-file="data/img/buildings/pioneers-house4.png" />
+    </graphic-set>
+    <graphic-set name="mapobjects/pioneers-house5">
+        <static-views-horizontal image-file="data/img/buildings/pioneers-house5.png" />
+    </graphic-set>
+    <graphic-set name="mapobjects/settlers-house1">
+        <static-views-horizontal image-file="data/img/buildings/settlers-house1.png" />
+    </graphic-set>
+    <graphic-set name="mapobjects/settlers-house2">
+        <static-views-horizontal image-file="data/img/buildings/settlers-house2.png" />
+    </graphic-set>
+    <graphic-set name="mapobjects/settlers-house3">
+        <static-views-horizontal image-file="data/img/buildings/settlers-house3.png" />
+    </graphic-set>
+    <graphic-set name="mapobjects/settlers-house4">
+        <static-views-horizontal image-file="data/img/buildings/settlers-house4.png" />
+    </graphic-set>
+    <graphic-set name="mapobjects/settlers-house5">
+        <static-views-horizontal image-file="data/img/buildings/settlers-house5.png" />
+    </graphic-set>
+    <graphic-set name="mapobjects/burghers-house1">
+        <static-views-horizontal image-file="data/img/buildings/burghers-house1.png" />
+    </graphic-set>
+    <graphic-set name="mapobjects/merchants-house1">
+        <static-views-horizontal image-file="data/img/buildings/merchants-house1.png" />
+    </graphic-set>
+    <graphic-set name="mapobjects/aristocrats-house1">
+        <static-views-horizontal image-file="data/img/buildings/aristocrats-house1.png" />
+    </graphic-set>
+    <graphic-set name="mapobjects/stonemason">
+        <static-views-horizontal image-file="data/img/buildings/stonemason.png" />
+    </graphic-set>
+    <graphic-set name="mapobjects/office1">
+        <static-views-horizontal image-file="data/img/buildings/office1.png" />
+    </graphic-set>
+    <graphic-set name="mapobjects/office2">
+        <static-views-horizontal image-file="data/img/buildings/office2.png" />
+    </graphic-set>
+    <graphic-set name="mapobjects/marketplace">
+        <static-views-horizontal image-file="data/img/buildings/marketplace.png" />
+    </graphic-set>
+    <graphic-set name="mapobjects/foresters">
+        <static-views-horizontal image-file="data/img/buildings/foresters.png" />
+    </graphic-set>
+    <graphic-set name="mapobjects/sheep-farm">
+        <static-views-horizontal image-file="data/img/buildings/sheep-farm.png" />
+    </graphic-set>
+    <graphic-set name="mapobjects/weaving-mill1">
+        <static-views-horizontal image-file="data/img/buildings/weaving-mill1.png" />
+    </graphic-set>
+    <graphic-set name="mapobjects/cattle-farm">
+        <static-views-horizontal image-file="data/img/buildings/cattle-farm.png" />
+    </graphic-set>
+    <graphic-set name="mapobjects/butchers">
+        <static-views-horizontal image-file="data/img/buildings/butchers.png" />
+    </graphic-set>
+    <graphic-set name="mapobjects/toolsmiths">
+        <static-views-horizontal image-file="data/img/buildings/toolsmiths.png" />
+    </graphic-set>
+    <graphic-set name="mapobjects/hunters-hut">
+        <static-views-horizontal image-file="data/img/buildings/hunters-hut.png" />
+    </graphic-set>
+    <graphic-set name="mapobjects/cathedral">
+        <static-views-horizontal image-file="data/img/buildings/cathedral.png" />
+    </graphic-set>
+    <graphic-set name="mapobjects/tavern">
+        <static-views-horizontal image-file="data/img/buildings/tavern.png" />
+    </graphic-set>
+    <graphic-set name="mapobjects/sugarcane-plantation">
+        <static-views-horizontal image-file="data/img/buildings/sugarcane-plantation.png" />
+    </graphic-set>
+    <graphic-set name="mapobjects/tobacco-plantation">
+        <static-views-horizontal image-file="data/img/buildings/tobacco-plantation.png" />
+    </graphic-set>
+    <graphic-set name="mapobjects/distillery">
+        <static-views-horizontal image-file="data/img/buildings/distillery.png" />
+    </graphic-set>
+    <graphic-set name="mapobjects/tobacco-goods">
+        <static-views-horizontal image-file="data/img/buildings/tobacco-goods.png" />
+    </graphic-set>
+    <graphic-set name="mapobjects/spices-plantation">
+        <static-views-horizontal image-file="data/img/buildings/spices-plantation.png" />
+    </graphic-set>
+    <graphic-set name="mapobjects/school">
+        <static-views-horizontal image-file="data/img/buildings/school.png" />
+    </graphic-set>
+    <graphic-set name="mapobjects/grain-farm">
+        <static-views-horizontal image-file="data/img/buildings/grain-farm.png" />
+    </graphic-set>
+    <graphic-set name="mapobjects/grain-mill">
+        <static-views-horizontal image-file="data/img/buildings/grain-mill.png" />
+    </graphic-set>
+    <graphic-set name="mapobjects/bakery">
+        <static-views-horizontal image-file="data/img/buildings/bakery.png" />
+    </graphic-set>
+    <graphic-set name="mapobjects/square1">
+        <static-views-horizontal image-file="data/img/buildings/square1.png" />
+    </graphic-set>
+    <graphic-set name="mapobjects/square2">
+        <static-views-horizontal image-file="data/img/buildings/square2.png" />
+    </graphic-set>
+    <graphic-set name="mapobjects/square3">
+        <static-views-horizontal image-file="data/img/buildings/square3.png" />
+    </graphic-set>
+    <graphic-set name="mapobjects/pier">
+        <static-views-horizontal image-file="data/img/buildings/pier.png" />
+    </graphic-set>
+
+    <graphic-set name="mapobjects/northern-forest1">
+        <harvestable image-file="data/img/harvestables/northern-forest1.png" states-count="5" />
+    </graphic-set>
+    <graphic-set name="mapobjects/northern-forest2">
+        <harvestable image-file="data/img/harvestables/northern-forest2.png" states-count="5" />
+    </graphic-set>
+    <graphic-set name="mapobjects/sugarcane-field">
+        <harvestable image-file="data/img/harvestables/sugarcane-field.png" states-count="5" />
+    </graphic-set>
+    <graphic-set name="mapobjects/tobacco-field">
+        <harvestable image-file="data/img/harvestables/tobacco-field.png" states-count="7" />
+    </graphic-set>
+    <graphic-set name="mapobjects/spices-field">
+        <harvestable image-file="data/img/harvestables/spices-field.png" states-count="6" />
+    </graphic-set>
+    <graphic-set name="mapobjects/grain-field">
+        <harvestable image-file="data/img/harvestables/grain-field.png" states-count="6" />
+    </graphic-set>
+
+    <!-- statische Grafiken -->
+
+    <graphic-set name="coin/coin">
+        <static image-file="data/img/gui/coin/coin.png" />
+    </graphic-set>
+    <graphic-set name="coin/coin-green-arrow">
+        <static image-file="data/img/gui/coin/coin-green-arrow.png" />
+    </graphic-set>
+    <graphic-set name="coin/coin-red-arrow">
+        <static image-file="data/img/gui/coin/coin-red-arrow.png" />
+    </graphic-set>
+    <graphic-set name="population-man">
+        <static image-file="data/img/gui/population-man.png" />
+    </graphic-set>
+
+    <graphic-set name="panel">
+        <static image-file="data/img/gui/panel.png" />
+    </graphic-set>
+    <graphic-set name="statusbar">
+        <static image-file="data/img/gui/statusbar.png" />
+    </graphic-set>
+    <graphic-set name="panel-header">
+        <static image-file="data/img/gui/panel-header.png" />
+    </graphic-set>
+    <graphic-set name="minimap">
+        <static image-file="data/img/gui/minimap.png" />
+    </graphic-set>
+
+    <graphic-set name="production-arrow">
+        <static image-file="data/img/gui/production-arrow.png" />
+    </graphic-set>
+    <graphic-set name="production-plus">
+        <static image-file="data/img/gui/production-plus.png" />
+    </graphic-set>
+
+    <!-- statische Grafiken: Panel-Buttons -->
+
+    <graphic-set name="panel-buttons/build">
+        <static image-file="data/img/gui/panel-buttons/build.png" />
+    </graphic-set>
+    <graphic-set name="panel-buttons/build-pressed">
+        <static image-file="data/img/gui/panel-buttons/build-pressed.png" />
+    </graphic-set>
+    <graphic-set name="panel-buttons/dummy">
+        <static image-file="data/img/gui/panel-buttons/dummy.png" />
+    </graphic-set>
+    <graphic-set name="panel-buttons/dummy-pressed">
+        <static image-file="data/img/gui/panel-buttons/dummy-pressed.png" />
+    </graphic-set>
+    <graphic-set name="panel-buttons/player-status">
+        <static image-file="data/img/gui/panel-buttons/player-status.png" />
+    </graphic-set>
+    <graphic-set name="panel-buttons/player-status-pressed">
+        <static image-file="data/img/gui/panel-buttons/player-status-pressed.png" />
+    </graphic-set>
+
+    <!-- statische Grafiken: Baumenü -->
+
+    <graphic-set name="add-building/panel-top">
+        <static image-file="data/img/gui/add-building/panel-top.png" />
+    </graphic-set>
+    <graphic-set name="add-building/panel">
+        <static image-file="data/img/gui/add-building/panel.png" />
+    </graphic-set>
+    <graphic-set name="add-building/panel-bottom">
+        <static image-file="data/img/gui/add-building/panel-bottom.png" />
+    </graphic-set>
+
+    <graphic-set name="add-building-button/question-mark">
+        <static image-file="data/img/gui/add-building/question-mark.png" />
+    </graphic-set>
+
+    <graphic-set name="add-building-button/chapel">
+        <static image-file="data/img/gui/add-building/chapel.png" />
+    </graphic-set>
+    <graphic-set name="add-building-button/marketplace">
+        <static image-file="data/img/gui/add-building/marketplace.png" />
+    </graphic-set>
+    <graphic-set name="add-building-button/office1">
+        <static image-file="data/img/gui/add-building/office1.png" />
+    </graphic-set>
+    <graphic-set name="add-building-button/office2">
+        <static image-file="data/img/gui/add-building/office2.png" />
+    </graphic-set>
+    <graphic-set name="add-building-button/cobbled-street">
+        <static image-file="data/img/gui/add-building/cobbled-street.png" />
+    </graphic-set>
+    <graphic-set name="add-building-button/farm-road">
+        <static image-file="data/img/gui/add-building/farm-road.png" />
+    </graphic-set>
+    <graphic-set name="add-building-button/sheep-farm">
+        <static image-file="data/img/gui/add-building/sheep-farm.png" />
+    </graphic-set>
+    <graphic-set name="add-building-button/weaving-mill1">
+        <static image-file="data/img/gui/add-building/weaving-mill1.png" />
+    </graphic-set>
+    <graphic-set name="add-building-button/cattle-farm">
+        <static image-file="data/img/gui/add-building/cattle-farm.png" />
+    </graphic-set>
+    <graphic-set name="add-building-button/butchers">
+        <static image-file="data/img/gui/add-building/butchers.png" />
+    </graphic-set>
+    <graphic-set name="add-building-button/toolsmiths">
+        <static image-file="data/img/gui/add-building/toolsmiths.png" />
+    </graphic-set>
+    <graphic-set name="add-building-button/pioneers-house1"><!-- TODO GraphicSet-Name anpassen ("pioneers-house") -->
+        <static image-file="data/img/gui/add-building/house.png" />
+    </graphic-set>
+    <graphic-set name="add-building-button/stonemason">
+        <static image-file="data/img/gui/add-building/stonemason.png" />
+    </graphic-set>
+    <graphic-set name="add-building-button/foresters">
+        <static image-file="data/img/gui/add-building/foresters.png" />
+    </graphic-set>
+    <graphic-set name="add-building-button/northern-forest1"><!-- TODO GraphicSet-Name anpassen ("forest") -->
+        <static image-file="data/img/gui/add-building/forest.png" />
+    </graphic-set>
+    <graphic-set name="add-building-button/hunters-hut">
+        <static image-file="data/img/gui/add-building/hunters-hut.png" />
+    </graphic-set>
+    <graphic-set name="add-building-button/cathedral">
+        <static image-file="data/img/gui/add-building/cathedral.png" />
+    </graphic-set>
+    <graphic-set name="add-building-button/tavern">
+        <static image-file="data/img/gui/add-building/tavern.png" />
+    </graphic-set>
+    <graphic-set name="add-building-button/sugarcane-plantation">
+        <static image-file="data/img/gui/add-building/sugarcane-plantation.png" />
+    </graphic-set>
+    <graphic-set name="add-building-button/sugarcane-field">
+        <static image-file="data/img/gui/add-building/sugarcane-field.png" />
+    </graphic-set>
+    <graphic-set name="add-building-button/tobacco-plantation">
+        <static image-file="data/img/gui/add-building/tobacco-plantation.png" />
+    </graphic-set>
+    <graphic-set name="add-building-button/tobacco-field">
+        <static image-file="data/img/gui/add-building/tobacco-field.png" />
+    </graphic-set>
+    <graphic-set name="add-building-button/spices-field">
+        <static image-file="data/img/gui/add-building/spices-field.png" />
+    </graphic-set>
+    <graphic-set name="add-building-button/distillery">
+        <static image-file="data/img/gui/add-building/distillery.png" />
+    </graphic-set>
+    <graphic-set name="add-building-button/tobacco-goods">
+        <static image-file="data/img/gui/add-building/tobacco-goods.png" />
+    </graphic-set>
+    <graphic-set name="add-building-button/spices-plantation">
+        <static image-file="data/img/gui/add-building/spices-plantation.png" />
+    </graphic-set>
+    <graphic-set name="add-building-button/school">
+        <static image-file="data/img/gui/add-building/school.png" />
+    </graphic-set>
+    <graphic-set name="add-building-button/square1">
+        <static image-file="data/img/gui/add-building/square1.png" />
+    </graphic-set>
+    <graphic-set name="add-building-button/square2">
+        <static image-file="data/img/gui/add-building/square2.png" />
+    </graphic-set>
+    <graphic-set name="add-building-button/square3">
+        <static image-file="data/img/gui/add-building/square3.png" />
+    </graphic-set>
+    <graphic-set name="add-building-button/pier">
+        <static image-file="data/img/gui/add-building/pier.png" />
+    </graphic-set>
+    <graphic-set name="add-building-button/grain-farm">
+        <static image-file="data/img/gui/add-building/grain-farm.png" />
+    </graphic-set>
+    <graphic-set name="add-building-button/grain-field">
+        <static image-file="data/img/gui/add-building/grain-field.png" />
+    </graphic-set>
+    <graphic-set name="add-building-button/grain-mill">
+        <static image-file="data/img/gui/add-building/grain-mill.png" />
+    </graphic-set>
+    <graphic-set name="add-building-button/bakery">
+        <static image-file="data/img/gui/add-building/bakery.png" />
+    </graphic-set>
+
+    <!-- statische Grafiken: Buttons, um Baumenü zu öffnen -->
+
+    <!-- TODO generate-build-buttons.php entfernen, wenn die neuen Blender-Buttons komplett sind -->
+    <graphic-set name="add-building-group/craftsman"><!-- TODO build-menu-Grafik verwenden -->
+        <static image-file="data/img/gui/button-add-building-craftsman.png" />
+    </graphic-set>
+    <graphic-set name="add-building-group/craftsman-pressed"><!-- TODO build-menu-Grafik verwenden -->
+        <static image-file="data/img/gui/button-add-building-craftsman-pressed.png" />
+    </graphic-set>
+    <graphic-set name="add-building-group/farm"><!-- TODO build-menu-Grafik verwenden -->
+        <static image-file="data/img/gui/button-add-building-farm.png" />
+    </graphic-set>
+    <graphic-set name="add-building-group/farm-pressed"><!-- TODO build-menu-Grafik verwenden -->
+        <static image-file="data/img/gui/button-add-building-farm-pressed.png" />
+    </graphic-set>
+    <graphic-set name="build-menu/port">
+        <static image-file="data/img/gui/build-menu/port.png" />
+    </graphic-set>
+    <graphic-set name="build-menu/port-pressed">
+        <static image-file="data/img/gui/build-menu/port-pressed.png" />
+    </graphic-set>
+    <graphic-set name="build-menu/public">
+        <static image-file="data/img/gui/build-menu/public.png" />
+    </graphic-set>
+    <graphic-set name="build-menu/public-pressed">
+        <static image-file="data/img/gui/build-menu/public-pressed.png" />
+    </graphic-set>
+    <graphic-set name="build-menu/demolish">
+        <static image-file="data/img/gui/build-menu/demolish.png" />
+    </graphic-set>
+    <graphic-set name="build-menu/demolish-pressed">
+        <static image-file="data/img/gui/build-menu/demolish-pressed.png" />
+    </graphic-set>
+
+    <!-- statische Grafiken: Wappen -->
+
+    <graphic-set name="coat-of-arms/population/red">
+        <static image-file="data/img/gui/coat-of-arms/population/red.png" />
+    </graphic-set>
+    <graphic-set name="coat-of-arms/population/blue">
+        <static image-file="data/img/gui/coat-of-arms/population/blue.png" />
+    </graphic-set>
+    <graphic-set name="coat-of-arms/population/yellow">
+        <static image-file="data/img/gui/coat-of-arms/population/yellow.png" />
+    </graphic-set>
+    <graphic-set name="coat-of-arms/population/white">
+        <static image-file="data/img/gui/coat-of-arms/population/white.png" />
+    </graphic-set>
+
+    <graphic-set name="coat-of-arms/large/red">
+        <static image-file="data/img/gui/coat-of-arms/large/red.png" />
+    </graphic-set>
+    <graphic-set name="coat-of-arms/large/blue">
+        <static image-file="data/img/gui/coat-of-arms/large/blue.png" />
+    </graphic-set>
+    <graphic-set name="coat-of-arms/large/yellow">
+        <static image-file="data/img/gui/coat-of-arms/large/yellow.png" />
+    </graphic-set>
+    <graphic-set name="coat-of-arms/large/white">
+        <static image-file="data/img/gui/coat-of-arms/large/white.png" />
+    </graphic-set>
+
+    <!-- statische Grafiken: Sonstige GUI-Buttons -->
+
+    <graphic-set name="button-music">
+        <static image-file="data/img/gui/button-music.png" />
+    </graphic-set>
+    <graphic-set name="button-music-pressed">
+        <static image-file="data/img/gui/button-music-pressed.png" />
+    </graphic-set>
+
+    <!-- statische Grafiken: Bevölkerung-Zufriedenheit -->
+
+    <graphic-set name="population-satisfaction/good">
+        <static image-file="data/img/gui/population-satisfaction/good.png" />
+    </graphic-set>
+    <graphic-set name="population-satisfaction/neutral">
+        <static image-file="data/img/gui/population-satisfaction/neutral.png" />
+    </graphic-set>
+    <graphic-set name="population-satisfaction/bad">
+        <static image-file="data/img/gui/population-satisfaction/bad.png" />
+    </graphic-set>
+    <graphic-set name="population-satisfaction/worst">
+        <static image-file="data/img/gui/population-satisfaction/worst.png" />
+    </graphic-set>
+
+    <!-- statische Grafiken: Icons für verlangte öffentliche Gebäude -->
+
+    <!--
+    <graphic-set name="public-building-icon/bathhouse">
+        <static image-file="data/img/gui/public-building-icon/bathhouse.png" />
+    </graphic-set>
+    -->
+    <graphic-set name="public-building-icon/chapel">
+        <static image-file="data/img/gui/public-building-icon/chapel.png" />
+    </graphic-set>
+    <!--
+    <graphic-set name="public-building-icon/church">
+        <static image-file="data/img/gui/public-building-icon/church.png" />
+    </graphic-set>
+    -->
+    <!--
+    <graphic-set name="public-building-icon/high-school">
+        <static image-file="data/img/gui/public-building-icon/high-school.png" />
+    </graphic-set>
+    -->
+    <graphic-set name="public-building-icon/marketplace">
+        <static image-file="data/img/gui/public-building-icon/marketplace.png" />
+    </graphic-set>
+    <graphic-set name="public-building-icon/school">
+        <static image-file="data/img/gui/public-building-icon/school.png" />
+    </graphic-set>
+    <graphic-set name="public-building-icon/tavern">
+        <static image-file="data/img/gui/public-building-icon/tavern.png" />
+    </graphic-set>
+    <!--
+    <graphic-set name="public-building-icon/theater">
+        <static image-file="data/img/gui/public-building-icon/theater.png" />
+    </graphic-set>
+    -->
+
+</graphics>

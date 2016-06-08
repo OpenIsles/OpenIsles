@@ -66,8 +66,6 @@ public:
     }
 
 protected:
-    virtual void loadStaticGraphicSet(const std::string&, const char* graphicFilename);
-
     /**
      * @brief Lädt eine Grafik.
      * Implementierungen wählen die entsprechende Grafik-Implementierung.
@@ -92,6 +90,19 @@ private:
     void loadTiles();
 
     /**
+     * @brief Lädt die Grafiken, die über die `tiles.xml` konfiguriert sind
+     * @param configFilePath Dateipfad der Config-Datei
+     */
+    void loadGraphicsFromXmlConfig(const std::string& configFilePath);
+
+    /**
+     * @brief Lädt eine statische Grafik
+     * @param graphicSet GraphicSet, was die Grafik erhalten soll
+     * @param graphicFilename Dateipfad der Quellgrafik
+     */
+    void loadStaticGraphicSet(GraphicSet* graphicSet, const char* graphicFilename);
+
+    /**
      * @brief Lädt Grafiken für ein Tileset von Straßen.
      * @param streetTileset Tilesetname
      */
@@ -100,21 +111,21 @@ private:
     /**
      * @brief Lädt eine Grafik, die horizontal-gekachelt 4 Ansichten ("south", "east", "north" und "west") enthält.
      *
-     * @param graphicSetName GrafikSet-Name
-     * @param graphicFilename Quellgrafik
+     * @param graphicSet GraphicSet, was die Grafik erhalten soll
+     * @param graphicFilename Dateipfad der Quellgrafik
      */
-    void loadStaticGraphicSetWith4Views(const std::string& graphicSetName, const char* graphicFilename);
+    void loadStaticGraphicSetWith4Views(GraphicSet* graphicSet, const char* graphicFilename);
 
     /**
      * @brief Lädt eine Harvestable-Grafik für erntebare Landschaft. Die Grafik enthält vertikal-gekachelt
-     * 4 Ansichten ("south", "east", "north" und "west"), sowie horizonal-gekachelt `tileStatesCount` verschiedene
+     * 4 Ansichten ("south", "east", "north" und "west"), sowie horizonal-gekachelt `statesCount` verschiedene
      * Wachstums-Zustände.
      *
-     * @param graphicSetName GrafikSet-Name
-     * @param graphicFilename Quellgrafik
-     * @param tileStatesCount Anzahl der Wachstum-Zustände
+     * @param graphicSet GraphicSet, was die Grafik erhalten soll
+     * @param graphicFilename Dateipfad der Quellgrafik
+     * @param statesCount Anzahl der Wachstum-Zustände
      */
-    void loadHarvestablesGraphicSet(const std::string& graphicSetName, const char* graphicFilename, int tileStatesCount);
+    void loadHarvestablesGraphicSet(GraphicSet* graphicSet, const char* graphicFilename, int statesCount);
 
     /**
      * @brief Lädt das Grafik-Set für das MapRotate-Widget
