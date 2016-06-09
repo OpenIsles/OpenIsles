@@ -17,6 +17,7 @@
 #include "map/coords/MapCoords.h"
 #include "map/coords/ScreenCoords.h"
 #include "map/Map.h"
+#include "map/MapObjectUtils.h"
 #include "map/Street.h"
 #include "pathfinding/AStar.h"
 #include "utils/Consts.h"
@@ -343,9 +344,6 @@ void GuiMap::renderTile(const MapCoords& mapCoords) {
         // TODO Vorsicht: doc/drawing-order-x-tiles.xcf ist veraltet -> mapObjectAlreadyDrawnThere gibts nicht mehr
 
         const MapCoords& moMapCoords = mapObjectToDrawHere->getMapCoords();
-        const Structure* structure = dynamic_cast<const Structure*>(mapObjectToDrawHere);
-        const Street* street = dynamic_cast<const Street*>(mapObjectToDrawHere);
-        const Harvestable* harvestable = dynamic_cast<const Harvestable*>(mapObjectToDrawHere);
 
         // Ausrechnen, welchen Schnibbel der Grafik wir anzeigen müssen
         int moMapWidth = mapObjectToDrawHere->getMapWidth();
@@ -375,29 +373,7 @@ void GuiMap::renderTile(const MapCoords& mapCoords) {
 
         const FourthDirection& view = mapObjectToDrawHere->getView();
         const FourthDirection& viewToRender = Direction::addDirections(view, screenView);
-
-        const GraphicSet* mapObjectGraphicSet = mapObjectType->graphicSet;
-
-        // TODO duplicate code
-        const IGraphic* graphicToDrawHere;
-        if (harvestable != nullptr) {
-            GraphicSetKeyState stateToRender =
-                (GraphicSetKeyState) (GraphicSetKeyState::GROWTH0 + int(harvestable->getAge()));
-            assert (stateToRender >= GraphicSetKeyState::GROWTH0 && stateToRender <= GraphicSetKeyState::GROWTH6);
-
-            graphicToDrawHere = mapObjectGraphicSet->getByStateAndView(stateToRender, viewToRender)->getGraphic();
-        }
-        else if (street != nullptr) {
-            const GraphicSetKeyState& stateToRender = street->getStateToRender();
-            graphicToDrawHere = mapObjectGraphicSet->getByStateAndView(stateToRender, viewToRender)->getGraphic();
-        }
-        else if (structure != nullptr) {
-            graphicToDrawHere = mapObjectGraphicSet->getByView(viewToRender)->getGraphic();
-        }
-        else {
-            assert(false);
-            return;
-        }
+        const IGraphic* graphicToDrawHere = MapObjectUtils::getGraphic(*mapObjectToDrawHere, viewToRender);
 
         /* Tricky part: Die Berechnung von xInMapObject und yInMapObject in allen Ansichten.
          *
@@ -783,28 +759,7 @@ const MapObjectFixed* GuiMap::getMapObjectFixedUnderMouseCoords(int mouseX, int 
         const FourthDirection& screenView = map->getScreenView();
         const FourthDirection& structureView = mapObjectFixed->getView();
         const FourthDirection& viewToRender = Direction::addDirections(structureView, screenView);
-
-        const MapObjectType* mapObjectType = mapObjectFixed->getMapObjectType();
-        const GraphicSet* graphicSet = mapObjectType->graphicSet;
-
-        // TODO duplicate code
-        const IGraphic* graphic;
-        if (mapObjectType->type == MapObjectTypeClass::HARVESTABLE) {
-            const Harvestable* harvestable = dynamic_cast<const Harvestable*>(mapObjectFixed);
-
-            GraphicSetKeyState state = (GraphicSetKeyState) (GraphicSetKeyState::GROWTH0 + int(harvestable->getAge()));
-            assert (state >= GraphicSetKeyState::GROWTH0 && state <= GraphicSetKeyState::GROWTH6);
-
-            graphic = graphicSet->getByStateAndView(state, viewToRender)->getGraphic();
-        }
-        else if (mapObjectType->type == MapObjectTypeClass::STREET) {
-            const Street* street = dynamic_cast<const Street*>(mapObjectFixed);
-            const GraphicSetKeyState& state = street->getStateToRender();
-            graphic = graphicSet->getByStateAndView(state, viewToRender)->getGraphic();
-        }
-        else {
-            graphic = graphicSet->getByView(viewToRender)->getGraphic();
-        }
+        const IGraphic* graphic = MapObjectUtils::getGraphic(*mapObjectFixed, viewToRender);
         
         graphic->getPixel(x, y, &r, &g, &b, &a);
 

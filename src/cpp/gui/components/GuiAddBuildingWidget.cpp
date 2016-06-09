@@ -8,6 +8,7 @@
 #include "gui/components/GuiAddBuildingWidget.h"
 #include "gui/components/GuiIconWithStringElement.h"
 #include "map/Street.h"
+#include "map/MapObjectUtils.h"
 #include "utils/StringFormat.h"
 
 
@@ -88,23 +89,7 @@ void GuiAddBuildingWidget::renderElement(IRenderer* renderer) {
 
     // Grafik
     const FourthDirection& view = context.guiMgr->getPanelState().addingMapObjectView;
-    const GraphicSet* graphicSet = mapObjectType->graphicSet;
-
-    // TODO duplicate code
-    const IGraphic* graphic;
-    if (mapObjectType->type == MapObjectTypeClass::HARVESTABLE) {
-        // Harvestable? ausgewachsenen Zustand nehmen
-        unsigned char maxAge = mapObjectType->maxAge;
-        GraphicSetKeyState graphicSetKeyStateFullgrown = (GraphicSetKeyState) (GraphicSetKeyState::GROWTH0 + maxAge);
-        graphic = graphicSet->getByStateAndView(graphicSetKeyStateFullgrown, view)->getGraphic();
-    }
-    else if (mapObjectType->type == MapObjectTypeClass::STREET) {
-        const GraphicSetKeyState& state = GraphicSetKeyState::STRAIGHT0;
-        graphic = graphicSet->getByStateAndView(state, view)->getGraphic();
-    }
-    else {
-        graphic = graphicSet->getByView(view)->getGraphic();
-    }
+    const IGraphic* graphic = MapObjectUtils::getGraphic(mapObjectType, view);
 
     double scale; // ggf. verkleinert zeichnen, wenn das Gebäude zu groß is
     if (graphic-> getWidth() <= 160) {

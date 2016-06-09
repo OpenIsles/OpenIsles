@@ -6,6 +6,7 @@
 #include "map/Building.h"
 #include "map/Map.h"
 #include "map/MapCoordUtils.h"
+#include "map/MapObjectUtils.h"
 #include "map/Street.h"
 
 
@@ -101,26 +102,7 @@ Rect MapCoordUtils::getDrawCoordsForMapObjectFixed(const Map& map, const MapObje
 
     const FourthDirection& structureView = mapObjectFixed->getView();
     const FourthDirection& viewToRender = Direction::addDirections(structureView, map.getScreenView());
-
-    const MapObjectType* mapObjectType = mapObjectFixed->getMapObjectType();
-    const GraphicSet* graphicSet = mapObjectType->graphicSet;
-
-    // TODO duplicate code
-    const IGraphic* graphic;
-    if (mapObjectType->type == MapObjectTypeClass::HARVESTABLE) {
-        // Harvestable? ausgewachsenen Zustand nehmen
-        unsigned char maxAge = mapObjectType->maxAge;
-        GraphicSetKeyState graphicSetKeyStateFullgrown = (GraphicSetKeyState) (GraphicSetKeyState::GROWTH0 + maxAge);
-        graphic = graphicSet->getByStateAndView(graphicSetKeyStateFullgrown, viewToRender)->getGraphic();
-    }
-    else if (mapObjectType->type == MapObjectTypeClass::STREET) {
-        const Street* street = dynamic_cast<const Street*>(mapObjectFixed);
-        const GraphicSetKeyState& state = street->getStateToRender();
-        graphic = graphicSet->getByStateAndView(state, viewToRender)->getGraphic();
-    }
-    else {
-        graphic = graphicSet->getByView(viewToRender)->getGraphic();
-    }
+    const IGraphic* graphic = MapObjectUtils::getGraphic(*mapObjectFixed, viewToRender);
 
     const int elevation = 1; // TODO für Gebäude wie Anlegestelle, Fischerhütte etc. muss auf 0 gesetzt werden
 
