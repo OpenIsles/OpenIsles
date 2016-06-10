@@ -108,6 +108,11 @@ struct MapObjectType {
     const GraphicSet* graphicSet = nullptr;
 
     /**
+     * @brief `true`, wenn das Gebäude während es arbeitet seine Animation abspielt.
+     */
+    bool animateWhenWorking = false;
+
+    /**
       * @brief gibt an, wie das Map-Objekt platziert wird
       */
     StructurePlacing structurePlacing;

@@ -320,7 +320,7 @@
     </building>
 
     <building name="grain-mill" width="2" height="2">
-        <graphic-set name="mapobjects/grain-mill" />
+        <graphic-set name="mapobjects/grain-mill" animate-when-working="true" />
         <!--
         TODO Animationen abhängig vom Zustand des Gebäudes (arbeitet oder tut nix)
         <graphic-set name="mapobjects/grain-mill">

@@ -128,17 +128,18 @@ private:
     void loadHarvestablesGraphicSet(GraphicSet* graphicSet, const char* graphicFilename, int statesCount);
 
     /**
-     * @brief Lädt eine Animation (vertikal-gekachelt 8 Ansichten; horizonal die Frames)
+     * @brief Lädt eine Animation (vertikal-gekachelt 4 oder 8 Ansichten; horizonal die Frames)
      *
      * @param graphicSet GraphicSet, was die Animation erhalten soll
      * @param graphicFilename Dateipfad der Quellgrafik
+     * @param views 4 oder 8, je nachdem, wie viele Ansichten die Animation hat
      * @param state Zustand im GraphicSet, in den die Animation geladen werden soll
      * @param framesCount Anzahl Frames, der in der Grafik enthalten ist
      * @param startFrame (zero-based) Index des ersten Frames für die Animation
      * @endFrame startFrame (zero-based) Index des letzten Frames für die Animation
      */
     void loadAnimationGraphicSet(
-        GraphicSet* graphicSet, const char* graphicFilename, const GraphicSetKeyState& state,
+        GraphicSet* graphicSet, const char* graphicFilename, int views, const GraphicSetKeyState& state,
         int framesCount, int startFrame, int endFrame);
 
     /**

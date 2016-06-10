@@ -3,6 +3,7 @@
 #include "game/Colony.h"
 #include "game/Game.h"
 #include "graphics/graphic/GraphicSetKeyState.h"
+#include "map/MapObjectUtils.h"
 
 
 void Carrier::initRoute(
@@ -67,12 +68,8 @@ bool Carrier::updateObject(const Context& context) {
     unsigned int ticksSinceLastUpdate = getTicksSinceLastUpdate(context);
 
     // Animieren
-    const Animation* animation = getAnimations()[0]; // TODO wir brauchen nur fps und framesCount. Das sollte in allen Richtungen gleich sein.
-
-    animationFrame += (double) ticksSinceLastUpdate / (double) TICKS_PER_SECOND * animation->getFps();
-    while (animationFrame >= animation->getFramesCount()) {
-        animationFrame -= animation->getFramesCount();
-    }
+    const Animation* animation = getAnimations()[0]; // fps und framesCount sollte in allen Richtungen gleich sein!
+    MapObjectUtils::animateObject(*this, animation, context);
 
     // TODO verallgemeinern
     if (state != WALKING) {

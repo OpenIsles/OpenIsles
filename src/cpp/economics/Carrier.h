@@ -68,13 +68,6 @@ private:
     EighthDirection currentMovingDirection;
 
     /**
-     * @brief aktueller Frame der Animation, die grade abgespielt wird. Dieser Wert ist ein double, da fortlaufend
-     * aktualisiert wird. Für das Rendering muss diese Zahl zur Ganzzahl umgewandelt werden.
-     * TODO ggf. macht es mehr Sinn, noch ein Bindeglied (erweitert MapObject) zwischen Animation und der Anwenderklasse zu setzen, die diese Info enthält
-     */
-    double animationFrame;
-
-    /**
      * @brief Zustand des Träger, um zwischen "laufen" und "ernten" zu unterscheiden
      */
     enum {

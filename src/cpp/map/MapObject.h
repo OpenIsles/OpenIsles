@@ -65,6 +65,15 @@ protected:
 
 public:
     /**
+     * @brief aktueller Frame der Animation, die grade abgespielt wird. Dieser Wert ist ein double, da fortlaufend
+     * aktualisiert wird. Für das Rendering muss diese Zahl zur Ganzzahl umgewandelt werden.
+     *
+     * TODO beobachten, ob dieses Feld hier bleiben kann. Evtl. brauchen wir pro Animation-Status einen Counter / Sicherung, wenn die Animation wechselt, dass hier auf 0 resettet wird
+     */
+    double animationFrame = 0;
+
+public:
+    /**
      * @brief Helper, der je nach Map-Objekt-Typ eine konkrete Instanz von `MapObject` erstellt.
      * @param mapObjectType Typ des zu erstellenden Map-Objekts
      * @return neue Instanz eines `MapObject` mit `type` bereits gesetzt

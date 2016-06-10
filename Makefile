@@ -206,11 +206,11 @@ build-add-building-gui: $(TARGET_EXECUTABLE)
 	rm $(SCREENSHOT)
 	
 ########################################################################################################################
-# Gebäude                                                                                                              #
+# Gebäude (statisch)                                                                                                   #
 ########################################################################################################################
 
 BUILDINGS := aristocrats-house1 bakery burghers-house1 butchers cathedral cattle-farm chapel distillery \
-             foresters grain-farm grain-mill hunters-hut marketplace merchants-house1 office1 office2 pier \
+             foresters grain-farm hunters-hut marketplace merchants-house1 office1 office2 pier \
              pioneers-house1 pioneers-house2 pioneers-house3 pioneers-house4 pioneers-house5 \
              school settlers-house1 settlers-house2 settlers-house3 settlers-house4 settlers-house5 \
              sheep-farm square1 spices-plantation square2 square3 stonemason sugarcane-plantation tavern \
@@ -231,6 +231,31 @@ $(DATA_DIRECTORY)/img/buildings/$(1).png: $(SRC_DIRECTORY)/blender/buildings/$(1
 endef
 
 $(foreach BUILDING,$(BUILDINGS),$(eval $(call RENDER_BUILDING,$(BUILDING))))
+
+########################################################################################################################
+# Gebäude (animiert)                                                                                                   #
+########################################################################################################################
+
+BUILDINGS_WITH_ANIMATION := grain-mill
+
+define RENDER_BUILDING_WITH_ANIMATION
+$(DATA_DIRECTORY)/img/buildings/$(1).png: $(SRC_DIRECTORY)/blender/buildings/$(1)/$(1).blend
+	$$(CREATE_TARGET_DIRECTORY)
+	cd $(SRC_DIRECTORY)/blender/buildings/$(1); $(BLENDER) -b $$(notdir $$<) -P ../render-building-with-animation.py
+
+	# geometry muss angegeben werden, sonst greift der Default von 120x120
+	$(MONTAGE) \
+	    $(SRC_DIRECTORY)/blender/buildings/$(1)/render/angle0/* \
+	    $(SRC_DIRECTORY)/blender/buildings/$(1)/render/angle90/* \
+	    $(SRC_DIRECTORY)/blender/buildings/$(1)/render/angle180/* \
+	    $(SRC_DIRECTORY)/blender/buildings/$(1)/render/angle270/* \
+	    -geometry +0+0 -tile x4 $$@
+endef
+
+$(foreach BUILDING_WITH_ANIMATION, \
+  $(BUILDINGS_WITH_ANIMATION),\
+  $(eval $(call RENDER_BUILDING_WITH_ANIMATION,$(BUILDING_WITH_ANIMATION))) \
+)
 
 ########################################################################################################################
 # Straßen                                                                                                              #

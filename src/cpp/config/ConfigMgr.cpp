@@ -106,6 +106,10 @@ void ConfigMgr::loadMapObjectTypes(const std::string& configFilePath) {
         rapidxml::xml_node<>* graphicSetNode = node->first_node("graphic-set", 11, true);
         mapObjectType.graphicSetName = std::string(graphicSetNode->first_attribute("name", 4, true)->value());
 
+        if (graphicSetNode->first_attribute("animate-when-working", 20, true) != nullptr) {
+            mapObjectType.animateWhenWorking = true;
+        }
+
         // TODO <animation>-Unter-Tag auswerten und für die Animationen nutzen
 
         // Structure-Placing

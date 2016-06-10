@@ -142,6 +142,9 @@ TEST(ConfigMgrTest, loadMapObjectTypes) {
     const MapObjectType* settlersHouse3 = configMgr.getMapObjectType("settlers-house3");
     const PopulationTier* settlers = configMgr.getPopulationTier("settlers");
     ASSERT_EQ(settlers, settlersHouse3->populationTier);
+
+    const MapObjectType* grainMill = configMgr.getMapObjectType("grain-mill");
+    ASSERT_TRUE(grainMill->animateWhenWorking);
 }
 
 /**

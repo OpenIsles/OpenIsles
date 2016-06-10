@@ -3,6 +3,7 @@
 #include "config/ConfigMgr.h"
 #include "economics/EconomicsMgr.h"
 #include "game/Game.h"
+#include "map/MapObjectUtils.h"
 #include "utils/DoubleToIntSequence.h"
 
 
@@ -40,6 +41,12 @@ void EconomicsMgr::updateProduction(Building* building) {
 
     if (!areAllInputGoodsHere()) {
         return;
+    }
+
+    // Wir produzieren was -> Animation durchführen
+    if (mapObjectType->animateWhenWorking) {
+        const Animation* animation = MapObjectUtils::getAnimation(*building, Direction::SOUTH); // fps und framesCount sollte in allen Richtungen gleich sein!
+        MapObjectUtils::animateObject(*building, animation, context);
     }
 
     // Waren die Waren grade frisch angeliefert?

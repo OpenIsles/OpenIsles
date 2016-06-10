@@ -138,8 +138,21 @@ void AbstractGraphicsMgr::loadGraphicsFromXmlConfig(const std::string& configFil
 
             // Animation (Frames nach rechts) mit 8 Ansichten (untereinander)
             else if (std::strcmp(nodeName, "animation") == 0) {
-                const char* stateName = subNode->first_attribute("state", 5, true)->value();
+                const char* stateName = nullptr;
+                rapidxml::xml_attribute<>* stateAttribute = subNode->first_attribute("state", 5, true);
+                if (stateAttribute != nullptr) {
+                    stateName = stateAttribute->value();
+                }
+
                 const char* imageFile = subNode->first_attribute("image-file", 10, true)->value();
+
+                int views = std::atoi(subNode->first_attribute("views", 5, true)->value());
+                if (views != 4 && views != 8) {
+                    Log::error(_("Illegal views %d for animation in graphicSet '%s'"),
+                               views, graphicSetName.c_str());
+                    throw std::runtime_error("Illegal views for animation");
+                }
+
                 int framesCount = std::atoi(subNode->first_attribute("frames-count", 12, true)->value());
 
                 int startFrame = 0;
@@ -159,8 +172,10 @@ void AbstractGraphicsMgr::loadGraphicsFromXmlConfig(const std::string& configFil
                     endFrame = std::atoi(framesAttributeValue.substr(c + 1).c_str());
                 }
 
-                GraphicSetKeyState state = GraphicSetKeyState::NONE;
-                if (std::strcmp(stateName, "walking") == 0) {
+                GraphicSetKeyState state = (GraphicSetKeyState) -1;
+                if (stateName == nullptr) {
+                    state = GraphicSetKeyState::NONE;
+                } else if (std::strcmp(stateName, "walking") == 0) {
                     state = GraphicSetKeyState::WALKING;
                 } else if (std::strcmp(stateName, "walking-with-goods") == 0) {
                     state = GraphicSetKeyState::WALKING_WITH_GOODS;
@@ -171,12 +186,13 @@ void AbstractGraphicsMgr::loadGraphicsFromXmlConfig(const std::string& configFil
                 }
                 // TODO weitere Zustände bei Bedarf; nicht alle, weil wir nicht alle brauchen
 
-                if (state == GraphicSetKeyState::NONE) {
-                    Log::error(_("Illegal state '%s' for animation in graphicSet '%s'"), stateName, graphicSetName.c_str());
+                if (state == (GraphicSetKeyState) -1) {
+                    Log::error(_("Illegal state '%s' for animation in graphicSet '%s'"),
+                               stateName, graphicSetName.c_str());
                     throw std::runtime_error("Illegal state for animation");
                 }
 
-                loadAnimationGraphicSet(graphicSet, imageFile, state, framesCount, startFrame, endFrame);
+                loadAnimationGraphicSet(graphicSet, imageFile, views, state, framesCount, startFrame, endFrame);
             }
         }
 
@@ -291,10 +307,11 @@ void AbstractGraphicsMgr::loadHarvestablesGraphicSet(
 }
 
 void AbstractGraphicsMgr::loadAnimationGraphicSet(
-    GraphicSet* graphicSet, const char* graphicFilename, const GraphicSetKeyState& state,
+    GraphicSet* graphicSet, const char* graphicFilename, int views, const GraphicSetKeyState& state,
     int framesCount, int startFrame, int endFrame) {
 
     assert ((startFrame >= 0) && (startFrame <= endFrame) && (endFrame < framesCount));
+    assert (views == 4 || views == 8);
 
     IGraphic* fullGraphic = loadGraphic(graphicFilename);
 
@@ -306,25 +323,48 @@ void AbstractGraphicsMgr::loadAnimationGraphicSet(
     int frameWidth = fullGraphicWidth / framesCount;
 
     int fullGraphicHeight = fullGraphic->getHeight();
-    if (fullGraphicHeight % 8 != 0) {
+    if (fullGraphicHeight % views != 0) {
         Log::error(_("Could not divide the views equally: '%s'"), graphicFilename);
         throw std::runtime_error("Could not divide the views equally");
     }
-    int frameHeight = fullGraphicHeight / 8;
+    int frameHeight = fullGraphicHeight / views;
 
     Rect frameRect(0, 0, frameWidth, frameHeight);
 
-    forEachEighthDirection(view) {
-        Animation* animation = new Animation(endFrame - startFrame + 1);
+    if (views == 8) {
+        forEachEighthDirection(view) {
+            Animation* animation = new Animation(endFrame - startFrame + 1);
 
-        frameRect.x = startFrame * frameWidth;
-        for (int frameIndex = startFrame, i = 0; frameIndex <= endFrame; frameIndex++, i++, frameRect.x += frameWidth) {
-            IGraphic* frameGraphic = loadGraphic(*fullGraphic, frameRect);
-            animation->addFrame(i, frameGraphic);
+            frameRect.x = startFrame * frameWidth;
+            for (int frameIndex = startFrame, i = 0;
+                 frameIndex <= endFrame;
+                 frameIndex++, i++, frameRect.x += frameWidth) {
+
+                IGraphic* frameGraphic = loadGraphic(*fullGraphic, frameRect);
+                animation->addFrame(i, frameGraphic);
+            }
+
+            graphicSet->addByStateAndView(state, view, animation);
+            frameRect.y += frameHeight;
         }
+    } else if (views == 4) {
+        forEachFourthDirection(view) {
+            Animation* animation = new Animation(endFrame - startFrame + 1);
 
-        graphicSet->addByStateAndView(state, view, animation);
-        frameRect.y += frameHeight;
+            frameRect.x = startFrame * frameWidth;
+            for (int frameIndex = startFrame, i = 0;
+                 frameIndex <= endFrame;
+                 frameIndex++, i++, frameRect.x += frameWidth) {
+
+                IGraphic* frameGraphic = loadGraphic(*fullGraphic, frameRect);
+                animation->addFrame(i, frameGraphic);
+            }
+
+            graphicSet->addByStateAndView(state, view, animation);
+            frameRect.y += frameHeight;
+        }
+    } else {
+        assert(false);
     }
 
     delete fullGraphic;

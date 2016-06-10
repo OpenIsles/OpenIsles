@@ -3,7 +3,7 @@
 
 enum GraphicSetKeyState : unsigned char {
 
-    NONE,               ///< kein Zustand (z.&nbsp;B. für Gebäude ohne speziellen Zustand)
+    NONE = 0,           ///< kein Zustand (z.&nbsp;B. für Gebäude ohne speziellen Zustand)
     WORKING,            ///< Gebäude arbeitet
 
     INVENTORY0,         ///< Zustand für verschieden hohe Lagerbestände innerhalb des Gebäude (Steinmetz, Förster)

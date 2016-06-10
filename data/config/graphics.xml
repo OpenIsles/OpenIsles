@@ -106,7 +106,9 @@
         <static-views-horizontal image-file="data/img/buildings/grain-farm.png" />
     </graphic-set>
     <graphic-set name="mapobjects/grain-mill">
-        <static-views-horizontal image-file="data/img/buildings/grain-mill.png" />
+        <animation image-file="data/img/buildings/grain-mill.png"
+                   views="4" frames-count="16" speed="90" />
+        <!-- TODO speed wird noch nicht ausgewertet = "1000 / FPS" = "Millisekunden Frame-Anzeigedauer" -->
     </graphic-set>
     <graphic-set name="mapobjects/bakery">
         <static-views-horizontal image-file="data/img/buildings/bakery.png" />
@@ -147,29 +149,29 @@
 
     <graphic-set name="carrier">
         <animation state="walking" image-file="data/img/animations/carrier.png"
-                   frames-count="31" />
+                   views="8" frames-count="31" />
     </graphic-set>
     <graphic-set name="cart">
         <animation state="walking" image-file="data/img/animations/cart-without-cargo.png"
-                   frames-count="32" />
+                   views="8" frames-count="32" />
         <animation state="walking-with-goods" image-file="data/img/animations/cart-with-cargo.png"
-                   frames-count="32" />
+                   views="8" frames-count="32" />
     </graphic-set>
     <graphic-set name="sheep">
         <animation state="walking" image-file="data/img/animations/sheep0.png"
-                   frames-count="12" frames="0-7" />
+                   views="8" frames-count="12" frames="0-7" />
         <animation state="eating" image-file="data/img/animations/sheep0.png"
-                   frames-count="12" frames="8-11" />
+                   views="8" frames-count="12" frames="8-11" />
         <animation state="walking-with-goods" image-file="data/img/animations/sheep1.png"
-                   frames-count="12" frames="0-7" />
+                   views="8" frames-count="12" frames="0-7" />
         <animation state="eating-with-goods" image-file="data/img/animations/sheep1.png"
-                   frames-count="12" frames="8-11" />
+                   views="8" frames-count="12" frames="8-11" />
     </graphic-set>
     <graphic-set name="cattle">
         <animation state="walking" image-file="data/img/animations/cattle.png"
-                   frames-count="14" frames="0-7" />
+                   views="8" frames-count="14" frames="0-7" />
         <animation state="eating" image-file="data/img/animations/cattle.png"
-                   frames-count="14" frames="8-13" />
+                   views="8" frames-count="14" frames="8-13" />
     </graphic-set>
 
     <!-- statische Grafiken -->

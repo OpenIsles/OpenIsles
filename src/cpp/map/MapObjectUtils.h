@@ -14,6 +14,15 @@ class MapObjectUtils {
 
 public:
     /**
+     * @brief Liefert die Animation für ein Map-Objekt
+     *
+     * @param mapObject Map-Objekt
+     * @param view zu verwendende View
+     * @return zu verwendende Animation
+     */
+    static const Animation* getAnimation(const MapObject& mapObject, const FourthDirection& view);
+
+    /**
      * @brief Liefert die Grafik für ein Map-Objekt
      *
      * @param mapObject Map-Objekt
@@ -34,6 +43,15 @@ public:
      * @return zu verwendende Grafik
      */
     static const IGraphic* getGraphic(const MapObjectType* mapObjectType, const FourthDirection& view);
+
+    /**
+     * Aktualisiert MapObject::animationFrame entsprechend der vergangenen Zeit seit dem letzten Update
+     *
+     * @param mapObject aktualisierendes Map-Objekt
+     * @param animation Animation, die verwendet wird (für FPS und Anzahl Frames)
+     * @param context (Dependency)
+     */
+    static void animateObject(MapObject& mapObject, const Animation* animation, const Context& context);
 
 };
 
