@@ -239,8 +239,8 @@ set(TEST_FILES
 add_definitions("-std=c++11 -Wall -Werror -pedantic")
 include_directories(${CMAKE_SOURCE_DIR}/src/cpp)
 
-# Debug-Build: Maximale Debug-Infos, Optimierung für Debugging. Erlaubt das Inspizieren von Variablen in Lambdas im gdb
-set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g3 -Og")
+# Debug-Build: Maximale Debug-Infos, erlaubt das Inspizieren von Variablen in Lambdas im gdb. Optimierungen aus
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g3 -O0")
 
 # Debuginfos für Debug-Buildconfig aktivieren - nicht vergessen, neue Variablen in die Doxyfile.in einzutragen
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DDEBUG")
