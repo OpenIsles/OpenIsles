@@ -1,6 +1,7 @@
 #ifndef _SHIP_H
 #define _SHIP_H
 
+#include <string>
 #include <vector>
 #include "global.h"
 #include "game/GoodsSlot.h"
@@ -12,6 +13,11 @@
 class Ship : public MapObjectMoving {
 
 public:
+    /**
+     * @brief Name des Schiffs
+     */
+    std::string name;
+
     /**
      * @brief Array aus transportierte Waren
      */
@@ -25,6 +31,14 @@ public:
     Ship(unsigned char goodsSlots);
 
     virtual ~Ship() {
+    }
+
+    const std::string& getName() const {
+        return name;
+    }
+
+    void setName(const std::string& name) {
+        this->name = name;
     }
 
     virtual bool updateObject(const Context& context);

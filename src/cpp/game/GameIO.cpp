@@ -291,6 +291,10 @@ void GameIO::loadMapObjects(Game* game, const ConfigMgr* configMgr, rapidxml::xm
 
             Ship* ship = game->addShip(mapCoords, mapObjectType, direction, player);
 
+            // Name
+            std::string name = std::string(getPropertyValueFromPropertiesNode(propertiesNode, "name"));
+            ship->setName(name);
+
             // Warenslots
             unsigned char slotNumber = 0;
             for (unsigned char i = 1; i <= mapObjectType->goodsSlots; i++) {

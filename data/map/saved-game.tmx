@@ -3814,6 +3814,7 @@
     <property name="goods-on-board1.inventory" value="25"/>
     <property name="goods-on-board2.good" value="tools"/>
     <property name="goods-on-board2.inventory" value="45"/>
+    <property name="name" value="Bau/Handel"/>
     <property name="player" value="1"/>
    </properties>
   </object>
