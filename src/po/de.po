@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenIsles 0.1\n"
 "Report-Msgid-Bugs-To: http://www.openisles.org\n"
-"POT-Creation-Date: 2016-05-29 14:39+0200\n"
-"PO-Revision-Date: 2016-05-08 19:15+0200\n"
+"POT-Creation-Date: 2016-06-11 22:14+0200\n"
+"PO-Revision-Date: 2016-06-11 22:13+0200\n"
 "Last-Translator: theHacker <openisles@openisles.org>\n"
 "Language-Team: theHacker <openisles@openisles.org>\n"
 "Language: de\n"
@@ -410,115 +410,139 @@ msgid_plural "populationTier|settlers|plural"
 msgstr[0] "Siedler"
 msgstr[1] "Siedler"
 
-#: src/cpp/config/ConfigMgr.cpp:21
+# automatically generated out of data xmls
+#: data/config/ships.xml
+msgid "mapObjectType|little-ship"
+msgstr "Kleines Schiff"
+
+#: src/cpp/config/ConfigMgr.cpp:22
 msgid "Loaded goods."
 msgstr "Waren geladen."
 
-#: src/cpp/config/ConfigMgr.cpp:24
+#: src/cpp/config/ConfigMgr.cpp:25
 msgid "Loaded carrier mapObjectTypes."
 msgstr "Träger-Mapobjekt-Typen geladen."
 
-#: src/cpp/config/ConfigMgr.cpp:27
+#: src/cpp/config/ConfigMgr.cpp:28
 msgid "Loaded mapObjectTypes."
 msgstr "Mapobjekt-Typen geladen."
 
-#: src/cpp/config/ConfigMgr.cpp:30
+#: src/cpp/config/ConfigMgr.cpp:31
+msgid "Loaded ship mapObjectTypes."
+msgstr "Schiff-Mapobjekt-Typen geladen."
+
+#: src/cpp/config/ConfigMgr.cpp:34
 msgid "Loaded population tiers."
 msgstr "Bevölkerungsgruppen geladen."
 
-#: src/cpp/config/ConfigMgr.cpp:33
+#: src/cpp/config/ConfigMgr.cpp:37
 msgid "Loaded tiles."
 msgstr "Kacheln geladen."
 
-#: src/cpp/config/ConfigMgr.cpp:39
+#: src/cpp/config/ConfigMgr.cpp:43
 #, c-format
 msgid "Error while loading the configuration: %s."
 msgstr "Fehler beim Laden der Konfiguration: %s."
 
-#: src/cpp/config/ConfigMgr.cpp:96 src/cpp/config/ConfigMgr.cpp:257
+#: src/cpp/config/ConfigMgr.cpp:100 src/cpp/config/ConfigMgr.cpp:270
 #, c-format
 msgid "Illegal node '%s'."
 msgstr "Ungültiger Knoten: '%s'."
 
-#: src/cpp/config/ConfigMgr.cpp:115
+#: src/cpp/config/ConfigMgr.cpp:128
 #, c-format
 msgid "Illegal value '%s' for structurePlacing."
 msgstr "Ungültiger Wert '%s' für structurePlacing."
 
-#: src/cpp/config/ConfigMgr.cpp:235
+#: src/cpp/config/ConfigMgr.cpp:248
 #, c-format
 msgid "Loaded mapObjectType '%s'."
 msgstr "Mapobjekt-Typ '%s' geladen."
 
-#: src/cpp/config/ConfigMgr.cpp:273
+#: src/cpp/config/ConfigMgr.cpp:289
 #, c-format
 msgid "Loaded carrier mapObjectType '%s'."
 msgstr "Träger-Mapobjekt-Typ '%s' geladen."
 
-#: src/cpp/config/ConfigMgr.cpp:360
+#: src/cpp/config/ConfigMgr.cpp:323
+#, c-format
+msgid "Loaded ship mapObjectType '%s'."
+msgstr "Schiff-Mapobjekt-Typ '%s' geladen."
+
+#: src/cpp/config/ConfigMgr.cpp:410
 #, c-format
 msgid "Illegal mapTileTypeName '%s'."
 msgstr "Ungültiger mapTileTypeName '%s'."
 
-#: src/cpp/config/ConfigMgr.cpp:378
+#: src/cpp/config/ConfigMgr.cpp:428
 #, c-format
 msgid "Illegal bool value '%s'."
 msgstr "Ungültiger boolescher Wert '%s'."
 
-#: src/cpp/config/ConfigMgr.cpp:414
+#: src/cpp/config/ConfigMgr.cpp:464
 msgid "Could not parse catchmentArea: Illegal char before first line."
 msgstr ""
 "Konnte catchmentArea nicht parsen: Ungültiges Zeichen vor der ersten Zeile."
 
-#: src/cpp/config/ConfigMgr.cpp:423
+#: src/cpp/config/ConfigMgr.cpp:473
 msgid "Could not parse catchmentArea: Illegal space inside line."
 msgstr ""
 "Konnte catchmentArea nicht parsen: Ungültiges Leerzeichen innerhalb einer "
 "Zeile."
 
-#: src/cpp/config/ConfigMgr.cpp:438
+#: src/cpp/config/ConfigMgr.cpp:488
 msgid "Could not parse catchmentArea: widths are not equal."
 msgstr "Konnte catchmentArea nicht parsen: Breiten sind nicht gleich."
 
-#: src/cpp/config/ConfigMgr.cpp:449
+#: src/cpp/config/ConfigMgr.cpp:499
 msgid "Could not parse catchmentArea: Last line was not completly empty."
 msgstr ""
 "Konnte catchmentArea nicht parsen: Letzte Zeile war nicht komplett leer."
 
-#: src/cpp/config/ConfigMgr.cpp:546
+#: src/cpp/config/ConfigMgr.cpp:596
 #, c-format
 msgid "Loaded populationTier '%s'."
 msgstr "Bevölkerungsgruppe '%s' geladen."
 
-#: src/cpp/config/ConfigMgr.cpp:572
+#: src/cpp/config/ConfigMgr.cpp:622
 #, c-format
 msgid "Illegal value '%s' for populationTier."
 msgstr "Ungültiger Wert '%s' für populationTier."
 
-#: src/cpp/game/Game.cpp:192
+#: src/cpp/game/Game.cpp:211
 msgid "Cannot have negative inhabitants."
 msgstr "Negative Bewohnerzahl nicht möglich."
 
-#: src/cpp/game/GameIO.cpp:92
+#: src/cpp/game/GameIO.cpp:95
 #, c-format
 msgid "Illegal player color '%s'."
 msgstr "Ungültige Spielerfarbe: '%s'."
 
-#: src/cpp/game/GameIO.cpp:144
+#: src/cpp/game/GameIO.cpp:147
 #, c-format
 msgid "Isle '%s' (%dx%d) does not match size on map (%dx%d)."
 msgstr ""
 "Insel '%s' (%dx%d) stimmt nicht mit der Größe auf der Karte überein (%dx%d)."
 
-#: src/cpp/game/GameIO.cpp:236
+#: src/cpp/game/GameIO.cpp:239
 #, c-format
 msgid "Warning: Did not find Good '%s' in savefile."
 msgstr "Warnung: Gut '%s' nicht in der Spieldatei gefunden."
 
-#: src/cpp/game/GameIO.cpp:251
+#: src/cpp/game/GameIO.cpp:255
 #, c-format
 msgid "Illegal mapObjectType '%s'."
 msgstr "Ungültiger Mapobjekt-Typ '%s'."
+
+#: src/cpp/game/GameIO.cpp:306
+#, c-format
+msgid "Warning: Ship has loaded unknown Good '%s'."
+msgstr "Warnung: Schiff hat unbekanntes Gut '%s' geladen."
+
+#: src/cpp/game/GameIO.cpp:313
+#, c-format
+msgid "Warning: Ship has illegal inventory %d for Good '%s'."
+msgstr "Warnung: Schiff hat ungültigen Lagerbestand %d für Gut '%s'."
 
 #: src/cpp/game/Player.h:90
 #, c-format
@@ -532,6 +556,11 @@ msgstr "Animation hat nicht nur ein Frame."
 #: src/cpp/graphics/graphic/Animation.h:89
 msgid "Animation does not have this many frames."
 msgstr "Animation hat nicht so viele Frames."
+
+#: src/cpp/graphics/graphic/GraphicSet.h:185
+#, c-format
+msgid "Count not find animation (%d, %d) on GraphicSet."
+msgstr "Konnte Animation (%d, %d) nicht im Grafik-Set finden."
 
 #: src/cpp/graphics/graphic/sdl/SDLGraphic.cpp:13
 #, c-format
@@ -568,15 +597,55 @@ msgstr "Konnte Textur nicht erzeugen: %s"
 msgid "Illegal bytesPerPixel: %d"
 msgstr "Ungültige bytesPerPixel: %d"
 
-#: src/cpp/graphics/mgr/AbstractGraphicsMgr.cpp:254
+#: src/cpp/graphics/mgr/AbstractGraphicsMgr.cpp:151
+#, c-format
+msgid "Illegal views %d for animation in graphicSet '%s'"
+msgstr "Ungültige views %d für Animation im Grafik-Set '%s'"
+
+#: src/cpp/graphics/mgr/AbstractGraphicsMgr.cpp:172
+#, c-format
+msgid "Could not parse frames '%s'"
+msgstr "Konnte frames '%s' nicht parsen"
+
+#: src/cpp/graphics/mgr/AbstractGraphicsMgr.cpp:195
+#, c-format
+msgid "Illegal state '%s' for animation in graphicSet '%s'"
+msgstr "Ungültiger state '%s' für Animation im Grafik-Set '%s'"
+
+#: src/cpp/graphics/mgr/AbstractGraphicsMgr.cpp:206
+#, c-format
+msgid "No graphics load for graphicSet '%s'"
+msgstr "Keine Grafiken für Grafik-Set '%s' geladen"
+
+#: src/cpp/graphics/mgr/AbstractGraphicsMgr.cpp:284
+#, c-format
+msgid "Illegal statesCount %d for graphicFilename %s"
+msgstr "Ungültiger statesCount %d für graphicFilename %s"
+
+#: src/cpp/graphics/mgr/AbstractGraphicsMgr.cpp:325
 #, c-format
 msgid "Could not divide the frames equally: '%s'"
 msgstr "Konnte die Frames nicht gleichmäßig aufteilen: '%s'"
 
-#: src/cpp/graphics/mgr/AbstractGraphicsMgr.cpp:261
+#: src/cpp/graphics/mgr/AbstractGraphicsMgr.cpp:332
 #, c-format
 msgid "Could not divide the views equally: '%s'"
 msgstr "Konnte die Ansichten nicht gleichmaßig aufteilen: '%s'"
+
+#: src/cpp/graphics/mgr/AbstractGraphicsMgr.cpp:442
+#, c-format
+msgid "No graphicSet defined for mapObjectType '%s'"
+msgstr "Kein Grafik-Set definiert für mapObjectType '%s'"
+
+#: src/cpp/graphics/mgr/AbstractGraphicsMgr.cpp:448
+#, c-format
+msgid "Could not find graphicSet: '%s'"
+msgstr "Konnte Grafik-Set '%s' nicht finden"
+
+#: src/cpp/graphics/mgr/AbstractGraphicsMgr.h:60
+#, c-format
+msgid "Count not find graphicSet '%s'."
+msgstr "Konnte Grafik-Set '%s' nicht finden."
 
 #: src/cpp/graphics/renderer/sdl/SDLRenderer.cpp:12
 #, c-format
@@ -660,27 +729,27 @@ msgstr ""
 "Kann Pixeldaten für den Screenshot nicht ermitteln. Es fehlen nun Pixel auf "
 "dem Riesenscreenshot."
 
-#: src/cpp/gui/components/GuiAddBuildingWidget.cpp:40
+#: src/cpp/gui/components/GuiAddBuildingWidget.cpp:41
 msgid "Costs for this structure"
 msgstr "Errichtungskosten für dieses Bauwerk"
 
-#: src/cpp/gui/components/GuiAddBuildingWidget.cpp:46
+#: src/cpp/gui/components/GuiAddBuildingWidget.cpp:47
 msgid "Operating costs for this structure"
 msgstr "Betriebskosten für dieses Bauwerk"
 
-#: src/cpp/gui/components/GuiAddBuildingWidget.cpp:58
+#: src/cpp/gui/components/GuiAddBuildingWidget.cpp:59
 msgid "Tools requirement for this structure"
 msgstr "Werkzeugbedarf für dieses Bauwerk"
 
-#: src/cpp/gui/components/GuiAddBuildingWidget.cpp:64
+#: src/cpp/gui/components/GuiAddBuildingWidget.cpp:65
 msgid "Wood requirement for this structure"
 msgstr "Holzbedarf für dieses Bauwerk"
 
-#: src/cpp/gui/components/GuiAddBuildingWidget.cpp:70
+#: src/cpp/gui/components/GuiAddBuildingWidget.cpp:71
 msgid "Bricks requirement for this structure"
 msgstr "Ziegelbedarf für dieses Bauwerk"
 
-#: src/cpp/gui/components/GuiAddBuildingWidget.cpp:152
+#: src/cpp/gui/components/GuiAddBuildingWidget.cpp:136
 msgid "Demolish"
 msgstr "Abreißen"
 
@@ -692,23 +761,23 @@ msgstr "Nahrung"
 msgid "Food supply (State equal over all tiers)"
 msgstr "Nahrungsversorgung (Status für alle Gruppen gleich)"
 
-#: src/cpp/gui/components/GuiMapRotateWidget.cpp:14
+#: src/cpp/gui/components/GuiMapRotateWidget.cpp:15
 msgid "Rotate map counterclockwise"
 msgstr "Karte linksherum drehen"
 
-#: src/cpp/gui/components/GuiMapRotateWidget.cpp:21
+#: src/cpp/gui/components/GuiMapRotateWidget.cpp:22
 msgid "Rotate map clockwise"
 msgstr "Karte rechtsherum drehen"
 
-#: src/cpp/gui/components/GuiMapZoomWidget.cpp:15
+#: src/cpp/gui/components/GuiMapZoomWidget.cpp:16
 msgid "Zoom in"
 msgstr "Ansicht vergrößern"
 
-#: src/cpp/gui/components/GuiMapZoomWidget.cpp:23
+#: src/cpp/gui/components/GuiMapZoomWidget.cpp:24
 msgid "Zoom out"
 msgstr "Ansicht verkleinern"
 
-#: src/cpp/gui/components/map/GuiMap.cpp:615
+#: src/cpp/gui/components/map/GuiMap.cpp:579
 msgid "TODO - Island's richness of soil"
 msgstr "TODO - Fruchtbarkeit der Insel"
 
@@ -918,7 +987,7 @@ msgstr "Daten sind nicht CSV-kodiert. Encoding = %s"
 msgid "mapCoords (%d, %d) out of bounds."
 msgstr "mapCoords (%d, %d) außerhalb des Begrenzung."
 
-#: src/cpp/map/Map.cpp:31
+#: src/cpp/map/Map.cpp:32
 msgid "Map has to be quadratically for now. ;-p"
 msgstr "Die Karte muss aktuell noch quadratisch sein. ;-p"
 

@@ -39,6 +39,18 @@ foreach ($nodes as $node) {
 	);
 }
 
+// Schiffe
+
+$mapObjectsXml = simplexml_load_file("$dataDir/config/ships.xml");
+$nodes = $mapObjectsXml->xpath('/ships/*/@name');
+
+foreach ($nodes as $node) {
+	$msgIds[] = array(
+		'file' => 'data/config/ships.xml',
+		'msgid' => "mapObjectType|$node"
+	);
+}
+
 // Bevölkerungsgruppen
 
 $populationTiersXml = simplexml_load_file("$dataDir/config/population-tiers.xml");

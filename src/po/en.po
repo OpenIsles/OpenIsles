@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenIsles 0.1\n"
 "Report-Msgid-Bugs-To: http://www.openisles.org\n"
-"POT-Creation-Date: 2016-05-29 14:39+0200\n"
-"PO-Revision-Date: 2016-05-08 19:16+0200\n"
+"POT-Creation-Date: 2016-06-11 22:14+0200\n"
+"PO-Revision-Date: 2016-06-11 22:09+0200\n"
 "Last-Translator: theHacker <openisles@openisles.org>\n"
 "Language-Team: theHacker <openisles@openisles.org>\n"
 "Language: en\n"
@@ -410,110 +410,134 @@ msgid_plural "populationTier|settlers|plural"
 msgstr[0] "Settler"
 msgstr[1] "Settlers"
 
-#: src/cpp/config/ConfigMgr.cpp:21
+# automatically generated out of data xmls
+#: data/config/ships.xml
+msgid "mapObjectType|little-ship"
+msgstr "Little ship"
+
+#: src/cpp/config/ConfigMgr.cpp:22
 msgid "Loaded goods."
 msgstr "Loaded goods."
 
-#: src/cpp/config/ConfigMgr.cpp:24
+#: src/cpp/config/ConfigMgr.cpp:25
 msgid "Loaded carrier mapObjectTypes."
 msgstr "Loaded carrier mapObjectTypes."
 
-#: src/cpp/config/ConfigMgr.cpp:27
+#: src/cpp/config/ConfigMgr.cpp:28
 msgid "Loaded mapObjectTypes."
 msgstr "Loaded mapObjectTypes."
 
-#: src/cpp/config/ConfigMgr.cpp:30
+#: src/cpp/config/ConfigMgr.cpp:31
+msgid "Loaded ship mapObjectTypes."
+msgstr "Loaded ship mapObjectTypes."
+
+#: src/cpp/config/ConfigMgr.cpp:34
 msgid "Loaded population tiers."
 msgstr "Loaded population tiers."
 
-#: src/cpp/config/ConfigMgr.cpp:33
+#: src/cpp/config/ConfigMgr.cpp:37
 msgid "Loaded tiles."
 msgstr "Loaded tiles."
 
-#: src/cpp/config/ConfigMgr.cpp:39
+#: src/cpp/config/ConfigMgr.cpp:43
 #, c-format
 msgid "Error while loading the configuration: %s."
 msgstr "Error while loading the configuration: %s."
 
-#: src/cpp/config/ConfigMgr.cpp:96 src/cpp/config/ConfigMgr.cpp:257
+#: src/cpp/config/ConfigMgr.cpp:100 src/cpp/config/ConfigMgr.cpp:270
 #, c-format
 msgid "Illegal node '%s'."
 msgstr "Illegal node '%s'."
 
-#: src/cpp/config/ConfigMgr.cpp:115
+#: src/cpp/config/ConfigMgr.cpp:128
 #, c-format
 msgid "Illegal value '%s' for structurePlacing."
 msgstr "Illegal value '%s' for structurePlacing."
 
-#: src/cpp/config/ConfigMgr.cpp:235
+#: src/cpp/config/ConfigMgr.cpp:248
 #, c-format
 msgid "Loaded mapObjectType '%s'."
 msgstr "Loaded mapObjectType '%s'."
 
-#: src/cpp/config/ConfigMgr.cpp:273
+#: src/cpp/config/ConfigMgr.cpp:289
 #, c-format
 msgid "Loaded carrier mapObjectType '%s'."
 msgstr "Loaded carrier mapObjectType '%s'."
 
-#: src/cpp/config/ConfigMgr.cpp:360
+#: src/cpp/config/ConfigMgr.cpp:323
+#, c-format
+msgid "Loaded ship mapObjectType '%s'."
+msgstr "Loaded ship mapObjectType '%s'."
+
+#: src/cpp/config/ConfigMgr.cpp:410
 #, c-format
 msgid "Illegal mapTileTypeName '%s'."
 msgstr "Illegal mapTileTypeName '%s'."
 
-#: src/cpp/config/ConfigMgr.cpp:378
+#: src/cpp/config/ConfigMgr.cpp:428
 #, c-format
 msgid "Illegal bool value '%s'."
 msgstr "Illegal bool value '%s'."
 
-#: src/cpp/config/ConfigMgr.cpp:414
+#: src/cpp/config/ConfigMgr.cpp:464
 msgid "Could not parse catchmentArea: Illegal char before first line."
 msgstr "Could not parse catchmentArea: Illegal char before first line."
 
-#: src/cpp/config/ConfigMgr.cpp:423
+#: src/cpp/config/ConfigMgr.cpp:473
 msgid "Could not parse catchmentArea: Illegal space inside line."
 msgstr "Could not parse catchmentArea: Illegal space inside line."
 
-#: src/cpp/config/ConfigMgr.cpp:438
+#: src/cpp/config/ConfigMgr.cpp:488
 msgid "Could not parse catchmentArea: widths are not equal."
 msgstr "Could not parse catchmentArea: widths are not equal."
 
-#: src/cpp/config/ConfigMgr.cpp:449
+#: src/cpp/config/ConfigMgr.cpp:499
 msgid "Could not parse catchmentArea: Last line was not completly empty."
 msgstr "Could not parse catchmentArea: Last line was not completly empty."
 
-#: src/cpp/config/ConfigMgr.cpp:546
+#: src/cpp/config/ConfigMgr.cpp:596
 #, c-format
 msgid "Loaded populationTier '%s'."
 msgstr "Loaded populationTier '%s'."
 
-#: src/cpp/config/ConfigMgr.cpp:572
+#: src/cpp/config/ConfigMgr.cpp:622
 #, c-format
 msgid "Illegal value '%s' for populationTier."
 msgstr "Illegal value '%s' for populationTier."
 
-#: src/cpp/game/Game.cpp:192
+#: src/cpp/game/Game.cpp:211
 msgid "Cannot have negative inhabitants."
 msgstr "Cannot have negative inhabitants."
 
-#: src/cpp/game/GameIO.cpp:92
+#: src/cpp/game/GameIO.cpp:95
 #, c-format
 msgid "Illegal player color '%s'."
 msgstr "Illegal player color '%s'."
 
-#: src/cpp/game/GameIO.cpp:144
+#: src/cpp/game/GameIO.cpp:147
 #, c-format
 msgid "Isle '%s' (%dx%d) does not match size on map (%dx%d)."
 msgstr "Isle '%s' (%dx%d) does not match size on map (%dx%d)."
 
-#: src/cpp/game/GameIO.cpp:236
+#: src/cpp/game/GameIO.cpp:239
 #, c-format
 msgid "Warning: Did not find Good '%s' in savefile."
 msgstr "Warning: Did not find Good '%s' in savefile."
 
-#: src/cpp/game/GameIO.cpp:251
+#: src/cpp/game/GameIO.cpp:255
 #, c-format
 msgid "Illegal mapObjectType '%s'."
 msgstr "Illegal mapObjectType '%s'."
+
+#: src/cpp/game/GameIO.cpp:306
+#, c-format
+msgid "Warning: Ship has loaded unknown Good '%s'."
+msgstr "Warning: Ship has loaded unknown Good '%s'."
+
+#: src/cpp/game/GameIO.cpp:313
+#, c-format
+msgid "Warning: Ship has illegal inventory %d for Good '%s'."
+msgstr "Warning: Ship has illegal inventory %d for Good '%s'."
 
 #: src/cpp/game/Player.h:90
 #, c-format
@@ -527,6 +551,11 @@ msgstr "Animation does not have only frame."
 #: src/cpp/graphics/graphic/Animation.h:89
 msgid "Animation does not have this many frames."
 msgstr "Animation does not have this many frames."
+
+#: src/cpp/graphics/graphic/GraphicSet.h:185
+#, c-format
+msgid "Count not find animation (%d, %d) on GraphicSet."
+msgstr "Count not find animation (%d, %d) on GraphicSet."
 
 #: src/cpp/graphics/graphic/sdl/SDLGraphic.cpp:13
 #, c-format
@@ -563,15 +592,55 @@ msgstr "Could not create texture: %s"
 msgid "Illegal bytesPerPixel: %d"
 msgstr "Illegal bytesPerPixel: %d"
 
-#: src/cpp/graphics/mgr/AbstractGraphicsMgr.cpp:254
+#: src/cpp/graphics/mgr/AbstractGraphicsMgr.cpp:151
+#, c-format
+msgid "Illegal views %d for animation in graphicSet '%s'"
+msgstr "Illegal views %d for animation in graphicSet '%s'"
+
+#: src/cpp/graphics/mgr/AbstractGraphicsMgr.cpp:172
+#, c-format
+msgid "Could not parse frames '%s'"
+msgstr "Could not parse frames '%s'"
+
+#: src/cpp/graphics/mgr/AbstractGraphicsMgr.cpp:195
+#, c-format
+msgid "Illegal state '%s' for animation in graphicSet '%s'"
+msgstr "Illegal state '%s' for animation in graphicSet '%s'"
+
+#: src/cpp/graphics/mgr/AbstractGraphicsMgr.cpp:206
+#, c-format
+msgid "No graphics load for graphicSet '%s'"
+msgstr "No graphics load for graphicSet '%s'"
+
+#: src/cpp/graphics/mgr/AbstractGraphicsMgr.cpp:284
+#, c-format
+msgid "Illegal statesCount %d for graphicFilename %s"
+msgstr "Illegal statesCount %d for graphicFilename %s"
+
+#: src/cpp/graphics/mgr/AbstractGraphicsMgr.cpp:325
 #, c-format
 msgid "Could not divide the frames equally: '%s'"
 msgstr "Could not divide the frames equally: '%s'"
 
-#: src/cpp/graphics/mgr/AbstractGraphicsMgr.cpp:261
+#: src/cpp/graphics/mgr/AbstractGraphicsMgr.cpp:332
 #, c-format
 msgid "Could not divide the views equally: '%s'"
 msgstr "Could not divide the views equally: '%s'"
+
+#: src/cpp/graphics/mgr/AbstractGraphicsMgr.cpp:442
+#, c-format
+msgid "No graphicSet defined for mapObjectType '%s'"
+msgstr "No graphicSet defined for mapObjectType '%s'"
+
+#: src/cpp/graphics/mgr/AbstractGraphicsMgr.cpp:448
+#, c-format
+msgid "Could not find graphicSet: '%s'"
+msgstr "Could not find graphicSet: '%s'"
+
+#: src/cpp/graphics/mgr/AbstractGraphicsMgr.h:60
+#, c-format
+msgid "Count not find graphicSet '%s'."
+msgstr "Count not find graphicSet '%s'."
 
 #: src/cpp/graphics/renderer/sdl/SDLRenderer.cpp:12
 #, c-format
@@ -655,27 +724,27 @@ msgstr ""
 "Cannot get pixel data for screenshot. There are now pixels missing on the "
 "big screenshot."
 
-#: src/cpp/gui/components/GuiAddBuildingWidget.cpp:40
+#: src/cpp/gui/components/GuiAddBuildingWidget.cpp:41
 msgid "Costs for this structure"
 msgstr "Costs for this structure"
 
-#: src/cpp/gui/components/GuiAddBuildingWidget.cpp:46
+#: src/cpp/gui/components/GuiAddBuildingWidget.cpp:47
 msgid "Operating costs for this structure"
 msgstr "Operating costs for this structure"
 
-#: src/cpp/gui/components/GuiAddBuildingWidget.cpp:58
+#: src/cpp/gui/components/GuiAddBuildingWidget.cpp:59
 msgid "Tools requirement for this structure"
 msgstr "Tools requirement for this structure"
 
-#: src/cpp/gui/components/GuiAddBuildingWidget.cpp:64
+#: src/cpp/gui/components/GuiAddBuildingWidget.cpp:65
 msgid "Wood requirement for this structure"
 msgstr "Wood requirement for this structure"
 
-#: src/cpp/gui/components/GuiAddBuildingWidget.cpp:70
+#: src/cpp/gui/components/GuiAddBuildingWidget.cpp:71
 msgid "Bricks requirement for this structure"
 msgstr "Bricks requirement for this structure"
 
-#: src/cpp/gui/components/GuiAddBuildingWidget.cpp:152
+#: src/cpp/gui/components/GuiAddBuildingWidget.cpp:136
 msgid "Demolish"
 msgstr "Demolish"
 
@@ -687,23 +756,23 @@ msgstr "Food"
 msgid "Food supply (State equal over all tiers)"
 msgstr "Food supply (State equal over all tiers)"
 
-#: src/cpp/gui/components/GuiMapRotateWidget.cpp:14
+#: src/cpp/gui/components/GuiMapRotateWidget.cpp:15
 msgid "Rotate map counterclockwise"
 msgstr "Rotate map counterclockwise"
 
-#: src/cpp/gui/components/GuiMapRotateWidget.cpp:21
+#: src/cpp/gui/components/GuiMapRotateWidget.cpp:22
 msgid "Rotate map clockwise"
 msgstr "Rotate map clockwise"
 
-#: src/cpp/gui/components/GuiMapZoomWidget.cpp:15
+#: src/cpp/gui/components/GuiMapZoomWidget.cpp:16
 msgid "Zoom in"
 msgstr "Zoom in"
 
-#: src/cpp/gui/components/GuiMapZoomWidget.cpp:23
+#: src/cpp/gui/components/GuiMapZoomWidget.cpp:24
 msgid "Zoom out"
 msgstr "Zoom out"
 
-#: src/cpp/gui/components/map/GuiMap.cpp:615
+#: src/cpp/gui/components/map/GuiMap.cpp:579
 msgid "TODO - Island's richness of soil"
 msgstr "TODO - Island's richness of soil"
 
@@ -913,7 +982,7 @@ msgstr "Data is not csv encoded. Encoding = %s"
 msgid "mapCoords (%d, %d) out of bounds."
 msgstr "mapCoords (%d, %d) out of bounds."
 
-#: src/cpp/map/Map.cpp:31
+#: src/cpp/map/Map.cpp:32
 msgid "Map has to be quadratically for now. ;-p"
 msgstr "Map has to be quadratically for now. ;-p"
 
