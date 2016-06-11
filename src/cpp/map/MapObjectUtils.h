@@ -17,19 +17,19 @@ public:
      * @brief Liefert die Animation für ein Map-Objekt
      *
      * @param mapObject Map-Objekt
-     * @param view zu verwendende View
+     * @param screenView aktuelle Ansicht der Karte
      * @return zu verwendende Animation
      */
-    static const Animation* getAnimation(const MapObject& mapObject, const FourthDirection& view);
+    static const Animation* getAnimation(const MapObject& mapObject, const FourthDirection& screenView);
 
     /**
      * @brief Liefert die Grafik für ein Map-Objekt
      *
      * @param mapObject Map-Objekt
-     * @param view zu verwendende View
+     * @param screenView aktuelle Ansicht der Karte
      * @return zu verwendende Grafik
      */
-    static const IGraphic* getGraphic(const MapObject& mapObject, const FourthDirection& view);
+    static const IGraphic* getGraphic(const MapObject& mapObject, const FourthDirection& screenView);
 
     /**
      * @brief Liefert die Grafik für einen Map-Objekt-Typ. Das wird für Baumenü verwendet, wo wir keine konkrete
@@ -42,7 +42,7 @@ public:
      * @param view zu verwendende View
      * @return zu verwendende Grafik
      */
-    static const IGraphic* getGraphic(const MapObjectType* mapObjectType, const FourthDirection& view);
+    static const IGraphic* getGraphic(const MapObjectType* mapObjectType, const EighthDirection& view);
 
     /**
      * Aktualisiert MapObject::animationFrame entsprechend der vergangenen Zeit seit dem letzten Update

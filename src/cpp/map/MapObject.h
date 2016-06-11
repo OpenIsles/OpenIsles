@@ -276,6 +276,10 @@ public:
     const EighthDirection& getCurrentMovingDirection() const {
         return currentMovingDirection;
     }
+
+    void setCurrentMovingDirection(const EighthDirection& currentMovingDirection) {
+        this->currentMovingDirection = currentMovingDirection;
+    }
 };
 
 #endif

@@ -18,6 +18,7 @@
 #include "map/coords/ScreenCoords.h"
 #include "map/Map.h"
 #include "map/MapObjectUtils.h"
+#include "map/Ship.h"
 #include "map/Street.h"
 #include "pathfinding/AStar.h"
 #include "utils/Consts.h"
@@ -371,9 +372,7 @@ void GuiMap::renderTile(const MapCoords& mapCoords) {
             drawingFlags = IGraphic::DRAWING_FLAG_MASKED;
         }
 
-        const FourthDirection& view = mapObjectToDrawHere->getView();
-        const FourthDirection& viewToRender = Direction::addDirections(view, screenView);
-        const IGraphic* graphicToDrawHere = MapObjectUtils::getGraphic(*mapObjectToDrawHere, viewToRender);
+        const IGraphic* graphicToDrawHere = MapObjectUtils::getGraphic(*mapObjectToDrawHere, screenView);
 
         /* Tricky part: Die Berechnung von xInMapObject und yInMapObject in allen Ansichten.
          *
@@ -465,45 +464,11 @@ void GuiMap::renderTile(const MapCoords& mapCoords) {
     for (auto iter = mapTile->mapObjectsMoving.cbegin(); iter != mapTile->mapObjectsMoving.cend(); iter++) {
         MapObjectMoving* mapObject = *iter;
 
-        Carrier* carrier = dynamic_cast<Carrier*>(mapObject);
-        if (carrier != nullptr) {
-            // TODO Carrier können später MEHRERE Animationen haben ("stehen und ernten", "laufen").
-            // TODO Carrier sollte die untenstehende Logik als getCurrentAnimationFrame(const FourDirection& screenView) kapseln
+        const IGraphic* animationCurrentFrame = MapObjectUtils::getGraphic(*mapObject, screenView);
+        Rect rect = MapCoordUtils::mapToDrawCoords(
+            mapObject->getMapCoords(), *map, 1, *animationCurrentFrame, mapObject->getMapWidth(), mapObject->getMapHeight());
 
-            // Übersetzung von "Laufrichtung" + "aktuelle Ansicht" in korrekte Animation
-            unsigned char animViewIndex = (10 - carrier->getCurrentMovingDirection() + screenView) % 8;
-
-            const DoubleMapCoords& mapCoords = carrier->getMapCoords();
-            const Animation* animation = carrier->getAnimations()[animViewIndex];
-            const IGraphic* animationCurrentFrame = animation->getFrame((unsigned int) carrier->animationFrame);
-
-            Rect rect = MapCoordUtils::mapToDrawCoords(
-                mapCoords, *map, 1, *animationCurrentFrame, carrier->getMapWidth(), carrier->getMapHeight());
-
-            animationCurrentFrame->drawScaledAt(rect.x, rect.y, (double) 1 / (double) screenZoom);
-            continue;
-        }
-
-        Ship* ship = dynamic_cast<Ship*>(mapObject);
-        if (ship != nullptr) {
-            // TODO Schiffe können später MEHRERE Animationen haben ("vor Anker", "segeln").
-
-            // Übersetzung von "Richtung" + "aktuelle Ansicht" in korrekte Animation
-            unsigned char animViewIndex = (10 - ship->getCurrentMovingDirection() + screenView) % 8;
-
-            const DoubleMapCoords& mapCoords = ship->getMapCoords();
-            const Animation* animation =
-                ship->getMapObjectType()->graphicSet->getByView((GraphicSetKeyView) animViewIndex); // TODO verbessern später ;)
-            const IGraphic* animationCurrentFrame = animation->getFrame((unsigned int) ship->animationFrame);
-
-            Rect rect = MapCoordUtils::mapToDrawCoords(
-                mapCoords, *map, 1, *animationCurrentFrame, ship->getMapWidth(), ship->getMapHeight());
-
-            animationCurrentFrame->drawScaledAt(rect.x, rect.y, (double) 1 / (double) screenZoom);
-            continue;
-        }
-
-        assert(false);
+        animationCurrentFrame->drawScaledAt(rect.x, rect.y, (double) 1 / (double) screenZoom);
     }
 }
 
@@ -600,9 +565,9 @@ bool GuiMap::onEventElement(SDL_Event& event) {
 
     // Mauszeiger bewegt? Dann Statuszeile aktualisieren
     if (event.type == SDL_MOUSEMOTION && hitTest(event.motion.x, event.motion.y)) {
-        const MapObjectFixed* mapObjectFixed = getMapObjectFixedUnderMouseCoords(event.button.x, event.button.y);
-        if (mapObjectFixed != nullptr && !mapObjectFixed->getMapObjectType()->isForest) {
-            context.guiMgr->setStatusBarText(_(mapObjectFixed->getMapObjectType()->getTitleMsgid()));
+        const MapObject* mapObject = getClickableMapObjectUnderMouseCoords(event.button.x, event.button.y);
+        if (mapObject != nullptr && !mapObject->getMapObjectType()->isForest) {
+            context.guiMgr->setStatusBarText(_(mapObject->getMapObjectType()->getTitleMsgid()));
         } else {
             const Map* map = context.game->getMap();
             const MapCoords& mapCoords = MapCoordUtils::getMapCoordsUnderMouse(*map, event.motion.x, event.motion.y);
@@ -739,22 +704,25 @@ void GuiMap::updateHoverObject() {
     }
 }
 
-const MapObjectFixed* GuiMap::getMapObjectFixedUnderMouseCoords(int mouseX, int mouseY) {
+const MapObject* GuiMap::getClickableMapObjectUnderMouseCoords(int mouseX, int mouseY) {
     Map* map = context.game->getMap();
     int screenZoom = map->getScreenZoom();
 
     // Objekte iterieren und merken, welche in Frage kommen
-    std::list<const MapObjectFixed*> mapObjectsHit;
+    std::list<const MapObject*> mapObjectsHit;
 
     const std::list<MapObject*>& mapObjects = map->getMapObjects();
     for (auto iter = mapObjects.crbegin(); iter != mapObjects.crend(); iter++) {
         MapObject* mapObject = *iter;
-        MapObjectFixed* mapObjectFixed = dynamic_cast<MapObjectFixed*>(mapObject);
-        if (mapObjectFixed == nullptr) {
-            continue;
+
+        // kein Gebäude oder Schiff? ignorieren. Optimierung: erst Building checken, das sind die meisten.
+        if (dynamic_cast<Building*>(mapObject) == nullptr) {
+            if (dynamic_cast<Ship*>(mapObject) == nullptr) {
+                continue;
+            }
         }
 
-        Rect rect = MapCoordUtils::getDrawCoordsForMapObjectFixed(*map, mapObjectFixed);
+        Rect rect = MapCoordUtils::getDrawCoordsForMapObject(*map, mapObject);
 
         // Außerhalb der Boundary-Box des Objekt geklickt?
         // TODO für Gebäude mit elevation=0 ggf. anpassen
@@ -777,15 +745,13 @@ const MapObjectFixed* GuiMap::getMapObjectFixedUnderMouseCoords(int mouseX, int 
         int y = (mouseY - rect.y) * screenZoom;
 
         const FourthDirection& screenView = map->getScreenView();
-        const FourthDirection& structureView = mapObjectFixed->getView();
-        const FourthDirection& viewToRender = Direction::addDirections(structureView, screenView);
-        const IGraphic* graphic = MapObjectUtils::getGraphic(*mapObjectFixed, viewToRender);
+        const IGraphic* graphic = MapObjectUtils::getGraphic(*mapObject, screenView);
         
         graphic->getPixel(x, y, &r, &g, &b, &a);
 
         // Checken, ob Pixel un-transparent genug ist, um es als Treffer zu nehmen
         if (a > 127) {
-            mapObjectsHit.push_back(mapObjectFixed);
+            mapObjectsHit.push_back(mapObject);
         }
     }
 
@@ -799,26 +765,40 @@ const MapObjectFixed* GuiMap::getMapObjectFixedUnderMouseCoords(int mouseX, int 
     // Mehrere Treffer. Wir müssen gucken, wer oben liegt. Je nachdem, wie die Karte ausgerichtet is, anders sortieren
     const FourthDirection& screenView = map->getScreenView();
 
-    mapObjectsHit.sort([&](const MapObjectFixed*& a, const MapObjectFixed*& b) {
+    mapObjectsHit.sort([&](const MapObject* a, const MapObject* b) {
+        DoubleMapCoords mapCoordsA;
+        if (dynamic_cast<const MapObjectFixed*>(a) != nullptr) {
+            mapCoordsA = dynamic_cast<const MapObjectFixed*>(a)->getMapCoords();
+        } else {
+            mapCoordsA = dynamic_cast<const MapObjectMoving*>(a)->getMapCoords();
+        }
+        
+        DoubleMapCoords mapCoordsB;
+        if (dynamic_cast<const MapObjectFixed*>(b) != nullptr) {
+            mapCoordsB = dynamic_cast<const MapObjectFixed*>(b)->getMapCoords();
+        } else {
+            mapCoordsB = dynamic_cast<const MapObjectMoving*>(b)->getMapCoords();
+        }
+        
         if (screenView == Direction::SOUTH) {
             return
-                (a->getMapCoords().y() > b->getMapCoords().y()) ||
-                ((a->getMapCoords().y() == b->getMapCoords().y()) && (a->getMapCoords().x() > b->getMapCoords().x()));
+                (mapCoordsA.y() > mapCoordsB.y()) ||
+                ((mapCoordsA.y() == mapCoordsB.y()) && (mapCoordsA.x() > mapCoordsB.x()));
         }
         else if (screenView == Direction::EAST) {
             return
-                (a->getMapCoords().x() > b->getMapCoords().x()) ||
-                ((a->getMapCoords().x() == b->getMapCoords().x()) && (a->getMapCoords().y() < b->getMapCoords().y()));
+                (mapCoordsA.x() > mapCoordsB.x()) ||
+                ((mapCoordsA.x() == mapCoordsB.x()) && (mapCoordsA.y() < mapCoordsB.y()));
         }
         else if (screenView == Direction::NORTH) {
             return
-                (a->getMapCoords().y() < b->getMapCoords().y()) ||
-                ((a->getMapCoords().y() == b->getMapCoords().y()) && (a->getMapCoords().x() < b->getMapCoords().x()));
+                (mapCoordsA.y() < mapCoordsB.y()) ||
+                ((mapCoordsA.y() == mapCoordsB.y()) && (mapCoordsA.x() < mapCoordsB.x()));
         }
         else if (screenView == Direction::WEST) {
             return
-                (a->getMapCoords().x() < b->getMapCoords().x()) ||
-                ((a->getMapCoords().x() == b->getMapCoords().x()) && (a->getMapCoords().y() > b->getMapCoords().y()));
+                (mapCoordsA.x() < mapCoordsB.x()) ||
+                ((mapCoordsA.x() == mapCoordsB.x()) && (mapCoordsA.y() > mapCoordsB.y()));
         }
         else {
             assert(false);
@@ -829,14 +809,9 @@ const MapObjectFixed* GuiMap::getMapObjectFixedUnderMouseCoords(int mouseX, int 
 }
 
 void GuiMap::onClickInMapForSelection(int mouseX, int mouseY) {
-    // TODO hier später weitere Typen (Schiffe) checken
-
-    // Gucken, ob ein Gebäude geklickt wurde.
-    const MapObjectFixed* mapObjectFixedClicked = getMapObjectFixedUnderMouseCoords(mouseX, mouseY);
-    const Building* buildingClicked = dynamic_cast<const Building*>(mapObjectFixedClicked);
-
-    if (buildingClicked != nullptr) {
-        context.game->setSelectedMapObject(buildingClicked);
+    const MapObject* mapObjectClicked = getClickableMapObjectUnderMouseCoords(mouseX, mouseY);
+    if (mapObjectClicked != nullptr) {
+        context.game->setSelectedMapObject(mapObjectClicked);
         return;
     }
 

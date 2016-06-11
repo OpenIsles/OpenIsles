@@ -8,7 +8,7 @@
 #include "map/coords/ScreenCoords.h"
 #include "utils/Rect.h"
 
-class MapObjectFixed;
+class MapObject;
 class Map;
 
 /**
@@ -83,10 +83,10 @@ public:
     /**
      * @brief Berechnet für ein bestimmtes Map-Objekt das SDL-Rechteck, an welche Stelle die Grafik gesetzt werden muss.
      * @param map (Dependency)
-     * @param mapObjectFixed Map-Objekt
+     * @param mapObject Map-Objekt
      * @return Rechteck mit den Draw-Koordinaten, wo die Grafik hingezeichnet werden muss
      */
-    static Rect getDrawCoordsForMapObjectFixed(const Map& map, const MapObjectFixed* mapObjectFixed);
+    static Rect getDrawCoordsForMapObject(const Map& map, const MapObject* mapObject);
 
     /**
      * @brief Ermittelt für die aktuelle Position des Mauszeigers, welche Screen-Koordinate dort liegt.

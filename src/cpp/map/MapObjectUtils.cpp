@@ -1,12 +1,14 @@
 #include <cassert>
+#include "economics/Carrier.h"
 #include "map/Harvestable.h"
 #include "map/MapObjectUtils.h"
+#include "map/Ship.h"
 #include "map/Street.h"
 #include "graphics/graphic/GraphicSet.h"
 #include "graphics/graphic/GraphicSetKeyState.h"
 
 
-const Animation* MapObjectUtils::getAnimation(const MapObject& mapObject, const FourthDirection& view) {
+const Animation* MapObjectUtils::getAnimation(const MapObject& mapObject, const FourthDirection& screenView) {
     const MapObjectType* mapObjectType = mapObject.getMapObjectType();
     const GraphicSet* graphicSet = mapObjectType->graphicSet;
 
@@ -16,30 +18,56 @@ const Animation* MapObjectUtils::getAnimation(const MapObject& mapObject, const 
         GraphicSetKeyState state = (GraphicSetKeyState) (GraphicSetKeyState::GROWTH0 + int(harvestable.getAge()));
         assert (state >= GraphicSetKeyState::GROWTH0 && state <= GraphicSetKeyState::GROWTH6);
 
+        EighthDirection view = Direction::addDirections(harvestable.getView(), screenView);
+
         return graphicSet->getByStateAndView(state, view);
     }
     else if (mapObjectType->type == MapObjectTypeClass::STREET) {
         const Street& street = dynamic_cast<const Street&>(mapObject);
         const GraphicSetKeyState& state = street.getStateToRender();
+        EighthDirection view = Direction::addDirections(street.getView(), screenView);
 
         return graphicSet->getByStateAndView(state, view);
     }
     else if (mapObjectType->type == MapObjectTypeClass::STRUCTURE ||
              mapObjectType->type == MapObjectTypeClass::BUILDING) {
 
+        const MapObjectFixed& mapObjectFixed = dynamic_cast<const MapObjectFixed&>(mapObject);
+        EighthDirection view = Direction::addDirections(mapObjectFixed.getView(), screenView);
+
         return graphicSet->getByView(view);
+    }
+    else if (mapObjectType->type == MapObjectTypeClass::CARRIER) {
+        const Carrier& carrier = dynamic_cast<const Carrier&>(mapObject);
+
+        // TODO Carrier können später MEHRERE Animationen haben ("stehen und ernten", "laufen").
+
+        // Übersetzung von "Laufrichtung" + "aktuelle Ansicht" in korrekte Animation
+        unsigned char animViewIndex = (unsigned char) ((10 - carrier.getCurrentMovingDirection() + screenView) % 8);
+
+        return carrier.getAnimations()[animViewIndex];
+    }
+    else if (mapObjectType->type == MapObjectTypeClass::SHIP) {
+        const Ship& ship = dynamic_cast<const Ship&>(mapObject);
+
+        // TODO Schiffe können später MEHRERE Animationen haben ("vor Anker", "segeln").
+
+        // Übersetzung von "Laufrichtung" + "aktuelle Ansicht" in korrekte Animation
+        unsigned char animViewIndex = (unsigned char) ((10 - ship.getCurrentMovingDirection() + screenView) % 8);
+
+        return ship.getMapObjectType()->graphicSet->getByView((GraphicSetKeyView) animViewIndex); // TODO verbessern später ;)
     }
 
     assert(false);
     return nullptr;
 }
 
-const IGraphic* MapObjectUtils::getGraphic(const MapObject& mapObject, const FourthDirection& view) {
-    const Animation* animation = getAnimation(mapObject, view);
-    return animation->getFrame(int(mapObject.animationFrame));
+const IGraphic* MapObjectUtils::getGraphic(const MapObject& mapObject, const FourthDirection& screenView) {
+    const Animation* animation = getAnimation(mapObject, screenView);
+    return animation->getFrame((unsigned int) mapObject.animationFrame);
 }
 
-const IGraphic* MapObjectUtils::getGraphic(const MapObjectType* mapObjectType, const FourthDirection& view) {
+const IGraphic* MapObjectUtils::getGraphic(const MapObjectType* mapObjectType, const EighthDirection& view) {
     const GraphicSet* graphicSet = mapObjectType->graphicSet;
 
     const Animation* animation = nullptr;
@@ -61,7 +89,7 @@ const IGraphic* MapObjectUtils::getGraphic(const MapObjectType* mapObjectType, c
 
         animation = graphicSet->getByView(view);
     } else {
-        assert(false);
+        assert(false); // TODO ggf. später für SHIP (wenn in Editor); CARRIER wird man hier wohl nie brauchen
     }
 
     return animation->getFrame(0);

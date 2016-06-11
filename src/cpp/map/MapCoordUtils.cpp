@@ -97,17 +97,25 @@ Rect MapCoordUtils::mapToDrawCoords(
     return screenToDrawCoords(screenCoords, map, elevation, graphic, mapWidth, mapHeight);
 }
 
-Rect MapCoordUtils::getDrawCoordsForMapObjectFixed(const Map& map, const MapObjectFixed* mapObjectFixed) {
-    const MapCoords& mapCoords = mapObjectFixed->getMapCoords();
-
-    const FourthDirection& structureView = mapObjectFixed->getView();
-    const FourthDirection& viewToRender = Direction::addDirections(structureView, map.getScreenView());
-    const IGraphic* graphic = MapObjectUtils::getGraphic(*mapObjectFixed, viewToRender);
+Rect MapCoordUtils::getDrawCoordsForMapObject(const Map& map, const MapObject* mapObject) {
+    const IGraphic* graphic = MapObjectUtils::getGraphic(*mapObject, map.getScreenView());
 
     const int elevation = 1; // TODO für Gebäude wie Anlegestelle, Fischerhütte etc. muss auf 0 gesetzt werden
 
-    return mapToDrawCoords(
-        mapCoords, map, elevation, *graphic, mapObjectFixed->getMapWidth(), mapObjectFixed->getMapHeight());
+    const MapObjectFixed* mapObjectFixed = dynamic_cast<const MapObjectFixed*>(mapObject);
+    const MapObjectMoving* mapObjectMoving = dynamic_cast<const MapObjectMoving*>(mapObject);
+
+    if (mapObjectFixed != nullptr) {
+        return mapToDrawCoords(mapObjectFixed->getMapCoords(), map, elevation,
+                               *graphic, mapObject->getMapWidth(), mapObject->getMapHeight());
+    }
+    else if (mapObjectMoving != nullptr) {
+        return mapToDrawCoords(mapObjectMoving->getMapCoords(), map, elevation,
+                               *graphic, mapObject->getMapWidth(), mapObject->getMapHeight());
+    }
+
+    assert(false);
+    return Rect();
 }
 
 ScreenCoords MapCoordUtils::getScreenCoordsUnderMouse(const Map& map, int mouseCurrentX, int mouseCurrentY) {

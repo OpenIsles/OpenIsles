@@ -269,7 +269,7 @@ struct MapObjectType {
      * @return Name des Map-Objekts (msgid)
      */
     std::string getTitleMsgid() const {
-        return "mapObjectType|" + name;
+        return "mapObjectType|" + name; // TODO Schiffe in das PHP-Script aufnehmen und übersetzen
     }
 
     /**
