@@ -309,9 +309,10 @@ void ConfigMgr::loadShipMapObjectTypes(const std::string& configFilePath) {
         mapObjectType.name = name;
         mapObjectType.type = MapObjectTypeClass::SHIP;
 
-        // TODO vorläufig mal 1x1 setzen. später checken
-        mapObjectType.mapWidth = 1;
-        mapObjectType.mapHeight = 1;
+        mapObjectType.mapWidth = (unsigned char) stringToUnsignedLong(
+            shipNode->first_attribute("width", 5, true)->value());
+        mapObjectType.mapHeight = (unsigned char) stringToUnsignedLong(
+            shipNode->first_attribute("height", 6, true)->value());
 
         rapidxml::xml_node<>* goodsSlotsNode = shipNode->first_node("goods-slots", 11, true);
         mapObjectType.goodsSlots = (unsigned char) stringToUnsignedLong(goodsSlotsNode->value());

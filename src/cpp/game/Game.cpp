@@ -184,7 +184,6 @@ Ship* Game::addShip(const DoubleMapCoords& mapCoords, const MapObjectType* mapOb
                     const EighthDirection& direction, Player* player) {
 
     assert(mapObjectType->type == MapObjectTypeClass::SHIP);
-    assert((mapObjectType->mapWidth == 1) && (mapObjectType->mapHeight == 1)); // Erstmal 1x1 fordern. Wir müssen später gucken, ob das notwendig ist. Ggf. können MapObjectMoving unabhängig von der mapWidth/mapHeight werden
 
     // Objekt anlegen
     Ship* ship = (Ship*) instantiateNewMapObject(mapObjectType);

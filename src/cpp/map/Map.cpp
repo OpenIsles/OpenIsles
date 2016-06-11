@@ -113,32 +113,33 @@ void Map::addMapObject(MapObject* mapObject) {
     // Objekt in die Liste einreihen
     mapObjects.push_front(mapObject);
 
+    int mapWidth = mapObject->getMapWidth();
+    int mapHeight = mapObject->getMapHeight();
+
     // Unterscheidung nach fixen und beweglichen Map-Objekten
+    // Fläche auf den MapTiles als belegt markieren
+
     MapObjectFixed* mapObjectFixed = dynamic_cast<MapObjectFixed*>(mapObject);
     if (mapObjectFixed != nullptr) {
         const MapCoords& mapCoords = mapObjectFixed->getMapCoords();
-        int mapWidth = mapObjectFixed->getMapWidth();
-        int mapHeight = mapObjectFixed->getMapHeight();
 
-        // Fläche auf den MapTiles als belegt markieren
         for (int my = mapCoords.y(); my < mapCoords.y() + mapHeight; my++) {
             for (int mx = mapCoords.x(); mx < mapCoords.x() + mapWidth; mx++) {
                 getMapTileAt(MapCoords(mx, my))->mapObjectFixed = mapObjectFixed;
             }
         }
-
         return;
     }
 
     MapObjectMoving* mapObjectMoving = dynamic_cast<MapObjectMoving*>(mapObject);
     if (mapObjectMoving != nullptr) {
-        // TODO Bewegliche Map-Objekte dürfen aktuell nur 1 Kachel groß sein. Später, wenn Schiffe da sind, müssen wir das erweitern.
-        assert((mapObjectMoving->getMapWidth() == 1) && (mapObjectMoving->getMapHeight() == 1));
-
-        // Fläche auf den MapTiles als belegt markieren
         const DoubleMapCoords& mapCoords = mapObjectMoving->getMapCoords();
-        getMapTileAt(MapCoords(int(mapCoords.x()), int(mapCoords.y())))->mapObjectsMoving.push_back(mapObjectMoving);
 
+        for (int my = int(std::floor(mapCoords.y())); my < int(std::ceil(mapCoords.y())) + mapHeight; my++) {
+            for (int mx = int(std::floor(mapCoords.x())); mx < int(std::ceil(mapCoords.x())) + mapWidth; mx++) {
+                getMapTileAt(MapCoords(mx, my))->mapObjectsMoving.push_back(mapObjectMoving);
+            }
+        }
         return;
     }
 
@@ -161,9 +162,6 @@ void Map::moveMapObject(MapObjectMoving* mapObject, const DoubleMapCoords newMap
     const int mapWidth = mapObject->getMapWidth();
     const int mapHeight = mapObject->getMapHeight();
 
-    // TODO Bewegliche Map-Objekte dürfen aktuell nur 1 Kachel groß sein. Später, wenn Schiffe da sind, müssen wir das ggf. erweitern.
-    assert((mapWidth == 1) && (mapHeight == 1));
-
     // Fläche auf den MapTiles ummarkieren.
     // Wir markieren mehrere Kacheln, wenn sich das Objekt zwischen zwei Kacheln befindet.
     const DoubleMapCoords& mapCoords = mapObject->getMapCoords();
@@ -185,12 +183,13 @@ void Map::moveMapObject(MapObjectMoving* mapObject, const DoubleMapCoords newMap
 void Map::deleteMapObject(MapObject* mapObject) {
     mapObjects.remove(mapObject);
 
+    const int mapWidth = mapObject->getMapWidth();
+    const int mapHeight = mapObject->getMapHeight();
+
     // Unterscheidung nach fixen und beweglichen Map-Objekten
     MapObjectFixed* mapObjectFixed = dynamic_cast<MapObjectFixed*>(mapObject);
     if (mapObjectFixed != nullptr) {
         const MapCoords& mapCoords = mapObjectFixed->getMapCoords();
-        int mapWidth = mapObjectFixed->getMapWidth();
-        int mapHeight = mapObjectFixed->getMapHeight();
 
         // Fläche auf den MapTiles als belegt markieren
         for (int my = mapCoords.y(); my < mapCoords.y() + mapHeight; my++) {
@@ -202,12 +201,6 @@ void Map::deleteMapObject(MapObject* mapObject) {
     else {
         MapObjectMoving* mapObjectMoving = dynamic_cast<MapObjectMoving*>(mapObject);
         if (mapObjectMoving != nullptr) {
-            const int mapWidth = mapObject->getMapWidth();
-            const int mapHeight = mapObject->getMapHeight();
-
-            // TODO Bewegliche Map-Objekte dürfen aktuell nur 1 Kachel groß sein. Später, wenn Schiffe da sind, müssen wir das ggf. erweitern.
-            assert ((mapWidth == 1) && (mapHeight == 1));
-
             // Fläche auf den MapTiles ummarkieren.
             // Es sind u.U. mehrere Kacheln markiert, wenn sich das Objekt zwischen zwei Kacheln befindet.
             const DoubleMapCoords& mapCoords = mapObjectMoving->getMapCoords();

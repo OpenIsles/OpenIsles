@@ -611,5 +611,7 @@ TEST(ConfigMgrTest, loadShipMapObjectTypes) {
     const MapObjectType* littleShip = configMgr.getMapObjectType("little-ship");
     ASSERT_TRUE(littleShip != nullptr);
     ASSERT_EQ(MapObjectTypeClass::SHIP, littleShip->type);
+    ASSERT_EQ(2, littleShip->mapWidth);
+    ASSERT_EQ(2, littleShip->mapHeight);
     ASSERT_EQ(4, littleShip->goodsSlots);
 }
