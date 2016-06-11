@@ -86,6 +86,8 @@ set(COMMON_SOURCE_FILES
     src/cpp/map/MapObjectType.h
     src/cpp/map/MapObjectUtils.cpp
     src/cpp/map/MapObjectUtils.h
+    src/cpp/map/Ship.cpp
+    src/cpp/map/Ship.h
     src/cpp/map/Street.cpp
     src/cpp/map/Street.h
     src/cpp/map/Structure.cpp

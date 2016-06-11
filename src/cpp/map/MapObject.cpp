@@ -4,6 +4,7 @@
 #include "map/Building.h"
 #include "map/Harvestable.h"
 #include "map/MapObject.h"
+#include "map/Ship.h"
 #include "map/Street.h"
 #include "map/Structure.h"
 
@@ -21,6 +22,8 @@ MapObject* MapObject::instantiate(const MapObjectType* mapObjectType) {
         mapObject = new Building();
     } else if (mapObjectType->type == MapObjectTypeClass::CARRIER) {
         mapObject = new Carrier();
+    } else if (mapObjectType->type == MapObjectTypeClass::SHIP) {
+        mapObject = new Ship(mapObjectType->goodsSlots);
     } else {
         assert(false);
         return nullptr;

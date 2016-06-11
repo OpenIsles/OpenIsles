@@ -3807,5 +3807,15 @@
     <property name="player" value="3"/>
    </properties>
   </object>
+  <object name="little-ship" x="1216" y="608" width="32" height="32">
+   <properties>
+    <property name="direction" value="southwest"/>
+    <property name="goods-on-board1.good" value="food"/>
+    <property name="goods-on-board1.inventory" value="25"/>
+    <property name="goods-on-board2.good" value="tools"/>
+    <property name="goods-on-board2.inventory" value="45"/>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
  </objectgroup>
 </map>

@@ -601,3 +601,15 @@ TEST(ConfigMgrTest, checkGetMapObjectTypesByPopulationTier) {
     const PopulationTier* pioneers = configMgr.getPopulationTier("pioneers");
     ASSERT_EQ(5, configMgr.getMapObjectTypesByPopulationTier(pioneers).size());
 }
+
+/**
+ * @brief Test, ob die Konfiguration der Schiffe korrekt geladen wird.
+ */
+TEST(ConfigMgrTest, loadShipMapObjectTypes) {
+    ConfigMgr configMgr("data/config");
+
+    const MapObjectType* littleShip = configMgr.getMapObjectType("little-ship");
+    ASSERT_TRUE(littleShip != nullptr);
+    ASSERT_EQ(MapObjectTypeClass::SHIP, littleShip->type);
+    ASSERT_EQ(4, littleShip->goodsSlots);
+}

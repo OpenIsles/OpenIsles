@@ -27,6 +27,9 @@ ConfigMgr::ConfigMgr(std::string configPath) {
         loadMapObjectTypes(configPath + "/map-objects.xml");
         Log::info(_("Loaded mapObjectTypes."));
 
+        loadShipMapObjectTypes(configPath + "/ships.xml");
+        Log::info(_("Loaded ship mapObjectTypes."));
+
         loadPopulationTiers(configPath + "/population-tiers.xml");
         Log::info(_("Loaded population tiers."));
 
@@ -284,6 +287,39 @@ void ConfigMgr::loadCarrierMapObjectTypes(const std::string& configFilePath) {
         // TODO Animations
 
         Log::info(_("Loaded carrier mapObjectType '%s'."), mapObjectType.name.c_str());
+    }
+
+    delete xmlDocument;
+}
+
+void ConfigMgr::loadShipMapObjectTypes(const std::string& configFilePath) {
+    rapidxml::file<> xmlFile(configFilePath.c_str());
+
+    rapidxml::xml_document<>* xmlDocument = new rapidxml::xml_document<>();
+    xmlDocument->parse<0>(xmlFile.data());
+
+    rapidxml::xml_node<>* shipsNode = xmlDocument->first_node("ships", 5, true);
+
+    for (rapidxml::xml_node<>* shipNode = shipsNode->first_node();
+         shipNode != nullptr;
+         shipNode = shipNode->next_sibling()) {
+
+        std::string name = std::string(shipNode->first_attribute("name", 4, true)->value());
+        MapObjectType& mapObjectType = mapObjectTypesMap[name];
+        mapObjectType.name = name;
+        mapObjectType.type = MapObjectTypeClass::SHIP;
+
+        // TODO vorläufig mal 1x1 setzen. später checken
+        mapObjectType.mapWidth = 1;
+        mapObjectType.mapHeight = 1;
+
+        rapidxml::xml_node<>* goodsSlotsNode = shipNode->first_node("goods-slots", 11, true);
+        mapObjectType.goodsSlots = (unsigned char) stringToUnsignedLong(goodsSlotsNode->value());
+
+        rapidxml::xml_node<>* graphicSetNode = shipNode->first_node("graphic-set", 11, true);
+        mapObjectType.graphicSetName = std::string(graphicSetNode->first_attribute("name", 4, true)->value());
+
+        Log::info(_("Loaded ship mapObjectType '%s'."), mapObjectType.name.c_str());
     }
 
     delete xmlDocument;

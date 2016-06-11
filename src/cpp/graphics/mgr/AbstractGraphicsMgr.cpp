@@ -153,7 +153,12 @@ void AbstractGraphicsMgr::loadGraphicsFromXmlConfig(const std::string& configFil
                     throw std::runtime_error("Illegal views for animation");
                 }
 
-                int framesCount = std::atoi(subNode->first_attribute("frames-count", 12, true)->value());
+                int framesCount = 1;
+
+                rapidxml::xml_attribute<>* framesCountAttribute = subNode->first_attribute("frames-count", 12, true);
+                if (framesCountAttribute != nullptr) {
+                    framesCount = std::atoi(framesCountAttribute->value());
+                }
 
                 int startFrame = 0;
                 int endFrame = framesCount - 1;

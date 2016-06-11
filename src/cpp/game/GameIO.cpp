@@ -1,4 +1,5 @@
 #include <array>
+#include <cassert>
 #include <cstdlib>
 #include <cstring>
 #include <string>
@@ -9,6 +10,7 @@
 #include "map/coords/ScreenCoords.h"
 #include "map/Map.h"
 #include "utils/Consts.h"
+#include "utils/StringFormat.h"
 
 
 // TODO allgemein: Fehlermanagement, wenn die Datei mal nicht so hübsch aussieht, dass alle Tags da sind / oder die Datei gar nicht da ist
@@ -241,7 +243,8 @@ void GameIO::loadColonies(Game* game, const ConfigMgr* configMgr, rapidxml::xml_
 }
 
 void GameIO::loadMapObjects(Game* game, const ConfigMgr* configMgr, rapidxml::xml_node<>* objectgroupMapObjectsNode) {
-    for (rapidxml::xml_node<>* objectNode = objectgroupMapObjectsNode->first_node("object", 6, true); objectNode != nullptr;
+    for (rapidxml::xml_node<>* objectNode = objectgroupMapObjectsNode->first_node("object", 6, true);
+         objectNode != nullptr;
          objectNode = objectNode->next_sibling("object", 6, true)) {
 
         // Allgemeine Daten einlesen
@@ -255,9 +258,9 @@ void GameIO::loadMapObjects(Game* game, const ConfigMgr* configMgr, rapidxml::xm
         const MapObjectTypeClass& mapObjectTypeClass = mapObjectType->type;
 
         MapCoords mapCoords = getMapCoordsFromObjectNode(objectNode);
-        rapidxml::xml_node<>* propertiesNode = objectNode->first_node("properties", 10, true);
 
-        EighthDirection view = getViewPropertyValueFromPropertiesNode(propertiesNode);
+        rapidxml::xml_node<>* propertiesNode = objectNode->first_node("properties", 10, true);
+        EighthDirection view = getViewPropertyValueFromPropertiesNode(propertiesNode, "view");
 
         if (mapObjectTypeClass == MapObjectTypeClass::STRUCTURE ||
             mapObjectTypeClass == MapObjectTypeClass::BUILDING ||
@@ -279,6 +282,46 @@ void GameIO::loadMapObjects(Game* game, const ConfigMgr* configMgr, rapidxml::xm
             }
         }
 
+        // Schiff anlegen
+        else if (mapObjectTypeClass == MapObjectTypeClass::SHIP) {
+            EighthDirection direction = getViewPropertyValueFromPropertiesNode(propertiesNode, "direction");
+
+            int playerNr = std::atoi(getPropertyValueFromPropertiesNode(propertiesNode, "player"));
+            Player* player = game->getPlayer(playerNr - 1);
+
+            Ship* ship = game->addShip(mapCoords, mapObjectType, direction, player);
+
+            // Warenslots
+            unsigned char slotNumber = 0;
+            for (unsigned char i = 1; i <= mapObjectType->goodsSlots; i++) {
+                std::string propertyName = std::string("goods-on-board") + toString(i) + ".good";
+                const char* propertyValue = getPropertyValueFromPropertiesNode(propertiesNode, propertyName.c_str());
+
+                if (propertyValue == nullptr) {
+                    continue; // Slot nicht belegt
+                }
+
+                const Good* good = configMgr->getGood(propertyValue);
+                if (good == nullptr) {
+                    Log::error(_("Warning: Ship has loaded unknown Good '%s'."), propertyValue);
+                    continue;
+                }
+
+                propertyName = std::string("goods-on-board") + toString(i) + ".inventory";
+                int inventory = std::atoi(getPropertyValueFromPropertiesNode(propertiesNode, propertyName.c_str()));
+                if ((inventory <= 0) || (inventory > 50)) {
+                    Log::error(_("Warning: Ship has illegal inventory %d for Good '%s'."),
+                               inventory, good->name.c_str());
+                    continue;
+                }
+
+                ship->goodsOnBoard[slotNumber].good = good;
+                ship->goodsOnBoard[slotNumber].inventory = (unsigned int) inventory;
+                ship->goodsOnBoard[slotNumber].capacity = 50;
+                slotNumber++;
+            }
+        }
+
         // MapObject für erntebare Landschaften anlegen
         else if (mapObjectTypeClass == MapObjectTypeClass::HARVESTABLE) {
             // TODO Aus nodeNameValue weiteres Identifizierungsmerkmal lesen (verschiedene Tiles, Nord-/Südwälder zu haben, Wald/Getreide/etc.)
@@ -287,6 +330,10 @@ void GameIO::loadMapObjects(Game* game, const ConfigMgr* configMgr, rapidxml::xm
 
             Harvestable* harvestable = game->addHarvestable(mapCoords, mapObjectType, view);
             harvestable->setAge(age);
+        }
+
+        else {
+            assert(false);
         }
     }
 }
@@ -317,8 +364,10 @@ const char* GameIO::getPropertyValueFromPropertiesNode(rapidxml::xml_node<>* pro
     return nullptr;
 }
 
-const EighthDirection GameIO::getViewPropertyValueFromPropertiesNode(rapidxml::xml_node<>* propertiesNode) {
-    const char* viewPropertyValue = getPropertyValueFromPropertiesNode(propertiesNode, "view");
+const EighthDirection GameIO::getViewPropertyValueFromPropertiesNode(rapidxml::xml_node<>* propertiesNode,
+                                                                     const char* propertyName) {
+
+    const char* viewPropertyValue = getPropertyValueFromPropertiesNode(propertiesNode, propertyName);
 
     // Nicht vorhanden? Dann Defaultwert zurückliefern
     if (viewPropertyValue == nullptr) {

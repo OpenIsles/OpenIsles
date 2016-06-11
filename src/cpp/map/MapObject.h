@@ -249,6 +249,14 @@ protected:
      */
     DoubleMapCoords mapCoords;
 
+    /**
+     * @brief aktuelle Richtung, in die das Object sich auf der Karte bewegt/zeigt.
+     *
+     * Bei Trägern wollen wir nicht bei jedem Frame das ausrechnen müssen, drum ist hier immer der aktuelle Wert.
+     * Bei Schiffen ist das die Richtung, in die es zeigt, wenn es stillsteht.
+     */
+    EighthDirection currentMovingDirection;
+
 public:
     virtual ~MapObjectMoving() {
     }
@@ -263,6 +271,10 @@ public:
 
     const DoubleMapCoords& getMapCoords() const {
         return mapCoords;
+    }
+
+    const EighthDirection& getCurrentMovingDirection() const {
+        return currentMovingDirection;
     }
 };
 

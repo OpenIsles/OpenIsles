@@ -460,30 +460,50 @@ void GuiMap::renderTile(const MapCoords& mapCoords) {
     }
 
 
-    // Träger etc. auf die Kachel zeichnen /////////////////////////////////////////////////////
+    // Träger und Schiffe auf die Kachel zeichnen //////////////////////////////////////////////
 
     for (auto iter = mapTile->mapObjectsMoving.cbegin(); iter != mapTile->mapObjectsMoving.cend(); iter++) {
         MapObjectMoving* mapObject = *iter;
-        // TODO Aktuell machen wir nur Träger
+
         Carrier* carrier = dynamic_cast<Carrier*>(mapObject);
-        if (carrier == nullptr) {
+        if (carrier != nullptr) {
+            // TODO Carrier können später MEHRERE Animationen haben ("stehen und ernten", "laufen").
+            // TODO Carrier sollte die untenstehende Logik als getCurrentAnimationFrame(const FourDirection& screenView) kapseln
+
+            // Übersetzung von "Laufrichtung" + "aktuelle Ansicht" in korrekte Animation
+            unsigned char animViewIndex = (10 - carrier->getCurrentMovingDirection() + screenView) % 8;
+
+            const DoubleMapCoords& mapCoords = carrier->getMapCoords();
+            const Animation* animation = carrier->getAnimations()[animViewIndex];
+            const IGraphic* animationCurrentFrame = animation->getFrame((unsigned int) carrier->animationFrame);
+
+            Rect rect = MapCoordUtils::mapToDrawCoords(
+                mapCoords, *map, 1, *animationCurrentFrame, carrier->getMapWidth(), carrier->getMapHeight());
+
+            animationCurrentFrame->drawScaledAt(rect.x, rect.y, (double) 1 / (double) screenZoom);
             continue;
         }
 
-        // TODO Carrier können später MEHRERE Animationen haben ("stehen und ernten", "laufen").
-        // TODO Carrier sollte die untenstehende Logik als getCurrentAnimationFrame(const FourDirection& screenView) kapseln
+        Ship* ship = dynamic_cast<Ship*>(mapObject);
+        if (ship != nullptr) {
+            // TODO Schiffe können später MEHRERE Animationen haben ("vor Anker", "segeln").
 
-        // Übersetzung von "Laufrichtung" + "aktuelle Ansicht" in korrekte Animation
-        unsigned char animViewIndex = (10 - carrier->getCurrentMovingDirection() + screenView) % 8;
+            // Übersetzung von "Richtung" + "aktuelle Ansicht" in korrekte Animation
+            unsigned char animViewIndex = (10 - ship->getCurrentMovingDirection() + screenView) % 8;
 
-        const DoubleMapCoords& mapCoords = carrier->getMapCoords();
-        const Animation* animation = carrier->getAnimations()[animViewIndex];
-        const IGraphic* animationCurrentFrame = animation->getFrame((unsigned int) carrier->animationFrame);
+            const DoubleMapCoords& mapCoords = ship->getMapCoords();
+            const Animation* animation =
+                ship->getMapObjectType()->graphicSet->getByView((GraphicSetKeyView) animViewIndex); // TODO verbessern später ;)
+            const IGraphic* animationCurrentFrame = animation->getFrame((unsigned int) ship->animationFrame);
 
-        Rect rect = MapCoordUtils::mapToDrawCoords(
-            mapCoords, *map, 1, *animationCurrentFrame, carrier->getMapWidth(), carrier->getMapHeight());
+            Rect rect = MapCoordUtils::mapToDrawCoords(
+                mapCoords, *map, 1, *animationCurrentFrame, ship->getMapWidth(), ship->getMapHeight());
 
-        animationCurrentFrame->drawScaledAt(rect.x, rect.y, (double) 1 / (double) screenZoom);
+            animationCurrentFrame->drawScaledAt(rect.x, rect.y, (double) 1 / (double) screenZoom);
+            continue;
+        }
+
+        assert(false);
     }
 }
 

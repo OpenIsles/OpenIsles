@@ -62,12 +62,6 @@ private:
     EightDirectionsAnimation animations;
 
     /**
-     * @brief aktuelle Richtung, in die der Träger auf der Karte läuft. Wir wollen nicht bei jedem Frame das
-     * ausrechnen müssen, drum ist hier immer der aktuelle Wert.
-     */
-    EighthDirection currentMovingDirection;
-
-    /**
      * @brief Zustand des Träger, um zwischen "laufen" und "ernten" zu unterscheiden
      */
     enum {
@@ -107,20 +101,10 @@ public:
         return animations;
     }
 
-    void setAnimations(const GraphicSet& graphicSet) {
-        forEachEighthDirection(view) {
-            animations[view] = graphicSet.getByView(view);
-        }
-    }
-
     void setAnimations(const EightDirectionsAnimation& animations) {
         forEachEighthDirection(view) {
             this->animations[view] = animations[view];
         }
-    }
-
-    const EighthDirection& getCurrentMovingDirection() const {
-        return currentMovingDirection;
     }
 
     /**

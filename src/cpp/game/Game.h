@@ -18,6 +18,7 @@
 #include "map/Isle.h"
 #include "map/Map.h"
 #include "map/MapObject.h"
+#include "map/Ship.h"
 #include "map/Street.h"
 #include "map/Structure.h"
 
@@ -265,6 +266,18 @@ public:
     Street* addStreet(
         const MapCoords& mapCoords, const MapObjectType* mapObjectType, const FourthDirection& view,
         Player* player, const StreetConnections& streetConnections);
+
+    /**
+     * @brief Fügt ein neues Schiff der Karte hinzu
+     * @param mapCoords Map-Koordinaten des Objekts
+     * @param mapObjectType Typ des Objekt
+     * @param direction Richtung, in die das Schiff zeigt
+     * @param player Spieler, dem das Schiff gehören soll
+     * @return Zeiger auf das neu angelegte Schiff
+     */
+    Ship* addShip(
+        const DoubleMapCoords& mapCoords, const MapObjectType* mapObjectType,
+        const EighthDirection& direction, Player* player);
 
     /**
      * @brief Entfernt ein Map-Objekt und führt alle notwendigen Logiken hierzu aus (z.&nbsp;B. Träger entfernen,

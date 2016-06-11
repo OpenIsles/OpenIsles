@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ships>
+    <!-- kleines Handelsschiff -->
+    <ship name="little-ship">
+        <goods-slots>4</goods-slots>
+        <graphic-set name="little-ship" />
+    </ship>
+</ships>

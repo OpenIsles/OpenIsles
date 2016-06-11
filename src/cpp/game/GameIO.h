@@ -76,13 +76,16 @@ private:
     static const char* getPropertyValueFromPropertiesNode(rapidxml::xml_node<>* propertiesNode, const char* propertyName);
 
     /**
-     * @brief Helper, um aus einem <properties>-Knoten die Eigenschaft "view" auszulesen und die Ansicht zurückzuliefern.
+     * @brief Helper, um aus einem <properties>-Knoten eine Eigenschaft auszulesen und die Ansicht zurückzuliefern.
      * Ist keine entsprechende Property vorhanden, wird die Südansicht (als Default, der wohl hauptsächlich benutzt wird)
      * zurückgeliefert.
+     *
      * @param propertiesNode <properties>-Knoten aus einer XML-Datei
+     * @param propertyName Name der Eigenschaft
      * @return Ansicht
      */
-    static const EighthDirection getViewPropertyValueFromPropertiesNode(rapidxml::xml_node<>* propertiesNode);
+    static const EighthDirection getViewPropertyValueFromPropertiesNode(rapidxml::xml_node<>* propertiesNode,
+                                                                        const char* propertyName);
 
 };
 

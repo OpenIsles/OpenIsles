@@ -61,7 +61,12 @@ enum MapObjectTypeClass {
     /**
      * @brief `Carrier`
      */
-    CARRIER
+    CARRIER,
+
+    /**
+     * @brief `Ship`
+     */
+    SHIP
 };
 
 
@@ -252,6 +257,11 @@ struct MapObjectType {
      * anzuzeigen.
      */
     bool isForest = false;
+
+    /**
+     * @brief (nur für `Ship`) gibt an, wie viele Lagerslots das Schiff hat
+     */
+    unsigned char goodsSlots = 0;
 
 
     /**

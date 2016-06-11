@@ -180,6 +180,25 @@ Street* Game::addStreet(const MapCoords& mapCoords, const MapObjectType* mapObje
     return street;
 }
 
+Ship* Game::addShip(const DoubleMapCoords& mapCoords, const MapObjectType* mapObjectType,
+                    const EighthDirection& direction, Player* player) {
+
+    assert(mapObjectType->type == MapObjectTypeClass::SHIP);
+    assert((mapObjectType->mapWidth == 1) && (mapObjectType->mapHeight == 1)); // Erstmal 1x1 fordern. Wir müssen später gucken, ob das notwendig ist. Ggf. können MapObjectMoving unabhängig von der mapWidth/mapHeight werden
+
+    // Objekt anlegen
+    Ship* ship = (Ship*) instantiateNewMapObject(mapObjectType);
+    ship->setMapCoords(mapCoords);
+    ship->setMapWidth(1);
+    ship->setMapHeight(1);
+    ship->setPlayer(player);
+
+    // Objekt in die Liste aufnehmen.
+    map->addMapObject(ship);
+
+    return ship;
+}
+
 MapObject* Game::instantiateNewMapObject(const MapObjectType* mapObjectType) const {
     MapObject* mapObject = MapObject::instantiate(mapObjectType);
     mapObject->setCreatedTicks(ticks);

@@ -371,6 +371,12 @@ private:
     void loadCarrierMapObjectTypes(const std::string& configFilePath);
 
     /**
+     * @brief Lädt die Konfiguration der verfügbaren Map-Objekt-Typen aus `ships.xml`.
+     * @param configFilePath Pfad der zu ladenden Config-XML-Datei
+     */
+    void loadShipMapObjectTypes(const std::string& configFilePath);
+
+    /**
      * @brief Lädt die Konfiguration der Gelände-Kacheln
      * @param configFilePath Pfad der zu ladenden Config-XML-Datei
      */
