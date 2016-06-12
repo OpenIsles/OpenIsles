@@ -202,6 +202,10 @@ set(NOSDL_FILES
     src/cpp/graphics/mgr/nosdl/NoSDLGraphicsMgr.h
     src/cpp/graphics/renderer/nosdl/NoSDLRenderer.h
 )
+set(AI_SOURCE_FILES
+    src/cpp/ai/AiMgr.cpp
+    src/cpp/ai/AiMgr.h
+)
 set(TEST_FILES
     test/cpp/GameTest.cpp
     test/cpp/GameTest.h
@@ -262,6 +266,7 @@ add_executable(OpenIsles
     ${GUI_SOURCE_FILES}
     ${GRAPHICS_SOURCE_FILES}
     ${SOUND_SOURCE_FILES}
+    ${AI_SOURCE_FILES}
 )
 
 # Windows mit MinGW

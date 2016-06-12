@@ -25,6 +25,16 @@ enum class PlayerColor : unsigned int {
 #define PLAYER_YELLOW 2
 #define PLAYER_WHITE  3
 
+
+enum PlayerType {
+
+    HUMAN,   ///< menschlicher Spieler, der die Anwendung grade bedient
+    AI,      ///< KI-gesteuerter Spieler
+    // TODO später hoffentlich mal NETWORK :-)
+
+};
+
+
 /**
  * @brief Klasse, die einen Spieler darstellt
  */
@@ -48,6 +58,11 @@ private:
      * @brief Spielerfarbe
      */
     PlayerColor color;
+
+    /**
+     * @brief Was ist das für ein Spieler
+     */
+    PlayerType type;
     
     /**
      * @brief Name des Spielers
@@ -61,7 +76,7 @@ public:
      * @param color Spielerfarbe
      * @param name Name des Spielers
      */
-    Player(PlayerColor color, const std::string& name);
+    Player(PlayerColor color, const PlayerType& type, const std::string& name);
     ~Player();
     
     PlayerColor getColor() const {
@@ -89,6 +104,20 @@ public:
 
         Log::error(_("Illegal player color: %u"), (unsigned int) color);
         throw std::runtime_error("Illegal player color");
+    }
+
+    /**
+     * @return `true`, wenn dies ein menschlicher Spieler ist
+     */
+    bool isHuman() const {
+        return (type == PlayerType::HUMAN);
+    }
+
+    /**
+     * @return `true`, wenn dies ein KI-Spieler ist
+     */
+    bool isAI() const {
+        return (type == PlayerType::AI);
     }
 };
 

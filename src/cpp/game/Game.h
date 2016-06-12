@@ -5,6 +5,7 @@
 #include <gtest/gtest.h>
 #endif
 
+#include <cassert>
 #include <map>
 #include <vector>
 #include "global.h"
@@ -162,6 +163,7 @@ public:
      * @param currentPlayer Spieler, der als aktueller Spieler gesetzt werden soll.
      */
     void setCurrentPlayer(Player* currentPlayer) {
+        assert(currentPlayer->isHuman());
         this->currentPlayer = currentPlayer;
     }
     

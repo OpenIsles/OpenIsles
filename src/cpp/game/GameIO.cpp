@@ -101,10 +101,13 @@ void GameIO::loadPlayers(Game* game, rapidxml::xml_node<>* mapNode) {
         std::string playerName = getPropertyValueFromPropertiesNode(propertiesNode, playerNameAttrName.c_str());
 
         // Spieler anlegen
-        Player* player = new Player(playerColor, playerName);
+        bool isHumanPlayer = (i == currentPlayerNr);
+        const PlayerType playerType = (isHumanPlayer) ? PlayerType::HUMAN : PlayerType::AI;
+
+        Player* player = new Player(playerColor, playerType, playerName);
         game->addPlayer(player);
 
-        if (i == currentPlayerNr) {
+        if (isHumanPlayer) {
             game->setCurrentPlayer(player);
         }
     }
