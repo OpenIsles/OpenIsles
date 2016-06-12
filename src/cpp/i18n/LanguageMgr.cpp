@@ -3,7 +3,11 @@
 
 
 void LanguageMgr::initFromEnvironment() {
+#ifdef WINDOWS
+    const char* newLocale = setlocale(LC_ALL, "");
+#else
     const char* newLocale = std::setlocale(LC_ALL, "");
+#endif
     if (newLocale != nullptr) {
         Log::info(_("Using locale '%s'."), newLocale);
     }

@@ -45,6 +45,12 @@ HOWTO ... unter Windows kompilieren
 - CMake-Variablen in CLion einrichten. Beim ersten Buildversuch sollten diese rot markiert werden.
   Siehe Screenshot cmake-variables.png. Es müssen die i686-w64-Varianten verwendet werden.
 
+  Wichtig: Nicht wie auf dem Screenshot Backslashe, sondern normale Slashes benutzen, sondern bekommt man merkwürdige
+  Fehlermeldung, wo die Pfadtrennzeichen komplett fehlen.
+
+- Seit neuestem fehlt die Freetype-Library im MinGW!? Library auf http://gnuwin32.sourceforge.net/packages/freetype.htm
+  runterladen (developer files) und die lib-Datei in lib-Verzeichnis der MinGW-Installation kopieren.
+
 - Die Anwendung sollte nun kompilieren und erfolgreich linken.
 
 - Zum Starten müssen die dll-Dateien aus den jeweiligen bin-Verzeichnissen der SDL-Libraries (wieder die

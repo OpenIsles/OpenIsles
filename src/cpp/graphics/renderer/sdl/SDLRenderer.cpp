@@ -77,7 +77,7 @@ const int SDLRenderer::getWindowHeight() const {
 
 void SDLRenderer::setClipRect(const Rect* const rect) {
     if (rect != nullptr) {
-#if SDL_VERSION_ATLEAST(2, 0, 4)
+#if SDL_VERSION_ATLEAST(2, 0, 4) || defined(WINDOWS)
         SDL_Rect sdlRect = { rect->x, rect->y, rect->w, rect->h };
 #else
         /* Workaround für Bug in SDL (bis v2.0.3)

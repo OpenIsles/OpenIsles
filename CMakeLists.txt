@@ -303,7 +303,7 @@ endif(MINGW)
 
 # Windows
 if(MINGW)
-    target_link_libraries(OpenIsles ${SDL2_LIBRARY} ${SDL2_IMAGE_LIBRARY} ${SDL2_MIXER_LIBRARY} ${SDL2_TTF_LIBRARY} winmm imm32 version freetype)
+    target_link_libraries(OpenIsles ${SDL2_LIBRARY} ${SDL2_IMAGE_LIBRARY} ${SDL2_MIXER_LIBRARY} ${SDL2_TTF_LIBRARY} winmm imm32 version freetype intl iconv)
 
 # Linux
 else(MINGW)
