@@ -268,9 +268,8 @@ void GuiMap::renderTile(const MapCoords& mapCoords) {
     int screenZoom = map->getScreenZoom();
 
     int drawingFlags = 0;
-    if (selectedMapObject != nullptr) {
-        bool insideCatchmentArea =
-            (selectedBuilding != nullptr && CatchmentArea::isInsideCatchmentArea(*selectedBuilding, mapCoords));
+    if (selectedBuilding != nullptr) {
+        bool insideCatchmentArea = CatchmentArea::isInsideCatchmentArea(*selectedBuilding, mapCoords);
 
         if (!insideCatchmentArea) {
             drawingFlags |= IGraphic::DRAWING_FLAG_DARKENED;
@@ -444,12 +443,10 @@ void GuiMap::renderTile(const MapCoords& mapCoords) {
 
         Rect rectDestination = Rect(destDrawX, destDrawY, rectSource.w / screenZoom, rectSource.h / screenZoom);
 
-        if (selectedMapObject != nullptr &&
+        if (selectedBuilding != nullptr &&
             (!(drawingFlags & IGraphic::DRAWING_FLAG_MASKED))) { // Wenn "maskiert", dann grundsätzlich nicht
                                                                  // zusätzlich "darkened" anwenden
-            bool insideCatchmentArea =
-                (selectedBuilding != nullptr &&
-                 CatchmentArea::isInsideCatchmentArea(*selectedBuilding, *mapObjectToDrawHere));
+            bool insideCatchmentArea = CatchmentArea::isInsideCatchmentArea(*selectedBuilding, *mapObjectToDrawHere);
 
             if (!insideCatchmentArea) {
                 drawingFlags |= IGraphic::DRAWING_FLAG_DARKENED;
