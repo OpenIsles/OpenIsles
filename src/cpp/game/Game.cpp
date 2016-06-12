@@ -188,8 +188,8 @@ Ship* Game::addShip(const DoubleMapCoords& mapCoords, const MapObjectType* mapOb
     // Objekt anlegen
     Ship* ship = (Ship*) instantiateNewMapObject(mapObjectType);
     ship->setMapCoords(mapCoords);
-    ship->setMapWidth(1);
-    ship->setMapHeight(1);
+    ship->setMapWidth(mapObjectType->mapWidth);
+    ship->setMapHeight(mapObjectType->mapHeight);
     ship->setPlayer(player);
     ship->setName("Mayflower"); // TODO Standard-Liste von Schiffsnamen und einen zufällig picken
     ship->setCurrentMovingDirection(direction);

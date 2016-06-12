@@ -314,6 +314,8 @@ void ConfigMgr::loadShipMapObjectTypes(const std::string& configFilePath) {
         mapObjectType.mapHeight = (unsigned char) stringToUnsignedLong(
             shipNode->first_attribute("height", 6, true)->value());
 
+        assert(mapObjectType.mapWidth == mapObjectType.mapHeight); // Schiffe müssen quadratisch sein, da sie sich drehen (8 Ansichten)
+
         rapidxml::xml_node<>* goodsSlotsNode = shipNode->first_node("goods-slots", 11, true);
         mapObjectType.goodsSlots = (unsigned char) stringToUnsignedLong(goodsSlotsNode->value());
 

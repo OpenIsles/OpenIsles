@@ -3807,7 +3807,7 @@
     <property name="player" value="3"/>
    </properties>
   </object>
-  <object name="little-ship" x="1216" y="608" width="32" height="32">
+  <object name="little-ship" x="1216" y="608" width="64" height="64">
    <properties>
     <property name="direction" value="southwest"/>
     <property name="goods-on-board1.good" value="food"/>
@@ -3818,7 +3818,7 @@
     <property name="player" value="1"/>
    </properties>
   </object>
-  <object name="little-ship" x="1312" y="640" width="32" height="32">
+  <object name="little-ship" x="1312" y="640" width="64" height="64">
    <properties>
     <property name="direction" value="north"/>
     <property name="goods-on-board1.good" value="tobacco"/>
