@@ -289,6 +289,8 @@ if(MINGW)
     target_include_directories(OpenIsles PUBLIC "${SDL2_MIXER_INCLUDE_DIR}")
     target_include_directories(OpenIsles PUBLIC "${SDL2_TTF_INCLUDE_DIR}")
 
+    # TODO Lua unter Windows einbinden
+
 # Linux
 else(MINGW)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DLINUX")
@@ -304,15 +306,32 @@ else(MINGW)
     execute_process(COMMAND "sdl2-config" "--cflags" OUTPUT_VARIABLE SDL2_CFLAGS OUTPUT_STRIP_TRAILING_WHITESPACE)
     separate_arguments(SDL2_CFLAGS UNIX_COMMAND "${SDL2_CFLAGS}")
     target_compile_options(OpenIsles PUBLIC ${SDL2_CFLAGS})
+
+    # Lua
+    include(FindLua)
+    if(NOT LUA_INCLUDE_DIR OR NOT LUA_LIBRARY)
+        message(FATAL_ERROR Essential library Lua not found)
+    endif()
+    if(LUA_VERSION_STRING VERSION_LESS 5.3)
+        message(WARN Your Lua version is older than 5.3. No garanties this will work. Consider updating to v5.3)
+    endif()
+
+    target_include_directories(OpenIsles PUBLIC ${LUA_INCLUDE_DIR})
+
 endif(MINGW)
 
 # Windows
 if(MINGW)
-    target_link_libraries(OpenIsles ${SDL2_LIBRARY} ${SDL2_IMAGE_LIBRARY} ${SDL2_MIXER_LIBRARY} ${SDL2_TTF_LIBRARY} winmm imm32 version freetype)
+    target_link_libraries(OpenIsles
+                          ${SDL2_LIBRARY} ${SDL2_IMAGE_LIBRARY} ${SDL2_MIXER_LIBRARY} ${SDL2_TTF_LIBRARY}
+                          ${LUA_LIBRARY}
+                          winmm imm32 version freetype)
 
 # Linux
 else(MINGW)
-    target_link_libraries(OpenIsles ${SDL2_LIBRARIES} ${SDL2_IMAGE_LIBRARIES} ${SDL2_MIXER_LIBRARIES} ${SDL2_TTF_LIBRARIES})
+    target_link_libraries(OpenIsles
+                          ${SDL2_LIBRARIES} ${SDL2_IMAGE_LIBRARIES} ${SDL2_MIXER_LIBRARIES} ${SDL2_TTF_LIBRARIES}
+                          ${LUA_LIBRARY})
 
 endif(MINGW)
 
