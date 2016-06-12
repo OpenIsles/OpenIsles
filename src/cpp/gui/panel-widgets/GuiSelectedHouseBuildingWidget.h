@@ -4,7 +4,6 @@
 #include <SDL.h>
 #include <list>
 #include "global.h"
-#include "graphics/graphic/sdl/SDLGraphic.h"
 #include "gui/components/GuiFoodSupplyElement.h"
 #include "gui/components/GuiGoodElement.h"
 #include "gui/components/GuiStaticGraphicElement.h"

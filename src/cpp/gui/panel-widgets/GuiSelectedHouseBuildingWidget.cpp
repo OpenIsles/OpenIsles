@@ -3,6 +3,7 @@
 #include "global.h"
 #include "config/ConfigMgr.h"
 #include "game/Game.h"
+#include "graphics/graphic/IGraphic.h"
 #include "graphics/mgr/IFontMgr.h"
 #include "gui/panel-widgets/GuiSelectedHouseBuildingWidget.h"
 #include "map/Map.h"
