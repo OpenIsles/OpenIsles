@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenIsles 0.1\n"
 "Report-Msgid-Bugs-To: http://www.openisles.org\n"
-"POT-Creation-Date: 2016-06-11 22:14+0200\n"
-"PO-Revision-Date: 2016-06-11 22:13+0200\n"
+"POT-Creation-Date: 2016-06-12 10:57+0200\n"
+"PO-Revision-Date: 2016-06-12 10:58+0200\n"
 "Last-Translator: theHacker <openisles@openisles.org>\n"
 "Language-Team: theHacker <openisles@openisles.org>\n"
 "Language: de\n"
@@ -509,7 +509,7 @@ msgstr "Bevölkerungsgruppe '%s' geladen."
 msgid "Illegal value '%s' for populationTier."
 msgstr "Ungültiger Wert '%s' für populationTier."
 
-#: src/cpp/game/Game.cpp:211
+#: src/cpp/game/Game.cpp:212
 msgid "Cannot have negative inhabitants."
 msgstr "Negative Bewohnerzahl nicht möglich."
 
@@ -534,12 +534,12 @@ msgstr "Warnung: Gut '%s' nicht in der Spieldatei gefunden."
 msgid "Illegal mapObjectType '%s'."
 msgstr "Ungültiger Mapobjekt-Typ '%s'."
 
-#: src/cpp/game/GameIO.cpp:306
+#: src/cpp/game/GameIO.cpp:310
 #, c-format
 msgid "Warning: Ship has loaded unknown Good '%s'."
 msgstr "Warnung: Schiff hat unbekanntes Gut '%s' geladen."
 
-#: src/cpp/game/GameIO.cpp:313
+#: src/cpp/game/GameIO.cpp:317
 #, c-format
 msgid "Warning: Ship has illegal inventory %d for Good '%s'."
 msgstr "Warnung: Schiff hat ungültigen Lagerbestand %d für Gut '%s'."
@@ -597,47 +597,47 @@ msgstr "Konnte Textur nicht erzeugen: %s"
 msgid "Illegal bytesPerPixel: %d"
 msgstr "Ungültige bytesPerPixel: %d"
 
-#: src/cpp/graphics/mgr/AbstractGraphicsMgr.cpp:151
+#: src/cpp/graphics/mgr/AbstractGraphicsMgr.cpp:154
 #, c-format
 msgid "Illegal views %d for animation in graphicSet '%s'"
 msgstr "Ungültige views %d für Animation im Grafik-Set '%s'"
 
-#: src/cpp/graphics/mgr/AbstractGraphicsMgr.cpp:172
+#: src/cpp/graphics/mgr/AbstractGraphicsMgr.cpp:175
 #, c-format
 msgid "Could not parse frames '%s'"
 msgstr "Konnte frames '%s' nicht parsen"
 
-#: src/cpp/graphics/mgr/AbstractGraphicsMgr.cpp:195
+#: src/cpp/graphics/mgr/AbstractGraphicsMgr.cpp:198
 #, c-format
 msgid "Illegal state '%s' for animation in graphicSet '%s'"
 msgstr "Ungültiger state '%s' für Animation im Grafik-Set '%s'"
 
-#: src/cpp/graphics/mgr/AbstractGraphicsMgr.cpp:206
+#: src/cpp/graphics/mgr/AbstractGraphicsMgr.cpp:209
 #, c-format
 msgid "No graphics load for graphicSet '%s'"
 msgstr "Keine Grafiken für Grafik-Set '%s' geladen"
 
-#: src/cpp/graphics/mgr/AbstractGraphicsMgr.cpp:284
+#: src/cpp/graphics/mgr/AbstractGraphicsMgr.cpp:287
 #, c-format
 msgid "Illegal statesCount %d for graphicFilename %s"
 msgstr "Ungültiger statesCount %d für graphicFilename %s"
 
-#: src/cpp/graphics/mgr/AbstractGraphicsMgr.cpp:325
+#: src/cpp/graphics/mgr/AbstractGraphicsMgr.cpp:328
 #, c-format
 msgid "Could not divide the frames equally: '%s'"
 msgstr "Konnte die Frames nicht gleichmäßig aufteilen: '%s'"
 
-#: src/cpp/graphics/mgr/AbstractGraphicsMgr.cpp:332
+#: src/cpp/graphics/mgr/AbstractGraphicsMgr.cpp:335
 #, c-format
 msgid "Could not divide the views equally: '%s'"
 msgstr "Konnte die Ansichten nicht gleichmaßig aufteilen: '%s'"
 
-#: src/cpp/graphics/mgr/AbstractGraphicsMgr.cpp:442
+#: src/cpp/graphics/mgr/AbstractGraphicsMgr.cpp:445
 #, c-format
 msgid "No graphicSet defined for mapObjectType '%s'"
 msgstr "Kein Grafik-Set definiert für mapObjectType '%s'"
 
-#: src/cpp/graphics/mgr/AbstractGraphicsMgr.cpp:448
+#: src/cpp/graphics/mgr/AbstractGraphicsMgr.cpp:451
 #, c-format
 msgid "Could not find graphicSet: '%s'"
 msgstr "Konnte Grafik-Set '%s' nicht finden"
@@ -681,47 +681,47 @@ msgstr "Konnte SDL-image nicht initialisieren: %s"
 msgid "Could not init SDL-TTF: %s"
 msgstr "Konnte SDL-TTF nicht initialisieren: %s"
 
-#: src/cpp/gui/GuiMgr.cpp:104
+#: src/cpp/gui/GuiMgr.cpp:106
 msgid "Switch to building mode"
 msgstr "Baumodus einschalten"
 
-#: src/cpp/gui/GuiMgr.cpp:110
+#: src/cpp/gui/GuiMgr.cpp:112
 msgid "Switch to combat mode"
 msgstr "Kampfmodus einschalten"
 
-#: src/cpp/gui/GuiMgr.cpp:116
+#: src/cpp/gui/GuiMgr.cpp:118
 msgid "Switch to info mode"
 msgstr "Infomodus einschalten"
 
-#: src/cpp/gui/GuiMgr.cpp:122
+#: src/cpp/gui/GuiMgr.cpp:124
 #: src/cpp/gui/panel-widgets/GuiOptionsMenuWidget.cpp:17
 msgid "Options"
 msgstr "Einstellungen"
 
-#: src/cpp/gui/GuiMgr.cpp:221
+#: src/cpp/gui/GuiMgr.cpp:228
 #, c-format
 msgid "Identifier %d is already registered."
 msgstr "Bezeichner %d ist bereits registriert."
 
-#: src/cpp/gui/GuiMgr.cpp:233
+#: src/cpp/gui/GuiMgr.cpp:240
 #, c-format
 msgid "Identifier %d is not registered."
 msgstr "Bezeichner %d ist nicht registriert."
 
-#: src/cpp/gui/GuiMgr.cpp:683
+#: src/cpp/gui/GuiMgr.cpp:700
 msgid "Cannot get pixel data for screenshot."
 msgstr "Kann Pixeldaten für den Screenshot nicht ermitteln."
 
-#: src/cpp/gui/GuiMgr.cpp:712
+#: src/cpp/gui/GuiMgr.cpp:729
 msgid "Cannot allocate memory for big screenshot."
 msgstr "Kann keinen Speicher für den Riesenscreenshot allozieren."
 
-#: src/cpp/gui/GuiMgr.cpp:725
+#: src/cpp/gui/GuiMgr.cpp:742
 #, c-format
 msgid "Creating tile screenshot for (%d, %d)"
 msgstr "Erzeuge Screenshot-Kachel für (%d, %d)"
 
-#: src/cpp/gui/GuiMgr.cpp:748
+#: src/cpp/gui/GuiMgr.cpp:765
 msgid ""
 "Cannot get pixel data for screenshot. There are now pixels missing on the "
 "big screenshot."
@@ -836,31 +836,31 @@ msgstr "Betriebskosten:"
 msgid "Balance:"
 msgstr "Bilanz:"
 
-#: src/cpp/gui/panel-widgets/GuiSelectedHouseBuildingWidget.cpp:17
+#: src/cpp/gui/panel-widgets/GuiSelectedHouseBuildingWidget.cpp:18
 msgid "Population growth in this population tier"
 msgstr "Zuwächse in dieser Bevölkerungsgruppe"
 
-#: src/cpp/gui/panel-widgets/GuiSelectedHouseBuildingWidget.cpp:18
+#: src/cpp/gui/panel-widgets/GuiSelectedHouseBuildingWidget.cpp:19
 msgid "No population growth in this population tier"
 msgstr "Keine Zuwächse in dieser Bevölkerungsgruppe"
 
-#: src/cpp/gui/panel-widgets/GuiSelectedHouseBuildingWidget.cpp:19
+#: src/cpp/gui/panel-widgets/GuiSelectedHouseBuildingWidget.cpp:20
 msgid "Slight population loss in this population tier"
 msgstr "Leichte Rückgänge in dieser Bevölkerungsgruppe"
 
-#: src/cpp/gui/panel-widgets/GuiSelectedHouseBuildingWidget.cpp:20
+#: src/cpp/gui/panel-widgets/GuiSelectedHouseBuildingWidget.cpp:21
 msgid "Severe population loss in this population tier"
 msgstr "Starke Rückgänge in dieser Bevölkerungsgruppe"
 
-#: src/cpp/gui/panel-widgets/GuiSelectedHouseBuildingWidget.cpp:39
+#: src/cpp/gui/panel-widgets/GuiSelectedHouseBuildingWidget.cpp:40
 msgid "Population in this population tier"
 msgstr "Anzahl dieser Bevölkerungsgruppe"
 
-#: src/cpp/gui/panel-widgets/GuiSelectedHouseBuildingWidget.cpp:48
+#: src/cpp/gui/panel-widgets/GuiSelectedHouseBuildingWidget.cpp:49
 msgid "Population tier's name"
 msgstr "Bezeichnung für diese Bevölkerung"
 
-#: src/cpp/gui/panel-widgets/GuiSelectedHouseBuildingWidget.cpp:109
+#: src/cpp/gui/panel-widgets/GuiSelectedHouseBuildingWidget.cpp:110
 #, c-format
 msgid "The demand for %s is not being fulfilled"
 msgstr "Der Bedarf an %s wird nicht erfüllt"
@@ -873,6 +873,10 @@ msgstr "Abholfertige Waren in diesem Gebäude"
 #, c-format
 msgid "Supply of %s (enough for another %.1ft of %s)"
 msgstr "%svorrat (reicht für weitere %.1ft %s)"
+
+#: src/cpp/gui/panel-widgets/GuiSelectedShipWidget.cpp:35
+msgid "Empty"
+msgstr "Leer"
 
 #: src/cpp/i18n/LanguageMgr.cpp:8
 #, c-format
@@ -1012,33 +1016,33 @@ msgid "Loaded music '%s'."
 msgstr "Musik '%s' geladen."
 
 # automatically generated out of data xmls
-#~ msgid "neededPublicBuilding|overdue|theater"
-#~ msgstr "Die Hausbewohner beklagen das Fehlen eines Theaters"
-
-# automatically generated out of data xmls
-#~ msgid "neededPublicBuilding|overdue|high-school"
-#~ msgstr "Die Hausbewohner beklagen das Fehlen einer Hochschule"
-
-# automatically generated out of data xmls
-#~ msgid "neededPublicBuilding|overdue|church"
-#~ msgstr "Die Hausbewohner beklagen das Fehlen einer Kirche"
-
-# automatically generated out of data xmls
-#~ msgid "neededPublicBuilding|overdue|bathhouse"
-#~ msgstr "Die Hausbewohner beklagen das Fehlen eines Badehauses"
-
-# automatically generated out of data xmls
-#~ msgid "neededPublicBuilding|new|theater"
-#~ msgstr "Die Hausbewohner verlangen nach einem Theater"
-
-# automatically generated out of data xmls
-#~ msgid "neededPublicBuilding|new|high-school"
-#~ msgstr "Die Hausbewohner verlangen nach einer Hochschule"
+#~ msgid "neededPublicBuilding|new|bathhouse"
+#~ msgstr "Die Hausbewohner verlangen nach einem Badehaus"
 
 # automatically generated out of data xmls
 #~ msgid "neededPublicBuilding|new|church"
 #~ msgstr "Die Hausbewohner verlangen nach einem größeren Gotteshaus"
 
 # automatically generated out of data xmls
-#~ msgid "neededPublicBuilding|new|bathhouse"
-#~ msgstr "Die Hausbewohner verlangen nach einem Badehaus"
+#~ msgid "neededPublicBuilding|new|high-school"
+#~ msgstr "Die Hausbewohner verlangen nach einer Hochschule"
+
+# automatically generated out of data xmls
+#~ msgid "neededPublicBuilding|new|theater"
+#~ msgstr "Die Hausbewohner verlangen nach einem Theater"
+
+# automatically generated out of data xmls
+#~ msgid "neededPublicBuilding|overdue|bathhouse"
+#~ msgstr "Die Hausbewohner beklagen das Fehlen eines Badehauses"
+
+# automatically generated out of data xmls
+#~ msgid "neededPublicBuilding|overdue|church"
+#~ msgstr "Die Hausbewohner beklagen das Fehlen einer Kirche"
+
+# automatically generated out of data xmls
+#~ msgid "neededPublicBuilding|overdue|high-school"
+#~ msgstr "Die Hausbewohner beklagen das Fehlen einer Hochschule"
+
+# automatically generated out of data xmls
+#~ msgid "neededPublicBuilding|overdue|theater"
+#~ msgstr "Die Hausbewohner beklagen das Fehlen eines Theaters"

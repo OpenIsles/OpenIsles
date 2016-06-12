@@ -13,6 +13,7 @@ class GuiGoodElement : public GuiStaticGraphicElement {
 private:
     /**
      * @brief Zeiger auf das Gut, dass angezeigt wird.
+     * Oder `nullptr`, wenn kein Gut gesetzt ist und das Element leer angezeigt wird.
      */
     const Good* good;
 
@@ -39,7 +40,11 @@ private:
 public:
     GuiGoodElement(const Context& context);
     virtual ~GuiGoodElement() override;
-    
+
+    /**
+     * @brief Setzt das Gut, dass dieses Element darstellt
+     * @param good Gut oder `nullptr`, um kein Gut zu verwenden
+     */
     void setGood(const Good* good);
 
     void setDisplayValue(bool displayValue) {

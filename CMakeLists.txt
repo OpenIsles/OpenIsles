@@ -176,6 +176,8 @@ set(GUI_SOURCE_FILES
     src/cpp/gui/panel-widgets/GuiSelectedProductionBuildingWidget.h
     src/cpp/gui/panel-widgets/GuiSelectedPublicBuildingWidget.cpp
     src/cpp/gui/panel-widgets/GuiSelectedPublicBuildingWidget.h
+    src/cpp/gui/panel-widgets/GuiSelectedShipWidget.cpp
+    src/cpp/gui/panel-widgets/GuiSelectedShipWidget.h
     src/cpp/gui/GuiMgr.cpp
     src/cpp/gui/GuiMgr.h
     src/cpp/gui/Identifiers.h

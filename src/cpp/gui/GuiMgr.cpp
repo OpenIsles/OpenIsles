@@ -20,8 +20,10 @@
 #include "gui/panel-widgets/GuiSelectedHouseBuildingWidget.h"
 #include "gui/panel-widgets/GuiSelectedProductionBuildingWidget.h"
 #include "gui/panel-widgets/GuiSelectedPublicBuildingWidget.h"
+#include "gui/panel-widgets/GuiSelectedShipWidget.h"
 #include "gui/Identifiers.h"
 #include "map/Map.h"
+#include "map/Ship.h"
 #include "utils/Events.h"
 
 #ifdef DEBUG_A_STAR
@@ -189,6 +191,11 @@ void GuiMgr::initPanelWidgets() {
     GuiSelectedPublicBuildingWidget* selectedPublicBuildingWidget = new GuiSelectedPublicBuildingWidget(context);
     registerElement(GUI_ID_SELECTED_PUBLIC_BUILDING_PANEL_WIDGET, selectedPublicBuildingWidget);
     panel->addChildElement(selectedPublicBuildingWidget);
+
+    // ausgewähltes Schiff
+    GuiSelectedShipWidget* selectedShipWidget = new GuiSelectedShipWidget(context);
+    registerElement(GUI_ID_SELECTED_SHIP_PANEL_WIDGET, selectedShipWidget);
+    panel->addChildElement(selectedShipWidget);
 
     // Kolonie-Warenübersicht
     GuiColonyGoodsWidget* colonyGoodsWidget = new GuiColonyGoodsWidget(context);
@@ -534,6 +541,16 @@ void GuiMgr::onSelectedMapObjectChanged(const MapObject* newSelectedMapObject) {
 
             guiSelectedBuildingWidget->onSelectedMapBuildingChanged(newSelectedBuilding);
             panelState.activeGuiPanelWidget = guiSelectedBuildingWidget;
+        }
+        else {
+            const Ship* newSelectedShip = dynamic_cast<const Ship*>(newSelectedMapObject);
+            if (newSelectedShip != nullptr) {
+                GuiSelectedShipWidget* guiSelectedShipWidget =
+                    (GuiSelectedShipWidget*) findElement(GUI_ID_SELECTED_SHIP_PANEL_WIDGET);
+
+                guiSelectedShipWidget->onSelectedShipChanged(newSelectedShip);
+                panelState.activeGuiPanelWidget = guiSelectedShipWidget;
+            }
         }
     }
 

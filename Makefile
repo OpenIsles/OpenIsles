@@ -334,6 +334,11 @@ endef
 
 $(foreach GOOD,$(GOODS),$(eval $(call RENDER_GOODS_ICONS,$(GOOD))))
 
+# leeres Symbol
+$(DATA_DIRECTORY)/img/goods/marketplace-icon/empty.png: $(SRC_DIRECTORY)/xcf/goods/marketplace-icon-background.png
+	mkdir -p $(DATA_DIRECTORY)/img/goods/marketplace-icon
+	convert $< -resize 42x42 $@
+
 ########################################################################################################################
 # Animationen                                                                                                          #
 ########################################################################################################################

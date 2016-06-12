@@ -26,6 +26,10 @@ void GuiGoodElement::setGood(const Good* good) {
 void GuiGoodElement::renderElement(IRenderer* renderer) {
     GuiStaticGraphicElement::renderElement(renderer);
 
+    if (good == nullptr) {
+        return; // nix weiter zu tun, wenn das Element leer ist
+    }
+
     int windowX, windowY;
     getWindowCoords(windowX, windowY);
 

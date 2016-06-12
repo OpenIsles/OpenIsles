@@ -44,6 +44,9 @@ void AbstractGraphicsMgr::loadGraphics() {
         graphicSets["goods-marketplace-icon/" + good->name] = graphicSet;
         loadStaticGraphicSet(graphicSet, std::string("data/img/goods/marketplace-icon/" + good->name + ".png").c_str());
     }
+    GraphicSet* graphicSet = new GraphicSet();
+    graphicSets["goods-marketplace-icon/empty"] = graphicSet;
+    loadStaticGraphicSet(graphicSet, "data/img/goods/marketplace-icon/empty.png");
 
     loadMapRotateGraphicSet();
     loadMapZoomGraphicSet();

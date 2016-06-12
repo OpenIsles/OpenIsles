@@ -15,11 +15,14 @@ void GuiGoodsSlotElement::setGoodsSlot(const GoodsSlot* goodsSlot) {
 }
 
 void GuiGoodsSlotElement::renderElement(IRenderer* renderer) {
-    assert(goodsSlot->capacity > 0);
-
     // Werte aktualisieren
-    setValue(goodsSlot->inventory);
-    setBarValue((double) goodsSlot->inventory / (double) goodsSlot->capacity);
+    if (goodsSlot->isUsed()) {
+        setValue(goodsSlot->inventory);
+        setBarValue((double) goodsSlot->inventory / (double) goodsSlot->capacity);
+    } else {
+        setValue(0);
+        setBarValue(0);
+    }
 
     // Den Rest macht die Basisklasse
     GuiGoodElement::renderElement(renderer);

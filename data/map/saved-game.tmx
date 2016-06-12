@@ -3818,5 +3818,18 @@
     <property name="player" value="1"/>
    </properties>
   </object>
+  <object name="little-ship" x="1312" y="640" width="32" height="32">
+   <properties>
+    <property name="direction" value="north"/>
+    <property name="goods-on-board1.good" value="tobacco"/>
+    <property name="goods-on-board1.inventory" value="5"/>
+    <property name="goods-on-board2.good" value="alcohol"/>
+    <property name="goods-on-board2.inventory" value="23"/>
+    <property name="goods-on-board3.good" value="tobacco-goods"/>
+    <property name="goods-on-board3.inventory" value="17"/>
+    <property name="name" value="Güter"/>
+    <property name="player" value="1"/>
+   </properties>
+  </object>
  </objectgroup>
 </map>

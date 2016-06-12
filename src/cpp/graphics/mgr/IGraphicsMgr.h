@@ -61,9 +61,16 @@ public:
     virtual const GraphicSet* getGraphicSet(const std::string& graphicName) const = 0;
 
     std::string getGraphicSetNameForGoodIcons(const Good* good, bool marketplaceIcon) const {
-        const std::string graphicSetNamePrefix = (marketplaceIcon) ? "goods-marketplace-icon" : "goods-icon";
+        if (good != nullptr) {
+            const std::string graphicSetNamePrefix = (marketplaceIcon) ? "goods-marketplace-icon" : "goods-icon";
 
-        return graphicSetNamePrefix + "/" + good->name;
+            return graphicSetNamePrefix + "/" + good->name;
+        }
+
+        // ein leeres Symbol in klein gibt es logischerweise nicht (es wäre rein-transparent!)
+        assert (marketplaceIcon == true);
+
+        return "goods-marketplace-icon/empty";
     }
 
     std::string getGraphicSetNameForAddBuildingButton(const MapObjectType* mapObjectType) const {
