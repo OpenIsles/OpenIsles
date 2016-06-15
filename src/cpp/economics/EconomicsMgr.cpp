@@ -140,7 +140,7 @@ void EconomicsMgr::updatePlayerStatus() {
     for (auto iter : game->getColonies()) {
         const Player* player = iter.first.first;
         const Colony* colony = iter.second;
-        int playerIndex = player->getColorIndex();
+        unsigned int playerIndex = player->getColorIndex();
 
         // Steuern: alle Bevölkerungsgruppen einzeln betrachten
         unsigned long taxesIncomeColony = 0;
@@ -173,7 +173,7 @@ void EconomicsMgr::updatePlayerStatus() {
         // TODO Stillgelegt-Status
 
         if (operatingCosts > 0) {
-            int playerIndex = mapObject->getPlayer()->getColorIndex();
+            unsigned int playerIndex = mapObject->getPlayer()->getColorIndex();
             operatingCostsSumPerPlayer[playerIndex] += operatingCosts;
         }
     }

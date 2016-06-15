@@ -1,7 +1,7 @@
 #ifndef _AI_MGR_H
 #define _AI_MGR_H
 
-#include <lua.h>
+#include <lua.hpp>
 #include "global.h"
 
 

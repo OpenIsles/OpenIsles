@@ -16,6 +16,8 @@ set(MAIN_SOURCE_FILE
     src/cpp/main.cpp
 )
 set(COMMON_SOURCE_FILES
+    src/cpp/ai/AiMgr.cpp
+    src/cpp/ai/AiMgr.h
     src/cpp/config/BuildingCosts.cpp
     src/cpp/config/BuildingCosts.h
     src/cpp/config/ConfigMgr.cpp
@@ -202,9 +204,11 @@ set(NOSDL_FILES
     src/cpp/graphics/mgr/nosdl/NoSDLGraphicsMgr.h
     src/cpp/graphics/renderer/nosdl/NoSDLRenderer.h
 )
-set(AI_SOURCE_FILES
-    src/cpp/ai/AiMgr.cpp
-    src/cpp/ai/AiMgr.h
+set(API_SOURCE_FILES
+    src/cpp/api/api-global.h
+    src/cpp/api/game.cpp
+    src/cpp/api/misc.cpp
+    src/cpp/api/player.cpp
 )
 set(TEST_FILES
     test/cpp/GameTest.cpp
@@ -266,7 +270,7 @@ add_executable(OpenIsles
     ${GUI_SOURCE_FILES}
     ${GRAPHICS_SOURCE_FILES}
     ${SOUND_SOURCE_FILES}
-    ${AI_SOURCE_FILES}
+    ${API_SOURCE_FILES}
 )
 
 # Windows mit MinGW

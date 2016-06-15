@@ -91,7 +91,7 @@ public:
      * @brief Liefert des Farbindex des Spielers zurück. Das entspricht dem Wert einer der Defines `PLAYER_*`.
      * @return Farbindex des Spielers im Bereich von 0 bis 3.
      */
-    int getColorIndex() const {
+    unsigned int getColorIndex() const {
         if (color == PlayerColor::RED) {
             return PLAYER_RED;
         } else if (color == PlayerColor::BLUE) {

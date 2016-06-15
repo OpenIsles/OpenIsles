@@ -1,38 +1,31 @@
-#include <fstream>
-#include <sstream>
 #include <stdexcept>
-#include <lauxlib.h>
 #include "ai/AiMgr.h"
+#include "api/api-global.h"
 
 
-/**
- * @brief Makro, um eine Funktion in Lua zur Verfügung zu stellen.
- * Das Makro generiert den Funktionskopf für die Funktion
- * @param name Name, unter dem die Funktion in Lua zur Verfügung stehen soll
- */
-#define DEFINE_LUA_FUNCTION(name) static int LUA_ ## name(lua_State* lua)
-
-/**
- * @brief Makro, dass eine zuvor mit DEFINE_LUA_FUNCTION definierte Funktion im `lua_state* lua` als
- * globale Funktion zur Verfügung stellt
- */
-#define REGISTER_GLOBAL_LUA_FUNCTION(name) \
-    lua_pushcfunction(lua, LUA_ ## name); \
-    lua_setglobal(lua, #name)
-
-
-DEFINE_LUA_FUNCTION(debug) {
-    const char* message = lua_tostring(lua, 1);
-    Log::debug(message);
-    return 0;
-}
+static const luaL_Reg apiMethods[] = {
+    { "getGameTicks"  , LUA_getGameTicks },
+    { "debug"         , LUA_debug },
+    { "getPlayerCount", LUA_getPlayerCount },
+    { "getPlayer"     , LUA_getPlayer },
+    { nullptr         , nullptr }
+};
 
 
 AiMgr::AiMgr(const Context& context) : ContextAware(context) {
     lua = luaL_newstate();
 
+    // Zeiger auf den Context im State sichern, damit wir später wieder rankommen
+    *static_cast<const Context**>(lua_getextraspace(lua)) = &context;
+
+    // Lua-Standard-Library
+    // TODO alle Funktionen aussortieren, die wir nicht wollen
+    luaL_openlibs(lua);
+
     // API registrieren
-    REGISTER_GLOBAL_LUA_FUNCTION(debug);
+    lua_newtable(lua);
+    luaL_setfuncs(lua, apiMethods, 0);
+    lua_setglobal(lua, "OpenIsles");
 
     // Script laden
     const char* scriptFilename = "data/ai/hello-world.lua";
