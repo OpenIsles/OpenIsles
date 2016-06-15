@@ -381,5 +381,11 @@ const EighthDirection GameIO::getViewPropertyValueFromPropertiesNode(rapidxml::x
         return Direction::SOUTH;
     }
 
-    return Direction::fromString(viewPropertyValue);
+    EighthDirection direction = Direction::fromString(viewPropertyValue);
+    if (direction == Direction::NONE) {
+        Log::error(_("Illegal dirName '%s'."), viewPropertyValue);
+        throw std::runtime_error("Illegal dirName");
+    }
+
+    return direction;
 }

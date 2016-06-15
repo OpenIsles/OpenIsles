@@ -365,6 +365,11 @@ void ConfigMgr::loadTilesConfig(const std::string& configFilePath) {
             int yOffsetInTileset = stringToInteger(tmxTileNode->first_attribute("y", 1, true)->value());
 
             FourthDirection tileView = Direction::fromString(tileViewName);
+            if (tileView == Direction::NONE) {
+                Log::error(_("Illegal dirName '%s'."), tileViewName);
+                throw std::runtime_error("Illegal dirName");
+            }
+
             mapTileConfig.mapTileViewsOffsetXYInTileset[tileView] =
                 std::make_pair(xOffsetInTileset, yOffsetInTileset);
 

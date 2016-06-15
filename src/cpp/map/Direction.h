@@ -118,6 +118,8 @@ public:
      * @brief Ermittelt eine Ansicht/Richtung aus einem String.
      * Diese Methode ist sehr teuer und sollte keinesfalls beim Rendern gebraucht werden!
      *
+     * Ist keine gültige Ansicht benannt, wird `NONE` zurückgegeben.
+     *
      * @param dirName String, der die Ansicht/Richtung benennt
      * @return EighthDirection
      */
@@ -139,8 +141,7 @@ public:
         } else if (dirName == "southwest") {
             return Direction::SOUTHWEST;
         } else {
-            Log::error(_("Illegal dirName '%s'."), dirName.c_str());
-            throw std::runtime_error("Illegal dirName");
+            return Direction::NONE;
         }
     }
 

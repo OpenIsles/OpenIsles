@@ -5,6 +5,7 @@
 
 static const luaL_Reg apiMethods[] = {
     { "getGameTicks"  , LUA_getGameTicks },
+    { "build"         , LUA_build },
     { "debug"         , LUA_debug },
     { "getPlayerCount", LUA_getPlayerCount },
     { "getPlayer"     , LUA_getPlayer },

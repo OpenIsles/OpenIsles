@@ -27,6 +27,17 @@
  */
 DEFINE_LUA_FUNCTION(getGameTicks);
 
+/**
+ * @lua
+ * @brief Baut etwas
+ * @param playerIndex [Integer] Index des Spielers, der bauen möchte
+ * @param mapObjectTypeName [String] Name des Map-Objekts
+ * @param mapX [Integer] Map-X-Koordinate, an die gebaut werden soll
+ * @param mapY [Integer] Map-Y-Koordinate, an die gebaut werden soll
+ * @param view [String] Ausrichtung des Objekts
+ */
+DEFINE_LUA_FUNCTION(build);
+
 
 // misc.cpp ///////////////////////////////////////////////////////////////////////////////////////
 
@@ -49,7 +60,7 @@ DEFINE_LUA_FUNCTION(getPlayerCount);
 /**
  * @lua
  * @brief Liefert Informationen zu einem Spieler zurück
- * @param playerIndex (Index des Spielers im Bereich 1 bis getPlayerCount())
+ * @param playerIndex [Integer] Index des Spielers i(m Bereich 1 bis getPlayerCount())
  * @return Record mit Informationen zum Spieler
  */
 DEFINE_LUA_FUNCTION(getPlayer);

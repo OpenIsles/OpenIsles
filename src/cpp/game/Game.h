@@ -152,10 +152,21 @@ public:
     /**
      * @brief Liefert einen bestimmten Spieler zurück
      * @param playerIndex Index des Spielers.
-     * @return Spieler
+     * @return Spieler (oder `nullptr`, wenn ein ungültiger Index übergeben wurde)
      */
-    Player* getPlayer(int playerIndex) const {
-        return players.at(playerIndex);
+    Player* getPlayer(unsigned int playerIndex) const {
+        if (playerIndex < players.size()) {
+            return players.at(playerIndex);
+        }
+
+        return nullptr;
+    }
+
+    /**
+     * @return Anzahl Spieler im Spiel
+     */
+    unsigned int getPlayerCount() const {
+        return (unsigned int ) players.size();
     }
 
     /**

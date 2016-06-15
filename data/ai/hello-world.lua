@@ -5,6 +5,7 @@
 oi = OpenIsles
 
 local firstRun = true
+local buildSomething = false
 local lastOutputTicks = 0
 
 function main()
@@ -29,5 +30,15 @@ function main()
         local player = oi.getPlayer(i)
 
         oi.debug("Player '" .. player.name .. "' (type " .. player.type .. ") has " .. player.coins .. " coins.")
+    end
+
+    -- nach 30 Sekunden bauen wir was
+    if (buildSomething == false) and (gameTicks > 30000) then
+        for y = 212, 217 do
+            oi.build(3, "farm-road", 52, y, "south");
+        end
+        oi.build(3, "foresters", 53, 215, "north");
+
+        buildSomething = true
     end
 end

@@ -2,24 +2,22 @@
 #include "game/Game.h"
 #include "game/Player.h"
 
-static constexpr int playersCount = 4;
-
 
 DEFINE_LUA_FUNCTION(getPlayerCount) {
-    // TODO aktuell haben wir immer 4 Spieler. Das sollte änderbar sein
+    const Context* context = *static_cast<const Context**>(lua_getextraspace(lua));
 
-    lua_pushinteger(lua, playersCount);
+    lua_pushinteger(lua, context->game->getPlayerCount());
     return 1;
 }
 
 DEFINE_LUA_FUNCTION(getPlayer) {
+    const Context* context = *static_cast<const Context**>(lua_getextraspace(lua));
+
     int playerIndex = luaL_checkinteger(lua, -1);
-    if (playerIndex < 0 || playerIndex > playersCount) {
+    const Player* player = context->game->getPlayer(playerIndex - 1);
+    if (player == nullptr) {
         return luaL_error(lua, _("Invalid playerIndex").c_str());
     }
-
-    const Context* context = *static_cast<const Context**>(lua_getextraspace(lua));
-    const Player* player = context->game->getPlayer(playerIndex - 1);
 
     lua_createtable(lua, 0, 4);
 
