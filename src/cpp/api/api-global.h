@@ -29,6 +29,34 @@ DEFINE_LUA_FUNCTION(getGameTicks);
 
 /**
  * @lua
+ * @brief Liefert die Karte zurück.
+ * @return Table mit `width`, `height` und Elementen `x,y` pro Kachel
+ */
+DEFINE_LUA_FUNCTION(getMap);
+
+/**
+ * @lua
+ * @brief Liefert allen Inseln zurück.
+ * @return Array mit Eigenschaften `width`, `height`, `x` und `y`
+ */
+DEFINE_LUA_FUNCTION(getIsles);
+
+/**
+ * @lua
+ * @brief Liefert alle Schiffe zurück.
+ * @return Array mit Eigenschaften `x`, `y`, `player` und `name`
+ */
+DEFINE_LUA_FUNCTION(getShips);
+
+/**
+ * @lua
+ * @brief Liefert alle Map-Objekte (das sind alle Strukturen, Harvestables und Gebäude; nicht: Träger und Schiffe) zurück.
+ * @return Array mit Eigenschaften `x`, `y`, `player` und `type`
+ */
+DEFINE_LUA_FUNCTION(getObjects);
+
+/**
+ * @lua
  * @brief Baut etwas
  * @param playerIndex [Integer] Index des Spielers, der bauen möchte
  * @param mapObjectTypeName [String] Name des Map-Objekts
@@ -37,6 +65,15 @@ DEFINE_LUA_FUNCTION(getGameTicks);
  * @param view [String] Ausrichtung des Objekts
  */
 DEFINE_LUA_FUNCTION(build);
+
+/**
+ * @lua
+ * @brief Reißt etwas ab
+ * @param playerIndex [Integer] Index des Spielers, der abreißen möchte
+ * @param mapX [Integer] Map-X-Koordinate, an der abgerissen werden soll
+ * @param mapY [Integer] Map-Y-Koordinate, an der abgerissen werden soll
+ */
+DEFINE_LUA_FUNCTION(demolish);
 
 
 // misc.cpp ///////////////////////////////////////////////////////////////////////////////////////

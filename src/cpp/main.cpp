@@ -232,6 +232,7 @@ int main(int argc, char** argv) {
     context.game = game;
 
     game->loadGameFromTMX(cmdlineParams.mapFileToLoad);
+    aiMgr->init();
 
     sdlRenderer->showWindow();
 

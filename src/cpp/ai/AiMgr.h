@@ -21,6 +21,12 @@ public:
     ~AiMgr();
 
     /**
+     * @brief Gibt der KI die Möglichkeit, sich zu initialisieren.
+     * Die KI bekommt die initialen Bedingungen zum Spiel (Karte) mitgeteilt.
+     */
+    void init();
+
+    /**
      * @brief Gibt der KI die Möglichkeit, Aktionen auszuführen
      */
     void update();

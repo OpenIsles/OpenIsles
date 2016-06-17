@@ -5,7 +5,12 @@
 
 static const luaL_Reg apiMethods[] = {
     { "getGameTicks"  , LUA_getGameTicks },
+    { "getMap"        , LUA_getMap },
+    { "getIsles"      , LUA_getIsles },
+    { "getShips"      , LUA_getShips },
+    { "getObjects"    , LUA_getObjects },
     { "build"         , LUA_build },
+    { "demolish"      , LUA_demolish },
     { "debug"         , LUA_debug },
     { "getPlayerCount", LUA_getPlayerCount },
     { "getPlayer"     , LUA_getPlayer },
@@ -40,9 +45,16 @@ AiMgr::~AiMgr() {
     lua_close(lua);
 }
 
+void AiMgr::init() {
+    lua_getglobal(lua, "init");
+    if (lua_pcall(lua, 0, 0, 0) != LUA_OK) {
+        Log::error(_("Error executing AI %s function: %s"), "init", lua_tostring(lua, -1));
+    }
+}
+
 void AiMgr::update() {
     lua_getglobal(lua, "main");
     if (lua_pcall(lua, 0, 0, 0) != LUA_OK) {
-        Log::error(_("Error executing AI main() function: %s"), lua_tostring(lua, -1)); // TODO Fehlermeldungen aus Lua sind nicht übersetzt
+        Log::error(_("Error executing AI %s function: %s"), "main", lua_tostring(lua, -1));
     }
 }
