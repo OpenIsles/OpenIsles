@@ -142,6 +142,9 @@ DEFINE_LUA_FUNCTION(build) {
     if (player == nullptr) {
         return luaL_error(lua, _("Invalid playerIndex").c_str());
     }
+    if (!player->isAI()) {
+        return luaL_error(lua, _("AI may only play for AI players").c_str());
+    }
 
     const char* mapObjectTypeName = luaL_checkstring(lua, 2);
     const MapObjectType* mapObjectType = context->configMgr->getMapObjectType(mapObjectTypeName);
@@ -189,6 +192,9 @@ DEFINE_LUA_FUNCTION(demolish) {
     Player* player = context->game->getPlayer(playerIndex - 1);
     if (player == nullptr) {
         return luaL_error(lua, _("Invalid playerIndex").c_str());
+    }
+    if (!player->isAI()) {
+        return luaL_error(lua, _("AI may only play for AI players").c_str());
     }
 
     int mapX = luaL_checkinteger(lua, 2);
