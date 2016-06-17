@@ -319,7 +319,7 @@ else(MINGW)
         message(WARN Your Lua version is older than 5.3. No garanties this will work. Consider updating to v5.3)
     endif()
 
-    target_include_directories(OpenIsles PUBLIC ${LUA_INCLUDE_DIR})
+    include_directories(${LUA_INCLUDE_DIR})
 
 endif(MINGW)
 
@@ -356,6 +356,7 @@ if(GTEST_FOUND)
 
     add_executable(OpenIsles-Tests
         ${COMMON_SOURCE_FILES}
+        ${API_SOURCE_FILES}
         ${NOSDL_FILES}
         ${TEST_FILES}
     )
@@ -367,7 +368,7 @@ if(GTEST_FOUND)
 
     target_include_directories(OpenIsles-Tests PUBLIC ${GTEST_INCLUDE_DIRS})
     target_compile_definitions(OpenIsles-Tests PUBLIC "-DNO_SDL -DIN_TESTS")
-    target_link_libraries(OpenIsles-Tests ${GTEST_BOTH_LIBRARIES} pthread) # BOTH-Variable benutzen, damit wir uns an jeder Testdatei die main()-Methode sparen
+    target_link_libraries(OpenIsles-Tests ${LUA_LIBRARY} ${GTEST_BOTH_LIBRARIES} pthread) # BOTH-Variable benutzen, damit wir uns an jeder Testdatei die main()-Methode sparen
 
     add_test(OpenIslesTests OpenIsles-Tests)
 endif(GTEST_FOUND)
