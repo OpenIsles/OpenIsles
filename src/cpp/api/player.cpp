@@ -4,9 +4,7 @@
 
 
 DEFINE_LUA_FUNCTION(getPlayerCount) {
-    const Context* context = *static_cast<const Context**>(lua_getextraspace(lua));
-
-    lua_pushinteger(lua, context->game->getPlayerCount());
+    lua_pushinteger(lua, Player::MAX_PLAYERS);
     return 1;
 }
 
@@ -15,17 +13,14 @@ DEFINE_LUA_FUNCTION(getPlayer) {
 
     int playerIndex = luaL_checkinteger(lua, -1);
     const Player* player = context->game->getPlayer(playerIndex - 1);
-    if (player == nullptr) {
+    if (player == nullptr || !player->isUsed()) {
         return luaL_error(lua, _("Invalid playerIndex").c_str());
     }
 
-    lua_createtable(lua, 0, 4);
+    lua_createtable(lua, 0, 3);
 
     lua_pushnumber(lua, player->coins);
     lua_setfield(lua, -2, "coins");
-
-    lua_pushinteger(lua, player->getColorIndex());
-    lua_setfield(lua, -2, "color");
 
     if (player->isHuman()) {
         lua_pushstring(lua, "human");

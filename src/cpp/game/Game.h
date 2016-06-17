@@ -5,6 +5,7 @@
 #include <gtest/gtest.h>
 #endif
 
+#include <array>
 #include <cassert>
 #include <map>
 #include <vector>
@@ -93,9 +94,9 @@ private:
     Map* map;
     
     /**
-     * @brief Vektor von Spielern
+     * @brief Array aller Spieler
      */
-    std::vector<Player*> players;
+    std::array<Player, Player::MAX_PLAYERS> players;
     
     /**
      * @brief Zeiger auf den Spieler, den dieser Client kontrolliert
@@ -142,31 +143,32 @@ public:
     
     /**
      * @brief Fügt einen neuen Spieler hinzu. Sinnvollerweise sollte das nur zu Beginns des Spiels gemacht werden.
-     * Die Spieler werden vom Destruktor am Ende freigegeben
-     * @param player Spieler
+     * @param color Spielerfarbe
+     * @param type Typ des Spielers
+     * @param name Name des Spielers
+     * @param coins Münzguthaben
+     * @return liefert den Player zurück
      */
-    void addPlayer(Player* player) {
-        players.push_back(player);
+    Player* addPlayer(PlayerColor color, const PlayerType& type, const std::string& name, long coins) {
+        assert (type != PlayerType::NONE);
+
+        Player* player = &players[int(color)];
+
+        player->initPlayer(color, type, name, coins);
+        return player;
     }
     
     /**
      * @brief Liefert einen bestimmten Spieler zurück
-     * @param playerIndex Index des Spielers.
+     * @param playerIndex Index des Spielers (im Bereich 0 bis Player::MAX_PLAYERS-1)
      * @return Spieler (oder `nullptr`, wenn ein ungültiger Index übergeben wurde)
      */
-    Player* getPlayer(unsigned int playerIndex) const {
-        if (playerIndex < players.size()) {
-            return players.at(playerIndex);
+    Player* getPlayer(int playerIndex) {
+        if ((playerIndex >= 0) && (playerIndex < Player::MAX_PLAYERS)) {
+            return &players[playerIndex];
         }
 
         return nullptr;
-    }
-
-    /**
-     * @return Anzahl Spieler im Spiel
-     */
-    unsigned int getPlayerCount() const {
-        return (unsigned int ) players.size();
     }
 
     /**

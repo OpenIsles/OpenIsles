@@ -7,31 +7,35 @@
 #include "game/PlayerStatus.h"
 
 /**
- * @brief Enum für die verschiedenen Spielerfarben.
- * Zugewiesene Werte sind im Format 0xAARRGGBB.
+ * @page playerIndex Spieleridentifzierung
+ *
+ * Jeder Spieler hat eine eindeutige Farbe, die mit dem `playerIndex` gleichzusetzen ist.
+ * Es werden immer für alle maximal möglichen Spieler (Player::MAX_PLAYERS) Player-Objekte angelegt.
+ * Ob ein Spieler wirklich in Verwendung ist, wird durch Player::isUsed() ermittelt.
+ *
+ * - Im C++-Code geht der `playerIndex` von 0 bis `(Player::MAX_PLAYERS - 1)`.
+ * - Im Lua-Code geht der `playerIndex` dagegen von 1 bis `(Player::MAX_PLAYERS)`, da dort Array one-based sind.
+ *   Der `playerIndex` 0 steht in diesem Fall für "keinen Spieler".
+ * - In der TMX-Datei werden die Spieler auch von 1 bis `(Player::MAX_PLAYERS)` durchnummiert. Diese Nummerierung
+ *   hat aber nichts mit dem `playerIndex` zu tun. Der `playerIndex` wird letztlich durch die Farbe des Spieler
+ *   zugeordnet.
  */
-enum class PlayerColor : unsigned int {
-    
-    RED    = 0xffaf2707,
-    BLUE   = 0xff1088df,
-    YELLOW = 0xfff8c030,
-    WHITE  = 0xffc0c0c0,
-    
+
+/**
+ * @brief Enum für die verschiedenen Spielerfarben. Der Wert entsprechend dem (zero-based) playerIndex.
+ */
+enum class PlayerColor : int {
+    RED = 0,
+    BLUE = 1,
+    YELLOW = 2,
+    WHITE = 3
 };
 
-// Defines, um Offsets für die Spielerfarben auf Bezeichner anwenden zu können, siehe Player::getColorIndex().
-#define PLAYER_RED    0
-#define PLAYER_BLUE   1
-#define PLAYER_YELLOW 2
-#define PLAYER_WHITE  3
-
-
-enum PlayerType {
-
+enum class PlayerType {
+    NONE,    ///< dieser Spieler ist nicht im Spiel
     HUMAN,   ///< menschlicher Spieler, der die Anwendung grade bedient
     AI,      ///< KI-gesteuerter Spieler
     // TODO später hoffentlich mal NETWORK :-)
-
 };
 
 
@@ -40,8 +44,12 @@ enum PlayerType {
  */
 class Player {
 
-    friend class Game; // Beim Hinzufügen eines Spielers wird der index gesetzt
-    
+public:
+    /**
+     * @brief maximale Spieleranzahl
+     */
+    static constexpr unsigned char MAX_PLAYERS = 4;
+
 public:
     /**
      * @brief Guthaben an Münzen
@@ -67,20 +75,38 @@ private:
     /**
      * @brief Name des Spielers
      */
-    const std::string name;
+    std::string name;
 
 public:
-    
+    Player() {
+        type = PlayerType::NONE;
+    }
+    ~Player() {}
+
     /**
-     * @brief Konstruiert einen neuen Spieler
+     * Setzt die Werte für einen Spieler
+     *
      * @param color Spielerfarbe
+     * @param type Typ des Spielers
      * @param name Name des Spielers
+     * @param coins Münzguthaben
      */
-    Player(PlayerColor color, const PlayerType& type, const std::string& name);
-    ~Player();
+    void initPlayer(PlayerColor color, const PlayerType& type, const std::string& name, long coins) {
+        this->color = color;
+        this->type = type;
+        this->name = name;
+        this->coins = coins;
+    }
     
     PlayerColor getColor() const {
         return color;
+    }
+
+    /**
+     * @brief Index des Spieler im Bereich 0 bis (Player::MAX_PLAYERS-1)
+     */
+    int getPlayerIndex() const {
+        return int(color);
     }
 
     const std::string& getName() const {
@@ -88,22 +114,10 @@ public:
     }
 
     /**
-     * @brief Liefert des Farbindex des Spielers zurück. Das entspricht dem Wert einer der Defines `PLAYER_*`.
-     * @return Farbindex des Spielers im Bereich von 0 bis 3.
+     * @return `true`, wenn der Spieler im Spiel ist. `false`, wenn der Spieler nicht am Spiel teilnimmt.
      */
-    unsigned int getColorIndex() const {
-        if (color == PlayerColor::RED) {
-            return PLAYER_RED;
-        } else if (color == PlayerColor::BLUE) {
-            return PLAYER_BLUE;
-        } else if (color == PlayerColor::YELLOW) {
-            return PLAYER_YELLOW;
-        } else if (color == PlayerColor::WHITE) {
-            return PLAYER_WHITE;
-        }
-
-        Log::error(_("Illegal player color: %u"), (unsigned int) color);
-        throw std::runtime_error("Illegal player color");
+    bool isUsed() const {
+        return (type != PlayerType::NONE);
     }
 
     /**

@@ -57,7 +57,7 @@ function main()
     lastOutputTicks = gameTicks
 
     -- Geld aller Spieler ausgeben
-    for i = 1, 4 do
+    for i = 1, oi.getPlayerCount() do
         local player = oi.getPlayer(i)
 
         oi.debug("Player '" .. player.name .. "' (type " .. player.type .. ") has " .. player.coins .. " coins.")

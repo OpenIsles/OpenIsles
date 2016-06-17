@@ -42,7 +42,6 @@ set(COMMON_SOURCE_FILES
     src/cpp/game/GameIO.cpp
     src/cpp/game/GameIO.h
     src/cpp/game/GoodsSlot.h
-    src/cpp/game/Player.cpp
     src/cpp/game/Player.h
     src/cpp/game/PlayerStatus.h
     src/cpp/game/PopulationSatisfaction.h

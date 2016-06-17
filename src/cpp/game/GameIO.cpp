@@ -75,12 +75,13 @@ void GameIO::loadPlayers(Game* game, rapidxml::xml_node<>* mapNode) {
 
     int currentPlayerNr = std::atoi(getPropertyValueFromPropertiesNode(propertiesNode, "current-player"));
 
-    for (int i = 1; i <= 4; i++) {
+    for (int i = 1; i <= Player::MAX_PLAYERS; i++) {
         std::string playerAttrPrefix = "player" + toString(i) + "-";
 
         // Spielerfarbe
         std::string playerColorAttrName = playerAttrPrefix + "color";
-        const char* playerColorAttrValue = getPropertyValueFromPropertiesNode(propertiesNode, playerColorAttrName.c_str());
+        const char* playerColorAttrValue =
+            getPropertyValueFromPropertiesNode(propertiesNode, playerColorAttrName.c_str());
         PlayerColor playerColor;
 
         if (std::strcmp(playerColorAttrValue, "red") == 0) {
@@ -103,9 +104,9 @@ void GameIO::loadPlayers(Game* game, rapidxml::xml_node<>* mapNode) {
         // Spieler anlegen
         bool isHumanPlayer = (i == currentPlayerNr);
         const PlayerType playerType = (isHumanPlayer) ? PlayerType::HUMAN : PlayerType::AI;
+        long coins = 10000; // TODO Münzguthaben aus TMX-Datei laden
 
-        Player* player = new Player(playerColor, playerType, playerName);
-        game->addPlayer(player);
+        Player* player = game->addPlayer(playerColor, playerType, playerName, coins);
 
         if (isHumanPlayer) {
             game->setCurrentPlayer(player);

@@ -88,7 +88,7 @@ DEFINE_LUA_FUNCTION(getShips) {
         lua_setfield(lua, -2, "x");
         lua_pushnumber(lua, mapCoords.y());
         lua_setfield(lua, -2, "y");
-        lua_pushinteger(lua, ship->getPlayer()->getColorIndex()); // TODO player per ID referenzieren
+        lua_pushinteger(lua, (lua_Integer) (ship->getPlayer()->getPlayerIndex() + 1));
         lua_setfield(lua, -2, "player");
         lua_pushstring(lua, ship->getName().c_str());
         lua_setfield(lua, -2, "name");
@@ -115,15 +115,14 @@ DEFINE_LUA_FUNCTION(getObjects) {
 
         const MapCoords& mapCoords = mapObjectFixed->getMapCoords();
 
-        // TODO player per ID referenzieren
-        int player = (mapObjectFixed->getPlayer() != nullptr) ? mapObjectFixed->getPlayer()->getColorIndex() : -1;
+        int player = (mapObjectFixed->getPlayer() != nullptr) ? (mapObjectFixed->getPlayer()->getPlayerIndex() + 1) : 0;
 
         lua_createtable(lua, 0, 4);
         lua_pushinteger(lua, (lua_Integer) mapCoords.x());
         lua_setfield(lua, -2, "x");
         lua_pushinteger(lua, (lua_Integer) mapCoords.y());
         lua_setfield(lua, -2, "y");
-        lua_pushinteger(lua, player);
+        lua_pushinteger(lua, (lua_Integer) player);
         lua_setfield(lua, -2, "player");
         lua_pushstring(lua, mapObjectFixed->getMapObjectType()->name.c_str());
         lua_setfield(lua, -2, "type");

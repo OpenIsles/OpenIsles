@@ -1,11 +1,22 @@
 #include <SDL.h>
 #include "config/ConfigMgr.h"
 #include "game/Game.h"
+#include "game/Player.h"
 #include "graphics/renderer/sdl/SDLRenderer.h"
 #include "gui/components/GuiMinimap.h"
 #include "map/coords/MapCoords.h"
 #include "utils/Color.h"
 
+
+/**
+ * @brief Spielerfarben, wie sie auf der Minimap dargestellt werden
+ */
+static unsigned int playerColors[Player::MAX_PLAYERS] = {
+    0xffaf2707,
+    0xff1088df,
+    0xfff8c030,
+    0xffc0c0c0
+};
 
 // TODO nicht-quadratische Karten erlauben (Wir brauchen x/yScaleFactor).
 // Info: Anno-Karten sind 500x350 Kacheln groß
@@ -121,7 +132,7 @@ void GuiMinimap::updateMinimapTexture() {
 
             *(pixelPtr++) = (mapTileConfig->isOceanOnMinimap()) ?
                             0x00000090 : (player != nullptr ?
-                                        ((uint32_t) player->getColor()) : 0xff886040);
+                                         playerColors[player->getPlayerIndex()] : 0xff886040);
         }
     }
 
