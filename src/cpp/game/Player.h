@@ -7,7 +7,7 @@
 #include "game/PlayerStatus.h"
 
 /**
- * @page playerIndex Spieleridentifzierung
+ * @page playerIndex Spieleridentifizierung
  *
  * Jeder Spieler hat eine eindeutige Farbe, die mit dem `playerIndex` gleichzusetzen ist.
  * Es werden immer für alle maximal möglichen Spieler (Player::MAX_PLAYERS) Player-Objekte angelegt.
