@@ -40,9 +40,6 @@ function init()
 end
 
 function main()
-    -- TODO eine init()-Methode wäre schön, wenn wir bei Spielstart benachrichtigt werden, z.B. mit Map und Spieleranzahl
-    local playerCount = oi.getPlayerCount()
-
     -- einmalige Begrüßung
     if firstRun == true then
         oi.debug("Hello World from AI :-)")
@@ -51,7 +48,7 @@ function main()
 
     -- nur alle 5 Sekunden was tun
     local gameTicks = oi.getGameTicks()
-    if gameTicks <= lastOutputTicks + 5000 then
+    if gameTicks < lastOutputTicks + 5000 then
         return
     end
     lastOutputTicks = gameTicks

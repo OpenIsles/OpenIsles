@@ -21,6 +21,12 @@ public:
     ~AiMgr();
 
     /**
+     * @brief Lädt ein KI-Script
+     * @param scriptFilename Dateipfad des Scripts
+     */
+    void loadScript(const std::string& scriptFilename);
+
+    /**
      * @brief Gibt der KI die Möglichkeit, sich zu initialisieren.
      * Die KI bekommt die initialen Bedingungen zum Spiel (Karte) mitgeteilt.
      */

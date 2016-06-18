@@ -212,6 +212,8 @@ set(API_SOURCE_FILES
 set(TEST_FILES
     test/cpp/GameTest.cpp
     test/cpp/GameTest.h
+    test/cpp/ai/AiGameTest.h
+    test/cpp/ai/HelloWorldAiTest.cpp
     test/cpp/config/ConfigMgrTest.cpp
     test/cpp/economics/CarrierSheepTest.cpp
     test/cpp/economics/CarrierTest.cpp
