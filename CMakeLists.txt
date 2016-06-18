@@ -236,6 +236,7 @@ set(TEST_FILES
     test/cpp/map/buildqueue/BuildOperationTest_DoBuild.cpp
     test/cpp/map/buildqueue/BuildOperationTest_Overbuild.cpp
     test/cpp/map/buildqueue/BuildOperationTest_Street.cpp
+    test/cpp/map/buildqueue/BuildOperationTest_Terrain.cpp
     test/cpp/map/coords/MapCoordsTest.cpp
     test/cpp/map/DirectionTest.cpp
     test/cpp/map/HarvestableTest.cpp

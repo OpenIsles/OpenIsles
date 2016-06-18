@@ -37,7 +37,7 @@ TEST_F(BuildOperationTest, buildStreets) {
     for (const MapCoords& mapCoords : mapCoordsToBuildThere) {
         const BuildOperationResultBit& resultBit = *result.at(mapCoords);
 
-        ASSERT_EQ(false, resultBit.somethingInTheWay);
+        ASSERT_EQ(true, resultBit.buildAllowed);
         ASSERT_EQ(false, resultBit.deleteMapObjectThere);
 
         ASSERT_EQ(cobbledStreet, resultBit.mapObjectToReplaceWith->getMapObjectType());

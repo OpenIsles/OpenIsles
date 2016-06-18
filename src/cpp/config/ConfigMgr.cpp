@@ -398,8 +398,11 @@ MapTileType ConfigMgr::getMapTileTypeByName(const std::string& mapTileTypeName) 
     else if (mapTileTypeName == "shallow-water") {
         return MapTileType::SHALLOW_WATER;
     }
-    else if (mapTileTypeName == "shore-ocean") {
-        return MapTileType::SHORE_OCEAN;
+    else if (mapTileTypeName == "shore-water") {
+        return MapTileType::SHORE_WATER;
+    }
+    else if (mapTileTypeName == "shore-sand") {
+        return MapTileType::SHORE_SAND;
     }
     else if (mapTileTypeName == "shore-grass") {
         return MapTileType::SHORE_GRASS;

@@ -40,10 +40,6 @@ GuiMap::GuiMap(const Context& context, GuiResourcesBar* guiResourcesBar) :
     GuiBase(context), guiResourcesBar(guiResourcesBar) {
 
     setCoords(Consts::mapClipRect.x, Consts::mapClipRect.y, Consts::mapClipRect.w, Consts::mapClipRect.h);
-
-    toolsGood = context.configMgr->getGood("tools");
-    woodGood = context.configMgr->getGood("wood");
-    bricksGood = context.configMgr->getGood("bricks");
 }
 
 GuiMap::~GuiMap() {
@@ -286,7 +282,7 @@ void GuiMap::renderTile(const MapCoords& mapCoords) {
     }
 
     if (buildOperationResultBit) {
-        if (buildOperationResultBit->somethingInTheWay) {
+        if (!buildOperationResultBit->buildAllowed) {
             drawingFlags |= IGraphic::DRAWING_FLAG_MASKED;
         }
     }
@@ -360,7 +356,7 @@ void GuiMap::renderTile(const MapCoords& mapCoords) {
             // - das neu zu platzierende Objekt
             // - ein bereits bestehendes Objekt: nur Strukturen/Harvestables maskiert zeigen, keine Gebäude
             if ((mapObjectType->type != MapObjectTypeClass::BUILDING) ||
-                !buildOperationResultBit->somethingInTheWay) {
+                buildOperationResultBit->buildAllowed) {
 
                 drawingFlags = IGraphic::DRAWING_FLAG_MASKED;
             }

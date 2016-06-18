@@ -31,37 +31,37 @@
             <tmx-tile tmx-tile-index="19" view="north" x="384" y="64" />
             <tmx-tile tmx-tile-index="20" view="west" x="448" y="64" />
         </tile>
-        <tile name="beach-corner" type="shore-ocean">
+        <tile name="beach-corner" type="shore-water">
             <tmx-tile tmx-tile-index="21" view="south" x="512" y="64" />
             <tmx-tile tmx-tile-index="22" view="east" x="576" y="64" />
             <tmx-tile tmx-tile-index="23" view="north" x="640" y="64" />
             <tmx-tile tmx-tile-index="24" view="west" x="704" y="64" />
         </tile>
-        <tile name="beach-edge1" type="shore-ocean">
+        <tile name="beach-edge1" type="shore-water">
             <tmx-tile tmx-tile-index="25" view="south" x="0" y="128" />
             <tmx-tile tmx-tile-index="26" view="east" x="64" y="128" />
             <tmx-tile tmx-tile-index="27" view="north" x="128" y="128" />
             <tmx-tile tmx-tile-index="28" view="west" x="192" y="128" />
         </tile>
-        <tile name="beach-edge2" type="shore-ocean">
+        <tile name="beach-edge2" type="shore-water">
             <tmx-tile tmx-tile-index="29" view="south" x="256" y="128" />
             <tmx-tile tmx-tile-index="30" view="east" x="320" y="128" />
             <tmx-tile tmx-tile-index="31" view="north" x="384" y="128" />
             <tmx-tile tmx-tile-index="32" view="west" x="448" y="128" />
         </tile>
-        <tile name="beach-edge3" type="shore-ocean">
+        <tile name="beach-edge3" type="shore-water">
             <tmx-tile tmx-tile-index="33" view="south" x="512" y="128" />
             <tmx-tile tmx-tile-index="34" view="east" x="576" y="128" />
             <tmx-tile tmx-tile-index="35" view="north" x="640" y="128" />
             <tmx-tile tmx-tile-index="36" view="west" x="704" y="128" />
         </tile>
-        <tile name="beach" type="shore-ocean">
+        <tile name="beach" type="shore-sand">
             <tmx-tile tmx-tile-index="37" view="south" x="0" y="192" />
             <tmx-tile tmx-tile-index="38" view="east" x="64" y="192" />
             <tmx-tile tmx-tile-index="39" view="north" x="128" y="192" />
             <tmx-tile tmx-tile-index="40" view="west" x="192" y="192" />
         </tile>
-        <tile name="water-corner" type="shore-ocean">
+        <tile name="water-corner" type="shore-water">
             <tmx-tile tmx-tile-index="41" view="south" x="256" y="192" />
             <tmx-tile tmx-tile-index="42" view="east" x="320" y="192" />
             <tmx-tile tmx-tile-index="43" view="north" x="384" y="192" />

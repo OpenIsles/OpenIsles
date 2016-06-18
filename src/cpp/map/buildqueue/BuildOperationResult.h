@@ -13,9 +13,14 @@
 struct BuildOperationResultBit {
 
     /**
-     * @brief `true`, wenn an mindestens einer Kachel was im Weg ist, was nicht überbaut werden kann.
+     * @brief `true`, wenn hier gebaut / abgerissen werden darf.
+     *
+     * `false`,
+     * - wenn an mindestens einer Kachel was im Weg ist, was nicht überbaut werden kann
+     * - wenn das Terrain nicht passt
+     * - uns das Gebiet nicht gehört
      */
-    bool somethingInTheWay;
+    bool buildAllowed = false;
 
     /**
      * @brief `false`, wenn die Resourcen nicht mehr reichen, ob dieses Objekt zu bauen.
@@ -84,9 +89,13 @@ public:
         OK,
 
         /**
-         * @brief Es ist was im Weg, was nicht überbaut werden kann.
+         * @brief Es kann nicht gebaut werden. Dies kann mehrere Gründe haben:
+         * - Es ist was im Weg, was nicht überbaut werden kann.
+         * - Das Terrain passt nicht (z.&nbsp;B. Straße ins Wasser bauen)
+         * - Das Zielgebiet ist nicht erschlossen oder gehört dem falschen Spieler
          */
-        SOMETHING_IN_THE_WAY
+        NOT_OK
+
     } result = OK;
 
     /**

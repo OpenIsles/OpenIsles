@@ -45,7 +45,7 @@ TEST_F(BuildOperationTest, somethingInTheWay) {
         const BuildOperationResult& result = buildOperation.getResult();
         ASSERT_EQ(BuildOperationResult::OK, result.result);
         ASSERT_EQ(6, result.size());
-        ASSERT_EQ(false, result.at(MapCoords(46, 35))->somethingInTheWay);
+        ASSERT_EQ(true, result.at(MapCoords(46, 35))->buildAllowed);
     }
 
     {
@@ -55,7 +55,7 @@ TEST_F(BuildOperationTest, somethingInTheWay) {
         const BuildOperationResult& result = buildOperation.getResult();
         ASSERT_EQ(BuildOperationResult::OK, result.result);
         ASSERT_EQ(6, result.size());
-        ASSERT_EQ(false, result.at(MapCoords(47, 34))->somethingInTheWay);
+        ASSERT_EQ(true, result.at(MapCoords(47, 34))->buildAllowed);
     }
 
     {
@@ -63,9 +63,9 @@ TEST_F(BuildOperationTest, somethingInTheWay) {
         BuildOperation buildOperation(context, *player);
         buildOperation.requestBuild(MapCoords(39, 34), tavern, Direction::NORTH);
         const BuildOperationResult& result = buildOperation.getResult();
-        ASSERT_EQ(BuildOperationResult::SOMETHING_IN_THE_WAY, result.result);
+        ASSERT_EQ(BuildOperationResult::NOT_OK, result.result);
         ASSERT_EQ(6, result.size());
-        ASSERT_EQ(true, result.at(MapCoords(40, 35))->somethingInTheWay);
+        ASSERT_EQ(false, result.at(MapCoords(40, 35))->buildAllowed);
     }
 
     {
@@ -73,9 +73,9 @@ TEST_F(BuildOperationTest, somethingInTheWay) {
         BuildOperation buildOperation(context, *player);
         buildOperation.requestBuild(MapCoords(38, 36), tavern, Direction::EAST);
         const BuildOperationResult& result = buildOperation.getResult();
-        ASSERT_EQ(BuildOperationResult::SOMETHING_IN_THE_WAY, result.result);
+        ASSERT_EQ(BuildOperationResult::NOT_OK, result.result);
         ASSERT_EQ(6, result.size());
-        ASSERT_EQ(true, result.at(MapCoords(40, 37))->somethingInTheWay);
+        ASSERT_EQ(false, result.at(MapCoords(40, 37))->buildAllowed);
     }
 }
 

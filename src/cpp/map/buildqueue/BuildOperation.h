@@ -129,11 +129,12 @@ private:
     bool testColony(const MapCoords& mapCoords);
 
     /**
-     * @brief Überprüft, ob ein geplantes Objekt in die Karte gesetzt werden kann oder was im Weg ist.
+     * @brief Überprüft, ob ein geplantes Objekt in die Karte gesetzt werden kann.
      * @param mapObjectToBuild zu platzierendes Objekt
      * @return `true`, wenn alles frei ist oder überbar ist; sonst `false`.
+     *         `false` gibt es auch, wenn das Terrain unpassend ist oder uns das Gebiet nicht gehört
      */
-    bool isSomethingInTheWayOnTheMap(const MapObjectToBuild& mapObjectToBuild) const;
+    bool isBuildAllowed(const MapObjectToBuild& mapObjectToBuild) const;
 
     /**
      * @brief Überprüft, ob ein Map-Objekt über ein anderes Map-Objekt gebaut werden darf.

@@ -810,7 +810,7 @@
         <graphic-set name="mapobjects/pier" />
         <structure-placing>individually</structure-placing>
         <placeable-on>
-            <map-tile-type>shore-ocean</map-tile-type>
+            <map-tile-type>shore-sand</map-tile-type>
             <map-tile-type>shore-grass</map-tile-type>
         </placeable-on>
         <building-costs>

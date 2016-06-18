@@ -7,6 +7,8 @@
  *
  * Testaufbau:
  * @image html buildoperation-test.png
+ * <br />
+ * @image html buildoperation-test-shore.png
  */
 class BuildOperationTest : public GameTest {
 
@@ -52,8 +54,8 @@ protected:
     void assertCorrectResultBitForDemolish(const BuildOperationResultBit& resultBit) const {
         ASSERT_EQ(true, resultBit.deleteMapObjectThere);
 
-        // immer false beim Abreißen
-        ASSERT_EQ(false, resultBit.somethingInTheWay);
+        // beim Abreißen sind diese Felder immer so gesetzt
+        ASSERT_EQ(true, resultBit.buildAllowed);
         ASSERT_EQ(false, resultBit.resourcesEnoughToBuildThis);
         ASSERT_EQ(false, resultBit.costsNothingBecauseOfChange);
 

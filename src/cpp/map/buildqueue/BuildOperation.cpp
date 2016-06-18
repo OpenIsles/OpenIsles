@@ -11,7 +11,8 @@ void BuildOperation::requestBuild(const MapCoords& mapCoords, const MapObjectTyp
     assert (mapObjectsToBuildMode == MapObjectToBuild::EMPTY ||
             mapObjectsToBuildMode == MapObjectToBuild::BUILD);
 
-    // TODO BUILDOPERATION die untenstehende Prüfung entsprechend einem Teil von isAllowedToPlaceMapObject()
+    // TODO Außerhalb der Map?
+    // TODO Außerhalb der Insel?
 
     // Erst überprüfen, ob sich das neue Objekt mit einem bestehenden in der Queue überlappt
     unsigned char mapWidth, mapHeight;
@@ -74,7 +75,7 @@ void BuildOperation::requestBuildWhenNothingInTheWay(const MapCoords& mapCoords,
             mapObjectsToBuildMode == MapObjectToBuild::BUILD);
 
     // Überprüfen. ob auf der Karte alles frei is,...
-    if (isSomethingInTheWayOnTheMap({ mapCoords, mapObjectType, view })) {
+    if (!isBuildAllowed({ mapCoords, mapObjectType, view })) {
         return;
     }
 
@@ -117,8 +118,9 @@ bool BuildOperation::testColony(const MapCoords& mapCoords) {
     return true;
 }
 
-bool BuildOperation::isSomethingInTheWayOnTheMap(const MapObjectToBuild& mapObjectToBuild) const {
+bool BuildOperation::isBuildAllowed(const MapObjectToBuild& mapObjectToBuild) const {
     const MapObjectType* mapObjectType = mapObjectToBuild.mapObjectType;
+    const Map* map = context.game->getMap();
 
     unsigned char mapWidth, mapHeight;
     if (mapObjectToBuild.view == Direction::NORTH || mapObjectToBuild.view == Direction::SOUTH) {
@@ -133,23 +135,30 @@ bool BuildOperation::isSomethingInTheWayOnTheMap(const MapObjectToBuild& mapObje
     for (int y = 0, my = mapObjectToBuild.mapCoords.y(); y < mapHeight; y++, my++) {
         for (int x = 0, mx = mapObjectToBuild.mapCoords.x(); x < mapWidth; x++, mx++) {
             MapCoords mapCoords(mx, my);
-
-            // Überlappung in der Bauqueue! Hier darf auf keinen Fall gebaut werden
-            if (result.find(mapCoords) != result.cend()) {
+            
+            // Passt das Gelände?
+            const MapTile* mapTile = map->getMapTileAt(mapCoords);
+            const MapTileConfig* mapTileConfig = mapTile->getMapTileConfig();
+            if (((MapTileTypeInt) mapTileConfig->mapTileType & mapObjectType->placeableOnMapTileTypeMask) == 0) {
                 return false;
             }
 
-            MapObjectFixed* mapObjectFixedAlreadyThere = context.game->getMap()->getMapObjectFixedAt(mapCoords);
+            // Gebiet erschlossen und unseres?
+            if (mapTile->player == nullptr || mapTile->player != &player) {
+                return false;
+            }
+
+            MapObjectFixed* mapObjectFixedAlreadyThere = map->getMapObjectFixedAt(mapCoords);
             if (mapObjectFixedAlreadyThere != nullptr) {
                 // Überbauen erlaubt?
                 if (!(mayBuildOver(mapObjectFixedAlreadyThere->getMapObjectType(), mapObjectType))) {
-                    return true;
+                    return false;
                 }
             }
         }
     }
 
-    return false;
+    return true;
 }
 
 bool BuildOperation::mayBuildOver(const MapObjectType* mapObjectTypeThere,
@@ -258,7 +267,7 @@ void BuildOperation::adeptExistingStreets(
             resultBit = iter->second;
         }
 
-        resultBit->somethingInTheWay = false;
+        resultBit->buildAllowed = true;
         resultBit->costsNothingBecauseOfChange = true;
         if (resourcesEnoughToBuildThis) {
             // wenn auch nur ein angrenzender Straßenneubau genug Baumaterial hat, hat es die Ersetzung natürlich auch
@@ -350,10 +359,10 @@ void BuildOperation::rebuildResultBuild() {
         std::shared_ptr<BuildOperationResultBit> resultBit(new BuildOperationResultBit());
 
         // Was im Weg?
-        bool somethingInTheWay = isSomethingInTheWayOnTheMap(mapObjectToBuild);
-        resultBit->somethingInTheWay = somethingInTheWay;
+        bool buildAllowed = isBuildAllowed(mapObjectToBuild);
+        resultBit->buildAllowed = buildAllowed;
 
-        if (!somethingInTheWay) {
+        if (buildAllowed) {
             MapObjectFixed* mapObjectToDraw = (MapObjectFixed*) MapObject::instantiate(mapObjectType);
             mapObjectToDraw->setMapCoords(mapObjectToBuild.mapCoords);
             mapObjectToDraw->setView(mapObjectToBuild.view);
@@ -362,7 +371,7 @@ void BuildOperation::rebuildResultBuild() {
             resultBit->mapObjectToDraw.reset(mapObjectToDraw);
         }
         else {
-            result.result = BuildOperationResult::SOMETHING_IN_THE_WAY;
+            result.result = BuildOperationResult::NOT_OK;
         }
 
         // Gratis-Überbauen: Wurde mit demselben Map-Objekt-Typ überbaut, so ist das nur eine "Änderung" und kostet nix
@@ -466,6 +475,7 @@ void BuildOperation::rebuildResultDemolish() {
         assert(mapObjectFixed != nullptr);
 
         std::shared_ptr<BuildOperationResultBit> resultBit(new BuildOperationResultBit());
+        resultBit->buildAllowed = true;
         resultBit->deleteMapObjectThere = true;
 
         // ResultBit den Koordinaten zuweisen
@@ -499,7 +509,7 @@ void BuildOperation::doBuild() {
         const MapCoords& mapCoords = iter.first;
         const BuildOperationResultBit& resultBit = *iter.second;
 
-        assert(!resultBit.somethingInTheWay);
+        assert(resultBit.buildAllowed);
 
         // Kachel schon abgearbeitet?
         if (mapCoordsDone.count(mapCoords)) {
@@ -604,81 +614,3 @@ void BuildOperation::doBuild() {
     colonyGoodsSlotWood.inventory -= buildingCostsEffective.wood;
     colonyGoodsSlotBricks.inventory -= buildingCostsEffective.bricks;
 }
-
-
-
-
-//
-//unsigned char GuiMap::isAllowedToPlaceMapObject(
-//    const MapCoords& mapCoords, const MapObjectType* mapObjectType, const FourthDirection& view) const {
-//
-//    MapTile* mapTile = context.game->getMap()->getMapTileAt(mapCoords);
-//    if (mapTile == nullptr) {
-//        return PLACING_STRUCTURE_OUTSIDE_OF_ISLE;
-//    }
-//
-//    Isle* isle = mapTile->isle;
-//    if (isle == nullptr) {
-//        return PLACING_STRUCTURE_OUTSIDE_OF_ISLE;
-//    }
-//
-//    unsigned char result = PLACING_STRUCTURE_ALLOWED;
-//
-//    // Resourcen checken
-//    Player* currentPlayer = context.game->getCurrentPlayer();
-//    Colony* colony = context.game->getColony(currentPlayer, isle);
-//
-//    if (colony != nullptr) {
-//        const BuildingCosts& buildingCosts = mapObjectType->buildingCosts;
-//        if ((buildingCosts.coins > currentPlayer->coins) ||
-//            (buildingCosts.tools > colony->getGoods(toolsGood).inventory) ||
-//            (buildingCosts.wood > colony->getGoods(woodGood).inventory) ||
-//            (buildingCosts.bricks > colony->getGoods(bricksGood).inventory)) {
-//            result |= PLACING_STRUCTURE_NO_RESOURCES;
-//        }
-//    }
-//
-//    // Checken, ob alles frei und erlaubt is, um das Gebäude zu setzen
-//    unsigned char mapWidth, mapHeight;
-//    if (view == Direction::NORTH || view == Direction::SOUTH) {
-//        mapWidth = mapObjectType->mapWidth;
-//        mapHeight = mapObjectType->mapHeight;
-//    } else {
-//        mapWidth = mapObjectType->mapHeight;
-//        mapHeight = mapObjectType->mapWidth;
-//    }
-//
-//    for (int y = mapCoords.y(); y < mapCoords.y() + mapHeight; y++) {
-//        for (int x = mapCoords.x(); x < mapCoords.x() + mapWidth; x++) {
-//            const MapTile* mapTile = context.game->getMap()->getMapTileAt(MapCoords(x, y));
-//
-//            // Steht was im Weg?
-//            if (mapTile->mapObjectFixed != nullptr) {
-//                result |= PLACING_STRUCTURE_SOMETHING_IN_THE_WAY;
-//            }
-//
-//            auto iterMapTileTemporarily = mapTilesToDrawTemporarily.find(MapCoords(x, y));
-//            if (iterMapTileTemporarily != mapTilesToDrawTemporarily.cend()) {
-//                if (iterMapTileTemporarily->second.mapObjectToDraw) {
-//                    // Zwar noch nicht echt gebaut, allerdings wollen wir da was hinbauen.
-//                    result |= PLACING_STRUCTURE_SOMETHING_IN_THE_WAY_TEMPORARILY;
-//                }
-//            }
-//
-//            // Passt das Gelände?
-//            const MapTileConfig* mapTileConfig = mapTile->getMapTileConfig();
-//            if (((MapTileTypeInt) mapTileConfig->mapTileType & mapObjectType->placeableOnMapTileTypeMask) == 0) {
-//                result |= PLACING_STRUCTURE_MAP_TILE_TYPE_MISMATCH;
-//            }
-//
-//            // Gebiet erschlossen?
-//            if (mapTile->player == nullptr ||                             // Gebiet nicht erschlossen,
-//                mapTile->player != context.game->getCurrentPlayer()) {   // oder nicht unseres
-//
-//                result |= PLACING_STRUCTURE_ROOM_NOT_UNLOCK;
-//            }
-//        }
-//    }
-//
-//    return result;
-//}

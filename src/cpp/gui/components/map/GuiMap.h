@@ -14,79 +14,6 @@
 #include "utils/RectangleData.h"
 
 
-// Konstanten für isAllowedToPlaceMapObject()
-
-/**
- * @brief Setzen der Struktur ist erlaubt
- */
-#define PLACING_STRUCTURE_ALLOWED                 0
-
-/**
- * @brief Setzen der Struktur ist nicht erlaubt wegen Resourcen-Mangel.
- * Grafisch wird dies dargestellt, indem das Gebäude blickt.
- */
-#define PLACING_STRUCTURE_NO_RESOURCES                       (1 << 0)
-
-/**
- * @brief Setzen der Struktur ist hier nicht erlaubt, weil was im Weg ist.
- */
-#define PLACING_STRUCTURE_SOMETHING_IN_THE_WAY               (1 << 1)
-
-/**
- * @brief (nur während Baumodus:) Setzen der Struktur ist hier nicht mehr erlaubt,
- * weil bereits ein anderes Objekt dort gebaut werden soll.
- */
-#define PLACING_STRUCTURE_SOMETHING_IN_THE_WAY_TEMPORARILY   (1 << 2)
-
-/**
- * @brief Setzen der Struktur ist hier nicht erlaubt, weil das Gebiet nicht erschlossen ist.
- */
-#define PLACING_STRUCTURE_ROOM_NOT_UNLOCK                    (1 << 3)
-
-/**
- * @brief Setzen der Struktur ist hier nicht erlaubt, weil das Gelände nicht passt.
- */
-#define PLACING_STRUCTURE_MAP_TILE_TYPE_MISMATCH             (1 << 4)
-
-/**
- * @brief Setzen der Struktur ist nicht erlaubt, da wir mitten auf dem Ozean außerhalb einer Insel sind.
- * Grafisch wird dies dargestellt, indem gar nix gezeichnet wird.
- */
-#define PLACING_STRUCTURE_OUTSIDE_OF_ISLE                    (1 << 5)
-
-
-/**
- * @brief Ähnlich `MapTile` stellt diese Struktur eine Kachel auf der Karte dar. Hier sind alle Infos drin, die wir
- * temporär brauchen. Wir müssen sie zwar zeichnen, allerdings sind sie noch nicht im Spielstand enthalten.
- *
- * Außerdem sind hier bevorstehende Veränderungen enthalten. Beispiele:
- * - Eine Waldkachel muss temporär gezeichnet werden (als Hover-Objekt bezeichnet).
- *   Sie ist aktuell nicht gesetzt, da der Spieler noch nicht die Maustaste gedrückt hat.
- * - Eine Straßen-Kurve-Kachel muss temporär durch eine T-Kachel ersetzt werden, wenn eine Straße angeschlossen wird.
- *   Auch diese Veränderung muss bei Bauabschluss in den Spielzustand übernommen werden.
- * - Temporär muss eine Kachel maskiert gezeichnet werden.
- *   Bei Bauabschluss muss die Kachel gelöscht werden, da der Nutzer das Abrisswerkzeug benutzt hat.
- * - Temporär wird statt einer Waldkachel ein Wohnhaus gezeichnet. Hier ist zu beachten, dass das Wohnhaus 2x2 Felder
- *   groß ist, die Waldkachel nur 1x1. Alle 4 Kacheln erhalten eine temporäre `draw`-Ersetzung. Außerdings ist die
- *   `build`-Ersetzung nur bei einer Kachel das Wohnhaus. Die anderen 3 Kacheln sind auf `nullptr` gesetzt.
- */
-struct MapTileTemporarily {
-
-public:
-    /**
-     * @brief Zeiger auf ein MapObject, das auf dieser Kachel gezeichnet werden soll.
-     * `nullptr` bedeutet, keine Ersetzung beim Zeichnen.
-     * Dasselbe Objekt wird via shared_ptr mehrfach in die Map eingebunden, wenn es mehrere Kacheln belegt.
-     */
-    std::shared_ptr<MapObjectFixed> mapObjectToDraw = nullptr;
-
-    /**
-     * @brief wenn auf `true` gesetzt, wird die Kachel maskiert gezeichnet.
-     */
-    bool drawTileMasked = false;
-};
-
-
 /**
  * @brief GUI-Element, was die Karte darstellt. Das ist der eigentliche Spielbereich.
  */
@@ -109,24 +36,6 @@ private:
      * @brief `true`, wenn gerade ein neues Gebäude positioniert wird.
      */
     bool inBuildingMode = false;
-
-    /**
-     * @brief Referenz auf das Baumaterial "Werkzeug"
-     * TODO wenn wir alles konfigurierbar machen wollen, sollte das später auch mal weg und die Baumaterialen dynamisch werden
-     */
-    const Good* toolsGood;
-
-    /**
-     * @brief Referenz auf das Baumaterial "Holz"
-     * TODO wenn wir alles konfigurierbar machen wollen, sollte das später auch mal weg und die Baumaterialen dynamisch werden
-     */
-    const Good* woodGood;
-
-    /**
-     * @brief Referenz auf das Baumaterial "Ziegel"
-     * TODO wenn wir alles konfigurierbar machen wollen, sollte das später auch mal weg und die Baumaterialen dynamisch werden
-     */
-    const Good* bricksGood;
 
 public:
     /**
@@ -265,25 +174,6 @@ private:
      *                        Bauaufträge hinzugefügt werden.
      */
     void addToBuildQueration(bool mustResetBefore);
-
-//    /**
-//     * @brief Aktualisiert die `mapTilesToDrawTemporarily` einer bestimmten. Dies verändert ggf. eine
-//     * Straßenkachel, wenn wir im Begriff sind, Straßen zu bauen und somit z.&nbsp;B. eine Gerade zu einem
-//     * T-Stück wird.
-//     *
-//     * @param mapCoordsToUpdate Map-Koordinate, die ggf. aktualisiert werden soll
-//     */
-//    void updateMapTilesToDrawTemporarilyForStreetsAt(const MapCoords& mapCoordsToUpdate);
-//
-//    /**
-//     * @brief Aktualisiert die `mapTilesToDrawTemporarily` um eine bestimmte Kachel herum. Dies verändert ggf.
-//     * Straßenkacheln, wenn wir im Begriff sind, Straßen zu bauen und somit z.&nbsp;B. eine Gerade zu einem
-//     * T-Stück wird.
-//     *
-//     * @param mapCoordsToUpdateAround Map-Koordinate, um die horizontal- und vertikal-angrenzende Felder ggf.
-//     * aktualisiert werden sollen
-//     */
-//    void updateMapTilesToDrawTemporarilyForStreetsAround(const MapCoords& mapCoordsToUpdateAround);
 
 };
 

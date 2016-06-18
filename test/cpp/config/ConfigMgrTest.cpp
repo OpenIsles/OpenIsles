@@ -129,7 +129,7 @@ TEST(ConfigMgrTest, loadMapObjectTypes) {
 
     const MapObjectType* pier = configMgr.getMapObjectType("pier");
     ASSERT_EQ(
-        (MapTileTypeInt) MapTileType::SHORE_OCEAN | (MapTileTypeInt) MapTileType::SHORE_GRASS,
+        (MapTileTypeInt) MapTileType::SHORE_SAND | (MapTileTypeInt) MapTileType::SHORE_GRASS,
         pier->placeableOnMapTileTypeMask);
 
     const MapObjectType* northernForest1 = configMgr.getMapObjectType("northern-forest1");
