@@ -16,6 +16,8 @@ set(MAIN_SOURCE_FILE
     src/cpp/main.cpp
 )
 set(COMMON_SOURCE_FILES
+    src/cpp/ai/AiMgr.cpp
+    src/cpp/ai/AiMgr.h
     src/cpp/config/BuildingCosts.cpp
     src/cpp/config/BuildingCosts.h
     src/cpp/config/ConfigMgr.cpp
@@ -40,7 +42,6 @@ set(COMMON_SOURCE_FILES
     src/cpp/game/GameIO.cpp
     src/cpp/game/GameIO.h
     src/cpp/game/GoodsSlot.h
-    src/cpp/game/Player.cpp
     src/cpp/game/Player.h
     src/cpp/game/PlayerStatus.h
     src/cpp/game/PopulationSatisfaction.h
@@ -202,9 +203,17 @@ set(NOSDL_FILES
     src/cpp/graphics/mgr/nosdl/NoSDLGraphicsMgr.h
     src/cpp/graphics/renderer/nosdl/NoSDLRenderer.h
 )
+set(API_SOURCE_FILES
+    src/cpp/api/api-global.h
+    src/cpp/api/game.cpp
+    src/cpp/api/misc.cpp
+    src/cpp/api/player.cpp
+)
 set(TEST_FILES
     test/cpp/GameTest.cpp
     test/cpp/GameTest.h
+    test/cpp/ai/AiGameTest.h
+    test/cpp/ai/HelloWorldAiTest.cpp
     test/cpp/config/ConfigMgrTest.cpp
     test/cpp/economics/CarrierSheepTest.cpp
     test/cpp/economics/CarrierTest.cpp
@@ -262,6 +271,7 @@ add_executable(OpenIsles
     ${GUI_SOURCE_FILES}
     ${GRAPHICS_SOURCE_FILES}
     ${SOUND_SOURCE_FILES}
+    ${API_SOURCE_FILES}
 )
 
 # Windows mit MinGW
@@ -284,6 +294,8 @@ if(MINGW)
     target_include_directories(OpenIsles PUBLIC "${SDL2_MIXER_INCLUDE_DIR}")
     target_include_directories(OpenIsles PUBLIC "${SDL2_TTF_INCLUDE_DIR}")
 
+    # TODO Lua unter Windows einbinden
+
 # Linux
 else(MINGW)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DLINUX")
@@ -299,15 +311,32 @@ else(MINGW)
     execute_process(COMMAND "sdl2-config" "--cflags" OUTPUT_VARIABLE SDL2_CFLAGS OUTPUT_STRIP_TRAILING_WHITESPACE)
     separate_arguments(SDL2_CFLAGS UNIX_COMMAND "${SDL2_CFLAGS}")
     target_compile_options(OpenIsles PUBLIC ${SDL2_CFLAGS})
+
+    # Lua
+    include(FindLua)
+    if(NOT LUA_INCLUDE_DIR OR NOT LUA_LIBRARY)
+        message(FATAL_ERROR Essential library Lua not found)
+    endif()
+    if(LUA_VERSION_STRING VERSION_LESS 5.3)
+        message(WARN Your Lua version is older than 5.3. No garanties this will work. Consider updating to v5.3)
+    endif()
+
+    include_directories(${LUA_INCLUDE_DIR})
+
 endif(MINGW)
 
 # Windows
 if(MINGW)
-    target_link_libraries(OpenIsles ${SDL2_LIBRARY} ${SDL2_IMAGE_LIBRARY} ${SDL2_MIXER_LIBRARY} ${SDL2_TTF_LIBRARY} winmm imm32 version freetype intl iconv)
+    target_link_libraries(OpenIsles
+                          ${SDL2_LIBRARY} ${SDL2_IMAGE_LIBRARY} ${SDL2_MIXER_LIBRARY} ${SDL2_TTF_LIBRARY}
+                          ${LUA_LIBRARY}
+                          winmm imm32 version freetype intl iconv)
 
 # Linux
 else(MINGW)
-    target_link_libraries(OpenIsles ${SDL2_LIBRARIES} ${SDL2_IMAGE_LIBRARIES} ${SDL2_MIXER_LIBRARIES} ${SDL2_TTF_LIBRARIES})
+    target_link_libraries(OpenIsles
+                          ${SDL2_LIBRARIES} ${SDL2_IMAGE_LIBRARIES} ${SDL2_MIXER_LIBRARIES} ${SDL2_TTF_LIBRARIES}
+                          ${LUA_LIBRARY})
 
 endif(MINGW)
 
@@ -329,6 +358,7 @@ if(GTEST_FOUND)
 
     add_executable(OpenIsles-Tests
         ${COMMON_SOURCE_FILES}
+        ${API_SOURCE_FILES}
         ${NOSDL_FILES}
         ${TEST_FILES}
     )
@@ -340,7 +370,7 @@ if(GTEST_FOUND)
 
     target_include_directories(OpenIsles-Tests PUBLIC ${GTEST_INCLUDE_DIRS})
     target_compile_definitions(OpenIsles-Tests PUBLIC "-DNO_SDL -DIN_TESTS")
-    target_link_libraries(OpenIsles-Tests ${GTEST_BOTH_LIBRARIES} pthread) # BOTH-Variable benutzen, damit wir uns an jeder Testdatei die main()-Methode sparen
+    target_link_libraries(OpenIsles-Tests ${LUA_LIBRARY} ${GTEST_BOTH_LIBRARIES} pthread) # BOTH-Variable benutzen, damit wir uns an jeder Testdatei die main()-Methode sparen
 
     add_test(OpenIslesTests OpenIsles-Tests)
 endif(GTEST_FOUND)

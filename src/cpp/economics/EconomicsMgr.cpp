@@ -128,11 +128,11 @@ void EconomicsMgr::updateProduction(Building* building) {
 
 void EconomicsMgr::updatePlayerStatus() {
     const std::set<PopulationTier>& allPopulationTiers = context.configMgr->getAllPopulationTiers();
-    const Game* game = context.game;
+    Game* game = context.game;
 
-    unsigned long populationSumPerPlayer[4] = { 0, 0, 0, 0 };
-    unsigned long taxesIncomeSumPerPlayer[4] = { 0, 0, 0, 0 };
-    unsigned long operatingCostsSumPerPlayer[4] = { 0, 0, 0, 0 };
+    unsigned long populationSumPerPlayer[Player::MAX_PLAYERS] = { 0 };
+    unsigned long taxesIncomeSumPerPlayer[Player::MAX_PLAYERS] = { 0 };
+    unsigned long operatingCostsSumPerPlayer[Player::MAX_PLAYERS] = { 0 };
 
     // TODO überarbeiten: Wir brauchen später die Zahlen pro Kolonie zusätzlich zum Gesamt
 
@@ -140,7 +140,7 @@ void EconomicsMgr::updatePlayerStatus() {
     for (auto iter : game->getColonies()) {
         const Player* player = iter.first.first;
         const Colony* colony = iter.second;
-        int playerIndex = player->getColorIndex();
+        int playerIndex = player->getPlayerIndex();
 
         // Steuern: alle Bevölkerungsgruppen einzeln betrachten
         unsigned long taxesIncomeColony = 0;
@@ -173,13 +173,13 @@ void EconomicsMgr::updatePlayerStatus() {
         // TODO Stillgelegt-Status
 
         if (operatingCosts > 0) {
-            int playerIndex = mapObject->getPlayer()->getColorIndex();
+            int playerIndex = mapObject->getPlayer()->getPlayerIndex();
             operatingCostsSumPerPlayer[playerIndex] += operatingCosts;
         }
     }
 
     // PlayerStatus aktualisieren
-    for (int playerIndex = 0; playerIndex < 4; playerIndex++) {
+    for (int playerIndex = 0; playerIndex < Player::MAX_PLAYERS; playerIndex++) {
         PlayerStatus& playerStatus = game->getPlayer(playerIndex)->playerStatus;
         playerStatus.population = populationSumPerPlayer[playerIndex];
         playerStatus.taxesIncome = taxesIncomeSumPerPlayer[playerIndex];
@@ -189,7 +189,7 @@ void EconomicsMgr::updatePlayerStatus() {
 }
 
 void EconomicsMgr::updateFinances() {
-    for (int playerIndex = 0; playerIndex < 4; playerIndex++) {
+    for (int playerIndex = 0; playerIndex < Player::MAX_PLAYERS; playerIndex++) {
         Player* player = context.game->getPlayer(playerIndex);
 
         // Steuereinnahmen

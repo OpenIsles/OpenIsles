@@ -6,6 +6,7 @@
 #include <stdexcept>
 #include <unistd.h>
 #include "global.h"
+#include "ai/AiMgr.h"
 #include "config/ConfigMgr.h"
 #include "economics/EconomicsMgr.h"
 #include "game/Game.h"
@@ -218,16 +219,21 @@ int main(int argc, char** argv) {
     EconomicsMgr* economicsMgr = new EconomicsMgr(context);
     context.economicsMgr = economicsMgr;
 
+    AiMgr* aiMgr = new AiMgr(context);
+    aiMgr->loadScript("data/ai/simple-ai.lua");
+
 #ifdef DEBUG
     PerformanceCounter performanceCounterEvents(500);
     PerformanceCounter performanceCounterGameUpdate(500);
     PerformanceCounter performanceCounterRendering(500);
+    PerformanceCounter performanceCounterAi(500);
 #endif
     
     Game* game = new Game(context);
     context.game = game;
 
     game->loadGameFromTMX(cmdlineParams.mapFileToLoad);
+    aiMgr->init();
 
     sdlRenderer->showWindow();
 
@@ -291,6 +297,15 @@ int main(int argc, char** argv) {
         performanceCounterGameUpdate.end();
 #endif
 
+        // KI
+#ifdef DEBUG
+        performanceCounterAi.start();
+#endif
+        aiMgr->update();
+
+#ifdef DEBUG
+        performanceCounterAi.end();
+#endif
 
         // Position des Mauszeigers holen
         SDL_GetMouseState(&context.mouseCurrentX, &context.mouseCurrentY);
@@ -309,13 +324,16 @@ int main(int argc, char** argv) {
         // Debug-Infos vorbereiten, damit wir sie später einfach nur ausgeben können
         debugOutput[0] = string_sprintf(
             _("PerfCounters: events avg %.3f, current = %.1f; "
-              "gameUpdate avg %.3f, current = %.1f; rendering avg %.3f, current = %.1f"),
+              "gameUpdate avg %.3f, current = %.1f; rendering avg %.3f, current = %.1f; "
+              "AI avg %.3f, current = %.1f"),
             performanceCounterEvents.getMillisAvg(),
             performanceCounterEvents.getMillisCurrent(),
             performanceCounterGameUpdate.getMillisAvg(),
             performanceCounterGameUpdate.getMillisCurrent(),
             performanceCounterRendering.getMillisAvg(),
-            performanceCounterRendering.getMillisCurrent()
+            performanceCounterRendering.getMillisCurrent(),
+            performanceCounterAi.getMillisAvg(),
+            performanceCounterAi.getMillisCurrent()
         );
 
         debugOutput[1] = string_sprintf(
@@ -419,6 +437,7 @@ int main(int argc, char** argv) {
     
     delete game;
 
+    delete aiMgr;
     delete economicsMgr;
     delete guiMgr;
     delete sdlFontMgr;

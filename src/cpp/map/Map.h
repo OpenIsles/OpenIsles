@@ -189,6 +189,13 @@ public:
     }
 
     /**
+     * @return Liste mit allen Inseln
+     */
+    const std::list<Isle*>& getIsles() const {
+        return isles;
+    }
+
+    /**
      * @brief Liefert das MapTile (Infos zu einer Kachel) an einer bestimmten Stelle zurück
      * @param mapCoords Map-Koordianten
      * @return Zeiger auf MapTile oder nullptr, wenn die Koordinaten außerhalb der Karte sind

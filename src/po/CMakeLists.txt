@@ -34,7 +34,8 @@ foreach(source_file IN LISTS
         COMMON_SOURCE_FILES
         GUI_SOURCE_FILES
         GRAPHICS_SOURCE_FILES
-        SOUND_SOURCE_FILES)
+        SOUND_SOURCE_FILES
+        API_SOURCE_FILES)
 
     SET(I18N_SOURCE_FILES ${I18N_SOURCE_FILES} ${source_file})
 endforeach()
