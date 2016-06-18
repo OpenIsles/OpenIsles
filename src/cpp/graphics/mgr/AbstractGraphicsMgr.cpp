@@ -52,11 +52,18 @@ void AbstractGraphicsMgr::loadGraphics() {
     loadMapZoomGraphicSet();
 
 #ifdef DEBUG_GUIMAP
-    loadStaticGraphicSet("debug/grid-overlay-evelation0", "data/debug-grid-overlay-elevation0.png");
-    loadStaticGraphicSet("debug/grid-overlay-screencoords", "data/debug-grid-overlay-screencoords.png");
+    graphicSet = new GraphicSet();
+    graphicSets["debug/grid-overlay-evelation0"] = graphicSet;
+    loadStaticGraphicSet(graphicSet, "data/debug-grid-overlay-elevation0.png");
+
+    graphicSet = new GraphicSet();
+    graphicSets["debug/grid-overlay-screencoords"] = graphicSet;
+    loadStaticGraphicSet(graphicSet, "data/debug-grid-overlay-screencoords.png");
 #endif
 #if defined(DEBUG_GUIMAP_COORDS) || defined(DEBUG_GUIMAP)
-    loadStaticGraphicSet("debug/grid-overlay-evelation1", "data/debug-grid-overlay-elevation1.png");
+    graphicSet = new GraphicSet();
+    graphicSets["debug/grid-overlay-evelation1"] = graphicSet;
+    loadStaticGraphicSet(graphicSet, "data/debug-grid-overlay-elevation1.png");
 #endif
 
     linkGraphicSetsToMapObjectTypes();
