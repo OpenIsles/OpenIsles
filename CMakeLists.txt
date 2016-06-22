@@ -275,6 +275,17 @@ add_executable(OpenIsles
     ${API_SOURCE_FILES}
 )
 
+# Lua
+include(FindLua)
+if(NOT LUA_INCLUDE_DIR OR NOT LUA_LIBRARY)
+    message(FATAL_ERROR Essential library Lua not found)
+endif()
+if(LUA_VERSION_STRING VERSION_LESS 5.3)
+    message(WARN Your Lua version is older than 5.3. No garanties this will work. Consider updating to v5.3)
+endif()
+
+include_directories(${LUA_INCLUDE_DIR})
+
 # Windows mit MinGW
 if(MINGW)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DWINDOWS")
@@ -295,7 +306,11 @@ if(MINGW)
     target_include_directories(OpenIsles PUBLIC "${SDL2_MIXER_INCLUDE_DIR}")
     target_include_directories(OpenIsles PUBLIC "${SDL2_TTF_INCLUDE_DIR}")
 
-    # TODO Lua unter Windows einbinden
+    # Libraries konfigurieren
+    target_link_libraries(OpenIsles
+                          ${SDL2_LIBRARY} ${SDL2_IMAGE_LIBRARY} ${SDL2_MIXER_LIBRARY} ${SDL2_TTF_LIBRARY}
+                          ${LUA_LIBRARY}
+                          winmm imm32 version freetype intl iconv)
 
 # Linux
 else(MINGW)
@@ -313,35 +328,14 @@ else(MINGW)
     separate_arguments(SDL2_CFLAGS UNIX_COMMAND "${SDL2_CFLAGS}")
     target_compile_options(OpenIsles PUBLIC ${SDL2_CFLAGS})
 
-    # Lua
-    include(FindLua)
-    if(NOT LUA_INCLUDE_DIR OR NOT LUA_LIBRARY)
-        message(FATAL_ERROR Essential library Lua not found)
-    endif()
-    if(LUA_VERSION_STRING VERSION_LESS 5.3)
-        message(WARN Your Lua version is older than 5.3. No garanties this will work. Consider updating to v5.3)
-    endif()
-
-    include_directories(${LUA_INCLUDE_DIR})
-
-endif(MINGW)
-
-# Windows
-if(MINGW)
-    target_link_libraries(OpenIsles
-                          ${SDL2_LIBRARY} ${SDL2_IMAGE_LIBRARY} ${SDL2_MIXER_LIBRARY} ${SDL2_TTF_LIBRARY}
-                          ${LUA_LIBRARY}
-                          winmm imm32 version freetype intl iconv)
-
-# Linux
-else(MINGW)
+    # Libraries konfigurieren
     target_link_libraries(OpenIsles
                           ${SDL2_LIBRARIES} ${SDL2_IMAGE_LIBRARIES} ${SDL2_MIXER_LIBRARIES} ${SDL2_TTF_LIBRARIES}
                           ${LUA_LIBRARY})
 
 endif(MINGW)
 
-
+# data-Verzeichnis ins Ziel-Verzeichnis kopieren
 file(COPY ${CMAKE_SOURCE_DIR}/data DESTINATION ${CMAKE_BINARY_DIR})
 
 

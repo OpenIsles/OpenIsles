@@ -25,6 +25,7 @@ HOWTO ... unter Windows kompilieren
     - mingw32-libssp (dll)
     - mingw32-libstdc++ (dll)
     - mingw32-libz (dll)
+    - mingw32-lua (dev+dll)
     - mingw32-make (bin)
     - mingw32-mingw-get (bin+gui+lic)
     - mingw32-mingwrt (dev+dll)
@@ -50,6 +51,9 @@ HOWTO ... unter Windows kompilieren
 
 - Seit neuestem fehlt die Freetype-Library im MinGW!? Library auf http://gnuwin32.sourceforge.net/packages/freetype.htm
   runterladen (developer files) und die lib-Datei in lib-Verzeichnis der MinGW-Installation kopieren.
+
+- CMake setzt LUA_LIBRARY auf die DLL-Datei, was zum Linken natürlich nicht klappt. Hier muss manuell auf
+  lib/liblua.a im MinGW-Verzeichnis verwiesen werden.
 
 - Die Anwendung sollte nun kompilieren und erfolgreich linken.
 
