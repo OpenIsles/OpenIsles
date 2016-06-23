@@ -281,7 +281,8 @@ if(NOT LUA_INCLUDE_DIR OR NOT LUA_LIBRARY)
     message(FATAL_ERROR Essential library Lua not found)
 endif()
 if(LUA_VERSION_STRING VERSION_LESS 5.3)
-    message(WARN Your Lua version is older than 5.3. No garanties this will work. Consider updating to v5.3)
+    # Lua 5.3 ist für lua_getextraspace() notwendig!
+    message(FATAL_ERROR Your Lua version is older than 5.3. You need to upgrade!)
 endif()
 
 include_directories(${LUA_INCLUDE_DIR})

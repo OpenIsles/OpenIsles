@@ -55,6 +55,11 @@ HOWTO ... unter Windows kompilieren
 - CMake setzt LUA_LIBRARY auf die DLL-Datei, was zum Linken natürlich nicht klappt. Hier muss manuell auf
   lib/liblua.a im MinGW-Verzeichnis verwiesen werden.
 
+- Die aktuell in MinGW enthaltene Lua-Lib ist zu alt. Unter http://luabinaries.sourceforge.net/download.html
+  kann eine aktuelle Version heruntengeladen werden (Windows x64 DLL and Includes (MingW 4 Compatible)).
+  Einfach in die entsprechenden Verzeichnisse in der MinGW-Installation kopieren (und ggf. überschreiben):
+  include/ nach include/, die .a- und .dll-Datei in bin/.
+
 - Die Anwendung sollte nun kompilieren und erfolgreich linken.
 
 - Zum Starten müssen die dll-Dateien aus den jeweiligen bin-Verzeichnissen der SDL-Libraries (wieder die
