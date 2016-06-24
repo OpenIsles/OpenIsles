@@ -107,7 +107,11 @@ local function phase0()
 end
 
 local function phase1()
-    -- TODO Resourcen für Haus da? Nein -> return
+    -- Resourcen für Haus da?
+    local colony = oi.getColonyAt(officeCoords);
+    if (colony.goods.wood < 3) then
+        return
+    end
 
     -- Zählen, wie viele Häuser schon da sind
     local countHouses = 0

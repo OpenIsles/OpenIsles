@@ -57,6 +57,15 @@ DEFINE_LUA_FUNCTION(getObjects);
 
 /**
  * @lua
+ * @brief Liefert Informationen über eine Kolonie an einer bestimmten Stelle
+ * @param Table mit `x` und `y` als Map-Koordinaten
+ * @return Table mit `name`, `population`, `goodsCapacity`, `player`
+ *         und `goods` (ein Table der Gütername auf Lagerbestand abbildet)
+ */
+DEFINE_LUA_FUNCTION(getColonyAt);
+
+/**
+ * @lua
  * @brief Baut etwas
  * @param playerIndex [Integer] Index des Spielers, der bauen möchte
  * @param mapObjectTypeName [String] Name des Map-Objekts

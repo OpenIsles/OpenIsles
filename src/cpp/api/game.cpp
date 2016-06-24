@@ -1,3 +1,4 @@
+#include <cassert>
 #include "api/api-global.h"
 #include "game/Game.h"
 #include "game/Player.h"
@@ -129,6 +130,64 @@ DEFINE_LUA_FUNCTION(getObjects) {
 
         lua_rawseti(lua, -2, (lua_Integer) i++);
     }
+    return 1;
+}
+
+DEFINE_LUA_FUNCTION(getColonyAt) {
+    const Context* context = *static_cast<const Context**>(lua_getextraspace(lua));
+
+    // Koordinaten einlesen
+    int stackPosOfArgument = 1; // TODO später diesen Block wiederverwenden
+    luaL_checktype(lua, stackPosOfArgument, LUA_TTABLE);
+
+    lua_getfield(lua, stackPosOfArgument, "y");
+    lua_getfield(lua, stackPosOfArgument, "x");
+
+    lua_Integer x = luaL_checkinteger(lua, -1);
+    lua_Integer y = luaL_checkinteger(lua, -2);
+    lua_pop(lua, 2);
+
+    // Ergebnis zusammenbauen
+    MapCoords mapCoords(x, y);
+    const Colony* colony = context->game->getColony(mapCoords);
+
+    if (colony == nullptr) {
+        lua_pushnil(lua);
+        return 1;
+    }
+
+    lua_createtable(lua, 0, 5);
+    lua_pushstring(lua, colony->name.c_str());
+    lua_setfield(lua, -2, "name");
+    lua_pushinteger(lua, colony->population);
+    lua_setfield(lua, -2, "population");
+    
+    unsigned int capacity = 0;
+    
+    lua_createtable(lua, 0, 1);
+    const std::list<const Good*>& allGoods = context->configMgr->getAllGoodsOrdered();
+    for (auto iter = allGoods.cbegin(); iter != allGoods.cend(); iter++) {
+        const Good* good = *iter;
+        const GoodsSlot& goodsSlot = colony->getGoods(good);
+        
+        // Kapazität ist für alle Slots gleich; einmalig merken
+        if (capacity == 0) {
+            capacity = goodsSlot.capacity;
+        }
+        
+        lua_pushinteger(lua, goodsSlot.inventory);
+        lua_setfield(lua, -2, good->name.c_str());
+    }
+    lua_setfield(lua, -2, "goods");
+
+    lua_pushinteger(lua, capacity);
+    lua_setfield(lua, -2, "goodsCapacity");
+
+    MapTile* mapTile = context->game->getMap()->getMapTileAt(mapCoords);
+    assert (mapTile->player != nullptr);
+    lua_pushinteger(lua, (lua_Integer) (mapTile->player->getPlayerIndex() + 1));
+    lua_setfield(lua, -2, "player");
+
     return 1;
 }
 

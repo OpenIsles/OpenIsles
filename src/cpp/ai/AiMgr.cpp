@@ -10,6 +10,7 @@ static const luaL_Reg apiMethods[] = {
     { "getIsles"      , LUA_getIsles },
     { "getShips"      , LUA_getShips },
     { "getObjects"    , LUA_getObjects },
+    { "getColonyAt"   , LUA_getColonyAt },
     { "build"         , LUA_build },
     { "demolish"      , LUA_demolish },
     { "debug"         , LUA_debug },
