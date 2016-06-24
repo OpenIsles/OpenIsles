@@ -7,7 +7,9 @@ oi = OpenIsles
 local playerIndex = 3       -- playerIndex, den diese KI steuert
 
 local map                   -- Karte
+local isles                 -- Inseln
 
+local mainIsle              -- Unsere Hauptinsel, wo das Kontor steht
 local officeCoords          -- Koordinaten unseres Kontors
 local streetOrigin          -- Koordinaten des erste Wegfelds für das Wege-Raster
 
@@ -33,7 +35,60 @@ local phase = 0             -- Phasen, was wir bauen:
      Sind genügend Siedler da, wird eine zweite Insel erschlossen
 --]]
 
-function phase0()
+
+-- Helper-Funktionen --------------------------------------------------------------------------------------------------
+
+--[[
+-- Prüft, ob die Koordinate (`mapCoords.x`, `mapCoords.y`) auf der Insel `isle` liegt.
+--]]
+local function isCoordsOnIsle(isle, mapCoords)
+    if (mapCoords.x >= isle.x) and (mapCoords.x <= isle.x + isle.width) and
+       (mapCoords.y >= isle.y) and (mapCoords.y <= isle.y + isle.height) then
+
+        return true
+    else
+        return false
+    end
+end
+
+--[[
+-- Liefert die Insel zurück, die sich auf Koordinate (`mapCoords.x`, `mapCoords.y`) befindet.
+--]]
+local function findIsle(mapCoords)
+    for _,isle in pairs(isles) do
+        if isCoordsOnIsle(isle, mapCoords) == true then
+            return isle
+        end
+    end
+
+    return nil;
+end
+
+--[[
+-- Zählt, wie viele Objekte vom Type `mapObjectType` der Spieler `playerIndex` auf der Insel hat, die auf der
+-- Koordinate (`mapCoords.x`, `mapCoords.y`) liegt.
+--]]
+local function countMapObjectOfTypeOnIsle(mapObjectType, playerIndex, mapCoords)
+    -- Insel suchen
+    local isle = findIsle(mapCoords)
+    assert(isle ~= nil, "Invalid coords. There is no isle.");
+
+    -- Nun alle Objekte durchgehen und zählen
+    local count = 0;
+    for _,object in pairs(oi.getObjects()) do
+        if object.player == playerIndex and object.type == mapObjectType then
+            if isCoordsOnIsle(isle, mapCoords) == true then
+                count = count + 1
+            end
+        end
+    end
+
+    return count
+end
+
+-- KI-Logik der verschiedenen Phasen ----------------------------------------------------------------------------------
+
+local function phase0()
     -- einfach im fixen Umkreis Straßen bauen
     local radius = 9
 
@@ -46,16 +101,51 @@ function phase0()
         end
     end
 
+    -- TODO Förster, Fischerhütte (TODO^2) und Marktplatz
+
+    phase = phase + 1
 end
+
+local function phase1()
+    -- TODO Resourcen für Haus da? Nein -> return
+
+    -- Zählen, wie viele Häuser schon da sind
+    local countHouses = 0
+    for i = 1, 5 do
+        countHouses = countHouses + countMapObjectOfTypeOnIsle("pioneers-house" .. i, playerIndex, officeCoords)
+    end
+
+    -- Häuser bauen, bis wir 12 Stück haben
+    if countHouses >= 12 then
+        phase = phase + 1
+    end
+
+    -- Ein neues Haus bauen
+    local coords = {
+        x = math.random(mainIsle.x, mainIsle.x + mainIsle.width - 1),
+        y = math.random(mainIsle.y, mainIsle.y + mainIsle.height - 1)
+    }
+
+    -- pcall, um Fehler einfach zu ignorieren; wir bauen irgendwo auf der Insel, kp, ob wir da dürfen (TODO verbesserungswürdig)
+    pcall(oi.build, playerIndex, "pioneers-house1", coords.x, coords.y, "south");
+end
+
+local function phase2()
+    oi.debug("Reached phase2 :-)")
+end
+
+-- Callbacks aus OpenIsles --------------------------------------------------------------------------------------------
 
 function init()
     map = oi.getMap()
+    isles = oi.getIsles()
 
     -- unser Kontor finden
-    for _,object in ipairs(oi.getObjects()) do
+    for _,object in pairs(oi.getObjects()) do
         if object.player == playerIndex and object.type == "office1" then
             officeCoords = { x = object.x, y = object.y }
             streetOrigin = { x = officeCoords.x + 1, y = officeCoords.y + 2 } -- TODO Ausrichtung berücksichtigen
+            mainIsle = findIsle(officeCoords)
             break
         end
     end
@@ -71,9 +161,9 @@ function main()
     if phase == 0 then
         phase0()
     elseif phase == 1 then
-        -- TODO
+        phase1()
     elseif phase == 2 then
-        -- TODO
+        phase2()
     elseif phase == 3 then
         -- TODO
     elseif phase == 4 then
