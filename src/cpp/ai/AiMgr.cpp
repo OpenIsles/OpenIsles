@@ -1,3 +1,4 @@
+#include <ctime>
 #include <stdexcept>
 #include "ai/AiMgr.h"
 #include "api/api-global.h"
@@ -27,6 +28,13 @@ AiMgr::AiMgr(const Context& context) : ContextAware(context) {
     // Lua-Standard-Library
     // TODO alle Funktionen aussortieren, die wir nicht wollen
     luaL_openlibs(lua);
+
+    // Zufallsgenerator initialisieren
+    std::time_t currentTime = std::time(nullptr);
+    Log::info("Initializing AI with random seed " + toString(currentTime));
+
+    std::string luaScript = "math.randomseed(" + toString(currentTime) + ")";
+    luaL_dostring(lua, luaScript.c_str());
 
     // API registrieren
     lua_newtable(lua);
