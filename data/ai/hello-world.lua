@@ -32,7 +32,7 @@ function init()
         oi.debug("ship: x = " .. ship.x .. ", y = " .. ship.y ..", player = " .. ship.player .. ", name = " .. ship.name)
     end
 
-    objects = oi.getObjects()
+    objects = oi.getMapObjectsFixed()
 
     for _,object in ipairs(objects) do
         oi.debug("object: x = " .. object.x .. ", y = " .. object.y ..", player = " .. object.player .. ", type = " .. object.type)

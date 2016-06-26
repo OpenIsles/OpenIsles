@@ -220,7 +220,7 @@ int main(int argc, char** argv) {
     context.economicsMgr = economicsMgr;
 
     AiMgr* aiMgr = new AiMgr(context);
-    aiMgr->loadScript("data/ai/simple-ai.lua");
+    aiMgr->loadScript("data/ai/simple-ai/main.lua");
 
 #ifdef DEBUG
     PerformanceCounter performanceCounterEvents(500);

@@ -4,14 +4,13 @@
 
 oi = OpenIsles
 
-local playerIndex = 3       -- playerIndex, den diese KI steuert
+dofile("data/ai/simple-ai/streets.lua")
+
+aiInfo = {}                 -- Diese globale Tabelle enthält alle Infos, die wir für die KI brauchen -- TODO aktuell is das nur für eine Insel!
+aiInfo.playerIndex = 3      -- playerIndex, den diese KI steuert
 
 local map                   -- Karte
 local isles                 -- Inseln
-
-local mainIsle              -- Unsere Hauptinsel, wo das Kontor steht
-local officeCoords          -- Koordinaten unseres Kontors
-local streetOrigin          -- Koordinaten des erste Wegfelds für das Wege-Raster
 
 local lastRunTicks = 0      -- Zeit, wann diese KI zuletzt was gemacht hat
 local phase = 0             -- Phasen, was wir bauen:
@@ -75,7 +74,7 @@ local function countMapObjectOfTypeOnIsle(mapObjectType, playerIndex, mapCoords)
 
     -- Nun alle Objekte durchgehen und zählen
     local count = 0;
-    for _,object in pairs(oi.getObjects()) do
+    for _,object in pairs(oi.getMapObjectsFixed()) do
         if object.player == playerIndex and object.type == mapObjectType then
             if isCoordsOnIsle(isle, mapCoords) == true then
                 count = count + 1
@@ -89,17 +88,9 @@ end
 -- KI-Logik der verschiedenen Phasen ----------------------------------------------------------------------------------
 
 local function phase0()
-    -- einfach im fixen Umkreis Straßen bauen
-    local radius = 9
-
-    for y = streetOrigin.y - radius, streetOrigin.y + radius do
-        for x = streetOrigin.x - radius, streetOrigin.x + radius do
-            if ((y % 6 == streetOrigin.y % 6) or (x % 6 == streetOrigin.x % 6)) then
-                -- pcall, um unbebaubare Felder einfach zu ignorieren (TODO verbesserungswürdig)
-                pcall(oi.build, playerIndex, "farm-road", x, y, "south");
-            end
-        end
-    end
+    -- Straßen vom Kontor aus bauen
+    local streetOrigin = getStreetOrigin(aiInfo.officeObject)
+    buildStreetSystemAt(streetOrigin)
 
     -- TODO Förster, Fischerhütte (TODO^2) und Marktplatz
 
@@ -108,7 +99,7 @@ end
 
 local function phase1()
     -- Resourcen für Haus da?
-    local colony = oi.getColonyAt(officeCoords);
+    local colony = oi.getColonyAt(aiInfo.officeCoords);
     if (colony.goods.wood < 3) then
         return
     end
@@ -116,7 +107,8 @@ local function phase1()
     -- Zählen, wie viele Häuser schon da sind
     local countHouses = 0
     for i = 1, 5 do
-        countHouses = countHouses + countMapObjectOfTypeOnIsle("pioneers-house" .. i, playerIndex, officeCoords)
+        countHouses = countHouses +
+                countMapObjectOfTypeOnIsle("pioneers-house" .. i, aiInfo.playerIndex, aiInfo.officeCoords)
     end
 
     -- Häuser bauen, bis wir 12 Stück haben
@@ -126,12 +118,12 @@ local function phase1()
 
     -- Ein neues Haus bauen
     local coords = {
-        x = math.random(mainIsle.x, mainIsle.x + mainIsle.width - 1),
-        y = math.random(mainIsle.y, mainIsle.y + mainIsle.height - 1)
+        x = math.random(aiInfo.isle.x, aiInfo.isle.x + aiInfo.isle.width - 1),
+        y = math.random(aiInfo.isle.y, aiInfo.isle.y + aiInfo.isle.height - 1)
     }
 
     -- pcall, um Fehler einfach zu ignorieren; wir bauen irgendwo auf der Insel, kp, ob wir da dürfen (TODO verbesserungswürdig)
-    pcall(oi.build, playerIndex, "pioneers-house1", coords.x, coords.y, "south");
+    pcall(oi.build, aiInfo.playerIndex, "pioneers-house1", coords.x, coords.y, "south");
 end
 
 local function phase2()
@@ -141,19 +133,19 @@ end
 -- Callbacks aus OpenIsles --------------------------------------------------------------------------------------------
 
 function init()
-    map = oi.getMap()
     isles = oi.getIsles()
 
     -- unser Kontor finden
-    for _,object in pairs(oi.getObjects()) do
-        if object.player == playerIndex and object.type == "office1" then
-            officeCoords = { x = object.x, y = object.y }
-            streetOrigin = { x = officeCoords.x + 1, y = officeCoords.y + 2 } -- TODO Ausrichtung berücksichtigen
-            mainIsle = findIsle(officeCoords)
+    for _,object in pairs(oi.getMapObjectsFixed()) do
+        if object.player == aiInfo.playerIndex and object.type == "office1" then
+            aiInfo.officeObject = object
+            aiInfo.officeCoords = { x = object.x, y = object.y }
+            aiInfo.isle = findIsle(aiInfo.officeCoords)
+            aiInfo.streetEndPoints = {}
             break
         end
     end
-    assert(officeCoords ~= nil, "Could not find our office");
+    assert(aiInfo.officeCoords ~= nil, "Could not find our office");
 end
 
 function main()

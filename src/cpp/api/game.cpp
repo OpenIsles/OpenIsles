@@ -8,6 +8,66 @@
 #include "utils/StringFormat.h"
 
 
+/**
+ * Baut einen Lua-Table für ein Map-Objekt auf.
+ * Nach dem Aufruf befindet sich ein Wert (der Table) zusätzlich auf dem Lua-Stack.
+ *
+ * @param lua Lua-State
+ * @param mapObjectFixed Map-Objekt, das wir nach Lua reichen wollen
+ */
+static void pushMapObjectOnLuaStack(lua_State* lua, const MapObjectFixed* mapObjectFixed) {
+    const MapCoords& mapCoords = mapObjectFixed->getMapCoords();
+
+    int player = (mapObjectFixed->getPlayer() != nullptr) ? (mapObjectFixed->getPlayer()->getPlayerIndex() + 1) : 0;
+    const char* view;
+
+    if (mapObjectFixed->getView() == Direction::SOUTH) {
+        view = "south";
+    } else if (mapObjectFixed->getView() == Direction::EAST) {
+        view = "east";
+    } else if (mapObjectFixed->getView() == Direction::NORTH) {
+        view = "north";
+    } else if (mapObjectFixed->getView() == Direction::WEST) {
+        view = "west";
+    } else {
+        assert (false);
+    }
+
+    lua_createtable(lua, 0, 5);
+    lua_pushinteger(lua, (lua_Integer) mapCoords.x());
+    lua_setfield(lua, -2, "x");
+    lua_pushinteger(lua, (lua_Integer) mapCoords.y());
+    lua_setfield(lua, -2, "y");
+    lua_pushinteger(lua, (lua_Integer) player);
+    lua_setfield(lua, -2, "player");
+    lua_pushstring(lua, mapObjectFixed->getMapObjectType()->name.c_str());
+    lua_setfield(lua, -2, "type");
+    lua_pushstring(lua, view);
+    lua_setfield(lua, -2, "view");
+}
+
+/**
+ * Liest eine Map-Koordinate vom Lua-Stack. Erwartet einen Table mit Keys x und y.
+ * Der Stack wird nicht verändert.
+ *
+ * @param lua Lua-State
+ * @param stackPosOfArgument Position auf dem Stack
+ * @return Map-Koordinate
+ */
+static MapCoords readMapCoordsFromStack(lua_State* lua, int stackPosOfArgument) {
+    luaL_checktype(lua, stackPosOfArgument, LUA_TTABLE);
+
+    lua_getfield(lua, stackPosOfArgument, "y");
+    lua_getfield(lua, stackPosOfArgument, "x");
+
+    lua_Integer x = luaL_checkinteger(lua, -1);
+    lua_Integer y = luaL_checkinteger(lua, -2);
+    lua_pop(lua, 2);
+
+    return MapCoords(x, y);
+}
+
+
 DEFINE_LUA_FUNCTION(getGameTicks) {
     const Context* context = *static_cast<const Context**>(lua_getextraspace(lua));
 
@@ -99,7 +159,7 @@ DEFINE_LUA_FUNCTION(getShips) {
     return 1;
 }
 
-DEFINE_LUA_FUNCTION(getObjects) {
+DEFINE_LUA_FUNCTION(getMapObjectsFixed) {
     const Context* context = *static_cast<const Context**>(lua_getextraspace(lua));
 
     const Map* map = context->game->getMap();
@@ -114,41 +174,33 @@ DEFINE_LUA_FUNCTION(getObjects) {
             continue;
         }
 
-        const MapCoords& mapCoords = mapObjectFixed->getMapCoords();
-
-        int player = (mapObjectFixed->getPlayer() != nullptr) ? (mapObjectFixed->getPlayer()->getPlayerIndex() + 1) : 0;
-
-        lua_createtable(lua, 0, 4);
-        lua_pushinteger(lua, (lua_Integer) mapCoords.x());
-        lua_setfield(lua, -2, "x");
-        lua_pushinteger(lua, (lua_Integer) mapCoords.y());
-        lua_setfield(lua, -2, "y");
-        lua_pushinteger(lua, (lua_Integer) player);
-        lua_setfield(lua, -2, "player");
-        lua_pushstring(lua, mapObjectFixed->getMapObjectType()->name.c_str());
-        lua_setfield(lua, -2, "type");
-
+        pushMapObjectOnLuaStack(lua, mapObjectFixed);
         lua_rawseti(lua, -2, (lua_Integer) i++);
     }
+    return 1;
+}
+
+DEFINE_LUA_FUNCTION(getMapObjectFixedAt) {
+    const Context* context = *static_cast<const Context**>(lua_getextraspace(lua));
+
+    MapCoords mapCoords = readMapCoordsFromStack(lua, 1);
+
+    const Map* map = context->game->getMap();
+    MapObjectFixed* mapObjectFixed = map->getMapObjectFixedAt(mapCoords);
+
+    if (mapObjectFixed != nullptr) {
+        pushMapObjectOnLuaStack(lua, mapObjectFixed);
+    } else {
+        lua_pushnil(lua);
+    }
+
     return 1;
 }
 
 DEFINE_LUA_FUNCTION(getColonyAt) {
     const Context* context = *static_cast<const Context**>(lua_getextraspace(lua));
 
-    // Koordinaten einlesen
-    int stackPosOfArgument = 1; // TODO später diesen Block wiederverwenden
-    luaL_checktype(lua, stackPosOfArgument, LUA_TTABLE);
-
-    lua_getfield(lua, stackPosOfArgument, "y");
-    lua_getfield(lua, stackPosOfArgument, "x");
-
-    lua_Integer x = luaL_checkinteger(lua, -1);
-    lua_Integer y = luaL_checkinteger(lua, -2);
-    lua_pop(lua, 2);
-
-    // Ergebnis zusammenbauen
-    MapCoords mapCoords(x, y);
+    MapCoords mapCoords = readMapCoordsFromStack(lua, 1);
     const Colony* colony = context->game->getColony(mapCoords);
 
     if (colony == nullptr) {

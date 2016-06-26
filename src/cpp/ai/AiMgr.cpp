@@ -5,18 +5,19 @@
 
 
 static const luaL_Reg apiMethods[] = {
-    { "getGameTicks"  , LUA_getGameTicks },
-    { "getMap"        , LUA_getMap },
-    { "getIsles"      , LUA_getIsles },
-    { "getShips"      , LUA_getShips },
-    { "getObjects"    , LUA_getObjects },
-    { "getColonyAt"   , LUA_getColonyAt },
-    { "build"         , LUA_build },
-    { "demolish"      , LUA_demolish },
-    { "debug"         , LUA_debug },
-    { "getPlayerCount", LUA_getPlayerCount },
-    { "getPlayer"     , LUA_getPlayer },
-    { nullptr         , nullptr }
+    { "getGameTicks"       , LUA_getGameTicks },
+    { "getMap"             , LUA_getMap },
+    { "getIsles"           , LUA_getIsles },
+    { "getShips"           , LUA_getShips },
+    { "getMapObjectsFixed" , LUA_getMapObjectsFixed },
+    { "getMapObjectFixedAt", LUA_getMapObjectFixedAt },
+    { "getColonyAt"        , LUA_getColonyAt },
+    { "build"              , LUA_build },
+    { "demolish"           , LUA_demolish },
+    { "debug"              , LUA_debug },
+    { "getPlayerCount"     , LUA_getPlayerCount },
+    { "getPlayer"          , LUA_getPlayer },
+    { nullptr              , nullptr }
 };
 
 

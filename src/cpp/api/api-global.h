@@ -50,10 +50,19 @@ DEFINE_LUA_FUNCTION(getShips);
 
 /**
  * @lua
- * @brief Liefert alle Map-Objekte (das sind alle Strukturen, Harvestables und Gebäude; nicht: Träger und Schiffe) zurück.
+ * @brief Liefert alle fixen Map-Objekte (das sind alle Strukturen, Harvestables und Gebäude; nicht: Träger und Schiffe) zurück.
  * @return Array mit Eigenschaften `x`, `y`, `player` und `type`
  */
-DEFINE_LUA_FUNCTION(getObjects);
+DEFINE_LUA_FUNCTION(getMapObjectsFixed);
+
+/**
+ * @lua
+ * @brief Liefert ein fixes Map-Objekt an einer bestimmten Koordinate zurück.
+ * @param Koordinate (Table mit `x`, `y`)
+ * @return Array mit Eigenschaften `x`, `y`, `player` und `type`
+ *         oder `nil`, wenn da kein Map-Objekt is
+ */
+DEFINE_LUA_FUNCTION(getMapObjectFixedAt);
 
 /**
  * @lua
