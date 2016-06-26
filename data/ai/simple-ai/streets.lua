@@ -100,7 +100,7 @@ function buildStreetSystemAt(sourceCoords)
             break
         end
         if i == 7 then
-            aiInfo.streetEndPoints[sourceCoords.x .. "," .. sourceCoords.y + 1] = true
+            aiInfo.streetEndPoints[sourceCoords.x .. "," .. sourceCoords.y + i] = true
         end
     end
 
@@ -109,7 +109,7 @@ function buildStreetSystemAt(sourceCoords)
             break
         end
         if i == 7 then
-            aiInfo.streetEndPoints[sourceCoords.x .. "," .. sourceCoords.y - 1] = true
+            aiInfo.streetEndPoints[sourceCoords.x .. "," .. sourceCoords.y - i] = true
         end
     end
 
