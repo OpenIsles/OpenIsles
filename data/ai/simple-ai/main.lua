@@ -4,6 +4,7 @@
 
 oi = OpenIsles
 
+dofile("data/ai/simple-ai/utils.lua")
 dofile("data/ai/simple-ai/streets.lua")
 
 aiInfo = {}                 -- Diese globale Tabelle enthält alle Infos, die wir für die KI brauchen -- TODO aktuell is das nur für eine Insel!
@@ -64,19 +65,13 @@ local function findIsle(mapCoords)
 end
 
 --[[
--- Zählt, wie viele Objekte vom Type `mapObjectType` der Spieler `playerIndex` auf der Insel hat, die auf der
--- Koordinate (`mapCoords.x`, `mapCoords.y`) liegt.
+-- Zählt, wie viele Objekte vom Type `mapObjectType` der Spieler `playerIndex` auf der Insel `isle` hat
 --]]
-local function countMapObjectOfTypeOnIsle(mapObjectType, playerIndex, mapCoords)
-    -- Insel suchen
-    local isle = findIsle(mapCoords)
-    assert(isle ~= nil, "Invalid coords. There is no isle.");
-
-    -- Nun alle Objekte durchgehen und zählen
+local function countMapObjectOfTypeOnIsle(mapObjectType, playerIndex, isle)
     local count = 0;
     for _,object in pairs(oi.getMapObjectsFixed()) do
         if object.player == playerIndex and object.type == mapObjectType then
-            if isCoordsOnIsle(isle, mapCoords) == true then
+            if isCoordsOnIsle(isle, buildCoords(object.x, object.y)) == true then
                 count = count + 1
             end
         end
@@ -90,7 +85,17 @@ end
 local function phase0()
     -- Straßen vom Kontor aus bauen
     local streetOrigin = getStreetOrigin(aiInfo.officeObject)
-    buildStreetSystemAt(streetOrigin)
+    if oi.getMapObjectFixedAt(streetOrigin) == nil then
+        buildStreetSystemAt(streetOrigin)
+        return
+    end
+
+    -- Straßen erweitern
+    if countMapObjectOfTypeOnIsle("farm-road", aiInfo.playerIndex, aiInfo.isle) < 30 then
+        local coords = keyToCoords(randomPickFromSet(aiInfo.streetEndPoints))
+        buildStreetSystemAt(coords)
+        return
+    end
 
     -- TODO Förster, Fischerhütte (TODO^2) und Marktplatz
 
@@ -107,8 +112,7 @@ local function phase1()
     -- Zählen, wie viele Häuser schon da sind
     local countHouses = 0
     for i = 1, 5 do
-        countHouses = countHouses +
-                countMapObjectOfTypeOnIsle("pioneers-house" .. i, aiInfo.playerIndex, aiInfo.officeCoords)
+        countHouses = countHouses + countMapObjectOfTypeOnIsle("pioneers-house" .. i, aiInfo.playerIndex, aiInfo.isle)
     end
 
     -- Häuser bauen, bis wir 12 Stück haben
@@ -139,7 +143,7 @@ function init()
     for _,object in pairs(oi.getMapObjectsFixed()) do
         if object.player == aiInfo.playerIndex and object.type == "office1" then
             aiInfo.officeObject = object
-            aiInfo.officeCoords = { x = object.x, y = object.y }
+            aiInfo.officeCoords = buildCoords(object.x, object.y)
             aiInfo.isle = findIsle(aiInfo.officeCoords)
             aiInfo.streetEndPoints = {}
             break

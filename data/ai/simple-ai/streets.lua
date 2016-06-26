@@ -34,13 +34,13 @@ end
 --]]
 function getStreetOrigin(officeObject)
     if officeObject.view == "south" then
-        return { x = officeObject.x + 1, y = officeObject.y - 1 }
+        return buildCoords(officeObject.x + 1, officeObject.y - 1)
     elseif officeObject.view == "east" then
-        return { x = officeObject.x + 2, y = officeObject.y - 1 }
+        return buildCoords(officeObject.x + 2, officeObject.y - 1)
     elseif officeObject.view == "north" then
-        return { x = officeObject.x + 1, y = officeObject.y + 2 }
+        return buildCoords(officeObject.x + 1, officeObject.y + 2)
     elseif officeObject.view == "west" then
-        return { x = officeObject.x - 1, y = officeObject.y - 1 }
+        return buildCoords(officeObject.x - 1, officeObject.y - 1)
     else
         error("Illegal view for office at (" .. officeObject.x .. ", " .. officeObject.y .. ")")
     end
@@ -82,7 +82,7 @@ function buildStreetSystemAt(sourceCoords)
             break
         end
         if i == 7 then
-            aiInfo.streetEndPoints[sourceCoords.x + i .. "," .. sourceCoords.y] = true
+            aiInfo.streetEndPoints[coordsToKey(buildCoords(sourceCoords.x + i, sourceCoords.y))] = true
         end
     end
 
@@ -91,7 +91,7 @@ function buildStreetSystemAt(sourceCoords)
             break
         end
         if i == 7 then
-            aiInfo.streetEndPoints[sourceCoords.x - i .. "," .. sourceCoords.y] = true
+            aiInfo.streetEndPoints[coordsToKey(buildCoords(sourceCoords.x - i, sourceCoords.y))] = true
         end
     end
 
@@ -100,7 +100,7 @@ function buildStreetSystemAt(sourceCoords)
             break
         end
         if i == 7 then
-            aiInfo.streetEndPoints[sourceCoords.x .. "," .. sourceCoords.y + i] = true
+            aiInfo.streetEndPoints[coordsToKey(buildCoords(sourceCoords.x, sourceCoords.y + i))] = true
         end
     end
 
@@ -109,12 +109,12 @@ function buildStreetSystemAt(sourceCoords)
             break
         end
         if i == 7 then
-            aiInfo.streetEndPoints[sourceCoords.x .. "," .. sourceCoords.y - i] = true
+            aiInfo.streetEndPoints[coordsToKey(buildCoords(sourceCoords.x, sourceCoords.y - i))] = true
         end
     end
 
     -- Endpunkt-Liste aktualisieren
-    aiInfo.streetEndPoints[sourceCoords.x .. "," .. sourceCoords.y] = nil
+    aiInfo.streetEndPoints[coordsToKey(sourceCoords)] = nil
 
     -- Debug
     oi.debug("aiInfo.streetEndPoints:")
