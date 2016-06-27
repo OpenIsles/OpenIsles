@@ -31,6 +31,7 @@ static void pushMapObjectOnLuaStack(lua_State* lua, const MapObjectFixed* mapObj
         view = "west";
     } else {
         assert (false);
+        view = nullptr;
     }
 
     lua_createtable(lua, 0, 5);
