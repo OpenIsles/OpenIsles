@@ -17,12 +17,18 @@ protected:
     const MapObjectType* settlersHouse4;
     const MapObjectType* settlersHouse5;
 
+    const MapObjectType* marketplace;
+    const MapObjectType* chapel;
+    const MapObjectType* school;
+    const MapObjectType* tavern;
+
     const FourthDirection southView = Direction::SOUTH;
     Player* player;
     Colony* colony;
 
     const PopulationTier* pioneers;
     const PopulationTier* settlers;
+    const PopulationTier* burghers;
     Building* houses[8];
 
 protected:
@@ -39,11 +45,17 @@ protected:
         settlersHouse4 = configMgr->getMapObjectType("settlers-house4");
         settlersHouse5 = configMgr->getMapObjectType("settlers-house5");
 
+        marketplace = configMgr->getMapObjectType("marketplace");
+        chapel = configMgr->getMapObjectType("chapel");
+        school = configMgr->getMapObjectType("school");
+        tavern = configMgr->getMapObjectType("tavern");
+
         player = game->getPlayer(0);
         colony = game->getColony({29, 27});
 
         pioneers = configMgr->getPopulationTier("pioneers");
         settlers = configMgr->getPopulationTier("settlers");
+        burghers = configMgr->getPopulationTier("burghers");
 
         // 8 Häuser bauen
         houses[0] = (Building*) game->addStructure({27, 23}, pioneersHouse1, southView, player);
@@ -55,14 +67,22 @@ protected:
         houses[6] = (Building*) game->addStructure({29, 27}, pioneersHouse2, southView, player);
         houses[7] = (Building*) game->addStructure({31, 27}, pioneersHouse3, southView, player);
 
+        // Marktplatz und Kapelle, damit die Pioniere zu Siedlern aufsteigen
+        game->addStructure({35, 26}, marketplace, southView, player);
+        game->addStructure({23, 26}, chapel, southView, player);
+
         // Baumaterial zur Verfügung stellen
         colony->getGoods(configMgr->getGood("tools")).inventory = 10;
         colony->getGoods(configMgr->getGood("wood")).inventory = 30;
         colony->getGoods(configMgr->getGood("bricks")).inventory = 0; // keine Ziegel, um Siedler->Bürger zu verhindern
 
         // Nahrung geben, damit keiner später verhungert
-        colony->getGoods(configMgr->getFoodGood().good).capacity = 100;
-        colony->getGoods(configMgr->getFoodGood().good).inventory = 100;
+        colony->getGoods(configMgr->getFoodGood().good).capacity = 200;
+        colony->getGoods(configMgr->getFoodGood().good).inventory = 200;
+
+        // Aufstieg zu Kaufleuten komplett verhindern
+        configMgr->getPopulationTier("merchants")->advancementCosts.bricks = 9999;
+
     }
 
     /**
@@ -302,4 +322,76 @@ TEST_F(HousesTest_Advancement, DISABLED_constructionMaterialDisallowed) {
 
     // Bevölkerungswachstum muss aber funktionieren
     ASSERT_EQ(16, colony->populationTiers[pioneers].population);
+}
+
+/**
+ * @brief Prüft, dass die Häuser nur zu Siedlern aufsteigen, wenn eine Kapelle da is
+ */
+TEST_F(HousesTest_Advancement, noSettlersWithoutChapel) {
+    // Kapelle abreißen. Das muss den Aufstieg stoppen
+    game->deleteMapObject(game->getMap()->getMapObjectFixedAt({23, 26}));
+
+    // 10 Minuten spielen, es darf nix umbauen
+    game->update(10 * TICKS_PER_MINUTE, 2000);
+    ASSERT_EQ(8, countHousesPerPopulationTier(pioneers));
+    ASSERT_EQ(0, countHousesPerPopulationTier(settlers));
+
+    // Kapelle wieder bauen. Jetzt bauen sie um
+    game->addStructure({23, 26}, chapel, southView, player);
+
+    game->update(10 * TICKS_PER_MINUTE, 2000);
+    ASSERT_EQ(0, countHousesPerPopulationTier(pioneers));
+    ASSERT_EQ(8, countHousesPerPopulationTier(settlers));
+}
+
+/**
+ * @brief Prüft, dass die Häuser nur zu Siedlern aufsteigen, wenn eine Kapelle da is.
+ *
+ * Kapelle ist so positioniert, dass nur ein Teil der Häuser in ihrem Bereich liegt.
+ * Die rechten 3 Häuser sind außerhalb.
+ */
+TEST_F(HousesTest_Advancement, onlySomeHousesHaveChapel) {
+    // Kapelle abreißen und woanders hinbauen
+    game->deleteMapObject(game->getMap()->getMapObjectFixedAt({23, 26}));
+    game->addStructure({21, 25}, chapel, southView, player);
+
+    // 10 Minuten spielen, es dürfen nur die Häuser links und in der Mitte umbauen.
+    // Die drei Häuser sind haben keine Abdeckung der Kapelle und müssen Pioniere bleiben
+    game->update(10 * TICKS_PER_MINUTE, 2000);
+    ASSERT_EQ(3, countHousesPerPopulationTier(pioneers));
+    ASSERT_EQ(5, countHousesPerPopulationTier(settlers));
+
+    ASSERT_EQ(settlers, houses[0]->getMapObjectType()->populationTier);
+    ASSERT_EQ(settlers, houses[1]->getMapObjectType()->populationTier);
+    ASSERT_EQ(settlers, houses[3]->getMapObjectType()->populationTier);
+    ASSERT_EQ(settlers, houses[5]->getMapObjectType()->populationTier);
+    ASSERT_EQ(settlers, houses[6]->getMapObjectType()->populationTier);
+
+    ASSERT_EQ(pioneers, houses[2]->getMapObjectType()->populationTier);
+    ASSERT_EQ(pioneers, houses[4]->getMapObjectType()->populationTier);
+    ASSERT_EQ(pioneers, houses[7]->getMapObjectType()->populationTier);
+}
+
+/**
+ * @brief Prüft, dass die Häuser zu Bürgern aufsteigen, wenn man zusätzlich noch Schule und Wirtshaus baut
+ */
+TEST_F(HousesTest_Advancement, advancementToBurghers) {
+    // 10 Minuten spielen, um alle auf Siedler zu haben
+    game->update(10 * TICKS_PER_MINUTE, 2000);
+    ASSERT_EQ(0, countHousesPerPopulationTier(pioneers));
+    ASSERT_EQ(8, countHousesPerPopulationTier(settlers));
+
+    // Schule und Wirtshaus bauen und nochmal Baumaterial auffüllen
+    colony->getGoods(configMgr->getGood("tools")).inventory = 20;
+    colony->getGoods(configMgr->getGood("wood")).inventory = 20;
+    colony->getGoods(configMgr->getGood("bricks")).inventory = 50;
+
+    game->addStructure({29, 25}, school, southView, player);
+    game->addStructure({27, 20}, tavern, southView, player);
+
+    // nochmal 10 Minuten spielen, danach sollten es Bürger sein
+    game->update(10 * TICKS_PER_MINUTE, 2000);
+    ASSERT_EQ(0, countHousesPerPopulationTier(pioneers));
+    ASSERT_EQ(0, countHousesPerPopulationTier(settlers));
+    ASSERT_EQ(8, countHousesPerPopulationTier(burghers));
 }

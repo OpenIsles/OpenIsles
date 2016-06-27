@@ -3,6 +3,7 @@
 #include "config/ConfigMgr.h"
 #include "economics/EconomicsMgr.h"
 #include "economics/InCatchmentAreaFinder.h"
+#include "game/CatchmentArea.h"
 #include "game/Game.h"
 #include "graphics/graphic/GraphicSetKeyState.h"
 #include "utils/RandomEngine.h"
@@ -245,6 +246,33 @@ void Building::checkForHouseAdvancement(const Context& context) {
 
     if (!((buildingCostsThere - advancementCosts).isNonNegative())) {
         return;
+    }
+
+    // Alle verlangten öffentlichen Gebäude da?
+    for (const MapObjectType* neededPublicBuilding : nextPopulationTier->needsPublicBuildings) {
+        // TODO optimieren und pro Gebäude eine Map aufbauen, wo wir einen einfachen Lookup machen können
+
+        bool foundOneBuildingCoveringUs = false;
+        for (const MapObject* mapObject : context.game->getMap()->getMapObjects()) {
+            const Building* buildingToTest = dynamic_cast<const Building*>(mapObject);
+
+            if ((buildingToTest == nullptr) || (buildingToTest->getMapObjectType() != neededPublicBuilding)) {
+                continue;
+            }
+            if (buildingToTest->player != this->player) {
+                continue; // nicht unser Gebäude -> zählt nicht
+            }
+
+            // Checken, ob im Einzugsgebiet
+            if (CatchmentArea::isInsideCatchmentArea(*buildingToTest, *this)) {
+                foundOneBuildingCoveringUs = true;
+                break;
+            }
+        }
+
+        if (!foundOneBuildingCoveringUs) {
+            return; // kein Gebäude vom Typ neededPublicBuilding da -> Kein Aufstieg möglich.
+        }
     }
 
     // Ok. Alles gut. Umbau durchführen

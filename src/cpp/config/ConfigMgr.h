@@ -269,11 +269,9 @@ public:
     }
 
 #ifdef IN_TESTS
-    // Tests die Möglichkeit zu geben, MapObjectType zu verändern
+    // Tests die Möglichkeit zu geben, MapObjectType und PopulationTier zu verändern.
+    // Methoden analog, nur mit Schreibzugriff.
 
-    /**
-     * @brief Analog const MapObjectType* getMapObjectType(const std::string&), nur mit Schreibzugriff.
-     */
     MapObjectType* getMapObjectType(const std::string& name) {
         auto iter = mapObjectTypesMap.find(name);
         if (iter != mapObjectTypesMap.end()) {
@@ -281,6 +279,18 @@ public:
         } else {
             return nullptr;
         }
+    }
+
+    PopulationTier* getPopulationTier(const std::string& name) {
+        for (auto iter = populationTiers.cbegin(); iter != populationTiers.cend(); iter++) {
+            const PopulationTier& populationTier = *iter;
+
+            if (populationTier.name == name) {
+                return const_cast<PopulationTier*>(&populationTier);
+            }
+        }
+
+        return nullptr;
     }
 #endif
 
