@@ -252,16 +252,16 @@ DEFINE_LUA_FUNCTION(build) {
     int playerIndex = luaL_checkinteger(lua, 1);
     Player* player = context->game->getPlayer(playerIndex - 1);
     if (player == nullptr) {
-        return luaL_error(lua, _("Invalid playerIndex").c_str());
+        return luaL_error(lua, _("Invalid playerIndex.").c_str());
     }
     if (!player->isAI()) {
-        return luaL_error(lua, _("AI may only play for AI players").c_str());
+        return luaL_error(lua, _("AI may only play for AI players.").c_str());
     }
 
     const char* mapObjectTypeName = luaL_checkstring(lua, 2);
     const MapObjectType* mapObjectType = context->configMgr->getMapObjectType(mapObjectTypeName);
     if (mapObjectType == nullptr) {
-        return luaL_error(lua, _("Invalid mapObjectType").c_str());
+        return luaL_error(lua, _("Invalid mapObjectType.").c_str());
     }
 
     int mapX = luaL_checkinteger(lua, 3);
@@ -270,7 +270,7 @@ DEFINE_LUA_FUNCTION(build) {
 
     MapTile* mapTile = context->game->getMap()->getMapTileAt(mapCoords);
     if (mapTile == nullptr) {
-        return luaL_error(lua, _("Invalid mapCoords").c_str());
+        return luaL_error(lua, _("Invalid mapCoords.").c_str());
     }
 
     const char* viewName = luaL_checkstring(lua, 5);
@@ -280,7 +280,7 @@ DEFINE_LUA_FUNCTION(build) {
         view != Direction::NORTH &&
         view != Direction::WEST) {
 
-        return luaL_error(lua, _("Invalid viewName").c_str());
+        return luaL_error(lua, _("Invalid viewName.").c_str());
     }
 
     // Passt soweit. Nun gucken, ob wir bauen können
@@ -288,7 +288,7 @@ DEFINE_LUA_FUNCTION(build) {
     buildOperation.requestBuild(mapCoords, mapObjectType, view);
 
     if (buildOperation.getResult().result != BuildOperationResult::OK) {
-        return luaL_error(lua, _("Cannot build there").c_str());
+        return luaL_error(lua, _("Cannot build there.").c_str());
     }
 
     buildOperation.doBuild();
@@ -303,10 +303,10 @@ DEFINE_LUA_FUNCTION(demolish) {
     int playerIndex = luaL_checkinteger(lua, 1);
     Player* player = context->game->getPlayer(playerIndex - 1);
     if (player == nullptr) {
-        return luaL_error(lua, _("Invalid playerIndex").c_str());
+        return luaL_error(lua, _("Invalid playerIndex.").c_str());
     }
     if (!player->isAI()) {
-        return luaL_error(lua, _("AI may only play for AI players").c_str());
+        return luaL_error(lua, _("AI may only play for AI players.").c_str());
     }
 
     int mapX = luaL_checkinteger(lua, 2);
@@ -315,7 +315,7 @@ DEFINE_LUA_FUNCTION(demolish) {
 
     MapObjectFixed* mapObjectFixed = context->game->getMap()->getMapObjectFixedAt(mapCoords);
     if (mapObjectFixed == nullptr) {
-        return luaL_error(lua, _("Nothing to demolish at these mapCoords").c_str());
+        return luaL_error(lua, _("Nothing to demolish at these mapCoords.").c_str());
     }
 
     // Passt soweit. Nun gucken, ob wir abreißen können
@@ -323,7 +323,7 @@ DEFINE_LUA_FUNCTION(demolish) {
     buildOperation.requestDemolish(*mapObjectFixed);
 
     if (buildOperation.getResult().result != BuildOperationResult::OK) {
-        return luaL_error(lua, _("Cannot demolish there").c_str());
+        return luaL_error(lua, _("Cannot demolish there.").c_str());
     }
 
     buildOperation.doBuild();

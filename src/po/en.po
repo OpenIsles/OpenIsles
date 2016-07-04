@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenIsles 0.1\n"
 "Report-Msgid-Bugs-To: http://www.openisles.org\n"
-"POT-Creation-Date: 2016-06-12 10:57+0200\n"
-"PO-Revision-Date: 2016-06-12 10:58+0200\n"
+"POT-Creation-Date: 2016-07-04 17:52+0200\n"
+"PO-Revision-Date: 2016-07-04 17:52+0200\n"
 "Last-Translator: theHacker <openisles@openisles.org>\n"
 "Language-Team: theHacker <openisles@openisles.org>\n"
 "Language: en\n"
@@ -415,6 +415,48 @@ msgstr[1] "Settlers"
 msgid "mapObjectType|little-ship"
 msgstr "Little ship"
 
+#: src/cpp/ai/AiMgr.cpp:53
+#, c-format
+msgid "Could not load AI script '%s': %s"
+msgstr "Could not load AI script '%s': %s"
+
+#: src/cpp/ai/AiMgr.cpp:61 src/cpp/ai/AiMgr.cpp:68
+#, c-format
+msgid "Error executing AI %s function: %s"
+msgstr "Error executing AI %s function: %s"
+
+#: src/cpp/api/game.cpp:255 src/cpp/api/game.cpp:306 src/cpp/api/player.cpp:17
+msgid "Invalid playerIndex."
+msgstr "Invalid playerIndex."
+
+#: src/cpp/api/game.cpp:258 src/cpp/api/game.cpp:309
+msgid "AI may only play for AI players."
+msgstr "AI may only play for AI players."
+
+#: src/cpp/api/game.cpp:264
+msgid "Invalid mapObjectType."
+msgstr "Invalid mapObjectType."
+
+#: src/cpp/api/game.cpp:273
+msgid "Invalid mapCoords."
+msgstr "Invalid mapCoords."
+
+#: src/cpp/api/game.cpp:283
+msgid "Invalid viewName."
+msgstr "Invalid viewName."
+
+#: src/cpp/api/game.cpp:291
+msgid "Cannot build there."
+msgstr "Cannot build there."
+
+#: src/cpp/api/game.cpp:318
+msgid "Nothing to demolish at these mapCoords."
+msgstr "Nothing to demolish at these mapCoords."
+
+#: src/cpp/api/game.cpp:326
+msgid "Cannot demolish there."
+msgstr "Cannot demolish there."
+
 #: src/cpp/config/ConfigMgr.cpp:22
 msgid "Loaded goods."
 msgstr "Loaded goods."
@@ -464,85 +506,85 @@ msgstr "Loaded mapObjectType '%s'."
 msgid "Loaded carrier mapObjectType '%s'."
 msgstr "Loaded carrier mapObjectType '%s'."
 
-#: src/cpp/config/ConfigMgr.cpp:323
+#: src/cpp/config/ConfigMgr.cpp:325
 #, c-format
 msgid "Loaded ship mapObjectType '%s'."
 msgstr "Loaded ship mapObjectType '%s'."
 
-#: src/cpp/config/ConfigMgr.cpp:410
+#: src/cpp/config/ConfigMgr.cpp:369 src/cpp/game/GameIO.cpp:387
+#, c-format
+msgid "Illegal dirName '%s'."
+msgstr "Illegal dirName '%s'."
+
+#: src/cpp/config/ConfigMgr.cpp:420
 #, c-format
 msgid "Illegal mapTileTypeName '%s'."
 msgstr "Illegal mapTileTypeName '%s'."
 
-#: src/cpp/config/ConfigMgr.cpp:428
+#: src/cpp/config/ConfigMgr.cpp:438
 #, c-format
 msgid "Illegal bool value '%s'."
 msgstr "Illegal bool value '%s'."
 
-#: src/cpp/config/ConfigMgr.cpp:464
+#: src/cpp/config/ConfigMgr.cpp:474
 msgid "Could not parse catchmentArea: Illegal char before first line."
 msgstr "Could not parse catchmentArea: Illegal char before first line."
 
-#: src/cpp/config/ConfigMgr.cpp:473
+#: src/cpp/config/ConfigMgr.cpp:483
 msgid "Could not parse catchmentArea: Illegal space inside line."
 msgstr "Could not parse catchmentArea: Illegal space inside line."
 
-#: src/cpp/config/ConfigMgr.cpp:488
+#: src/cpp/config/ConfigMgr.cpp:498
 msgid "Could not parse catchmentArea: widths are not equal."
 msgstr "Could not parse catchmentArea: widths are not equal."
 
-#: src/cpp/config/ConfigMgr.cpp:499
+#: src/cpp/config/ConfigMgr.cpp:509
 msgid "Could not parse catchmentArea: Last line was not completly empty."
 msgstr "Could not parse catchmentArea: Last line was not completly empty."
 
-#: src/cpp/config/ConfigMgr.cpp:596
+#: src/cpp/config/ConfigMgr.cpp:606
 #, c-format
 msgid "Loaded populationTier '%s'."
 msgstr "Loaded populationTier '%s'."
 
-#: src/cpp/config/ConfigMgr.cpp:622
+#: src/cpp/config/ConfigMgr.cpp:632
 #, c-format
 msgid "Illegal value '%s' for populationTier."
 msgstr "Illegal value '%s' for populationTier."
 
-#: src/cpp/game/Game.cpp:212
+#: src/cpp/game/Game.cpp:206
 msgid "Cannot have negative inhabitants."
 msgstr "Cannot have negative inhabitants."
 
-#: src/cpp/game/GameIO.cpp:95
+#: src/cpp/game/GameIO.cpp:96
 #, c-format
 msgid "Illegal player color '%s'."
 msgstr "Illegal player color '%s'."
 
-#: src/cpp/game/GameIO.cpp:147
+#: src/cpp/game/GameIO.cpp:151
 #, c-format
 msgid "Isle '%s' (%dx%d) does not match size on map (%dx%d)."
 msgstr "Isle '%s' (%dx%d) does not match size on map (%dx%d)."
 
-#: src/cpp/game/GameIO.cpp:239
+#: src/cpp/game/GameIO.cpp:243
 #, c-format
 msgid "Warning: Did not find Good '%s' in savefile."
 msgstr "Warning: Did not find Good '%s' in savefile."
 
-#: src/cpp/game/GameIO.cpp:255
+#: src/cpp/game/GameIO.cpp:259
 #, c-format
 msgid "Illegal mapObjectType '%s'."
 msgstr "Illegal mapObjectType '%s'."
 
-#: src/cpp/game/GameIO.cpp:310
+#: src/cpp/game/GameIO.cpp:314
 #, c-format
 msgid "Warning: Ship has loaded unknown Good '%s'."
 msgstr "Warning: Ship has loaded unknown Good '%s'."
 
-#: src/cpp/game/GameIO.cpp:317
+#: src/cpp/game/GameIO.cpp:321
 #, c-format
 msgid "Warning: Ship has illegal inventory %d for Good '%s'."
 msgstr "Warning: Ship has illegal inventory %d for Good '%s'."
-
-#: src/cpp/game/Player.h:90
-#, c-format
-msgid "Illegal player color: %u"
-msgstr "Illegal player color: %u"
 
 #: src/cpp/graphics/graphic/Animation.h:74
 msgid "Animation does not have only frame."
@@ -592,47 +634,47 @@ msgstr "Could not create texture: %s"
 msgid "Illegal bytesPerPixel: %d"
 msgstr "Illegal bytesPerPixel: %d"
 
-#: src/cpp/graphics/mgr/AbstractGraphicsMgr.cpp:154
+#: src/cpp/graphics/mgr/AbstractGraphicsMgr.cpp:161
 #, c-format
 msgid "Illegal views %d for animation in graphicSet '%s'"
 msgstr "Illegal views %d for animation in graphicSet '%s'"
 
-#: src/cpp/graphics/mgr/AbstractGraphicsMgr.cpp:175
+#: src/cpp/graphics/mgr/AbstractGraphicsMgr.cpp:182
 #, c-format
 msgid "Could not parse frames '%s'"
 msgstr "Could not parse frames '%s'"
 
-#: src/cpp/graphics/mgr/AbstractGraphicsMgr.cpp:198
+#: src/cpp/graphics/mgr/AbstractGraphicsMgr.cpp:205
 #, c-format
 msgid "Illegal state '%s' for animation in graphicSet '%s'"
 msgstr "Illegal state '%s' for animation in graphicSet '%s'"
 
-#: src/cpp/graphics/mgr/AbstractGraphicsMgr.cpp:209
+#: src/cpp/graphics/mgr/AbstractGraphicsMgr.cpp:216
 #, c-format
 msgid "No graphics load for graphicSet '%s'"
 msgstr "No graphics load for graphicSet '%s'"
 
-#: src/cpp/graphics/mgr/AbstractGraphicsMgr.cpp:287
+#: src/cpp/graphics/mgr/AbstractGraphicsMgr.cpp:294
 #, c-format
 msgid "Illegal statesCount %d for graphicFilename %s"
 msgstr "Illegal statesCount %d for graphicFilename %s"
 
-#: src/cpp/graphics/mgr/AbstractGraphicsMgr.cpp:328
+#: src/cpp/graphics/mgr/AbstractGraphicsMgr.cpp:335
 #, c-format
 msgid "Could not divide the frames equally: '%s'"
 msgstr "Could not divide the frames equally: '%s'"
 
-#: src/cpp/graphics/mgr/AbstractGraphicsMgr.cpp:335
+#: src/cpp/graphics/mgr/AbstractGraphicsMgr.cpp:342
 #, c-format
 msgid "Could not divide the views equally: '%s'"
 msgstr "Could not divide the views equally: '%s'"
 
-#: src/cpp/graphics/mgr/AbstractGraphicsMgr.cpp:445
+#: src/cpp/graphics/mgr/AbstractGraphicsMgr.cpp:452
 #, c-format
 msgid "No graphicSet defined for mapObjectType '%s'"
 msgstr "No graphicSet defined for mapObjectType '%s'"
 
-#: src/cpp/graphics/mgr/AbstractGraphicsMgr.cpp:451
+#: src/cpp/graphics/mgr/AbstractGraphicsMgr.cpp:458
 #, c-format
 msgid "Could not find graphicSet: '%s'"
 msgstr "Could not find graphicSet: '%s'"
@@ -772,7 +814,7 @@ msgstr "Zoom in"
 msgid "Zoom out"
 msgstr "Zoom out"
 
-#: src/cpp/gui/components/map/GuiMap.cpp:579
+#: src/cpp/gui/components/map/GuiMap.cpp:572
 msgid "TODO - Island's richness of soil"
 msgstr "TODO - Island's richness of soil"
 
@@ -873,24 +915,24 @@ msgstr "Supply of %s (enough for another %.1ft of %s)"
 msgid "Empty"
 msgstr "Empty"
 
-#: src/cpp/i18n/LanguageMgr.cpp:8
+#: src/cpp/i18n/LanguageMgr.cpp:12
 #, c-format
 msgid "Using locale '%s'."
 msgstr "Using locale '%s'."
 
-#: src/cpp/main.cpp:111
+#: src/cpp/main.cpp:112
 msgid "FPS:"
 msgstr "FPS:"
 
-#: src/cpp/main.cpp:114
+#: src/cpp/main.cpp:115
 msgid "current:"
 msgstr "current:"
 
-#: src/cpp/main.cpp:119
+#: src/cpp/main.cpp:120
 msgid "average:"
 msgstr "average:"
 
-#: src/cpp/main.cpp:159
+#: src/cpp/main.cpp:160
 #, c-format
 msgid ""
 "Usage: %s -m mapFileToLoad [-b benchmarkFrames] [-t runOnlyGameTicks -s "
@@ -899,62 +941,62 @@ msgstr ""
 "Usage: %s -m mapFileToLoad [-b benchmarkFrames] [-t runOnlyGameTicks -s "
 "bmpFileForBigScreenshot]"
 
-#: src/cpp/main.cpp:166
+#: src/cpp/main.cpp:167
 msgid "Error: No map file specified."
 msgstr "Error: No map file specified."
 
-#: src/cpp/main.cpp:194
+#: src/cpp/main.cpp:195
 msgid "Could not register events."
 msgstr "Could not register events."
 
-#: src/cpp/main.cpp:311
+#: src/cpp/main.cpp:326
 #, c-format
 msgid ""
 "PerfCounters: events avg %.3f, current = %.1f; gameUpdate avg %.3f, current "
-"= %.1f; rendering avg %.3f, current = %.1f"
+"= %.1f; rendering avg %.3f, current = %.1f; AI avg %.3f, current = %.1f"
 msgstr ""
 "PerfCounters: events avg %.3f, current = %.1f; gameUpdate avg %.3f, current "
-"= %.1f; rendering avg %.3f, current = %.1f"
+"= %.1f; rendering avg %.3f, current = %.1f; AI avg %.3f, current = %.1f"
 
-#: src/cpp/main.cpp:322
+#: src/cpp/main.cpp:340
 #, c-format
 msgid "Screen: mapCentered = (%d, %d), zoom = %d, view = %d"
 msgstr "Screen: mapCentered = (%d, %d), zoom = %d, view = %d"
 
-#: src/cpp/main.cpp:326
+#: src/cpp/main.cpp:344
 #, c-format
 msgid "Game ticks: %lu"
 msgstr "Game ticks: %lu"
 
-#: src/cpp/main.cpp:329
+#: src/cpp/main.cpp:347
 #, c-format
 msgid "mouse = (%d, %d), screen = (%d, %d), mapElevated = (%d, %d)"
 msgstr "mouse = (%d, %d), screen = (%d, %d), mapElevated = (%d, %d)"
 
-#: src/cpp/main.cpp:348
+#: src/cpp/main.cpp:366
 #, c-format
 msgid "selectedMapObject(Fixed) on mapCoords (%d, %d), size = (%d, %d)"
 msgstr "selectedMapObject(Fixed) on mapCoords (%d, %d), size = (%d, %d)"
 
-#: src/cpp/main.cpp:357
+#: src/cpp/main.cpp:375
 #, c-format
 msgid "selectedMapObject(Moving) on mapCoords (%f, %f), size = (%d, %d)"
 msgstr "selectedMapObject(Moving) on mapCoords (%f, %f), size = (%d, %d)"
 
-#: src/cpp/main.cpp:363
+#: src/cpp/main.cpp:381
 #, c-format
 msgid "selectedMapObject(UNKNOWN!?) size = (%d, %d)"
 msgstr "selectedMapObject(UNKNOWN!?) size = (%d, %d)"
 
-#: src/cpp/main.cpp:376
+#: src/cpp/main.cpp:394
 msgid "catchmentAreaIterator set"
 msgstr "catchmentAreaIterator set"
 
-#: src/cpp/main.cpp:378
+#: src/cpp/main.cpp:396
 msgid "catchmentAreaIterator nullptr"
 msgstr "catchmentAreaIterator nullptr"
 
-#: src/cpp/main.cpp:382
+#: src/cpp/main.cpp:400
 #, c-format
 msgid ""
 "debugAStar: source = (%d, %d), destination = (%d, %d), %s, useStreetOnly = "
@@ -963,18 +1005,13 @@ msgstr ""
 "debugAStar: source = (%d, %d), destination = (%d, %d), %s, useStreetOnly = "
 "%s, rightAnglesOnly = %s"
 
-#: src/cpp/main.cpp:389 src/cpp/main.cpp:390
+#: src/cpp/main.cpp:407 src/cpp/main.cpp:408
 msgid "false"
 msgstr "false"
 
-#: src/cpp/main.cpp:389 src/cpp/main.cpp:390
+#: src/cpp/main.cpp:407 src/cpp/main.cpp:408
 msgid "true"
 msgstr "true"
-
-#: src/cpp/map/Direction.h:142
-#, c-format
-msgid "Illegal dirName '%s'."
-msgstr "Illegal dirName '%s'."
 
 #: src/cpp/map/Isle.cpp:25
 #, c-format

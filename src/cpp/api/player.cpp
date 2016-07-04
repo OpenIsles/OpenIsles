@@ -14,7 +14,7 @@ DEFINE_LUA_FUNCTION(getPlayer) {
     int playerIndex = luaL_checkinteger(lua, -1);
     const Player* player = context->game->getPlayer(playerIndex - 1);
     if (player == nullptr || !player->isUsed()) {
-        return luaL_error(lua, _("Invalid playerIndex").c_str());
+        return luaL_error(lua, _("Invalid playerIndex.").c_str());
     }
 
     lua_createtable(lua, 0, 3);
