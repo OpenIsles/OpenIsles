@@ -6,6 +6,9 @@
     <graphic-set name="mapobjects/chapel">
         <static-views-horizontal image-file="data/img/buildings/chapel.png" />
     </graphic-set>
+    <graphic-set name="mapobjects/church">
+        <static-views-horizontal image-file="data/img/buildings/church.png" />
+    </graphic-set>
     <graphic-set name="mapobjects/pioneers-house1">
         <static-views-horizontal image-file="data/img/buildings/pioneers-house1.png" />
     </graphic-set>
@@ -254,6 +257,9 @@
     <graphic-set name="add-building-button/chapel">
         <static image-file="data/img/gui/add-building/chapel.png" />
     </graphic-set>
+    <graphic-set name="add-building-button/church">
+        <static image-file="data/img/gui/add-building/church.png" />
+    </graphic-set>
     <graphic-set name="add-building-button/marketplace">
         <static image-file="data/img/gui/add-building/marketplace.png" />
     </graphic-set>
@@ -453,11 +459,9 @@
     <graphic-set name="public-building-icon/chapel">
         <static image-file="data/img/gui/public-building-icon/chapel.png" />
     </graphic-set>
-    <!--
     <graphic-set name="public-building-icon/church">
         <static image-file="data/img/gui/public-building-icon/church.png" />
     </graphic-set>
-    -->
     <!--
     <graphic-set name="public-building-icon/high-school">
         <static image-file="data/img/gui/public-building-icon/high-school.png" />

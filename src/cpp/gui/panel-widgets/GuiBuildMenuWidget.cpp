@@ -114,7 +114,7 @@ GuiBuildMenuWidget::GuiBuildMenuWidget(const Context& context) : GuiPanelWidget(
                 context.configMgr->getMapObjectType("pioneers-house1"), // TODO Merker in der Config einbauen, dass hier zufällig verteilt wird (Häuser/Wald); GraphicSet-Name sollte angepasst werden
                 context.configMgr->getMapObjectType("marketplace"),
                 context.configMgr->getMapObjectType("chapel"),
-                nullptr
+                context.configMgr->getMapObjectType("church")
             }
         }
     };

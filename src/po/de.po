@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenIsles 0.1\n"
 "Report-Msgid-Bugs-To: http://www.openisles.org\n"
-"POT-Creation-Date: 2016-07-04 17:52+0200\n"
+"POT-Creation-Date: 2016-07-04 18:03+0200\n"
 "PO-Revision-Date: 2016-07-04 17:51+0200\n"
 "Last-Translator: theHacker <openisles@openisles.org>\n"
 "Language-Team: theHacker <openisles@openisles.org>\n"
@@ -129,6 +129,11 @@ msgstr "Rinderfarm"
 #: data/config/map-objects.xml
 msgid "mapObjectType|chapel"
 msgstr "Kapelle"
+
+# automatically generated out of data xmls
+#: data/config/map-objects.xml
+msgid "mapObjectType|church"
+msgstr "Kirche"
 
 # automatically generated out of data xmls
 #: data/config/map-objects.xml
@@ -342,6 +347,11 @@ msgstr "Die Hausbewohner verlangen nach einer Kapelle"
 
 # automatically generated out of data xmls
 #: data/config/population-tiers.xml
+msgid "neededPublicBuilding|new|church"
+msgstr "Die Hausbewohner verlangen nach einem größeren Gotteshaus"
+
+# automatically generated out of data xmls
+#: data/config/population-tiers.xml
 msgid "neededPublicBuilding|new|marketplace"
 msgstr "Die Hausbewohner verlangen nach einem Marktplatz"
 
@@ -359,6 +369,11 @@ msgstr "Die Hausbewohner verlangen nach einem Wirtshaus"
 #: data/config/population-tiers.xml
 msgid "neededPublicBuilding|overdue|chapel"
 msgstr "Die Hausbewohner beklagen das Fehlen einer Kapelle"
+
+# automatically generated out of data xmls
+#: data/config/population-tiers.xml
+msgid "neededPublicBuilding|overdue|church"
+msgstr "Die Hausbewohner beklagen das Fehlen einer Kirche"
 
 # automatically generated out of data xmls
 #: data/config/population-tiers.xml
@@ -1057,10 +1072,6 @@ msgstr "Musik '%s' geladen."
 #~ msgstr "Die Hausbewohner verlangen nach einem Badehaus"
 
 # automatically generated out of data xmls
-#~ msgid "neededPublicBuilding|new|church"
-#~ msgstr "Die Hausbewohner verlangen nach einem größeren Gotteshaus"
-
-# automatically generated out of data xmls
 #~ msgid "neededPublicBuilding|new|high-school"
 #~ msgstr "Die Hausbewohner verlangen nach einer Hochschule"
 
@@ -1071,10 +1082,6 @@ msgstr "Musik '%s' geladen."
 # automatically generated out of data xmls
 #~ msgid "neededPublicBuilding|overdue|bathhouse"
 #~ msgstr "Die Hausbewohner beklagen das Fehlen eines Badehauses"
-
-# automatically generated out of data xmls
-#~ msgid "neededPublicBuilding|overdue|church"
-#~ msgstr "Die Hausbewohner beklagen das Fehlen einer Kirche"
 
 # automatically generated out of data xmls
 #~ msgid "neededPublicBuilding|overdue|high-school"

@@ -172,6 +172,7 @@ build-add-building-gui: $(TARGET_EXECUTABLE)
 	    \( +clone -crop 102x102+3019+1112 -resize 46x46 -write $(DATA_DIRECTORY)/img/gui/add-building/cathedral.png +delete \) \
 	    \( +clone -crop 103x103+3524+1316 -resize 46x46 -write $(DATA_DIRECTORY)/img/gui/add-building/cattle-farm.png +delete \) \
 	    \( +clone -crop 67x67+3310+1621 -resize 46x46 -write $(DATA_DIRECTORY)/img/gui/add-building/chapel.png +delete \) \
+	    \( +clone -crop 78x78+2153+1388 -resize 46x46 -write $(DATA_DIRECTORY)/img/gui/add-building/church.png +delete \) \
 	    \( +clone -crop 55x55+3620+1513 -resize 46x46 -write $(DATA_DIRECTORY)/img/gui/add-building/cobbled-street.png +delete \) \
 	    \( +clone -crop 78x78+2937+1780 -resize 46x46 -write $(DATA_DIRECTORY)/img/gui/add-building/distillery.png +delete \) \
 	    \( +clone -crop 55x55+3497+1577 -resize 46x46 -write $(DATA_DIRECTORY)/img/gui/add-building/farm-road.png +delete \) \
@@ -209,8 +210,8 @@ build-add-building-gui: $(TARGET_EXECUTABLE)
 # Gebäude (statisch)                                                                                                   #
 ########################################################################################################################
 
-BUILDINGS := aristocrats-house1 bakery burghers-house1 butchers cathedral cattle-farm chapel distillery \
-             foresters grain-farm hunters-hut marketplace merchants-house1 office1 office2 pier \
+BUILDINGS := aristocrats-house1 bakery burghers-house1 butchers cathedral cattle-farm chapel church \
+             distillery foresters grain-farm hunters-hut marketplace merchants-house1 office1 office2 pier \
              pioneers-house1 pioneers-house2 pioneers-house3 pioneers-house4 pioneers-house5 \
              school settlers-house1 settlers-house2 settlers-house3 settlers-house4 settlers-house5 \
              sheep-farm square1 spices-plantation square2 square3 stonemason sugarcane-plantation tavern \

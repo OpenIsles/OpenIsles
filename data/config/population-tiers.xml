@@ -78,7 +78,7 @@
             <public-building name="marketplace" />
             <public-building name="tavern" />
             <public-building name="school" />
-            <!--<public-building name="church" />-->
+            <public-building name="church" />
             <!--<public-building name="bathhouse" />-->
         </needs>
         <max-population-per-house>25</max-population-per-house>
@@ -104,7 +104,7 @@
             <!--<good name="jewelry" consume-per-cycle="0.2" />-->
             <public-building name="marketplace" />
             <public-building name="tavern" />
-            <!--<public-building name="church" />-->
+            <public-building name="church" />
             <!--<public-building name="bathhouse" />-->
             <!--<public-building name="high-school" />-->
             <!--<public-building name="theater" />-->
