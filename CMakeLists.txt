@@ -110,6 +110,8 @@ set(COMMON_SOURCE_FILES
     src/cpp/utils/Events.h
     src/cpp/utils/MapCoordsIterator.h
     src/cpp/utils/Log.h
+    src/cpp/utils/Lua.cpp
+    src/cpp/utils/Lua.h
     src/cpp/utils/RandomEngine.h
     src/cpp/utils/Rect.h
     src/cpp/utils/RectangleData.h
@@ -140,6 +142,8 @@ set(GUI_SOURCE_FILES
     src/cpp/gui/components/GuiGoodsSlotElement.h
     src/cpp/gui/components/GuiIconWithStringElement.cpp
     src/cpp/gui/components/GuiIconWithStringElement.h
+    src/cpp/gui/components/GuiLuaConsole.cpp
+    src/cpp/gui/components/GuiLuaConsole.h
     src/cpp/gui/components/GuiMapRotateWidget.cpp
     src/cpp/gui/components/GuiMapRotateWidget.h
     src/cpp/gui/components/GuiMapZoomWidget.cpp

@@ -7,10 +7,11 @@
 #include "gui/components/map/GuiMap.h"
 #include "gui/components/GuiAddBuildingWidget.h"
 #include "gui/components/GuiBuildMenu.h"
-#include "gui/components/GuiPushButton.h"
+#include "gui/components/GuiLuaConsole.h"
 #include "gui/components/GuiMapRotateWidget.h"
 #include "gui/components/GuiMapZoomWidget.h"
 #include "gui/components/GuiMinimap.h"
+#include "gui/components/GuiPushButton.h"
 #include "gui/components/GuiStatusBar.h"
 #include "gui/panel-widgets/GuiBuildMenuWidget.h"
 #include "gui/panel-widgets/GuiColonyGoodsWidget.h"
@@ -155,6 +156,13 @@ void GuiMgr::initGui() {
     guiBuildMenu->setVisible(false);
     registerElement(GUI_ID_BUILD_MENU, guiBuildMenu);
 
+    // Lua-Konsole
+    if (context.cmdlineParams.enableLuaConsole) {
+        GuiLuaConsole* guiLuaConsole = new GuiLuaConsole(context);
+        guiLuaConsole->setVisible(false);
+        registerElement(GUI_ID_LUA_CONSOLE, guiLuaConsole);
+    }
+
     //////////////////////////////////////////////////////////////////////////////////////////
     // Zustand initialisieren ////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////////
@@ -264,7 +272,7 @@ void GuiMgr::onEvent(SDL_Event& event) {
     Game* game = context.game;
     Map* map = game->getMap();
 
-    // Vorbereitende Arbeiten. Das Event wird danach trotzdem an die GUI-Element gegeben.
+    // Vorbereitende Arbeiten. Das Event wird danach trotzdem an die GUI-Elemente gegeben.
 
     // Bei Linksklick die Koordinaten merken
     if (event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_LEFT) {
@@ -300,6 +308,15 @@ void GuiMgr::onEvent(SDL_Event& event) {
              */
 
             mapCoordsUnderMouse = newMapCoordsUnderMouse;
+        }
+    }
+
+    // Lua-Konsole als allererstes
+    // TODO ggf. kann man das verallgemeinern, dass es Texteingabe-Elemente gibt, die, wenn sie den Fokus haben, bevorzugt die Events kriegen
+    if (context.cmdlineParams.enableLuaConsole) {
+        GuiLuaConsole* guiLuaConsole = dynamic_cast<GuiLuaConsole*>(findElement(GUI_ID_LUA_CONSOLE));
+        if (!guiLuaConsole->onEventElement(event)) {
+            return;
         }
     }
 

@@ -72,6 +72,40 @@ struct Context {
      */
     uint32_t userEventBase;
 
+
+    /**
+     * @brief hält die Befehlszeilen-Parameter
+     */
+    struct {
+        /**
+         * @brief wenn ungleich 0, gibt an, wie viele Frames das Spiel laufen soll, bis es automatisch beendet wird.
+         * Dies ist zum Messen der Ausführungsgeschwindigkeit, um immer dieselben Bedingungen und gleiche Laufzeit
+         * zu haben.
+         */
+        int benchmarkFrames = 0;
+
+        /**
+         * @brief Dateiname der Map, die geladen werden soll
+         */
+        char* mapFileToLoad = nullptr;
+
+        /**
+         * @brief wenn ungleich 0, läuft das Spiel exakt die angegebene [Spielzeit](@ref gameTicks), führt danach den
+         * Riesenscreenshot aus und beendet dann.
+         */
+        unsigned long ticksToRun = 0;
+
+        /**
+         * @brief Dateiname, unter dem ein Riesenscreenshot abgespeichert werden soll
+         */
+        char* bmpFileForBigScreenshot = nullptr;
+
+        /**
+         * @brief Lua-Konsole in-game aktiviert?
+         */
+        bool enableLuaConsole = false;
+
+    } cmdlineParams;
 };
 
 /**

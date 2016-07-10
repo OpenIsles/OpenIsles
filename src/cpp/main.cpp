@@ -51,37 +51,6 @@ static std::string debugOutput[7];
 
 static PerformanceCounter fpsCounter(500);
 
-/**
- * @brief hält die Befehlszeilen-Parameter
- */
-static struct {
-
-    /**
-     * @brief wenn ungleich 0, gibt an, wie viele Frames das Spiel laufen soll, bis es automatisch beendet wird.
-     * Dies ist zum Messen der Ausführungsgeschwindigkeit, um immer dieselben Bedingungen und gleiche Laufzeit
-     * zu haben.
-     */
-    int benchmarkFrames = 0;
-
-    /**
-     * @brief Dateiname der Map, die geladen werden soll
-     */
-    char* mapFileToLoad = nullptr;
-
-    /**
-     * @brief wenn ungleich 0, läuft das Spiel exakt die angegebene [Spielzeit](@ref gameTicks), führt danach den
-     * Riesenscreenshot aus und beendet dann.
-     */
-    unsigned long ticksToRun = 0;
-
-    /**
-     * @brief Dateiname, unter dem ein Riesenscreenshot abgespeichert werden soll
-     */
-    char* bmpFileForBigScreenshot = nullptr;
-
-} cmdlineParams;
-
-
 /*********************************************************************************************************************
  * Prototypen                                                                                                        *
  *********************************************************************************************************************/
@@ -136,12 +105,13 @@ void drawFrame(const Context& context, IRenderer* renderer) {
 #endif
 }
 
-bool parseCmdlineParams(int argc, char** argv) {
+bool parseCmdlineParams(Context& context, int argc, char** argv) {
     static struct option allowedLongOptions[] = {
         { "benchmark-frames", required_argument, 0, 'b' },
+        { "lua-console",      optional_argument, 0, 'l' },
         { "map",              required_argument, 0, 'm' },
-        { "ticks-to-run",     required_argument, 0, 't' },
         { "screenshot",       required_argument, 0, 's' },
+        { "ticks-to-run",     required_argument, 0, 't' },
         { nullptr, 0, 0, 0 }
     };
 
@@ -150,6 +120,7 @@ bool parseCmdlineParams(int argc, char** argv) {
             "  -b, --benchmark       If specified only a certain amount of frames are\n"
             "                        executed, then the game ends automatically. This option\n"
             "                        is used for performance evaluations.\n"
+            "  -l, --lua-console     Enables the in-game Lua console.\n"
             "  -m, --map             Map file to load. This parameter is required.\n"
             "  -s, --screenshot      Creates a big screenshot and exits right away. This\n"
             "                        option specifies which file the screenshot is saved to.\n"
@@ -162,22 +133,26 @@ bool parseCmdlineParams(int argc, char** argv) {
 
     int opt;
     int longIndex = 0;
-    while ((opt = getopt_long(argc, argv, "b:m:t:s:", allowedLongOptions, &longIndex)) != -1) {
+    while ((opt = getopt_long(argc, argv, "b:lm:s:t:", allowedLongOptions, &longIndex)) != -1) {
         switch (opt) {
             case 'b':
-                cmdlineParams.benchmarkFrames = atoi(optarg);
+                context.cmdlineParams.benchmarkFrames = atoi(optarg);
+                break;
+
+            case 'l':
+                context.cmdlineParams.enableLuaConsole = true;
                 break;
 
             case 'm':
-                cmdlineParams.mapFileToLoad = optarg;
-                break;
-
-            case 't':
-                cmdlineParams.ticksToRun = (unsigned long) atol(optarg);
+                context.cmdlineParams.mapFileToLoad = optarg;
                 break;
 
             case 's':
-                cmdlineParams.bmpFileForBigScreenshot = optarg;
+                context.cmdlineParams.bmpFileForBigScreenshot = optarg;
+                break;
+
+            case 't':
+                context.cmdlineParams.ticksToRun = (unsigned long) atol(optarg);
                 break;
 
             default:
@@ -186,7 +161,7 @@ bool parseCmdlineParams(int argc, char** argv) {
         }
     }
 
-    if (cmdlineParams.mapFileToLoad == nullptr) {
+    if (context.cmdlineParams.mapFileToLoad == nullptr) {
         Log::error(_("Error: No map file specified."));
         return false;
     }
@@ -195,13 +170,14 @@ bool parseCmdlineParams(int argc, char** argv) {
 }
 
 int main(int argc, char** argv) {
+    Context context = Context();
+
     // Internationalisierung aktivieren //////////////////////////////////////////////////////////////////////////////
 
     LanguageMgr::initFromEnvironment();
 
     // Befehlszeilen-Analyse /////////////////////////////////////////////////////////////////////////////////////////
-
-    if (!parseCmdlineParams(argc, argv)) {
+    if (!parseCmdlineParams(context, argc, argv)) {
         return EXIT_FAILURE;
     }
 
@@ -210,8 +186,6 @@ int main(int argc, char** argv) {
     IRenderer* sdlRenderer = new SDLRenderer();
 
     // Game-Initialisierung //////////////////////////////////////////////////////////////////////////////////////////
-
-    Context context = Context();
 
     context.userEventBase = SDL_RegisterEvents(USER_EVENT_MAXEVENT + 1);
     if (context.userEventBase == (uint32_t) -1) {
@@ -255,23 +229,23 @@ int main(int argc, char** argv) {
     Game* game = new Game(context);
     context.game = game;
 
-    game->loadGameFromTMX(cmdlineParams.mapFileToLoad);
+    game->loadGameFromTMX(context.cmdlineParams.mapFileToLoad);
     aiMgr->init();
 
     sdlRenderer->showWindow();
 
     // Automatischer Riesenscreenshot angefordert? ///////////////////////////////////////////////////////////////////
 
-    if ((cmdlineParams.ticksToRun > 0) && (cmdlineParams.bmpFileForBigScreenshot != nullptr)) {
-        game->update(cmdlineParams.ticksToRun, 1000);
-        guiMgr->takeScreenshot(true, cmdlineParams.bmpFileForBigScreenshot);
+    if ((context.cmdlineParams.ticksToRun > 0) && (context.cmdlineParams.bmpFileForBigScreenshot != nullptr)) {
+        game->update(context.cmdlineParams.ticksToRun, 1000);
+        guiMgr->takeScreenshot(true, context.cmdlineParams.bmpFileForBigScreenshot);
 
         guiMgr->quit();
     }
 
     // Mainloop //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    int benchmarkFramesToGo = cmdlineParams.benchmarkFrames;
+    int benchmarkFramesToGo = context.cmdlineParams.benchmarkFrames;
 
     uint32_t sdlTicks = SDL_GetTicks();
     uint32_t lastSdlTicks = sdlTicks;

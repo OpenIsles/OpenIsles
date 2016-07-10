@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenIsles 0.1\n"
 "Report-Msgid-Bugs-To: http://www.openisles.org\n"
-"POT-Creation-Date: 2016-07-10 12:20+0200\n"
-"PO-Revision-Date: 2016-07-10 12:13+0200\n"
+"POT-Creation-Date: 2016-07-10 12:45+0200\n"
+"PO-Revision-Date: 2016-07-10 12:43+0200\n"
 "Last-Translator: theHacker <openisles@openisles.org>\n"
 "Language-Team: theHacker <openisles@openisles.org>\n"
 "Language: de\n"
@@ -940,19 +940,19 @@ msgstr "Leer"
 msgid "Using locale '%s'."
 msgstr "Benutze Locale '%s'."
 
-#: src/cpp/main.cpp:112
+#: src/cpp/main.cpp:117
 msgid "FPS:"
 msgstr "FPS:"
 
-#: src/cpp/main.cpp:115
+#: src/cpp/main.cpp:120
 msgid "current:"
 msgstr "Aktuell:"
 
-#: src/cpp/main.cpp:120
+#: src/cpp/main.cpp:125
 msgid "average:"
 msgstr "Durchs.:"
 
-#: src/cpp/main.cpp:149
+#: src/cpp/main.cpp:155
 msgid ""
 "\n"
 "Usage: OpenIsles -m file [-b frames] [-t ticks -s file]\n"
@@ -961,6 +961,7 @@ msgid ""
 "                        executed, then the game ends automatically. This "
 "option\n"
 "                        is used for performance evaluations.\n"
+"  -l, --lua-console     Enables the in-game Lua console.\n"
 "  -m, --map             Map file to load. This parameter is required.\n"
 "  -s, --screenshot      Creates a big screenshot and exits right away. This\n"
 "                        option specifies which file the screenshot is saved "
@@ -981,6 +982,7 @@ msgstr ""
 "                        ausgeführt, danach endet das Spiel automatisch. "
 "Diese\n"
 "                        Option wird für Performance-Auswertungen benutzt.\n"
+"  -l, --lua-console     Aktiviert die in-game Lua-Konsole.\n"
 "  -m, --map             Karten-Datei, die geladen werden soll. Dieser "
 "Parameter\n"
 "                        muss angegeben werden.\n"
@@ -998,15 +1000,15 @@ msgstr ""
 "                        verzögern. Diese Option gibt an, wie viele Ticks\n"
 "                        (= Millisekunden Spielzeit) ausgeführt werden.\n"
 
-#: src/cpp/main.cpp:190
+#: src/cpp/main.cpp:201
 msgid "Error: No map file specified."
 msgstr "Fehler: Keine Map-Datei angegeben."
 
-#: src/cpp/main.cpp:218
+#: src/cpp/main.cpp:229
 msgid "Could not register events."
 msgstr "Konnte Events nicht registrieren."
 
-#: src/cpp/main.cpp:349
+#: src/cpp/main.cpp:360
 #, c-format
 msgid ""
 "PerfCounters: events avg %.3f, current = %.1f; gameUpdate avg %.3f, current "
@@ -1015,45 +1017,45 @@ msgstr ""
 "PerfCounters: events avg %.3f, current = %.1f; gameUpdate avg %.3f, current "
 "= %.1f; rendering avg %.3f, current = %.1f; AI avg %.3f, current = %.1f"
 
-#: src/cpp/main.cpp:363
+#: src/cpp/main.cpp:374
 #, c-format
 msgid "Screen: mapCentered = (%d, %d), zoom = %d, view = %d"
 msgstr "Screen: mapCentered = (%d, %d), zoom = %d, view = %d"
 
-#: src/cpp/main.cpp:367
+#: src/cpp/main.cpp:378
 #, c-format
 msgid "Game ticks: %lu"
 msgstr "Game-Ticks: %lu"
 
-#: src/cpp/main.cpp:370
+#: src/cpp/main.cpp:381
 #, c-format
 msgid "mouse = (%d, %d), screen = (%d, %d), mapElevated = (%d, %d)"
 msgstr "mouse = (%d, %d), screen = (%d, %d), mapElevated = (%d, %d)"
 
-#: src/cpp/main.cpp:389
+#: src/cpp/main.cpp:400
 #, c-format
 msgid "selectedMapObject(Fixed) on mapCoords (%d, %d), size = (%d, %d)"
 msgstr "selectedMapObject(Fixed) auf mapCoords (%d, %d), size = (%d, %d)"
 
-#: src/cpp/main.cpp:398
+#: src/cpp/main.cpp:409
 #, c-format
 msgid "selectedMapObject(Moving) on mapCoords (%f, %f), size = (%d, %d)"
 msgstr "selectedMapObject(Moving) auf mapCoords (%f, %f), size = (%d, %d)"
 
-#: src/cpp/main.cpp:404
+#: src/cpp/main.cpp:415
 #, c-format
 msgid "selectedMapObject(UNKNOWN!?) size = (%d, %d)"
 msgstr "selectedMapObject(UNBEKANNT!?) size = (%d, %d)"
 
-#: src/cpp/main.cpp:417
+#: src/cpp/main.cpp:428
 msgid "catchmentAreaIterator set"
 msgstr "catchmentAreaIterator gesetzt"
 
-#: src/cpp/main.cpp:419
+#: src/cpp/main.cpp:430
 msgid "catchmentAreaIterator nullptr"
 msgstr "catchmentAreaIterator nullptr"
 
-#: src/cpp/main.cpp:423
+#: src/cpp/main.cpp:434
 #, c-format
 msgid ""
 "debugAStar: source = (%d, %d), destination = (%d, %d), %s, useStreetOnly = "
@@ -1062,11 +1064,11 @@ msgstr ""
 "debugAStar: source = (%d, %d), destination = (%d, %d), %s, useStreetOnly = "
 "%s, rightAnglesOnly = %s"
 
-#: src/cpp/main.cpp:430 src/cpp/main.cpp:431
+#: src/cpp/main.cpp:441 src/cpp/main.cpp:442
 msgid "false"
 msgstr "false"
 
-#: src/cpp/main.cpp:430 src/cpp/main.cpp:431
+#: src/cpp/main.cpp:441 src/cpp/main.cpp:442
 msgid "true"
 msgstr "true"
 

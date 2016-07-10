@@ -17,6 +17,7 @@
 #define GUI_ID_RESOURCES_BAR 5
 #define GUI_ID_MAP_ROTATE_WIDGET 6
 #define GUI_ID_MAP_ZOOM_WIDGET 7
+#define GUI_ID_LUA_CONSOLE 8
 
 // Gebäude bauen ///////////////////////////////////////////////////////////////////////////////////////////////////////
 

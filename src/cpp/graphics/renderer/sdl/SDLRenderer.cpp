@@ -98,6 +98,11 @@ void SDLRenderer::setClipRect(const Rect* const rect) {
 }
 
 void SDLRenderer::setDrawColor(const Color& color) {
+    if (color.a < 255) {
+        SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
+    } else {
+        SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_NONE);
+    }
     SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
 }
 
