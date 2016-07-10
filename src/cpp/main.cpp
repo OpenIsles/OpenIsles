@@ -2,9 +2,9 @@
 #define SDL_MAIN_HANDLED
 #endif
 #include <cstdlib>
+#include <getopt.h>
 #include <libintl.h>
 #include <stdexcept>
-#include <unistd.h>
 #include "global.h"
 #include "ai/AiMgr.h"
 #include "config/ConfigMgr.h"
@@ -137,8 +137,32 @@ void drawFrame(const Context& context, IRenderer* renderer) {
 }
 
 bool parseCmdlineParams(int argc, char** argv) {
+    static struct option allowedLongOptions[] = {
+        { "benchmark-frames", required_argument, 0, 'b' },
+        { "map",              required_argument, 0, 'm' },
+        { "ticks-to-run",     required_argument, 0, 't' },
+        { "screenshot",       required_argument, 0, 's' },
+        { nullptr, 0, 0, 0 }
+    };
+
+    std::string usageMessage = _(
+            "\nUsage: OpenIsles -m file [-b frames] [-t ticks -s file]\n\n"
+            "  -b, --benchmark       If specified only a certain amount of frames are\n"
+            "                        executed, then the game ends automatically. This option\n"
+            "                        is used for performance evaluations.\n"
+            "  -m, --map             Map file to load. This parameter is required.\n"
+            "  -s, --screenshot      Creates a big screenshot and exits right away. This\n"
+            "                        option specifies which file the screenshot is saved to.\n"
+            "                        Use this option with -t to play the game forward a\n"
+            "                        certain amount of time before taking the screenshot.\n"
+            "  -t, --ticks-to-run    Used in combination with -s to delay the screenshot.\n"
+            "                        This option supplies the ticks (= milliseconds game\n"
+            "                        time) to run.\n"
+    );
+
     int opt;
-    while ((opt = getopt(argc, argv, "b:m:t:s:")) != -1) {
+    int longIndex = 0;
+    while ((opt = getopt_long(argc, argv, "b:m:t:s:", allowedLongOptions, &longIndex)) != -1) {
         switch (opt) {
             case 'b':
                 cmdlineParams.benchmarkFrames = atoi(optarg);
@@ -157,8 +181,7 @@ bool parseCmdlineParams(int argc, char** argv) {
                 break;
 
             default:
-                Log::error(_("Usage: %s -m mapFileToLoad [-b benchmarkFrames] [-t runOnlyGameTicks -s bmpFileForBigScreenshot]"),
-                           argv[0]);
+                Log::error(usageMessage);
                 return false;
         }
     }

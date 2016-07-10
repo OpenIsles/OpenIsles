@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenIsles 0.1\n"
 "Report-Msgid-Bugs-To: http://www.openisles.org\n"
-"POT-Creation-Date: 2016-07-04 18:03+0200\n"
-"PO-Revision-Date: 2016-07-04 17:51+0200\n"
+"POT-Creation-Date: 2016-07-10 12:20+0200\n"
+"PO-Revision-Date: 2016-07-10 12:13+0200\n"
 "Last-Translator: theHacker <openisles@openisles.org>\n"
 "Language-Team: theHacker <openisles@openisles.org>\n"
 "Language: de\n"
@@ -952,24 +952,61 @@ msgstr "Aktuell:"
 msgid "average:"
 msgstr "Durchs.:"
 
-#: src/cpp/main.cpp:160
-#, c-format
+#: src/cpp/main.cpp:149
 msgid ""
-"Usage: %s -m mapFileToLoad [-b benchmarkFrames] [-t runOnlyGameTicks -s "
-"bmpFileForBigScreenshot]"
+"\n"
+"Usage: OpenIsles -m file [-b frames] [-t ticks -s file]\n"
+"\n"
+"  -b, --benchmark       If specified only a certain amount of frames are\n"
+"                        executed, then the game ends automatically. This "
+"option\n"
+"                        is used for performance evaluations.\n"
+"  -m, --map             Map file to load. This parameter is required.\n"
+"  -s, --screenshot      Creates a big screenshot and exits right away. This\n"
+"                        option specifies which file the screenshot is saved "
+"to.\n"
+"                        Use this option with -t to play the game forward a\n"
+"                        certain amount of time before taking the "
+"screenshot.\n"
+"  -t, --ticks-to-run    Used in combination with -s to delay the "
+"screenshot.\n"
+"                        This option supplies the ticks (= milliseconds game\n"
+"                        time) to run.\n"
 msgstr ""
-"Aufruf: %s -m zuLadendeMapDatei [-b anzahlFramesFürBenchmark] [-t "
-"nurGameticksAusführen -s bmpDateiFürRiesenscreenshot]"
+"\n"
+"Aufruf: OpenIsles -m Datei [-b Frames] [-t Ticks -s Datei]\n"
+"\n"
+"  -b, --benchmark       Wenn angegeben, wird nur eine bestimmte Anzahl "
+"Frames\n"
+"                        ausgeführt, danach endet das Spiel automatisch. "
+"Diese\n"
+"                        Option wird für Performance-Auswertungen benutzt.\n"
+"  -m, --map             Karten-Datei, die geladen werden soll. Dieser "
+"Parameter\n"
+"                        muss angegeben werden.\n"
+"  -s, --screenshot      Erzeugt einen Riesenscreenshot und beendet danach "
+"sofort.\n"
+"                        Diese Option legt fest, in welche Datei der "
+"Screenshot\n"
+"                        gespeichert werden soll.\n"
+"                        Benutz diese Option mit -t, um das Spiel eine "
+"bestimmte\n"
+"                        Zeit vorwärts zu spulen, bevor der Screenshot\n"
+"                        angefertigt wird.\n"
+"  -t, --ticks-to-run    Wird in Kombination mit -s benutzt, um den "
+"Screenshot zu\n"
+"                        verzögern. Diese Option gibt an, wie viele Ticks\n"
+"                        (= Millisekunden Spielzeit) ausgeführt werden.\n"
 
-#: src/cpp/main.cpp:167
+#: src/cpp/main.cpp:190
 msgid "Error: No map file specified."
 msgstr "Fehler: Keine Map-Datei angegeben."
 
-#: src/cpp/main.cpp:195
+#: src/cpp/main.cpp:218
 msgid "Could not register events."
 msgstr "Konnte Events nicht registrieren."
 
-#: src/cpp/main.cpp:326
+#: src/cpp/main.cpp:349
 #, c-format
 msgid ""
 "PerfCounters: events avg %.3f, current = %.1f; gameUpdate avg %.3f, current "
@@ -978,45 +1015,45 @@ msgstr ""
 "PerfCounters: events avg %.3f, current = %.1f; gameUpdate avg %.3f, current "
 "= %.1f; rendering avg %.3f, current = %.1f; AI avg %.3f, current = %.1f"
 
-#: src/cpp/main.cpp:340
+#: src/cpp/main.cpp:363
 #, c-format
 msgid "Screen: mapCentered = (%d, %d), zoom = %d, view = %d"
 msgstr "Screen: mapCentered = (%d, %d), zoom = %d, view = %d"
 
-#: src/cpp/main.cpp:344
+#: src/cpp/main.cpp:367
 #, c-format
 msgid "Game ticks: %lu"
 msgstr "Game-Ticks: %lu"
 
-#: src/cpp/main.cpp:347
+#: src/cpp/main.cpp:370
 #, c-format
 msgid "mouse = (%d, %d), screen = (%d, %d), mapElevated = (%d, %d)"
 msgstr "mouse = (%d, %d), screen = (%d, %d), mapElevated = (%d, %d)"
 
-#: src/cpp/main.cpp:366
+#: src/cpp/main.cpp:389
 #, c-format
 msgid "selectedMapObject(Fixed) on mapCoords (%d, %d), size = (%d, %d)"
 msgstr "selectedMapObject(Fixed) auf mapCoords (%d, %d), size = (%d, %d)"
 
-#: src/cpp/main.cpp:375
+#: src/cpp/main.cpp:398
 #, c-format
 msgid "selectedMapObject(Moving) on mapCoords (%f, %f), size = (%d, %d)"
 msgstr "selectedMapObject(Moving) auf mapCoords (%f, %f), size = (%d, %d)"
 
-#: src/cpp/main.cpp:381
+#: src/cpp/main.cpp:404
 #, c-format
 msgid "selectedMapObject(UNKNOWN!?) size = (%d, %d)"
 msgstr "selectedMapObject(UNBEKANNT!?) size = (%d, %d)"
 
-#: src/cpp/main.cpp:394
+#: src/cpp/main.cpp:417
 msgid "catchmentAreaIterator set"
 msgstr "catchmentAreaIterator gesetzt"
 
-#: src/cpp/main.cpp:396
+#: src/cpp/main.cpp:419
 msgid "catchmentAreaIterator nullptr"
 msgstr "catchmentAreaIterator nullptr"
 
-#: src/cpp/main.cpp:400
+#: src/cpp/main.cpp:423
 #, c-format
 msgid ""
 "debugAStar: source = (%d, %d), destination = (%d, %d), %s, useStreetOnly = "
@@ -1025,11 +1062,11 @@ msgstr ""
 "debugAStar: source = (%d, %d), destination = (%d, %d), %s, useStreetOnly = "
 "%s, rightAnglesOnly = %s"
 
-#: src/cpp/main.cpp:407 src/cpp/main.cpp:408
+#: src/cpp/main.cpp:430 src/cpp/main.cpp:431
 msgid "false"
 msgstr "false"
 
-#: src/cpp/main.cpp:407 src/cpp/main.cpp:408
+#: src/cpp/main.cpp:430 src/cpp/main.cpp:431
 msgid "true"
 msgstr "true"
 
