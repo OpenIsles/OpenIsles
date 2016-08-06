@@ -6,6 +6,7 @@ oi = OpenIsles
 
 dofile("data/ai/simple-ai/utils.lua")
 dofile("data/ai/simple-ai/streets.lua")
+dofile("data/ai/simple-ai/buildings.lua")
 
 aiInfo = {}                 -- Diese globale Tabelle enthält alle Infos, die wir für die KI brauchen -- TODO aktuell is das nur für eine Insel!
 aiInfo.playerIndex = 3      -- playerIndex, den diese KI steuert
@@ -61,14 +62,14 @@ local function findIsle(mapCoords)
         end
     end
 
-    return nil;
+    return nil
 end
 
 --[[
 -- Zählt, wie viele Objekte vom Type `mapObjectType` der Spieler `playerIndex` auf der Insel `isle` hat
 --]]
 local function countMapObjectOfTypeOnIsle(mapObjectType, playerIndex, isle)
-    local count = 0;
+    local count = 0
     for _,object in pairs(oi.getMapObjectsFixed()) do
         if object.player == playerIndex and object.type == mapObjectType then
             if isCoordsOnIsle(isle, buildCoords(object.x, object.y)) == true then
@@ -97,14 +98,21 @@ local function phase0()
         return
     end
 
-    -- TODO Förster, Fischerhütte (TODO^2) und Marktplatz
+    -- TODO Fischerhütte (TODO^2) und Marktplatz
+
+    -- Förster bauen
+    local free6x6Blocks = findFree6x6Blocks()
+    local coords = keyToCoords(randomPickFromArray(free6x6Blocks))
+    oi.build(aiInfo.playerIndex, "foresters", coords.x, coords.y, randomView())
+    connectBuildingToStreetSystem(coords)
+    fillBuildingCatchmentArea(coords, "northern-forest1")
 
     phase = phase + 1
 end
 
 local function phase1()
     -- Resourcen für Haus da?
-    local colony = oi.getColonyAt(aiInfo.officeCoords);
+    local colony = oi.getColonyAt(aiInfo.officeCoords)
     if (colony.goods.wood < 3) then
         return
     end
@@ -127,7 +135,7 @@ local function phase1()
     }
 
     -- pcall, um Fehler einfach zu ignorieren; wir bauen irgendwo auf der Insel, kp, ob wir da dürfen (TODO verbesserungswürdig)
-    pcall(oi.build, aiInfo.playerIndex, "pioneers-house1", coords.x, coords.y, "south");
+    pcall(oi.build, aiInfo.playerIndex, "pioneers-house1", coords.x, coords.y, "south")
 end
 
 local function phase2()
@@ -146,10 +154,11 @@ function init()
             aiInfo.officeCoords = buildCoords(object.x, object.y)
             aiInfo.isle = findIsle(aiInfo.officeCoords)
             aiInfo.streetEndPoints = {}
+            aiInfo.blocksWithStreets = {}
             break
         end
     end
-    assert(aiInfo.officeCoords ~= nil, "Could not find our office");
+    assert(aiInfo.officeCoords ~= nil, "Could not find our office")
 end
 
 function main()

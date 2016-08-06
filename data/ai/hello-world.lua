@@ -63,16 +63,16 @@ function main()
     -- nach 30 Sekunden bauen wir was
     if (buildSomething == false) and (gameTicks > 30000) then
         for y = 212, 217 do
-            oi.build(3, "farm-road", 52, y, "south");
+            oi.build(3, "farm-road", 52, y, "south")
         end
-        oi.build(3, "foresters", 53, 215, "north");
+        oi.build(3, "foresters", 53, 215, "north")
 
         buildSomething = true
     end
 
     -- nach 40 Sekunden reißen wir wieder was ab
     if (demolishSomething == false) and (gameTicks > 40000) then
-        oi.demolish(3, 52, 217);
+        oi.demolish(3, 52, 217)
         demolishSomething = true
     end
 end

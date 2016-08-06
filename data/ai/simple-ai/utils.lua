@@ -2,6 +2,9 @@
 -- Allgemeine Hilfsfunktionen
 ---------------------------------
 
+local ALL_VIEWS = { "south", "east", "north", "west" }
+
+
 --[[
 -- Wandelt zwei Zahlen x, y in eine Map-Koordiante (Table) um
 --]]
@@ -54,4 +57,20 @@ function randomPickFromSet(set)
     end
 
     assert(false)
+end
+
+--[[
+-- Gibt einen zufälligen Wert aus einem Array (Table mit Index-Keys und Value) zurück
+--]]
+function randomPickFromArray(array)
+    local index = math.random(#array)
+
+    return array[index]
+end
+
+--[[
+-- Gibt eine zufällige Ansicht zurück
+--]]
+function randomView()
+    return randomPickFromArray(ALL_VIEWS)
 end

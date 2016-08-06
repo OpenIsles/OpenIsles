@@ -5,6 +5,7 @@
 #include "map/buildqueue/BuildOperation.h"
 #include "map/Isle.h"
 #include "map/Map.h"
+#include "utils/CatchmentAreaIterator.h"
 #include "utils/StringFormat.h"
 
 
@@ -34,14 +35,20 @@ static void pushMapObjectOnLuaStack(lua_State* lua, const MapObjectFixed* mapObj
         view = nullptr;
     }
 
+    const MapObjectType* mapObjectType = mapObjectFixed->getMapObjectType();
+
     lua_createtable(lua, 0, 5);
     lua_pushinteger(lua, (lua_Integer) mapCoords.x());
     lua_setfield(lua, -2, "x");
     lua_pushinteger(lua, (lua_Integer) mapCoords.y());
     lua_setfield(lua, -2, "y");
+    lua_pushinteger(lua, (lua_Integer) mapObjectType->mapWidth);
+    lua_setfield(lua, -2, "width");
+    lua_pushinteger(lua, (lua_Integer) mapObjectType->mapHeight);
+    lua_setfield(lua, -2, "height");
     lua_pushinteger(lua, (lua_Integer) player);
     lua_setfield(lua, -2, "player");
-    lua_pushstring(lua, mapObjectFixed->getMapObjectType()->name.c_str());
+    lua_pushstring(lua, mapObjectType->name.c_str());
     lua_setfield(lua, -2, "type");
     lua_pushstring(lua, view);
     lua_setfield(lua, -2, "view");
@@ -66,8 +73,22 @@ static MapCoords readMapCoordsFromStack(lua_State* lua, int stackPosOfArgument) 
     lua_pop(lua, 2);
 
     return MapCoords(x, y);
+    // TODO API stabiler machen. Ungültige Koordinaten führen später zu nullptr-Dereferenzierungen
 }
 
+/**
+ * Schreibt eine Map-Koordinate auf den Lua-Stack. Es wird eine Table mit Keys x und y auf den Stack gelegt.
+ *
+ * @param lua Lua-State
+ * @param mapCoords Map-Koordinate, die auf den Stack gelegt werden soll
+ */
+static void pushMapCoordsOnLuaStack(lua_State* lua, const MapCoords& mapCoords) {
+    lua_createtable(lua, 0, 2);
+    lua_pushinteger(lua, (lua_Integer) mapCoords.x());
+    lua_setfield(lua, -2, "x");
+    lua_pushinteger(lua, (lua_Integer) mapCoords.y());
+    lua_setfield(lua, -2, "y");
+}
 
 DEFINE_LUA_FUNCTION(getGameTicks) {
     const Context* context = *static_cast<const Context**>(lua_getextraspace(lua));
@@ -194,6 +215,48 @@ DEFINE_LUA_FUNCTION(getMapObjectFixedAt) {
     } else {
         lua_pushnil(lua);
     }
+
+    return 1;
+}
+
+DEFINE_LUA_FUNCTION(getCatchmentAreaForBuilding) {
+    const Context* context = *static_cast<const Context**>(lua_getextraspace(lua));
+
+    MapCoords mapCoords = readMapCoordsFromStack(lua, 1);
+
+    const Map* map = context->game->getMap();
+    const MapObjectFixed* mapObjectFixed = map->getMapObjectFixedAt(mapCoords);
+    const Building* building = dynamic_cast<const Building*>(mapObjectFixed);
+
+    if (mapObjectFixed != nullptr) {
+        CatchmentAreaIterator catchmentAreaIterator(*building, false);
+        const std::vector<MapCoords>& coordsInCatchmentArea = catchmentAreaIterator.getMapCoordsInCatchmentArea();
+        const int coordsCount = int(coordsInCatchmentArea.size());
+
+        lua_createtable(lua, coordsCount, 0);
+        for (int i = 0; i < coordsCount; i++) {
+            pushMapCoordsOnLuaStack(lua, coordsInCatchmentArea[i]);
+            lua_rawseti(lua, -2, (lua_Integer) i);
+        }
+    } else {
+        lua_pushnil(lua);
+    }
+
+    return 1;
+}
+
+DEFINE_LUA_FUNCTION(getMapTileAt) {
+    const Context* context = *static_cast<const Context**>(lua_getextraspace(lua));
+
+    MapCoords mapCoords = readMapCoordsFromStack(lua, 1);
+    const MapTile* mapTile = context->game->getMap()->getMapTileAt(mapCoords);
+    int player = (mapTile->player != nullptr) ? (mapTile->player->getPlayerIndex() + 1) : 0;
+
+    lua_createtable(lua, 0, 2);
+    lua_pushinteger(lua, (lua_Integer) player);
+    lua_setfield(lua, -2, "player");
+    lua_pushinteger(lua, (lua_Integer) mapTile->getMapTileConfig()->mapTileType);
+    lua_setfield(lua, -2, "mapTileType");
 
     return 1;
 }

@@ -2,6 +2,11 @@
 -- Funktionen zum Straßenbau / Planung
 ------------------------------------------
 
+-- aiInfo.streetEndPoints   Set mit Endpunkten des Straßensystems
+-- aiInfo.blocksWithStreets Set mit Mittelpunkten für 6x6-Blöcke, die wir mit Straßen erschlossen haben.
+--                          Siehe findFree6x6Blocks()
+
+
 BITMASK_GRASS = 256
 
 
@@ -116,9 +121,147 @@ function buildStreetSystemAt(sourceCoords)
     -- Endpunkt-Liste aktualisieren
     aiInfo.streetEndPoints[coordsToKey(sourceCoords)] = nil
 
-    -- Debug
-    oi.debug("aiInfo.streetEndPoints:")
-    for coords,_ in pairs(aiInfo.streetEndPoints) do
-        oi.debug(coords)
+    -- Merken, welche Blöcke damit neu dazukommen
+    aiInfo.blocksWithStreets[coordsToKey(buildCoords(sourceCoords.x + 3, sourceCoords.y + 3))] = true
+    aiInfo.blocksWithStreets[coordsToKey(buildCoords(sourceCoords.x - 4, sourceCoords.y + 3))] = true
+    aiInfo.blocksWithStreets[coordsToKey(buildCoords(sourceCoords.x + 3, sourceCoords.y - 4))] = true
+    aiInfo.blocksWithStreets[coordsToKey(buildCoords(sourceCoords.x - 4, sourceCoords.y - 4))] = true
+end
+
+--[[
+-- Findet alle komplett freien 6x6-Blöcke im Straßenraster.
+-- Zurückgegeben wird die "mittlere" (s.u.) Koordinate. Das ist die von den vieren, die auf x- und y- den kleineren
+-- Wert hat.
+--
+-- Ein Block wird nur als frei gewertet, wenn alle 36 Felder zum bebaubaren Bereich von uns gehören.
+--
+--
+-- ░█░░░░░░█░
+-- ██████████
+-- ░█░░░░░░█░
+-- ░█░░░░░░█░
+-- ░█░░x░░░█░
+-- ░█░░░░░░█░
+-- ░█░░░░░░█░
+-- ░█░░░░░░█░
+-- ██████████
+--]]
+function findFree6x6Blocks()
+    local free6x6Blocks = {}
+
+    -- Mögliche Koordinatenmitten checken
+    for blockMiddleCoords,_ in pairs(aiInfo.blocksWithStreets) do
+        local middleCoords = keyToCoords(blockMiddleCoords)
+
+        local blockIsFree = true
+        for y = middleCoords.y - 2, middleCoords.y + 3 do
+            for x = middleCoords.x - 2, middleCoords.x + 3 do
+                local coords = buildCoords(x, y)
+
+                -- unser Gebiet?
+                local mapTile = oi.getMapTileAt(coords)
+                if mapTile.player ~= aiInfo.playerIndex then
+                    blockIsFree = false
+                    break
+                end
+
+                -- Gelände ok?
+                if mapTile.mapTileType ~= BITMASK_GRASS then
+                    blockIsFree = false
+                    break
+                end
+
+                -- schon bebaut?
+                local mapObjectFixed = oi.getMapObjectFixedAt(coords)
+                if mapObjectFixed ~= nil then
+                    if (mapObjectFixed.type ~= "northern-forest1") and
+                       (mapObjectFixed.type ~= "northern-forest2") then
+
+                        blockIsFree = false
+                        break
+                    end
+                end
+            end
+
+            if blockIsFree == false then
+                break
+            end
+        end
+
+        -- Block frei?
+        if blockIsFree == true then
+            table.insert(free6x6Blocks, blockMiddleCoords)
+        end
+    end
+
+    return free6x6Blocks
+end
+
+--[[
+-- Verbindet ein Gebäude (buildingCoords gibt dessen Koordinaten vor) mit dem Straßennetz.
+--
+-- Wir probieren gerade Straßenzüge von jedem Punkt des Gebäudes aus und gucken, ob wir es zur Haupt-Staße schaffen.
+--]]
+function connectBuildingToStreetSystem(buildingCoords)
+    local building = oi.getMapObjectFixedAt(buildingCoords)
+
+    local buildingWidth, buildingHeight
+    if building.view == "south" or building.view == "north" then
+        buildingWidth = building.width
+        buildingHeight = building.height
+    else
+        buildingWidth = building.height
+        buildingHeight = building.width
+    end
+
+    -- Mögliche Lösungen finden
+    local possibleConnections = {}
+    local testSolution = function(startCoords, increment)
+        local coords = startCoords
+        local currentConnection = {}
+
+        for i = 1, 3 do -- maximale 3 Kacheln lang darf die Verbindungsstraße werden
+            local mapObjectFixed = oi.getMapObjectFixedAt(coords)
+            if mapObjectFixed ~= nil then
+                if (mapObjectFixed.type == "farm-road") or
+                   (mapObjectFixed.type == "cobbled-street") then
+                    -- Hauptstraße gefunden -> Lösung
+
+                    table.insert(possibleConnections, currentConnection)
+                    return
+                end
+
+                if (mapObjectFixed.type ~= "northern-forest1") and
+                   (mapObjectFixed.type ~= "northern-forest2") then
+
+                    -- was im Weg -> keine Lösung
+                    return
+                end
+            end
+
+            -- Koordinaten merken; wichtig: nicht coords direkt nehmen, das verändern wir gleich
+            table.insert(currentConnection, buildCoords(coords.x, coords.y))
+
+            increment(coords)
+        end
+    end
+
+    for y = building.y, building.y + buildingHeight - 1 do
+        testSolution(buildCoords(building.x + buildingWidth, y), function(coords) coords.x = coords.x + 1 end)
+        testSolution(buildCoords(building.x - 1, y), function(coords) coords.x = coords.x - 1 end)
+    end
+    for x = building.x, building.x + buildingWidth - 1 do
+        testSolution(buildCoords(x, building.y + buildingHeight), function(coords) coords.y = coords.y + 1 end)
+        testSolution(buildCoords(x, building.y - 1), function(coords) coords.y = coords.y - 1 end)
+    end
+
+    -- Irgendeine Lösung wählen und bauen
+    if #possibleConnections == 0 then
+        oi.debug("Error: Could not connect building at (" .. building.x .. "," .. building.y .. ") to street network")
+    end
+
+    local connection = randomPickFromArray(possibleConnections)
+    for _,coords in ipairs(connection) do
+        oi.build(aiInfo.playerIndex, "farm-road", coords.x, coords.y, "south")
     end
 end

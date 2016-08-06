@@ -51,7 +51,7 @@ DEFINE_LUA_FUNCTION(getShips);
 /**
  * @lua
  * @brief Liefert alle fixen Map-Objekte (das sind alle Strukturen, Harvestables und Gebäude; nicht: Träger und Schiffe) zurück.
- * @return Array mit Eigenschaften `x`, `y`, `player` und `type`
+ * @return Array mit Eigenschaften `x`, `y`, `width`, `height`, `player` und `type`
  */
 DEFINE_LUA_FUNCTION(getMapObjectsFixed);
 
@@ -59,10 +59,29 @@ DEFINE_LUA_FUNCTION(getMapObjectsFixed);
  * @lua
  * @brief Liefert ein fixes Map-Objekt an einer bestimmten Koordinate zurück.
  * @param Koordinate (Table mit `x`, `y`)
- * @return Array mit Eigenschaften `x`, `y`, `player` und `type`
+ * @return Array mit Eigenschaften `x`, `y`, `width`, `height`, `player` und `type`
  *         oder `nil`, wenn da kein Map-Objekt is
  */
 DEFINE_LUA_FUNCTION(getMapObjectFixedAt);
+
+/**
+ * @lua
+ * @brief Liefert für ein Gebäude dessen Einzugsbereich zurück
+ * @param Koordinate (Table mit `x`, `y`), für dessen Map-Objekt der Einzugsbereich benötigt wird
+ * @return Array aus Tables (`x`, `y`) mit allen Koordinaten, die zum Einzugsbereich gehören
+ *         oder `nil`, wenn da kein Gebäude is
+ */
+DEFINE_LUA_FUNCTION(getCatchmentAreaForBuilding);
+
+/**
+ * @lua
+ * @brief Liefert Informationen zu einer bestimmten Koordinate zurück.
+ * @param Koordinate (Table mit `x`, `y`)
+ * @return Table mit Eigenschaften `player` (dem das Gebiet gehört bzw. 0, wenn keinem),
+ *         `mapTileType` (Geländetyp, siehe MapTileType)
+ *         (TODO später mehr)
+ */
+DEFINE_LUA_FUNCTION(getMapTileAt);
 
 /**
  * @lua
